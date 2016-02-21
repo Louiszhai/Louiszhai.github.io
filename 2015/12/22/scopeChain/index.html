@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>详解JS作用域链及闭包 | louis blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="JavaScript scope chain for while 作用域链 闭包 var">
+<meta property="og:type" content="article">
+<meta property="og:title" content="详解JS作用域链及闭包">
+<meta property="og:url" content="http://louiszhai.github.io/2015/12/22/scopeChain/index.html">
+<meta property="og:site_name" content="louis blog">
+<meta property="og:description" content="JavaScript scope chain for while 作用域链 闭包 var">
+<meta property="og:image" content="http://louiszhai.github.io/doc_images/scopeChain01.png">
+<meta property="og:image" content="http://louiszhai.github.io/doc_images/scopeChain02.jpg">
+<meta property="og:updated_time" content="2015-12-27T02:35:02.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="详解JS作用域链及闭包">
+<meta name="twitter:description" content="JavaScript scope chain for while 作用域链 闭包 var">
+  
+    <link rel="alternative" href="/atom.xml" title="louis blog" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img src="/i.png" class="js-avatar" style="width: 100%;height: 100%;opacity: 1;">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">louis</a></h1>
+		</hgroup>
+
+		
+		<p class="header-subtitle">程序猿 前端攻城师</p>
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>菜单</li>
+						<li>标签</li>
+						
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="github" target="_blank" href="https://github.com/Louiszhai" title="github">github</a>
+					        
+								<a class="weibo" target="_blank" href="http://weibo.com/xingyez" title="weibo">weibo</a>
+					        
+								<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						<a href="/tags/JavaScript/" style="font-size: 10px;">JavaScript</a>
+					</div>
+				</section>
+				
+				
+				
+
+				
+			</div>
+		</div>
+	</header>				
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">louis</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				<img lazy-src="/i.png" class="js-avatar">
+			</div>
+			<hgroup>
+			  <h1 class="header-author">louis</h1>
+			</hgroup>
+			
+			<p class="header-subtitle">程序猿 前端攻城师</p>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="https://github.com/Louiszhai" title="github">github</a>
+			        
+						<a class="weibo" target="_blank" href="http://weibo.com/xingyez" title="weibo">weibo</a>
+			        
+						<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+      <div class="body-wrap"><article id="post-scopeChain" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/12/22/scopeChain/" class="article-date">
+  	<time datetime="2015-12-22T00:06:13.000Z" itemprop="datePublished">2015-12-22</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      详解JS作用域链及闭包
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/">JavaScript</a></li></ul>
+	</div>
+
+        
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          <div id="toc" class="toc-article">
+    <div class="toc-title">目录</div>
+    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#u5BFC_u8BFB"><span class="toc-text">导读</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u56DE_u987E_u4E0A_u7BC7"><span class="toc-text">回顾上篇</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u4F5C_u7528_u57DF"><span class="toc-text">作用域</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#js_u4E2D_u53EA_u6709_u51FD_u6570_u4F5C_u7528_u57DF"><span class="toc-text">js中只有函数作用域</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#u4F7F_u7528_var__u58F0_u660E_u53D8_u91CF"><span class="toc-text">使用 var 声明变量</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#JS_u4E2D_u7684_u4F5C_u7528_u57DF_u94FE"><span class="toc-text">JS中的作用域链</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u95ED_u5305"><span class="toc-text">闭包</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#u95ED_u5305_u5185_u7684_u5FAE_u89C2_u4E16_u754C"><span class="toc-text">闭包内的微观世界</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#u95ED_u5305_u6709_u53EF_u80FD_u5BFC_u81F4IE_u6D4F_u89C8_u5668_u5185_u5B58_u6CC4_u6F0F"><span class="toc-text">闭包有可能导致IE浏览器内存泄漏</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#for_u5FAA_u73AF_u95EE_u9898_u5206_u6790"><span class="toc-text">for循环问题分析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u8E29_u4E2A_u4F5C_u7528_u57DF_u7684_u5751"><span class="toc-text">踩个作用域的坑</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#this_u4F5C_u7528_u57DF"><span class="toc-text">this作用域</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#with_u8BED_u53E5"><span class="toc-text">with语句</span></a></li></ol>
+</div>
+      
+        <h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>上一篇我们讲到for和while循环效率之低, 令人发指. 那么本篇我们将揭晓它们低效率的原因, 并给出优化建议. 欢迎阅读本篇<strong><code>详解JS作用域链及闭包</code></strong>.</p>
+<a id="more"></a>
+<h3 id="u56DE_u987E_u4E0A_u7BC7"><a href="#u56DE_u987E_u4E0A_u7BC7" class="headerlink" title="回顾上篇"></a>回顾上篇</h3><p>请先看上一篇中提到的for循环代码:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> array = [];</span><br><span class="line">array.length = <span class="number">1000000</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> t1 = +<span class="keyword">new</span> <span class="built_in">Date</span>();</span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">var</span> i=<span class="number">0</span>,length=array.length;i&lt;length;i++)&#123;</span><br><span class="line">  <span class="comment">//array.push(i);</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> t2 = +<span class="keyword">new</span> <span class="built_in">Date</span>();</span><br><span class="line"><span class="built_in">console</span>.log(t2-t1);</span><br><span class="line"><span class="comment">//由于此时CPU空闲较多,此时效率有些许提升,以下是连续5次的运行时间:</span></span><br><span class="line"><span class="comment">//4091+4038+4202+4415+4507 = 21253(ms)</span></span><br></pre></td></tr></table></figure>
+<p>我们再看下面一段代码:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> t1 = +<span class="keyword">new</span> <span class="built_in">Date</span>();</span><br><span class="line">(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;<span class="comment">//闭包</span></span><br><span class="line">  <span class="keyword">for</span>(<span class="keyword">var</span> i=<span class="number">0</span>,length=array.length;i&lt;length;i++)&#123;</span><br><span class="line">  	<span class="comment">//array.push(i);</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;)();</span><br><span class="line"><span class="keyword">var</span> t2 = +<span class="keyword">new</span> <span class="built_in">Date</span>();</span><br><span class="line"><span class="built_in">console</span>.log(t2-t1);</span><br><span class="line"><span class="comment">//以下是连续5次的运行时间:</span></span><br><span class="line"><span class="comment">//17+19+17+20+18 = 91(ms)</span></span><br></pre></td></tr></table></figure>
+<p>计算一下: 21253/91 = 233 效率提升两百多倍, 为什么呢?</p>
+<p>我们注意到两段代码最大的区别就是, 第二段代码使用了匿名函数包裹for循环. 我们将在后面讲到, 请耐心阅读.</p>
+<h3 id="u4F5C_u7528_u57DF"><a href="#u4F5C_u7528_u57DF" class="headerlink" title="作用域"></a>作用域</h3><p>所谓作用域, <a href="http://blog.csdn.net/yueguanghaidao" target="_blank" rel="external">Skycrab</a> 有句解释还不错, 指的是, 变量在声明它们的函数体以及这个函数体嵌套的任意函数体内都是有定义的.</p>
+<h4 id="js_u4E2D_u53EA_u6709_u51FD_u6570_u4F5C_u7528_u57DF"><a href="#js_u4E2D_u53EA_u6709_u51FD_u6570_u4F5C_u7528_u57DF" class="headerlink" title="js中只有函数作用域"></a>js中只有函数作用域</h4><p>众所周知, JS中并没有块作用域, 只有函数作用域. 如下:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(<span class="keyword">var</span> i=<span class="number">0</span>;i&lt;<span class="number">10</span>;i++)&#123;</span><br><span class="line">  ;</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">console</span>.log(i);<span class="comment">//10</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="keyword">var</span> a = <span class="number">123</span>;</span><br><span class="line">&#125;</span><br><span class="line">f();</span><br><span class="line"><span class="built_in">console</span>.log(a);<span class="comment">//a is not defined</span></span><br></pre></td></tr></table></figure>
+<p>因此 js 中只有一种局部作用域, 即函数作用域.</p>
+<h4 id="u4F7F_u7528_var__u58F0_u660E_u53D8_u91CF"><a href="#u4F7F_u7528_var__u58F0_u660E_u53D8_u91CF" class="headerlink" title="使用 var 声明变量"></a>使用 var 声明变量</h4><p>通常我们知道, js 作为一种弱类型语言, 声明一个变量只需要var保留字, 如果在函数中不使用 var 声明变量, 该变量将提升为全局变量, 进而脱离函数作用域, 如下:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  b = <span class="number">123</span>;</span><br><span class="line">&#125;</span><br><span class="line">f();</span><br><span class="line"><span class="built_in">console</span>.log(b);<span class="comment">//123</span></span><br></pre></td></tr></table></figure>
+<p>此时相对于前面使用var声明的 a 变量, b 变量被提升为全局变量, 在函数作用域外依然可以访问.</p>
+<p>既然在函数作用域内不使用 var 声明变量, 会将变量提升为全局变量, 那么在全局下, 不使用var, 会怎么样呢?</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//全局下不使用var声明,该变量依然是全局变量</span></span><br><span class="line">c = <span class="string">"hello scope"</span>;</span><br><span class="line"><span class="built_in">console</span>.log(c);<span class="comment">//hello scope</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">window</span>.c);<span class="comment">//hello scope</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//查看c变量的属性</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">Object</span>.getOwnPropertyDescriptor(<span class="built_in">window</span>, <span class="string">'c'</span>));<span class="comment">//Object &#123;value: "hello scope", writable: true, enumerable: true, configurable: true&#125; ,此时c变量可赋值,可列举,可配置</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//试着删除c变量</span></span><br><span class="line"><span class="keyword">delete</span> c;<span class="comment">//true 表示c变量被成功删除</span></span><br><span class="line"><span class="built_in">console</span>.log(c);<span class="comment">//c is not defined</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">window</span>.c);<span class="comment">//undefined</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//使用var声明后再删除d变量</span></span><br><span class="line"><span class="keyword">var</span> d = <span class="number">1</span>;</span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">Object</span>.getOwnPropertyDescriptor(<span class="built_in">window</span>, <span class="string">'d'</span>));<span class="comment">//Object &#123;value: 1, writable: true, enumerable: true, configurable: false&#125; ,此时d变量可赋值,可列举,但不可配置</span></span><br><span class="line"><span class="keyword">delete</span> d;<span class="comment">//false 表示d变量删除失败</span></span><br><span class="line"><span class="built_in">console</span>.log(d);<span class="comment">//1 </span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">window</span>.d);<span class="comment">//1</span></span><br></pre></td></tr></table></figure>
+<p>综上, 有如下规律:</p>
+<ul>
+<li>不使用var保留字声明变量, 变量提升为全局变量, 而不论变量处于哪种作用域;</li>
+<li>如果不使用var声明,  该变量便可配置, 即可被 delete 保留字删除, 删除后该变量便不可访问; 如果使用var声明, 该变量便不可配置, 即不能被 delete 保留字删除;</li>
+<li>只要是全局变量都可以直接访问, 也可使用 “window.变量名” 来访问, 不管该变量是不是通过var来声明的;</li>
+</ul>
+<h3 id="JS_u4E2D_u7684_u4F5C_u7528_u57DF_u94FE"><a href="#JS_u4E2D_u7684_u4F5C_u7528_u57DF_u94FE" class="headerlink" title="JS中的作用域链"></a>JS中的作用域链</h3><p>函数对象和其它对象一样，拥有可以通过代码访问的属性和一系列仅供JavaScript引擎访问的内部属性。其中一个内部属性是[[Scope]]，由ECMA-262标准第三版定义，该内部属性包含了函数被创建的作用域中对象的集合，这个集合被称为函数的作用域链，它决定了哪些数据能被函数访问。</p>
+<p>我们先看一个栗子:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> e = <span class="string">"hello"</span>;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  e = <span class="string">"scope chain"</span>;</span><br><span class="line">  <span class="keyword">var</span> g = = <span class="string">"good"</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>以上作用域链的图如下所示:</p>
+<p><img src="/doc_images/scopeChain01.png" alt=""></p>
+<p>函数执行时, 在函数 f 内部会生成一个 active object 和 scope chain. JavaScript引擎内部对象会放入 active object中, 外部的 e 变量处于scope chain的第二层, index=1, 而内部的g变量处于scope chain的顶层, index=0, 因此访问g变量总比访问e变量来的快些.</p>
+<h3 id="u95ED_u5305"><a href="#u95ED_u5305" class="headerlink" title="闭包"></a>闭包</h3><p>聊到作用域, 就不得不说闭包, 那么, 什么是闭包?</p>
+<p>“官方”的解释是：闭包是一个拥有许多变量和绑定了这些变量的环境的表达式（通常是一个函数），因而这些变量也是该表达式的一部分。</p>
+<p>这是什么意思呢, 其实我也不懂.</p>
+<p>通俗的讲就是: 闭包是一个函数, 并且这个函数可以访问其他函数内的局部变量.</p>
+<p>可是我们都知道函数作用域是局部作用域, 为了做到让另一个函数访问它内部的变量, 恐怕只能将另一个函数放入它的内部, 如下:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> h = <span class="number">1</span>;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="keyword">var</span> i = <span class="number">2</span>;</span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> <span class="title">f2</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  	<span class="keyword">var</span> j = <span class="number">3</span> + i + h;</span><br><span class="line">    <span class="built_in">console</span>.log(j);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> ff = f();</span><br><span class="line">ff();<span class="comment">//6</span></span><br></pre></td></tr></table></figure>
+<p>由于 f2 处于 f 的内部, 因此 f2 内可以访问到 f 的局部作用域, 这样通过返回 f2 就能保证在 f 函数外部也能访问到 i 变量.</p>
+<p>当f2执行时, 变量 j 处于scope chain的 index0的位置上, 变量 i 和变量 h 分别处于 scope chain 的 index1 index2 的位置上. 因此 j 的赋值过程其实就是沿着 scope chain 第二层 第三层 依次找到 i 和 h 的值, 然后将它们和3一起求和, 最终赋值给 j .</p>
+<p>浏览器沿着 scope chain 寻找变量总是需要耗费CPU时间, 越是 scope chain 的 外层(或者离f2越远的变量), 浏览器查找起来越是需要时间, 因为 scope chain 需要历经更多次遍历. 因此全局变量(window)总是需要最多的访问时间.</p>
+<h4 id="u95ED_u5305_u5185_u7684_u5FAE_u89C2_u4E16_u754C"><a href="#u95ED_u5305_u5185_u7684_u5FAE_u89C2_u4E16_u754C" class="headerlink" title="闭包内的微观世界"></a>闭包内的微观世界</h4><p>　　如果要更加深入的了解闭包以及函数 f 和嵌套函数 f2 的关系，我们需要引入另外几个概念：函数的执行环境(excution context)、活动对象(call object)、作用域(scope)、作用域链(scope chain)。以函数a从定义到执行的过程为例阐述这几个概念。</p>
+<ol>
+<li>当<strong>定义</strong>函数 f 的时候，js解释器会将函数a的<strong>作用域链(scope chain)</strong>设置为<strong>定义 f 时 a 所在的“环境”</strong>，如果 f 是一个全局函数，则scope chain中只有window对象。</li>
+<li>当<strong>执行</strong>函数 f 的时候，f 会进入相应的<strong>执行环境(excution context)</strong>。</li>
+<li>在创建执行环境的过程中，首先会为 f 添加一个scope属性，即a的<strong>作用域</strong>，其值就为第1步中的scope chain。即a.scope=f 的作用域链。</li>
+<li>然后执行环境会创建一个<strong>活动对象(call object)</strong>。活动对象也是一个拥有属性的对象，但它不具有原型而且不能通过JavaScript代码直接访问。创建完活动对象后，把活动对象添加到 f 的作用域链的最顶端。此时a的作用域链包含了两个对象：f 的活动对象和window对象。</li>
+<li>下一步是在活动对象上添加一个arguments属性，它保存着调用函数 f 时所传递的参数。</li>
+<li>最后把所有函数 f 的形参和内部的函数 f2 的引用也添加到 f 的活动对象上。在这一步中，完成了函数 f2 的定义，因此如同第3步，函数 f2 的作用域链被设置为 f2 所被定义的环境，即 f 的作用域。</li>
+</ol>
+<p>到此，整个函数 f 从定义到执行的步骤就完成了。此时 f 返回函数 f2 的引用给 ff，又函数 f2 的作用域链包含了对函数 f 的活动对象的引用，也就是说 f2 可以访问到 f 中定义的所有变量和函数。函数 f2 被 ff 引用，函数 f2又依赖函数 f ，因此函数 f 在返回后不会被GC回收。</p>
+<p>当函数 f2 执行的时候亦会像以上步骤一样。因此，执行时 f2 的作用域链包含了3个对象：f2 的活动对象、f 的活动对象和window对象，如下图所示：</p>
+<p><img src="/doc_images/scopeChain02.jpg" alt=""></p>
+<p>如图所示，当在函数 f2 中访问一个变量的时候，搜索顺序是：</p>
+<ol>
+<li>先搜索自身的活动对象，如果存在则返回，如果不存在将继续搜索函数 f 的活动对象，依次查找，直到找到为止。</li>
+<li>如果函数 f2 存在prototype原型对象，则在查找完自身的活动对象后先查找自身的原型对象，再继续查找。这就是Javascript中的变量查找机制。</li>
+<li>如果整个作用域链上都无法找到，则返回undefined。</li>
+</ol>
+<p>小结，本段中提到了两个重要的词语：函数的<strong>定义</strong>与<strong>执行</strong>。文中提到函数的作用域是在定义函数时候就已经确定，而不是在执行的时候确定（参看步骤1和3）。用一段代码来说明这个问题：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params">x</span>) </span>&#123; </span><br><span class="line">  <span class="keyword">var</span> g = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123; <span class="keyword">return</span> x; &#125;</span><br><span class="line">  <span class="keyword">return</span> g;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> h = f(<span class="number">1</span>);</span><br><span class="line">alert(h());</span><br></pre></td></tr></table></figure>
+<p>这段代码中变量h指向了f中的那个匿名函数(由g返回)。</p>
+<ul>
+<li>假设函数h的作用域是在执行alert(h())确定的，那么此时h的作用域链是：h的活动对象-&gt;alert的活动对象-&gt;window对象。</li>
+<li>假设函数h的作用域是在定义时确定的，就是说h指向的那个匿名函数在定义的时候就已经确定了作用域。那么在执行的时候，h的作用域链为：h的活动对象-&gt;f的活动对象-&gt;window对象。</li>
+</ul>
+<p>如果第一种假设成立，那输出值就是undefined；如果第二种假设成立，输出值则为1。</p>
+<p>运行结果证明了第2个假设是正确的，说明函数的作用域确实是在定义这个函数的时候就已经确定了。</p>
+<h4 id="u95ED_u5305_u6709_u53EF_u80FD_u5BFC_u81F4IE_u6D4F_u89C8_u5668_u5185_u5B58_u6CC4_u6F0F"><a href="#u95ED_u5305_u6709_u53EF_u80FD_u5BFC_u81F4IE_u6D4F_u89C8_u5668_u5185_u5B58_u6CC4_u6F0F" class="headerlink" title="闭包有可能导致IE浏览器内存泄漏"></a>闭包有可能导致IE浏览器内存泄漏</h4><p>先看一个栗子:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="keyword">var</span> div = <span class="built_in">document</span>.createElement(<span class="string">"div"</span>);   </span><br><span class="line">  div.onclick = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上述div的click事件就是一个闭包, 由于该闭包的存在使得 f 函数内部的 div 变量对DOM元素的引用将一直存在.</p>
+<p>而早期IE浏览器( IE9之前 ) js 对象和 DOM 对象使用不同的垃圾收集方法, DOM对象使用计数垃圾回收机制, 只要匿名函数( 比如说onclick事件 )存在, DOM对象的引用便至少为1,因此它所占用的内存就永远不会被销毁.</p>
+<p>有趣的是,不同的IE版本将导致不同的现象:</p>
+<ul>
+<li>如果是IE 6, 内存泄漏，直到关闭IE进程为止;</li>
+<li>如果是IE 7，内存泄漏， 直到离开当前页面为止;</li>
+<li>如果是IE 8， GC回收器回收他们的内存，无论当前是不是compatibility模式.</li>
+</ul>
+<p>总结一下, 闭包的优点: 共享函数作用域, 便于开放一些接口或变量供外部使用;</p>
+<p>注意事项: 由于闭包可能会使得函数中变量被长期保存在内存中, 从而大量消耗内存, 影响页面性能, 因此不能滥用, 并且在IE浏览中可能导致内存泄露. 解决方法是，在退出函数之前，将不使用的局部变量全部删除.</p>
+<h3 id="for_u5FAA_u73AF_u95EE_u9898_u5206_u6790"><a href="#for_u5FAA_u73AF_u95EE_u9898_u5206_u6790" class="headerlink" title="for循环问题分析"></a>for循环问题分析</h3><p>我们再来看看开篇的for循环问题, 增加匿名函数后, for循环内部的变量便处于匿名函数的局部作用域下, 此时访问 length 属性, 或者访问 i 属性, 都只需要在匿名函数作用域内查找即可, 因此查询效率大大提升(测试数据发现提升有两百多倍).</p>
+<p>使用匿名函数后, 不止是作用域查询更快, 作用域内的变量还与外部隔离, 避免了像 i , length 这样的变量对后续代码产生影响. 可谓一举两得.</p>
+<h3 id="u8E29_u4E2A_u4F5C_u7528_u57DF_u7684_u5751"><a href="#u8E29_u4E2A_u4F5C_u7528_u57DF_u7684_u5751" class="headerlink" title="踩个作用域的坑"></a>踩个作用域的坑</h3><p>下面我们来踩一个作用域经典的坑.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> div = <span class="built_in">document</span>.getElementsByTagName(<span class="string">"div"</span>);</span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">var</span> i=<span class="number">0</span>,len=div.length;i&lt;len;i++)&#123;</span><br><span class="line">  div[i].onclick = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  	<span class="built_in">console</span>.log(i);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上述代码的本意是每次点击div, 打印div的索引, 实际上打印的却是 len 的值. 我们来分析下原因.</p>
+<p>点击div时, 将会执行 console.log(i) 语句, 显然 i 变量不在 click 事件的局部作用域内, 浏览器将沿着 scope chain 寻找 i 变量, 在 index1 的地方, 即 for循环开始的地方, 此处定义了一个 i 变量, 又 js 没有块作用域, 故 i 变量并不会在 for循环块执行完成后被销毁,又 i的最后一次自加使得 i = len, 于是浏览器在scope chain index=1索引的地方停下来了, 返回了i的值, 即len的值.</p>
+<p>为了解决这个问题, 我们将根据症结, 对症下药, 从作用域入手, 改变click事件的局部作用域, 如下:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> div = <span class="built_in">document</span>.getElementsByTagName(<span class="string">"div"</span>);</span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">var</span> i=<span class="number">0</span>,len=div.length;i&lt;len;i++)&#123;</span><br><span class="line">  (<span class="function"><span class="keyword">function</span>(<span class="params">n</span>)</span>&#123;</span><br><span class="line">  	div[n].onclick = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">      <span class="built_in">console</span>.log(n);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;)(i);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>由于 click 事件被闭包包裹, 并且闭包自执行, 因此闭包内 n 变量的值每次都不一样, 点击div时, 浏览器将沿着 scope chain 寻找 n 变量, 最终会找到闭包内的 n 变量, 并且打印出div 的索引.</p>
+<h3 id="this_u4F5C_u7528_u57DF"><a href="#this_u4F5C_u7528_u57DF" class="headerlink" title="this作用域"></a>this作用域</h3><p>前面我们学习了作用域链, 闭包等基础知识, 下面我们来聊聊神秘莫测的this作用域.</p>
+<p>熟悉OOP的开发人员都知道, this是对象实例的引用, 始终指向对象实例. 然而 js 的世界里, this随着它的执行环境改变而改变, 并且它总是指向它所在方法的对象. 如下,</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  alert(<span class="keyword">this</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> o = &#123;&#125;;</span><br><span class="line">o.func = f;</span><br><span class="line">f();<span class="comment">//[object Window]</span></span><br><span class="line">o.func();<span class="comment">//[object Object]</span></span><br><span class="line"><span class="built_in">console</span>.log(f===<span class="built_in">window</span>.f);<span class="comment">//true</span></span><br></pre></td></tr></table></figure>
+<p>当f单独执行时, 其内部this指向window对象, 但是当f成为o对象的属性func时, this指向的是o对象, 又f === window.f, 故它们实际上指向的都是this所在方法的对象.</p>
+<p>下面我们来应用下</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Array</span>.prototype.slice.call([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>],<span class="number">1</span>);<span class="comment">//[2,3],正确用法</span></span><br><span class="line"><span class="built_in">Array</span>.prototype.slice([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>],<span class="number">1</span>);<span class="comment">//[], 错误用法,此时slice内部this仍然指向Array.prototype</span></span><br><span class="line"><span class="keyword">var</span> slice = <span class="built_in">Array</span>.prototype.slice;</span><br><span class="line">slice([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>],<span class="number">1</span>);<span class="comment">//Uncaught TypeError: Array.prototype.slice called on null or undefined</span></span><br><span class="line"><span class="comment">//此时slice内部this指向的是window对象,离开了原来的Array.prototype对象作用域,故报错~~</span></span><br></pre></td></tr></table></figure>
+<p>总结下, this的使用只需要注意一点:</p>
+<blockquote>
+<p>this 总是指向它所在方法的对象.</p>
+</blockquote>
+<h3 id="with_u8BED_u53E5"><a href="#with_u8BED_u53E5" class="headerlink" title="with语句"></a>with语句</h3><p>聊到作用域链就不得不说with语句了, with语句可以用来临时改变作用域, 将语句中的对象添加到作用域的顶部.</p>
+<p>语法: with (expression){statement} 例如:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> k = &#123;name:<span class="string">"daicy"</span>&#125;;</span><br><span class="line"><span class="keyword">with</span>(k)&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(name);<span class="comment">//daicy</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">console</span>.log(name);<span class="comment">//undefined</span></span><br></pre></td></tr></table></figure>
+<p>with 语句用于对象 k, 作用域第一层为 k 对象内部作用域, 故能直接打印出 name 的值, 在with之外的语句不受此影响. </p>
+<p>再看一个栗子:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> l = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>];</span><br><span class="line"><span class="keyword">with</span>(l) &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(map(<span class="function"><span class="keyword">function</span>(<span class="params">i</span>)</span>&#123;</span><br><span class="line">  	<span class="keyword">return</span> i*i;</span><br><span class="line">  &#125;));<span class="comment">//[1,4,9]</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在这个例子中，with 语句用于数组，所以在调用 map() 方法时，解释程序将检查该方法是否是本地函数。如果不是，它将检查伪对象 l，看它是否为该对象的方法, 又map是Array对象的方法, 数组l继承了该方法, 故能正确执行.</p>
+<p>注意: with语句容易引起歧义, 由于需要强制改变作用域链, 它将带来更多的cpu消耗, 建议慎用 with 语句.</p>
+<hr>
+<p>本问就讨论这么多内容,大家有什么问题或好的想法欢迎在下方参与<a href="#respond">留言和评论</a>.</p>
+<p>本文作者: <a href="https://github.com/Louiszhai" target="_blank" rel="external">louis</a></p>
+<p>本文链接: <a href="http://louiszhai.github.io/2015/12/22/scopeChain/">http://louiszhai.github.io/2015/12/22/scopeChain/</a></p>
+<p>参考文章</p>
+<ul>
+<li><a href="http://rainsilence.iteye.com/blog/2012209" target="_blank" rel="external">Jquery的each循环和原生循环及html5foreach循环的效率比较 - rainsilence - ITeye技术网站</a></li>
+<li><a href="http://blog.csdn.net/lmj623565791/article/details/25076713" target="_blank" rel="external">Javascript 进阶 作用域 作用域链 - Hongyang - 博客频道 - CSDN.NET</a></li>
+<li><a href="http://blog.csdn.net/yueguanghaidao/article/details/9568071" target="_blank" rel="external">Js作用域与作用域链详解 - Skycrab - 博客频道 - CSDN.NET</a></li>
+<li><a href="http://www.w3school.com.cn/js/pro_js_statements_with.asp" target="_blank" rel="external">ECMAScript with 语句</a></li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/with" target="_blank" rel="external">with - JavaScript | MDN</a></li>
+<li><a href="http://www.cnblogs.com/lufy/archive/2012/05/18/2507536.html" target="_blank" rel="external">Javascript–闭包引起的IE内存泄露 - 船长op - 博客园</a></li>
+<li><a href="http://www.jb51.net/article/24101.htm" target="_blank" rel="external">javascript深入理解js闭包_javascript技巧_脚本之家</a></li>
+</ul>
+
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2015/12/29/array/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption"><</strong>
+      <div class="article-nav-title">
+        
+          捋一捋JS的数组
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2015/12/18/traverse/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">详解JS遍历</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">分享到：</span>
+		<a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+		<a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+<div class="duoshuo">
+	<div class="ds-thread" data-thread-key="scopeChain" data-title="详解JS作用域链及闭包" data-url="http://louiszhai.github.io/2015/12/22/scopeChain/"></div>
+	<style>
+		#ds-reset .ds-avatar img{width:54px;height:54px;border-radius:27px;-webkit-border-radius:27px;-moz-border-radius:27px;box-shadow:inset 0 -1px 0 #3333sf;-webkit-box-shadow:inset 0 -1px 0 #3333sf;-webkit-transition:0.4s;-webkit-transition:-webkit-transform 0.4s ease-out;transition:transform 0.4s ease-out;-moz-transition:-moz-transform 0.4s ease-out;}
+		#ds-reset .ds-avatar img:hover{box-shadow:0 0 10px #fff;rgba(255,255,255,.6),inset 0 0 20px rgba(255,255,255,1);-webkit-box-shadow:0 0 10px #fff;rgba(255,255,255,.6),inset 0 0 20px rgba(255,255,255,1);transform:rotateZ(360deg);-webkit-transform:rotateZ(360deg);-moz-transform:rotateZ(360deg);}
+		p.ds-powered-by,#ds-sync-checkbox,.ds-sync label{display:none!important;}
+		#ds-reset .ds-rounded-top{-webkit-border-top-right-radius:0px;-webkit-border-top-left-radius:0px;border-top-right-radius:0px;border-top-left-radius:0px;}
+		#ds-thread #ds-reset .ds-textarea-wrapper{background:#fff;border:0;margin-bottom:20px;padding-right:0px;}
+		#ds-thread #ds-reset .ds-textarea-wrapper textarea{min-height:80px;border:1px solid #ccc;padding:10px;-webkit-appearance:none;border-radius:0;background-color:#FFFFFF;border-color:#cccccc;box-shadow:inset 0 1px 2px rgba(0,0,0,0.1);color:rgba(0,0,0,0.75);-webkit-box-sizing:border-box;box-sizing:border-box;-webkit-transition:border-color 0.15s linear,background 0.15s linear;-moz-transition:border-color 0.15s linear,background 0.15s linear;-ms-transition:border-color 0.15s linear,background 0.15s linear;-o-transition:border-color 0.15s linear,background 0.15s linear;transition:border-color 0.15s linear,background 0.15s linear;}
+		/*#ds-thread #ds-reset .ds-textarea-wrapper textarea:focus{border-color:#999999;background:#fafafa;outline:none;}*/
+		#ds-thread #ds-reset .ds-post-options{border-bottom-left-radius:0px;-webkit-border-bottom-left-radius:0px;border:none;background:none!important;}
+		#ds-reset .ds-textarea-wrapper textarea:focus{border-color:#66afe9;outline:0;-webkit-box-shadow:inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);box-shadow:inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);}
+		#ds-thread #ds-reset .ds-post-button:hover,#ds-thread #ds-reset .ds-post-button:focus{
+		    background-color: #51a351;
+		    background-position: 0 -32px;
+		    color:white;
+		}
+		#ds-thread #ds-reset .ds-post-toolbar,#ds-reset .ds-avatar{box-shadow:none;}
+		#ds-thread #ds-reset .ds-textarea-wrapper textarea:focus{
+	    	/*background: none repeat scroll 0 0 #F4FAFF;*/
+	    	border-color:#9DD4FD;
+	    	border-width:1px;
+	    	box-shadow:0 1px 1px rgba(0,0,0,0.075) inset, 0 0 8px rgba(82, 168, 236, 0.6);
+	    	outline:0 none;
+    	}
+		#ds-thread #ds-reset .ds-textarea-wrapper textarea:active{
+	    	/*background: none repeat scroll 0 0 #F4FAFF;*/
+	    	border-width:1px;
+	    	border-color:#9DD4FD;
+	    	box-shadow:0 1px 1px rgba(0,0,0,0.075) inset, 0 0 8px rgba(82, 168, 236, 0.6);
+	    	outline:0 none;
+    	}
+    	#ds-thread #ds-reset .ds-post-button{
+    		box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset, 0 1px 2px rgba(0, 0, 0, 0.05);
+		    border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+		    border-width: 1px;
+		    border-style: solid;
+		    border-radius: 3px;
+		    background: #5bb75b;
+		    color:white;
+		    text-shadow:none;
+		    transition:background-color 300ms ease-out;
+    	}
+    	#ds-reset .ds-avatar{
+    		background-color:initial;
+    	}
+
+	</style>
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"true"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+
+		window.addEventListener('hashchange', function() {
+            if (window.location.hash === '#respond') {
+                $('.duoshuo textarea').focus();
+            }
+        });
+	})();
+	</script>
+</div>
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2016 louis
+
+        <script type="text/javascript">if(location.href.indexOf('localhost')<0){var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan style='position:relative;top:2px' id='cnzz_stat_icon_1256923583'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s11.cnzz.com/z_stat.php%3Fid%3D1256923583%26show%3Dpic' type='text/javascript'%3E%3C/script%3E"));}</script>
+
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+
+
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: false,
+		animate: false,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="/js/jquery-1.9.1.min.js" type="text/javascript"></script>
+<script src="/js/main.js" type="text/javascript"></script>
+
+
+
+
+
+
+  </div>
+  <a href="https://github.com/Louiszhai"><img style="position: absolute; top: 0; right: 0; border: 0;" source="https://camo.githubusercontent.com/a6677b08c955af8400f44c6298f40e7d19cc5b2d/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677261795f3664366436642e706e67" src="/img/fork_me_on_github.png" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png"></a>
+</body>
+</html>

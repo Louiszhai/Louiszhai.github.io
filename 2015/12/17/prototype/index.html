@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>详解prototype与__proto__ | louis blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="JavaScript prototype __proto__ 原型 内部原型 new">
+<meta property="og:type" content="article">
+<meta property="og:title" content="详解prototype与__proto__">
+<meta property="og:url" content="http://louiszhai.github.io/2015/12/17/prototype/index.html">
+<meta property="og:site_name" content="louis blog">
+<meta property="og:description" content="JavaScript prototype __proto__ 原型 内部原型 new">
+<meta property="og:image" content="http://louiszhai.github.io/doc_images/prototype.png">
+<meta property="og:updated_time" content="2015-12-17T14:09:47.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="详解prototype与__proto__">
+<meta name="twitter:description" content="JavaScript prototype __proto__ 原型 内部原型 new">
+  
+    <link rel="alternative" href="/atom.xml" title="louis blog" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img src="/i.png" class="js-avatar" style="width: 100%;height: 100%;opacity: 1;">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">louis</a></h1>
+		</hgroup>
+
+		
+		<p class="header-subtitle">程序猿 前端攻城师</p>
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>菜单</li>
+						<li>标签</li>
+						
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="github" target="_blank" href="https://github.com/Louiszhai" title="github">github</a>
+					        
+								<a class="weibo" target="_blank" href="http://weibo.com/xingyez" title="weibo">weibo</a>
+					        
+								<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						<a href="/tags/JavaScript/" style="font-size: 10px;">JavaScript</a>
+					</div>
+				</section>
+				
+				
+				
+
+				
+			</div>
+		</div>
+	</header>				
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">louis</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				<img lazy-src="/i.png" class="js-avatar">
+			</div>
+			<hgroup>
+			  <h1 class="header-author">louis</h1>
+			</hgroup>
+			
+			<p class="header-subtitle">程序猿 前端攻城师</p>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="https://github.com/Louiszhai" title="github">github</a>
+			        
+						<a class="weibo" target="_blank" href="http://weibo.com/xingyez" title="weibo">weibo</a>
+			        
+						<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+      <div class="body-wrap"><article id="post-prototype" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/12/17/prototype/" class="article-date">
+  	<time datetime="2015-12-17T01:34:36.000Z" itemprop="datePublished">2015-12-17</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      详解prototype与__proto__
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/">JavaScript</a></li></ul>
+	</div>
+
+        
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          <div id="toc" class="toc-article">
+    <div class="toc-title">目录</div>
+    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#u6982_u5FF5"><span class="toc-text">概念</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u6817_u5B50"><span class="toc-text">栗子</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#proto"><span class="toc-text">__proto__</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Function-prototype"><span class="toc-text">Function.prototype</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#JS_u4E2D_u51FD_u6570_u662F_u4E00_u7B49_u516C_u6C11"><span class="toc-text">JS中函数是一等公民</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Object-prototype"><span class="toc-text">Object.prototype</span></a></li></ol>
+</div>
+      
+        <h3 id="u6982_u5FF5"><a href="#u6982_u5FF5" class="headerlink" title="概念"></a>概念</h3><ol>
+<li><strong>prototype</strong> 是函数(function) 的一个属性, 它指向函数的原型.</li>
+<li><strong>__proto__</strong>   是对象的内部属性, 它指向构造器的原型, 对象依赖它进行原型链查询.</li>
+</ol>
+<p>由上, <strong>prototype</strong> 只有函数才有, 其他(非函数)对象不具有该属性. 而 <strong>__proto__</strong> 是对象的内部属性, 任何对象都拥有该属性. </p>
+<a id="more"></a>
+<h3 id="u6817_u5B50"><a href="#u6817_u5B50" class="headerlink" title="栗子"></a>栗子</h3><p>下面我们来吃个栗子帮助消化下:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Person</span>(<span class="params">name</span>)</span>&#123;</span><br><span class="line">  <span class="keyword">this</span>.name = name;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> p1 = <span class="keyword">new</span> Person(<span class="string">'louis'</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(Person.prototype);<span class="comment">//Person原型 &#123;constructor: Person(name),__proto__: Object&#125;</span></span><br><span class="line"><span class="built_in">console</span>.log(p1.prototype);<span class="comment">//undefined</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(Person.__proto__);<span class="comment">//空函数, function()&#123;&#125;</span></span><br><span class="line"><span class="built_in">console</span>.log(p1.__proto__ == Person.prototype);<span class="comment">//true</span></span><br></pre></td></tr></table></figure>
+<p>吃栗子时我们发现, Person.prototype(原型) 默认拥有两个属性:</p>
+<ul>
+<li>constructor 属性, 指向构造器, 即Person本身</li>
+<li>__proto__ 属性, 指向一个空的Object 对象</li>
+</ul>
+<p>而p1作为非函数对象, 自然就没有 prototype 属性; 此处佐证了<code>概念1</code></p>
+<p>下面来看看__proto__属性:</p>
+<p>Person.__proto__ 属性 指向的是一个空函数( function(){} ), 待会儿我们再来研究这个空函数.</p>
+<p>p1.__proto__ 属性 指向的是 构造器(Person) 的原型, 即 Person.prototype. 此处佐证了<code>概念2</code></p>
+<p>这里我们发现: 原型链查询时, 正是通过这个属性(__proto__) 链接到构造器的原型, 从而实现查询的层层深入.</p>
+<p>对 <code>概念1</code> 不太理解的同学, 说明你们不会吃栗子, 咱们忽略他们. 对 <code>概念2</code> 不太理解的同学, 我们来多吃几个栗子, 边吃边想:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> obj = &#123;name: <span class="string">'jack'</span>&#125;,</span><br><span class="line">	arr = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>],</span><br><span class="line">	reg = <span class="regexp">/hello/g</span>,</span><br><span class="line">	date = <span class="keyword">new</span> <span class="built_in">Date</span>,</span><br><span class="line">	err = <span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">'exception'</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(obj.__proto__  === <span class="built_in">Object</span>.prototype); <span class="comment">// true</span></span><br><span class="line"><span class="built_in">console</span>.log(arr.__proto__  === <span class="built_in">Array</span>.prototype);  <span class="comment">// true</span></span><br><span class="line"><span class="built_in">console</span>.log(reg.__proto__  === <span class="built_in">RegExp</span>.prototype); <span class="comment">// true</span></span><br><span class="line"><span class="built_in">console</span>.log(date.__proto__ === <span class="built_in">Date</span>.prototype);   <span class="comment">// true</span></span><br><span class="line"><span class="built_in">console</span>.log(err.__proto__  === <span class="built_in">Error</span>.prototype);  <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
+<p>可见, 以上通过 <code>对象字面量</code> 和 new + JS引擎内置构造器() 创建的对象, 无一例外, 它们的__proto__ 属性全部指向构造器的原型(prototype). 充分佐证了 <code>概念2</code> .</p>
+<h3 id="proto"><a href="#proto" class="headerlink" title="__proto__"></a>__proto__</h3><p>刚才留下了一个问题: Person.__proto__ 指向的是一个空函数, 下面我们来看看这个空函数究竟是什么.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(Person.__proto__ === <span class="built_in">Function</span>.prototype);<span class="comment">//true</span></span><br></pre></td></tr></table></figure>
+<p>Person 是构造器也是函数(function), Person的__proto__ 属性自然就指向 函数(function)的原型, 即 Function.prototype.</p>
+<p>这说明了什么呢?</p>
+<p>我们由 “特殊” 联想到 “通用” , 由Person构造器联想一般的构造器.</p>
+<p>这说明 <strong>所有的构造器都继承于Function.prototype</strong> (此处我们只是由特殊总结出了普适规律, 并没有给出证明, 请耐心看到后面) , 甚至包括根构造器Object及Function自身。所有构造器都继承了Function.prototype的属性及方法。如length、call、apply、bind（ES5）等. 如下:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(<span class="built_in">Number</span>.__proto__   === <span class="built_in">Function</span>.prototype); <span class="comment">// true</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">Boolean</span>.__proto__  === <span class="built_in">Function</span>.prototype); <span class="comment">// true</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">String</span>.__proto__   === <span class="built_in">Function</span>.prototype); <span class="comment">// true</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">Object</span>.__proto__   === <span class="built_in">Function</span>.prototype); <span class="comment">// true</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">Function</span>.__proto__ === <span class="built_in">Function</span>.prototype); <span class="comment">// true</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">Array</span>.__proto__    === <span class="built_in">Function</span>.prototype); <span class="comment">// true</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">RegExp</span>.__proto__   === <span class="built_in">Function</span>.prototype); <span class="comment">// true</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">Error</span>.__proto__    === <span class="built_in">Function</span>.prototype); <span class="comment">// true</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">Date</span>.__proto__     === <span class="built_in">Function</span>.prototype); <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
+<p>JavaScript中有内置(build-in)构造器/对象共计13个（<a href="http://kangax.github.com/es5-compat-table/" target="_blank" rel="external">ES5</a>中新加了JSON），这里列举了可访问的9个构造器。剩下如Global不能直接访问，Arguments仅在函数调用时由JS引擎创建，Math，JSON是以对象形式存在的，无需new。由于任何对象都拥有 __proto__ 属性指向构造器的原型. 即它们的 __proto__ 指向Object对象的原型(Object.prototype)。如下所示:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(<span class="built_in">Math</span>.__proto__ === <span class="built_in">Object</span>.prototype);  <span class="comment">// true</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">JSON</span>.__proto__ === <span class="built_in">Object</span>.prototype);  <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
+<p>如上所述, 既然所有的构造器都来自于Function.prototype, 那么Function.prototype 到底是什么呢?</p>
+<h3 id="Function-prototype"><a href="#Function-prototype" class="headerlink" title="Function.prototype"></a>Function.prototype</h3><p>我们借用 typeof 运算符来看看它的类型. </p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(<span class="keyword">typeof</span> <span class="built_in">Function</span>.prototype) <span class="comment">// "function"</span></span><br></pre></td></tr></table></figure>
+<p>实际上, Function.prototype也是唯一一个typeof XXX.prototype为 “function”的prototype。其它的构造器的prototype都是一个对象。如下:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(<span class="keyword">typeof</span> <span class="built_in">Number</span>.prototype)   <span class="comment">// object</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="keyword">typeof</span> <span class="built_in">Boolean</span>.prototype)  <span class="comment">// object</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="keyword">typeof</span> <span class="built_in">String</span>.prototype)   <span class="comment">// object</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="keyword">typeof</span> <span class="built_in">Object</span>.prototype)   <span class="comment">// object</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="keyword">typeof</span> <span class="built_in">Array</span>.prototype)    <span class="comment">// object</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="keyword">typeof</span> <span class="built_in">RegExp</span>.prototype)   <span class="comment">// object</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="keyword">typeof</span> <span class="built_in">Error</span>.prototype)    <span class="comment">// object</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="keyword">typeof</span> <span class="built_in">Date</span>.prototype)     <span class="comment">// object</span></span><br></pre></td></tr></table></figure>
+<h3 id="JS_u4E2D_u51FD_u6570_u662F_u4E00_u7B49_u516C_u6C11"><a href="#JS_u4E2D_u51FD_u6570_u662F_u4E00_u7B49_u516C_u6C11" class="headerlink" title="JS中函数是一等公民"></a>JS中函数是一等公民</h3><p>既然Function.prototype 的类型是函数, 那么它会拥有 __proto__ 属性吗, Function.prototype.__proto__ 会指向哪里呢? 会指向对象的原型吗? 请看下方:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(<span class="built_in">Function</span>.prototype.__proto__ === <span class="built_in">Object</span>.prototype) <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
+<p>透过上方代码, 且我们了解到: Function.prototype 的类型是函数, 也就意味着一个函数拥有 __proto__ 属性, 并且该属性指向了对象(Object)构造器的原型. 这意味着啥?</p>
+<p>根据我们在 <code>概念2</code> 中了解到的: <strong>__proto__</strong>   是对象的内部属性, 它指向构造器的原型.</p>
+<p>这意味着 Function.prototype 函数 拥有了一个对象的内部属性, 并且该属性还恰好指向对象构造器的原型. 它是一个对象吗? 是的, 它一定是对象. 它必须是. </p>
+<p>实际上, JavaScript的世界观里, 函数也是对象, 函数是一等公民.</p>
+<p>这说明所有的构造器既是<code>函数</code>也是一个普通JS<code>对象</code>，可以给构造器添加/删除属性等。同时它也继承了Object.prototype上的所有方法：toString、valueOf、hasOwnProperty等。</p>
+<h3 id="Object-prototype"><a href="#Object-prototype" class="headerlink" title="Object.prototype"></a>Object.prototype</h3><p>函数的 __proto__ 属性指向 Function.prototype, 如: Person.__proto__ —&gt; Function.prototype</p>
+<p>Function.prototype 函数的 __proto__ 属性指向 Object.prototype, 如: Function.prototype.__proto__ —&gt; Object.prototype.</p>
+<p>那么Object.prototype.__proto__ 指向什么呢? </p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(<span class="built_in">Object</span>.prototype.__proto__ === <span class="literal">null</span>);<span class="comment">//true</span></span><br></pre></td></tr></table></figure>
+<p>由于已经到顶, JS世界的源头一片荒芜, 竟然什么都没有! 令人嗟叹不已.</p>
+<p>都说一图胜千言, 我也不能免俗. 下面附一张 <a href="http://stackoverflow.com/" target="_blank" rel="external">stackoverflow</a> 上的图:</p>
+<p><img src="/doc_images/prototype.png" alt=""></p>
+<p>这张图也指出: </p>
+<ul>
+<li>Object.__proto__ == Function.prototype,</li>
+</ul>
+<ul>
+<li>Function.__proto__ == Function.prototype.</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//虽然上面做过测试, 我们还是再次测试下</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">Object</span>.__proto__   == <span class="built_in">Function</span>.prototype);<span class="comment">//true</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">Function</span>.__proto__ == <span class="built_in">Function</span>.prototype);<span class="comment">//true</span></span><br></pre></td></tr></table></figure>
+<p>由于对象构造器 (Object) 也是构造器, 又构造器都是函数, 又函数是一等公民, 函数也是对象.</p>
+<p>故, 对象构造器 (Object) 拥有<strong>3</strong>种身份:</p>
+<ul>
+<li><code>构造器</code></li>
+<li><code>函数</code></li>
+<li><code>对象</code></li>
+</ul>
+<p>推而广之, 所有构造器都拥有上述3种身份.</p>
+<p>由于构造器是 <code>对象</code> (身份3), 理所当然拥有 __proto__ 属性, 且该属性一定指向其构造器的原型, 也就是指向 <code>函数</code> (身份2) 构造器(Function)的原型, 即 Function.prototype. 于是我们证明了上面那句 <strong>所有的构造器都继承于Function.prototype</strong> (身份1).</p>
+<p>注: 上面代码中用到的 __proto__ 目前在IE6/7/8/9中并不支持。IE9中可以使用<a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Object/GetPrototypeOf" target="_blank" rel="external">Object.getPrototypeOf</a>(ES5)获取对象的内部原型。</p>
+<hr>
+<p>本问就讨论这么多内容,大家有什么问题或好的想法欢迎在下方参与<a href="#respond">留言和评论</a>.</p>
+<p>本文作者: <a href="https://github.com/Louiszhai" target="_blank" rel="external">louis</a></p>
+<p>本文链接: <a href="http://louiszhai.github.io/2015/12/17/prototype/">http://louiszhai.github.io/2015/12/17/prototype/</a></p>
+<p>参考文章</p>
+<ul>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/prototype" target="_blank" rel="external">Function.prototype - JavaScript | MDN</a></li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/prototype" target="_blank" rel="external">Object.prototype - JavaScript | MDN</a></li>
+<li><a href="http://www.cnblogs.com/snandy/archive/2012/09/01/2664134.html" target="_blank" rel="external">JavaScript中__proto__与prototype的关系 - snandy - 博客园</a></li>
+</ul>
+
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2015/12/18/traverse/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption"><</strong>
+      <div class="article-nav-title">
+        
+          详解JS遍历
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2015/12/16/currying/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Currying</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">分享到：</span>
+		<a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+		<a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+<div class="duoshuo">
+	<div class="ds-thread" data-thread-key="prototype" data-title="详解prototype与__proto__" data-url="http://louiszhai.github.io/2015/12/17/prototype/"></div>
+	<style>
+		#ds-reset .ds-avatar img{width:54px;height:54px;border-radius:27px;-webkit-border-radius:27px;-moz-border-radius:27px;box-shadow:inset 0 -1px 0 #3333sf;-webkit-box-shadow:inset 0 -1px 0 #3333sf;-webkit-transition:0.4s;-webkit-transition:-webkit-transform 0.4s ease-out;transition:transform 0.4s ease-out;-moz-transition:-moz-transform 0.4s ease-out;}
+		#ds-reset .ds-avatar img:hover{box-shadow:0 0 10px #fff;rgba(255,255,255,.6),inset 0 0 20px rgba(255,255,255,1);-webkit-box-shadow:0 0 10px #fff;rgba(255,255,255,.6),inset 0 0 20px rgba(255,255,255,1);transform:rotateZ(360deg);-webkit-transform:rotateZ(360deg);-moz-transform:rotateZ(360deg);}
+		p.ds-powered-by,#ds-sync-checkbox,.ds-sync label{display:none!important;}
+		#ds-reset .ds-rounded-top{-webkit-border-top-right-radius:0px;-webkit-border-top-left-radius:0px;border-top-right-radius:0px;border-top-left-radius:0px;}
+		#ds-thread #ds-reset .ds-textarea-wrapper{background:#fff;border:0;margin-bottom:20px;padding-right:0px;}
+		#ds-thread #ds-reset .ds-textarea-wrapper textarea{min-height:80px;border:1px solid #ccc;padding:10px;-webkit-appearance:none;border-radius:0;background-color:#FFFFFF;border-color:#cccccc;box-shadow:inset 0 1px 2px rgba(0,0,0,0.1);color:rgba(0,0,0,0.75);-webkit-box-sizing:border-box;box-sizing:border-box;-webkit-transition:border-color 0.15s linear,background 0.15s linear;-moz-transition:border-color 0.15s linear,background 0.15s linear;-ms-transition:border-color 0.15s linear,background 0.15s linear;-o-transition:border-color 0.15s linear,background 0.15s linear;transition:border-color 0.15s linear,background 0.15s linear;}
+		/*#ds-thread #ds-reset .ds-textarea-wrapper textarea:focus{border-color:#999999;background:#fafafa;outline:none;}*/
+		#ds-thread #ds-reset .ds-post-options{border-bottom-left-radius:0px;-webkit-border-bottom-left-radius:0px;border:none;background:none!important;}
+		#ds-reset .ds-textarea-wrapper textarea:focus{border-color:#66afe9;outline:0;-webkit-box-shadow:inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);box-shadow:inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);}
+		#ds-thread #ds-reset .ds-post-button:hover,#ds-thread #ds-reset .ds-post-button:focus{
+		    background-color: #51a351;
+		    background-position: 0 -32px;
+		    color:white;
+		}
+		#ds-thread #ds-reset .ds-post-toolbar,#ds-reset .ds-avatar{box-shadow:none;}
+		#ds-thread #ds-reset .ds-textarea-wrapper textarea:focus{
+	    	/*background: none repeat scroll 0 0 #F4FAFF;*/
+	    	border-color:#9DD4FD;
+	    	border-width:1px;
+	    	box-shadow:0 1px 1px rgba(0,0,0,0.075) inset, 0 0 8px rgba(82, 168, 236, 0.6);
+	    	outline:0 none;
+    	}
+		#ds-thread #ds-reset .ds-textarea-wrapper textarea:active{
+	    	/*background: none repeat scroll 0 0 #F4FAFF;*/
+	    	border-width:1px;
+	    	border-color:#9DD4FD;
+	    	box-shadow:0 1px 1px rgba(0,0,0,0.075) inset, 0 0 8px rgba(82, 168, 236, 0.6);
+	    	outline:0 none;
+    	}
+    	#ds-thread #ds-reset .ds-post-button{
+    		box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset, 0 1px 2px rgba(0, 0, 0, 0.05);
+		    border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+		    border-width: 1px;
+		    border-style: solid;
+		    border-radius: 3px;
+		    background: #5bb75b;
+		    color:white;
+		    text-shadow:none;
+		    transition:background-color 300ms ease-out;
+    	}
+    	#ds-reset .ds-avatar{
+    		background-color:initial;
+    	}
+
+	</style>
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"true"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+
+		window.addEventListener('hashchange', function() {
+            if (window.location.hash === '#respond') {
+                $('.duoshuo textarea').focus();
+            }
+        });
+	})();
+	</script>
+</div>
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2016 louis
+
+        <script type="text/javascript">if(location.href.indexOf('localhost')<0){var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan style='position:relative;top:2px' id='cnzz_stat_icon_1256923583'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s11.cnzz.com/z_stat.php%3Fid%3D1256923583%26show%3Dpic' type='text/javascript'%3E%3C/script%3E"));}</script>
+
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+
+
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: false,
+		animate: false,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="/js/jquery-1.9.1.min.js" type="text/javascript"></script>
+<script src="/js/main.js" type="text/javascript"></script>
+
+
+
+
+
+
+  </div>
+  <a href="https://github.com/Louiszhai"><img style="position: absolute; top: 0; right: 0; border: 0;" source="https://camo.githubusercontent.com/a6677b08c955af8400f44c6298f40e7d19cc5b2d/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677261795f3664366436642e706e67" src="/img/fork_me_on_github.png" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png"></a>
+</body>
+</html>

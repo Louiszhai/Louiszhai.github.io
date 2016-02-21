@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>字符串常用方法 | louis blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="JavaScript String String.prototype">
+<meta property="og:type" content="article">
+<meta property="og:title" content="字符串常用方法">
+<meta property="og:url" content="http://louiszhai.github.io/2016/01/12/js.String/index.html">
+<meta property="og:site_name" content="louis blog">
+<meta property="og:description" content="JavaScript String String.prototype">
+<meta property="og:updated_time" content="2016-01-17T12:29:58.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="字符串常用方法">
+<meta name="twitter:description" content="JavaScript String String.prototype">
+  
+    <link rel="alternative" href="/atom.xml" title="louis blog" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img src="/i.png" class="js-avatar" style="width: 100%;height: 100%;opacity: 1;">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">louis</a></h1>
+		</hgroup>
+
+		
+		<p class="header-subtitle">程序猿 前端攻城师</p>
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>菜单</li>
+						<li>标签</li>
+						
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="github" target="_blank" href="https://github.com/Louiszhai" title="github">github</a>
+					        
+								<a class="weibo" target="_blank" href="http://weibo.com/xingyez" title="weibo">weibo</a>
+					        
+								<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						<a href="/tags/JavaScript/" style="font-size: 10px;">JavaScript</a>
+					</div>
+				</section>
+				
+				
+				
+
+				
+			</div>
+		</div>
+	</header>				
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">louis</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				<img lazy-src="/i.png" class="js-avatar">
+			</div>
+			<hgroup>
+			  <h1 class="header-author">louis</h1>
+			</hgroup>
+			
+			<p class="header-subtitle">程序猿 前端攻城师</p>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="https://github.com/Louiszhai" title="github">github</a>
+			        
+						<a class="weibo" target="_blank" href="http://weibo.com/xingyez" title="weibo">weibo</a>
+			        
+						<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+      <div class="body-wrap"><article id="post-js.String" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/01/12/js.String/" class="article-date">
+  	<time datetime="2016-01-12T12:27:09.000Z" itemprop="datePublished">2016-01-12</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      字符串常用方法
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/">JavaScript</a></li></ul>
+	</div>
+
+        
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          <div id="toc" class="toc-article">
+    <div class="toc-title">目录</div>
+    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#u5BFC_u8BFB"><span class="toc-text">导读</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#String-prototype"><span class="toc-text">String.prototype</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#u5C5E_u6027"><span class="toc-text">属性</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#u65B9_u6CD5"><span class="toc-text">方法</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#HTML_u65E0_u5173_u7684_u65B9_u6CD5"><span class="toc-text">HTML无关的方法</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#charAt"><span class="toc-text">charAt</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#charCodeAt"><span class="toc-text">charCodeAt</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#concat"><span class="toc-text">concat</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#indexOf"><span class="toc-text">indexOf</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#lastIndexOf"><span class="toc-text">lastIndexOf</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#locateCompare"><span class="toc-text">locateCompare</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#match"><span class="toc-text">match</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#replace"><span class="toc-text">replace</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#search"><span class="toc-text">search</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#slice"><span class="toc-text">slice</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#split"><span class="toc-text">split</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#substr"><span class="toc-text">substr</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#substring"><span class="toc-text">substring</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#toLocaleLowerCase"><span class="toc-text">toLocaleLowerCase</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#toLocaleUpperCase"><span class="toc-text">toLocaleUpperCase</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#toLowerCase"><span class="toc-text">toLowerCase</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#toUpperCase"><span class="toc-text">toUpperCase</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#toString-NaN"><span class="toc-text">toString</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#valueOf-NaN"><span class="toc-text">valueOf</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#trim"><span class="toc-text">trim</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#codePointAt"><span class="toc-text">codePointAt</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#contains"><span class="toc-text">contains</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#endsWith"><span class="toc-text">endsWith</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#normalize"><span class="toc-text">normalize</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#repeat"><span class="toc-text">repeat</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#startsWith"><span class="toc-text">startsWith</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#HTML_u6709_u5173_u7684_u65B9_u6CD5"><span class="toc-text">HTML有关的方法</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#anchor"><span class="toc-text">anchor</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#link"><span class="toc-text">link</span></a></li></ol></li></ol></li></ol></li></ol>
+</div>
+      
+        <h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>javaScript 中, 字符串无处不在, 并且所有的字符串方法均来自 String.prototype, 这一节, 我们走进看一看String内部, 探讨那些常用或不常用的字符串操作方法.</p>
+<a id="more"></a>
+<h3 id="String-prototype"><a href="#String-prototype" class="headerlink" title="String.prototype"></a>String.prototype</h3><p>String.prototype 属性指向 String 的原型对象. 以下是它的属性特性:</p>
+<table>
+<thead>
+<tr>
+<th>writable</th>
+<th>false</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>enumerable</td>
+<td>false</td>
+</tr>
+<tr>
+<td>configurable</td>
+<td>false</td>
+</tr>
+</tbody>
+</table>
+<p>所有的字符串实例都继承自 String.prototype. 因此任何 String.prototype 上的改变都会在字符串上体现出来.</p>
+<h4 id="u5C5E_u6027"><a href="#u5C5E_u6027" class="headerlink" title="属性"></a>属性</h4><ul>
+<li>String.prototype.constructor 指向构造器(String())</li>
+<li>String.prototype.length 表示字符串长度</li>
+</ul>
+<h4 id="u65B9_u6CD5"><a href="#u65B9_u6CD5" class="headerlink" title="方法"></a>方法</h4><p>字符串方法分为两种, 一种是html无关的方法, 一种是html有关的方法. 我们先看第一种. 无论字符串方法如何厉害, 都不至于强大到可以改变原字符串.</p>
+<h5 id="HTML_u65E0_u5173_u7684_u65B9_u6CD5"><a href="#HTML_u65E0_u5173_u7684_u65B9_u6CD5" class="headerlink" title="HTML无关的方法"></a>HTML无关的方法</h5><p>常用的方法有, charAt, charCodeAt, concat, indexOf, lastIndexOf, localeCompare, match, replace, search, slice, split, substr, substring, toLocaleLowerCase, toLocaleUpperCase, toLowerCase, toString, toUpperCase, trim, valueof 等ES5支持的, 以及 codePointAt, contains, endsWith, normalize, repeat, startsWith 等ES6支持的, 还包括 quote, toSource, trimLeft, trimRight 等非标准的.</p>
+<p>接下来我们将对各个方法分别举例阐述其用法. 若没有特别说明, 该方法将兼容所有目前主流浏览器.</p>
+<h6 id="charAt"><a href="#charAt" class="headerlink" title="charAt"></a>charAt</h6><p>charAt() 方法返回字符串中指定位置的字符。</p>
+<p>语法: <em>str</em>.charAt(index)</p>
+<p>index 为字符串索引(取值从0至length-1), 如果超出该范围, 则返回空串.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(<span class="string">"Hello, World"</span>.charAt(<span class="number">8</span>));<span class="comment">//o, 返回下标为8的字符串o</span></span><br></pre></td></tr></table></figure>
+<h6 id="charCodeAt"><a href="#charCodeAt" class="headerlink" title="charCodeAt"></a>charCodeAt</h6><p>charCodeAt() 返回指定索引处字符的 Unicode 数值.</p>
+<p>语法: str.charCodeAt(index)</p>
+<p>index 为一个从0至length-1的整数. 如果不是一个数值，则默认为 0, 如果小于0或者大于字符串长度, 则返回 NaN.</p>
+<p>Unicode 编码单元（code points）的范围从 0 到 1,114,111。开头的 128 个 Unicode 编码单元和 ASCII 字符编码一样. </p>
+<p>charCodeAt() 总是返回一个小于 65,536 的值. 因为高位编码单元需要由一对字符来表示, 为了查看其编码的完成字符, 需要查看 charCodeAt(i) 以及 charCodeAt(i+1) 的值. 如需更多了解请参考 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/String/prototype" target="_blank" rel="external">fixedCharCodeAt</a>.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(<span class="string">"Hello, World"</span>.charCodeAt(<span class="number">8</span>));<span class="comment">//111</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">"前端工程师"</span>.charCodeAt(<span class="number">2</span>));<span class="comment">//24037, 可见也可以查看中文Unicode编码</span></span><br></pre></td></tr></table></figure>
+<h6 id="concat"><a href="#concat" class="headerlink" title="concat"></a>concat</h6><p>concat() 方法将一个或多个字符串拼接在一起, 组成新的字符串并返回.</p>
+<p>语法: <em>str</em>.concat(string2, string3, …)</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(<span class="string">"早"</span>.concat(<span class="string">"上"</span>,<span class="string">"好"</span>,<span class="string">"各位"</span>));<span class="comment">//早上好各位</span></span><br></pre></td></tr></table></figure>
+<p>但是 concat 的性能表现不佳, 强烈推荐使用赋值操作符(+, +=) 代替 concat. “+” 操作符大概快了 concat 几十倍.(数据参考 <a href="http://jsperf.com/concat-vs-plus-vs-join" target="_blank" rel="external">性能测试</a>).</p>
+<h6 id="indexOf"><a href="#indexOf" class="headerlink" title="indexOf"></a>indexOf</h6><h6 id="lastIndexOf"><a href="#lastIndexOf" class="headerlink" title="lastIndexOf"></a>lastIndexOf</h6><p>indexOf() 方法用于查找子字符串在字符串中首次出现的位置. 没有则返回 -1. 该方法严格区分大小写, 并且从左往右查找. 而 lastIndexOf 则从右往左查找, 其它与前者一致.</p>
+<p>语法: str.indexOf(searchValue [, fromIndex=0])</p>
+<p>searchValue 表示被查找的字符串, fromIndex 表示开始查找的位置, 默认为0, 如果小于0, 则查找整个字符串, 若超过字符串长度, 则该方法返回-1, 除非被查找的是空字符串, 此时返回字符串长度.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(<span class="string">""</span>.indexOf(<span class="string">""</span>,<span class="number">100</span>));<span class="comment">//0</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">"IT改变世界"</span>.indexOf(<span class="string">"世界"</span>));<span class="comment">//4</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">"IT改变世界"</span>.lastIndexOf(<span class="string">"世界"</span>));<span class="comment">//4</span></span><br></pre></td></tr></table></figure>
+<h6 id="locateCompare"><a href="#locateCompare" class="headerlink" title="locateCompare"></a>locateCompare</h6><p>locateCompare() 方法用来比较字符串, 如果指定字符串在原字符串的前面则返回负数, 否则返回正数或0, 其中0 表示两个字符串相同. 该方法实现依赖具体的本地实现, 不同的语言下可能有不同的返回.</p>
+<p>语法: <em>str</em>.localeCompare(str2 [, locales [, options]])</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> str = <span class="string">"apple"</span>;</span><br><span class="line"><span class="keyword">var</span> str2 = <span class="string">"orange"</span>;</span><br><span class="line"><span class="built_in">console</span>.log(str.localeCompare(str2));<span class="comment">//-1</span></span><br><span class="line"><span class="built_in">console</span>.log(str.localeCompare(<span class="string">"123"</span>));<span class="comment">//1</span></span><br></pre></td></tr></table></figure>
+<p>目前 Safari 浏览器暂不支持该方法. Chrome 24, Firefox 29, IE11, Opera 15 已实现了它.</p>
+<h6 id="match"><a href="#match" class="headerlink" title="match"></a>match</h6><p>match() 方法用于测试字符串是否支持指定正则表达式的规则, 即使传入的是非正则表达式对象, 它也会隐式地使用 new RegExp(obj) 将其转换为正则表达式对象.</p>
+<p>语法: <em>str</em>.match(regexp)</p>
+<p>该方法返回包含匹配结果的数组, 如果没有匹配项, 则返回 null.</p>
+<p><strong>描述</strong></p>
+<ul>
+<li>若正则表达式没有 g 标志, 则返回同 RegExp.exec(str) 相同的结果. 而且返回的数组拥有一个额外的 input 属性, 该属性包含原始字符串, 另外该数组还拥有一个 index 属性, 该属性表示匹配字符串在原字符串中索引(从0开始).</li>
+<li>若正则表达式包含 g 标志, 则该方法返回一个包含所有匹配结果的数组, 没有匹配到则返回 null.</li>
+</ul>
+<p><strong>相关 RegExp 方法</strong></p>
+<ul>
+<li>若需测试字符串是否匹配正则, 请参考 RegExp.test(str).</li>
+<li>若只需第一个匹配结果, 请参考 RegExp.exec(str).</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> str = <span class="string">"World Internet Conference"</span>;</span><br><span class="line"><span class="built_in">console</span>.log(str.match(<span class="regexp">/[a-d]/i</span>));<span class="comment">//["d", index: 4, input: "World Internet Conference"]</span></span><br><span class="line"><span class="built_in">console</span>.log(str.match(<span class="regexp">/[a-d]/gi</span>));<span class="comment">//["d", "C", "c"]</span></span><br><span class="line"><span class="comment">//RegExp 方法如下</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="regexp">/[a-d]/gi</span>.test(str));<span class="comment">//true</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="regexp">/[a-d]/gi</span>.exec(str));<span class="comment">//["d", index: 4, input: "World Internet Conference"],</span></span><br></pre></td></tr></table></figure>
+<p>由上可知, RegExp.test(str) 方法只要匹配到了一个字符也返回true. 而</p>
+<p>RegExp.exec(str) 方法无论正则中有没有包含 g 标志, RegExp.exec将直接返回第一个匹配结果, 且该结果同 str.match(regexp) 方法不包含 g 标志时的返回一致.</p>
+<h6 id="replace"><a href="#replace" class="headerlink" title="replace"></a>replace</h6><p>该方法在之前已经讲过, 详细请参考 <a href="http://louiszhai.github.io/2015/12/11/js.replace/"><code>详解ECMAScript String.replace</code></a> .</p>
+<h6 id="search"><a href="#search" class="headerlink" title="search"></a>search</h6><p>search() 方法用于测试字符串对象是否包含某个正则匹配. 相当于正则表达式的 test 方法. 且该方法比 match() 方法更快. 如果匹配成功, search() 返回正则表达式在字符串中首次匹配项的索引, 否则返回-1.</p>
+<p>语法: <em>str</em>.search(regexp)</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> str = <span class="string">"abcdefg"</span>;</span><br><span class="line"><span class="built_in">console</span>.log(str.search(<span class="regexp">/[d-g]/</span>));<span class="comment">//3, 匹配到子串"defg",而d在原字符串中的索引为3</span></span><br></pre></td></tr></table></figure>
+<h6 id="slice"><a href="#slice" class="headerlink" title="slice"></a>slice</h6><p>slice() 方法提取字符串的一部分, 并返回新的字符串. 该方法有些类似Array.prototype.slice 方法.</p>
+<p>语法: <em>str</em>.slice(start, end)</p>
+<p>首先 end 参数可选, start可取正值, 也可取负值. </p>
+<p>取正值时表示从索引为start的位置截取到end的位置(不包括end所在位置的字符, 如果end省略则截取到字符串末尾).</p>
+<p>取负值时表示从索引为 length+start 位置截取到end所在位置的字符.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> str = <span class="string">"It is our choices that show what we truly are, far more than our abilities."</span>;</span><br><span class="line"><span class="built_in">console</span>.log(str.slice(<span class="number">0</span>,-<span class="number">30</span>));<span class="comment">//It is our choices that show what we truly are</span></span><br><span class="line"><span class="built_in">console</span>.log(str.slice(-<span class="number">30</span>));<span class="comment">//, far more than our abilities.</span></span><br></pre></td></tr></table></figure>
+<h6 id="split"><a href="#split" class="headerlink" title="split"></a>split</h6><p>split() 方法把原字符串分割成子字符串组成数组, 并返回该数组.</p>
+<p>语法: <em>str</em>.split(separator, limit)</p>
+<p>两个参数均是可选的, 其中 separator 表示分隔符, 它可以是字符串也可以是正则表达式. 如果忽略 separator, 则返回的数组包含一个由原字符串组成的元素. 如果 separator 是一个空串, 则 str 将会被分割成一个由原字符串中字符组成的数组. limit 表示从返回的数组中截取前 limit 个元素, 从而限定返回的数组长度.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> str = <span class="string">"today is a sunny day"</span>;</span><br><span class="line"><span class="built_in">console</span>.log(str.split());<span class="comment">//["today is a sunny day"]</span></span><br><span class="line"><span class="built_in">console</span>.log(str.split(<span class="string">""</span>));<span class="comment">//["t", "o", "d", "a", "y", " ", "i", "s", " ", "a", " ", "s", "u", "n", "n", "y", " ", "d", "a", "y"]</span></span><br><span class="line"><span class="built_in">console</span>.log(str.split(<span class="string">" "</span>));<span class="comment">//["today", "is", "a", "sunny", "day"]</span></span><br></pre></td></tr></table></figure>
+<p>使用limit限定返回的数组大小. 如下:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(str.split(<span class="string">" "</span>));<span class="comment">//["today"]</span></span><br></pre></td></tr></table></figure>
+<p>使用正则分隔符(RegExp separator). 如下:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(str.split(<span class="regexp">/\s*is\s*/</span>));<span class="comment">//["today", "a sunny day"]</span></span><br></pre></td></tr></table></figure>
+<p>若正则分隔符里包含捕获括号, 则括号匹配的结果将会包含在返回的数组中.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(str.split(<span class="regexp">/(\s*is\s*)/</span>));<span class="comment">//["today", " is ", "a sunny day"]</span></span><br></pre></td></tr></table></figure>
+<h6 id="substr"><a href="#substr" class="headerlink" title="substr"></a>substr</h6><p>substr() 方法返回字符串指定位置开始的指定数量的字符.</p>
+<p>语法: <em>str</em>.substr(start[, length])</p>
+<p>start 表示开始截取字符的位置, 可取正值或负值. 取正值时表示start位置的索引, 取负值时表示 length+start位置的索引.</p>
+<p>length 表示截取的字符长度.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> str = <span class="string">"Yesterday is history. Tomorrow is mystery. But today is a gift."</span>;</span><br><span class="line"><span class="built_in">console</span>.log(str.substr(<span class="number">47</span>));<span class="comment">//today is a gift.</span></span><br><span class="line"><span class="built_in">console</span>.log(str.substr(-<span class="number">16</span>));<span class="comment">//today is a gift.</span></span><br></pre></td></tr></table></figure>
+<p>目前 Microsoft’s JScript 不支持 start 参数取负的索引, 如需在 IE 下支持, 请参考 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/String/substr#Description" target="_blank" rel="external">Polyfill</a>.</p>
+<h6 id="substring"><a href="#substring" class="headerlink" title="substring"></a>substring</h6><p>substring() 方法返回字符串两个索引之间的子串.</p>
+<p>语法: <em>str</em>.substring(indexA[, indexB])</p>
+<p>indexA, indexB 表示字符串索引, 其中 indexB 可选, 如果省略, 则表示返回从 indexA 到字符串末尾的子串.</p>
+<p><strong>描述</strong></p>
+<p>substring 要截取的是从 indexA 到 indexB(不包含)之间的字符, 符合以下规律:</p>
+<ul>
+<li>若 indexA == indexB, 则返回一个空字符串;</li>
+<li>若 省略 indexB, 则提取字符一直到字符串末尾;</li>
+<li>若 任一参数小于 0 或 NaN, 则被当作 0;</li>
+<li>若 任一参数大于 length, 则被当作 length.</li>
+</ul>
+<p>而 如果 indexA &gt; indexB, 则 substring 的执行效果就像是两个参数调换一般. 比如: str.substring(0,1) == str.substring(1,0)</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> str = <span class="string">"Get outside every day. Miracles are waiting everywhere."</span>;</span><br><span class="line"><span class="built_in">console</span>.log(str.substring(<span class="number">1</span>,<span class="number">1</span>));<span class="comment">//""</span></span><br><span class="line"><span class="built_in">console</span>.log(str.substring(<span class="number">0</span>));<span class="comment">//Get outside every day. Miracles are waiting everywhere.</span></span><br><span class="line"><span class="built_in">console</span>.log(str.substring(-<span class="number">1</span>));<span class="comment">//Get outside every day. Miracles are waiting everywhere.</span></span><br><span class="line"><span class="built_in">console</span>.log(str.substring(<span class="number">0</span>,<span class="number">100</span>));<span class="comment">//Get outside every day. Miracles are waiting everywhere.</span></span><br><span class="line"><span class="built_in">console</span>.log(str.substring(<span class="number">22</span>,<span class="literal">NaN</span>));<span class="comment">//Get outside every day.</span></span><br></pre></td></tr></table></figure>
+<h6 id="toLocaleLowerCase"><a href="#toLocaleLowerCase" class="headerlink" title="toLocaleLowerCase"></a>toLocaleLowerCase</h6><h6 id="toLocaleUpperCase"><a href="#toLocaleUpperCase" class="headerlink" title="toLocaleUpperCase"></a>toLocaleUpperCase</h6><p>toLocaleLowerCase() 方法返回调用该方法的字符串被转换成小写的值, 转换规则根据本地化的大小写映射. 而 toLocaleUpperCase() 方法则是转换成大写的值.</p>
+<p>语法: <em>str</em>.toLocaleLowerCase(), <em>str</em>.toLocaleUpperCase()</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(<span class="string">'ABCDEFG'</span>.toLocaleLowerCase());<span class="comment">//abcdefg</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">'abcdefg'</span>.toLocaleUpperCase());<span class="comment">//ABCDEFG</span></span><br></pre></td></tr></table></figure>
+<h6 id="toLowerCase"><a href="#toLowerCase" class="headerlink" title="toLowerCase"></a>toLowerCase</h6><h6 id="toUpperCase"><a href="#toUpperCase" class="headerlink" title="toUpperCase"></a>toUpperCase</h6><p>这两个方法分别表示将字符串转换为相应的小写,大写形式, 并返回. 如下:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(<span class="string">'ABCDEFG'</span>.toLowerCase());<span class="comment">//abcdefg</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">'abcdefg'</span>.toUpperCase());<span class="comment">//ABCDEFG</span></span><br></pre></td></tr></table></figure>
+<h6 id="toString-NaN"><a href="#toString-NaN" class="headerlink" title="toString"></a>toString</h6><h6 id="valueOf-NaN"><a href="#valueOf-NaN" class="headerlink" title="valueOf"></a>valueOf</h6><p>这两个方法都是返回指定对象的字符串形式.</p>
+<p>语法: <em>str</em>.toString(), <em>str</em>.valueOf()</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> str = <span class="string">"abc"</span>;</span><br><span class="line"><span class="built_in">console</span>.log(str.toString());<span class="comment">//abc</span></span><br><span class="line"><span class="built_in">console</span>.log(str.toString()==str.valueOf());<span class="comment">//true</span></span><br></pre></td></tr></table></figure>
+<h6 id="trim"><a href="#trim" class="headerlink" title="trim"></a>trim</h6><p>trim() 方法清除字符串首尾的空白并返回.</p>
+<p>语法: <em>str</em>.trim()</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(<span class="string">"    abc    "</span>.trim());<span class="comment">//abc</span></span><br></pre></td></tr></table></figure>
+<p>trim() 方法是 ECMAScript 5 标准加入的, 它并不支持IE9以下的低版本IE浏览器, 如需支持, 请参考以下兼容写法:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(!<span class="built_in">String</span>.prototype.trim) &#123;</span><br><span class="line">  <span class="built_in">String</span>.prototype.trim = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.replace(<span class="regexp">/^\s+|\s+$/g</span>,<span class="string">''</span>);</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h6 id="codePointAt"><a href="#codePointAt" class="headerlink" title="codePointAt"></a>codePointAt</h6><p>codePointAt() 方法返回使用UTF-16编码的给定位置的值的非负整数. 该方法遵循 ES6标准, 并非所有浏览器都支持.</p>
+<p>语法: <em>str</em>.codePointAt(position)</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(<span class="string">"a"</span>.codePointAt(<span class="number">0</span>));<span class="comment">//97</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">"\u4f60\u597d"</span>.codePointAt(<span class="number">0</span>));<span class="comment">//20320</span></span><br></pre></td></tr></table></figure>
+<p>codePointAt 符合 ES6 标准, 如需支持, 请参考 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/String/codePointAt#Polyfill" target="_blank" rel="external">Polyfill</a> .</p>
+<h6 id="contains"><a href="#contains" class="headerlink" title="contains"></a>contains</h6><p>contains() 方法尚处于 ES6 规范的草案中, 它用来判断一个字符串是否属于另一个字符, 如果是, 则返回true, 如果不是, 则返回false.</p>
+<p>语法: <em>str</em>.contains(subString [, position])</p>
+<p>subString 表示要搜索的字符串, position 表示从当前字符串的哪个位置开始搜索字符串, 默认值为0.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> str = <span class="string">"Practice makes perfect."</span>;</span><br><span class="line"><span class="built_in">console</span>.log(str.contains(<span class="string">"perfect"</span>));<span class="comment">//true</span></span><br><span class="line"><span class="built_in">console</span>.log(str.contains(<span class="string">"perfect"</span>,<span class="number">100</span>));<span class="comment">//false</span></span><br></pre></td></tr></table></figure>
+<p>实际上, 目前只有 Firefox 17及之后的版本实现了该方法.</p>
+<h6 id="endsWith"><a href="#endsWith" class="headerlink" title="endsWith"></a>endsWith</h6><p>endsWith() 方法基本与 contains() 功能相同, 不同的是, 它用来判断一个字符串是否是原字符串的结尾. 若是则返回true, 否则返回false.</p>
+<p>语法: <em>str</em>.endsWith(substring [, position])</p>
+<p>与contains 方法不同, position 参数的默认值为字符串长度.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> str = <span class="string">"Learn and live."</span>;</span><br><span class="line"><span class="built_in">console</span>.log(str.endsWith(<span class="string">"live."</span>));<span class="comment">//true</span></span><br><span class="line"><span class="built_in">console</span>.log(str.endsWith(<span class="string">"Learn"</span>,<span class="number">5</span>));<span class="comment">//true</span></span><br></pre></td></tr></table></figure>
+<p>同样目前只有 Firefox 17版本及之后的版本实现了该方法. 其他浏览器请参考 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/String/endsWith#Polyfill" target="_blank" rel="external">Polyfill</a>.</p>
+<h6 id="normalize"><a href="#normalize" class="headerlink" title="normalize"></a>normalize</h6><p>normalize() 方法尚处于 ES6 规范的草案中, 它会按照指定的 Unicode 正规形式将原字符串正规化.</p>
+<p>语法: <em>str</em>.normalize([form])</p>
+<p>form 参数可省略, 目前有四种 Unicode 正规形式, 即 “NFC”, “NFD”, “NFKC” 以及 “NFKD”, form的默认值为 “NFC”. 如果form 传入了非法的参数值, 则会抛出 RangeError 异常.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> str = <span class="string">"\u4f60\u597d"</span>;</span><br><span class="line"><span class="built_in">console</span>.log(str.normalize());<span class="comment">//你好</span></span><br><span class="line"><span class="built_in">console</span>.log(str.normalize(<span class="string">"NFC"</span>));<span class="comment">//你好</span></span><br><span class="line"><span class="built_in">console</span>.log(str.normalize(<span class="string">"NFD"</span>));<span class="comment">//你好</span></span><br><span class="line"><span class="built_in">console</span>.log(str.normalize(<span class="string">"NFKC"</span>));<span class="comment">//你好</span></span><br><span class="line"><span class="built_in">console</span>.log(str.normalize(<span class="string">"NFKD"</span>));<span class="comment">//你好</span></span><br></pre></td></tr></table></figure>
+<p>目前只有 Chrome, Firefox 浏览器实现了该方法.</p>
+<h6 id="repeat"><a href="#repeat" class="headerlink" title="repeat"></a>repeat</h6><p>repeat() 方法尚处于 ES6 规范的草案中, 它返回重复原字符串多次的新字符串.</p>
+<p>语法: <em>str</em>.repeat(count)</p>
+<p>count 参数只能取大于等于0 的数字, 若该数字不为整数, 将自动转换为整数形式. 如果取负数或者其他值将报错</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> str = <span class="string">"A still tongue makes a wise head."</span>;</span><br><span class="line"><span class="built_in">console</span>.log(str.repeat(<span class="number">0</span>));<span class="comment">//""</span></span><br><span class="line"><span class="built_in">console</span>.log(str.repeat(<span class="number">1</span>));<span class="comment">//A still tongue makes a wise head.</span></span><br><span class="line"><span class="built_in">console</span>.log(str.repeat(<span class="number">1.5</span>));<span class="comment">//A still tongue makes a wise head.</span></span><br><span class="line"><span class="built_in">console</span>.log(str.repeat(-<span class="number">1</span>));<span class="comment">//RangeError:Invalid count value</span></span><br></pre></td></tr></table></figure>
+<p>目前只有 Chrome 41, Firefox 24版本浏览器实现了该方法. 其他浏览器请参考 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/String/repeat#Polyfill" target="_blank" rel="external">Polyfill</a>.</p>
+<h6 id="startsWith"><a href="#startsWith" class="headerlink" title="startsWith"></a>startsWith</h6><p>startsWith() 方法用来判断当前字符串是否是以给定字符串开始的, 若是则返回true, 否则返回false.</p>
+<p>语法: <em>str</em>.startsWith(subString [, position])</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> str = <span class="string">"Where there is a will, there is a way."</span>;</span><br><span class="line"><span class="built_in">console</span>.log(str.startsWith(<span class="string">"Where"</span>));<span class="comment">//true</span></span><br><span class="line"><span class="built_in">console</span>.log(str.startsWith(<span class="string">"there"</span>,<span class="number">6</span>));<span class="comment">//true</span></span><br></pre></td></tr></table></figure>
+<p>目前只有 Firefox 17 版本实现了该方法, 其他浏览器请参考 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/String/startsWith#Polyfill" target="_blank" rel="external">Polyfill</a>.</p>
+<p>其它非标准的方法暂时不作介绍. 如需了解请参考 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/String/prototype" target="_blank" rel="external">String.prototype - JavaScript | MDN</a> 中标注为感叹号的方法.</p>
+<h6 id="HTML_u6709_u5173_u7684_u65B9_u6CD5"><a href="#HTML_u6709_u5173_u7684_u65B9_u6CD5" class="headerlink" title="HTML有关的方法"></a>HTML有关的方法</h6><p>常用的方法有 anchor, link 其它方法如 big, blink, bold, fixed, fontcolor, fontsize, italics, small, strike, sub, sup均已废除.</p>
+<p>接下来我们将介绍 anchor和link 两个方法, 其他废除方法不作介绍.</p>
+<h6 id="anchor"><a href="#anchor" class="headerlink" title="anchor"></a>anchor</h6><p>anchor() 方法创建一个锚标签.</p>
+<p>语法: <em>str</em>.anchor(name)</p>
+<p>name 指定被创建的a标签的name属性, 使用该方法创建的锚点, 将会成为 document.anchors 数组的元素.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> str = <span class="string">"this is a anchor tag"</span>;</span><br><span class="line"><span class="built_in">document</span>.body.innerHTML = <span class="built_in">document</span>.body.innerHTML + str.anchor(<span class="string">"anchor1"</span>);<span class="comment">//body末尾将会追加这些内容 &lt;a name="anchor1"&gt;this is a anchor tag&lt;/a&gt;</span></span><br></pre></td></tr></table></figure>
+<h6 id="link"><a href="#link" class="headerlink" title="link"></a>link</h6><p>link() 方法同样创建一个a标签.</p>
+<p>语法: <em>str</em>.link(url)</p>
+<p>url 指定被创建的a标签的href属性, 如果url中包含特殊字符, 将自动进行编码. 例如 &amp;会被转义为 &amp;, “ 会被转义为 “ &amp;\quot; 使用该方法创建的a标签, 将会成为 document.links 数组中的元素.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> str = <span class="string">"百度"</span>;</span><br><span class="line"><span class="built_in">document</span>.write(str.link(<span class="string">"https://www.baidu.com"</span>));<span class="comment">//&lt;a href="https://www.baidu.com"&gt;百度&lt;/a&gt;</span></span><br></pre></td></tr></table></figure>
+<hr>
+<p>实际上 String.prototype 中, 常用的方法就charAt, indexOf, lastIndexOf, match, replace, search, slice, split, substr, substring, toLowerCase, toUpperCase, trim, valueof 等这些. 熟悉它们的语法规则就能熟练地驾驭字符串.</p>
+<hr>
+<p>本问就讨论这么多内容,大家有什么问题或好的想法欢迎在下方参与<a href="#respond">留言和评论</a>.</p>
+<p>本文作者: <a href="https://github.com/Louiszhai" target="_blank" rel="external">louis</a></p>
+<p>本文链接: <a href="http://louiszhai.github.io/2016/01/12/js.String/">http://louiszhai.github.io/2016/01/12/js.String/</a></p>
+<p>参考文章</p>
+<ul>
+<li><a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/String/prototype" target="_blank" rel="external">String.prototype - JavaScript | MDN</a></li>
+</ul>
+
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2016/01/11/bind/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Function.prototype.bind</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">分享到：</span>
+		<a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+		<a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+<div class="duoshuo">
+	<div class="ds-thread" data-thread-key="js.String" data-title="字符串常用方法" data-url="http://louiszhai.github.io/2016/01/12/js.String/"></div>
+	<style>
+		#ds-reset .ds-avatar img{width:54px;height:54px;border-radius:27px;-webkit-border-radius:27px;-moz-border-radius:27px;box-shadow:inset 0 -1px 0 #3333sf;-webkit-box-shadow:inset 0 -1px 0 #3333sf;-webkit-transition:0.4s;-webkit-transition:-webkit-transform 0.4s ease-out;transition:transform 0.4s ease-out;-moz-transition:-moz-transform 0.4s ease-out;}
+		#ds-reset .ds-avatar img:hover{box-shadow:0 0 10px #fff;rgba(255,255,255,.6),inset 0 0 20px rgba(255,255,255,1);-webkit-box-shadow:0 0 10px #fff;rgba(255,255,255,.6),inset 0 0 20px rgba(255,255,255,1);transform:rotateZ(360deg);-webkit-transform:rotateZ(360deg);-moz-transform:rotateZ(360deg);}
+		p.ds-powered-by,#ds-sync-checkbox,.ds-sync label{display:none!important;}
+		#ds-reset .ds-rounded-top{-webkit-border-top-right-radius:0px;-webkit-border-top-left-radius:0px;border-top-right-radius:0px;border-top-left-radius:0px;}
+		#ds-thread #ds-reset .ds-textarea-wrapper{background:#fff;border:0;margin-bottom:20px;padding-right:0px;}
+		#ds-thread #ds-reset .ds-textarea-wrapper textarea{min-height:80px;border:1px solid #ccc;padding:10px;-webkit-appearance:none;border-radius:0;background-color:#FFFFFF;border-color:#cccccc;box-shadow:inset 0 1px 2px rgba(0,0,0,0.1);color:rgba(0,0,0,0.75);-webkit-box-sizing:border-box;box-sizing:border-box;-webkit-transition:border-color 0.15s linear,background 0.15s linear;-moz-transition:border-color 0.15s linear,background 0.15s linear;-ms-transition:border-color 0.15s linear,background 0.15s linear;-o-transition:border-color 0.15s linear,background 0.15s linear;transition:border-color 0.15s linear,background 0.15s linear;}
+		/*#ds-thread #ds-reset .ds-textarea-wrapper textarea:focus{border-color:#999999;background:#fafafa;outline:none;}*/
+		#ds-thread #ds-reset .ds-post-options{border-bottom-left-radius:0px;-webkit-border-bottom-left-radius:0px;border:none;background:none!important;}
+		#ds-reset .ds-textarea-wrapper textarea:focus{border-color:#66afe9;outline:0;-webkit-box-shadow:inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);box-shadow:inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);}
+		#ds-thread #ds-reset .ds-post-button:hover,#ds-thread #ds-reset .ds-post-button:focus{
+		    background-color: #51a351;
+		    background-position: 0 -32px;
+		    color:white;
+		}
+		#ds-thread #ds-reset .ds-post-toolbar,#ds-reset .ds-avatar{box-shadow:none;}
+		#ds-thread #ds-reset .ds-textarea-wrapper textarea:focus{
+	    	/*background: none repeat scroll 0 0 #F4FAFF;*/
+	    	border-color:#9DD4FD;
+	    	border-width:1px;
+	    	box-shadow:0 1px 1px rgba(0,0,0,0.075) inset, 0 0 8px rgba(82, 168, 236, 0.6);
+	    	outline:0 none;
+    	}
+		#ds-thread #ds-reset .ds-textarea-wrapper textarea:active{
+	    	/*background: none repeat scroll 0 0 #F4FAFF;*/
+	    	border-width:1px;
+	    	border-color:#9DD4FD;
+	    	box-shadow:0 1px 1px rgba(0,0,0,0.075) inset, 0 0 8px rgba(82, 168, 236, 0.6);
+	    	outline:0 none;
+    	}
+    	#ds-thread #ds-reset .ds-post-button{
+    		box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset, 0 1px 2px rgba(0, 0, 0, 0.05);
+		    border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+		    border-width: 1px;
+		    border-style: solid;
+		    border-radius: 3px;
+		    background: #5bb75b;
+		    color:white;
+		    text-shadow:none;
+		    transition:background-color 300ms ease-out;
+    	}
+    	#ds-reset .ds-avatar{
+    		background-color:initial;
+    	}
+
+	</style>
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"true"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+
+		window.addEventListener('hashchange', function() {
+            if (window.location.hash === '#respond') {
+                $('.duoshuo textarea').focus();
+            }
+        });
+	})();
+	</script>
+</div>
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2016 louis
+
+        <script type="text/javascript">if(location.href.indexOf('localhost')<0){var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan style='position:relative;top:2px' id='cnzz_stat_icon_1256923583'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s11.cnzz.com/z_stat.php%3Fid%3D1256923583%26show%3Dpic' type='text/javascript'%3E%3C/script%3E"));}</script>
+
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+
+
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: false,
+		animate: false,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="/js/jquery-1.9.1.min.js" type="text/javascript"></script>
+<script src="/js/main.js" type="text/javascript"></script>
+
+
+
+
+
+
+  </div>
+  <a href="https://github.com/Louiszhai"><img style="position: absolute; top: 0; right: 0; border: 0;" source="https://camo.githubusercontent.com/a6677b08c955af8400f44c6298f40e7d19cc5b2d/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677261795f3664366436642e706e67" src="/img/fork_me_on_github.png" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png"></a>
+</body>
+</html>
