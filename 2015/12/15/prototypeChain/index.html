@@ -3,6 +3,7 @@
 <head>
   <meta charset="utf-8">
   
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <title>详解JS原型链 | louis blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="JavaScript 原型链 prototype instanceof typeof  hasOwnProperty new  借用构造函数 组合继承 寄生式继承 寄生组合式继承">
@@ -11,7 +12,7 @@
 <meta property="og:url" content="http://louiszhai.github.io/2015/12/15/prototypeChain/index.html">
 <meta property="og:site_name" content="louis blog">
 <meta property="og:description" content="JavaScript 原型链 prototype instanceof typeof  hasOwnProperty new  借用构造函数 组合继承 寄生式继承 寄生组合式继承">
-<meta property="og:updated_time" content="2015-12-18T02:42:16.000Z">
+<meta property="og:updated_time" content="2016-04-27T02:32:34.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="详解JS原型链">
 <meta name="twitter:description" content="JavaScript 原型链 prototype instanceof typeof  hasOwnProperty new  借用构造函数 组合继承 寄生式继承 寄生组合式继承">
@@ -23,10 +24,13 @@
   
   <link rel="stylesheet" href="/css/style.css" type="text/css">
 </head>
+
 <body>
   <div id="container">
     <div class="left-col">
-    <div class="overlay"></div>
+    <div class="overlay">
+	<input type="text" class="st-default-search-input" style="position:absolute;top: 50px;left: 35px;">
+</div>
 <div class="intrude-less">
 	<header id="header" class="inner">
 		<a href="/" class="profilepic">
@@ -63,7 +67,7 @@
 					<div class="tips-arrow"></div>
 					<ul class="tips-inner">
 						<li>菜单</li>
-						<li>标签</li>
+						<li>標籤</li>
 						
 						
 					</ul>
@@ -79,7 +83,7 @@
 						
 							<li><a href="/">主页</a></li>
 				        
-							<li><a href="/archives">所有文章</a></li>
+							<li><a href="/archives/">所有文章</a></li>
 				        
 						</ul>
 					</nav>
@@ -99,7 +103,7 @@
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud" id="js-tagcloud">
-						<a href="/tags/JavaScript/" style="font-size: 10px;">JavaScript</a>
+						<a href="/tags/CSS/" style="font-size: 10px;">CSS</a> <a href="/tags/JavaScript/" style="font-size: 20px;">JavaScript</a> <a href="/tags/XSS/" style="font-size: 10px;">XSS</a> <a href="/tags/css/" style="font-size: 15px;">css</a>
 					</div>
 				</section>
 				
@@ -111,6 +115,7 @@
 		</div>
 	</header>				
 </div>
+
     </div>
     <div class="mid-col">
       <nav id="mobile-nav">
@@ -121,7 +126,9 @@
 	<div class="intrude-less">
 		<header id="header" class="inner">
 			<div class="profilepic">
-				<img lazy-src="/i.png" class="js-avatar">
+			
+				<img src="/i.png" class="js-avatar" style="width: 100%;height: 100%;opacity: 1;">
+			
 			</div>
 			<hgroup>
 			  <h1 class="header-author">louis</h1>
@@ -134,7 +141,7 @@
 				
 					<li><a href="/">主页</a></li>
 		        
-					<li><a href="/archives">所有文章</a></li>
+					<li><a href="/archives/">所有文章</a></li>
 		        
 		        <div class="clearfix"></div>
 				</ul>
@@ -153,6 +160,7 @@
 		</header>				
 	</div>
 </nav>
+
       <div class="body-wrap"><article id="post-prototypeChain" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -192,7 +200,7 @@
       
           <div id="toc" class="toc-article">
     <div class="toc-title">目录</div>
-    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#u6458_u81EAJavaScript_u9AD8_u7EA7_u7A0B_u5E8F_u8BBE_u8BA1_3A"><span class="toc-text">摘自JavaScript高级程序设计:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u6982_u5FF5"><span class="toc-text">概念</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u786E_u5B9A_u539F_u578B_u548C_u5B9E_u4F8B_u7684_u5173_u7CFB"><span class="toc-text">确定原型和实例的关系</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u539F_u578B_u94FE_u7684_u95EE_u9898"><span class="toc-text">原型链的问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u501F_u7528_u6784_u9020_u51FD_u6570"><span class="toc-text">借用构造函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u7EC4_u5408_u7EE7_u627F"><span class="toc-text">组合继承</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u539F_u578B_u7EE7_u627F"><span class="toc-text">原型继承</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u5BC4_u751F_u5F0F_u7EE7_u627F"><span class="toc-text">寄生式继承</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u5BC4_u751F_u7EC4_u5408_u5F0F_u7EE7_u627F"><span class="toc-text">寄生组合式继承</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u6269_u5C55_3A"><span class="toc-text">扩展:</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#u5C5E_u6027_u67E5_u627E"><span class="toc-text">属性查找</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#instanceof__26amp_3B_26amp_3B_typeof"><span class="toc-text">instanceof && typeof</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#new_u8FD0_u7B97_u7B26"><span class="toc-text">new运算符</span></a></li></ol></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#u6458_u81EAJavaScript_u9AD8_u7EA7_u7A0B_u5E8F_u8BBE_u8BA1_3A"><span class="toc-text">摘自JavaScript高级程序设计:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u6982_u5FF5"><span class="toc-text">概念</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u786E_u5B9A_u539F_u578B_u548C_u5B9E_u4F8B_u7684_u5173_u7CFB"><span class="toc-text">确定原型和实例的关系</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u539F_u578B_u94FE_u7684_u95EE_u9898"><span class="toc-text">原型链的问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u501F_u7528_u6784_u9020_u51FD_u6570"><span class="toc-text">借用构造函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u7EC4_u5408_u7EE7_u627F"><span class="toc-text">组合继承</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u539F_u578B_u7EE7_u627F"><span class="toc-text">原型继承</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u5BC4_u751F_u5F0F_u7EE7_u627F"><span class="toc-text">寄生式继承</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u5BC4_u751F_u7EC4_u5408_u5F0F_u7EE7_u627F"><span class="toc-text">寄生组合式继承</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#new__u8FD0_u7B97_u7B26"><span class="toc-text">new 运算符</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#proto_5C___u5C5E_u6027_u662F_u6307_u5B9A_u539F_u578B_u7684_u5173_u952E"><span class="toc-text">_proto\_ 属性是指定原型的关键</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u6269_u5C55_3A"><span class="toc-text">扩展:</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#u5C5E_u6027_u67E5_u627E"><span class="toc-text">属性查找</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#instanceof__26amp_3B_26amp_3B_typeof"><span class="toc-text">instanceof && typeof</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#new_u8FD0_u7B97_u7B26"><span class="toc-text">new运算符</span></a></li></ol></li></ol>
 </div>
       
         <h3 id="u6458_u81EAJavaScript_u9AD8_u7EA7_u7A0B_u5E8F_u8BBE_u8BA1_3A"><a href="#u6458_u81EAJavaScript_u9AD8_u7EA7_u7A0B_u5E8F_u8BBE_u8BA1_3A" class="headerlink" title="摘自JavaScript高级程序设计:"></a>摘自JavaScript高级程序设计:</h3><p>继承是OO语言中的一个最为人津津乐道的概念.许多OO语言都支持两种继承方式: <strong>接口继承</strong> 和 <strong>实现继承</strong> .接口继承只继承方法签名,而实现继承则继承实际的方法.由于js中方法没有签名,在ECMAScript中无法实现接口继承.ECMAScript只支持实现继承,而且其 <code>实现继承</code> 主要是依靠原型链来实现的.</p>
@@ -293,9 +301,8 @@
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">extend</span>(<span class="params">subClass, superClass</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> F = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;&#125;;</span><br><span class="line">  F.prototype = superClass.prototype;</span><br><span class="line">  subClass.prototype = <span class="keyword">new</span> F(); </span><br><span class="line">  subClass.prototype.constructor = subClass;</span><br><span class="line"></span><br><span class="line">  subClass.superclass = superClass.prototype;</span><br><span class="line">  <span class="keyword">if</span>(superClass.prototype.constructor == <span class="built_in">Object</span>.prototype.constructor) &#123;</span><br><span class="line">    superClass.prototype.constructor = superClass;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>我一直不太明白的是为什么要 “<strong>new F()</strong>“, 既然extend的目的是将子类型的 prototype 指向超类型的 prototype,为什么不直接做如下操作呢?</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">subClass.prototype = superClass.prototype;<span class="comment">//直接指向超类型prototype</span></span><br></pre></td></tr></table></figure>
-<p>于是便有了下面这个插曲.</p>
-<hr>
-<p>我仔细研究了new运算符具体干了什么?发现其实很简单，就干了三件事情。</p>
+<p>显然, 基于如上操作, 子类型原型将与超类型原型共用, 根本就没有继承关系.</p>
+<h3 id="new__u8FD0_u7B97_u7B26"><a href="#new__u8FD0_u7B97_u7B26" class="headerlink" title="new 运算符"></a>new 运算符</h3><p>为了追本溯源, 我顺便研究了new运算符具体干了什么?发现其实很简单，就干了三件事情.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> obj  = &#123;&#125;;</span><br><span class="line">obj.__proto__ = F.prototype;</span><br><span class="line">F.call(obj);</span><br></pre></td></tr></table></figure>
 <p>第一行，我们创建了一个空对象obj;</p>
 <p>第二行，我们将这个空对象的<strong>proto</strong>成员指向了F函数对象prototype成员对象;</p>
@@ -303,13 +310,18 @@
 <p>我们可以这么理解: 以 new 操作符调用构造函数的时候，函数内部实际上发生以下变化：</p>
 <p>  1、创建一个空对象，并且 this 变量引用该对象，同时还继承了该函数的原型。</p>
 <p>  2、属性和方法被加入到 this 引用的对象中。</p>
-<p>  3、新创建的对象由 this 所引用，并且最后隐式的返回 this 。</p>
-<p>以上new操作符的作用大体是继承原型并返回this, 即便如此 new F()依然没有做更多的事情,故我认为可以使用以下代码替换掉new F()那段.</p>
+<p>  3、新创建的对象由 this 所引用，并且最后隐式的返回 this.</p>
+<h3 id="proto_5C___u5C5E_u6027_u662F_u6307_u5B9A_u539F_u578B_u7684_u5173_u952E"><a href="#proto_5C___u5C5E_u6027_u662F_u6307_u5B9A_u539F_u578B_u7684_u5173_u952E" class="headerlink" title="_<em>proto\</em>_ 属性是指定原型的关键"></a>_<em>proto\</em>_ 属性是指定原型的关键</h3><p>以上, 通过设置 _<em>proto\</em>_ 属性继承了父类, 如果去掉new 操作, 直接参考如下写法</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">subClass.prototype = superClass.prototype;<span class="comment">//直接指向超类型prototype</span></span><br></pre></td></tr></table></figure>
-<p>于是最终extend代码应该为</p>
+<p>那么, 使用 instanceof 方法判断对象是否是构造器的实例时, 将会出现紊乱.</p>
+<p>假如参考如上写法, 那么extend代码应该为</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">extend</span>(<span class="params">subClass, superClass</span>) </span>&#123;</span><br><span class="line">  subClass.prototype = superClass.prototype;</span><br><span class="line"></span><br><span class="line">  subClass.superclass = superClass.prototype;</span><br><span class="line">  <span class="keyword">if</span>(superClass.prototype.constructor == <span class="built_in">Object</span>.prototype.constructor) &#123;</span><br><span class="line">    superClass.prototype.constructor = superClass;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>此时, 请看如下测试:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">a</span>(<span class="params"></span>)</span>&#123;&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">b</span>(<span class="params"></span>)</span>&#123;&#125;</span><br><span class="line">extend(b,a);</span><br><span class="line"><span class="keyword">var</span> c = <span class="keyword">new</span> a()&#123;&#125;;</span><br><span class="line"><span class="built_in">console</span>.log(c <span class="keyword">instanceof</span> a);<span class="comment">//true</span></span><br><span class="line"><span class="built_in">console</span>.log(c <span class="keyword">instanceof</span> b);<span class="comment">//true</span></span><br></pre></td></tr></table></figure>
+<p>c被认为是a的实例可以理解, 也是对的; 但c却被认为也是b的实例, 这就不对了. 究其原因, instanceof 操作符比较的应该是 c._<em>proto\</em>_ 与 构造器.prototype(即 b.prototype 或 a.prototype) 这两者是否相等, 又extend(b,a); 则b.prototype === a.prototype, 故这才打印出上述不合理的输出.</p>
+<hr>
 <p>那么最终,原型链继承可以这么实现,例如:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Father</span>(<span class="params">name</span>)</span>&#123;</span><br><span class="line">	<span class="keyword">this</span>.name = name;</span><br><span class="line">	<span class="keyword">this</span>.colors = [<span class="string">"red"</span>,<span class="string">"blue"</span>,<span class="string">"green"</span>];</span><br><span class="line">&#125;</span><br><span class="line">Father.prototype.sayName = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">	alert(<span class="keyword">this</span>.name);</span><br><span class="line">&#125;;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Son</span>(<span class="params">name,age</span>)</span>&#123;</span><br><span class="line">	Father.call(<span class="keyword">this</span>,name);<span class="comment">//继承实例属性，第一次调用Father()</span></span><br><span class="line">	<span class="keyword">this</span>.age = age;</span><br><span class="line">&#125;</span><br><span class="line">extend(Son,Father)<span class="comment">//继承父类方法,此处并不会第二次调用Father()</span></span><br><span class="line">Son.prototype.sayAge = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">	alert(<span class="keyword">this</span>.age);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> instance1 = <span class="keyword">new</span> Son(<span class="string">"louis"</span>,<span class="number">5</span>);</span><br><span class="line">instance1.colors.push(<span class="string">"black"</span>);</span><br><span class="line"><span class="built_in">console</span>.log(instance1.colors);<span class="comment">//"red,blue,green,black"</span></span><br><span class="line">instance1.sayName();<span class="comment">//louis</span></span><br><span class="line">instance1.sayAge();<span class="comment">//5</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> instance1 = <span class="keyword">new</span> Son(<span class="string">"zhai"</span>,<span class="number">10</span>);</span><br><span class="line"><span class="built_in">console</span>.log(instance1.colors);<span class="comment">//"red,blue,green"</span></span><br><span class="line">instance1.sayName();<span class="comment">//zhai</span></span><br><span class="line">instance1.sayAge();<span class="comment">//10</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Father</span>(<span class="params">name</span>)</span>&#123;</span><br><span class="line">	<span class="keyword">this</span>.name = name;</span><br><span class="line">	<span class="keyword">this</span>.colors = [<span class="string">"red"</span>,<span class="string">"blue"</span>,<span class="string">"green"</span>];</span><br><span class="line">&#125;</span><br><span class="line">Father.prototype.sayName = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">	alert(<span class="keyword">this</span>.name);</span><br><span class="line">&#125;;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Son</span>(<span class="params">name,age</span>)</span>&#123;</span><br><span class="line">	Father.call(<span class="keyword">this</span>,name);<span class="comment">//继承实例属性，第一次调用Father()</span></span><br><span class="line">	<span class="keyword">this</span>.age = age;</span><br><span class="line">&#125;</span><br><span class="line">extend(Son,Father)<span class="comment">//继承父类方法,此处并不会第二次调用Father()</span></span><br><span class="line">Son.prototype.sayAge = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">	alert(<span class="keyword">this</span>.age);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> instance1 = <span class="keyword">new</span> Son(<span class="string">"louis"</span>,<span class="number">5</span>);</span><br><span class="line">instance1.colors.push(<span class="string">"black"</span>);</span><br><span class="line"><span class="built_in">console</span>.log(instance1.colors);<span class="comment">//"red,blue,green,black"</span></span><br><span class="line">instance1.sayName();<span class="comment">//louis</span></span><br><span class="line">instance1.sayAge();<span class="comment">//5</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> instance1 = <span class="keyword">new</span> Son(<span class="string">"zhai"</span>,<span class="number">10</span>);</span><br><span class="line"><span class="built_in">console</span>.log(instance1.colors);<span class="comment">//"red,blue,green"</span></span><br><span class="line">instance1.sayName();<span class="comment">//zhai</span></span><br><span class="line">instance1.sayAge();<span class="comment">//10</span></span><br></pre></td></tr></table></figure>
 <hr>
 <h3 id="u6269_u5C55_3A"><a href="#u6269_u5C55_3A" class="headerlink" title="扩展:"></a>扩展:</h3><h4 id="u5C5E_u6027_u67E5_u627E"><a href="#u5C5E_u6027_u67E5_u627E" class="headerlink" title="属性查找"></a>属性查找</h4><p>​    使用了原型链后, 当查找一个对象的属性时，JavaScript 会向上遍历原型链，直到找到给定名称的属性为止，到查找到达原型链的顶部 - 也就是 Object.prototype - 但是仍然没有找到指定的属性，就会返回 undefined. 此时若想避免原型链查找, 建议使用 <strong>hasOwnProperty</strong> 方法. 因为 <strong>hasOwnProperty</strong> 是 JavaScript 中唯一一个处理属性但是不查找原型链的函数. 如:</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(instance1.hasOwnProperty(<span class="string">'age'</span>));<span class="comment">//true</span></span><br></pre></td></tr></table></figure>
@@ -370,20 +382,26 @@
 </article>
 
 
-<div class="share">
+<div class="share_jia">
 	<!-- JiaThis Button BEGIN -->
 	<div class="jiathis_style">
-		<span class="jiathis_txt">分享到：</span>
-		<a class="jiathis_button_tsina"></a>
+		<span class="jiathis_txt">分享到: &nbsp; </span>
+		<a class="jiathis_button_facebook"></a> 
+    <a class="jiathis_button_twitter"></a>
+    <a class="jiathis_button_plus"></a> 
+    <a class="jiathis_button_tsina"></a>
 		<a class="jiathis_button_cqq"></a>
 		<a class="jiathis_button_douban"></a>
 		<a class="jiathis_button_weixin"></a>
 		<a class="jiathis_button_tumblr"></a>
-		<a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
 	</div>
 	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
 	<!-- JiaThis Button END -->
 </div>
+
+
+
 
 
 
@@ -467,11 +485,20 @@
 
     	</div>
       	<div class="footer-right">
-      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      		<a href="https://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
       	</div>
     </div>
   </div>
 </footer>
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+  
+  _st('install','4AmBuvmx4Cy-3hvyxeh8','2.0.0');
+</script>
     </div>
     
   <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
@@ -499,6 +526,6 @@
 
 
   </div>
-  <a href="https://github.com/Louiszhai"><img style="position: absolute; top: 0; right: 0; border: 0;" source="https://camo.githubusercontent.com/a6677b08c955af8400f44c6298f40e7d19cc5b2d/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677261795f3664366436642e706e67" src="/img/fork_me_on_github.png" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png"></a>
+  <a href="https://github.com/Louiszhai" style="position: fixed; top: 0; right: 0; border: 0;"><img source="https://camo.githubusercontent.com/a6677b08c955af8400f44c6298f40e7d19cc5b2d/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677261795f3664366436642e706e67" src="/img/fork_me_on_github.png" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png"></a>
 </body>
 </html>

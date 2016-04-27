@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" >
+  <title>xss攻防 | louis blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="xss">
+<meta property="og:type" content="article">
+<meta property="og:title" content="xss攻防">
+<meta property="og:url" content="http://louiszhai.github.io/2016/03/05/xss/index.html">
+<meta property="og:site_name" content="louis blog">
+<meta property="og:description" content="xss">
+<meta property="og:updated_time" content="2016-04-27T01:26:33.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="xss攻防">
+<meta name="twitter:description" content="xss">
+  
+    <link rel="alternative" href="/atom.xml" title="louis blog" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay">
+	<input type="text" class="st-default-search-input" style="position:absolute;top: 50px;left: 35px;">
+</div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img src="/i.png" class="js-avatar" style="width: 100%;height: 100%;opacity: 1;">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">louis</a></h1>
+		</hgroup>
+
+		
+		<p class="header-subtitle">程序猿 前端攻城师</p>
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>菜单</li>
+						<li>標籤</li>
+						
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives/">所有文章</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="github" target="_blank" href="https://github.com/Louiszhai" title="github">github</a>
+					        
+								<a class="weibo" target="_blank" href="http://weibo.com/xingyez" title="weibo">weibo</a>
+					        
+								<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						<a href="/tags/CSS/" style="font-size: 10px;">CSS</a> <a href="/tags/JavaScript/" style="font-size: 20px;">JavaScript</a> <a href="/tags/XSS/" style="font-size: 10px;">XSS</a> <a href="/tags/css/" style="font-size: 15px;">css</a>
+					</div>
+				</section>
+				
+				
+				
+
+				
+			</div>
+		</div>
+	</header>				
+</div>
+
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">louis</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+			
+				<img src="/i.png" class="js-avatar" style="width: 100%;height: 100%;opacity: 1;">
+			
+			</div>
+			<hgroup>
+			  <h1 class="header-author">louis</h1>
+			</hgroup>
+			
+			<p class="header-subtitle">程序猿 前端攻城师</p>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives/">所有文章</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="https://github.com/Louiszhai" title="github">github</a>
+			        
+						<a class="weibo" target="_blank" href="http://weibo.com/xingyez" title="weibo">weibo</a>
+			        
+						<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+
+      <div class="body-wrap"><article id="post-xss" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/03/05/xss/" class="article-date">
+  	<time datetime="2016-03-05T01:48:09.000Z" itemprop="datePublished">2016-03-05</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      xss攻防
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/XSS/">XSS</a></li></ul>
+	</div>
+
+        
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          <div id="toc" class="toc-article">
+    <div class="toc-title">目录</div>
+    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#u5BFC_u8BFB"><span class="toc-text">导读</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#xss_u653B_u51FB_u65B9_u5F0F"><span class="toc-text">xss攻击方式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u9632_u6B62xss_u653B_u51FB"><span class="toc-text">防止xss攻击</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#u8F6C_u4E49"><span class="toc-text">转义</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#u5BF9_u4E8E_u67D0_u4E9B_u4F4D_u7F6E_2C_u4E0D_u53D7_u4FE1_u4EFB_u7684_u6570_u636E_u505A_u8F6C_u4E49_u5C31_u53EF_u4EE5_u4FDD_u8BC1_u5B89_u5168"><span class="toc-text">对于某些位置,不受信任的数据做转义就可以保证安全</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#u5BF9_u4E8E_u67D0_u4E9B_u4F4D_u7F6E_uFF0C_u5373_u4F7F_u505A_u4E86_u8F6C_u4E49_u4F9D_u7136_u4E0D_u5B89_u5168"><span class="toc-text">对于某些位置，即使做了转义依然不安全</span></a></li></ol></li></ol></li></ol>
+</div>
+      
+        <h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p><strong>XSS</strong> (Cross-Site Script) 攻击又叫跨站脚本攻击, 本质是一种注入攻击. 其原理, 简单的说就是利用各种手段把恶意代码添加到网页中, 并让受害者执行这段脚本. XSS能做用户使用浏览器能做的一切事情. 同源策略无法保证不受XSS攻击，因为此时攻击者就在同源之内.</p>
+<a id="more"></a>
+<h3 id="xss_u653B_u51FB_u65B9_u5F0F"><a href="#xss_u653B_u51FB_u65B9_u5F0F" class="headerlink" title="xss攻击方式"></a>xss攻击方式</h3><p>从攻击的方式可以分为</p>
+<ul>
+<li>反射型</li>
+<li>存储型</li>
+<li>文档型</li>
+</ul>
+<p>这种分类方式有些过时, 长久以来, 人们认为XSS分类有以上三种, 但实际情况中经常无法区分, 所以更明确的分类方式可以分为以下两类:</p>
+<ul>
+<li>client(客户端型)</li>
+<li>server(服务端型)</li>
+</ul>
+<p>当一端xss代码是在服务端被插入的, 那么这就是服务端型xss, 同理, 如果代码在客户端插入, 就是客户端型xss.</p>
+<h3 id="u9632_u6B62xss_u653B_u51FB"><a href="#u9632_u6B62xss_u653B_u51FB" class="headerlink" title="防止xss攻击"></a>防止xss攻击</h3><h4 id="u8F6C_u4E49"><a href="#u8F6C_u4E49" class="headerlink" title="转义"></a>转义</h4><p>无论是服务端型还是客户端型xss，攻击达成都需要两个条件</p>
+<ul>
+<li>代码被注入</li>
+<li>代码被执行</li>
+</ul>
+<p>其实只要做好无论任何情况下保证代码不被执行就能完全杜绝xss攻击.</p>
+<p>总之, 任何时候都不要把不受信任的数据直接插入到dom中的任何位置, 一定要做转义。</p>
+<h5 id="u5BF9_u4E8E_u67D0_u4E9B_u4F4D_u7F6E_2C_u4E0D_u53D7_u4FE1_u4EFB_u7684_u6570_u636E_u505A_u8F6C_u4E49_u5C31_u53EF_u4EE5_u4FDD_u8BC1_u5B89_u5168"><a href="#u5BF9_u4E8E_u67D0_u4E9B_u4F4D_u7F6E_2C_u4E0D_u53D7_u4FE1_u4EFB_u7684_u6570_u636E_u505A_u8F6C_u4E49_u5C31_u53EF_u4EE5_u4FDD_u8BC1_u5B89_u5168" class="headerlink" title="对于某些位置,不受信任的数据做转义就可以保证安全"></a>对于某些位置,不受信任的数据做转义就可以保证安全</h5><ul>
+<li>一般的标签属性值</li>
+<li>div body 的内部html</li>
+</ul>
+<h5 id="u5BF9_u4E8E_u67D0_u4E9B_u4F4D_u7F6E_uFF0C_u5373_u4F7F_u505A_u4E86_u8F6C_u4E49_u4F9D_u7136_u4E0D_u5B89_u5168"><a href="#u5BF9_u4E8E_u67D0_u4E9B_u4F4D_u7F6E_uFF0C_u5373_u4F7F_u505A_u4E86_u8F6C_u4E49_u4F9D_u7136_u4E0D_u5B89_u5168" class="headerlink" title="对于某些位置，即使做了转义依然不安全"></a>对于某些位置，即使做了转义依然不安全</h5><ul>
+<li><script>中</li>
+<li>注释中</li>
+<li>表签的属性名名</li>
+<li>标签名</li>
+<li>css标签中</li>
+</ul>
+<h5 id="u4F7F_u7528JSON-parse__u800C_u4E0D_u662Feval_2C_request__u7684content-type_u8981_u6307_u5B9A_u662FContent-Type_3A_application/json_3B"><a href="#u4F7F_u7528JSON-parse__u800C_u4E0D_u662Feval_2C_request__u7684content-type_u8981_u6307_u5B9A_u662FContent-Type_3A_application/json_3B" class="headerlink" title="使用JSON.parse 而不是eval, request 的content-type要指定是Content-Type: application/json;"></a>使用JSON.parse 而不是eval, request 的content-type要指定是Content-Type: application/json;</h5><h5 id="u5982_u679C_u94FE_u63A5_u7684URL_u4E2D_u90E8_u5206_u662F_u52A8_u6001_u751F_u6210_u7684_2C__u4E00_u5B9A_u8981_u505A_u8F6C_u4E49"><a href="#u5982_u679C_u94FE_u63A5_u7684URL_u4E2D_u90E8_u5206_u662F_u52A8_u6001_u751F_u6210_u7684_2C__u4E00_u5B9A_u8981_u505A_u8F6C_u4E49" class="headerlink" title="如果链接的URL中部分是动态生成的, 一定要做转义."></a>如果链接的URL中部分是动态生成的, 一定要做转义.</h5><h4 id="u4F7F_u7528_u6D4F_u89C8_u5668_u81EA_u5E26_u7684xss-filter"><a href="#u4F7F_u7528_u6D4F_u89C8_u5668_u81EA_u5E26_u7684xss-filter" class="headerlink" title="使用浏览器自带的xss-filter"></a>使用浏览器自带的xss-filter</h4><p>xss01.png</p>
+<p>现代浏览器都对反射型xss有一定的防御力, 其原理是检查url和dom中元素的相关性. 但这并不能完全防止反射型xss. 另外, 浏览器对于存储型xss并没有抵抗力, 原因很简单, 用户的需求是多种多样的. 所以, 抵御xss这件事情不能指望浏览器.</p>
+<blockquote>
+<p>可以通过http头控制是否打开 xss-filter,当然默认是打开的.X-XSS-Protection</p>
+</blockquote>
+<h4 id="CSP_28Content_Security_Policy_29"><a href="#CSP_28Content_Security_Policy_29" class="headerlink" title="CSP(Content Security Policy)"></a>CSP(Content Security Policy)</h4><p>为了缓解很大一部分潜在的跨站脚本问题, 浏览器的扩展程序系统引入了内容安全策略(CSP). CSP 管理网站允许加载的内容, 并且使用白名单的机制对网站加载或执行的资源起作用. 在网页中, 这样的策略通过 HTTP 头信息或者 meta 元素定义.</p>
+<p>CSP 并不是用来防止 xss 攻击的, 而是最小化 xss 发生后所造成的伤害. 实际上, 除了开发者自己做好 xss 转义, 并没有别的方法可以防止 xss 的发生. CSP 可以说是HTML5给web安全带来的最实惠的东西. 那么如何引入 CSP 呢?</p>
+<p>xss02.png</p>
+<p>通过response头</p>
+<blockquote>
+<p>只允许脚本从本源加载Content-Security-Policy: script-src ‘self’</p>
+</blockquote>
+<p>通过HTML的META标签</p>
+<blockquote>
+<p>作用同上&lt;meta http-equiv=”Content-Security-Policy” content=”script-src ‘self’”&gt;</p>
+</blockquote>
+<p>那么CSP 除了限制script-src 之外还能限制什么呢？</p>
+<blockquote>
+<p>base-uri : 限制这篇文档的uri  </p>
+<p>child-src ：限制子窗口的源(iframe,弹窗等),取代frame-src  </p>
+<p>connect-src ：限制脚本可以访问的源  </p>
+<p>font-src : 限制字体的源  </p>
+<p>form-action : 限制表单能够提交到的源  </p>
+<p>frame-ancestors : 限制了当前页面可以被哪些页面以iframe,frame,object等方式加载  </p>
+<p>frame-src ：deprecated with child-src,限制了当前页面可以加载哪些源，与frame-ancestors对应 </p>
+<p>img-src : 限制图片可以从哪些源加载  </p>
+<p>media-src : 限制video, audio, source, track 能够从哪些源加载  </p>
+<p>object-src ：限制插件可以从哪些源加载  </p>
+<p>sandbox ：强制打开沙盒模式</p>
+</blockquote>
+<p>可以看出, CSP是一个强大的策略, 几乎可以限制了所有能够用到的资源的来源. 使用好CSP可以很大成都降低XSS带来的风险.</p>
+<p>另外，CSP还提供一个报告的头 Content-Security-Policy-Report-Only，使用这个头浏览器向服务器报告csp状态，细节先不讨论。</p>
+<ul>
+<li>Content-Security-Policy-Report-Only: script-src ‘self’;  </li>
+<li>report-uri /csp-report-endpoint/</li>
+</ul>
+<p>CSP 目前有两版，CSP1 和CSP2， 两版的支持状态可以在</p>
+<p><a href="http://caniuse.com/#search=csp">http://caniuse.com/#search=csp</a> 中查到.</p>
+<h5 id="CSP1"><a href="#CSP1" class="headerlink" title="CSP1"></a>CSP1</h5><p>xss03-csp1.png</p>
+<h5 id="CSP2"><a href="#CSP2" class="headerlink" title="CSP2"></a>CSP2</h5><p>xss03-csp2.png</p>
+<p>CSP虽然提供了强大的安全保护, 但是他也造成了如下问题: Eval及相关函数被禁用、内嵌的JavaScript代码将不会执行、只能通过白名单来加载远程脚本.</p>
+<h4 id="X-Frame-Options"><a href="#X-Frame-Options" class="headerlink" title="X-Frame-Options"></a>X-Frame-Options</h4><p>X-Frame-Options <a href="https://developer.mozilla.org/en/HTTP">HTTP</a> 响应头是用来给浏览器指示允许一个页面可否在 <frame>, <iframe> 或者 <object> 中展现的标记. 网站可以使用此功能, 来确保自己网站的内容没有被嵌到别人的网站中去, 也从而避免了点击劫持 (clickjacking) 的攻击. 但以后可以被CSP的 frame-ancestors取代。目前支持的状态比起 CSP frame-ancestors要好.</p>
+<p>X-Frame-Options 共有三个值</p>
+<ul>
+<li>DENY 表示这个页面不允许被以frame的方式加载 </li>
+<li>SAMEORIGIN 表示这个页面只允许被同源页面加载</li>
+<li>ALLOW-FROM uri 表示这个页面只能被特定的域加载</li>
+</ul>
+<p>服务器配置</p>
+<p><strong>java代码:</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">response.addHeader(<span class="string">"x-frame-options"</span>,<span class="string">"SAMEORIGIN"</span>);</span><br></pre></td></tr></table></figure>
+<p><strong>Nginx配置:</strong></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">addheader X-Frame-Options SAMEORIGIN</span><br></pre></td></tr></table></figure>
+<p><strong>Apache配置:</strong></p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword"><span class="common">Header</span></span> always append X-Frame-Options SAMEORIGIN</span><br></pre></td></tr></table></figure>
+<h5 id="u6D4F_u89C8_u5668_u517C_u5BB9_u6027"><a href="#u6D4F_u89C8_u5668_u517C_u5BB9_u6027" class="headerlink" title="浏览器兼容性"></a>浏览器兼容性</h5><table>
+<thead>
+<tr>
+<th>特性</th>
+<th>Chrome</th>
+<th>Firefox (Gecko)</th>
+<th>Internet Explorer</th>
+<th>Opera</th>
+<th>Safari</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>基础支持</td>
+<td>4.1.249.1042</td>
+<td><a href="https://developer.mozilla.org/en-US/Firefox/Releases/NaN">3.6.9</a> (1.9.2.9)</td>
+<td>8.0</td>
+<td>10.5</td>
+<td>4.0</td>
+</tr>
+<tr>
+<td>ALLOW-FROM 支持</td>
+<td>Not supported</td>
+<td><a href="https://developer.mozilla.org/en-US/Firefox/Releases/18">18.0</a></td>
+<td>8.0?</td>
+<td>?</td>
+<td>Not supported</td>
+</tr>
+</tbody>
+</table>
+<h4 id="Http-Only"><a href="#Http-Only" class="headerlink" title="Http-Only"></a>Http-Only</h4><p>使用 http-only 保护cookie, 可以保证即使发生了xss,用户的cookie也是安全的.使用http-only 保护的cookie是不会被javascript读写的.</p>
+<h4 id="iframe__u6C99_u7BB1_u73AF_u5883"><a href="#iframe__u6C99_u7BB1_u73AF_u5883" class="headerlink" title="iframe 沙箱环境"></a>iframe 沙箱环境</h4><p>HTML5为iframe提供了安全属性 sandbox, 进而限制iframe的能力. 如下:</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="title">iframe</span> <span class="attribute">src</span>=<span class="value">"untrusted.html"</span> <span class="attribute">sandbox</span>=<span class="value">"allow-scripts allow-forms"</span>&gt;</span><span class="tag">&lt;/<span class="title">iframe</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h4 id="u5176_u4ED6_u5B89_u5168_u76F8_u5173_u7684HTTP_u5934"><a href="#u5176_u4ED6_u5B89_u5168_u76F8_u5173_u7684HTTP_u5934" class="headerlink" title="其他安全相关的HTTP头"></a>其他安全相关的HTTP头</h4><h5 id="X-Content-Type-Options"><a href="#X-Content-Type-Options" class="headerlink" title="X-Content-Type-Options"></a>X-Content-Type-Options</h5><p>X-Content-Type-Options 阻止浏览器进行content-type 嗅探, 能够防止类型嗅探攻击.</p>
+<p>这个header主要用来防止在IE9、chrome和safari中的MIME类型混淆攻击. 通常浏览器可以通过嗅探内容本身的方法来决定它是什么类型, 而不是看响应中的content-type值. 通过设置 X-Content-Type-Options：如果content-type和期望的类型匹配，则不需要嗅探，只能从外部加载确定类型的资源. 举个例子, 如果加载了一个样式表, 那么资源的MIME类型只能是text/css, 对于IE中的脚本资源, 以下的内容类型是有效的:</p>
+<figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">application</span>/ecmascript  </span><br><span class="line"><span class="type">application</span>/javascript  </span><br><span class="line"><span class="type">application</span>/x-javascript  </span><br><span class="line"><span class="type">text</span>/ecmascript  </span><br><span class="line"><span class="type">text</span>/javascript  </span><br><span class="line"><span class="type">text</span>/jscript  </span><br><span class="line"><span class="type">text</span>/x-javascript  </span><br><span class="line"><span class="type">text</span>/vbs  </span><br><span class="line"><span class="type">text</span>/vbscript</span><br></pre></td></tr></table></figure>
+<p>对于chrome, 则支持下面的MIME 类型:</p>
+<figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">text</span>/javascript  </span><br><span class="line"><span class="type">text</span>/ecmascript  </span><br><span class="line"><span class="type">application</span>/javascript  </span><br><span class="line"><span class="type">application</span>/ecmascript  </span><br><span class="line"><span class="type">application</span>/x-javascript  </span><br><span class="line"><span class="type">text</span>/javascript1<span class="number">.1</span>  </span><br><span class="line"><span class="type">text</span>/javascript1<span class="number">.2</span>  </span><br><span class="line"><span class="type">text</span>/javascript1<span class="number">.3</span>  </span><br><span class="line"><span class="type">text</span>/jscript  </span><br><span class="line"><span class="type">text</span>/live <span class="keyword">script</span></span><br></pre></td></tr></table></figure>
+<p><strong>正确的设置</strong></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nosniff &#8211; &#36825;&#20010;&#26159;&#21807;&#19968;&#27491;&#30830;&#30340;&#35774;&#32622;.</span><br></pre></td></tr></table></figure>
+<p>通常不正确的设置</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#8216;nosniff&#8217; &#8211; &#24341;&#21495;&#26159;&#19981;&#20801;&#35768;&#30340;&#10;: nosniff &#8211; &#20882;&#21495;&#20063;&#26159;&#38169;&#35823;&#30340;</span><br></pre></td></tr></table></figure>
+<p><strong>如何检测</strong></p>
+<p>在IE和chrome中打开开发者工具，在控制台中观察配置了nosniff和没有配置nosniff的输出有啥区别.</p>
+<h5 id="HPKP_28Public_Key_Pinning_29"><a href="#HPKP_28Public_Key_Pinning_29" class="headerlink" title="HPKP(Public Key Pinning)"></a>HPKP(Public Key Pinning)</h5><p>HPKP 是一个response 头, 用来检测一个证书的公钥是否发生了改变, 防止中间人攻击.</p>
+<p>我们知道, 受信任的 CA（证书颁发机构）有好几百个, 他们成为整个网站身份认证过程中一个较大的攻击面. 现有的证书信任链机制最大的问题是, 任何一家受信任的 CA 都可以签发任意网站的站点证书, 这些证书在浏览器看来, 都是合法的.</p>
+<p>HPKP 技术给予我们主动选择信任 CA 的权利. 它的工作原理是通过响应头或者 <meta> 标签告诉浏览器当前网站的证书指纹, 以及过期时间等其它信息. 未来一段时间内, 浏览器再次访问这个网站必须验证证书链中的证书指纹, 如果跟之前指定的值不匹配, 即便证书本身是合法的, 也必须断开连接.</p>
+<p>HPKP 官方文档见 <a href="https://tools.ietf.org/html/rfc7469">RFC7469</a> , 目前 Firefox 35+ 和 Chrome 38+ 已经支持. 它的基本格式如下:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Public-Key-Pins: pin-sha256=&#34;base64==&#34;; max-age=expireTime [; includeSubdomains][; report-uri=&#34;reportURI&#34;]</span><br></pre></td></tr></table></figure>
+<h5 id="HSTS__28HTTP_Strict-Transport-Security_29"><a href="#HSTS__28HTTP_Strict-Transport-Security_29" class="headerlink" title="HSTS (HTTP Strict-Transport-Security)"></a>HSTS (HTTP Strict-Transport-Security)</h5><p>HSTS 是国际互联网工程组织IETE正在推行一种新的Web安全协议, 可以用来抵御中间人攻击, 它强制浏览器使用TSL作为数据通道, 即强制使用HTTPS与服务器创建连接.</p>
+<p>服务器开启HSTS的方法是, 当客户端通过HTTPS发出请求时, 在服务器返回的超文本传输协议响应头中包含Strict-Transport-Security字段. 非加密传输时设置的HSTS字段无效.</p>
+<p>比如, <a href="https://xxx">https://xxx</a> 的响应头含有Strict-Transport-Security: max-age=31536000; includeSubDomains. 这意味着两点:</p>
+<p>在接下来的一年（即31536000秒）中, 浏览器只要向xxx或其子域名发送HTTP请求时, 必须采用HTTPS来发起连接. 比如, 用户点击超链接或在地址栏输入 <a href="http://xxx/">http://xxx/</a> , 浏览器应当自动将 http 转写成 https, 然后直接向 <a href="https://xxx/">https://xxx/</a> 发送请求.</p>
+<p>在接下来的一年中, 如果 xxx 服务器发送的TLS证书无效, 用户不能忽略浏览器警告继续访问网站.</p>
+<p>不足就是, 用户首次访问网址是不受HSTS保护的, 这是因为首次还未收到HSTS. 解决方案有两个, 一是浏览器预置 HSTS域名列表, Google Chrome、Firefox 和 Internet Explorer 实现了这一方案. 二是将HSTS信息加入到域名系统记录中.</p>
+<h3 id="u524D_u7AEFxss_u8FC7_u6EE4"><a href="#u524D_u7AEFxss_u8FC7_u6EE4" class="headerlink" title="前端xss过滤"></a>前端xss过滤</h3><p>最后提供一种前端xss过滤的方法</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">xssCheck</span>(<span class="params">str,reg</span>)</span>&#123;</span><br><span class="line">	<span class="keyword">return</span> str ? str.replace(reg || <span class="regexp">/[&amp;&lt;"&gt;'](?:		(amp|lt|quot|gt|#39|nbsp|#\d+);)?/g</span>, <span class="function"><span class="keyword">function</span> (<span class="params">a, b</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(b)&#123;</span><br><span class="line">            <span class="keyword">return</span> a;</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            <span class="keyword">return</span> &#123;</span><br><span class="line">                <span class="string">'&lt;'</span>:<span class="string">'&amp;lt;'</span>,</span><br><span class="line">                <span class="string">'&amp;'</span>:<span class="string">'&amp;amp;'</span>,</span><br><span class="line">                <span class="string">'"'</span>:<span class="string">'&amp;quot;'</span>,</span><br><span class="line">                <span class="string">'&gt;'</span>:<span class="string">'&amp;gt;'</span>,</span><br><span class="line">                <span class="string">"'"</span>:<span class="string">'&amp;#39;'</span>,</span><br><span class="line">            &#125;[a]</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;) : <span class="string">''</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<p>本文就讨论这么多内容,大家有什么问题或好的想法欢迎在下方参与<a href="#respond">留言和评论</a>.</p>
+<p>本文作者: <a href="https://github.com/Louiszhai">louis</a></p>
+<p>本文链接: <a href="http://louiszhai.github.io/2016/03/05/xss/">http://louiszhai.github.io/2016/03/05/xss/</a></p>
+<p>参考文章</p>
+<ul>
+<li><a href="http://drops.wooyun.org/web/13009?hmsr=toutiao.io&amp;utmmedium=toutiao.io&amp;utmsource=toutiao.io">前端防御XSS | WooYun知识库</a></li>
+<li><a href="http://www.freebuf.com/articles/web/61268.html">XSS攻击冷门花样玩法总结 - FreeBuf.COM | 关注黑客与极客</a></li>
+<li>[关于Web安全，99%的网站都忽略了这些][5]</li>
+<li><a href="http://www.tuicool.com/articles/jURNfy">HTTP Public Key Pinning 介绍 - 推酷</a></li>
+</ul>
+</script></li></ul>
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2016/03/12/css-float/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption"><</strong>
+      <div class="article-nav-title">
+        
+          float深入分析
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2016/01/12/js.String/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">字符串常用方法</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share_jia">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">分享到: &nbsp; </span>
+		<a class="jiathis_button_facebook"></a> 
+    <a class="jiathis_button_twitter"></a>
+    <a class="jiathis_button_plus"></a> 
+    <a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+
+
+
+<div class="duoshuo">
+	<div class="ds-thread" data-thread-key="xss" data-title="xss攻防" data-url="http://louiszhai.github.io/2016/03/05/xss/"></div>
+	<style>
+		#ds-reset .ds-avatar img{width:54px;height:54px;border-radius:27px;-webkit-border-radius:27px;-moz-border-radius:27px;box-shadow:inset 0 -1px 0 #3333sf;-webkit-box-shadow:inset 0 -1px 0 #3333sf;-webkit-transition:0.4s;-webkit-transition:-webkit-transform 0.4s ease-out;transition:transform 0.4s ease-out;-moz-transition:-moz-transform 0.4s ease-out;}
+		#ds-reset .ds-avatar img:hover{box-shadow:0 0 10px #fff;rgba(255,255,255,.6),inset 0 0 20px rgba(255,255,255,1);-webkit-box-shadow:0 0 10px #fff;rgba(255,255,255,.6),inset 0 0 20px rgba(255,255,255,1);transform:rotateZ(360deg);-webkit-transform:rotateZ(360deg);-moz-transform:rotateZ(360deg);}
+		p.ds-powered-by,#ds-sync-checkbox,.ds-sync label{display:none!important;}
+		#ds-reset .ds-rounded-top{-webkit-border-top-right-radius:0px;-webkit-border-top-left-radius:0px;border-top-right-radius:0px;border-top-left-radius:0px;}
+		#ds-thread #ds-reset .ds-textarea-wrapper{background:#fff;border:0;margin-bottom:20px;padding-right:0px;}
+		#ds-thread #ds-reset .ds-textarea-wrapper textarea{min-height:80px;border:1px solid #ccc;padding:10px;-webkit-appearance:none;border-radius:0;background-color:#FFFFFF;border-color:#cccccc;box-shadow:inset 0 1px 2px rgba(0,0,0,0.1);color:rgba(0,0,0,0.75);-webkit-box-sizing:border-box;box-sizing:border-box;-webkit-transition:border-color 0.15s linear,background 0.15s linear;-moz-transition:border-color 0.15s linear,background 0.15s linear;-ms-transition:border-color 0.15s linear,background 0.15s linear;-o-transition:border-color 0.15s linear,background 0.15s linear;transition:border-color 0.15s linear,background 0.15s linear;}
+		/*#ds-thread #ds-reset .ds-textarea-wrapper textarea:focus{border-color:#999999;background:#fafafa;outline:none;}*/
+		#ds-thread #ds-reset .ds-post-options{border-bottom-left-radius:0px;-webkit-border-bottom-left-radius:0px;border:none;background:none!important;}
+		#ds-reset .ds-textarea-wrapper textarea:focus{border-color:#66afe9;outline:0;-webkit-box-shadow:inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);box-shadow:inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);}
+		#ds-thread #ds-reset .ds-post-button:hover,#ds-thread #ds-reset .ds-post-button:focus{
+		    background-color: #51a351;
+		    background-position: 0 -32px;
+		    color:white;
+		}
+		#ds-thread #ds-reset .ds-post-toolbar,#ds-reset .ds-avatar{box-shadow:none;}
+		#ds-thread #ds-reset .ds-textarea-wrapper textarea:focus{
+	    	/*background: none repeat scroll 0 0 #F4FAFF;*/
+	    	border-color:#9DD4FD;
+	    	border-width:1px;
+	    	box-shadow:0 1px 1px rgba(0,0,0,0.075) inset, 0 0 8px rgba(82, 168, 236, 0.6);
+	    	outline:0 none;
+    	}
+		#ds-thread #ds-reset .ds-textarea-wrapper textarea:active{
+	    	/*background: none repeat scroll 0 0 #F4FAFF;*/
+	    	border-width:1px;
+	    	border-color:#9DD4FD;
+	    	box-shadow:0 1px 1px rgba(0,0,0,0.075) inset, 0 0 8px rgba(82, 168, 236, 0.6);
+	    	outline:0 none;
+    	}
+    	#ds-thread #ds-reset .ds-post-button{
+    		box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset, 0 1px 2px rgba(0, 0, 0, 0.05);
+		    border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+		    border-width: 1px;
+		    border-style: solid;
+		    border-radius: 3px;
+		    background: #5bb75b;
+		    color:white;
+		    text-shadow:none;
+		    transition:background-color 300ms ease-out;
+    	}
+    	#ds-reset .ds-avatar{
+    		background-color:initial;
+    	}
+
+	</style>
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"true"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+
+		window.addEventListener('hashchange', function() {
+            if (window.location.hash === '#respond') {
+                $('.duoshuo textarea').focus();
+            }
+        });
+	})();
+	</script>
+</div>
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2016 louis
+
+        <script type="text/javascript">if(location.href.indexOf('localhost')<0){var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan style='position:relative;top:2px' id='cnzz_stat_icon_1256923583'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s11.cnzz.com/z_stat.php%3Fid%3D1256923583%26show%3Dpic' type='text/javascript'%3E%3C/script%3E"));}</script>
+
+    	</div>
+      	<div class="footer-right">
+      		<a href="https://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+  
+  _st('install','4AmBuvmx4Cy-3hvyxeh8','2.0.0');
+</script>
+    </div>
+    
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+
+
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: false,
+		animate: false,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="/js/jquery-1.9.1.min.js" type="text/javascript"></script>
+<script src="/js/main.js" type="text/javascript"></script>
+
+
+
+
+
+
+  </div>
+  <a href="https://github.com/Louiszhai" style="position: fixed; top: 0; right: 0; border: 0;"><img source="https://camo.githubusercontent.com/a6677b08c955af8400f44c6298f40e7d19cc5b2d/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677261795f3664366436642e706e67" src="/img/fork_me_on_github.png" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png"></a>
+</body>
+</html>

@@ -4,7 +4,7 @@
   <subtitle><![CDATA[程序猿 前端攻城师]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://louiszhai.github.io/"/>
-  <updated>2016-01-17T12:29:58.000Z</updated>
+  <updated>2016-04-27T01:26:57.000Z</updated>
   <id>http://louiszhai.github.io/</id>
   
   <author>
@@ -15,11 +15,387 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title><![CDATA[详解IE7以下独有的hasLayout]]></title>
+    <link href="http://louiszhai.github.io/2016/03/31/css-hasLayout/"/>
+    <id>http://louiszhai.github.io/2016/03/31/css-hasLayout/</id>
+    <published>2016-03-31T05:57:56.000Z</published>
+    <updated>2016-04-27T01:26:57.000Z</updated>
+    <content type="html"><![CDATA[<h3 id="u4EC0_u4E48_u662FhasLayout"><a href="#u4EC0_u4E48_u662FhasLayout" class="headerlink" title="什么是hasLayout"></a>什么是hasLayout</h3><blockquote>
+<p>hasLayout property: Gets a value that indicates whether the object has layout.</p>
+</blockquote>
+<p><strong>hasLayout</strong> 是IE渲染引擎的一个内部实现. IE中, 一个元素要么自己计算大小组织内容(自己渲染), 要么依赖父元素来计算大小和组织内容(依赖祖先元素渲染). 为了区分两者, 渲染引擎采用了 hasLayout 属性, 该属性可以设置为 true 或 false. 若一个元素的 hasLayout 属性值为 true 时, 这个元素便拥有了一个布局(layout), 该元素便不在依赖某个祖先元素进行渲染, 而是它自己就去渲染自己了, 它会负责对自己和可能的子孙元素进行尺寸计算和定位, 这意味着这个元素需要花更多的代价来维护自身和里面的内容; 相反的, 若元素的 hasLayout 属性值为 false时, 它会直接依赖于某个祖先元素来完成这些工作, 最终造成很多的IE bugs.</p>
+<a id="more"></a>
+<h3 id="u9ED8_u8BA4_u60C5_u51B5_u4E0BhasLayout_3Dtrue_u7684_u5143_u7D20"><a href="#u9ED8_u8BA4_u60C5_u51B5_u4E0BhasLayout_3Dtrue_u7684_u5143_u7D20" class="headerlink" title="默认情况下hasLayout=true的元素"></a>默认情况下hasLayout=true的元素</h3><p>下列元素默认拥有 layout:</p>
+<ul>
+<li>html body</li>
+<li>table tr th td</li>
+<li>img</li>
+<li>hr</li>
+<li>input button file select textarea fieldset</li>
+<li>marquee</li>
+<li>frameset frame iframe </li>
+<li>objects applets embed</li>
+</ul>
+<h3 id="u600E_u4E48_u89E6_u53D1_u53CA_u6E05_u9664_hasLayout"><a href="#u600E_u4E48_u89E6_u53D1_u53CA_u6E05_u9664_hasLayout" class="headerlink" title="怎么触发及清除 hasLayout"></a>怎么触发及清除 hasLayout</h3><p>以下css样式的设置, 会触发元素的 hasLayout:</p>
+<ul>
+<li><em>position: absolute</em>(IE5+)</li>
+<li><em>float: left|right</em>(IE5+)</li>
+<li><em>display: inline-block</em>(IE5+)</li>
+<li><em>width|height: “auto”以外的任何值</em>(IE5+; 只对block元素有效)</li>
+<li><em>zoom: “normal”以外的任何值</em>(IE5.5+; IE私有属性)</li>
+<li><em>writing-mode: tb-rl</em>(IE5+; IE私有属性)</li>
+<li><em>overflow: hidden|scroll|auto</em>(IE7; 此属性在IE6及更早版本中不能应用在未触发hasLayout的元素上)</li>
+<li><em>overflow-x|-y: hidden|scroll|auto</em>(IE7; 此属性在IE6及更早版本中不触发hasLayout; 此属性在CSS3中才获支持)</li>
+<li><em>position: fixed</em>(IE7)</li>
+<li><em>min-width: 任何值</em>(IE7; 即使是0)</li>
+<li><em>max-width: “none”以外的任何值</em>(IE7)</li>
+<li><em>min-height: 任何值</em>(IE7)</li>
+<li><em>max-height: “none”以外的任何值</em>(IE7)</li>
+<li><em>position: fixed</em>(IE7)</li>
+</ul>
+<p>以下css样式的设置, 会清除已经触发的 hasLayout:</p>
+<ul>
+<li><em>position: static</em>(IE5+)</li>
+<li><em>float: none</em>(IE5+)</li>
+<li><em>display: “inline-block”以外的任何值</em>(IE5+)</li>
+<li><em>width|height: “auto”</em>(IE5+; 对inline元素无效)</li>
+<li><em>zoom: “normal”</em>(IE5.5+; IE私有属性)</li>
+<li><em>writing-mode: 从’tb-rl’到’lr-tb’</em>(IE5+; IE私有属性)</li>
+<li><em>max-width|max-height: “none”</em>(IE7)</li>
+<li><em>overflow: visible</em>(IE7)</li>
+</ul>
+<h3 id="hasLayout__u7684_u5F71_u54CD"><a href="#hasLayout__u7684_u5F71_u54CD" class="headerlink" title="hasLayout 的影响"></a>hasLayout 的影响</h3><ol>
+<li><strong>浮动元素可以被 layout 元素自动包含</strong>. 一般情况下, 由于浮动元素脱离普通文档流会造成父元素的坍塌. 但是在IE6-7下, 通过触发父元素的 hasLayout, 可以使得父元素自动包含浮动的子元素, 从而修复坍塌问题. 一般我们设置父元素的 *height:1%; 即可, 1%并不会改变实际高度, 只是触发了 hasLayout, 该方法被称为霍莉破解(Holly hack), 需要注意的是, 当这个元素的 overflow 属性被设置为 visible 时, 这个方法就失效了.</li>
+<li>正常情况下, 浮动元素旁边的元素, 其内容应该环绕该浮动元素. 如果这个元素拥有 layout, 那么这个元素就会表现为一个矩形, 其内容不会环绕浮动元素.</li>
+<li>IE独有的滤镜属性(filter) 只适用于 layout 元素, 若一个div 设置了<strong>filter:alpha(opacity=90)</strong>, 又没有触发该div 的 hasLayout, 那么透明的设置将无效.</li>
+<li>hasLayout 影响块级元素鼠标的响应区域, 通常 hasLayout=false时, 只有文字区域才有响应, 而 hasLayout=true 时, 整个块级元素都是可以响应的.</li>
+</ol>
+<h3 id="hasLayout__u5F15_u8D77_u7684bug"><a href="#hasLayout__u5F15_u8D77_u7684bug" class="headerlink" title="hasLayout 引起的bug"></a>hasLayout 引起的bug</h3><ol>
+<li>IE6 及更低版本的双空白边浮动 bug, 修复方案: display:inline;</li>
+<li>IE5-6的 3 像素偏移 bug, 修复方案: _height:1%;</li>
+<li>IE6 的躲躲猫(peek-a-boo) bug, 修复方案: _height:1%;</li>
+<li>IE6-7负margin隐藏Bug, 修复方案: 去掉父元素的hasLayout; 或者赋hasLayout给子元素, 并添加position:relative;</li>
+</ol>
+<h3 id="u600E_u4E48_u68C0_u6D4BIE_u4E0B_u7684_u67D0_u4E2A_u5143_u7D20_u662F_u5426_u62E5_u6709hasLayout"><a href="#u600E_u4E48_u68C0_u6D4BIE_u4E0B_u7684_u67D0_u4E2A_u5143_u7D20_u662F_u5426_u62E5_u6709hasLayout" class="headerlink" title="怎么检测IE下的某个元素是否拥有hasLayout"></a>怎么检测IE下的某个元素是否拥有hasLayout</h3><p>在 IE Developer Toolbar 下, 拥有 haslayout的元素, 通常显示为 “haslayout = -1”. 也可通过js的方式检测, 如下所示:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> element = <span class="built_in">document</span>.getElementById(<span class="string">"myDiv"</span>);</span><br><span class="line"><span class="built_in">console</span>.log(element.currentStyle.hasLayout);<span class="comment">//该方式只能获取值, 而不能设置</span></span><br></pre></td></tr></table></figure>
+<p>以下代码可用于在IE6-7下测试某个元素是否拥有hasLayout:</p>
+<p>Code example: <a href="http://samples.msdn.microsoft.com/workshop/samples/author/dhtml/refs/hasLayout.htm" target="_blank" rel="external">http://samples.msdn.microsoft.com/workshop/samples/author/dhtml/refs/hasLayout.htm</a></p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="doctype">&lt;!DOCTYPE html&gt;</span> </span><br><span class="line"><span class="tag">&lt;<span class="title">html</span>&gt;</span> </span><br><span class="line"><span class="tag">&lt;<span class="title">head</span>&gt;</span> </span><br><span class="line">  <span class="tag">&lt;<span class="title">title</span>&gt;</span>hasLayout Property<span class="tag">&lt;/<span class="title">title</span>&gt;</span> </span><br><span class="line"><span class="tag">&lt;/<span class="title">head</span>&gt;</span> </span><br><span class="line"> </span><br><span class="line"><span class="tag">&lt;<span class="title">body</span>&gt;</span> </span><br><span class="line">  <span class="tag">&lt;<span class="title">h1</span>&gt;</span>hasLayout Property<span class="tag">&lt;/<span class="title">h1</span>&gt;</span> </span><br><span class="line">  <span class="tag">&lt;<span class="title">p</span>&gt;</span>This example uses the <span class="tag">&lt;<span class="title">strong</span>&gt;</span>hasLayout<span class="tag">&lt;/<span class="title">strong</span>&gt;</span> property of the <span class="tag">&lt;<span class="title">strong</span>&gt;</span>currentStyle<span class="tag">&lt;/<span class="title">strong</span>&gt;</span> object to  </span><br><span class="line">    show that an element has layout when it is absolutely positioned, or when its height and/or width are specified.   </span><br><span class="line">    The <span class="tag">&lt;<span class="title">strong</span>&gt;</span>hasLayout<span class="tag">&lt;/<span class="title">strong</span>&gt;</span> property returns <span class="tag">&lt;<span class="title">strong</span>&gt;</span>true<span class="tag">&lt;/<span class="title">strong</span>&gt;</span> for an object that has layout, and  </span><br><span class="line">    <span class="tag">&lt;<span class="title">strong</span>&gt;</span>false<span class="tag">&lt;/<span class="title">strong</span>&gt;</span> for an object that has no layout.<span class="tag">&lt;/<span class="title">p</span>&gt;</span> </span><br><span class="line">  <span class="tag">&lt;<span class="title">fieldset</span> <span class="attribute">style</span>=<span class="value">"width: 50%; text-align: center;"</span>&gt;</span> </span><br><span class="line">    <span class="tag">&lt;<span class="title">legend</span>&gt;</span><span class="tag">&lt;<span class="title">strong</span>&gt;</span>hasLayout<span class="tag">&lt;/<span class="title">strong</span>&gt;</span> Property<span class="tag">&lt;/<span class="title">legend</span>&gt;</span> </span><br><span class="line">    <span class="tag">&lt;<span class="title">p</span> <span class="attribute">style</span>=<span class="value">"text-align: left;"</span>&gt;</span><span class="tag">&lt;<span class="title">em</span>&gt;</span>Which DIV element has layout?<span class="tag">&lt;/<span class="title">em</span>&gt;</span><span class="tag">&lt;/<span class="title">p</span>&gt;</span> </span><br><span class="line">    <span class="tag">&lt;<span class="title">div</span> <span class="attribute">id</span>=<span class="value">"oWidthSet"</span> <span class="attribute">style</span>=<span class="value">"width: 100%; text-align: left;"</span>&gt;</span><span class="tag">&lt;<span class="title">strong</span>&gt;</span>DIV<span class="tag">&lt;/<span class="title">strong</span>&gt;</span> element A has its <span class="tag">&lt;<span class="title">strong</span>&gt;</span>width<span class="tag">&lt;/<span class="title">strong</span>&gt;</span> set to <span class="tag">&lt;<span class="title">strong</span>&gt;</span>100%<span class="tag">&lt;/<span class="title">strong</span>&gt;</span>.<span class="tag">&lt;/<span class="title">div</span>&gt;</span> </span><br><span class="line">    <span class="tag">&lt;<span class="title">div</span> <span class="attribute">id</span>=<span class="value">"oNotSet"</span> <span class="attribute">style</span>=<span class="value">"text-align: left;"</span>&gt;</span><span class="tag">&lt;<span class="title">strong</span>&gt;</span>DIV<span class="tag">&lt;/<span class="title">strong</span>&gt;</span> element B is not positioned, and neither its <span class="tag">&lt;<span class="title">strong</span>&gt;</span>height<span class="tag">&lt;/<span class="title">strong</span>&gt;</span> nor <span class="tag">&lt;<span class="title">strong</span>&gt;</span>width<span class="tag">&lt;/<span class="title">strong</span>&gt;</span> is set.<span class="tag">&lt;/<span class="title">div</span>&gt;</span> </span><br><span class="line">    <span class="tag">&lt;<span class="title">br</span>&gt;</span> </span><br><span class="line">    <span class="tag">&lt;<span class="title">button</span> <span class="attribute">onclick</span>=<span class="value">"document.getElementById('messageBox').textContent = document.getElementById('oWidthSet').currentStyle.hasLayout;"</span>&gt;</span>DIV Element A<span class="tag">&lt;/<span class="title">button</span>&gt;</span> </span><br><span class="line">    <span class="tag">&lt;<span class="title">button</span> <span class="attribute">onclick</span>=<span class="value">"document.getElementById('messageBox').textContent = document.getElementById('oNotSet').currentStyle.hasLayout;"</span>&gt;</span>DIV Element B<span class="tag">&lt;/<span class="title">button</span>&gt;</span> </span><br><span class="line">  <span class="tag">&lt;/<span class="title">fieldset</span>&gt;</span> </span><br><span class="line">  <span class="tag">&lt;<span class="title">div</span> <span class="attribute">id</span>=<span class="value">"messageBox"</span> <span class="attribute">style</span>=<span class="value">"padding-top: 1em; font-weight: bold;"</span>&gt;</span><span class="tag">&lt;/<span class="title">div</span>&gt;</span> </span><br><span class="line"><span class="tag">&lt;/<span class="title">body</span>&gt;</span> </span><br><span class="line"><span class="tag">&lt;/<span class="title">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>另外, 若一个元素没有布局(layout), 那么IE下 clientWidth/clientHeight 总是返回0. 基于这点, 可以使用另一种js的方法检测元素是否拥有hasLayout, 如下:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(element.clientHeight==<span class="number">0</span>);<span class="comment">//等于true则表示该元素不拥有hasLayout</span></span><br></pre></td></tr></table></figure>
+<h3 id="u9700_u8981_u6CE8_u610F_u7684_u662F"><a href="#u9700_u8981_u6CE8_u610F_u7684_u662F" class="headerlink" title="需要注意的是"></a>需要注意的是</h3><ul>
+<li>hasLayout 功能只存在于IE7及低版本的浏览器上, IE8中已删除 hasLayout 功能.</li>
+<li>hasLayout 触发后, 没有办法直接设置 hasLayout=false, 只有将那些触发 hasLayout 的 css 属性去除, 才能恢复原样.</li>
+</ul>
+<hr>
+<p>本文就讨论这么多内容,大家有什么问题或好的想法欢迎在下方参与<a href="#respond">留言和评论</a>.</p>
+<p>本文作者: <a href="https://github.com/Louiszhai" target="_blank" rel="external">louis</a></p>
+<p>本文链接: <a href="http://louiszhai.github.io/2016/03/31/css-hasLayout/">http://louiszhai.github.io/2016/03/31/css-hasLayout/</a></p>
+<p>参考文章</p>
+<ul>
+<li><a href="https://msdn.microsoft.com/library/ms530751(v=vs.85).aspx" target="_blank" rel="external">display property (Internet Explorer)</a></li>
+<li><a href="http://blog.csdn.net/hedong37518585/article/details/6639263" target="_blank" rel="external">hasLayout 介绍，以及其触发条件 - 何东狮吼 - 博客频道 - CSDN.NET</a></li>
+<li><a href="http://blog.sina.com.cn/s/blog_50502064010135lr.html" target="_blank" rel="external">认识hasLayout——IE6、7浏览器css bug的一大罪恶根源_ICER_JIN_新浪博客</a></li>
+<li><a href="https://msdn.microsoft.com/zh-cn/data/ms530764" target="_blank" rel="external">hasLayout property (Internet Explorer)</a></li>
+</ul>
+]]></content>
+    <summary type="html">
+    <![CDATA[css IE6 IE7 hasLayout]]>
+    
+    </summary>
+    
+      <category term="css" scheme="http://louiszhai.github.io/tags/css/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[你不知道的margin属性]]></title>
+    <link href="http://louiszhai.github.io/2016/03/23/css-margin/"/>
+    <id>http://louiszhai.github.io/2016/03/23/css-margin/</id>
+    <published>2016-03-23T12:47:36.000Z</published>
+    <updated>2016-04-27T01:26:54.000Z</updated>
+    <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>margin属性处于盒子模型的最外层, 用以隔开其他元素, 它可以依次设置4个长度值, 分别表示 “上 右 下 左” 的间距, 其中第1个和第3个值相对应, 第2个与第4个相对应, 如果省略前者, 后者将取与前者相同的数值. margin属性共存在以下 4 种表示方式:</p>
+<ul>
+<li>margin: 10px 1rem 1em 5%; 共 4 个数值, 表示依次设置 上, 右, 下, 左的间距;</li>
+<li>margin: 10px 1rem 1em; 共 3 个数值, 省略第4个值, 左间距将取右间距的值, 表示依次设置 上, 左右, 下的间距;</li>
+<li>margin: 10px 1rem; 共 2 个数值, 省略第3,4个值, 左间距将取右间距的值, 下间距将取上间距的值, 表示依次设置 上下, 左右的间距;</li>
+<li>margin: 10px; 共 1 个数值, 同时省略第2,3,4个值, 表示上下左右的间距均为10px;</li>
+</ul>
+<p>若是块级元素, 借助 margin:0 auto; 即可实现水平居中.</p>
+<p>看到这里, 你可能会觉得这些你都懂了, 这不要紧, 显然本文也不是为了科普margin的基础语法, 请往下看.</p>
+<a id="more"></a>
+<h3 id="u5782_u76F4_u5916_u8FB9_u8DDD_u5408_u5E76_u95EE_u9898"><a href="#u5782_u76F4_u5916_u8FB9_u8DDD_u5408_u5E76_u95EE_u9898" class="headerlink" title="垂直外边距合并问题"></a>垂直外边距合并问题</h3><p>别被上面这个名词给吓倒了, 简单地说, 外边距合并指的是, 当两个垂直外边距相遇时, 它们将形成一个外边距. 合并后的外边距的高度等于两个发生合并的外边距的高度中的较大者. 你可以查看<a href="http://www.w3school.com.cn/css/css_margin_collapsing.asp" target="_blank" rel="external">W3Shool CSS外边距合并</a>了解这个基本知识.</p>
+<p>实际工作中, 垂直外边距合并问题常见于第一个子元素的margin-top会顶开父元素与父元素相邻元素的间距, 而且只在标准浏览器下(FirfFox、Chrome、Opera、Sarfi)产生问题, IE下反而表现良好.</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="title">style</span>&gt;</span><span class="css"></span><br><span class="line">  <span class="class">.outer-box</span><span class="rules">&#123;</span><br><span class="line">  	<span class="rule"><span class="attribute">margin-top</span>:<span class="value"><span class="number">15px</span></span></span>;</span><br><span class="line">  &#125;</span></span><br><span class="line">  <span class="class">.inner-box</span><span class="rules">&#123;</span><br><span class="line">  	<span class="rule"><span class="attribute">margin-top</span>:<span class="value"><span class="number">30px</span></span></span>;</span><br><span class="line">  &#125;</span></span><br><span class="line"></span><span class="tag">&lt;/<span class="title">style</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="title">div</span> <span class="attribute">class</span>=<span class="value">"outer-box"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="title">div</span> <span class="attribute">class</span>=<span class="value">"inner-box"</span>&gt;</span>1234567890<span class="tag">&lt;/<span class="title">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="title">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>打开控制台, 你会发现内部div距离顶部的距离是30px, 而不是45px, 这是因为内部div与外部div的margin-top属性做了合并, 取两者中的最大值, 即 30px.</p>
+<p>如果按照CSS规范, IE的“良好表现”其实是一个错误的表现, 因为IE的hasLayout渲染导致了这个“表现良好”的外观. 而其他标准浏览器则会表现出“有问题”的外观. 好了, 如果你读过了上面W3Shcool的CSS外边距合并的文章后, 就很容易讨论这个问题了. 这个问题发生的原因是<strong>根据规范, 一个盒子如果没有上补白(padding-top)和上边框(border-top), 那么这个盒子的上边距会和其内部文档流中的第一个子元素的上边距重叠</strong>.</p>
+<p>基于此, 该问题便很好解决了, 给外部div设置一个透明的1像素的border-top即可.</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="class">.outer-box</span><span class="rules">&#123;</span><br><span class="line">  <span class="rule"><span class="attribute">margin-top</span>:<span class="value"><span class="number">15px</span></span></span>;</span><br><span class="line">  <span class="rule"><span class="attribute">border-top</span>:<span class="value"><span class="number">1px</span> solid transparent</span></span>;</span><br><span class="line">&#125;</span></span><br></pre></td></tr></table></figure>
+<h3 id="margin_u662F_u5426_u5BF9_u5185_u8054_u5143_u7D20_u751F_u6548_3F"><a href="#margin_u662F_u5426_u5BF9_u5185_u8054_u5143_u7D20_u751F_u6548_3F" class="headerlink" title="margin是否对内联元素生效?"></a>margin是否对内联元素生效?</h3><p>margin也能用于内联元素, 这是规范所允许的, 但是margin-top和margin-bottom对内联元素（对行）的高度没有影响, 并且由于边界效果(margin效果)是透明的, 他也没有任何的视觉影响.</p>
+<p>这是因为边界应用于内联元素时不改变元素的行高度，如果你要改变内联元素的行高即类似文本的行间距, 那么你只能使用这三个属性: line-height, fong-size, vertical-align. 请记住, 这个影响内联元素高度的是line-height而不是height, 因为内联元素是一行行的, 定一个height的话, 那这到底是整段inline元素的高呢? 还是inline元素一行的高呢? 这都说不准, 所以统一都给每行定一个高, 只能是line-height了.</p>
+<p><strong>margin-top/margin-bottom对内联元素没有实际效果, 不过margin-left/margin-right还是能够对内联元素产生影响的</strong>. 应用margin:10px 20px 30px 40px;, 左边这个css如果写在inline元素上, 他的效果大致是, 上下无效果, 左边离他相邻元素或者文本距离为40px, 右边离他相邻元素或者文本距离为20px.</p>
+<h3 id="u6709_u5173margin_u7684_u5E38_u89C1bug"><a href="#u6709_u5173margin_u7684_u5E38_u89C1bug" class="headerlink" title="有关margin的常见bug"></a>有关margin的常见bug</h3><p>下面罗列一下常见的有关margin的bug, 可能不全, 非常欢迎交流探讨, 请在<a href="#respond">回复</a>中补充.</p>
+<h4 id="IE6_u4E2D_u6D6E_u52A8_u5143_u7D203px_u95F4_u9694Bug"><a href="#IE6_u4E2D_u6D6E_u52A8_u5143_u7D203px_u95F4_u9694Bug" class="headerlink" title="IE6中浮动元素3px间隔Bug"></a>IE6中浮动元素3px间隔Bug</h4><p>发生场景: 发生在一个元素浮动，然后一个不浮动的元素自然上浮与之靠近会出现的3px的bug.<br>解决方法: 右边元素也一起浮动; 或者为右边元素添加IE6 Hack “_margin-left:-3px;” 从而消除3px间距.<br>原因分析：IE6浏览器缺陷Bug.</p>
+<h4 id="inline-block_u5143_u7D20_u4E4B_u95F4_u7A7A_u767DBug"><a href="#inline-block_u5143_u7D20_u4E4B_u95F4_u7A7A_u767DBug" class="headerlink" title="inline-block元素之间空白Bug"></a>inline-block元素之间空白Bug</h4><p>发生场景: IE8+、Chrome、Firefox、Safari等浏览器下的效果, 两个inline-block的元素之间会存在一定的空白间距, 空白间距的宽度与父元素的font-size大小有关.</p>
+<p>解决方法: 可以为inline-block元素设置为负的margin-left; 或父元素font-size设置为0, 子元素再重新设置回来, 如需兼容所有浏览器, 请参考 <a href="http://louiszhai.github.io/2016/03/27/css-inline-block/">inline-block空白间距解决方案探讨</a>.</p>
+<p>原因分析: HTML 中的换行符、空格符、制表符等合并为空白符, 字体大小不为 0 的情况下, 空白符自然占据一定的宽度, 因此产生了元素间的空隙.</p>
+<h4 id="IE6/7_u8D1Fmargin_u9690_u85CFBug"><a href="#IE6/7_u8D1Fmargin_u9690_u85CFBug" class="headerlink" title="IE6/7负margin隐藏Bug"></a>IE6/7负margin隐藏Bug</h4><p>发生场景: 当给一个有hasLayout的父元素内的非hasLayout元素设置负margin时, 超出父元素部分不可见.<br>解决方法: 去掉父元素的hasLayout; 或者赋hasLayout给子元素,并添加position:relative;<br>原理分析: IE6/7独有的hasLayout产生问题.</p>
+<h4 id="IE6/7_u4E0Bul/ol_u6807_u8BB0_u6D88_u5931bug"><a href="#IE6/7_u4E0Bul/ol_u6807_u8BB0_u6D88_u5931bug" class="headerlink" title="IE6/7下ul/ol标记消失bug"></a>IE6/7下ul/ol标记消失bug</h4><p>发生场合: 当ul/ol触发了haslayout并且是在ul/ol上写margin-left, 前面默认的ul/ol标记会消失.<br>解决方法: 给li设置margin-left, 而不是给ul/ol设置margin-left.<br>原因分析：IE6/7浏览器Bug.</p>
+<h4 id="IE6/7_u4E0Bmargin_u4E0Eabsolute_u5143_u7D20_u91CD_u53E0bug"><a href="#IE6/7_u4E0Bmargin_u4E0Eabsolute_u5143_u7D20_u91CD_u53E0bug" class="headerlink" title="IE6/7下margin与absolute元素重叠bug"></a>IE6/7下margin与absolute元素重叠bug</h4><p>发生场景: 双栏自适应布局中, 左侧元素absolute绝对定位, 右侧的margin撑开距离定位. 在IE6/7下左侧应用了absolute属性的块级元素与右边的自适应的文字内容重叠.<br>解决方法: 把左侧块级元素更改为内联元素, 比如把div更换为span.<br>原因分析: 这是由于IE6-7浏览器将inline水平标签元素和block水平的标签元素没有加以区分一视同仁渲染了. 属于IE6-7浏览器渲染Bug.</p>
+<h4 id="IE6/7/8_u4E0Bauto_margin_u5C45_u4E2Dbug"><a href="#IE6/7/8_u4E0Bauto_margin_u5C45_u4E2Dbug" class="headerlink" title="IE6/7/8下auto margin居中bug"></a>IE6/7/8下auto margin居中bug</h4><p>发生场景: 给block元素设置margin auto无法居中<br>解决方法: 出现这种bug的原因通常是没有Doctype, 然后触发了ie的quirks mode, 加上Doctype声明就可以了. 在《打败IE的葵花宝典》里给出的方法是给block元素添加一个width能够解决, 但据测试, 加with此种方法是无效的, 如果没有Doctype即使给元素添加width也无法让block元素居中.<br>原因分析: 缺少Doctype声明.</p>
+<h4 id="IE8_u4E0Binput_5Bbutton__7C_submit_5D__u8BBE_u7F6Emargin_3A0_auto_u65E0_u6CD5_u5C45_u4E2D"><a href="#IE8_u4E0Binput_5Bbutton__7C_submit_5D__u8BBE_u7F6Emargin_3A0_auto_u65E0_u6CD5_u5C45_u4E2D" class="headerlink" title="IE8下input[button | submit] 设置margin:0 auto无法居中"></a>IE8下input[button | submit] 设置margin:0 auto无法居中</h4><p>发生场景: ie8下, 如果给像button这样的标签（如button input[type=”button”] input[type=”submit”]）设置{ display: block; margin:0 auto; }如果不设置宽度的话无法居中.<br>解决方法: 可以给为input加上宽度.<br>原因分析: IE8浏览器Bug.</p>
+<h4 id="IE8_u767E_u5206_u6BD4padding_u5782_u76F4margin_bug"><a href="#IE8_u767E_u5206_u6BD4padding_u5782_u76F4margin_bug" class="headerlink" title="IE8百分比padding垂直margin bug"></a>IE8百分比padding垂直margin bug</h4><p>发生场景: 当父元素设置了百分比的padding, 子元素有垂直的margin的时候, 就好像父元素被设置了margin一样.<br>解决方法: 给父元素加一个overflow:hidden/auto。<br>原因分析: IE8浏览器Bug.</p>
+<hr>
+<p>本文就讨论这么多内容,大家有什么问题或好的想法欢迎在下方参与<a href="#respond">留言和评论</a>.</p>
+<p>本文作者: <a href="https://github.com/Louiszhai" target="_blank" rel="external">louis</a></p>
+<p>本文链接: <a href="http://louiszhai.github.io/2016/03/23/css-margin/">http://louiszhai.github.io/2016/03/23/css-margin/</a></p>
+<p>参考文章</p>
+<ul>
+<li><a href="http://www.hicss.net/do-not-tell-me-you-understand-margin/" target="_blank" rel="external">不要告诉我你懂margin</a></li>
+</ul>
+]]></content>
+    <summary type="html">
+    <![CDATA[css margin]]>
+    
+    </summary>
+    
+      <category term="css" scheme="http://louiszhai.github.io/tags/css/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[float深入分析]]></title>
+    <link href="http://louiszhai.github.io/2016/03/12/css-float/"/>
+    <id>http://louiszhai.github.io/2016/03/12/css-float/</id>
+    <published>2016-03-12T09:55:04.000Z</published>
+    <updated>2016-04-27T01:26:58.000Z</updated>
+    <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>float即浮动, 使用float, 该浮动元素便会脱离正常的文档流, 使其浮动到父元素的行的一端(元素向左或向右移动, 直到碰到浮动元素, 或者达到父元素内容的边界, 不包括padding), 并且其他元素将忽略该浮动元素并填补其原先的空间.</p>
+<p>这里需要捋清一个概念, 所谓文档流是什么?</p>
+<p><strong>文档流</strong>: 元素按照自上到下, 自左到右的顺序依次排放, 即文档流.</p>
+<p>float特别适合这种图文混排, 文字环绕图片的效果, 布局上灵活多变. 但不太适合动画, 因其可能造成reflow性能问题, 此时宜用绝对定位(position:absolute)或者固定定位(position:fixed).</p>
+<a id="more"></a>
+<h3 id="float_u5BF9_u5E03_u5C40_u7684_u5F71_u54CD"><a href="#float_u5BF9_u5E03_u5C40_u7684_u5F71_u54CD" class="headerlink" title="float对布局的影响"></a>float对布局的影响</h3><h4 id="u5BF9_u884C_u6846_u7684_u5F71_u54CD"><a href="#u5BF9_u884C_u6846_u7684_u5F71_u54CD" class="headerlink" title="对行框的影响"></a>对行框的影响</h4><p>浮动元素旁边的行框被缩短, 从而给浮动框留出空间, 行框围绕浮动框.</p>
+<p>因此, 创建浮动框可以使文本围绕图像, 如下:</p>
+<p>float01.gif</p>
+<p>float02.gif</p>
+<h4 id="u5BF9_u7236_u5143_u7D20_u7684_u5F71_u54CD"><a href="#u5BF9_u7236_u5143_u7D20_u7684_u5F71_u54CD" class="headerlink" title="对父元素的影响"></a>对父元素的影响</h4><p>元素浮动后, 会脱离正常文档流, 原文档中, 该浮动元素似乎消失了, 因此它不能撑开父元素, 容易造成父元素的塌陷.</p>
+<h4 id="u5BF9_u5144_u5F1F_u5143_u7D20_u7684_u5F71_u54CD"><a href="#u5BF9_u5144_u5F1F_u5143_u7D20_u7684_u5F71_u54CD" class="headerlink" title="对兄弟元素的影响"></a>对兄弟元素的影响</h4><p>若兄弟元素是 <strong>块级元素</strong>.</p>
+<p>现代浏览器及IE8+下, 该兄弟元素会忽视浮动元素而占据它的位置, 并且该兄弟元素会处于浮动元素的下层(并且无法通过z-index属性改变他们的层叠关系), 然而它的内容文字和其他行内元将会环绕浮动元素.</p>
+<p>对此, IE6,7分别有不同的表现. IE6,7中, 该兄弟元素会紧跟在浮动元素的右侧, 并且IE6中会保留3px的空隙; IE7中则没有空隙.</p>
+<p>若兄弟元素是 <strong>内联元素</strong></p>
+<p>则内联元素将环绕浮动元素排列.</p>
+<h4 id="u5BF9_u5144_u5F1F_u5143_u7D20_28_u6D6E_u52A8_29_u7684_u5F71_u54CD"><a href="#u5BF9_u5144_u5F1F_u5143_u7D20_28_u6D6E_u52A8_29_u7684_u5F71_u54CD" class="headerlink" title="对兄弟元素(浮动)的影响"></a>对兄弟元素(浮动)的影响</h4><p>若兄弟元素是 <strong>同一方向浮动</strong>.</p>
+<p>则兄弟元素相对该浮动元素按照从左到右(float:left)或者从右到左(float:right)的顺序依次排列.</p>
+<p>若兄弟元素是 <strong>反方向浮动</strong>.</p>
+<p>则兄弟元素和浮动元素将组成两个向左或向右的浮动队列, 分别相对浮动方向同时向行中间浮动. 他们尽可能处于同一行, 如果行的宽度不足以容纳这两个队列, 两个队列将错开成两行, DOM结构中处于之前的浮动队列将优先排在上面一行, 另一个浮动队列将排在下一行或者部分排在下一行.</p>
+<h4 id="u5BF9_u81EA_u8EAB_u5143_u7D20_u7684_u5F71_u54CD"><a href="#u5BF9_u81EA_u8EAB_u5143_u7D20_u7684_u5F71_u54CD" class="headerlink" title="对自身元素的影响"></a>对自身元素的影响</h4><p>浮动元素默认被视作<strong>块级对象</strong>(block-level).</p>
+<h4 id="u5BF9_u5B50_u5143_u7D20_u7684_u5F71_u54CD"><a href="#u5BF9_u5B50_u5143_u7D20_u7684_u5F71_u54CD" class="headerlink" title="对子元素的影响"></a>对子元素的影响</h4><p>浮动元素, 其高度或宽度取浮动子元素和非浮动子元素高度或宽度的最大值.</p>
+<h4 id="u5BF9_u7236_u5143_u7D20_u975E_u6D6E_u52A8_u5144_u5F1F_u5143_u7D20_u7684_u5F71_u54CD"><a href="#u5BF9_u7236_u5143_u7D20_u975E_u6D6E_u52A8_u5144_u5F1F_u5143_u7D20_u7684_u5F71_u54CD" class="headerlink" title="对父元素非浮动兄弟元素的影响"></a>对父元素非浮动兄弟元素的影响</h4><p>父元素之外的非浮动元素将会无视该浮动元素, 他们只会相对父元素按照正常文档流去排列.</p>
+<h4 id="u5BF9_u7236_u5143_u7D20_u6D6E_u52A8_u5144_u5F1F_u5143_u7D20_u7684_u5F71_u54CD"><a href="#u5BF9_u7236_u5143_u7D20_u6D6E_u52A8_u5144_u5F1F_u5143_u7D20_u7684_u5F71_u54CD" class="headerlink" title="对父元素浮动兄弟元素的影响"></a>对父元素浮动兄弟元素的影响</h4><p>父元素之外的浮动兄弟元素, 会本能的找到该浮动元素, 现象参照 “对兄弟元素(浮动)的影响”.</p>
+<h3 id="u6E05_u9664_u6D6E_u52A8_u76842_u79CD_u65B9_u6CD5"><a href="#u6E05_u9664_u6D6E_u52A8_u76842_u79CD_u65B9_u6CD5" class="headerlink" title="清除浮动的2种方法"></a>清除浮动的2种方法</h3><p>如上, float会带来父元素的塌陷, 下面提供两种解决方案, 以弥补float的缺陷.</p>
+<p>如下DOM, 由于子元素设置为float:left, 此时父元素并不会被撑大, 高度为0, 背景将无法展示.</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="title">style</span>&gt;</span><span class="css"></span><br><span class="line">	<span class="class">.outer</span><span class="rules">&#123;</span><br><span class="line">		<span class="rule"><span class="attribute">background</span>:<span class="value"><span class="hexcolor">#ccc</span></span></span>;</span><br><span class="line">	&#125;</span></span><br><span class="line">	<span class="class">.inner</span><span class="rules">&#123;</span><br><span class="line">		<span class="rule"><span class="attribute">float</span>:<span class="value">left</span></span>;</span><br><span class="line">		<span class="rule"><span class="attribute">width</span>:<span class="value"><span class="number">150px</span></span></span>;</span><br><span class="line">		<span class="rule"><span class="attribute">height</span>:<span class="value"><span class="number">100px</span></span></span>;</span><br><span class="line">		<span class="rule"><span class="attribute">margin</span>:<span class="value"><span class="number">10px</span></span></span>;</span><br><span class="line">		<span class="rule"><span class="attribute">border</span>:<span class="value"><span class="number">1px</span> solid red</span></span>;</span><br><span class="line">	&#125;</span></span><br><span class="line"></span><span class="tag">&lt;/<span class="title">style</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="title">div</span> <span class="attribute">class</span>=<span class="value">"outer"</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="title">div</span> <span class="attribute">class</span>=<span class="value">"inner"</span>&gt;</span><span class="tag">&lt;/<span class="title">div</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="title">div</span> <span class="attribute">class</span>=<span class="value">"inner"</span>&gt;</span><span class="tag">&lt;/<span class="title">div</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="title">div</span> <span class="attribute">class</span>=<span class="value">"inner"</span>&gt;</span><span class="tag">&lt;/<span class="title">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="title">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>IE6~7下可通过设置父元素的样式为zoom:1来清除浮动, 其他浏览器请参考如下两种方法清除浮动.</p>
+<h4 id="overflow"><a href="#overflow" class="headerlink" title="overflow"></a>overflow</h4><p>父元素使用overflow:auto|hidden, 切记不可使用overflow:visible.</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="class">.outer</span><span class="rules">&#123;</span><br><span class="line">	<span class="rule"><span class="attribute">overflow</span>:<span class="value">auto|hidden</span></span>;</span><br><span class="line">&#125;</span></span><br></pre></td></tr></table></figure>
+<h4 id="after_u4F2A_u7C7B"><a href="#after_u4F2A_u7C7B" class="headerlink" title="after伪类"></a>after伪类</h4><p>利用clear:both属性, 同时为避免加入dom元素, 使用after伪元素设置如下属性即可:</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class">.outer</span><span class="pseudo">::after</span><span class="rules">&#123;</span><br><span class="line">	<span class="rule"><span class="attribute">content</span>:<span class="value"><span class="string">''</span></span></span>;</span><br><span class="line">	<span class="rule"><span class="attribute">display</span>:<span class="value">block</span></span>;</span><br><span class="line">	<span class="rule"><span class="attribute">clear</span>:<span class="value">both</span></span>;</span><br><span class="line">&#125;</span></span><br></pre></td></tr></table></figure>
+<hr>
+<p>本文就讨论这么多内容,大家有什么问题或好的想法欢迎在下方参与<a href="#respond">留言和评论</a>.</p>
+<p>本文作者: <a href="https://github.com/Louiszhai" target="_blank" rel="external">louis</a></p>
+<p>本文链接: <a href="http://louiszhai.github.io/2016/03/12/css-float/">http://louiszhai.github.io/2016/03/12/css-float/</a></p>
+<p>参考文章</p>
+<ul>
+<li><a href="http://www.w3cplus.com/css/float.html" target="_blank" rel="external">float深入剖析_float 教程_w3cplus</a></li>
+<li><a href="http://www.wuwenyuan.com/1079.html" target="_blank" rel="external">网站CSS布局：float布局与position优势对比 | 网络营销技巧</a></li>
+</ul>
+]]></content>
+    <summary type="html">
+    <![CDATA[css float clear:both overflow:auto 文档流]]>
+    
+    </summary>
+    
+      <category term="CSS" scheme="http://louiszhai.github.io/tags/CSS/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[xss攻防]]></title>
+    <link href="http://louiszhai.github.io/2016/03/05/xss/"/>
+    <id>http://louiszhai.github.io/2016/03/05/xss/</id>
+    <published>2016-03-05T01:48:09.000Z</published>
+    <updated>2016-04-27T01:26:33.000Z</updated>
+    <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p><strong>XSS</strong> (Cross-Site Script) 攻击又叫跨站脚本攻击, 本质是一种注入攻击. 其原理, 简单的说就是利用各种手段把恶意代码添加到网页中, 并让受害者执行这段脚本. XSS能做用户使用浏览器能做的一切事情. 同源策略无法保证不受XSS攻击，因为此时攻击者就在同源之内.</p>
+<a id="more"></a>
+<h3 id="xss_u653B_u51FB_u65B9_u5F0F"><a href="#xss_u653B_u51FB_u65B9_u5F0F" class="headerlink" title="xss攻击方式"></a>xss攻击方式</h3><p>从攻击的方式可以分为</p>
+<ul>
+<li>反射型</li>
+<li>存储型</li>
+<li>文档型</li>
+</ul>
+<p>这种分类方式有些过时, 长久以来, 人们认为XSS分类有以上三种, 但实际情况中经常无法区分, 所以更明确的分类方式可以分为以下两类:</p>
+<ul>
+<li>client(客户端型)</li>
+<li>server(服务端型)</li>
+</ul>
+<p>当一端xss代码是在服务端被插入的, 那么这就是服务端型xss, 同理, 如果代码在客户端插入, 就是客户端型xss.</p>
+<h3 id="u9632_u6B62xss_u653B_u51FB"><a href="#u9632_u6B62xss_u653B_u51FB" class="headerlink" title="防止xss攻击"></a>防止xss攻击</h3><h4 id="u8F6C_u4E49"><a href="#u8F6C_u4E49" class="headerlink" title="转义"></a>转义</h4><p>无论是服务端型还是客户端型xss，攻击达成都需要两个条件</p>
+<ul>
+<li>代码被注入</li>
+<li>代码被执行</li>
+</ul>
+<p>其实只要做好无论任何情况下保证代码不被执行就能完全杜绝xss攻击.</p>
+<p>总之, 任何时候都不要把不受信任的数据直接插入到dom中的任何位置, 一定要做转义。</p>
+<h5 id="u5BF9_u4E8E_u67D0_u4E9B_u4F4D_u7F6E_2C_u4E0D_u53D7_u4FE1_u4EFB_u7684_u6570_u636E_u505A_u8F6C_u4E49_u5C31_u53EF_u4EE5_u4FDD_u8BC1_u5B89_u5168"><a href="#u5BF9_u4E8E_u67D0_u4E9B_u4F4D_u7F6E_2C_u4E0D_u53D7_u4FE1_u4EFB_u7684_u6570_u636E_u505A_u8F6C_u4E49_u5C31_u53EF_u4EE5_u4FDD_u8BC1_u5B89_u5168" class="headerlink" title="对于某些位置,不受信任的数据做转义就可以保证安全"></a>对于某些位置,不受信任的数据做转义就可以保证安全</h5><ul>
+<li>一般的标签属性值</li>
+<li>div body 的内部html</li>
+</ul>
+<h5 id="u5BF9_u4E8E_u67D0_u4E9B_u4F4D_u7F6E_uFF0C_u5373_u4F7F_u505A_u4E86_u8F6C_u4E49_u4F9D_u7136_u4E0D_u5B89_u5168"><a href="#u5BF9_u4E8E_u67D0_u4E9B_u4F4D_u7F6E_uFF0C_u5373_u4F7F_u505A_u4E86_u8F6C_u4E49_u4F9D_u7136_u4E0D_u5B89_u5168" class="headerlink" title="对于某些位置，即使做了转义依然不安全"></a>对于某些位置，即使做了转义依然不安全</h5><ul>
+<li><script>中</li>
+<li>注释中</li>
+<li>表签的属性名名</li>
+<li>标签名</li>
+<li>css标签中</li>
+</ul>
+<h5 id="u4F7F_u7528JSON-parse__u800C_u4E0D_u662Feval_2C_request__u7684content-type_u8981_u6307_u5B9A_u662FContent-Type_3A_application/json_3B"><a href="#u4F7F_u7528JSON-parse__u800C_u4E0D_u662Feval_2C_request__u7684content-type_u8981_u6307_u5B9A_u662FContent-Type_3A_application/json_3B" class="headerlink" title="使用JSON.parse 而不是eval, request 的content-type要指定是Content-Type: application/json;"></a>使用JSON.parse 而不是eval, request 的content-type要指定是Content-Type: application/json;</h5><h5 id="u5982_u679C_u94FE_u63A5_u7684URL_u4E2D_u90E8_u5206_u662F_u52A8_u6001_u751F_u6210_u7684_2C__u4E00_u5B9A_u8981_u505A_u8F6C_u4E49"><a href="#u5982_u679C_u94FE_u63A5_u7684URL_u4E2D_u90E8_u5206_u662F_u52A8_u6001_u751F_u6210_u7684_2C__u4E00_u5B9A_u8981_u505A_u8F6C_u4E49" class="headerlink" title="如果链接的URL中部分是动态生成的, 一定要做转义."></a>如果链接的URL中部分是动态生成的, 一定要做转义.</h5><h4 id="u4F7F_u7528_u6D4F_u89C8_u5668_u81EA_u5E26_u7684xss-filter"><a href="#u4F7F_u7528_u6D4F_u89C8_u5668_u81EA_u5E26_u7684xss-filter" class="headerlink" title="使用浏览器自带的xss-filter"></a>使用浏览器自带的xss-filter</h4><p>xss01.png</p>
+<p>现代浏览器都对反射型xss有一定的防御力, 其原理是检查url和dom中元素的相关性. 但这并不能完全防止反射型xss. 另外, 浏览器对于存储型xss并没有抵抗力, 原因很简单, 用户的需求是多种多样的. 所以, 抵御xss这件事情不能指望浏览器.</p>
+<blockquote>
+<p>可以通过http头控制是否打开 xss-filter,当然默认是打开的.X-XSS-Protection</p>
+</blockquote>
+<h4 id="CSP_28Content_Security_Policy_29"><a href="#CSP_28Content_Security_Policy_29" class="headerlink" title="CSP(Content Security Policy)"></a>CSP(Content Security Policy)</h4><p>为了缓解很大一部分潜在的跨站脚本问题, 浏览器的扩展程序系统引入了内容安全策略(CSP). CSP 管理网站允许加载的内容, 并且使用白名单的机制对网站加载或执行的资源起作用. 在网页中, 这样的策略通过 HTTP 头信息或者 meta 元素定义.</p>
+<p>CSP 并不是用来防止 xss 攻击的, 而是最小化 xss 发生后所造成的伤害. 实际上, 除了开发者自己做好 xss 转义, 并没有别的方法可以防止 xss 的发生. CSP 可以说是HTML5给web安全带来的最实惠的东西. 那么如何引入 CSP 呢?</p>
+<p>xss02.png</p>
+<p>通过response头</p>
+<blockquote>
+<p>只允许脚本从本源加载Content-Security-Policy: script-src ‘self’</p>
+</blockquote>
+<p>通过HTML的META标签</p>
+<blockquote>
+<p>作用同上&lt;meta http-equiv=”Content-Security-Policy” content=”script-src ‘self’”&gt;</p>
+</blockquote>
+<p>那么CSP 除了限制script-src 之外还能限制什么呢？</p>
+<blockquote>
+<p>base-uri : 限制这篇文档的uri  </p>
+<p>child-src ：限制子窗口的源(iframe,弹窗等),取代frame-src  </p>
+<p>connect-src ：限制脚本可以访问的源  </p>
+<p>font-src : 限制字体的源  </p>
+<p>form-action : 限制表单能够提交到的源  </p>
+<p>frame-ancestors : 限制了当前页面可以被哪些页面以iframe,frame,object等方式加载  </p>
+<p>frame-src ：deprecated with child-src,限制了当前页面可以加载哪些源，与frame-ancestors对应 </p>
+<p>img-src : 限制图片可以从哪些源加载  </p>
+<p>media-src : 限制video, audio, source, track 能够从哪些源加载  </p>
+<p>object-src ：限制插件可以从哪些源加载  </p>
+<p>sandbox ：强制打开沙盒模式</p>
+</blockquote>
+<p>可以看出, CSP是一个强大的策略, 几乎可以限制了所有能够用到的资源的来源. 使用好CSP可以很大成都降低XSS带来的风险.</p>
+<p>另外，CSP还提供一个报告的头 Content-Security-Policy-Report-Only，使用这个头浏览器向服务器报告csp状态，细节先不讨论。</p>
+<ul>
+<li>Content-Security-Policy-Report-Only: script-src ‘self’;  </li>
+<li>report-uri /csp-report-endpoint/</li>
+</ul>
+<p>CSP 目前有两版，CSP1 和CSP2， 两版的支持状态可以在</p>
+<p><a href="http://caniuse.com/#search=csp">http://caniuse.com/#search=csp</a> 中查到.</p>
+<h5 id="CSP1"><a href="#CSP1" class="headerlink" title="CSP1"></a>CSP1</h5><p>xss03-csp1.png</p>
+<h5 id="CSP2"><a href="#CSP2" class="headerlink" title="CSP2"></a>CSP2</h5><p>xss03-csp2.png</p>
+<p>CSP虽然提供了强大的安全保护, 但是他也造成了如下问题: Eval及相关函数被禁用、内嵌的JavaScript代码将不会执行、只能通过白名单来加载远程脚本.</p>
+<h4 id="X-Frame-Options"><a href="#X-Frame-Options" class="headerlink" title="X-Frame-Options"></a>X-Frame-Options</h4><p>X-Frame-Options <a href="https://developer.mozilla.org/en/HTTP">HTTP</a> 响应头是用来给浏览器指示允许一个页面可否在 <frame>, <iframe> 或者 <object> 中展现的标记. 网站可以使用此功能, 来确保自己网站的内容没有被嵌到别人的网站中去, 也从而避免了点击劫持 (clickjacking) 的攻击. 但以后可以被CSP的 frame-ancestors取代。目前支持的状态比起 CSP frame-ancestors要好.</p>
+<p>X-Frame-Options 共有三个值</p>
+<ul>
+<li>DENY 表示这个页面不允许被以frame的方式加载 </li>
+<li>SAMEORIGIN 表示这个页面只允许被同源页面加载</li>
+<li>ALLOW-FROM uri 表示这个页面只能被特定的域加载</li>
+</ul>
+<p>服务器配置</p>
+<p><strong>java代码:</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">response.addHeader(<span class="string">"x-frame-options"</span>,<span class="string">"SAMEORIGIN"</span>);</span><br></pre></td></tr></table></figure>
+<p><strong>Nginx配置:</strong></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">addheader X-Frame-Options SAMEORIGIN</span><br></pre></td></tr></table></figure>
+<p><strong>Apache配置:</strong></p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword"><span class="common">Header</span></span> always append X-Frame-Options SAMEORIGIN</span><br></pre></td></tr></table></figure>
+<h5 id="u6D4F_u89C8_u5668_u517C_u5BB9_u6027"><a href="#u6D4F_u89C8_u5668_u517C_u5BB9_u6027" class="headerlink" title="浏览器兼容性"></a>浏览器兼容性</h5><table>
+<thead>
+<tr>
+<th>特性</th>
+<th>Chrome</th>
+<th>Firefox (Gecko)</th>
+<th>Internet Explorer</th>
+<th>Opera</th>
+<th>Safari</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>基础支持</td>
+<td>4.1.249.1042</td>
+<td><a href="https://developer.mozilla.org/en-US/Firefox/Releases/NaN">3.6.9</a> (1.9.2.9)</td>
+<td>8.0</td>
+<td>10.5</td>
+<td>4.0</td>
+</tr>
+<tr>
+<td>ALLOW-FROM 支持</td>
+<td>Not supported</td>
+<td><a href="https://developer.mozilla.org/en-US/Firefox/Releases/18">18.0</a></td>
+<td>8.0?</td>
+<td>?</td>
+<td>Not supported</td>
+</tr>
+</tbody>
+</table>
+<h4 id="Http-Only"><a href="#Http-Only" class="headerlink" title="Http-Only"></a>Http-Only</h4><p>使用 http-only 保护cookie, 可以保证即使发生了xss,用户的cookie也是安全的.使用http-only 保护的cookie是不会被javascript读写的.</p>
+<h4 id="iframe__u6C99_u7BB1_u73AF_u5883"><a href="#iframe__u6C99_u7BB1_u73AF_u5883" class="headerlink" title="iframe 沙箱环境"></a>iframe 沙箱环境</h4><p>HTML5为iframe提供了安全属性 sandbox, 进而限制iframe的能力. 如下:</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="title">iframe</span> <span class="attribute">src</span>=<span class="value">"untrusted.html"</span> <span class="attribute">sandbox</span>=<span class="value">"allow-scripts allow-forms"</span>&gt;</span><span class="tag">&lt;/<span class="title">iframe</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h4 id="u5176_u4ED6_u5B89_u5168_u76F8_u5173_u7684HTTP_u5934"><a href="#u5176_u4ED6_u5B89_u5168_u76F8_u5173_u7684HTTP_u5934" class="headerlink" title="其他安全相关的HTTP头"></a>其他安全相关的HTTP头</h4><h5 id="X-Content-Type-Options"><a href="#X-Content-Type-Options" class="headerlink" title="X-Content-Type-Options"></a>X-Content-Type-Options</h5><p>X-Content-Type-Options 阻止浏览器进行content-type 嗅探, 能够防止类型嗅探攻击.</p>
+<p>这个header主要用来防止在IE9、chrome和safari中的MIME类型混淆攻击. 通常浏览器可以通过嗅探内容本身的方法来决定它是什么类型, 而不是看响应中的content-type值. 通过设置 X-Content-Type-Options：如果content-type和期望的类型匹配，则不需要嗅探，只能从外部加载确定类型的资源. 举个例子, 如果加载了一个样式表, 那么资源的MIME类型只能是text/css, 对于IE中的脚本资源, 以下的内容类型是有效的:</p>
+<figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">application</span>/ecmascript  </span><br><span class="line"><span class="type">application</span>/javascript  </span><br><span class="line"><span class="type">application</span>/x-javascript  </span><br><span class="line"><span class="type">text</span>/ecmascript  </span><br><span class="line"><span class="type">text</span>/javascript  </span><br><span class="line"><span class="type">text</span>/jscript  </span><br><span class="line"><span class="type">text</span>/x-javascript  </span><br><span class="line"><span class="type">text</span>/vbs  </span><br><span class="line"><span class="type">text</span>/vbscript</span><br></pre></td></tr></table></figure>
+<p>对于chrome, 则支持下面的MIME 类型:</p>
+<figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">text</span>/javascript  </span><br><span class="line"><span class="type">text</span>/ecmascript  </span><br><span class="line"><span class="type">application</span>/javascript  </span><br><span class="line"><span class="type">application</span>/ecmascript  </span><br><span class="line"><span class="type">application</span>/x-javascript  </span><br><span class="line"><span class="type">text</span>/javascript1<span class="number">.1</span>  </span><br><span class="line"><span class="type">text</span>/javascript1<span class="number">.2</span>  </span><br><span class="line"><span class="type">text</span>/javascript1<span class="number">.3</span>  </span><br><span class="line"><span class="type">text</span>/jscript  </span><br><span class="line"><span class="type">text</span>/live <span class="keyword">script</span></span><br></pre></td></tr></table></figure>
+<p><strong>正确的设置</strong></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nosniff &#8211; &#36825;&#20010;&#26159;&#21807;&#19968;&#27491;&#30830;&#30340;&#35774;&#32622;.</span><br></pre></td></tr></table></figure>
+<p>通常不正确的设置</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#8216;nosniff&#8217; &#8211; &#24341;&#21495;&#26159;&#19981;&#20801;&#35768;&#30340;&#10;: nosniff &#8211; &#20882;&#21495;&#20063;&#26159;&#38169;&#35823;&#30340;</span><br></pre></td></tr></table></figure>
+<p><strong>如何检测</strong></p>
+<p>在IE和chrome中打开开发者工具，在控制台中观察配置了nosniff和没有配置nosniff的输出有啥区别.</p>
+<h5 id="HPKP_28Public_Key_Pinning_29"><a href="#HPKP_28Public_Key_Pinning_29" class="headerlink" title="HPKP(Public Key Pinning)"></a>HPKP(Public Key Pinning)</h5><p>HPKP 是一个response 头, 用来检测一个证书的公钥是否发生了改变, 防止中间人攻击.</p>
+<p>我们知道, 受信任的 CA（证书颁发机构）有好几百个, 他们成为整个网站身份认证过程中一个较大的攻击面. 现有的证书信任链机制最大的问题是, 任何一家受信任的 CA 都可以签发任意网站的站点证书, 这些证书在浏览器看来, 都是合法的.</p>
+<p>HPKP 技术给予我们主动选择信任 CA 的权利. 它的工作原理是通过响应头或者 <meta> 标签告诉浏览器当前网站的证书指纹, 以及过期时间等其它信息. 未来一段时间内, 浏览器再次访问这个网站必须验证证书链中的证书指纹, 如果跟之前指定的值不匹配, 即便证书本身是合法的, 也必须断开连接.</p>
+<p>HPKP 官方文档见 <a href="https://tools.ietf.org/html/rfc7469">RFC7469</a> , 目前 Firefox 35+ 和 Chrome 38+ 已经支持. 它的基本格式如下:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Public-Key-Pins: pin-sha256=&#34;base64==&#34;; max-age=expireTime [; includeSubdomains][; report-uri=&#34;reportURI&#34;]</span><br></pre></td></tr></table></figure>
+<h5 id="HSTS__28HTTP_Strict-Transport-Security_29"><a href="#HSTS__28HTTP_Strict-Transport-Security_29" class="headerlink" title="HSTS (HTTP Strict-Transport-Security)"></a>HSTS (HTTP Strict-Transport-Security)</h5><p>HSTS 是国际互联网工程组织IETE正在推行一种新的Web安全协议, 可以用来抵御中间人攻击, 它强制浏览器使用TSL作为数据通道, 即强制使用HTTPS与服务器创建连接.</p>
+<p>服务器开启HSTS的方法是, 当客户端通过HTTPS发出请求时, 在服务器返回的超文本传输协议响应头中包含Strict-Transport-Security字段. 非加密传输时设置的HSTS字段无效.</p>
+<p>比如, <a href="https://xxx">https://xxx</a> 的响应头含有Strict-Transport-Security: max-age=31536000; includeSubDomains. 这意味着两点:</p>
+<p>在接下来的一年（即31536000秒）中, 浏览器只要向xxx或其子域名发送HTTP请求时, 必须采用HTTPS来发起连接. 比如, 用户点击超链接或在地址栏输入 <a href="http://xxx/">http://xxx/</a> , 浏览器应当自动将 http 转写成 https, 然后直接向 <a href="https://xxx/">https://xxx/</a> 发送请求.</p>
+<p>在接下来的一年中, 如果 xxx 服务器发送的TLS证书无效, 用户不能忽略浏览器警告继续访问网站.</p>
+<p>不足就是, 用户首次访问网址是不受HSTS保护的, 这是因为首次还未收到HSTS. 解决方案有两个, 一是浏览器预置 HSTS域名列表, Google Chrome、Firefox 和 Internet Explorer 实现了这一方案. 二是将HSTS信息加入到域名系统记录中.</p>
+<h3 id="u524D_u7AEFxss_u8FC7_u6EE4"><a href="#u524D_u7AEFxss_u8FC7_u6EE4" class="headerlink" title="前端xss过滤"></a>前端xss过滤</h3><p>最后提供一种前端xss过滤的方法</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">xssCheck</span>(<span class="params">str,reg</span>)</span>&#123;</span><br><span class="line">	<span class="keyword">return</span> str ? str.replace(reg || <span class="regexp">/[&amp;&lt;"&gt;'](?:		(amp|lt|quot|gt|#39|nbsp|#\d+);)?/g</span>, <span class="function"><span class="keyword">function</span> (<span class="params">a, b</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(b)&#123;</span><br><span class="line">            <span class="keyword">return</span> a;</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            <span class="keyword">return</span> &#123;</span><br><span class="line">                <span class="string">'&lt;'</span>:<span class="string">'&amp;lt;'</span>,</span><br><span class="line">                <span class="string">'&amp;'</span>:<span class="string">'&amp;amp;'</span>,</span><br><span class="line">                <span class="string">'"'</span>:<span class="string">'&amp;quot;'</span>,</span><br><span class="line">                <span class="string">'&gt;'</span>:<span class="string">'&amp;gt;'</span>,</span><br><span class="line">                <span class="string">"'"</span>:<span class="string">'&amp;#39;'</span>,</span><br><span class="line">            &#125;[a]</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;) : <span class="string">''</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<p>本文就讨论这么多内容,大家有什么问题或好的想法欢迎在下方参与<a href="#respond">留言和评论</a>.</p>
+<p>本文作者: <a href="https://github.com/Louiszhai">louis</a></p>
+<p>本文链接: <a href="http://louiszhai.github.io/2016/03/05/xss/">http://louiszhai.github.io/2016/03/05/xss/</a></p>
+<p>参考文章</p>
+<ul>
+<li><a href="http://drops.wooyun.org/web/13009?hmsr=toutiao.io&amp;utmmedium=toutiao.io&amp;utmsource=toutiao.io">前端防御XSS | WooYun知识库</a></li>
+<li><a href="http://www.freebuf.com/articles/web/61268.html">XSS攻击冷门花样玩法总结 - FreeBuf.COM | 关注黑客与极客</a></li>
+<li>[关于Web安全，99%的网站都忽略了这些][5]</li>
+<li><a href="http://www.tuicool.com/articles/jURNfy">HTTP Public Key Pinning 介绍 - 推酷</a></li>
+</ul>
+</script></li></ul>]]></content>
+    <summary type="html">
+    <![CDATA[xss]]>
+    
+    </summary>
+    
+      <category term="XSS" scheme="http://louiszhai.github.io/tags/XSS/"/>
+    
+  </entry>
+  
+  <entry>
     <title><![CDATA[字符串常用方法]]></title>
     <link href="http://louiszhai.github.io/2016/01/12/js.String/"/>
     <id>http://louiszhai.github.io/2016/01/12/js.String/</id>
     <published>2016-01-12T12:27:09.000Z</published>
-    <updated>2016-01-17T12:29:58.000Z</updated>
+    <updated>2016-04-27T01:26:47.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>javaScript 中, 字符串无处不在, 并且所有的字符串方法均来自 String.prototype, 这一节, 我们走进看一看String内部, 探讨那些常用或不常用的字符串操作方法.</p>
 <a id="more"></a>
 <h3 id="String-prototype"><a href="#String-prototype" class="headerlink" title="String.prototype"></a>String.prototype</h3><p>String.prototype 属性指向 String 的原型对象. 以下是它的属性特性:</p>
@@ -181,7 +557,7 @@
 <hr>
 <p>实际上 String.prototype 中, 常用的方法就charAt, indexOf, lastIndexOf, match, replace, search, slice, split, substr, substring, toLowerCase, toUpperCase, trim, valueof 等这些. 熟悉它们的语法规则就能熟练地驾驭字符串.</p>
 <hr>
-<p>本问就讨论这么多内容,大家有什么问题或好的想法欢迎在下方参与<a href="#respond">留言和评论</a>.</p>
+<p>本文就讨论这么多内容,大家有什么问题或好的想法欢迎在下方参与<a href="#respond">留言和评论</a>.</p>
 <p>本文作者: <a href="https://github.com/Louiszhai" target="_blank" rel="external">louis</a></p>
 <p>本文链接: <a href="http://louiszhai.github.io/2016/01/12/js.String/">http://louiszhai.github.io/2016/01/12/js.String/</a></p>
 <p>参考文章</p>
@@ -203,7 +579,7 @@
     <link href="http://louiszhai.github.io/2016/01/11/bind/"/>
     <id>http://louiszhai.github.io/2016/01/11/bind/</id>
     <published>2016-01-11T00:01:33.000Z</published>
-    <updated>2016-01-17T12:29:49.000Z</updated>
+    <updated>2016-04-27T01:27:01.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>ES5新增了 Function.prototype.bind 方法, 该方法不同于jquery的bind 方法, 它主要用于固定 this 作用域, 避免各种由于上下文切换造成的语义问题. 常用在 setTimeout, for循环等内部.</p>
 <a id="more"></a>
 <h3 id="bind"><a href="#bind" class="headerlink" title="bind"></a>bind</h3><p>语法: func.bind(thisArg, arg1, arg2, ….)</p>
@@ -224,7 +600,7 @@
 <p>可以看出来, 使用 bind() 方法后, 代码优雅得多.</p>
 <p>注: 作为ES5标准加入的bind方法显然不支持 IE9之前的低版本IE, 如需使用, 请参考<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Function/bind#Compatibility" target="_blank" rel="external">Polyfill</a>.</p>
 <hr>
-<p>本问就讨论这么多内容,大家有什么问题或好的想法欢迎在下方参与<a href="#respond">留言和评论</a>.</p>
+<p>本文就讨论这么多内容,大家有什么问题或好的想法欢迎在下方参与<a href="#respond">留言和评论</a>.</p>
 <p>本文作者: <a href="https://github.com/Louiszhai" target="_blank" rel="external">louis</a></p>
 <p>本文链接: <a href="http://louiszhai.github.io/2016/01/11/bind/">http://louiszhai.github.io/2016/01/11/bind/</a></p>
 <p>参考文章</p>
@@ -242,11 +618,148 @@
   </entry>
   
   <entry>
+    <title><![CDATA[由同源策略到前端跨域]]></title>
+    <link href="http://louiszhai.github.io/2016/01/11/cross-domain/"/>
+    <id>http://louiszhai.github.io/2016/01/11/cross-domain/</id>
+    <published>2016-01-11T00:01:33.000Z</published>
+    <updated>2016-03-12T03:13:26.000Z</updated>
+    <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>同源策略 (Same-Origin Policy) 最早由 Netscape 公司提出, 所谓同源就是要求, 域名, 协议, 端口相同. 非同源的脚本不能访问或者操作其他域的页面对象(如DOM等). 作为著名的安全策略, 虽然它只是一个规范, 并不强制要求,  但现在所有支持 javaScript 的浏览器都会使用这个策略. 以至于该策略成为浏览器最核心最基本的安全功能, 如果缺少了同源策略, web的安全将无从谈起.</p>
+<a id="more"></a>
+<h3 id="u540C_u6E90_u7B56_u7565_u7684_08_u9650_u5236"><a href="#u540C_u6E90_u7B56_u7565_u7684_08_u9650_u5236" class="headerlink" title="同源策略的限制"></a>同源策略的限制</h3><p>同源策略下的web世界, 域的壁垒高筑, 从而保证各个网页相互独立, 互相之间不能直接访问, iframe, ajax 均受其限制, 而script标签不受此限制.</p>
+<h4 id="iframe_u9650_u5236"><a href="#iframe_u9650_u5236" class="headerlink" title="iframe限制"></a>iframe限制</h4><ul>
+<li>可以访问同域资源, 可读写;</li>
+<li>访问跨域页面时, 只读.</li>
+</ul>
+<h4 id="Ajax_u9650_u5236"><a href="#Ajax_u9650_u5236" class="headerlink" title="Ajax限制"></a>Ajax限制</h4><p>Ajax 的限制比 iframe 限制更严.</p>
+<ul>
+<li>同域资源可读写;</li>
+<li>跨域请求会直接被浏览器拦截.</li>
+</ul>
+<h4 id="Script_u9650_u5236"><a href="#Script_u9650_u5236" class="headerlink" title="Script限制"></a>Script限制</h4><p>script并无限制, 因为script标签引入的文件不能够被客户端的 js 获取到, 不会影响到原页面的安全, 因此script标签引入的文件没必要遵循浏览器的同源策略. 相反, ajax 加载的文件内容可被客户端 js 获取到, 引入的文件内容可能会泄漏或者影响原页面安全, 故, ajax必须遵循同源策略.</p>
+<h4 id="u6CE8_u610F"><a href="#u6CE8_u610F" class="headerlink" title="注意"></a>注意</h4><p>同源策略要求三同, 即: <strong>同域</strong>, <strong>同协议</strong>, <strong>同端口</strong>.</p>
+<ul>
+<li>同域即host相同, 顶级域名, 一级域名, 二级域名, 三级域名等必须相同, 且域名不能与 ip 对应;</li>
+<li>同协议要求, http与https协议必须保持一致;</li>
+<li>同端口要求, 端口号必须相同.</li>
+</ul>
+<p>IE有些例外, 它仅仅只是验证主机名以及访问协议，而忽略了端口号.</p>
+<p>这里需要澄清一个概念, 所谓的域, 跟 js 等资源的存放服务器没有关系, 比如你到 baidu.com 使用 script 标签请求了 google.com 下的js, 那么该 js 所在域是 baidu.com, 而不是 google.com. 换言之, 它能操作baidu.com的页面对象, 却不能操作google.com的页面对象.</p>
+<h3 id="u8DE8_u57DF_u8BBF_u95EE"><a href="#u8DE8_u57DF_u8BBF_u95EE" class="headerlink" title="跨域访问"></a>跨域访问</h3><p>实际上, 我们又不可避免地需要做一些跨域的请求, 下面提供几种方案去绕过同源策略:</p>
+<h4 id="u4F7F_u7528_u4EE3_u7406"><a href="#u4F7F_u7528_u4EE3_u7406" class="headerlink" title="使用代理"></a>使用代理</h4><p>虽然ajax和iframe受同源策略限制, 但服务器端代码请求, 却不受此限制, 我们可以基于此去伪造一个同源请求, 实现跨域的访问. </p>
+<ol>
+<li>请求同域下的web服务器;</li>
+<li>web服务器像代理一样去请求真正的第三方服务器;</li>
+<li>代理拿到数据过后, 直接返回给客户端ajax.</li>
+</ol>
+<p>这样, 我们便拿到了跨域数据.</p>
+<h4 id="JSONP"><a href="#JSONP" class="headerlink" title="JSONP"></a>JSONP</h4><p>由上, script标签并不受同源策略约束, 基于script 标签可做 jsonp 形式的访问, 可以通过第三方服务器生成动态的js代码来回调本地的js方法，而方法中的参数则由第三方服务器在后台获取，并以JSON的形式填充到JS方法当中. 即 JSON with Padding. 具体如下:</p>
+<p>1) 可用js生成以下html 代码, 去做jsonp的请求.</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="title">script</span> <span class="attribute">type</span>=<span class="value">"text/javascript"</span> <span class="attribute">src</span>=<span class="value">"https://www.targetDomain.com/jsonp?callback=callbackName"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="title">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>使用 jquery, 即</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">jQuery.getJSON(</span><br><span class="line">  <span class="string">"https://www.yourdomain.com/jsonp?callback=?"</span>,</span><br><span class="line">  <span class="function"><span class="keyword">function</span>(<span class="params">data</span>) </span>&#123;</span><br><span class="line">      <span class="built_in">console</span>.log(<span class="string">"name: "</span> + data.name);</span><br><span class="line">  &#125;</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+<p>其中回调函数名 “callback” 为 “?”, 即不需要用户指定，而是由jquery生成.</p>
+<p>2) 服务器端,以 java 为例, 参考如下: </p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException &#123;</span><br><span class="line">  //获取JSON数据</span><br><span class="line">  String jsonData = "&#123;\"name\":\"jsonp\""&#125;";</span><br><span class="line">  //获取回调函数名</span><br><span class="line">  String callback = req.getParameter("callback");  </span><br><span class="line">  //拼接动态JS代码</span><br><span class="line">  String output = callback + "(" + jsonData + ");</span><br><span class="line">    resp.setContentType("text/javascript");</span><br><span class="line">  PrintWriter out = resp.getWriter();</span><br><span class="line">  out.println(output);</span><br><span class="line">  // 响应为 callbackName(&#123;\"name\":\"jsonp\""&#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="postMessage"><a href="#postMessage" class="headerlink" title="postMessage"></a>postMessage</h4><p>ES5新增的 postMessage() 方法允许来自不同源的脚本采用异步方式进行有限的通信，可以实现跨文本档、多窗口、跨域消息传递.</p>
+<p>语法: postMessage(data,origin)</p>
+<p><strong>data</strong>: 要传递的数据，html5规范中提到该参数可以是JavaScript的任意基本类型或可复制的对象，然而并不是所有浏览器都做到了这点儿，部分浏览器只能处理字符串参数，所以我们在传递参数的时候需要使用JSON.stringify()方法对对象参数序列化，在低版本IE中引用json2.js可以实现类似效果.</p>
+<p><strong>origin</strong>：字符串参数，指明目标窗口的源，协议+主机+端口号[+URL]，URL会被忽略，所以可以不写，这个参数是为了安全考虑，postMessage()方法只会将message传递给指定窗口，当然如果愿意也可以建参数设置为”*”，这样可以传递给任意窗口，如果要指定和当前窗口同源的话设置为”/“。</p>
+<p>父页面发送消息: </p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">window</span>.frames[<span class="number">0</span>].postMessage(<span class="string">'message'</span>, origin)</span><br></pre></td></tr></table></figure>
+<p>iframe接受消息: </p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">window</span>.addEventListener(<span class="string">'message'</span>,<span class="function"><span class="keyword">function</span>(<span class="params">e</span>)</span>&#123;</span><br><span class="line">	<span class="keyword">if</span>(e.source!=<span class="built_in">window</span>.parent) <span class="keyword">return</span>;<span class="comment">//判断消息源是不是父页面</span></span><br><span class="line">  	<span class="comment">//TODO ...</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>其中 e 对象有三个重要的属性​    </p>
+<ul>
+<li>data, 表示父页面传递过来的message</li>
+<li>source, 表示发送消息的窗口对象</li>
+<li>origin, 表示发送消息窗口的源(协议+主机+端口号)</li>
+</ul>
+<h4 id="CORS__u8DE8_u57DF_u8BBF_u95EE"><a href="#CORS__u8DE8_u57DF_u8BBF_u95EE" class="headerlink" title="CORS 跨域访问"></a>CORS 跨域访问</h4><p>HTML5带来了一种新的跨域请求的方式 — CORS, 即 <a href="https://en.wikipedia.org/wiki/Cross-originresourcesharing" target="_blank" rel="external">Cross-origin resource sharing</a>. 它更加安全, 上述的 JSONP, postMessage 等, 资源本身没有能力保证自己不被滥用. CORS的目标是保护资源只被可信的访问源以正确的方式访问. </p>
+<p>目前, 主流的浏览器都支持此协议, 可以在caniuse.com 中查到<a href="http://caniuse.com/#search=cors" target="_blank" rel="external">http://caniuse.com/#search=cors</a>.</p>
+<p>简而言之, 浏览器不再一味禁止跨域访问, 而是需要检查目的站点返回的消息的头域, 要检查该响应是否允许当前站点访问. 通过HTTP头域的方式来通知浏览器:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Response headers[edit]</span><br><span class="line">Access-Control-Allow-Origin</span><br><span class="line">Access-Control-Allow-Credentials</span><br><span class="line">Access-Control-Expose-Headers</span><br><span class="line">Access-Control-Max-Age</span><br><span class="line">Access-Control-Allow-Methods</span><br><span class="line">Access-Control-Allow-Headers</span><br></pre></td></tr></table></figure>
+<p>CORS的解决办法是在服务端Response的HTTP头域加入资源的访问权限信息. 如: A站只需要在response头中加一个字段就能让B站跨站访问.</p>
+<figure class="highlight fortran"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">access</span>-control-allow-origin:*</span><br></pre></td></tr></table></figure>
+<p>其中<code>*</code> 表示通配, 所有的域都能访问此资源, 如果严谨一些只允许B站访问:</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">access-control-allow-origin:<span class="tag">&lt;<span class="title">B-DOMAIN</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>这样B站就可以直接访问此资源, 不需要JSONP 也不需要iframe了.</p>
+<p>CORS还可以约束只允许某种METHOD访问, 比如:</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">Access-Control-Allow-Methods</span>: <span class="string">POST, GET, OPTIONS</span></span><br></pre></td></tr></table></figure>
+<p>CORS为安全考据在跨站ajax访问的时候是不带cookie的, 但这点同样可以改变, 只需要加这个头, 浏览器就会把cookie 奉上!</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Access-Control-Allow-<span class="string">Credentials:</span> <span class="literal">true</span></span><br></pre></td></tr></table></figure>
+<p>在访问资源前，浏览器会先发出OPTIONS请求，获取这些权限信息，并比对当前站点的脚本是否有权限，然后再将实际的脚本的数据请求发出. 发现权限不允许, 则不会发出请求. 逻辑流程图为:</p>
+<p><img src="/docImages/cross-domain01.jpg" alt=""></p>
+<p>浏览器也可以直接将GET请求发出，数据和权限同时到达浏览器端，但是数据是否交给脚本处理需要浏览器检查权限对比后作出决定。</p>
+<p>一次具体的跨域访问的流程为：</p>
+<p><img src="/docImages/cross-domain02.jpg" alt=""></p>
+<p>因此权限控制交给了服务端，服务端一般也会提供对资源的CORS的配置.</p>
+<h4 id="document-domain"><a href="#document-domain" class="headerlink" title="document.domain"></a>document.domain</h4><p>通过修改document的domain属性，我们可以在域和子域或者不同的子域之间通信(即它们必须在同一个一级域名下)。同域策略认为域和子域隶属于不同的域，比如a.com和 script.a.com是不同的域，这时，我们无法在a.com下的页面中调用script.a.com中定义的JavaScript方法。但是当我们把它们document的domain属性都修改为a.com，浏览器就会认为它们处于同一个域下，那么我们就可以互相获取对方数据或者操作对方DOM了。</p>
+<p>比如, 我们在 www.a.com/a.html 下, 现在想获取 www.script.a.com/b.html, 即主域名相同, 二级域名不同. 那么可以这么做:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">document</span>.domain = <span class="string">'a.com'</span>;</span><br><span class="line"><span class="keyword">var</span> iframe = <span class="built_in">document</span>.createElement(<span class="string">'iframe'</span>);</span><br><span class="line">iframe.src = <span class="string">'http://www.script.a.com/b.html'</span>;</span><br><span class="line">iframe.style.display = <span class="string">'none'</span>;</span><br><span class="line"><span class="built_in">document</span>.body.appendChild(iframe);</span><br><span class="line">iframe.addEventListener(<span class="string">'load'</span>,<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">	<span class="comment">//TODO 载入完成时做的事情</span></span><br><span class="line">	<span class="comment">//var _document = iframe.contentWindow.document;</span></span><br><span class="line"> 	<span class="comment">//...</span></span><br><span class="line">&#125;,<span class="literal">false</span>);</span><br></pre></td></tr></table></figure>
+<p>注意: </p>
+<ul>
+<li>2个页面都要设置, 哪怕 a.html 页已处于 <em>a.com</em> 域名下, 也必须显式设置.</li>
+<li>document.domain只能设置为一级域名，比如这里a页不能设置为<em>www.a.com</em> (二级域名).</li>
+</ul>
+<p>利用domain属性跨域具有以下局限性:</p>
+<ul>
+<li>两个页面要在同一个一级域名下, 且必须同协议, 同端口, 即子域互跨;</li>
+<li>只适用于iframe.</li>
+</ul>
+<h5 id="Internet_Explorer_u540C_u6E90_u7B56_u7565_u7ED5_u8FC7"><a href="#Internet_Explorer_u540C_u6E90_u7B56_u7565_u7ED5_u8FC7" class="headerlink" title="Internet Explorer同源策略绕过"></a>Internet Explorer同源策略绕过</h5><p>Internet Explorer8以及前面的版本很容易通过document.domain实现同源策略绕过，通过重写文档对象，域属性这个问题可以十分轻松的被利用。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> <span class="built_in">document</span>;</span><br><span class="line"><span class="built_in">document</span> = &#123;&#125;;</span><br><span class="line"><span class="built_in">document</span>.domain = ‘http:<span class="comment">//www.a.com';</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">document</span>.domain);</span><br></pre></td></tr></table></figure>
+<p>如果你在最新的浏览器中运行这段代码，可能在JavaScript控制台会显示一个同源策略绕过错误。</p>
+<h4 id="window-name"><a href="#window-name" class="headerlink" title="window.name"></a>window.name</h4><p>window 对象的name属性是一个很特别的属性，当该window的location变化，然后重新加载，它的name属性可以依然保持不变。那么我们可以在页面 A中用iframe加载其他域的页面B，而页面B中用JavaScript把需要传递的数据赋值给window.name，iframe加载完成之后（iframe.onload），页面A修改iframe的地址，将其变成同域的一个地址，然后就可以读出iframe的window.name的值了（因为A中的window.name和iframe中的window.name互相独立的，所以不能直接在A中获取window.name，而要通过iframe获取其window.name）。这个方式非常适合单向的数据请求，而且协议简单、安全。不会像JSONP那样不做限制地执行外部脚本。</p>
+<h4 id="location-hash"><a href="#location-hash" class="headerlink" title="location.hash"></a>location.hash</h4><p><strong>location.hash（两个iframe之间），又称FIM，Fragment Identitier Messaging的简写</strong>.</p>
+<p>因为父窗口可以对iframe进行URL读写，iframe也可以读写父窗口的URL，URL有一部分被称为hash，就是#号及其后面的字符，它一般用于浏览器锚点定位，Server端并不关心这部分，应该说HTTP请求过程中不会携带hash，所以这部分的修改不会产生HTTP请求，但是会产生浏览器历史记录。此方法的原理就是改变URL的hash部分来进行双向通信。每个window通过改变其他 window的location来发送消息（由于两个页面不在同一个域下IE、Chrome不允许修改parent.location.hash的值，所以要借助于父窗口域名下的一个代理iframe），并通过监听自己的URL的变化来接收消息。这个方式的通信会造成一些不必要的浏览器历史记录，而且有些浏览器不支持onhashchange事件，需要轮询来获知URL的改变，最后，这样做也存在缺点，诸如数据直接暴露在了url中，数据容量和类型都有限等。</p>
+<h4 id="Access_Control"><a href="#Access_Control" class="headerlink" title="Access Control"></a>Access Control</h4><p>此跨域方法目前只在很少的浏览器中得以支持，这些浏览器可以发送一个跨域的HTTP请求（Firefox, Google Chrome等通过XMLHTTPRequest实现，IE8下通过XDomainRequest实现），请求的响应必须包含一个Access- Control-Allow-Origin的HTTP响应头，该响应头声明了请求域的可访问权限。例如baidu.com对google.com下的getUsers.php发送了一个跨域的HTTP请求（通过ajax），那么getUsers.php必须加入如下的响应头：</p>
+<figure class="highlight jsp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">header(<span class="string">"Access-Control-Allow-Origin: http://www.baidu.com"</span>);<span class="comment">//表示允许baidu.com跨域请求本文件</span></span><br></pre></td></tr></table></figure>
+<h4 id="flash_URLLoder"><a href="#flash_URLLoder" class="headerlink" title="flash URLLoder"></a>flash URLLoder</h4><p>flash有自己的一套安全策略, 服务器可以通过crossdomain.xml文件来声明能被哪些域的SWF文件访问, SWF也可以通过API来确定自身能被哪些域的SWF加载. 当跨域访问资源时, 例如从域 a.com 请求域 b.com上的数据, 我们可以借助flash来发送HTTP请求. </p>
+<ul>
+<li>首先, 修改域 b.com上的 crossdomain.xml(一般存放在根目录, 如果没有需要手动创建) , 把 a.com 加入到白名单;</li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="pi">&lt;?xml version="1.0"?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="title">cross-domain-policy</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="title">site-control</span> <span class="attribute">permitted-cross-domain-policies</span>=<span class="value">"by-content-type"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="title">allow-access-from</span> <span class="attribute">domain</span>=<span class="value">"a.com"</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="title">cross-domain-policy</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>其次, 通过Flash URLLoader发送HTTP请求, 拿到请求后并返回;</li>
+<li>最后, 通过Flash API把响应结果传递给JavaScript.</li>
+</ul>
+<p>Flash URLLoader是一种很普遍的跨域解决方案，不过需要支持iOS的话，这个方案就不可行了.</p>
+<h4 id="WebSocket"><a href="#WebSocket" class="headerlink" title="WebSocket"></a>WebSocket</h4><p>在WebSocket出现之前, 很多网站为了实现实时推送技术, 通常采用的方案是轮询(Polling)和Comet技术, Comet又可细分为两种实现方式, 一种是长轮询机制, 一种称为流技术, 这两种方式实际上是对轮询技术的改进, 这些方案带来很明显的缺点, 需要由浏览器对服务器发出HTTP request, 大量消耗服务器带宽和资源. 面对这种状况, HTML5定义了WebSocket协议, 能更好的节省服务器资源和带宽并实现真正意义上的实时推送.</p>
+<p>WebSocket 本质上是一个基于TCP的协议, 它的目标是在一个单独的持久链接上提供全双工(full-duplex), 双向通信, 以基于事件的方式, 赋予浏览器实时通信能力. 既然是双向通信, 就意味着服务器端和客户端可以同时发送并响应请求, 而不再像HTTP的请求和响应. (同源策略对 web sockets 不适用)</p>
+<p>原理: 为了建立一个WebSocket连接，客户端浏览器首先要向服务器发起一个HTTP请求, 这个请求和通常的HTTP请求不同, 包含了一些附加头信息, 其中附加头信息”Upgrade: WebSocket”表明这是一个申请协议升级的HTTP请求, 服务器端解析这些附加的头信息然后产生应答信息返回给客户端, 客户端和服务器端的WebSocket连接就建立起来了, 双方就可以通过这个连接通道自由的传递信息, 并且这个连接会持续存在直到客户端或者服务器端的某一方主动的关闭连接.</p>
+<p><em>一个典型WebSocket客户端请求头：</em></p>
+<p><img src="/docImages/cross-domain03.jpg" alt=""></p>
+<hr>
+<p>本问就讨论这么多内容,大家有什么问题或好的想法欢迎在下方参与<a href="#respond">留言和评论</a>.</p>
+<p>本文作者: <a href="https://github.com/Louiszhai" target="_blank" rel="external">louis</a></p>
+<p>本文链接: <a href="http://louiszhai.github.io/2016/03/02/cross-domain/">http://louiszhai.github.io/2016/03/02/cross-domain/</a></p>
+<p>参考文章</p>
+<ul>
+<li>[学习总结 前端跨域请求的解决办法——JSONP-哥墨迹的iteye-ITeye技术网站][3]</li>
+<li><a href="http://www.cnblogs.com/dolphinX/p/3464056.html" target="_blank" rel="external">html5 postMessage解决跨域、跨窗口消息传递-Samaritans-博客园</a></li>
+<li>[深入理解前端跨域方法和原理-kongjiea笔记-博客频道-CSDN.NET][5]</li>
+<li>[跨域访问和防盗链基本原理-WEB前端-伯乐在线][6]</li>
+<li><a href="http://unicorn-kid.com/fe-node/2014/08/07/JavaScript%20%E8%B7%A8%E5%9F%9F%20%E4%B9%8B%E4%B8%80%20%E5%90%8C%E6%BA%90%E7%AD%96%E7%95%A5.html" target="_blank" rel="external">Javascript 跨域 之一 同源策略 - KID</a></li>
+<li><a href="http://www.freebuf.com/articles/web/65468.html" target="_blank" rel="external">同源策略详解及绕过（Part1） - FreeBuf.COM | 关注黑客与极客</a></li>
+<li><a href="http://www.plhwin.com/2014/05/28/nodejs-socketio/" target="_blank" rel="external">使用Node.js+Socket.IO搭建WebSocket实时应用 | 潘良虎的随想录</a></li>
+<li><a href="http://blog.jackxy.com/cross-origin-123/" target="_blank" rel="external">跨域资源访问的几种方式</a></li>
+</ul>
+]]></content>
+    <summary type="html">
+    <![CDATA[JavaScript Same-Origin 同源策略 跨域]]>
+    
+    </summary>
+    
+      <category term="JavaScript" scheme="http://louiszhai.github.io/tags/JavaScript/"/>
+    
+  </entry>
+  
+  <entry>
     <title><![CDATA[setTimeout & setInterval]]></title>
     <link href="http://louiszhai.github.io/2016/01/10/js.timer/"/>
     <id>http://louiszhai.github.io/2016/01/10/js.timer/</id>
     <published>2016-01-10T05:52:11.000Z</published>
-    <updated>2016-01-10T13:13:39.000Z</updated>
+    <updated>2016-04-27T01:26:45.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>设置web定时器应当是一个相当常见的需求, 实际上, 我们也有两大工具函数可以任意调用: setTimeout, setInterval. 然而 js 里却没有java的那种wait(), 定时又未必准时, 要想写个定时器还须得深入理解 setTimeout 和 setInterval 的运行原理才行.</p>
 <a id="more"></a>
 <h3 id="u8FD0_u884C_u539F_u7406"><a href="#u8FD0_u884C_u539F_u7406" class="headerlink" title="运行原理"></a>运行原理</h3><p>setTimeout 和 setInterval 并非异步调用, 所谓的”异步调用”, 只是因它们都往 js 引擎的代码执行队列里插入代码, 看起来像”异步调用”而已.</p>
@@ -286,7 +799,7 @@
 <p>注: IE9 及更早版本的IE 浏览器不支持它们第一个语法中的向回调函数中传参数的功能. 如需支持, 请参考<a href="https://developer.mozilla.org/zh-CN/docs/Web/API/Window/setTimeout#回调参数" target="_blank" rel="external">兼容写法</a>, 或者借用 Function.prototype.bind 函数, 如下:</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">setTimeout(<span class="function"><span class="keyword">function</span>(<span class="params">arg1</span>)</span>&#123;&#125;.bind(<span class="literal">undefined</span>, <span class="number">10</span>), <span class="number">1000</span>);</span><br></pre></td></tr></table></figure>
 <hr>
-<p>本问就讨论这么多内容,大家有什么问题或好的想法欢迎在下方参与<a href="#respond">留言和评论</a>.</p>
+<p>本文就讨论这么多内容,大家有什么问题或好的想法欢迎在下方参与<a href="#respond">留言和评论</a>.</p>
 <p>本文作者: <a href="https://github.com/Louiszhai" target="_blank" rel="external">louis</a></p>
 <p>本文链接: <a href="http://louiszhai.github.io/2016/01/10/js.timer/">http://louiszhai.github.io/2016/01/10/js.timer/</a></p>
 <p>参考文章</p>
@@ -310,17 +823,19 @@
     <link href="http://louiszhai.github.io/2015/12/29/array/"/>
     <id>http://louiszhai.github.io/2015/12/29/array/</id>
     <published>2015-12-29T01:00:17.000Z</published>
-    <updated>2016-01-12T04:13:37.000Z</updated>
+    <updated>2016-04-27T01:24:33.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>数组是一种非常重要的数据类型, 它语法简单, 灵活,高效, 在多数编程语言中, 数组都充当着至关重要的角色, 以至于很难想象没有数组的编程语言会是什么样子. 这期我们就来侃侃JavaScript的数组, 趴趴它的那点破事儿. 这篇博客从2015年写到了2016年, 权当是跨年的总结吧, 祝大家新年快乐, 2016更好, 未来更好!</p>
 <a id="more"></a>
 <p>声明: 以下未特别标明的方法均为ES5已实现的方法.</p>
 <h3 id="u539F_u578B"><a href="#u539F_u578B" class="headerlink" title="原型"></a>原型</h3><p>js中所有的数组方法均来自于Array.prototype, 和其他构造函数一样, 你可以通过扩展 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Array" target="_blank" rel="external"><code>Array</code></a> 的 <code>prototype</code> 属性上的方法来给所有数组实例增加方法.</p>
 <p>值得一说的是, Array.prototype本身就是一个数组.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Array</span>.isArray(<span class="built_in">Array</span>.prototype); <span class="comment">// true</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">Array</span>.prototype.length);<span class="comment">//0</span></span><br></pre></td></tr></table></figure>
-<p>很明显,数组的原型是一个空数组,如下:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Array</span>.__proto__;<span class="comment">//[]</span></span><br><span class="line"><span class="built_in">console</span>.log([].__proto__.length);<span class="comment">//0</span></span><br><span class="line"><span class="built_in">console</span>.log([].__proto__);<span class="comment">//[Symbol(Symbol.unscopables): Object]</span></span><br></pre></td></tr></table></figure>
+<p>很明显, 数组的原型是一个空数组, 如下:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log([].__proto__.length);<span class="comment">//0</span></span><br><span class="line"><span class="built_in">console</span>.log([].__proto__);<span class="comment">//[Symbol(Symbol.unscopables): Object]</span></span><br></pre></td></tr></table></figure>
 <p>有关Symbol(Symbol.unscopables)的知识, 这里不做详述, 具体请移步后续章节.</p>
 <h3 id="u65B9_u6CD5"><a href="#u65B9_u6CD5" class="headerlink" title="方法"></a>方法</h3><p>Array.prototype的方法包含三种, 一种是会改变自身值的, 一种是不会改变自身值的, 另外一种是遍历方法.</p>
+<p>由于 Array.prototype 的某些属性被设置为[[DontEnum]], 因此不能用一般的方法进行遍历, 我们可以通过如下方式获取 Array.prototype 的所有方法:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Object</span>.getOwnPropertyNames(<span class="built_in">Array</span>.prototype);<span class="comment">//["length", "constructor", "toString", "toLocaleString", "join", "pop", "push", "reverse", "shift", "unshift", "slice", "splice", "sort", "filter", "forEach", "some", "every", "map", "indexOf", "lastIndexOf", "reduce", "reduceRight", "copyWithin", "find", "findIndex", "fill", "includes", "entries", "keys", "concat"]</span></span><br></pre></td></tr></table></figure>
 <h4 id="u6539_u53D8_u81EA_u8EAB_u503C_u7684_u65B9_u6CD5_289_u4E2A_29"><a href="#u6539_u53D8_u81EA_u8EAB_u503C_u7684_u65B9_u6CD5_289_u4E2A_29" class="headerlink" title="改变自身值的方法(9个)"></a>改变自身值的方法(9个)</h4><p>基于ES6, 改变自身值的方法一共有9个, 分别为pop, push, reverse, shift, sort, splice, unshift, 以及两个ES6新增的方法copyWithin, fill.</p>
 <h5 id="pop"><a href="#pop" class="headerlink" title="pop"></a>pop</h5><p>pop() 方法删除一个数组中的最后的一个元素，并且返回这个元素.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> array = [<span class="string">"cat"</span>, <span class="string">"dog"</span>, <span class="string">"cow"</span>, <span class="string">"chicken"</span>, <span class="string">"mouse"</span>];</span><br><span class="line"><span class="keyword">var</span> item = array.pop();</span><br><span class="line"><span class="built_in">console</span>.log(array);<span class="comment">//["cat", "dog", "cow", "chicken"]</span></span><br><span class="line"><span class="built_in">console</span>.log(item);<span class="comment">//mouse</span></span><br></pre></td></tr></table></figure>
@@ -342,6 +857,8 @@
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> array = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>];</span><br><span class="line"><span class="keyword">var</span> array2 = array.reverse();</span><br><span class="line"><span class="built_in">console</span>.log(array);<span class="comment">//[5,4,3,2,1]</span></span><br><span class="line"><span class="built_in">console</span>.log(array2===array);<span class="comment">//true</span></span><br></pre></td></tr></table></figure>
 <p>同上, reverse 也是鸭式辨型的受益者, 颠倒元素的范围受length属性制约, 如下:</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> o = &#123;<span class="number">0</span>:<span class="string">"a"</span>, <span class="number">1</span>:<span class="string">"b"</span>, <span class="number">2</span>:<span class="string">"c"</span>, length:<span class="number">2</span>&#125;;</span><br><span class="line"><span class="keyword">var</span> o2 = <span class="built_in">Array</span>.prototype.reverse.call(o);</span><br><span class="line"><span class="built_in">console</span>.log(o);<span class="comment">//Object &#123;0: "b", 1: "a", 2: "c", length: 2&#125;</span></span><br><span class="line"><span class="built_in">console</span>.log(o === o2);<span class="comment">//true</span></span><br></pre></td></tr></table></figure>
+<p>如果 length 属性小于2 或者 length 属性不为数值, 那么原类数组对象将没有变化. 即使 length 属性不存在, 该对象也不会去创建 length 属性. 特别的是, 当 length 属性较大时, 类数组对象的”索引”会尽可能的向 length 看齐. 如下: </p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> o = &#123;<span class="number">0</span>:<span class="string">"a"</span>, <span class="number">1</span>:<span class="string">"b"</span>, <span class="number">2</span>:<span class="string">"c"</span>,length:<span class="number">100</span>&#125;;</span><br><span class="line"><span class="keyword">var</span> o2 = <span class="built_in">Array</span>.prototype.reverse.call(o);</span><br><span class="line"><span class="built_in">console</span>.log(o);<span class="comment">//Object &#123;97: "c", 98: "b", 99: "a", length: 100&#125;</span></span><br><span class="line"><span class="built_in">console</span>.log(o === o2);<span class="comment">//true</span></span><br></pre></td></tr></table></figure>
 <h5 id="shift"><a href="#shift" class="headerlink" title="shift"></a>shift</h5><p>shift()方法删除数组的第一个元素, 并返回这个元素.</p>
 <p>语法: arr.shift()</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> array = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>];</span><br><span class="line"><span class="keyword">var</span> item = array.shift();</span><br><span class="line"><span class="built_in">console</span>.log(array);<span class="comment">//[2,3,4,5]</span></span><br><span class="line"><span class="built_in">console</span>.log(item);<span class="comment">//1</span></span><br></pre></td></tr></table></figure>
@@ -366,7 +883,7 @@
 <p>为什么上面测试中需要重新给array赋值呢, 这是因为sort每次排序时改变的是数组本身, 并且返回数组引用. 如果不这么做, 经过连续两次排序后, array2 和 array3 将指向同一个数组, 最终影响我们测试. array重新赋值后就断开了对原数组的引用.</p>
 <p>同上, sort一样受益于鸭式辨型, 比如:</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> o = &#123;<span class="number">0</span>:<span class="string">'互'</span>,<span class="number">1</span>:<span class="string">'联'</span>,<span class="number">2</span>:<span class="string">'网'</span>,<span class="number">3</span>:<span class="string">'改'</span>,<span class="number">4</span>:<span class="string">'变'</span>,<span class="number">5</span>:<span class="string">'世'</span>,<span class="number">6</span>:<span class="string">'界'</span>,length:<span class="number">7</span>&#125;;</span><br><span class="line"><span class="built_in">Array</span>.prototype.sort.call(o,<span class="function"><span class="keyword">function</span>(<span class="params">a, b</span>)</span>&#123;</span><br><span class="line">  <span class="keyword">return</span> a.localeCompare(b);</span><br><span class="line">&#125;);</span><br><span class="line"><span class="built_in">console</span>.log(o);<span class="comment">//Object &#123;0: "变", 1: "改", 2: "互", 3: "界", 4: "联", 5: "世", 6: "网", length: 7&#125;, 可见同上述排序结果一致</span></span><br></pre></td></tr></table></figure>
-<p>注意: 使用sort的鸭式辨型特性时, 若类数组对象不具有length属性, 它并不会为其添加length属性.</p>
+<p>注意: 使用sort的鸭式辨型特性时, 若类数组对象不具有length属性,它并不会进行排序, 也不会为其添加length属性.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> o = &#123;<span class="number">0</span>:<span class="string">'互'</span>,<span class="number">1</span>:<span class="string">'联'</span>,<span class="number">2</span>:<span class="string">'网'</span>,<span class="number">3</span>:<span class="string">'改'</span>,<span class="number">4</span>:<span class="string">'变'</span>,<span class="number">5</span>:<span class="string">'世'</span>,<span class="number">6</span>:<span class="string">'界'</span>&#125;;</span><br><span class="line"><span class="built_in">Array</span>.prototype.sort.call(o,<span class="function"><span class="keyword">function</span>(<span class="params">a, b</span>)</span>&#123;</span><br><span class="line">  <span class="keyword">return</span> a.localeCompare(b);</span><br><span class="line">&#125;);</span><br><span class="line"><span class="built_in">console</span>.log(o);<span class="comment">//Object &#123;0: "互", 1: "联", 2: "网", 3: "改", 4: "变", 5: "世", 6: "界"&#125;, 可见并未添加length属性</span></span><br></pre></td></tr></table></figure>
 <h6 id="u4F7F_u7528_u6620_u5C04_u6539_u5584_u6392_u5E8F"><a href="#u4F7F_u7528_u6620_u5C04_u6539_u5584_u6392_u5E8F" class="headerlink" title="使用映射改善排序"></a>使用映射改善排序</h6><p>comparefn 如果需要对数组元素多次转换以实现排序, 那么使用map辅助排序将是个不错的选择. 基本思想就是将数组中的每个元素实际比较的值取出来, 排序后再将数组恢复.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 需要被排序的数组</span></span><br><span class="line"><span class="keyword">var</span> array = [<span class="string">'dog'</span>, <span class="string">'Cat'</span>, <span class="string">'Boy'</span>, <span class="string">'apple'</span>];</span><br><span class="line"><span class="comment">// 对需要排序的数字和位置的临时存储</span></span><br><span class="line"><span class="keyword">var</span> mapped = array.map(<span class="function"><span class="keyword">function</span>(<span class="params">el, i</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> &#123; index: i, value: el.toLowerCase() &#125;;</span><br><span class="line">&#125;)</span><br><span class="line"><span class="comment">// 按照多个值排序数组</span></span><br><span class="line">mapped.sort(<span class="function"><span class="keyword">function</span>(<span class="params">a, b</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> +(a.value &gt; b.value) || +(a.value === b.value) - <span class="number">1</span>;</span><br><span class="line">&#125;);</span><br><span class="line"><span class="comment">// 根据索引得到排序的结果</span></span><br><span class="line"><span class="keyword">var</span> result = mapped.map(<span class="function"><span class="keyword">function</span>(<span class="params">el</span>)</span>&#123;</span><br><span class="line">  <span class="keyword">return</span> array[el.index];</span><br><span class="line">&#125;);</span><br><span class="line"><span class="built_in">console</span>.log(result);<span class="comment">//["apple", "Boy", "Cat", "dog"]</span></span><br></pre></td></tr></table></figure>
@@ -508,12 +1025,12 @@
 </ul>
 <h5 id="splice"><a href="#splice" class="headerlink" title="splice"></a>splice</h5><p>splice()方法用新元素替换旧元素的方式来修改数组.</p>
 <p>语法: arr.splice(start,deleteCount[, item1[, item2[, …]]])</p>
-<p>start 指定从哪一位开始修改内容. 如果超过了数组长度, 则从数组末尾开始添加内容; 如果是负值, 则其指定的索引位置等同于length+start(length为数组的长度), 表示从数组末尾开始的第几位.</p>
+<p>start 指定从哪一位开始修改内容. 如果超过了数组长度, 则从数组末尾开始添加内容; 如果是负值, 则其指定的索引位置等同于 length+start (length为数组的长度), 表示从数组末尾开始的第 -start 位.</p>
 <p>deleteCount 指定要删除的元素个数, 若等于0 ,则不删除. 这种情况下, 至少应该添加一位新元素. 若大于start之后的元素总和, 则start及之后的元素都将被删除.</p>
 <p>itemN 指定新增的元素, 如果缺省, 则该方法只删除数组元素.</p>
 <p>返回值 由原数组中被删除元素组成的数组,如果没有删除, 则返回一个空数组.</p>
 <p>下面来举栗子说明:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> array = [<span class="string">"apple"</span>,<span class="string">"boy"</span>];</span><br><span class="line"><span class="keyword">var</span> splices = array.splice(<span class="number">1</span>,<span class="number">1</span>);</span><br><span class="line"><span class="built_in">console</span>.log(array);<span class="comment">//["apple"]</span></span><br><span class="line"><span class="built_in">console</span>.log(splices);<span class="comment">//["boy"] ,可见是从数组下标为1的元素开始删除,并且删除一个元素,由于itemN缺省,故此时该方法只删除元素</span></span><br><span class="line"></span><br><span class="line">array = [<span class="string">"apple"</span>,<span class="string">"boy"</span>];</span><br><span class="line">splices = array.splice(<span class="number">2</span>,<span class="number">1</span>,<span class="string">"cat"</span>);</span><br><span class="line"><span class="built_in">console</span>.log(array);<span class="comment">//["apple", "boy", "cat"]</span></span><br><span class="line"><span class="built_in">console</span>.log(splices);<span class="comment">//[], 可见由于start超过数组长度,此时从数组末尾开始添加元素,并且原数组不会发生删除行为</span></span><br><span class="line"></span><br><span class="line">array = [<span class="string">"apple"</span>,<span class="string">"boy"</span>];</span><br><span class="line">splices = array.splice(-<span class="number">3</span>,<span class="number">1</span>,<span class="string">"cat"</span>);</span><br><span class="line"><span class="built_in">console</span>.log(array);<span class="comment">//["cat", "boy"]</span></span><br><span class="line"><span class="built_in">console</span>.log(splices);<span class="comment">//["apple"], 可见当start为负值时,是从数组末尾开始的第-start位开始删除,删除一个元素,并且从此处插入了一个元素</span></span><br><span class="line"></span><br><span class="line">array = [<span class="string">"apple"</span>,<span class="string">"boy"</span>];</span><br><span class="line">splices = array.splice(-<span class="number">3</span>,<span class="number">1</span>,<span class="string">"cat"</span>);</span><br><span class="line"><span class="built_in">console</span>.log(array);<span class="comment">//["cat", "boy"]</span></span><br><span class="line"><span class="built_in">console</span>.log(splices);<span class="comment">//["apple"], 可见即使-start超出数组长度,数组默认从首位开始删除</span></span><br><span class="line"></span><br><span class="line">array = [<span class="string">"apple"</span>,<span class="string">"boy"</span>];</span><br><span class="line">splices = array.splice(<span class="number">0</span>,<span class="number">3</span>,<span class="string">"cat"</span>);</span><br><span class="line"><span class="built_in">console</span>.log(array);<span class="comment">//["cat"]</span></span><br><span class="line"><span class="built_in">console</span>.log(splices);<span class="comment">//["apple", "boy"], 可见当deleteCount大于数组start之后的元素总和时,start及之后的元素都将被删除</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> array = [<span class="string">"apple"</span>,<span class="string">"boy"</span>];</span><br><span class="line"><span class="keyword">var</span> splices = array.splice(<span class="number">1</span>,<span class="number">1</span>);</span><br><span class="line"><span class="built_in">console</span>.log(array);<span class="comment">//["apple"]</span></span><br><span class="line"><span class="built_in">console</span>.log(splices);<span class="comment">//["boy"] ,可见是从数组下标为1的元素开始删除,并且删除一个元素,由于itemN缺省,故此时该方法只删除元素</span></span><br><span class="line"></span><br><span class="line">array = [<span class="string">"apple"</span>,<span class="string">"boy"</span>];</span><br><span class="line">splices = array.splice(<span class="number">2</span>,<span class="number">1</span>,<span class="string">"cat"</span>);</span><br><span class="line"><span class="built_in">console</span>.log(array);<span class="comment">//["apple", "boy", "cat"]</span></span><br><span class="line"><span class="built_in">console</span>.log(splices);<span class="comment">//[], 可见由于start超过数组长度,此时从数组末尾开始添加元素,并且原数组不会发生删除行为</span></span><br><span class="line"></span><br><span class="line">array = [<span class="string">"apple"</span>,<span class="string">"boy"</span>];</span><br><span class="line">splices = array.splice(-<span class="number">2</span>,<span class="number">1</span>,<span class="string">"cat"</span>);</span><br><span class="line"><span class="built_in">console</span>.log(array);<span class="comment">//["cat", "boy"]</span></span><br><span class="line"><span class="built_in">console</span>.log(splices);<span class="comment">//["apple"], 可见当start为负值时,是从数组末尾开始的第-start位开始删除,删除一个元素,并且从此处插入了一个元素</span></span><br><span class="line"></span><br><span class="line">array = [<span class="string">"apple"</span>,<span class="string">"boy"</span>];</span><br><span class="line">splices = array.splice(-<span class="number">3</span>,<span class="number">1</span>,<span class="string">"cat"</span>);</span><br><span class="line"><span class="built_in">console</span>.log(array);<span class="comment">//["cat", "boy"]</span></span><br><span class="line"><span class="built_in">console</span>.log(splices);<span class="comment">//["apple"], 可见即使-start超出数组长度,数组默认从首位开始删除</span></span><br><span class="line"></span><br><span class="line">array = [<span class="string">"apple"</span>,<span class="string">"boy"</span>];</span><br><span class="line">splices = array.splice(<span class="number">0</span>,<span class="number">3</span>,<span class="string">"cat"</span>);</span><br><span class="line"><span class="built_in">console</span>.log(array);<span class="comment">//["cat"]</span></span><br><span class="line"><span class="built_in">console</span>.log(splices);<span class="comment">//["apple", "boy"], 可见当deleteCount大于数组start之后的元素总和时,start及之后的元素都将被删除</span></span><br></pre></td></tr></table></figure>
 <p>同上, splice一样受益于鸭式辨型, 比如:</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> o = &#123;<span class="number">0</span>:<span class="string">"apple"</span>,<span class="number">1</span>:<span class="string">"boy"</span>,length:<span class="number">2</span>&#125;;</span><br><span class="line"><span class="keyword">var</span> splices = <span class="built_in">Array</span>.prototype.splice.call(o,<span class="number">1</span>,<span class="number">1</span>);</span><br><span class="line"><span class="built_in">console</span>.log(o);<span class="comment">//Object &#123;0: "apple", length: 1&#125;, 可见对象o删除了一个属性,并且length-1</span></span><br><span class="line"><span class="built_in">console</span>.log(splices);<span class="comment">//["boy"]</span></span><br></pre></td></tr></table></figure>
 <p>注: 如果类数组对象没有length属性, splice将为该类数组对象添加length属性,并初始化为0. 此处栗子忽略. 如果需要请在<a href="https://github.com/Louiszhai" target="_blank" rel="external">评论</a>里反馈.</p>
@@ -524,7 +1041,7 @@
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> array = [<span class="string">"red"</span>, <span class="string">"green"</span>, <span class="string">"blue"</span>];</span><br><span class="line"><span class="keyword">var</span> length = array.unshift([<span class="string">"yellow"</span>]);</span><br><span class="line"><span class="built_in">console</span>.log(array);<span class="comment">//[["yellow"], "red", "green", "blue"]</span></span><br><span class="line"><span class="built_in">console</span>.log(length);<span class="comment">//4, 可见数组也能成功插入</span></span><br></pre></td></tr></table></figure>
 <p>同上, unshift也受益于鸭式辨型, 呈上栗子:</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> o = &#123;<span class="number">0</span>:<span class="string">"red"</span>, <span class="number">1</span>:<span class="string">"green"</span>, <span class="number">2</span>:<span class="string">"blue"</span>,length:<span class="number">3</span>&#125;;</span><br><span class="line"><span class="keyword">var</span> length = <span class="built_in">Array</span>.prototype.unshift.call(o,<span class="string">"gray"</span>);</span><br><span class="line"><span class="built_in">console</span>.log(o);<span class="comment">//Object &#123;0: "gray", 1: "red", 2: "green", 3: "blue", length: 4&#125;</span></span><br><span class="line"><span class="built_in">console</span>.log(length);<span class="comment">//4</span></span><br></pre></td></tr></table></figure>
-<p>注: 如果类数组对象不指定length属性, 则返回结果是这样的 Object {0: “gray”, 1: “green”, 2: “blue”, length: 1}, shift会认为数组长度为0, 此时将从对象下标为0的位置开始插入, 并且初始化类数组对象的length属性为插入元素个数.</p>
+<p>注: 如果类数组对象不指定length属性, 则返回结果是这样的 Object {0: “gray”, 1: “green”, 2: “blue”, length: 1}, shift会认为数组长度为0, 此时将从对象下标为0的位置开始插入, 相应位置属性将被替换, 此时初始化类数组对象的length属性为插入元素个数.</p>
 <h5 id="copyWithin"><a href="#copyWithin" class="headerlink" title="copyWithin"></a>copyWithin</h5><p>copyWithin() 方法用于数组内的元素替换, 即替换元素和被替换元素均是数组内的元素.</p>
 <p>语法: arr.copyWithin(target, start[, end = this.length])</p>
 <p>taget 指定被替换元素的索引, start 指定替换元素起始的索引, end 可选, 指的是替换元素结束位置的索引.</p>
@@ -600,15 +1117,17 @@
 <p>fromIndex 为开始查找的位置, 缺省默认为数组长度length-1. 如果超出数组长度, 由于是逆向查找, 则查找整个数组. 如果为负值, 则从数组的第 length + fromIndex项开始往数组开头查找, 如果length + fromIndex&lt;0 则数组不会被查找.</p>
 <p>同 indexOf 一样, lastIndexOf 也是严格匹配数组元素.</p>
 <p>栗子参考 <code>indexOf</code> , 不再详述, 兼容低版本IE浏览器(IE6~8), 请参考 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array/lastIndexOf#Compatibility" target="_blank" rel="external">Polyfill</a>.</p>
-<h5 id="includes"><a href="#includes" class="headerlink" title="includes"></a>includes</h5><p>includes() 方法<strong>目前仍处于 ECMAScript 7 规范提案中</strong>, 它用来判断当前数组是否包含某个指定的值, 如果是, 则返回 true, 否则返回 false.</p>
+<h5 id="includes_28ES6_29"><a href="#includes_28ES6_29" class="headerlink" title="includes(ES6)"></a>includes(ES6)</h5><p>includes() 方法基于<strong>ECMAScript 2015（ES6）规范</strong>, 它用来判断当前数组是否包含某个指定的值, 如果是, 则返回 true, 否则返回 false.</p>
 <p>语法: <em>arr</em>.includes(element, fromIndex=0)</p>
 <p>element 为需要查找的元素</p>
 <p>fromIndex 表示从该索引位置开始查找 element, 缺省为0, 它是正向查找, 即从索引处往数组末尾查找.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> array = [<span class="number">1</span>, <span class="number">2</span>, <span class="literal">NaN</span>];</span><br><span class="line"><span class="built_in">console</span>.log(array.includes(<span class="number">1</span>));<span class="comment">//true</span></span><br><span class="line"><span class="built_in">console</span>.log(array.includes(<span class="literal">NaN</span>));<span class="comment">//true</span></span><br><span class="line"><span class="built_in">console</span>.log(array.includes(<span class="number">2</span>,-<span class="number">4</span>));<span class="comment">//true</span></span><br></pre></td></tr></table></figure>
 <p>该方法同样受益于鸭式辨型. 如下:</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> o = &#123;<span class="number">0</span>:<span class="string">'a'</span>, <span class="number">1</span>:<span class="string">'b'</span>, <span class="number">2</span>:<span class="string">'c'</span>, length:<span class="number">3</span>&#125;;</span><br><span class="line"><span class="keyword">var</span> bool = <span class="built_in">Array</span>.prototype.includes.call(o, <span class="string">'a'</span>);</span><br><span class="line"><span class="built_in">console</span>.log(bool);<span class="comment">//true</span></span><br></pre></td></tr></table></figure>
-<p>处于 ECMAScript 7 规范提案中的该方法只有在Chrome 47, opera 34, Safari 9版本及其更高版本中才予以实现. 如需支持其他浏览器, 请参考 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array/includes#Polyfill" target="_blank" rel="external">Polyfill</a>.</p>
-<h5 id="toSource"><a href="#toSource" class="headerlink" title="toSource"></a>toSource</h5><p>toSource() 方法是非标准的, 该方法返回数组的源代码, 目前只有 Firefox 实现了它.</p>
+<p>该方法只有在Chrome 47, opera 34, Safari 9版本及其更高版本中才予以实现. 如需支持其他浏览器, 请参考 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array/includes#Polyfill" target="_blank" rel="external">Polyfill</a>.</p>
+<h5 id="startsWith"><a href="#startsWith" class="headerlink" title="startsWith"></a>startsWith</h5><p>startsWith() 方法基于<strong>ECMAScript 2015（ES6）规范</strong>, 它用来判断当前数组是否包含某个指定的值, 如果是, 则返回 true, 否则返回 false.</p>
+<p>语法: <em>arr</em>.includes(element, fromIndex=0)</p>
+<h5 id="endsWith"><a href="#endsWith" class="headerlink" title="endsWith"></a>endsWith</h5><h5 id="toSource"><a href="#toSource" class="headerlink" title="toSource"></a>toSource</h5><p>toSource() 方法是非标准的, 该方法返回数组的源代码, 目前只有 Firefox 实现了它.</p>
 <p>语法: <em>arr</em>.toSource()</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> array = [<span class="string">'a'</span>, <span class="string">'b'</span>, <span class="string">'c'</span>];</span><br><span class="line"><span class="built_in">console</span>.log(array.toSource());<span class="comment">//["a", "b", "c"]</span></span><br><span class="line"><span class="comment">//测试鸭式辨型</span></span><br><span class="line"><span class="keyword">var</span> o = &#123;<span class="number">0</span>:<span class="string">'a'</span>, <span class="number">1</span>:<span class="string">'b'</span>, <span class="number">2</span>:<span class="string">'c'</span>, length:<span class="number">3</span>&#125;;</span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">Array</span>.prototype.toSource.call(o));<span class="comment">//["a","b","c"]</span></span><br></pre></td></tr></table></figure>
 <h4 id="u904D_u5386_u65B9_u6CD5_2812_u4E2A_29"><a href="#u904D_u5386_u65B9_u6CD5_2812_u4E2A_29" class="headerlink" title="遍历方法(12个)"></a>遍历方法(12个)</h4><p>基于ES6, 不会改变自身的方法一共有12个, 分别为forEach, every, some, filter, map, reduce, reduceRight, 以及ES6新增的方法entries, find, findIndex, keys, values.</p>
@@ -616,24 +1135,38 @@
 <p>语法: <em>arr</em>.forEach(fn, thisArg)</p>
 <p>fn 表示在数组每一项上执行的函数, 接受三个参数:</p>
 <ul>
-<li>item 当前正在被处理的元素的值</li>
+<li>value 当前正在被处理的元素的值</li>
 <li>index 当前元素的数组索引</li>
 <li>array 数组本身</li>
 </ul>
 <p>thisArg 可选, 用来当做fn函数内的this对象(context 上下文).</p>
 <p>forEach 将为数组中每一项执行一次 fn 函数, 那些已删除, 新增或者从未赋值的项将被跳过(但不包括值为 undefined 的项). 遍历过程中, fn会被传入上述三个参数.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> array = [<span class="number">1</span>, <span class="number">3</span>, <span class="number">5</span>];</span><br><span class="line"><span class="keyword">var</span> obj = &#123;name:<span class="string">'cc'</span>&#125;;</span><br><span class="line"><span class="keyword">var</span> sReturn = array.forEach(<span class="function"><span class="keyword">function</span>(<span class="params">item, index, array</span>)</span>&#123;</span><br><span class="line">  array[index] = item * item;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="keyword">this</span>.name);<span class="comment">//cc被打印了三次</span></span><br><span class="line">&#125;,obj);</span><br><span class="line"><span class="built_in">console</span>.log(array);<span class="comment">//[1, 9, 25], 可见原数组改变了</span></span><br><span class="line"><span class="built_in">console</span>.log(sReturn);<span class="comment">//undefined, 可见返回值为undefined</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> array = [<span class="number">1</span>, <span class="number">3</span>, <span class="number">5</span>];</span><br><span class="line"><span class="keyword">var</span> obj = &#123;name:<span class="string">'cc'</span>&#125;;</span><br><span class="line"><span class="keyword">var</span> sReturn = array.forEach(<span class="function"><span class="keyword">function</span>(<span class="params">value, index, array</span>)</span>&#123;</span><br><span class="line">  array[index] = value * value;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="keyword">this</span>.name);<span class="comment">//cc被打印了三次</span></span><br><span class="line">&#125;,obj);</span><br><span class="line"><span class="built_in">console</span>.log(array);<span class="comment">//[1, 9, 25], 可见原数组改变了</span></span><br><span class="line"><span class="built_in">console</span>.log(sReturn);<span class="comment">//undefined, 可见返回值为undefined</span></span><br></pre></td></tr></table></figure>
 <p>得益于鸭式辨型, 虽然forEach不能直接遍历对象, 但它可以通过call方式遍历类数组对象. 如下:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> o = &#123;<span class="number">0</span>:<span class="number">1</span>, <span class="number">1</span>:<span class="number">3</span>, <span class="number">2</span>:<span class="number">5</span>, length:<span class="number">3</span>&#125;;</span><br><span class="line"><span class="built_in">Array</span>.prototype.forEach.call(o,<span class="function"><span class="keyword">function</span>(<span class="params">item, index, obj</span>)</span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(item,index,obj);</span><br><span class="line">  obj[index] = item * item;</span><br><span class="line">&#125;,o);</span><br><span class="line"><span class="comment">//1 0 Object &#123;0: 1, 1: 3, 2: 5, length: 3&#125;</span></span><br><span class="line"><span class="comment">//3 1 Object &#123;0: 1, 1: 3, 2: 5, length: 3&#125;</span></span><br><span class="line"><span class="comment">//5 2 Object &#123;0: 1, 1: 9, 2: 5, length: 3&#125;</span></span><br><span class="line"><span class="built_in">console</span>.log(o);<span class="comment">//Object &#123;0: 1, 1: 9, 2: 25, length: 3&#125;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> o = &#123;<span class="number">0</span>:<span class="number">1</span>, <span class="number">1</span>:<span class="number">3</span>, <span class="number">2</span>:<span class="number">5</span>, length:<span class="number">3</span>&#125;;</span><br><span class="line"><span class="built_in">Array</span>.prototype.forEach.call(o,<span class="function"><span class="keyword">function</span>(<span class="params">value, index, obj</span>)</span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(value,index,obj);</span><br><span class="line">  obj[index] = value * value;</span><br><span class="line">&#125;,o);</span><br><span class="line"><span class="comment">//1 0 Object &#123;0: 1, 1: 3, 2: 5, length: 3&#125;</span></span><br><span class="line"><span class="comment">//3 1 Object &#123;0: 1, 1: 3, 2: 5, length: 3&#125;</span></span><br><span class="line"><span class="comment">//5 2 Object &#123;0: 1, 1: 9, 2: 5, length: 3&#125;</span></span><br><span class="line"><span class="built_in">console</span>.log(o);<span class="comment">//Object &#123;0: 1, 1: 9, 2: 25, length: 3&#125;</span></span><br></pre></td></tr></table></figure>
 <p>参考前面的文章 <a href="http://louiszhai.github.io/2015/12/18/traverse/#forEach"><code>详解JS遍历</code></a> 中 forEach的讲解, 我们知道, forEach无法直接退出循环, 只能使用return 来达到for循环中continue的效果, 并且forEach不能在低版本IE(6~8)中使用, 兼容写法请参考 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array/forEach#兼容旧环境（Polyfill）" target="_blank" rel="external">Polyfill</a> .</p>
-<h5 id="every"><a href="#every" class="headerlink" title="every"></a>every</h5><p>every() 方法用于测试数组中所有元素是否都通过了指定函数的测试, 如果全部通过则返回 true, 否则返回false. 语法同上述forEach, 具体请参考 <a href="http://louiszhai.github.io/2015/12/18/traverse/#every"><code>详解JS遍历</code></a> 中every的讲解.</p>
+<h5 id="every"><a href="#every" class="headerlink" title="every"></a>every</h5><p>every() 方法使用传入的函数测试所有元素, 只要其中有一个函数返回值为 false, 那么该方法的结果为 false; 如果全部返回 true, 那么该方法的结果才为 true. 因此 every 方法存在如下规律:</p>
+<ul>
+<li>若需检测数组中存在元素大于100 (即, one &gt; 100), 那么我们需要在传入的函数中构造 “false” 返回值 (即, 返回 item &lt;= 100), 同时整个方法结果为 false 才表示数组存在元素满足条件; (简单理解为, 若是单项判断, 可用 one false ===&gt; false)</li>
+</ul>
+<ul>
+<li>若需检测数组中是否所有元素都大于100 (即, all &gt; 100),  那么我们需要在传入的函数中构造 “true” 返回值 (即, 返回 item &gt; 100), 同时整个方法结果为 true 才表示数组所有元素均满足条件. (简单理解为, 若是全部判断, 可用 all true ===&gt; true)</li>
+</ul>
+<p>语法同上述forEach, 具体还可以参考 <a href="http://louiszhai.github.io/2015/12/18/traverse/#every"><code>详解JS遍历</code></a> 中every的讲解.</p>
 <p>以下是鸭式辨型的写法:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> o = &#123;<span class="number">0</span>:<span class="number">10</span>, <span class="number">1</span>:<span class="number">8</span>, <span class="number">2</span>:<span class="number">25</span>, length:<span class="number">3</span>&#125;;</span><br><span class="line"><span class="keyword">var</span> bool = <span class="built_in">Array</span>.prototype.every.call(o,<span class="function"><span class="keyword">function</span>(<span class="params">item, index, obj</span>)</span>&#123;</span><br><span class="line">  <span class="keyword">return</span> item &gt;= <span class="number">8</span>;</span><br><span class="line">&#125;,o);</span><br><span class="line"><span class="built_in">console</span>.log(bool);<span class="comment">//true</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> o = &#123;<span class="number">0</span>:<span class="number">10</span>, <span class="number">1</span>:<span class="number">8</span>, <span class="number">2</span>:<span class="number">25</span>, length:<span class="number">3</span>&#125;;</span><br><span class="line"><span class="keyword">var</span> bool = <span class="built_in">Array</span>.prototype.every.call(o,<span class="function"><span class="keyword">function</span>(<span class="params">value, index, obj</span>)</span>&#123;</span><br><span class="line">  <span class="keyword">return</span> value &gt;= <span class="number">8</span>;</span><br><span class="line">&#125;,o);</span><br><span class="line"><span class="built_in">console</span>.log(bool);<span class="comment">//true</span></span><br></pre></td></tr></table></figure>
 <p>every 一样不能在低版本IE(6~8)中使用, 兼容写法请参考 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array/every#Compatibility" target="_blank" rel="external">Polyfill</a> .</p>
-<h5 id="some"><a href="#some" class="headerlink" title="some"></a>some</h5><p>some() 方法几乎同 every() 方法一致, 唯一的区别是, some测试数组元素时, 只要有一个通过, 则返回 true, 若全部不通过, 则返回 false. 其在低版本IE(6~8) 的兼容写法请参考 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array/some#Compatibility" target="_blank" rel="external">Polyfill</a> .</p>
+<h5 id="some"><a href="#some" class="headerlink" title="some"></a>some</h5><p>some() 方法刚好同 every() 方法相反, some 测试数组元素时, 只要有一个函数返回值为 true, 则该方法返回 true, 若全部返回 false, 则该方法返回 false. 因此 some 方法存在如下规律:</p>
+<ul>
+<li>若需检测数组中存在元素大于100 (即, one &gt; 100), 那么我们需要在传入的函数中构造 “true” 返回值 (即, 返回 item &gt; 100), 同时整个方法结果为 true 才表示数组存在元素满足条件; (简单理解为, 若是单项判断, 可用 one true ===&gt; true)</li>
+</ul>
+<ul>
+<li>若需检测数组中是否所有元素都大于100 (即, all &gt; 100),  那么我们需要在传入的函数中构造 “false” 返回值 (即, 返回 item &lt;= 100), 同时整个方法结果为 false 才表示数组所有元素均满足条件. (简单理解为, 若是全部判断, 可用 all false ===&gt; false)</li>
+</ul>
+<p>some 的鸭式辨型写法可以参照every,  同样它也不能在低版本IE(6~8)中使用, 兼容写法请参考 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array/some#Compatibility" target="_blank" rel="external">Polyfill</a> .</p>
 <h5 id="filter"><a href="#filter" class="headerlink" title="filter"></a>filter</h5><p>filter() 方法使用传入的函数测试所有元素, 并返回所有通过测试的元素组成的新数组.</p>
 <p>语法: <em>arr</em>.filter(fn, thisArg)</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> array = [<span class="number">18</span>, <span class="number">9</span>, <span class="number">10</span>, <span class="number">35</span>, <span class="number">80</span>];</span><br><span class="line"><span class="keyword">var</span> array2 = array.filter(<span class="function"><span class="keyword">function</span>(<span class="params">item, index, array</span>)</span>&#123;</span><br><span class="line">  <span class="keyword">return</span> item &gt; <span class="number">20</span>;</span><br><span class="line">&#125;);</span><br><span class="line"><span class="built_in">console</span>.log(array2);<span class="comment">//[35, 80]</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> array = [<span class="number">18</span>, <span class="number">9</span>, <span class="number">10</span>, <span class="number">35</span>, <span class="number">80</span>];</span><br><span class="line"><span class="keyword">var</span> array2 = array.filter(<span class="function"><span class="keyword">function</span>(<span class="params">value, index, array</span>)</span>&#123;</span><br><span class="line">  <span class="keyword">return</span> value &gt; <span class="number">20</span>;</span><br><span class="line">&#125;);</span><br><span class="line"><span class="built_in">console</span>.log(array2);<span class="comment">//[35, 80]</span></span><br></pre></td></tr></table></figure>
 <p>filter一样支持鸭式辨型, 具体请参考every方法鸭式辨型写法. 其在低版本IE(6~8) 的兼容写法请参考 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array/filter#Compatibility" target="_blank" rel="external">Polyfill</a> .</p>
 <h5 id="map"><a href="#map" class="headerlink" title="map"></a>map</h5><p>map() 方法遍历数组, 使用传入函数处理每个元素, 并返回函数的返回值组成的新数组.</p>
 <p>语法: <em>arr</em>.map(fn, thisArg)</p>
@@ -646,7 +1179,7 @@
 <p>fn 表示在数组每一项上执行的函数, 接受四个参数:</p>
 <ul>
 <li>previousValue 上一次调用回调返回的值, 或者是提供的初始值</li>
-<li>item 数组中当前被处理元素的值</li>
+<li>value 数组中当前被处理元素的值</li>
 <li>index 当前元素在数组中的索引</li>
 <li>array 数组自身</li>
 </ul>
@@ -657,7 +1190,7 @@
 <li>如果 initialValue 未被提供, 那么 previousVaule 等于数组中的第一个值, item 等于数组中的第二个值. 此时如果数组为空, 那么将抛出 TypeError.</li>
 <li>如果数组仅有一个元素, 并且没有提供 initialValue, 或提供了 initialValue 但数组为空, 那么fn不会被执行, 数组的唯一值将被返回.</li>
 </ul>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> array = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>];</span><br><span class="line"><span class="keyword">var</span> s = array.reduce(<span class="function"><span class="keyword">function</span>(<span class="params">previousValue, item, index, array</span>)</span>&#123;</span><br><span class="line">  <span class="keyword">return</span> previousValue * item;</span><br><span class="line">&#125;,<span class="number">1</span>);</span><br><span class="line"><span class="built_in">console</span>.log(s);<span class="comment">//24</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> array = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>];</span><br><span class="line"><span class="keyword">var</span> s = array.reduce(<span class="function"><span class="keyword">function</span>(<span class="params">previousValue, value, index, array</span>)</span>&#123;</span><br><span class="line">  <span class="keyword">return</span> previousValue * value;</span><br><span class="line">&#125;,<span class="number">1</span>);</span><br><span class="line"><span class="built_in">console</span>.log(s);<span class="comment">//24</span></span><br></pre></td></tr></table></figure>
 <p>以上回调被调用4次, 每次的参数和返回见下表:</p>
 <table>
 <thead>
@@ -709,7 +1242,7 @@
 <p>其在低版本IE(6~8) 的兼容写法请参考 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array/reduce#兼容旧环境（Polyfill）" target="_blank" rel="external">Polyfill</a> .</p>
 <h5 id="reduceRight"><a href="#reduceRight" class="headerlink" title="reduceRight"></a>reduceRight</h5><p>reduceRight() 方法接收一个方法作为累加器, 数组中的每个值(从右至左) 开始合并, 最终为一个值. 除了与reduce执行方向相反外, 其他完全与其一致, 请参考上述 reduce 方法介绍.</p>
 <p>其在低版本IE(6~8) 的兼容写法请参考 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array/reduceRight#.E5.85.BC.E5.AE.B9.E6.80.A7.E6.97.A7.E7.8E.AF.E5.A2.83.EF.BC.88Polyfill.EF.BC.89" target="_blank" rel="external">Polyfill</a> .</p>
-<h5 id="entries"><a href="#entries" class="headerlink" title="entries"></a>entries</h5><p>entries() 方法基于<strong>ECMAScript 2015（ES6）规范</strong>, 返回一个数组迭代器对象, 该对象包含数组中每个索引的键值对.</p>
+<h5 id="entries_28ES6_29"><a href="#entries_28ES6_29" class="headerlink" title="entries(ES6)"></a>entries(ES6)</h5><p>entries() 方法基于<strong>ECMAScript 2015（ES6）规范</strong>, 返回一个数组迭代器对象, 该对象包含数组中每个索引的键值对.</p>
 <p>语法: <em>arr</em>.entries()</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> array = [<span class="string">"a"</span>, <span class="string">"b"</span>, <span class="string">"c"</span>];</span><br><span class="line"><span class="keyword">var</span> iterator = array.entries();</span><br><span class="line"><span class="built_in">console</span>.log(iterator.next().value);<span class="comment">//[0, "a"]</span></span><br><span class="line"><span class="built_in">console</span>.log(iterator.next().value);<span class="comment">//[1, "b"]</span></span><br><span class="line"><span class="built_in">console</span>.log(iterator.next().value);<span class="comment">//[2, "c"]</span></span><br><span class="line"><span class="built_in">console</span>.log(iterator.next().value);<span class="comment">//undefined, 迭代器处于数组末尾时, 再迭代就会返回undefined</span></span><br></pre></td></tr></table></figure>
 <p>很明显, entries 也受益于鸭式辨型, 如下:</p>
@@ -737,14 +1270,14 @@
 </tr>
 </tbody>
 </table>
-<h5 id="find_26amp_3BfindIndex"><a href="#find_26amp_3BfindIndex" class="headerlink" title="find&amp;findIndex"></a>find&amp;findIndex</h5><p>find() 方法基于<strong>ECMAScript 2015（ES6）规范</strong>, 返回数组中第一个满足条件的元素(如果有的话), 如果没有, 则返回undefined.</p>
+<h5 id="find_26amp_3BfindIndex_28ES6_29"><a href="#find_26amp_3BfindIndex_28ES6_29" class="headerlink" title="find&amp;findIndex(ES6)"></a>find&amp;findIndex(ES6)</h5><p>find() 方法基于<strong>ECMAScript 2015（ES6）规范</strong>, 返回数组中第一个满足条件的元素(如果有的话), 如果没有, 则返回undefined.</p>
 <p>findIndex() 方法则返回数组中第一个满足条件的元素的索引(如果有的话), 否则返回-1.</p>
 <p>语法: <em>arr</em>.find(fn, thisArg), <em>arr</em>.findIndex(fn, thisArg)</p>
 <p>我们发现它们的语法与forEach等十分相似, 其实不光语法, find(或findIndex) 在参数及其使用注意事项上, 均与forEach一致. 因此此处将略去 find(或findIndex) 的参数介绍. 下面我们来看个栗子:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> array = [<span class="number">1</span>, <span class="number">3</span>, <span class="number">5</span>, <span class="number">7</span>, <span class="number">8</span>, <span class="number">9</span>, <span class="number">10</span>];</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params">item, index, array</span>)</span>&#123;</span><br><span class="line">  <span class="keyword">return</span> item%<span class="number">2</span>==<span class="number">0</span>;<span class="comment">//返回偶数</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">f2</span>(<span class="params">item, index, array</span>)</span>&#123;</span><br><span class="line">  <span class="keyword">return</span> item &gt; <span class="number">20</span>;<span class="comment">//返回大于20的数</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">console</span>.log(array.find(f));<span class="comment">//8</span></span><br><span class="line"><span class="built_in">console</span>.log(array.find(f2));<span class="comment">//undefined</span></span><br><span class="line"><span class="built_in">console</span>.log(array.findIndex(f));<span class="comment">//4</span></span><br><span class="line"><span class="built_in">console</span>.log(array.findIndex(f2));<span class="comment">//-1</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> array = [<span class="number">1</span>, <span class="number">3</span>, <span class="number">5</span>, <span class="number">7</span>, <span class="number">8</span>, <span class="number">9</span>, <span class="number">10</span>];</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params">value, index, array</span>)</span>&#123;</span><br><span class="line">  <span class="keyword">return</span> value%<span class="number">2</span>==<span class="number">0</span>;<span class="comment">//返回偶数</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">f2</span>(<span class="params">value, index, array</span>)</span>&#123;</span><br><span class="line">  <span class="keyword">return</span> value &gt; <span class="number">20</span>;<span class="comment">//返回大于20的数</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">console</span>.log(array.find(f));<span class="comment">//8</span></span><br><span class="line"><span class="built_in">console</span>.log(array.find(f2));<span class="comment">//undefined</span></span><br><span class="line"><span class="built_in">console</span>.log(array.findIndex(f));<span class="comment">//4</span></span><br><span class="line"><span class="built_in">console</span>.log(array.findIndex(f2));<span class="comment">//-1</span></span><br></pre></td></tr></table></figure>
 <p>由于其鸭式辨型写法也与forEach方法一致, 故此处略去. </p>
 <p>兼容性上我没有详测, 可以知道的是, 最新版的Chrome(47), 以及Firefox的版本25均实现了它们.</p>
-<h5 id="keys"><a href="#keys" class="headerlink" title="keys"></a>keys</h5><p>keys() 方法基于<strong>ECMAScript 2015（ES6）规范</strong>,返回一个数组索引的迭代器. (实际实现可能会有调整)</p>
+<h5 id="keys_28ES6_29"><a href="#keys_28ES6_29" class="headerlink" title="keys(ES6)"></a>keys(ES6)</h5><p>keys() 方法基于<strong>ECMAScript 2015（ES6）规范</strong>,返回一个数组索引的迭代器. (实际实现可能会有调整)</p>
 <p>语法: <em>arr</em>.keys()</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> array = [<span class="string">"abc"</span>, <span class="string">"xyz"</span>];</span><br><span class="line"><span class="keyword">var</span> iterator = array.keys();</span><br><span class="line"><span class="built_in">console</span>.log(iterator.next());<span class="comment">//Object &#123;value: 0, done: false&#125;</span></span><br><span class="line"><span class="built_in">console</span>.log(iterator.next());<span class="comment">//Object &#123;value: 1, done: false&#125;</span></span><br><span class="line"><span class="built_in">console</span>.log(iterator.next());<span class="comment">//Object &#123;value: undefined, done: false&#125;</span></span><br></pre></td></tr></table></figure>
 <p>索引迭代器会包含那些没有对应元素的索引, 如下:</p>
@@ -773,11 +1306,11 @@
 </tr>
 </tbody>
 </table>
-<h5 id="values"><a href="#values" class="headerlink" title="values"></a>values</h5><p>values() 方法基于<strong>ECMAScript 2015（ES6）规范</strong>, 返回一个数组迭代器对象, 该对象包含数组中每个索引的值. 其用法基本与上述 entries 方法一致.</p>
+<h5 id="values_28ES6_29"><a href="#values_28ES6_29" class="headerlink" title="values(ES6)"></a>values(ES6)</h5><p>values() 方法基于<strong>ECMAScript 2015（ES6）规范</strong>, 返回一个数组迭代器对象, 该对象包含数组中每个索引的值. 其用法基本与上述 entries 方法一致.</p>
 <p>语法: <em>arr</em>.values()</p>
 <p>遗憾的是, 现在没有浏览器实现了该方法, 因此下面将就着看看吧.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> array = [<span class="string">"abc"</span>, <span class="string">"xyz"</span>];</span><br><span class="line"><span class="keyword">var</span> iterator = array.values();</span><br><span class="line"><span class="built_in">console</span>.log(iterator.next().value);<span class="comment">//abc</span></span><br><span class="line"><span class="built_in">console</span>.log(iterator.next().value);<span class="comment">//xyz</span></span><br></pre></td></tr></table></figure>
-<h5 id="Symbol-iterator"><a href="#Symbol-iterator" class="headerlink" title="Symbol.iterator"></a>Symbol.iterator</h5><p>该方法基于<strong>ECMAScript 2015（ES6）规范</strong>, 同 values 方法功能相同.</p>
+<h5 id="Symbol-iterator_28ES6_29"><a href="#Symbol-iterator_28ES6_29" class="headerlink" title="Symbol.iterator(ES6)"></a>Symbol.iterator(ES6)</h5><p>该方法基于<strong>ECMAScript 2015（ES6）规范</strong>, 同 values 方法功能相同.</p>
 <p>语法: <em>arr</em>[Symbol.iterator]()</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> array = [<span class="string">"abc"</span>, <span class="string">"xyz"</span>];</span><br><span class="line"><span class="keyword">var</span> iterator = array[<span class="built_in">Symbol</span>.iterator]();</span><br><span class="line"><span class="built_in">console</span>.log(iterator.next().value);<span class="comment">//abc</span></span><br><span class="line"><span class="built_in">console</span>.log(iterator.next().value);<span class="comment">//xyz</span></span><br></pre></td></tr></table></figure>
 <p>其鸭式辨型写法请参考上述 entries 方法.</p>
@@ -804,8 +1337,15 @@
 </tr>
 </tbody>
 </table>
-<h3 id="u603B_u7ED3"><a href="#u603B_u7ED3" class="headerlink" title="总结"></a>总结</h3><p>以上, Array.prototype 的各方法 基本介绍完毕, Array.prototype 的所有方法均具有鸭式辨型这种神奇的特性. 它们不止可以用来处理数组对象, 还可以处理类数组对象. </p>
-<p>例如 javascript 中一个纯天然的类数组对象字符串(String), 像join 方法就完全适用, 可惜的是 Array.prototype 中很多的方法均会去试图修改当前对象的 length 属性, 比如说 pop 方法, 操作 String 对象时, 它就会报错.</p>
+<h3 id="u603B_u7ED3"><a href="#u603B_u7ED3" class="headerlink" title="总结"></a>总结</h3><p>以上, Array.prototype 的各方法 基本介绍完毕, 这些方法之间存在很多共性. 比如:</p>
+<ul>
+<li>所有插入元素的方法, 比如 push, unshift, 一律返回数组新的长度;</li>
+<li>所有删除元素的方法, 比如 pop, shift, splice 一律返回删除的元素, 或者返回删除的多个元素组成的数组;</li>
+<li><p>部分遍历方法, 比如 forEach, every, some, filter, map, find, findIndex, 它们都接 function(value,index,array){} 和 thisArg 这样两个参数.</p>
+<p>Array.prototype 的所有方法均具有鸭式辨型这种神奇的特性. 它们不止可以用来处理数组对象, 还可以处理类数组对象. </p>
+</li>
+</ul>
+<p>例如 javascript 中一个纯天然的类数组对象字符串(String), 像join 方法就完全适用, 可惜的是 Array.prototype 中很多的方法均会去试图修改当前对象的 length 属性, 比如说 pop, push, shift, unshift 方法, 操作 String 对象时, 它就会报错.</p>
 <p>还记得么, Array.prototype本身就是一个数组, 并且它的长度为0.</p>
 <p>后续章节我们将继续探索Array的一些事情. 感谢您的阅读! </p>
 <p>同时, 以下话题将会逐步去探讨, 敬请关注:</p>
@@ -830,7 +1370,7 @@
 </ul>
 ]]></content>
     <summary type="html">
-    <![CDATA[JavaScript Array]]>
+    <![CDATA[JavaScript Array isArray map filter forEach every some push shift unshift sort indexOf]]>
     
     </summary>
     
@@ -977,7 +1517,7 @@
     <link href="http://louiszhai.github.io/2015/12/18/traverse/"/>
     <id>http://louiszhai.github.io/2015/12/18/traverse/</id>
     <published>2015-12-18T02:54:48.000Z</published>
-    <updated>2016-01-06T00:26:46.000Z</updated>
+    <updated>2016-04-27T01:26:36.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>遍历数组或对象是一名程序员的基本素养之一. 然而遍历却不是一件简单的事, 优秀的程序员知道怎么去选择合适的遍历方法, 优化遍历效率. 本篇将带你走进JavaScript遍历的世界, 享受分析JS循环的快感. 本篇所有代码都可以直接运行, 希望您通读本篇后, 不止是浏览, 最好是亲手去实践下.</p>
 <a id="more"></a>
 <h3 id="u6982_u8FF0"><a href="#u6982_u8FF0" class="headerlink" title="概述"></a>概述</h3><p>js有如下两种数据需要经常遍历</p>
@@ -1104,7 +1644,7 @@
 <p>综上, 最佳遍历选手是 for in 循环, 推荐大家优先考虑使用它, 一般情况下, 最好不使用forEach. ( Firefox浏览器由于对forEach循环做了底层优化, 效率接近native,不在我们考虑范围内 ).</p>
 <p>声明: 本文测试使用的浏览器为<code>Google Chrome</code>的47.0.2526.80 (64-bit)版本. 如果发现本文测试数据不对, 欢迎批评指正.</p>
 <hr>
-<p>本问就讨论这么多内容,大家有什么问题或好的想法欢迎在下方参与<a href="#respond">留言和评论</a>.</p>
+<p>本文就讨论这么多内容,大家有什么问题或好的想法欢迎在下方参与<a href="#respond">留言和评论</a>.</p>
 <p>本文作者: <a href="https://github.com/Louiszhai" target="_blank" rel="external">louis</a></p>
 <p>本文链接: <a href="http://louiszhai.github.io/2015/12/18/traverse/">http://louiszhai.github.io/2015/12/18/traverse/</a></p>
 <p>参考文章</p>
@@ -1129,7 +1669,7 @@
     <link href="http://louiszhai.github.io/2015/12/17/prototype/"/>
     <id>http://louiszhai.github.io/2015/12/17/prototype/</id>
     <published>2015-12-17T01:34:36.000Z</published>
-    <updated>2015-12-17T14:09:47.000Z</updated>
+    <updated>2016-04-27T01:26:44.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u6982_u5FF5"><a href="#u6982_u5FF5" class="headerlink" title="概念"></a>概念</h3><ol>
 <li><strong>prototype</strong> 是函数(function) 的一个属性, 它指向函数的原型.</li>
 <li><strong>__proto__</strong>   是对象的内部属性, 它指向构造器的原型, 对象依赖它进行原型链查询.</li>
@@ -1178,7 +1718,7 @@
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(<span class="built_in">Object</span>.prototype.__proto__ === <span class="literal">null</span>);<span class="comment">//true</span></span><br></pre></td></tr></table></figure>
 <p>由于已经到顶, JS世界的源头一片荒芜, 竟然什么都没有! 令人嗟叹不已.</p>
 <p>都说一图胜千言, 我也不能免俗. 下面附一张 <a href="http://stackoverflow.com/" target="_blank" rel="external">stackoverflow</a> 上的图:</p>
-<p><img src="/doc_images/prototype.png" alt=""></p>
+<p><img src="/docImages/prototype.png" alt=""></p>
 <p>这张图也指出: </p>
 <ul>
 <li>Object.__proto__ == Function.prototype,</li>
@@ -1198,7 +1738,7 @@
 <p>由于构造器是 <code>对象</code> (身份3), 理所当然拥有 __proto__ 属性, 且该属性一定指向其构造器的原型, 也就是指向 <code>函数</code> (身份2) 构造器(Function)的原型, 即 Function.prototype. 于是我们证明了上面那句 <strong>所有的构造器都继承于Function.prototype</strong> (身份1).</p>
 <p>注: 上面代码中用到的 __proto__ 目前在IE6/7/8/9中并不支持。IE9中可以使用<a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Object/GetPrototypeOf" target="_blank" rel="external">Object.getPrototypeOf</a>(ES5)获取对象的内部原型。</p>
 <hr>
-<p>本问就讨论这么多内容,大家有什么问题或好的想法欢迎在下方参与<a href="#respond">留言和评论</a>.</p>
+<p>本文就讨论这么多内容,大家有什么问题或好的想法欢迎在下方参与<a href="#respond">留言和评论</a>.</p>
 <p>本文作者: <a href="https://github.com/Louiszhai" target="_blank" rel="external">louis</a></p>
 <p>本文链接: <a href="http://louiszhai.github.io/2015/12/17/prototype/">http://louiszhai.github.io/2015/12/17/prototype/</a></p>
 <p>参考文章</p>
@@ -1222,7 +1762,7 @@
     <link href="http://louiszhai.github.io/2015/12/16/currying/"/>
     <id>http://louiszhai.github.io/2015/12/16/currying/</id>
     <published>2015-12-16T00:57:06.000Z</published>
-    <updated>2015-12-17T10:08:05.000Z</updated>
+    <updated>2016-04-27T01:26:52.000Z</updated>
     <content type="html"><![CDATA[<p>Currying是函数式编程的一个特性，将多个参数的处理转化成单个参数的处理，类似链式调用。</p>
 <h3 id="u67EF_u91CC_u5316_28Currying_29"><a href="#u67EF_u91CC_u5316_28Currying_29" class="headerlink" title="柯里化(Currying)"></a>柯里化(Currying)</h3><p>柯里化有3个常见作用：1. 参数复用；2. 提前返回；3. 延迟计算/运行。</p>
 <p>通俗的柯里化函数原型如下:</p>
@@ -1280,7 +1820,7 @@
 <p>以上是关于 <code>javaScript</code> 柯里化与反柯里化的一些理解. </p>
 <p>柯里化体现的思想是”归一”, 多个参数化为一个参数, 然后逐个处理, 便于产生偏函数, 实现链式调用; 反柯里化体现的思想是”延伸”, 通过拓展方法的作用域, 使得它变得更通用, 提高了代码的复用性. 它们都提升了代码的优雅性.</p>
 <hr>
-<p>本问就讨论这么多内容,大家有什么问题或好的想法欢迎在下方参与<a href="#respond">留言和评论</a>.</p>
+<p>本文就讨论这么多内容,大家有什么问题或好的想法欢迎在下方参与<a href="#respond">留言和评论</a>.</p>
 <p>本文作者: <a href="https://github.com/Louiszhai" target="_blank" rel="external">louis</a></p>
 <p>本文链接: <a href="http://louiszhai.github.io/2015/12/16/currying/">http://louiszhai.github.io/2015/12/16/currying/</a></p>
 <p>参考文章</p>
@@ -1303,7 +1843,7 @@
     <link href="http://louiszhai.github.io/2015/12/15/arguments/"/>
     <id>http://louiszhai.github.io/2015/12/15/arguments/</id>
     <published>2015-12-15T12:44:51.000Z</published>
-    <updated>2015-12-17T10:07:01.000Z</updated>
+    <updated>2016-04-27T01:27:02.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u6982_u8FF0"><a href="#u6982_u8FF0" class="headerlink" title="概述"></a>概述</h3><p><strong>Arguments</strong> 对象已经不再是函数的属性了, 它是函数内部的本地变量,  包括如下属性：</p>
 <ol>
 <li>callee — 指向当前函数的引用</li>
@@ -1331,7 +1871,7 @@
 <p>如果 <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array#Array_generic_methods" target="_blank" rel="external">Array generics</a> 可用的话，下面的代码则可以作为替代:</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> args = <span class="built_in">Array</span>.slice(<span class="built_in">arguments</span>);<span class="comment">//注意,arguments对象仅在函数内部有效</span></span><br></pre></td></tr></table></figure>
 <hr>
-<p>本问就讨论这么多内容,大家有什么问题或好的想法欢迎在下方参与<a href="#respond">留言和评论</a>.</p>
+<p>本文就讨论这么多内容,大家有什么问题或好的想法欢迎在下方参与<a href="#respond">留言和评论</a>.</p>
 <p>本文作者: <a href="https://github.com/Louiszhai" target="_blank" rel="external">louis</a></p>
 <p>本文链接: <a href="http://louiszhai.github.io/2015/12/15/arguments/">http://louiszhai.github.io/2015/12/15/arguments/</a></p>
 <p>参考文章</p>
@@ -1359,7 +1899,7 @@
     <link href="http://louiszhai.github.io/2015/12/15/prototypeChain/"/>
     <id>http://louiszhai.github.io/2015/12/15/prototypeChain/</id>
     <published>2015-12-15T01:26:28.000Z</published>
-    <updated>2015-12-18T02:42:16.000Z</updated>
+    <updated>2016-04-27T02:32:34.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u6458_u81EAJavaScript_u9AD8_u7EA7_u7A0B_u5E8F_u8BBE_u8BA1_3A"><a href="#u6458_u81EAJavaScript_u9AD8_u7EA7_u7A0B_u5E8F_u8BBE_u8BA1_3A" class="headerlink" title="摘自JavaScript高级程序设计:"></a>摘自JavaScript高级程序设计:</h3><p>继承是OO语言中的一个最为人津津乐道的概念.许多OO语言都支持两种继承方式: <strong>接口继承</strong> 和 <strong>实现继承</strong> .接口继承只继承方法签名,而实现继承则继承实际的方法.由于js中方法没有签名,在ECMAScript中无法实现接口继承.ECMAScript只支持实现继承,而且其 <code>实现继承</code> 主要是依靠原型链来实现的.</p>
 <a id="more"></a> 
 <h3 id="u6982_u5FF5"><a href="#u6982_u5FF5" class="headerlink" title="概念"></a>概念</h3><p>简单回顾下构造函数,原型和实例的关系:</p>
@@ -1458,9 +1998,8 @@
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">extend</span>(<span class="params">subClass, superClass</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> F = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;&#125;;</span><br><span class="line">  F.prototype = superClass.prototype;</span><br><span class="line">  subClass.prototype = <span class="keyword">new</span> F(); </span><br><span class="line">  subClass.prototype.constructor = subClass;</span><br><span class="line"></span><br><span class="line">  subClass.superclass = superClass.prototype;</span><br><span class="line">  <span class="keyword">if</span>(superClass.prototype.constructor == <span class="built_in">Object</span>.prototype.constructor) &#123;</span><br><span class="line">    superClass.prototype.constructor = superClass;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>我一直不太明白的是为什么要 “<strong>new F()</strong>“, 既然extend的目的是将子类型的 prototype 指向超类型的 prototype,为什么不直接做如下操作呢?</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">subClass.prototype = superClass.prototype;<span class="comment">//直接指向超类型prototype</span></span><br></pre></td></tr></table></figure>
-<p>于是便有了下面这个插曲.</p>
-<hr>
-<p>我仔细研究了new运算符具体干了什么?发现其实很简单，就干了三件事情。</p>
+<p>显然, 基于如上操作, 子类型原型将与超类型原型共用, 根本就没有继承关系.</p>
+<h3 id="new__u8FD0_u7B97_u7B26"><a href="#new__u8FD0_u7B97_u7B26" class="headerlink" title="new 运算符"></a>new 运算符</h3><p>为了追本溯源, 我顺便研究了new运算符具体干了什么?发现其实很简单，就干了三件事情.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> obj  = &#123;&#125;;</span><br><span class="line">obj.__proto__ = F.prototype;</span><br><span class="line">F.call(obj);</span><br></pre></td></tr></table></figure>
 <p>第一行，我们创建了一个空对象obj;</p>
 <p>第二行，我们将这个空对象的<strong>proto</strong>成员指向了F函数对象prototype成员对象;</p>
@@ -1468,13 +2007,18 @@
 <p>我们可以这么理解: 以 new 操作符调用构造函数的时候，函数内部实际上发生以下变化：</p>
 <p>  1、创建一个空对象，并且 this 变量引用该对象，同时还继承了该函数的原型。</p>
 <p>  2、属性和方法被加入到 this 引用的对象中。</p>
-<p>  3、新创建的对象由 this 所引用，并且最后隐式的返回 this 。</p>
-<p>以上new操作符的作用大体是继承原型并返回this, 即便如此 new F()依然没有做更多的事情,故我认为可以使用以下代码替换掉new F()那段.</p>
+<p>  3、新创建的对象由 this 所引用，并且最后隐式的返回 this.</p>
+<h3 id="proto_5C___u5C5E_u6027_u662F_u6307_u5B9A_u539F_u578B_u7684_u5173_u952E"><a href="#proto_5C___u5C5E_u6027_u662F_u6307_u5B9A_u539F_u578B_u7684_u5173_u952E" class="headerlink" title="_<em>proto\</em>_ 属性是指定原型的关键"></a>_<em>proto\</em>_ 属性是指定原型的关键</h3><p>以上, 通过设置 _<em>proto\</em>_ 属性继承了父类, 如果去掉new 操作, 直接参考如下写法</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">subClass.prototype = superClass.prototype;<span class="comment">//直接指向超类型prototype</span></span><br></pre></td></tr></table></figure>
-<p>于是最终extend代码应该为</p>
+<p>那么, 使用 instanceof 方法判断对象是否是构造器的实例时, 将会出现紊乱.</p>
+<p>假如参考如上写法, 那么extend代码应该为</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">extend</span>(<span class="params">subClass, superClass</span>) </span>&#123;</span><br><span class="line">  subClass.prototype = superClass.prototype;</span><br><span class="line"></span><br><span class="line">  subClass.superclass = superClass.prototype;</span><br><span class="line">  <span class="keyword">if</span>(superClass.prototype.constructor == <span class="built_in">Object</span>.prototype.constructor) &#123;</span><br><span class="line">    superClass.prototype.constructor = superClass;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>此时, 请看如下测试:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">a</span>(<span class="params"></span>)</span>&#123;&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">b</span>(<span class="params"></span>)</span>&#123;&#125;</span><br><span class="line">extend(b,a);</span><br><span class="line"><span class="keyword">var</span> c = <span class="keyword">new</span> a()&#123;&#125;;</span><br><span class="line"><span class="built_in">console</span>.log(c <span class="keyword">instanceof</span> a);<span class="comment">//true</span></span><br><span class="line"><span class="built_in">console</span>.log(c <span class="keyword">instanceof</span> b);<span class="comment">//true</span></span><br></pre></td></tr></table></figure>
+<p>c被认为是a的实例可以理解, 也是对的; 但c却被认为也是b的实例, 这就不对了. 究其原因, instanceof 操作符比较的应该是 c._<em>proto\</em>_ 与 构造器.prototype(即 b.prototype 或 a.prototype) 这两者是否相等, 又extend(b,a); 则b.prototype === a.prototype, 故这才打印出上述不合理的输出.</p>
+<hr>
 <p>那么最终,原型链继承可以这么实现,例如:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Father</span>(<span class="params">name</span>)</span>&#123;</span><br><span class="line">	<span class="keyword">this</span>.name = name;</span><br><span class="line">	<span class="keyword">this</span>.colors = [<span class="string">"red"</span>,<span class="string">"blue"</span>,<span class="string">"green"</span>];</span><br><span class="line">&#125;</span><br><span class="line">Father.prototype.sayName = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">	alert(<span class="keyword">this</span>.name);</span><br><span class="line">&#125;;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Son</span>(<span class="params">name,age</span>)</span>&#123;</span><br><span class="line">	Father.call(<span class="keyword">this</span>,name);<span class="comment">//继承实例属性，第一次调用Father()</span></span><br><span class="line">	<span class="keyword">this</span>.age = age;</span><br><span class="line">&#125;</span><br><span class="line">extend(Son,Father)<span class="comment">//继承父类方法,此处并不会第二次调用Father()</span></span><br><span class="line">Son.prototype.sayAge = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">	alert(<span class="keyword">this</span>.age);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> instance1 = <span class="keyword">new</span> Son(<span class="string">"louis"</span>,<span class="number">5</span>);</span><br><span class="line">instance1.colors.push(<span class="string">"black"</span>);</span><br><span class="line"><span class="built_in">console</span>.log(instance1.colors);<span class="comment">//"red,blue,green,black"</span></span><br><span class="line">instance1.sayName();<span class="comment">//louis</span></span><br><span class="line">instance1.sayAge();<span class="comment">//5</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> instance1 = <span class="keyword">new</span> Son(<span class="string">"zhai"</span>,<span class="number">10</span>);</span><br><span class="line"><span class="built_in">console</span>.log(instance1.colors);<span class="comment">//"red,blue,green"</span></span><br><span class="line">instance1.sayName();<span class="comment">//zhai</span></span><br><span class="line">instance1.sayAge();<span class="comment">//10</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Father</span>(<span class="params">name</span>)</span>&#123;</span><br><span class="line">	<span class="keyword">this</span>.name = name;</span><br><span class="line">	<span class="keyword">this</span>.colors = [<span class="string">"red"</span>,<span class="string">"blue"</span>,<span class="string">"green"</span>];</span><br><span class="line">&#125;</span><br><span class="line">Father.prototype.sayName = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">	alert(<span class="keyword">this</span>.name);</span><br><span class="line">&#125;;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Son</span>(<span class="params">name,age</span>)</span>&#123;</span><br><span class="line">	Father.call(<span class="keyword">this</span>,name);<span class="comment">//继承实例属性，第一次调用Father()</span></span><br><span class="line">	<span class="keyword">this</span>.age = age;</span><br><span class="line">&#125;</span><br><span class="line">extend(Son,Father)<span class="comment">//继承父类方法,此处并不会第二次调用Father()</span></span><br><span class="line">Son.prototype.sayAge = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">	alert(<span class="keyword">this</span>.age);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> instance1 = <span class="keyword">new</span> Son(<span class="string">"louis"</span>,<span class="number">5</span>);</span><br><span class="line">instance1.colors.push(<span class="string">"black"</span>);</span><br><span class="line"><span class="built_in">console</span>.log(instance1.colors);<span class="comment">//"red,blue,green,black"</span></span><br><span class="line">instance1.sayName();<span class="comment">//louis</span></span><br><span class="line">instance1.sayAge();<span class="comment">//5</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> instance1 = <span class="keyword">new</span> Son(<span class="string">"zhai"</span>,<span class="number">10</span>);</span><br><span class="line"><span class="built_in">console</span>.log(instance1.colors);<span class="comment">//"red,blue,green"</span></span><br><span class="line">instance1.sayName();<span class="comment">//zhai</span></span><br><span class="line">instance1.sayAge();<span class="comment">//10</span></span><br></pre></td></tr></table></figure>
 <hr>
 <h3 id="u6269_u5C55_3A"><a href="#u6269_u5C55_3A" class="headerlink" title="扩展:"></a>扩展:</h3><h4 id="u5C5E_u6027_u67E5_u627E"><a href="#u5C5E_u6027_u67E5_u627E" class="headerlink" title="属性查找"></a>属性查找</h4><p>​    使用了原型链后, 当查找一个对象的属性时，JavaScript 会向上遍历原型链，直到找到给定名称的属性为止，到查找到达原型链的顶部 - 也就是 Object.prototype - 但是仍然没有找到指定的属性，就会返回 undefined. 此时若想避免原型链查找, 建议使用 <strong>hasOwnProperty</strong> 方法. 因为 <strong>hasOwnProperty</strong> 是 JavaScript 中唯一一个处理属性但是不查找原型链的函数. 如:</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(instance1.hasOwnProperty(<span class="string">'age'</span>));<span class="comment">//true</span></span><br></pre></td></tr></table></figure>
@@ -1520,7 +2064,7 @@
     <link href="http://louiszhai.github.io/2015/12/11/js.boolean/"/>
     <id>http://louiszhai.github.io/2015/12/11/js.boolean/</id>
     <published>2015-12-11T03:37:00.000Z</published>
-    <updated>2015-12-15T15:06:11.000Z</updated>
+    <updated>2016-04-27T01:26:49.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u8BED_u6CD5"><a href="#u8BED_u6CD5" class="headerlink" title="语法"></a>语法</h3><p>众所周知, JavaScript有五个基本的值类型：<strong>number</strong>、<strong>string</strong>、<strong>boolean</strong>、<strong>null</strong>和<strong>undefined。</strong>除了null和undefined以外，其他三个具有所谓的基本包装对象。可以使用内置构造函数Number()、String()、Boolean()创建包装对象。</p>
 <blockquote>
 <p>boolean是JS的6种数据类型(number,string,object,boolean,null,undefined)之一,有且只有两种值:true和false</p>
@@ -1550,7 +2094,7 @@
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> obj = <span class="keyword">new</span> <span class="built_in">Boolean</span>(<span class="literal">false</span>);</span><br><span class="line"><span class="built_in">console</span>.log(obj &amp;&amp; <span class="literal">true</span>);<span class="comment">//true</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="literal">true</span> &amp;&amp; obj);<span class="comment">//false</span></span><br></pre></td></tr></table></figure>
 <p>因此,第二个console实际上打印的是obj对象的值,即false</p>
 <hr>
-<p>本问就讨论这么多内容,大家有什么问题或好的想法欢迎在下方参与<a href="#respond">留言和评论</a>.</p>
+<p>本文就讨论这么多内容,大家有什么问题或好的想法欢迎在下方参与<a href="#respond">留言和评论</a>.</p>
 <p>本文作者: <a href="https://github.com/Louiszhai" target="_blank" rel="external">louis</a></p>
 <p>本文链接: <a href="http://louiszhai.github.io/2015/12/11/js.boolean/">http://louiszhai.github.io/2015/12/11/js.boolean/</a></p>
 <p>参考文章</p>
@@ -1572,7 +2116,7 @@
     <link href="http://louiszhai.github.io/2015/12/11/js.replace/"/>
     <id>http://louiszhai.github.io/2015/12/11/js.replace/</id>
     <published>2015-12-11T02:02:47.000Z</published>
-    <updated>2015-12-15T14:13:54.000Z</updated>
+    <updated>2016-04-27T01:26:48.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u8BED_u6CD5"><a href="#u8BED_u6CD5" class="headerlink" title="语法"></a>语法</h3><blockquote>
 <p><strong>str.replace( regexp | substr, newSubStr | function[, flags] )</strong></p>
 </blockquote>
@@ -1617,7 +2161,7 @@
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">replacer</span>(<span class="params">match,offset,string</span>)</span>&#123;</span><br><span class="line">    <span class="comment">//由于字符串中不会有括号进行分组,此时没有子串</span></span><br><span class="line">    <span class="keyword">return</span> offset+<span class="string">" that"</span>;<span class="comment">//偏移为4</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> a = <span class="string">"what is this? before"</span>;</span><br><span class="line"><span class="keyword">var</span> b = a.replace(<span class="string">" is this"</span>,replacer);</span><br><span class="line"><span class="built_in">console</span>.log(b); <span class="comment">// "what4 that? before"</span></span><br></pre></td></tr></table></figure>
 <p>以上4种replace使用方法可以满足大部分的操作字符串场景,特别是function的引入,极大的增强了replace的实力,从而使得我们操作字符游刃有余.</p>
 <hr>
-<p>本问就讨论这么多内容,大家有什么问题或好的想法欢迎在下方参与<a href="http://louiszhai.github.io/2015/12/11/js.replace/#respond">留言和评论</a>.<br>本文作者: <a href="https://github.com/Louiszhai" target="_blank" rel="external">louis</a><br>本文链接: <a href="http://louiszhai.github.io/2015/12/11/js.replace/">http://louiszhai.github.io/2015/12/11/js.replace/</a></p>
+<p>本文就讨论这么多内容,大家有什么问题或好的想法欢迎在下方参与<a href="http://louiszhai.github.io/2015/12/11/js.replace/#respond">留言和评论</a>.<br>本文作者: <a href="https://github.com/Louiszhai" target="_blank" rel="external">louis</a><br>本文链接: <a href="http://louiszhai.github.io/2015/12/11/js.replace/">http://louiszhai.github.io/2015/12/11/js.replace/</a></p>
 <p>参考文章</p>
 <ul>
 <li><a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/String/replace" target="_blank" rel="external">String.prototype.replace() - JavaScript | MDN</a></li>
