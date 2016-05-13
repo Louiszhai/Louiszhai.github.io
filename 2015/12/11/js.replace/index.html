@@ -4,17 +4,18 @@
   <meta charset="utf-8">
   
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
-  <title>详解ECMAScript String.replace | louis blog</title>
+  <title>String.prototype.replace高阶技能 | louis blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="JavaScript string replace">
 <meta property="og:type" content="article">
-<meta property="og:title" content="详解ECMAScript String.replace">
+<meta property="og:title" content="String.prototype.replace高阶技能">
 <meta property="og:url" content="http://louiszhai.github.io/2015/12/11/js.replace/index.html">
 <meta property="og:site_name" content="louis blog">
 <meta property="og:description" content="JavaScript string replace">
-<meta property="og:updated_time" content="2016-04-27T01:26:48.000Z">
+<meta property="og:image" content="http://louiszhai.github.io/docImages/replace01.png">
+<meta property="og:updated_time" content="2016-05-13T01:41:16.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="详解ECMAScript String.replace">
+<meta name="twitter:title" content="String.prototype.replace高阶技能">
 <meta name="twitter:description" content="JavaScript string replace">
   
     <link rel="alternative" href="/atom.xml" title="louis blog" type="application/atom+xml">
@@ -178,7 +179,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      详解ECMAScript String.replace
+      String.prototype.replace高阶技能
     </h1>
   
 
@@ -200,12 +201,11 @@
       
           <div id="toc" class="toc-article">
     <div class="toc-title">目录</div>
-    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#u8BED_u6CD5"><span class="toc-text">语法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u53C2_u6570"><span class="toc-text">参数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u63CF_u8FF0"><span class="toc-text">描述</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Demo"><span class="toc-text">Demo</span></a></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#u5BFC_u8BFB"><span class="toc-text">导读</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u8BED_u6CD5"><span class="toc-text">语法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u53C2_u6570"><span class="toc-text">参数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u63CF_u8FF0"><span class="toc-text">描述</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Demo"><span class="toc-text">Demo</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u7B80_u6613_u7684_u5B57_u7B26_u4E32_u6A21_u677F_u5F15_u64CE"><span class="toc-text">简易的字符串模板引擎</span></a></li></ol>
 </div>
       
-        <h3 id="u8BED_u6CD5"><a href="#u8BED_u6CD5" class="headerlink" title="语法"></a>语法</h3><blockquote>
-<p><strong>str.replace( regexp | substr, newSubStr | function[, flags] )</strong></p>
-</blockquote>
+        <h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>String.prototype.replace 方法虽然其貌不扬, 然混迹于江湖, 经常活跃于各大代码角落, 终于自学所成4招, 谋得一些名气. 下面我们基于它的几招, 实现一个简易的js模板引擎.</p>
+<h3 id="u8BED_u6CD5"><a href="#u8BED_u6CD5" class="headerlink" title="语法"></a>语法</h3><p><strong>str.replace( regexp | substr, newSubStr | function[, flags] )</strong></p>
 <a id="more"></a>
 <h3 id="u53C2_u6570"><a href="#u53C2_u6570" class="headerlink" title="参数"></a>参数</h3><ul>
 <li><strong>regexp:</strong> 一个 RegExp 对象。该正则所匹配的内容会被第二个参数的返回值替换掉。</li>
@@ -215,7 +215,7 @@
 <li><strong>flags:</strong> 注意：flags 参数在 v8 内核（Chrome and NodeJs）中不起作用。方法中使用 flags 参数不是符合标准的并且不赞成这样做。</li>
 </ul>
 <blockquote>
-<p>简单概括,replace拥有两个参数,第一个是需要替换的字符串或者正则表达式;<br> 第二个是新的字符串或者一个function,这样参数便有四种组合</p>
+<p>简单概括,replace拥有两个参数,第一个是需要替换的字符串或者正则表达式;<br>第二个是新的字符串或者一个function,这样参数便有四种组合</p>
 </blockquote>
 <h3 id="u63CF_u8FF0"><a href="#u63CF_u8FF0" class="headerlink" title="描述"></a>描述</h3><p>该方法并不改变调用它的字符串本身，而只是返回替换后的字符串。</p>
 <h3 id="Demo"><a href="#Demo" class="headerlink" title="Demo"></a>Demo</h3><p>1.一般来说我们使用JS String对象的replace方法的姿势是这个样子:</p>
@@ -246,6 +246,10 @@
 </blockquote>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">replacer</span>(<span class="params">match,offset,string</span>)</span>&#123;</span><br><span class="line">    <span class="comment">//由于字符串中不会有括号进行分组,此时没有子串</span></span><br><span class="line">    <span class="keyword">return</span> offset+<span class="string">" that"</span>;<span class="comment">//偏移为4</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> a = <span class="string">"what is this? before"</span>;</span><br><span class="line"><span class="keyword">var</span> b = a.replace(<span class="string">" is this"</span>,replacer);</span><br><span class="line"><span class="built_in">console</span>.log(b); <span class="comment">// "what4 that? before"</span></span><br></pre></td></tr></table></figure>
 <p>以上4种replace使用方法可以满足大部分的操作字符串场景,特别是function的引入,极大的增强了replace的实力,从而使得我们操作字符游刃有余.</p>
+<h3 id="u7B80_u6613_u7684_u5B57_u7B26_u4E32_u6A21_u677F_u5F15_u64CE"><a href="#u7B80_u6613_u7684_u5B57_u7B26_u4E32_u6A21_u677F_u5F15_u64CE" class="headerlink" title="简易的字符串模板引擎"></a>简易的字符串模板引擎</h3><p>基于 replace 方法的第三个用法, 我们可以实现一个tmpl方法,  输入一个模板字符串, 输入一个key-value对象, 即可生成新的字符串.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> template = <span class="string">"one &#123;a&#125; two &#123;b&#125; &#123;c&#125;"</span>,</span><br><span class="line">	obj = &#123;a:<span class="string">"apple"</span>,b:<span class="string">"orange"</span>,c:<span class="string">"..."</span>&#125;,</span><br><span class="line">	_array = [];</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">tmpl</span>(<span class="params">template,obj</span>)</span>&#123;</span><br><span class="line">	<span class="keyword">var</span> retu = template.replace(<span class="regexp">/([^&#123;&#125;]*)&#123;(.)&#125;/g</span>,<span class="function"><span class="keyword">function</span>(<span class="params">match,p1,p2,offset,string</span>)</span>&#123;</span><br><span class="line">		_array.push(&#123;<span class="string">'match'</span>:match, <span class="string">'p1'</span>:p1, <span class="string">'p2'</span>:p2, <span class="string">'offset'</span>:offset, <span class="string">'string'</span>:string&#125;);</span><br><span class="line">      	<span class="keyword">return</span> p1+obj[p2];</span><br><span class="line">    &#125;);</span><br><span class="line">    <span class="built_in">console</span>.table &amp;&amp; <span class="built_in">console</span>.table(_array);</span><br><span class="line">  	!<span class="built_in">console</span>.table &amp;&amp; <span class="built_in">console</span>.log(_array);</span><br><span class="line">  	<span class="built_in">console</span>.log(retu);</span><br><span class="line">&#125;</span><br><span class="line">tmpl(template,obj);</span><br></pre></td></tr></table></figure>
+<p>最终输出如下这张图:</p>
+<p><img src="/docImages/replace01.png" alt=""></p>
 <hr>
 <p>本文就讨论这么多内容,大家有什么问题或好的想法欢迎在下方参与<a href="http://louiszhai.github.io/2015/12/11/js.replace/#respond">留言和评论</a>.<br>本文作者: <a href="https://github.com/Louiszhai" target="_blank" rel="external">louis</a><br>本文链接: <a href="http://louiszhai.github.io/2015/12/11/js.replace/">http://louiszhai.github.io/2015/12/11/js.replace/</a></p>
 <p>参考文章</p>
@@ -301,7 +305,7 @@
 
 
 <div class="duoshuo">
-	<div class="ds-thread" data-thread-key="js.replace" data-title="详解ECMAScript String.replace" data-url="http://louiszhai.github.io/2015/12/11/js.replace/"></div>
+	<div class="ds-thread" data-thread-key="js.replace" data-title="String.prototype.replace高阶技能" data-url="http://louiszhai.github.io/2015/12/11/js.replace/"></div>
 	<style>
 		#ds-reset .ds-avatar img{width:54px;height:54px;border-radius:27px;-webkit-border-radius:27px;-moz-border-radius:27px;box-shadow:inset 0 -1px 0 #3333sf;-webkit-box-shadow:inset 0 -1px 0 #3333sf;-webkit-transition:0.4s;-webkit-transition:-webkit-transform 0.4s ease-out;transition:transform 0.4s ease-out;-moz-transition:-moz-transform 0.4s ease-out;}
 		#ds-reset .ds-avatar img:hover{box-shadow:0 0 10px #fff;rgba(255,255,255,.6),inset 0 0 20px rgba(255,255,255,1);-webkit-box-shadow:0 0 10px #fff;rgba(255,255,255,.6),inset 0 0 20px rgba(255,255,255,1);transform:rotateZ(360deg);-webkit-transform:rotateZ(360deg);-moz-transform:rotateZ(360deg);}

@@ -12,7 +12,7 @@
 <meta property="og:url" content="http://louiszhai.github.io/2015/12/29/array/index.html">
 <meta property="og:site_name" content="louis blog">
 <meta property="og:description" content="JavaScript Array isArray map filter forEach every some push shift unshift sort indexOf">
-<meta property="og:updated_time" content="2016-04-27T01:24:33.000Z">
+<meta property="og:updated_time" content="2016-05-09T16:37:42.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="捋一捋JS的数组">
 <meta name="twitter:description" content="JavaScript Array isArray map filter forEach every some push shift unshift sort indexOf">
@@ -459,6 +459,8 @@
 <p><em>浅复制</em> 是指当对象的被复制时, 只是复制了对象的引用, 指向的依然是同一个对象. 下面来说明slice为什么是浅复制.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> array = [&#123;color:<span class="string">"yellow"</span>&#125;, <span class="number">2</span>, <span class="number">3</span>];</span><br><span class="line"><span class="keyword">var</span> array2 = array.slice(<span class="number">0</span>,<span class="number">1</span>);</span><br><span class="line"><span class="built_in">console</span>.log(array2);<span class="comment">//[&#123;color:"yellow"&#125;]</span></span><br><span class="line">array[<span class="number">0</span>][<span class="string">"color"</span>] = <span class="string">"blue"</span>;</span><br><span class="line"><span class="built_in">console</span>.log(array2);<span class="comment">//[&#123;color:"bule"&#125;]</span></span><br></pre></td></tr></table></figure>
 <p>由于slice是浅复制, 复制到的对象只是一个引用, 改变原数组array的值, array2也随之改变.</p>
+<p>同时, 稍微利用下 slice 方法第一个参数为负数时的特性, 我们可以非常方便的拿到数组的最后一项元素, 如下:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>].slice(-<span class="number">1</span>));<span class="comment">//[3]</span></span><br></pre></td></tr></table></figure>
 <p>同上, slice 一样受益于鸭式辨型, 如下:</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> o = &#123;<span class="number">0</span>:&#123;<span class="string">"color"</span>:<span class="string">"yellow"</span>&#125;, <span class="number">1</span>:<span class="number">2</span>, <span class="number">2</span>:<span class="number">3</span>, length:<span class="number">3</span>&#125;;</span><br><span class="line"><span class="keyword">var</span> o2 = <span class="built_in">Array</span>.prototype.slice.call(o,<span class="number">0</span>,<span class="number">1</span>);</span><br><span class="line"><span class="built_in">console</span>.log(o2);<span class="comment">//[&#123;color:"yellow"&#125;] ,毫无违和感...</span></span><br></pre></td></tr></table></figure>
 <p>鉴于IE9以下版本对于该方法支持性并不是很好, 如需更好的支持低版本IE浏览器, 请参考<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array/slice#更可靠地跨浏览器" target="_blank" rel="external">更可靠地跨浏览器</a></p>

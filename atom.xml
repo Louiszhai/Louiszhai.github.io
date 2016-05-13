@@ -823,7 +823,7 @@
     <link href="http://louiszhai.github.io/2015/12/29/array/"/>
     <id>http://louiszhai.github.io/2015/12/29/array/</id>
     <published>2015-12-29T01:00:17.000Z</published>
-    <updated>2016-04-27T01:24:33.000Z</updated>
+    <updated>2016-05-09T16:37:42.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>数组是一种非常重要的数据类型, 它语法简单, 灵活,高效, 在多数编程语言中, 数组都充当着至关重要的角色, 以至于很难想象没有数组的编程语言会是什么样子. 这期我们就来侃侃JavaScript的数组, 趴趴它的那点破事儿. 这篇博客从2015年写到了2016年, 权当是跨年的总结吧, 祝大家新年快乐, 2016更好, 未来更好!</p>
 <a id="more"></a>
 <p>声明: 以下未特别标明的方法均为ES5已实现的方法.</p>
@@ -1080,6 +1080,8 @@
 <p><em>浅复制</em> 是指当对象的被复制时, 只是复制了对象的引用, 指向的依然是同一个对象. 下面来说明slice为什么是浅复制.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> array = [&#123;color:<span class="string">"yellow"</span>&#125;, <span class="number">2</span>, <span class="number">3</span>];</span><br><span class="line"><span class="keyword">var</span> array2 = array.slice(<span class="number">0</span>,<span class="number">1</span>);</span><br><span class="line"><span class="built_in">console</span>.log(array2);<span class="comment">//[&#123;color:"yellow"&#125;]</span></span><br><span class="line">array[<span class="number">0</span>][<span class="string">"color"</span>] = <span class="string">"blue"</span>;</span><br><span class="line"><span class="built_in">console</span>.log(array2);<span class="comment">//[&#123;color:"bule"&#125;]</span></span><br></pre></td></tr></table></figure>
 <p>由于slice是浅复制, 复制到的对象只是一个引用, 改变原数组array的值, array2也随之改变.</p>
+<p>同时, 稍微利用下 slice 方法第一个参数为负数时的特性, 我们可以非常方便的拿到数组的最后一项元素, 如下:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>].slice(-<span class="number">1</span>));<span class="comment">//[3]</span></span><br></pre></td></tr></table></figure>
 <p>同上, slice 一样受益于鸭式辨型, 如下:</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> o = &#123;<span class="number">0</span>:&#123;<span class="string">"color"</span>:<span class="string">"yellow"</span>&#125;, <span class="number">1</span>:<span class="number">2</span>, <span class="number">2</span>:<span class="number">3</span>, length:<span class="number">3</span>&#125;;</span><br><span class="line"><span class="keyword">var</span> o2 = <span class="built_in">Array</span>.prototype.slice.call(o,<span class="number">0</span>,<span class="number">1</span>);</span><br><span class="line"><span class="built_in">console</span>.log(o2);<span class="comment">//[&#123;color:"yellow"&#125;] ,毫无违和感...</span></span><br></pre></td></tr></table></figure>
 <p>鉴于IE9以下版本对于该方法支持性并不是很好, 如需更好的支持低版本IE浏览器, 请参考<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array/slice#更可靠地跨浏览器" target="_blank" rel="external">更可靠地跨浏览器</a></p>
@@ -2112,14 +2114,13 @@
   </entry>
   
   <entry>
-    <title><![CDATA[详解ECMAScript String.replace]]></title>
+    <title><![CDATA[String.prototype.replace高阶技能]]></title>
     <link href="http://louiszhai.github.io/2015/12/11/js.replace/"/>
     <id>http://louiszhai.github.io/2015/12/11/js.replace/</id>
     <published>2015-12-11T02:02:47.000Z</published>
-    <updated>2016-04-27T01:26:48.000Z</updated>
-    <content type="html"><![CDATA[<h3 id="u8BED_u6CD5"><a href="#u8BED_u6CD5" class="headerlink" title="语法"></a>语法</h3><blockquote>
-<p><strong>str.replace( regexp | substr, newSubStr | function[, flags] )</strong></p>
-</blockquote>
+    <updated>2016-05-13T01:41:16.000Z</updated>
+    <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>String.prototype.replace 方法虽然其貌不扬, 然混迹于江湖, 经常活跃于各大代码角落, 终于自学所成4招, 谋得一些名气. 下面我们基于它的几招, 实现一个简易的js模板引擎.</p>
+<h3 id="u8BED_u6CD5"><a href="#u8BED_u6CD5" class="headerlink" title="语法"></a>语法</h3><p><strong>str.replace( regexp | substr, newSubStr | function[, flags] )</strong></p>
 <a id="more"></a>
 <h3 id="u53C2_u6570"><a href="#u53C2_u6570" class="headerlink" title="参数"></a>参数</h3><ul>
 <li><strong>regexp:</strong> 一个 RegExp 对象。该正则所匹配的内容会被第二个参数的返回值替换掉。</li>
@@ -2129,7 +2130,7 @@
 <li><strong>flags:</strong> 注意：flags 参数在 v8 内核（Chrome and NodeJs）中不起作用。方法中使用 flags 参数不是符合标准的并且不赞成这样做。</li>
 </ul>
 <blockquote>
-<p>简单概括,replace拥有两个参数,第一个是需要替换的字符串或者正则表达式;<br> 第二个是新的字符串或者一个function,这样参数便有四种组合</p>
+<p>简单概括,replace拥有两个参数,第一个是需要替换的字符串或者正则表达式;<br>第二个是新的字符串或者一个function,这样参数便有四种组合</p>
 </blockquote>
 <h3 id="u63CF_u8FF0"><a href="#u63CF_u8FF0" class="headerlink" title="描述"></a>描述</h3><p>该方法并不改变调用它的字符串本身，而只是返回替换后的字符串。</p>
 <h3 id="Demo"><a href="#Demo" class="headerlink" title="Demo"></a>Demo</h3><p>1.一般来说我们使用JS String对象的replace方法的姿势是这个样子:</p>
@@ -2160,6 +2161,10 @@
 </blockquote>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">replacer</span>(<span class="params">match,offset,string</span>)</span>&#123;</span><br><span class="line">    <span class="comment">//由于字符串中不会有括号进行分组,此时没有子串</span></span><br><span class="line">    <span class="keyword">return</span> offset+<span class="string">" that"</span>;<span class="comment">//偏移为4</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> a = <span class="string">"what is this? before"</span>;</span><br><span class="line"><span class="keyword">var</span> b = a.replace(<span class="string">" is this"</span>,replacer);</span><br><span class="line"><span class="built_in">console</span>.log(b); <span class="comment">// "what4 that? before"</span></span><br></pre></td></tr></table></figure>
 <p>以上4种replace使用方法可以满足大部分的操作字符串场景,特别是function的引入,极大的增强了replace的实力,从而使得我们操作字符游刃有余.</p>
+<h3 id="u7B80_u6613_u7684_u5B57_u7B26_u4E32_u6A21_u677F_u5F15_u64CE"><a href="#u7B80_u6613_u7684_u5B57_u7B26_u4E32_u6A21_u677F_u5F15_u64CE" class="headerlink" title="简易的字符串模板引擎"></a>简易的字符串模板引擎</h3><p>基于 replace 方法的第三个用法, 我们可以实现一个tmpl方法,  输入一个模板字符串, 输入一个key-value对象, 即可生成新的字符串.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> template = <span class="string">"one &#123;a&#125; two &#123;b&#125; &#123;c&#125;"</span>,</span><br><span class="line">	obj = &#123;a:<span class="string">"apple"</span>,b:<span class="string">"orange"</span>,c:<span class="string">"..."</span>&#125;,</span><br><span class="line">	_array = [];</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">tmpl</span>(<span class="params">template,obj</span>)</span>&#123;</span><br><span class="line">	<span class="keyword">var</span> retu = template.replace(<span class="regexp">/([^&#123;&#125;]*)&#123;(.)&#125;/g</span>,<span class="function"><span class="keyword">function</span>(<span class="params">match,p1,p2,offset,string</span>)</span>&#123;</span><br><span class="line">		_array.push(&#123;<span class="string">'match'</span>:match, <span class="string">'p1'</span>:p1, <span class="string">'p2'</span>:p2, <span class="string">'offset'</span>:offset, <span class="string">'string'</span>:string&#125;);</span><br><span class="line">      	<span class="keyword">return</span> p1+obj[p2];</span><br><span class="line">    &#125;);</span><br><span class="line">    <span class="built_in">console</span>.table &amp;&amp; <span class="built_in">console</span>.table(_array);</span><br><span class="line">  	!<span class="built_in">console</span>.table &amp;&amp; <span class="built_in">console</span>.log(_array);</span><br><span class="line">  	<span class="built_in">console</span>.log(retu);</span><br><span class="line">&#125;</span><br><span class="line">tmpl(template,obj);</span><br></pre></td></tr></table></figure>
+<p>最终输出如下这张图:</p>
+<p><img src="/docImages/replace01.png" alt=""></p>
 <hr>
 <p>本文就讨论这么多内容,大家有什么问题或好的想法欢迎在下方参与<a href="http://louiszhai.github.io/2015/12/11/js.replace/#respond">留言和评论</a>.<br>本文作者: <a href="https://github.com/Louiszhai" target="_blank" rel="external">louis</a><br>本文链接: <a href="http://louiszhai.github.io/2015/12/11/js.replace/">http://louiszhai.github.io/2015/12/11/js.replace/</a></p>
 <p>参考文章</p>
