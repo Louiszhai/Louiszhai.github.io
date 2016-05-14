@@ -575,11 +575,11 @@
   </entry>
   
   <entry>
-    <title><![CDATA[Function.prototype.bind]]></title>
+    <title><![CDATA[Function.prototype.bind方法指南]]></title>
     <link href="http://louiszhai.github.io/2016/01/11/bind/"/>
     <id>http://louiszhai.github.io/2016/01/11/bind/</id>
     <published>2016-01-11T00:01:33.000Z</published>
-    <updated>2016-04-27T01:27:01.000Z</updated>
+    <updated>2016-05-14T01:43:59.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>ES5新增了 Function.prototype.bind 方法, 该方法不同于jquery的bind 方法, 它主要用于固定 this 作用域, 避免各种由于上下文切换造成的语义问题. 常用在 setTimeout, for循环等内部.</p>
 <a id="more"></a>
 <h3 id="bind"><a href="#bind" class="headerlink" title="bind"></a>bind</h3><p>语法: func.bind(thisArg, arg1, arg2, ….)</p>
@@ -823,7 +823,7 @@
     <link href="http://louiszhai.github.io/2015/12/29/array/"/>
     <id>http://louiszhai.github.io/2015/12/29/array/</id>
     <published>2015-12-29T01:00:17.000Z</published>
-    <updated>2016-05-09T16:37:42.000Z</updated>
+    <updated>2016-05-13T10:33:40.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>数组是一种非常重要的数据类型, 它语法简单, 灵活,高效, 在多数编程语言中, 数组都充当着至关重要的角色, 以至于很难想象没有数组的编程语言会是什么样子. 这期我们就来侃侃JavaScript的数组, 趴趴它的那点破事儿. 这篇博客从2015年写到了2016年, 权当是跨年的总结吧, 祝大家新年快乐, 2016更好, 未来更好!</p>
 <a id="more"></a>
 <p>声明: 以下未特别标明的方法均为ES5已实现的方法.</p>
@@ -2118,21 +2118,22 @@
     <link href="http://louiszhai.github.io/2015/12/11/js.replace/"/>
     <id>http://louiszhai.github.io/2015/12/11/js.replace/</id>
     <published>2015-12-11T02:02:47.000Z</published>
-    <updated>2016-05-13T01:46:05.000Z</updated>
+    <updated>2016-05-13T13:27:09.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>String.prototype.replace 方法虽然其貌不扬, 然混迹于江湖, 经常活跃于各大代码角落, 终于自学所成4招, 谋得一些名气. 下面我们基于它的几招, 实现一个简易的js模板引擎.</p>
 <a id="more"></a>
 <h3 id="u8BED_u6CD5"><a href="#u8BED_u6CD5" class="headerlink" title="语法"></a>语法</h3><p><strong>str.replace( regexp | substr, newSubStr | function[, flags] )</strong></p>
 <h3 id="u53C2_u6570"><a href="#u53C2_u6570" class="headerlink" title="参数"></a>参数</h3><ul>
-<li><strong>regexp:</strong> 一个 RegExp 对象。该正则所匹配的内容会被第二个参数的返回值替换掉。</li>
-<li><strong>substr:</strong> 一个要被 newSubStr 替换的字符串。</li>
-<li><strong>newSubStr:</strong> 替换掉第一个参数在原字符串中的匹配部分。该字符串中可以内插一些特殊的变量名。</li>
-<li><strong>function:</strong> 一个用来创建新子字符串的函数，该函数的返回值将替换掉第一个参数匹配到的结果。该函数的参数描述请参考 指定一个函数作为参数 小节。</li>
-<li><strong>flags:</strong> 注意：flags 参数在 v8 内核（Chrome and NodeJs）中不起作用。方法中使用 flags 参数不是符合标准的并且不赞成这样做。</li>
+<li><strong>regexp:</strong> 一个 RegExp 对象. 该正则所匹配的内容会被第二个参数的返回值替换掉。</li>
+<li><strong>substr:</strong> 一个要被 newSubStr 替换的字符串.</li>
+<li><strong>newSubStr:</strong> 替换掉第一个参数在原字符串中的匹配部分. 该字符串中可以内插一些特殊的变量名.</li>
+<li><strong>function:</strong> 一个用来创建新子字符串的函数, 该函数的返回值将替换掉第一个参数匹配到的结果. 该函数的参数描述请参考 指定一个函数作为参数 小节.</li>
+<li><strong>flags:</strong> 注意：flags 参数在 v8 内核（Chrome and NodeJs）中不起作用. 方法中使用 flags 参数不是符合标准的并且不赞成这样做.</li>
 </ul>
 <blockquote>
-<p>简单概括,replace拥有两个参数,第一个是需要替换的字符串或者正则表达式;<br>第二个是新的字符串或者一个function,这样参数便有四种组合</p>
+<p>简单概括,replace拥有两个参数,第一个是需要替换的字符串或者正则表达式;</p>
+<p>第二个是新的字符串或者一个function,这样参数便有四种组合.</p>
 </blockquote>
-<h3 id="u63CF_u8FF0"><a href="#u63CF_u8FF0" class="headerlink" title="描述"></a>描述</h3><p>该方法并不改变调用它的字符串本身，而只是返回替换后的字符串。</p>
+<h3 id="u63CF_u8FF0"><a href="#u63CF_u8FF0" class="headerlink" title="描述"></a>描述</h3><p>该方法并不改变调用它的字符串本身，而只是返回替换后的字符串.</p>
 <h3 id="Demo"><a href="#Demo" class="headerlink" title="Demo"></a>Demo</h3><p>1.一般来说我们使用JS String对象的replace方法的姿势是这个样子:</p>
 <blockquote>
 <p>match1:    String–&gt;String</p>
