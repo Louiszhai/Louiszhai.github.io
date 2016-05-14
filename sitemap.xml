@@ -2,6 +2,11 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://louiszhai.github.io/2016/01/11/cross-domain/</loc>
+    <lastmod>2016-05-14T01:57:33.000Z</lastmod>
+  </url>
+  
+  <url>
     <loc>http://louiszhai.github.io/2016/01/11/bind/</loc>
     <lastmod>2016-05-14T01:43:59.000Z</lastmod>
   </url>
@@ -74,11 +79,6 @@
   <url>
     <loc>http://louiszhai.github.io/2016/03/05/xss/</loc>
     <lastmod>2016-04-27T01:26:33.000Z</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://louiszhai.github.io/2016/01/11/cross-domain/</loc>
-    <lastmod>2016-03-12T03:13:26.000Z</lastmod>
   </url>
   
   <url>

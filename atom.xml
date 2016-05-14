@@ -622,10 +622,10 @@
     <link href="http://louiszhai.github.io/2016/01/11/cross-domain/"/>
     <id>http://louiszhai.github.io/2016/01/11/cross-domain/</id>
     <published>2016-01-11T00:01:33.000Z</published>
-    <updated>2016-03-12T03:13:26.000Z</updated>
+    <updated>2016-05-14T01:57:33.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>同源策略 (Same-Origin Policy) 最早由 Netscape 公司提出, 所谓同源就是要求, 域名, 协议, 端口相同. 非同源的脚本不能访问或者操作其他域的页面对象(如DOM等). 作为著名的安全策略, 虽然它只是一个规范, 并不强制要求,  但现在所有支持 javaScript 的浏览器都会使用这个策略. 以至于该策略成为浏览器最核心最基本的安全功能, 如果缺少了同源策略, web的安全将无从谈起.</p>
 <a id="more"></a>
-<h3 id="u540C_u6E90_u7B56_u7565_u7684_08_u9650_u5236"><a href="#u540C_u6E90_u7B56_u7565_u7684_08_u9650_u5236" class="headerlink" title="同源策略的限制"></a>同源策略的限制</h3><p>同源策略下的web世界, 域的壁垒高筑, 从而保证各个网页相互独立, 互相之间不能直接访问, iframe, ajax 均受其限制, 而script标签不受此限制.</p>
+<h3 id="u540C_u6E90_u7B56_u7565_u7684_u9650_u5236"><a href="#u540C_u6E90_u7B56_u7565_u7684_u9650_u5236" class="headerlink" title="同源策略的限制"></a>同源策略的限制</h3><p>同源策略下的web世界, 域的壁垒高筑, 从而保证各个网页相互独立, 互相之间不能直接访问, iframe, ajax 均受其限制, 而script标签不受此限制.</p>
 <h4 id="iframe_u9650_u5236"><a href="#iframe_u9650_u5236" class="headerlink" title="iframe限制"></a>iframe限制</h4><ul>
 <li>可以访问同域资源, 可读写;</li>
 <li>访问跨域页面时, 只读.</li>
