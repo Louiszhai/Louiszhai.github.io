@@ -2,6 +2,16 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://louiszhai.github.io/2015/12/22/scopeChain/</loc>
+    <lastmod>2016-05-14T02:28:37.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://louiszhai.github.io/2015/12/29/array/</loc>
+    <lastmod>2016-05-14T02:24:10.000Z</lastmod>
+  </url>
+  
+  <url>
     <loc>http://louiszhai.github.io/2016/01/11/cross-domain/</loc>
     <lastmod>2016-05-14T01:57:33.000Z</lastmod>
   </url>
@@ -14,11 +24,6 @@
   <url>
     <loc>http://louiszhai.github.io/2015/12/11/js.replace/</loc>
     <lastmod>2016-05-13T13:27:09.000Z</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://louiszhai.github.io/2015/12/29/array/</loc>
-    <lastmod>2016-05-13T10:33:40.000Z</lastmod>
   </url>
   
   <url>
@@ -79,11 +84,6 @@
   <url>
     <loc>http://louiszhai.github.io/2016/03/05/xss/</loc>
     <lastmod>2016-04-27T01:26:33.000Z</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://louiszhai.github.io/2015/12/22/scopeChain/</loc>
-    <lastmod>2015-12-27T02:35:02.000Z</lastmod>
   </url>
   
 </urlset>

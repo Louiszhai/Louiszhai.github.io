@@ -14,7 +14,7 @@
 <meta property="og:description" content="JavaScript scope chain for while 作用域链 闭包 var">
 <meta property="og:image" content="http://louiszhai.github.io/doc_images/scopeChain01.png">
 <meta property="og:image" content="http://louiszhai.github.io/doc_images/scopeChain02.jpg">
-<meta property="og:updated_time" content="2015-12-27T02:35:02.000Z">
+<meta property="og:updated_time" content="2016-05-14T02:28:37.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="详解JS作用域链及闭包">
 <meta name="twitter:description" content="JavaScript scope chain for while 作用域链 闭包 var">
@@ -212,7 +212,7 @@
 <p>我们再看下面一段代码:</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> t1 = +<span class="keyword">new</span> <span class="built_in">Date</span>();</span><br><span class="line">(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;<span class="comment">//闭包</span></span><br><span class="line">  <span class="keyword">for</span>(<span class="keyword">var</span> i=<span class="number">0</span>,length=array.length;i&lt;length;i++)&#123;</span><br><span class="line">  	<span class="comment">//array.push(i);</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;)();</span><br><span class="line"><span class="keyword">var</span> t2 = +<span class="keyword">new</span> <span class="built_in">Date</span>();</span><br><span class="line"><span class="built_in">console</span>.log(t2-t1);</span><br><span class="line"><span class="comment">//以下是连续5次的运行时间:</span></span><br><span class="line"><span class="comment">//17+19+17+20+18 = 91(ms)</span></span><br></pre></td></tr></table></figure>
 <p>计算一下: 21253/91 = 233 效率提升两百多倍, 为什么呢?</p>
-<p>我们注意到两段代码最大的区别就是, 第二段代码使用了匿名函数包裹for循环. 我们将在后面讲到, 请耐心阅读.</p>
+<p>我们注意到两段代码最大的区别就是, 第二段代码使用了匿名函数包裹for循环. 我们将在后面讲到, 请耐心阅读.</p>
 <h3 id="u4F5C_u7528_u57DF"><a href="#u4F5C_u7528_u57DF" class="headerlink" title="作用域"></a>作用域</h3><p>所谓作用域, <a href="http://blog.csdn.net/yueguanghaidao" target="_blank" rel="external">Skycrab</a> 有句解释还不错, 指的是, 变量在声明它们的函数体以及这个函数体嵌套的任意函数体内都是有定义的.</p>
 <h4 id="js_u4E2D_u53EA_u6709_u51FD_u6570_u4F5C_u7528_u57DF"><a href="#js_u4E2D_u53EA_u6709_u51FD_u6570_u4F5C_u7528_u57DF" class="headerlink" title="js中只有函数作用域"></a>js中只有函数作用域</h4><p>众所周知, JS中并没有块作用域, 只有函数作用域. 如下:</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(<span class="keyword">var</span> i=<span class="number">0</span>;i&lt;<span class="number">10</span>;i++)&#123;</span><br><span class="line">  ;</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">console</span>.log(i);<span class="comment">//10</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="keyword">var</span> a = <span class="number">123</span>;</span><br><span class="line">&#125;</span><br><span class="line">f();</span><br><span class="line"><span class="built_in">console</span>.log(a);<span class="comment">//a is not defined</span></span><br></pre></td></tr></table></figure>
@@ -225,7 +225,7 @@
 <p>综上, 有如下规律:</p>
 <ul>
 <li>不使用var保留字声明变量, 变量提升为全局变量, 而不论变量处于哪种作用域;</li>
-<li>如果不使用var声明,  该变量便可配置, 即可被 delete 保留字删除, 删除后该变量便不可访问; 如果使用var声明, 该变量便不可配置, 即不能被 delete 保留字删除;</li>
+<li>如果不使用var声明,  该变量便可配置, 即可被 delete 保留字删除, 删除后该变量便不可访问; 如果使用var声明, 该变量便不可配置, 即不能被 delete 保留字删除;</li>
 <li>只要是全局变量都可以直接访问, 也可使用 “window.变量名” 来访问, 不管该变量是不是通过var来声明的;</li>
 </ul>
 <h3 id="JS_u4E2D_u7684_u4F5C_u7528_u57DF_u94FE"><a href="#JS_u4E2D_u7684_u4F5C_u7528_u57DF_u94FE" class="headerlink" title="JS中的作用域链"></a>JS中的作用域链</h3><p>函数对象和其它对象一样，拥有可以通过代码访问的属性和一系列仅供JavaScript引擎访问的内部属性。其中一个内部属性是[[Scope]]，由ECMA-262标准第三版定义，该内部属性包含了函数被创建的作用域中对象的集合，这个集合被称为函数的作用域链，它决定了哪些数据能被函数访问。</p>
@@ -282,8 +282,8 @@
 </ul>
 <p>总结一下, 闭包的优点: 共享函数作用域, 便于开放一些接口或变量供外部使用;</p>
 <p>注意事项: 由于闭包可能会使得函数中变量被长期保存在内存中, 从而大量消耗内存, 影响页面性能, 因此不能滥用, 并且在IE浏览中可能导致内存泄露. 解决方法是，在退出函数之前，将不使用的局部变量全部删除.</p>
-<h3 id="for_u5FAA_u73AF_u95EE_u9898_u5206_u6790"><a href="#for_u5FAA_u73AF_u95EE_u9898_u5206_u6790" class="headerlink" title="for循环问题分析"></a>for循环问题分析</h3><p>我们再来看看开篇的for循环问题, 增加匿名函数后, for循环内部的变量便处于匿名函数的局部作用域下, 此时访问 length 属性, 或者访问 i 属性, 都只需要在匿名函数作用域内查找即可, 因此查询效率大大提升(测试数据发现提升有两百多倍).</p>
-<p>使用匿名函数后, 不止是作用域查询更快, 作用域内的变量还与外部隔离, 避免了像 i , length 这样的变量对后续代码产生影响. 可谓一举两得.</p>
+<h3 id="for_u5FAA_u73AF_u95EE_u9898_u5206_u6790"><a href="#for_u5FAA_u73AF_u95EE_u9898_u5206_u6790" class="headerlink" title="for循环问题分析"></a>for循环问题分析</h3><p>我们再来看看开篇的for循环问题, 增加匿名函数后, for循环内部的变量便处于匿名函数的局部作用域下, 此时访问 length 属性, 或者访问 i 属性, 都只需要在匿名函数作用域内查找即可, 因此查询效率大大提升(测试数据发现提升有两百多倍).</p>
+<p>使用匿名函数后, 不止是作用域查询更快, 作用域内的变量还与外部隔离, 避免了像 i , length 这样的变量对后续代码产生影响. 可谓一举两得.</p>
 <h3 id="u8E29_u4E2A_u4F5C_u7528_u57DF_u7684_u5751"><a href="#u8E29_u4E2A_u4F5C_u7528_u57DF_u7684_u5751" class="headerlink" title="踩个作用域的坑"></a>踩个作用域的坑</h3><p>下面我们来踩一个作用域经典的坑.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> div = <span class="built_in">document</span>.getElementsByTagName(<span class="string">"div"</span>);</span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">var</span> i=<span class="number">0</span>,len=div.length;i&lt;len;i++)&#123;</span><br><span class="line">  div[i].onclick = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  	<span class="built_in">console</span>.log(i);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>上述代码的本意是每次点击div, 打印div的索引, 实际上打印的却是 len 的值. 我们来分析下原因.</p>
