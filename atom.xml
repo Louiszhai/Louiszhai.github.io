@@ -579,7 +579,7 @@
     <link href="http://louiszhai.github.io/2016/01/11/bind/"/>
     <id>http://louiszhai.github.io/2016/01/11/bind/</id>
     <published>2016-01-11T00:01:33.000Z</published>
-    <updated>2016-05-14T01:43:59.000Z</updated>
+    <updated>2016-05-17T01:07:43.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>ES5新增了 Function.prototype.bind 方法, 该方法不同于jquery的bind 方法, 它主要用于固定 this 作用域, 避免各种由于上下文切换造成的语义问题. 常用在 setTimeout, for循环等内部.</p>
 <a id="more"></a>
 <h3 id="bind"><a href="#bind" class="headerlink" title="bind"></a>bind</h3><p>语法: func.bind(thisArg, arg1, arg2, ….)</p>
@@ -622,7 +622,7 @@
     <link href="http://louiszhai.github.io/2016/01/11/cross-domain/"/>
     <id>http://louiszhai.github.io/2016/01/11/cross-domain/</id>
     <published>2016-01-11T00:01:33.000Z</published>
-    <updated>2016-05-14T01:57:33.000Z</updated>
+    <updated>2016-05-17T01:07:43.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>同源策略 (Same-Origin Policy) 最早由 Netscape 公司提出, 所谓同源就是要求, 域名, 协议, 端口相同. 非同源的脚本不能访问或者操作其他域的页面对象(如DOM等). 作为著名的安全策略, 虽然它只是一个规范, 并不强制要求,  但现在所有支持 javaScript 的浏览器都会使用这个策略. 以至于该策略成为浏览器最核心最基本的安全功能, 如果缺少了同源策略, web的安全将无从谈起.</p>
 <a id="more"></a>
 <h3 id="u540C_u6E90_u7B56_u7565_u7684_u9650_u5236"><a href="#u540C_u6E90_u7B56_u7565_u7684_u9650_u5236" class="headerlink" title="同源策略的限制"></a>同源策略的限制</h3><p>同源策略下的web世界, 域的壁垒高筑, 从而保证各个网页相互独立, 互相之间不能直接访问, iframe, ajax 均受其限制, 而script标签不受此限制.</p>
@@ -823,7 +823,7 @@
     <link href="http://louiszhai.github.io/2015/12/29/array/"/>
     <id>http://louiszhai.github.io/2015/12/29/array/</id>
     <published>2015-12-29T01:00:17.000Z</published>
-    <updated>2016-05-14T02:24:10.000Z</updated>
+    <updated>2016-05-17T01:07:43.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>数组是一种非常重要的数据类型, 它语法简单, 灵活,高效, 在多数编程语言中, 数组都充当着至关重要的角色, 以至于很难想象没有数组的编程语言会是什么样子. 这期我们就来侃侃JavaScript的数组, 趴趴它的那点破事儿. 这篇博客从2015年写到了2016年, 权当是跨年的总结吧, 祝大家新年快乐, 2016更好, 未来更好!</p>
 <a id="more"></a>
 <p>声明: 以下未特别标明的方法均为ES5已实现的方法.</p>
@@ -1385,7 +1385,7 @@
     <link href="http://louiszhai.github.io/2015/12/22/scopeChain/"/>
     <id>http://louiszhai.github.io/2015/12/22/scopeChain/</id>
     <published>2015-12-22T00:06:13.000Z</published>
-    <updated>2016-05-14T02:28:37.000Z</updated>
+    <updated>2016-05-17T01:07:43.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>上一篇我们讲到for和while循环效率之低, 令人发指. 那么本篇我们将揭晓它们低效率的原因, 并给出优化建议. 欢迎阅读本篇<strong><code>详解JS作用域链及闭包</code></strong>.</p>
 <a id="more"></a>
 <h3 id="u56DE_u987E_u4E0A_u7BC7"><a href="#u56DE_u987E_u4E0A_u7BC7" class="headerlink" title="回顾上篇"></a>回顾上篇</h3><p>请先看上一篇中提到的for循环代码:</p>
@@ -1901,7 +1901,7 @@
     <link href="http://louiszhai.github.io/2015/12/15/prototypeChain/"/>
     <id>http://louiszhai.github.io/2015/12/15/prototypeChain/</id>
     <published>2015-12-15T01:26:28.000Z</published>
-    <updated>2016-04-27T02:32:34.000Z</updated>
+    <updated>2016-05-17T01:07:43.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u6458_u81EAJavaScript_u9AD8_u7EA7_u7A0B_u5E8F_u8BBE_u8BA1_3A"><a href="#u6458_u81EAJavaScript_u9AD8_u7EA7_u7A0B_u5E8F_u8BBE_u8BA1_3A" class="headerlink" title="摘自JavaScript高级程序设计:"></a>摘自JavaScript高级程序设计:</h3><p>继承是OO语言中的一个最为人津津乐道的概念.许多OO语言都支持两种继承方式: <strong>接口继承</strong> 和 <strong>实现继承</strong> .接口继承只继承方法签名,而实现继承则继承实际的方法.由于js中方法没有签名,在ECMAScript中无法实现接口继承.ECMAScript只支持实现继承,而且其 <code>实现继承</code> 主要是依靠原型链来实现的.</p>
 <a id="more"></a> 
 <h3 id="u6982_u5FF5"><a href="#u6982_u5FF5" class="headerlink" title="概念"></a>概念</h3><p>简单回顾下构造函数,原型和实例的关系:</p>
@@ -1916,10 +1916,10 @@
 <p>即: constructor1.prototype = instance2</p>
 <p>鉴于上述游戏规则生效,如果试图引用constructor1构造的实例instance1的某个属性p1:</p>
 <p>1).首先会在instance1内部属性中找一遍;</p>
-<p>2).接着会在instance1.constructor1.prototype中找一遍,而instance1.constructor1.prototype 实际上是instance2, 也就是说在instance2中寻找该属性p1;</p>
-<p>3).如果instance2中还是没有,此时程序不会灰心,它会继续在instance2.constructor2.prototype中寻找…直至Object的原型对象</p>
+<p>2).接着会在instance1.__proto__(constructor1.prototype)中找一遍,而constructor1.prototype 实际上是instance2, 也就是说在instance2中寻找该属性p1;</p>
+<p>3).如果instance2中还是没有,此时程序不会灰心,它会继续在instance2.__proto__(constructor2.prototype)中寻找…直至Object的原型对象</p>
 <blockquote>
-<p>搜索轨迹: instance1–&gt; instance2 –&gt; instance2.constructor2.prototype…Object.prototype</p>
+<p>搜索轨迹: instance1–&gt; instance2 –&gt; constructor2.prototype…–&gt;Object.prototype</p>
 </blockquote>
 <p>这种搜索的轨迹,形似一条长链, 又因prototype在这个游戏规则中充当链接的作用,于是我们把这种实例与原型的链条称作 <strong>原型链</strong> . 下面有个例子</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Father</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">	<span class="keyword">this</span>.property = <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br><span class="line">Father.prototype.getFatherValue = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">	<span class="keyword">return</span> <span class="keyword">this</span>.property;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Son</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">	<span class="keyword">this</span>.sonProperty = <span class="literal">false</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//继承 Father</span></span><br><span class="line">Son.prototype = <span class="keyword">new</span> Father();<span class="comment">//Son.prototype被重写,导致Son.prototype.constructor也一同被重写</span></span><br><span class="line">Son.prototype.getSonVaule = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">	<span class="keyword">return</span> <span class="keyword">this</span>.sonProperty;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> instance = <span class="keyword">new</span> Son();</span><br><span class="line">alert(instance.getFatherValue());<span class="comment">//true</span></span><br></pre></td></tr></table></figure>

@@ -12,7 +12,7 @@
 <meta property="og:url" content="http://louiszhai.github.io/2015/12/15/prototypeChain/index.html">
 <meta property="og:site_name" content="louis blog">
 <meta property="og:description" content="JavaScript 原型链 prototype instanceof typeof  hasOwnProperty new  借用构造函数 组合继承 寄生式继承 寄生组合式继承">
-<meta property="og:updated_time" content="2016-04-27T02:32:34.000Z">
+<meta property="og:updated_time" content="2016-05-17T01:07:43.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="详解JS原型链">
 <meta name="twitter:description" content="JavaScript 原型链 prototype instanceof typeof  hasOwnProperty new  借用构造函数 组合继承 寄生式继承 寄生组合式继承">
@@ -217,10 +217,10 @@
 <p>即: constructor1.prototype = instance2</p>
 <p>鉴于上述游戏规则生效,如果试图引用constructor1构造的实例instance1的某个属性p1:</p>
 <p>1).首先会在instance1内部属性中找一遍;</p>
-<p>2).接着会在instance1.constructor1.prototype中找一遍,而instance1.constructor1.prototype 实际上是instance2, 也就是说在instance2中寻找该属性p1;</p>
-<p>3).如果instance2中还是没有,此时程序不会灰心,它会继续在instance2.constructor2.prototype中寻找…直至Object的原型对象</p>
+<p>2).接着会在instance1.__proto__(constructor1.prototype)中找一遍,而constructor1.prototype 实际上是instance2, 也就是说在instance2中寻找该属性p1;</p>
+<p>3).如果instance2中还是没有,此时程序不会灰心,它会继续在instance2.__proto__(constructor2.prototype)中寻找…直至Object的原型对象</p>
 <blockquote>
-<p>搜索轨迹: instance1–&gt; instance2 –&gt; instance2.constructor2.prototype…Object.prototype</p>
+<p>搜索轨迹: instance1–&gt; instance2 –&gt; constructor2.prototype…–&gt;Object.prototype</p>
 </blockquote>
 <p>这种搜索的轨迹,形似一条长链, 又因prototype在这个游戏规则中充当链接的作用,于是我们把这种实例与原型的链条称作 <strong>原型链</strong> . 下面有个例子</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Father</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">	<span class="keyword">this</span>.property = <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br><span class="line">Father.prototype.getFatherValue = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">	<span class="keyword">return</span> <span class="keyword">this</span>.property;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Son</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">	<span class="keyword">this</span>.sonProperty = <span class="literal">false</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//继承 Father</span></span><br><span class="line">Son.prototype = <span class="keyword">new</span> Father();<span class="comment">//Son.prototype被重写,导致Son.prototype.constructor也一同被重写</span></span><br><span class="line">Son.prototype.getSonVaule = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">	<span class="keyword">return</span> <span class="keyword">this</span>.sonProperty;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> instance = <span class="keyword">new</span> Son();</span><br><span class="line">alert(instance.getFatherValue());<span class="comment">//true</span></span><br></pre></td></tr></table></figure>
