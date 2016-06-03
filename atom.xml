@@ -395,7 +395,7 @@
     <link href="http://louiszhai.github.io/2016/01/12/js.String/"/>
     <id>http://louiszhai.github.io/2016/01/12/js.String/</id>
     <published>2016-01-12T12:27:09.000Z</published>
-    <updated>2016-06-03T05:00:19.000Z</updated>
+    <updated>2016-06-03T08:54:35.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>javaScript 中, 字符串无处不在, 并且所有的字符串方法均来自 String.prototype, 这一节, 我们走进看一看String内部, 探讨那些常用或不常用的字符串操作方法.</p>
 <a id="more"></a>
 <h3 id="String-prototype"><a href="#String-prototype" class="headerlink" title="String.prototype"></a>String.prototype</h3><p>String.prototype 属性指向 String 的原型对象. 以下是它的属性特性:</p>
@@ -516,7 +516,7 @@
 <h6 id="trim"><a href="#trim" class="headerlink" title="trim"></a>trim</h6><p>trim() 方法清除字符串首尾的空白并返回.</p>
 <p>语法: <em>str</em>.trim()</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(<span class="string">"    abc    "</span>.trim());<span class="comment">//abc</span></span><br></pre></td></tr></table></figure>
-<p>trim() 方法是 ECMAScript 5 标准加入的, 它并不支持IE9以下的低版本IE浏览器, 如需支持, 请参考以下兼容写法:</p>
+<p>trim() 方法是 ECMAScript 5.1 标准加入的, 它并不支持IE9以下的低版本IE浏览器, 如需支持, 请参考以下兼容写法:</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(!<span class="built_in">String</span>.prototype.trim) &#123;</span><br><span class="line">  <span class="built_in">String</span>.prototype.trim = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.replace(<span class="regexp">/^\s+|\s+$/g</span>,<span class="string">''</span>);</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h6 id="codePointAt"><a href="#codePointAt" class="headerlink" title="codePointAt"></a>codePointAt</h6><p>codePointAt() 方法返回使用UTF-16编码的给定位置的值的非负整数. 该方法遵循 ES6标准, 并非所有浏览器都支持.</p>
 <p>语法: <em>str</em>.codePointAt(position)</p>

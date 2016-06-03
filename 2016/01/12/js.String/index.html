@@ -12,7 +12,7 @@
 <meta property="og:url" content="http://louiszhai.github.io/2016/01/12/js.String/index.html">
 <meta property="og:site_name" content="louis blog">
 <meta property="og:description" content="JavaScript String String.prototype">
-<meta property="og:updated_time" content="2016-06-03T05:00:19.000Z">
+<meta property="og:updated_time" content="2016-06-03T08:54:35.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="字符串常用方法">
 <meta name="twitter:description" content="JavaScript String String.prototype">
@@ -323,7 +323,7 @@
 <h6 id="trim"><a href="#trim" class="headerlink" title="trim"></a>trim</h6><p>trim() 方法清除字符串首尾的空白并返回.</p>
 <p>语法: <em>str</em>.trim()</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(<span class="string">"    abc    "</span>.trim());<span class="comment">//abc</span></span><br></pre></td></tr></table></figure>
-<p>trim() 方法是 ECMAScript 5 标准加入的, 它并不支持IE9以下的低版本IE浏览器, 如需支持, 请参考以下兼容写法:</p>
+<p>trim() 方法是 ECMAScript 5.1 标准加入的, 它并不支持IE9以下的低版本IE浏览器, 如需支持, 请参考以下兼容写法:</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(!<span class="built_in">String</span>.prototype.trim) &#123;</span><br><span class="line">  <span class="built_in">String</span>.prototype.trim = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.replace(<span class="regexp">/^\s+|\s+$/g</span>,<span class="string">''</span>);</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h6 id="codePointAt"><a href="#codePointAt" class="headerlink" title="codePointAt"></a>codePointAt</h6><p>codePointAt() 方法返回使用UTF-16编码的给定位置的值的非负整数. 该方法遵循 ES6标准, 并非所有浏览器都支持.</p>
 <p>语法: <em>str</em>.codePointAt(position)</p>
