@@ -12,7 +12,7 @@
 <meta property="og:url" content="http://louiszhai.github.io/2016/01/12/js.String/index.html">
 <meta property="og:site_name" content="louis blog">
 <meta property="og:description" content="JavaScript String String.prototype">
-<meta property="og:updated_time" content="2016-04-27T01:26:47.000Z">
+<meta property="og:updated_time" content="2016-06-03T05:00:19.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="字符串常用方法">
 <meta name="twitter:description" content="JavaScript String String.prototype">
@@ -229,7 +229,7 @@
 <li>String.prototype.constructor 指向构造器(String())</li>
 <li>String.prototype.length 表示字符串长度</li>
 </ul>
-<h4 id="u65B9_u6CD5"><a href="#u65B9_u6CD5" class="headerlink" title="方法"></a>方法</h4><p>字符串方法分为两种, 一种是html无关的方法, 一种是html有关的方法. 我们先看第一种. 无论字符串方法如何厉害, 都不至于强大到可以改变原字符串.</p>
+<h4 id="u65B9_u6CD5"><a href="#u65B9_u6CD5" class="headerlink" title="方法"></a>方法</h4><p>字符串方法分为两种, 一种是html无关的方法, 一种是html有关的方法. 我们先看第一种. 但是无论字符串方法如何厉害, 都不至于强大到可以改变原字符串.</p>
 <h5 id="HTML_u65E0_u5173_u7684_u65B9_u6CD5"><a href="#HTML_u65E0_u5173_u7684_u65B9_u6CD5" class="headerlink" title="HTML无关的方法"></a>HTML无关的方法</h5><p>常用的方法有, charAt, charCodeAt, concat, indexOf, lastIndexOf, localeCompare, match, replace, search, slice, split, substr, substring, toLocaleLowerCase, toLocaleUpperCase, toLowerCase, toString, toUpperCase, trim, valueof 等ES5支持的, 以及 codePointAt, contains, endsWith, normalize, repeat, startsWith 等ES6支持的, 还包括 quote, toSource, trimLeft, trimRight 等非标准的.</p>
 <p>接下来我们将对各个方法分别举例阐述其用法. 若没有特别说明, 该方法将兼容所有目前主流浏览器.</p>
 <h6 id="charAt"><a href="#charAt" class="headerlink" title="charAt"></a>charAt</h6><p>charAt() 方法返回字符串中指定位置的字符。</p>
@@ -244,7 +244,7 @@
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(<span class="string">"Hello, World"</span>.charCodeAt(<span class="number">8</span>));<span class="comment">//111</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">"前端工程师"</span>.charCodeAt(<span class="number">2</span>));<span class="comment">//24037, 可见也可以查看中文Unicode编码</span></span><br></pre></td></tr></table></figure>
 <h6 id="concat"><a href="#concat" class="headerlink" title="concat"></a>concat</h6><p>concat() 方法将一个或多个字符串拼接在一起, 组成新的字符串并返回.</p>
 <p>语法: <em>str</em>.concat(string2, string3, …)</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(<span class="string">"早"</span>.concat(<span class="string">"上"</span>,<span class="string">"好"</span>,<span class="string">"各位"</span>));<span class="comment">//早上好各位</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(<span class="string">"早"</span>.concat(<span class="string">"上"</span>,<span class="string">"好"</span>));<span class="comment">//早上好</span></span><br></pre></td></tr></table></figure>
 <p>但是 concat 的性能表现不佳, 强烈推荐使用赋值操作符(+, +=) 代替 concat. “+” 操作符大概快了 concat 几十倍.(数据参考 <a href="http://jsperf.com/concat-vs-plus-vs-join" target="_blank" rel="external">性能测试</a>).</p>
 <h6 id="indexOf"><a href="#indexOf" class="headerlink" title="indexOf"></a>indexOf</h6><h6 id="lastIndexOf"><a href="#lastIndexOf" class="headerlink" title="lastIndexOf"></a>lastIndexOf</h6><p>indexOf() 方法用于查找子字符串在字符串中首次出现的位置. 没有则返回 -1. 该方法严格区分大小写, 并且从左往右查找. 而 lastIndexOf 则从右往左查找, 其它与前者一致.</p>
 <p>语法: str.indexOf(searchValue [, fromIndex=0])</p>
@@ -270,7 +270,7 @@
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> str = <span class="string">"World Internet Conference"</span>;</span><br><span class="line"><span class="built_in">console</span>.log(str.match(<span class="regexp">/[a-d]/i</span>));<span class="comment">//["d", index: 4, input: "World Internet Conference"]</span></span><br><span class="line"><span class="built_in">console</span>.log(str.match(<span class="regexp">/[a-d]/gi</span>));<span class="comment">//["d", "C", "c"]</span></span><br><span class="line"><span class="comment">//RegExp 方法如下</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="regexp">/[a-d]/gi</span>.test(str));<span class="comment">//true</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="regexp">/[a-d]/gi</span>.exec(str));<span class="comment">//["d", index: 4, input: "World Internet Conference"],</span></span><br></pre></td></tr></table></figure>
 <p>由上可知, RegExp.test(str) 方法只要匹配到了一个字符也返回true. 而</p>
 <p>RegExp.exec(str) 方法无论正则中有没有包含 g 标志, RegExp.exec将直接返回第一个匹配结果, 且该结果同 str.match(regexp) 方法不包含 g 标志时的返回一致.</p>
-<h6 id="replace"><a href="#replace" class="headerlink" title="replace"></a>replace</h6><p>该方法在之前已经讲过, 详细请参考 <a href="http://louiszhai.github.io/2015/12/11/js.replace/"><code>详解ECMAScript String.replace</code></a> .</p>
+<h6 id="replace"><a href="#replace" class="headerlink" title="replace"></a>replace</h6><p>该方法在之前已经讲过, 详细请参考 <a href="http://louiszhai.github.io/2015/12/11/js.replace/"><code>String.prototype.replace高阶技能</code></a> .</p>
 <h6 id="search"><a href="#search" class="headerlink" title="search"></a>search</h6><p>search() 方法用于测试字符串对象是否包含某个正则匹配. 相当于正则表达式的 test 方法. 且该方法比 match() 方法更快. 如果匹配成功, search() 返回正则表达式在字符串中首次匹配项的索引, 否则返回-1.</p>
 <p>语法: <em>str</em>.search(regexp)</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> str = <span class="string">"abcdefg"</span>;</span><br><span class="line"><span class="built_in">console</span>.log(str.search(<span class="regexp">/[d-g]/</span>));<span class="comment">//3, 匹配到子串"defg",而d在原字符串中的索引为3</span></span><br></pre></td></tr></table></figure>
@@ -317,6 +317,9 @@
 <h6 id="toString-NaN"><a href="#toString-NaN" class="headerlink" title="toString"></a>toString</h6><h6 id="valueOf-NaN"><a href="#valueOf-NaN" class="headerlink" title="valueOf"></a>valueOf</h6><p>这两个方法都是返回指定对象的字符串形式.</p>
 <p>语法: <em>str</em>.toString(), <em>str</em>.valueOf()</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> str = <span class="string">"abc"</span>;</span><br><span class="line"><span class="built_in">console</span>.log(str.toString());<span class="comment">//abc</span></span><br><span class="line"><span class="built_in">console</span>.log(str.toString()==str.valueOf());<span class="comment">//true</span></span><br></pre></td></tr></table></figure>
+<p>尽管他们是如此的相似, 但仍能抓住他们之间细微的差别, 请尝试运行以下一段代码:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> x = &#123;</span><br><span class="line">    toString: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123; <span class="keyword">return</span> <span class="string">"test"</span>; &#125;,</span><br><span class="line">    valueOf: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123; <span class="keyword">return</span> <span class="number">123</span>; &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">alert(x); <span class="comment">// test</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">"x="</span> + x); <span class="comment">// "x=123"</span></span><br><span class="line"><span class="built_in">console</span>.log(x + <span class="string">"=x"</span>); <span class="comment">// "123=x"</span></span><br><span class="line"><span class="built_in">console</span>.log(x + <span class="string">"1"</span>); <span class="comment">// 1231</span></span><br><span class="line"><span class="built_in">console</span>.log(x + <span class="number">1</span>); <span class="comment">// 124</span></span><br><span class="line"><span class="built_in">console</span>.log([<span class="string">"x="</span>, x].join(<span class="string">""</span>)); <span class="comment">// "x=test"</span></span><br></pre></td></tr></table></figure>
+<p>我们发现当 “+” 操作符存在时, x趋向于转换为数字, 表达式会优先调用 valueOf 方法, 如果调用数组的 join 方法, x趋向于转换为字符串, 表达式会优先调用 toString 方法.</p>
 <h6 id="trim"><a href="#trim" class="headerlink" title="trim"></a>trim</h6><p>trim() 方法清除字符串首尾的空白并返回.</p>
 <p>语法: <em>str</em>.trim()</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(<span class="string">"    abc    "</span>.trim());<span class="comment">//abc</span></span><br></pre></td></tr></table></figure>
@@ -370,6 +373,7 @@
 <p>参考文章</p>
 <ul>
 <li><a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/String/prototype" target="_blank" rel="external">String.prototype - JavaScript | MDN</a></li>
+<li><a href="http://stackoverflow.com/questions/2485632/valueof-vs-tostring-in-javascript" target="_blank" rel="external">valueOf() vs. toString() in Javascript - Stack Overflow</a></li>
 </ul>
 
       
