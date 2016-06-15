@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" >
+  <title>16种方法实现水平居中垂直居中 | louis blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="css 水平居中 垂直居中">
+<meta property="og:type" content="article">
+<meta property="og:title" content="16种方法实现水平居中垂直居中">
+<meta property="og:url" content="http://louiszhai.github.io/2016/03/12/css-center/index.html">
+<meta property="og:site_name" content="louis blog">
+<meta property="og:description" content="css 水平居中 垂直居中">
+<meta property="og:updated_time" content="2016-06-15T01:22:01.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="16种方法实现水平居中垂直居中">
+<meta name="twitter:description" content="css 水平居中 垂直居中">
+  
+    <link rel="alternative" href="/atom.xml" title="louis blog" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay">
+	<input type="text" class="st-default-search-input" style="position:absolute;top: 50px;left: 35px;">
+</div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img src="/i.png" class="js-avatar" style="width: 100%;height: 100%;opacity: 1;">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">louis</a></h1>
+		</hgroup>
+
+		
+		<p class="header-subtitle">程序猿 前端攻城师</p>
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>菜单</li>
+						<li>標籤</li>
+						
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives/">所有文章</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="github" target="_blank" href="https://github.com/Louiszhai" title="github">github</a>
+					        
+								<a class="weibo" target="_blank" href="http://weibo.com/xingyez" title="weibo">weibo</a>
+					        
+								<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						<a href="/tags/CSS/" style="font-size: 15px;">CSS</a> <a href="/tags/JavaScript/" style="font-size: 20px;">JavaScript</a> <a href="/tags/XSS/" style="font-size: 10px;">XSS</a> <a href="/tags/css/" style="font-size: 15px;">css</a>
+					</div>
+				</section>
+				
+				
+				
+
+				
+			</div>
+		</div>
+	</header>				
+</div>
+
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">louis</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+			
+				<img src="/i.png" class="js-avatar" style="width: 100%;height: 100%;opacity: 1;">
+			
+			</div>
+			<hgroup>
+			  <h1 class="header-author">louis</h1>
+			</hgroup>
+			
+			<p class="header-subtitle">程序猿 前端攻城师</p>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives/">所有文章</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="https://github.com/Louiszhai" title="github">github</a>
+			        
+						<a class="weibo" target="_blank" href="http://weibo.com/xingyez" title="weibo">weibo</a>
+			        
+						<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+
+      <div class="body-wrap"><article id="post-css-center" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/03/12/css-center/" class="article-date">
+  	<time datetime="2016-03-12T11:03:04.000Z" itemprop="datePublished">2016-03-12</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      16种方法实现水平居中垂直居中
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CSS/">CSS</a></li></ul>
+	</div>
+
+        
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          <div id="toc" class="toc-article">
+    <div class="toc-title">目录</div>
+    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#u5BFC_u8BFB"><span class="toc-text">导读</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u6C34_u5E73_u5C45_u4E2D"><span class="toc-text">水平居中</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u5782_u76F4_u5C45_u4E2D"><span class="toc-text">垂直居中</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#u5355_u884C_u6587_u672C"><span class="toc-text">单行文本</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#u884C_u5185_u5757_u7EA7_u5143_u7D20"><span class="toc-text">行内块级元素</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#u5143_u7D20_u9AD8_u5EA6_u4E0D_u5B9A"><span class="toc-text">元素高度不定</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#u5143_u7D20_u9AD8_u5EA6_u56FA_u5B9A"><span class="toc-text">元素高度固定</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u603B_u7ED3"><span class="toc-text">总结</span></a></li></ol>
+</div>
+      
+        <h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>熟悉水平居中和垂直居中的方法, 不为别的, 就为用的时候能够信手拈来. 下面直接步入正题.</p>
+<a id="more"></a>
+<h3 id="u6C34_u5E73_u5C45_u4E2D"><a href="#u6C34_u5E73_u5C45_u4E2D" class="headerlink" title="水平居中"></a>水平居中</h3><p>1) 若是行内元素, 给其父元素设置 text-align:center,即可实现行内元素水平居中.</p>
+<p>2) 若是块级元素, 该元素设置 margin:0 auto即可.</p>
+<p>3) 若子元素包含 float:left 属性, 为了让子元素水平居中, 则可让父元素宽度设置为fit-content,并且配合margin, 作如下设置:</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="class">.parent</span><span class="rules">&#123;</span><br><span class="line">  	<span class="rule"><span class="attribute">width</span>:<span class="value"> -moz-fit-content</span></span>;</span><br><span class="line">	<span class="rule"><span class="attribute">width</span>:<span class="value"> -webkit-fit-content</span></span>;</span><br><span class="line">	<span class="rule"><span class="attribute">width</span>:<span class="value">fit-content</span></span>;</span><br><span class="line">	<span class="rule"><span class="attribute">margin</span>:<span class="value"><span class="number">0</span> auto</span></span>;</span><br><span class="line">&#125;</span></span><br></pre></td></tr></table></figure>
+<p>fit-content是CSS3中给width属性新加的一个属性值,它配合margin可以轻松实现水平居中, 目前只支持Chrome 和 Firefox浏览器.</p>
+<p>4) 使用flex布局, 可以轻松的实现水平居中, 子元素设置如下:</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="class">.son</span><span class="rules">&#123;</span><br><span class="line">	<span class="rule"><span class="attribute">display</span>:<span class="value"> flex</span></span>;</span><br><span class="line">	<span class="rule"><span class="attribute">justify-content</span>:<span class="value"> center</span></span>;</span><br><span class="line">&#125;</span></span><br></pre></td></tr></table></figure>
+<p>5) 使用css3 盒模型, 父元素display: box;box-pack: center;如下设置:</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="class">.parent</span> <span class="rules">&#123;</span><br><span class="line">	<span class="rule"><span class="attribute">display</span>:<span class="value"> -webkit-box</span></span>;</span><br><span class="line">	<span class="rule"><span class="attribute">-webkit-box-orient</span>:<span class="value"> horizontal</span></span>;</span><br><span class="line">	<span class="rule"><span class="attribute">-webkit-box-pack</span>:<span class="value"> center</span></span>;</span><br><span class="line">	<span class="rule"><span class="attribute">display</span>:<span class="value"> -moz-box</span></span>;</span><br><span class="line">	<span class="rule"><span class="attribute">-moz-box-orient</span>:<span class="value"> horizontal</span></span>;</span><br><span class="line">	<span class="rule"><span class="attribute">-moz-box-pack</span>:<span class="value"> center</span></span>;</span><br><span class="line">	<span class="rule"><span class="attribute">display</span>:<span class="value"> -o-box</span></span>;</span><br><span class="line">  	<span class="rule"><span class="attribute">-o-box-orient</span>:<span class="value"> horizontal</span></span>;</span><br><span class="line">  	<span class="rule"><span class="attribute">-o-box-pack</span>:<span class="value"> center</span></span>;</span><br><span class="line">  	<span class="rule"><span class="attribute">display</span>:<span class="value"> -ms-box</span></span>;</span><br><span class="line">  	<span class="rule"><span class="attribute">-ms-box-orient</span>:<span class="value"> horizontal</span></span>;</span><br><span class="line">  	<span class="rule"><span class="attribute">-ms-box-pack</span>:<span class="value"> center</span></span>;</span><br><span class="line">  	<span class="rule"><span class="attribute">display</span>:<span class="value"> box</span></span>;</span><br><span class="line">  	<span class="rule"><span class="attribute">box-orient</span>:<span class="value"> horizontal</span></span>;</span><br><span class="line">  	<span class="rule"><span class="attribute">box-pack</span>:<span class="value"> center</span></span>;</span><br><span class="line">&#125;</span></span><br></pre></td></tr></table></figure>
+<p>6) 使用CSS3中新增的transform属性, 子元素设置如下:</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class">.son</span><span class="rules">&#123;</span><br><span class="line">	<span class="rule"><span class="attribute">position</span>:<span class="value">absolute</span></span>;</span><br><span class="line">  	<span class="rule"><span class="attribute">left</span>:<span class="value"><span class="number">50%</span></span></span>;</span><br><span class="line">  	<span class="rule"><span class="attribute">transform</span>:<span class="value"><span class="function">translate</span>(-<span class="number">50%</span>,<span class="number">0</span>)</span></span>;</span><br><span class="line">&#125;</span></span><br></pre></td></tr></table></figure>
+<p>7) 使用绝对定位方式, 以及负值的margin-left, 子元素设置如下:</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="class">.son</span><span class="rules">&#123;</span><br><span class="line">	<span class="rule"><span class="attribute">position</span>:<span class="value">absolute</span></span>;</span><br><span class="line">	<span class="rule"><span class="attribute">width</span>:<span class="value">固定</span></span>;</span><br><span class="line">    <span class="rule"><span class="attribute">left</span>:<span class="value"><span class="number">50%</span></span></span>;</span><br><span class="line">    <span class="rule"><span class="attribute">margin-left</span>:<span class="value">-<span class="number">0.5</span>宽度</span></span>;</span><br><span class="line">&#125;</span></span><br></pre></td></tr></table></figure>
+<p>8) 使用绝对定位方式, 以及left:0;right:0;margin:0 auto; 子元素设置如下:</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class">.son</span><span class="rules">&#123;</span><br><span class="line">	<span class="rule"><span class="attribute">position</span>:<span class="value">absolute</span></span>;</span><br><span class="line">	<span class="rule"><span class="attribute">width</span>:<span class="value">固定</span></span>;</span><br><span class="line">	<span class="rule"><span class="attribute">left</span>:<span class="value"><span class="number">0</span></span></span>;</span><br><span class="line">	<span class="rule"><span class="attribute">right</span>:<span class="value"><span class="number">0</span></span></span>;</span><br><span class="line">	<span class="rule"><span class="attribute">margin</span>:<span class="value"><span class="number">0</span> auto</span></span>;</span><br><span class="line">&#125;</span></span><br></pre></td></tr></table></figure>
+<h3 id="u5782_u76F4_u5C45_u4E2D"><a href="#u5782_u76F4_u5C45_u4E2D" class="headerlink" title="垂直居中"></a>垂直居中</h3><h4 id="u5355_u884C_u6587_u672C"><a href="#u5355_u884C_u6587_u672C" class="headerlink" title="单行文本"></a>单行文本</h4><p>1) 若元素是单行文本, 则可设置 line-height 等于父元素高度</p>
+<h4 id="u884C_u5185_u5757_u7EA7_u5143_u7D20"><a href="#u884C_u5185_u5757_u7EA7_u5143_u7D20" class="headerlink" title="行内块级元素"></a>行内块级元素</h4><p>2) 若元素是行内块级元素, 基本思想是使用display: inline-block, vertical-align: middle和一个伪元素让内容块处于容器中央.</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="class">.parent</span><span class="pseudo">::after</span>, <span class="class">.son</span><span class="rules">&#123;</span><br><span class="line">	<span class="rule"><span class="attribute">display</span>:<span class="value">inline-block</span></span>;</span><br><span class="line">	<span class="rule"><span class="attribute">vertical-align</span>:<span class="value">middle</span></span>;</span><br><span class="line">&#125;</span></span><br><span class="line"><span class="class">.parent</span><span class="pseudo">::after</span><span class="rules">&#123;</span><br><span class="line">	<span class="rule"><span class="attribute">content</span>:<span class="value"><span class="string">''</span></span></span>;</span><br><span class="line">	<span class="rule"><span class="attribute">height</span>:<span class="value"><span class="number">100%</span></span></span>;</span><br><span class="line">&#125;</span></span><br></pre></td></tr></table></figure>
+<p>这是一种很流行的方法, 也适应IE7.</p>
+<h4 id="u5143_u7D20_u9AD8_u5EA6_u4E0D_u5B9A"><a href="#u5143_u7D20_u9AD8_u5EA6_u4E0D_u5B9A" class="headerlink" title="元素高度不定"></a>元素高度不定</h4><p>3) 可用 <strong>vertical-align</strong> 属性, 而vertical-align只有在父层为 td 或者 th 时, 才会生效, 对于其他块级元素, 例如 div、p 等, 默认情况是不支持的. 为了使用vertical-align, 我们需要设置父元素display:table, 子元素 display:table-cell;vertical-align:middle;</p>
+<p><strong>优点</strong></p>
+<p>元素高度可以动态改变, 不需再CSS中定义, 如果父元素没有足够空间时, 该元素内容也不会被截断.</p>
+<p><strong>缺点</strong></p>
+<p>IE6~7, 甚至IE8 beta中无效.</p>
+<p>4) 可用 <strong>Flex</strong>, 这是CSS布局未来的趋势. Flexbox是CSS3新增属性, 设计初衷是为了解决像垂直居中这样的常见布局问题. 相关的文章如《<a href="http://coding.smashingmagazine.com/2013/05/22/centering-elements-with-flexbox/" target="_blank" rel="external">Centering Elements with Flexbox</a>》</p>
+<p>父元素做如下设置即可保证子元素垂直居中:</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="class">.parent</span> <span class="rules">&#123;</span><br><span class="line">  <span class="rule"><span class="attribute">display</span>:<span class="value"> flex</span></span>;</span><br><span class="line">  <span class="rule"><span class="attribute">align-items</span>:<span class="value"> center</span></span>;</span><br><span class="line">&#125;</span></span><br></pre></td></tr></table></figure>
+<p><strong>优点</strong></p>
+<ul>
+<li>内容块的宽高任意, 优雅的溢出.</li>
+</ul>
+<ul>
+<li>可用于更复杂高级的布局技术中.</li>
+</ul>
+<p><strong>缺点</strong></p>
+<ul>
+<li>IE8/IE9不支持</li>
+<li>需要浏览器厂商前缀</li>
+<li>渲染上可能会有一些问题</li>
+</ul>
+<p>5) 使用CSS3盒模型</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class">.parent</span> <span class="rules">&#123;</span><br><span class="line">  	<span class="rule"><span class="attribute">display</span>:<span class="value"> box</span></span>;</span><br><span class="line">  	<span class="rule"><span class="attribute">box-orient</span>:<span class="value"> vertical</span></span>;</span><br><span class="line">  	<span class="rule"><span class="attribute">box-pack</span>:<span class="value"> center</span></span>;</span><br><span class="line">&#125;</span></span><br></pre></td></tr></table></figure>
+<p><strong>优点</strong></p>
+<p>实现简单, 扩展性强</p>
+<p><strong>缺点</strong></p>
+<p>兼容性差, 不支持IE</p>
+<p>6) 可用 <strong>transform</strong> , 设置父元素相对定位(position:relative), 子元素如下css样式:</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class">.son</span><span class="rules">&#123;</span><br><span class="line">	<span class="rule"><span class="attribute">position</span>:<span class="value">absolute</span></span>;</span><br><span class="line">	<span class="rule"><span class="attribute">top</span>:<span class="value"><span class="number">50%</span></span></span>;</span><br><span class="line">	<span class="rule"><span class="attribute">-webkit-transform</span>:<span class="value"> <span class="function">translate</span>(-<span class="number">50%</span>,-<span class="number">50%</span>)</span></span>;  </span><br><span class="line">	<span class="rule"><span class="attribute">-ms-transform</span>:<span class="value"> <span class="function">translate</span>(-<span class="number">50%</span>,-<span class="number">50%</span>)</span></span>;</span><br><span class="line">	<span class="rule"><span class="attribute">transform</span>:<span class="value"> <span class="function">translate</span>(-<span class="number">50%</span>,-<span class="number">50%</span>)</span></span>;</span><br><span class="line">&#125;</span></span><br></pre></td></tr></table></figure>
+<p><strong>优点</strong></p>
+<p>代码量少</p>
+<p><strong>缺点</strong></p>
+<p>IE8不支持, 属性需要追加浏览器厂商前缀, 可能干扰其他 transform 效果, 某些情形下会出现文本或元素边界渲染模糊的现象.</p>
+<h4 id="u5143_u7D20_u9AD8_u5EA6_u56FA_u5B9A"><a href="#u5143_u7D20_u9AD8_u5EA6_u56FA_u5B9A" class="headerlink" title="元素高度固定"></a>元素高度固定</h4><p>7) 设置父元素相对定位(position:relative), 子元素如下css样式:</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="class">.son</span><span class="rules">&#123;</span><br><span class="line">	<span class="rule"><span class="attribute">position</span>:<span class="value">absolute</span></span>;</span><br><span class="line">	<span class="rule"><span class="attribute">top</span>:<span class="value"><span class="number">50%</span></span></span>;</span><br><span class="line">	<span class="rule"><span class="attribute">height</span>:<span class="value">固定</span></span>;</span><br><span class="line">	<span class="rule"><span class="attribute">margin-top</span>:<span class="value">-<span class="number">0.5</span>高度</span></span>;</span><br><span class="line">&#125;</span></span><br></pre></td></tr></table></figure>
+<p><strong>优点</strong></p>
+<p>适用于所有浏览器.</p>
+<p><strong>缺点</strong></p>
+<p>父元素空间不够时, 子元素可能不可见(当浏览器窗口缩小时,滚动条不出现时).如果子元素设置了overflow:auto, 则高度不够时, 会出现滚动条.</p>
+<p>8) 设置父元素相对定位(position:relative), 子元素如下css样式:</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class">.son</span><span class="rules">&#123;</span><br><span class="line">	<span class="rule"><span class="attribute">position</span>:<span class="value">absolute</span></span>;</span><br><span class="line">	<span class="rule"><span class="attribute">height</span>:<span class="value">固定</span></span>;</span><br><span class="line">	<span class="rule"><span class="attribute">top</span>:<span class="value"><span class="number">0</span></span></span>;</span><br><span class="line">	<span class="rule"><span class="attribute">bottom</span>:<span class="value"><span class="number">0</span></span></span>;</span><br><span class="line">	<span class="rule"><span class="attribute">margin</span>:<span class="value">auto <span class="number">0</span></span></span>;</span><br><span class="line">&#125;</span></span><br></pre></td></tr></table></figure>
+<p><strong>优点</strong></p>
+<p>简单</p>
+<p><strong>缺点</strong></p>
+<p>没有足够空间时, 子元素会被截断, 但不会有滚动条.</p>
+<h3 id="u603B_u7ED3"><a href="#u603B_u7ED3" class="headerlink" title="总结"></a>总结</h3><p>水平居中较为简单, 共提供了8种方法, 一般情况下 text-align:center,marin:0 auto; 足矣</p>
+<ul>
+<li>① text-align:center;</li>
+</ul>
+<ul>
+<li>② margin:0 auto;</li>
+<li>③ width:fit-content;</li>
+<li>④ flex</li>
+<li>⑤ 盒模型</li>
+<li>⑥ transform</li>
+<li>⑦ ⑧ 两种不同的绝对定位方法</li>
+</ul>
+<p>垂直居中, 共提供了8种方法.</p>
+<ul>
+<li>① 单行文本, line-height</li>
+<li>② 行内块级元素, 使用 display: inline-block, vertical-align: middle; 加上伪元素辅助实现</li>
+<li>③ vertical-align</li>
+<li>④ flex</li>
+<li>⑤ 盒模型</li>
+<li>⑥ transform</li>
+<li>⑦ ⑧ 两种不同的绝对定位方法</li>
+</ul>
+<p>我们发现, flex, 盒模型, transform, 绝对定位, 这几种方法同时适用于水平居中和垂直居中.</p>
+<p>希望对大家有所帮助.</p>
+<hr>
+<p>本问就讨论这么多内容,大家有什么问题或好的想法欢迎在下方参与<a href="#respond">留言和评论</a>.</p>
+<p>本文作者: <a href="https://github.com/Louiszhai" target="_blank" rel="external">louis</a></p>
+<p>本文链接: <a href="http://louiszhai.github.io/2016/03/12/css-center/">http://louiszhai.github.io/2016/03/12/css-center/</a></p>
+<p>参考文章</p>
+<ul>
+<li><a href="http://blog.csdn.net/freshlover/article/details/11579669" target="_blank" rel="external">盘点8种CSS实现垂直居中水平居中的绝对定位居中技术 - freshlover的专栏 - 博客频道 - CSDN.NET</a></li>
+<li><a href="https://www.smashingmagazine.com/2013/05/centering-elements-with-flexbox/" target="_blank" rel="external">Designing CSS Layouts With Flexbox Is As Easy As Pie – Smashing Magazine</a></li>
+<li><a href="http://www.w3cplus.com/css/elements-horizontally-center-with-css.html" target="_blank" rel="external">六种实现元素水平居中<em>水平居中, 垂直居中 教程\</em>大漠</a></li>
+</ul>
+
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2016/03/23/css-margin/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption"><</strong>
+      <div class="article-nav-title">
+        
+          你不知道的margin属性
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2016/03/12/css-float/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">float深入分析</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share_jia">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">分享到: &nbsp; </span>
+		<a class="jiathis_button_facebook"></a> 
+    <a class="jiathis_button_twitter"></a>
+    <a class="jiathis_button_plus"></a> 
+    <a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+
+
+
+<div class="duoshuo">
+	<div class="ds-thread" data-thread-key="css-center" data-title="16种方法实现水平居中垂直居中" data-url="http://louiszhai.github.io/2016/03/12/css-center/"></div>
+	<style>
+		#ds-reset .ds-avatar img{width:54px;height:54px;border-radius:27px;-webkit-border-radius:27px;-moz-border-radius:27px;box-shadow:inset 0 -1px 0 #3333sf;-webkit-box-shadow:inset 0 -1px 0 #3333sf;-webkit-transition:0.4s;-webkit-transition:-webkit-transform 0.4s ease-out;transition:transform 0.4s ease-out;-moz-transition:-moz-transform 0.4s ease-out;}
+		#ds-reset .ds-avatar img:hover{box-shadow:0 0 10px #fff;rgba(255,255,255,.6),inset 0 0 20px rgba(255,255,255,1);-webkit-box-shadow:0 0 10px #fff;rgba(255,255,255,.6),inset 0 0 20px rgba(255,255,255,1);transform:rotateZ(360deg);-webkit-transform:rotateZ(360deg);-moz-transform:rotateZ(360deg);}
+		p.ds-powered-by,#ds-sync-checkbox,.ds-sync label{display:none!important;}
+		#ds-reset .ds-rounded-top{-webkit-border-top-right-radius:0px;-webkit-border-top-left-radius:0px;border-top-right-radius:0px;border-top-left-radius:0px;}
+		#ds-thread #ds-reset .ds-textarea-wrapper{background:#fff;border:0;margin-bottom:20px;padding-right:0px;}
+		#ds-thread #ds-reset .ds-textarea-wrapper textarea{min-height:80px;border:1px solid #ccc;padding:10px;-webkit-appearance:none;border-radius:0;background-color:#FFFFFF;border-color:#cccccc;box-shadow:inset 0 1px 2px rgba(0,0,0,0.1);color:rgba(0,0,0,0.75);-webkit-box-sizing:border-box;box-sizing:border-box;-webkit-transition:border-color 0.15s linear,background 0.15s linear;-moz-transition:border-color 0.15s linear,background 0.15s linear;-ms-transition:border-color 0.15s linear,background 0.15s linear;-o-transition:border-color 0.15s linear,background 0.15s linear;transition:border-color 0.15s linear,background 0.15s linear;}
+		/*#ds-thread #ds-reset .ds-textarea-wrapper textarea:focus{border-color:#999999;background:#fafafa;outline:none;}*/
+		#ds-thread #ds-reset .ds-post-options{border-bottom-left-radius:0px;-webkit-border-bottom-left-radius:0px;border:none;background:none!important;}
+		#ds-reset .ds-textarea-wrapper textarea:focus{border-color:#66afe9;outline:0;-webkit-box-shadow:inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);box-shadow:inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);}
+		#ds-thread #ds-reset .ds-post-button:hover,#ds-thread #ds-reset .ds-post-button:focus{
+		    background-color: #51a351;
+		    background-position: 0 -32px;
+		    color:white;
+		}
+		#ds-thread #ds-reset .ds-post-toolbar,#ds-reset .ds-avatar{box-shadow:none;}
+		#ds-thread #ds-reset .ds-textarea-wrapper textarea:focus{
+	    	/*background: none repeat scroll 0 0 #F4FAFF;*/
+	    	border-color:#9DD4FD;
+	    	border-width:1px;
+	    	box-shadow:0 1px 1px rgba(0,0,0,0.075) inset, 0 0 8px rgba(82, 168, 236, 0.6);
+	    	outline:0 none;
+    	}
+		#ds-thread #ds-reset .ds-textarea-wrapper textarea:active{
+	    	/*background: none repeat scroll 0 0 #F4FAFF;*/
+	    	border-width:1px;
+	    	border-color:#9DD4FD;
+	    	box-shadow:0 1px 1px rgba(0,0,0,0.075) inset, 0 0 8px rgba(82, 168, 236, 0.6);
+	    	outline:0 none;
+    	}
+    	#ds-thread #ds-reset .ds-post-button{
+    		box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset, 0 1px 2px rgba(0, 0, 0, 0.05);
+		    border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+		    border-width: 1px;
+		    border-style: solid;
+		    border-radius: 3px;
+		    background: #5bb75b;
+		    color:white;
+		    text-shadow:none;
+		    transition:background-color 300ms ease-out;
+    	}
+    	#ds-reset .ds-avatar{
+    		background-color:initial;
+    	}
+
+	</style>
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"true"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+
+		window.addEventListener('hashchange', function() {
+            if (window.location.hash === '#respond') {
+                $('.duoshuo textarea').focus();
+            }
+        });
+	})();
+	</script>
+</div>
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2016 louis
+
+        <script type="text/javascript">if(location.href.indexOf('localhost')<0){var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan style='position:relative;top:2px' id='cnzz_stat_icon_1256923583'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s11.cnzz.com/z_stat.php%3Fid%3D1256923583%26show%3Dpic' type='text/javascript'%3E%3C/script%3E"));}</script>
+
+    	</div>
+      	<div class="footer-right">
+      		<a href="https://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+  
+  _st('install','4AmBuvmx4Cy-3hvyxeh8','2.0.0');
+</script>
+    </div>
+    
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+
+
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: false,
+		animate: false,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="/js/jquery-1.9.1.min.js" type="text/javascript"></script>
+<script src="/js/main.js" type="text/javascript"></script>
+
+
+
+
+
+
+  </div>
+  <a href="https://github.com/Louiszhai" style="position: fixed; top: 0; right: 0; border: 0;"><img source="https://camo.githubusercontent.com/a6677b08c955af8400f44c6298f40e7d19cc5b2d/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677261795f3664366436642e706e67" src="/img/fork_me_on_github.png" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png"></a>
+</body>
+</html>

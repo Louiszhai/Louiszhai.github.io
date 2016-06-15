@@ -2,6 +2,16 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://louiszhai.github.io/2016/03/12/css-center/</loc>
+    <lastmod>2016-06-15T01:22:01.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://louiszhai.github.io/2016/06/13/regexp/</loc>
+    <lastmod>2016-06-15T01:13:08.000Z</lastmod>
+  </url>
+  
+  <url>
     <loc>http://louiszhai.github.io/2016/01/12/js.String/</loc>
     <lastmod>2016-06-03T08:54:35.000Z</lastmod>
   </url>

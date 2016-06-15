@@ -4,7 +4,7 @@
   <subtitle><![CDATA[程序猿 前端攻城师]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://louiszhai.github.io/"/>
-  <updated>2016-04-27T01:26:57.000Z</updated>
+  <updated>2016-06-15T01:13:08.000Z</updated>
   <id>http://louiszhai.github.io/</id>
   
   <author>
@@ -13,6 +13,575 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[无正则不前端]]></title>
+    <link href="http://louiszhai.github.io/2016/06/13/regexp/"/>
+    <id>http://louiszhai.github.io/2016/06/13/regexp/</id>
+    <published>2016-06-13T00:24:55.000Z</published>
+    <updated>2016-06-15T01:13:08.000Z</updated>
+    <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>有关正则表达的介绍, 无须我多言. 这里借助 Jeffrey Friedl 的&lt;精通正则表达式&gt; 一书的序言抛个砖.</p>
+<blockquote>
+<p>​    “如果罗列计算机软件领域的伟大发明, 我相信绝对不会超过二十项, 在这个名单当中, 当然应该包括分组交换网络, Web, Lisp, 哈希算法, UNIX, 编译技术, 关系模型, 面向对象, XML这些大名鼎鼎的家伙, 而正则表达式也绝对不应该被漏掉. </p>
+<p>​     对很多实际工作而言, 正则表达式简直是灵丹妙药, 能够成百倍的提高开发效率和程序质量, 正则表达式在生物信息学和人类基因图谱的研究中所发挥的关键作用, 更是被传为佳话. CSDN的创始人蒋涛先生在早年开发专业软件产品时, 就曾经体验过这一工具的巨大威力, 并且一直印象深刻.”</p>
+</blockquote>
+<p>因此, 我们没有理由不去了解正则表达式, 甚至是熟练掌握并运行它.</p>
+<a id="more"></a>
+<h3 id="u56DE_u987E_u5386_u53F2"><a href="#u56DE_u987E_u5386_u53F2" class="headerlink" title="回顾历史"></a>回顾历史</h3><p>如果非要讨论正则表达式的渊源, 最早可以追溯至对人类神经系统如何工作的早期研究. Warren McCulloch 和 Walter Pitts 这两位神经生理学家研究出一种数学方式来描述这些神经网络.</p>
+<p>1956 年, 一位叫 Stephen Kleene 的数学家在 McCulloch 和 Pitts 早期工作的基础上, 发表了一篇标题为”神经网事件的表示法”的论文, 引入了正则表达式的概念.</p>
+<p>随后, 发现可以将这一工作应用于使用 Ken Thompson 的计算搜索算法的一些早期研究, Ken Thompson 是 Unix 的主要发明人. 正则表达式的第一个实用应用程序就是 Unix 中的  qed 编辑器.</p>
+<p>至此之后, 正则表达式成为家喻户晓的文本处理工具, 几乎各大编程语言都以支持正则表达式作为卖点, 当然 JavaScript 也不例外.</p>
+<h3 id="u6B63_u5219_u8868_u8FBE_u5F0F_u7684_u5B9A_u4E49"><a href="#u6B63_u5219_u8868_u8FBE_u5F0F_u7684_u5B9A_u4E49" class="headerlink" title="正则表达式的定义"></a>正则表达式的定义</h3><p>正则表达式是由普通字符和特殊字符(也叫元字符)组成的文字模板.</p>
+<h3 id="u6B63_u5219_u7684_u51E0_u5927_u5BB6_u65CF"><a href="#u6B63_u5219_u7684_u51E0_u5927_u5BB6_u65CF" class="headerlink" title="正则的几大家族"></a>正则的几大家族</h3><h4 id="u6B63_u5219_u8868_u8FBE_u5F0F_u5206_u7C7B"><a href="#u6B63_u5219_u8868_u8FBE_u5F0F_u5206_u7C7B" class="headerlink" title="正则表达式分类"></a>正则表达式分类</h4><p>在 linux 和 osx 下, 常见的正则表达式, 至少有以下三种: </p>
+<ul>
+<li>基本的正则表达式( Basic Regular Expression 又叫 Basic RegEx  简称 BREs )</li>
+<li>扩展的正则表达式( Extended Regular Expression 又叫 Extended RegEx 简称 EREs )</li>
+<li>Perl 的正则表达式( Perl Regular Expression 又叫 Perl RegEx 简称 PREs )</li>
+</ul>
+<h4 id="u6B63_u5219_u8868_u8FBE_u5F0F_u6BD4_u8F83"><a href="#u6B63_u5219_u8868_u8FBE_u5F0F_u6BD4_u8F83" class="headerlink" title="正则表达式比较"></a>正则表达式比较</h4><table>
+<thead>
+<tr>
+<th>字符</th>
+<th>说明</th>
+<th>Basic RegEx</th>
+<th>Extended RegEx</th>
+<th>python RegEx</th>
+<th>Perl regEx</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>转义</td>
+<td></td>
+<td>\</td>
+<td>\</td>
+<td>\</td>
+<td>\</td>
+</tr>
+<tr>
+<td>^</td>
+<td>匹配行首，例如’^dog’匹配以字符串dog开头的行（注意：awk 指令中，’^’则是匹配字符串的开始）</td>
+<td>^</td>
+<td>^</td>
+<td>^</td>
+<td>^</td>
+</tr>
+<tr>
+<td>$</td>
+<td>匹配行尾，例如：’^、dog$’匹配以字符串 dog 为结尾的行（注意：awk 指令中，’$’则是匹配字符串的结尾）</td>
+<td>$</td>
+<td>$</td>
+<td>$</td>
+<td>$</td>
+</tr>
+<tr>
+<td>^$</td>
+<td>匹配空行</td>
+<td>^$</td>
+<td>^$</td>
+<td>^$</td>
+<td>^$</td>
+</tr>
+<tr>
+<td>^string$</td>
+<td>匹配行，例如：’^dog$’匹配只含一个字符串 dog 的行</td>
+<td>^string$</td>
+<td>^string$</td>
+<td>^string$</td>
+<td>^string$</td>
+</tr>
+<tr>
+<td>\&lt;</td>
+<td>匹配单词，例如：’\&lt;frog’ （等价于’\bfrog’），匹配以 frog 开头的单词</td>
+<td>\&lt;</td>
+<td>\&lt;</td>
+<td><strong>不支持</strong></td>
+<td><strong>不支持</strong>（但可以使用\b来匹配单词，例如：’\bfrog’）</td>
+</tr>
+<tr>
+<td>></td>
+<td>匹配单词，例如：’frog>‘（等价于’frog\b ‘），匹配以 frog 结尾的单词</td>
+<td>></td>
+<td>></td>
+<td><strong>不支持</strong></td>
+<td><strong>不支持</strong>（但可以使用\b来匹配单词，例如：’frog\b’）</td>
+</tr>
+<tr>
+<td>\<x\></x\></td>
+<td>匹配一个单词或者一个特定字符，例如：’\<frog\>‘（等价于’\bfrog\b’）、’\<g\>‘</g\></frog\></td>
+<td>\<x\></x\></td>
+<td>\<x\></x\></td>
+<td><strong>不支持</strong></td>
+<td><strong>不支持</strong>（但可以使用\b来匹配单词，例如：’\bfrog\b’</td>
+</tr>
+<tr>
+<td>()</td>
+<td>匹配表达式，例如：不支持’（frog）’</td>
+<td><strong>不支持</strong>（但可以使用，如：dog</td>
+<td>()</td>
+<td>()</td>
+<td>()</td>
+</tr>
+<tr>
+<td></td>
+<td>匹配表达式，例如：不支持’（frog）’</td>
+<td></td>
+<td><strong>不支持</strong>（同())</td>
+<td><strong>不支持</strong>（同())</td>
+<td><strong>不支持</strong>（同())</td>
+</tr>
+<tr>
+<td>？</td>
+<td>匹配前面的子表达式 0 次或 1 次（等价于{0,1}），例如：where(is)?能匹配”where” 以及”whereis”</td>
+<td><strong>不支持</strong>（同\?)</td>
+<td>？</td>
+<td>？</td>
+<td>？</td>
+</tr>
+<tr>
+<td>\?</td>
+<td>匹配前面的子表达式 0 次或 1 次（等价于’{0,1}‘），例如：’whereis\? ‘能匹配 “where”以及”whereis”</td>
+<td>\?</td>
+<td><strong>不支持</strong>（同?)</td>
+<td><strong>不支持</strong>（同?)</td>
+<td><strong>不支持</strong>（同?)</td>
+</tr>
+<tr>
+<td>?</td>
+<td>当该字符紧跟在任何一个其他限制符（*, +, ?, {n},{n,}, {n,m}） 后面时，匹配模式是非贪婪的。非贪婪模式尽可能少的匹配所搜索的字符串，而默认的贪婪模式则尽可能多的匹配所搜索的字符串。例如，对于字符串 “oooo”，’o+?’ 将匹配单个”o”，而 ‘o+’ 将匹配所有 ‘o’</td>
+<td><strong>不支持</strong></td>
+<td><strong>不支持</strong></td>
+<td><strong>不支持</strong></td>
+<td><strong>不支持</strong></td>
+</tr>
+<tr>
+<td>.</td>
+<td>匹配除换行符（’\n’）之外的任意单个字符（注意：awk 指令中的句点能匹配换行符）</td>
+<td>.</td>
+<td>.（如果要匹配包括“\n”在内的任何一个字符，请使用：’(^$)\</td>
+<td>（.）</td>
+<td>.</td>
+<td>.（如果要匹配包括“\n”在内的任何一个字符，请使用：’ [.\n] ‘</td>
+</tr>
+<tr>
+<td>*</td>
+<td>匹配前面的子表达式 0 次或多次（等价于{0, }），例如：zo* 能匹配 “z”以及 “zoo”</td>
+<td>*</td>
+<td>*</td>
+<td>*</td>
+<td>*</td>
+</tr>
+<tr>
+<td>+</td>
+<td>匹配前面的子表达式 1 次或多次（等价于’{1, }‘），例如：’whereis+ ‘能匹配 “whereis”以及”whereisis”</td>
+<td>+</td>
+<td><strong>不支持</strong>（同+)</td>
+<td><strong>不支持</strong>（同+)</td>
+<td><strong>不支持</strong>（同+)</td>
+</tr>
+<tr>
+<td>+</td>
+<td>匹配前面的子表达式 1 次或多次（等价于{1, }），例如：zo+能匹配 “zo”以及 “zoo”，但不能匹配 “z”</td>
+<td><strong>不支持</strong>（同+)</td>
+<td>+</td>
+<td>+</td>
+<td>+</td>
+</tr>
+<tr>
+<td>{n}</td>
+<td>n 必须是一个 0 或者正整数，匹配子表达式 n 次，例如：zo{2}能匹配</td>
+<td><strong>不支持</strong>（同{n})</td>
+<td>{n}</td>
+<td>{n}</td>
+<td>{n}</td>
+</tr>
+<tr>
+<td>{n,}</td>
+<td>“zooz”，但不能匹配 “Bob”n 必须是一个 0 或者正整数，匹配子表达式大于等于 n次，例如：go{2,}</td>
+<td><strong>不支持</strong>（同{n,})</td>
+<td>{n,}</td>
+<td>{n,}</td>
+<td>{n,}</td>
+</tr>
+<tr>
+<td>{n,m}</td>
+<td>能匹配 “good”，但不能匹配 godm 和 n 均为非负整数，其中 n &lt;= m，最少匹配 n 次且最多匹配 m 次 ，例如：o{1,3}将配”fooooood” 中的前三个 o（请注意在逗号和两个数之间不能有空格）</td>
+<td><strong>不支持</strong>（同{n,m})</td>
+<td>{n,m}</td>
+<td>{n,m}</td>
+<td>{n,m}</td>
+</tr>
+<tr>
+<td>x\</td>
+<td>y</td>
+<td>匹配 x 或 y，例如： 不支持’z\</td>
+<td>（food）’ 能匹配 “z” 或”food”；’（z\</td>
+<td>f）ood’ 则匹配”zood” 或 “food”</td>
+<td><strong>不支持</strong>（同x\</td>
+<td>y)</td>
+<td>x\</td>
+<td>y</td>
+<td>x\</td>
+<td>y</td>
+<td>x\</td>
+<td>y</td>
+</tr>
+<tr>
+<td>[0-9]</td>
+<td>匹配从 0 到 9 中的任意一个数字字符（注意：要写成递增）</td>
+<td>[0-9]</td>
+<td>[0-9]</td>
+<td>[0-9]</td>
+<td>[0-9]</td>
+</tr>
+<tr>
+<td>[xyz]</td>
+<td>字符集合，匹配所包含的任意一个字符，例如：’[abc]’可以匹配”lay” 中的 ‘a’（注意：如果元字符，例如：. *等，它们被放在[ ]中，那么它们将变成一个普通字符）</td>
+<td>[xyz]</td>
+<td>[xyz]</td>
+<td>[xyz]</td>
+<td>[xyz]</td>
+</tr>
+<tr>
+<td>[^xyz]</td>
+<td>负值字符集合，匹配未包含的任意一个字符（注意：不包括换行符），例如：’[^abc]’ 可以匹配 “Lay” 中的’L’（注意：[^xyz]在awk 指令中则是匹配未包含的任意一个字符+换行符）</td>
+<td>[^xyz]</td>
+<td>[^xyz]</td>
+<td>[^xyz]</td>
+<td>[^xyz]</td>
+</tr>
+<tr>
+<td>[A-Za-z]</td>
+<td>匹配大写字母或者小写字母中的任意一个字符（注意：要写成递增）</td>
+<td>[A-Za-z]</td>
+<td>[A-Za-z]</td>
+<td>[A-Za-z]</td>
+<td>[A-Za-z]</td>
+</tr>
+<tr>
+<td>[^A-Za-z]</td>
+<td>匹配除了大写与小写字母之外的任意一个字符（注意：写成递增）</td>
+<td>[^A-Za-z]</td>
+<td>[^A-Za-z]</td>
+<td>[^A-Za-z]</td>
+<td>[^A-Za-z]</td>
+</tr>
+<tr>
+<td>\d</td>
+<td>匹配从 0 到 9 中的任意一个数字字符（等价于 [0-9]）</td>
+<td><strong>不支持</strong></td>
+<td><strong>不支持</strong></td>
+<td>\d</td>
+<td>\d</td>
+</tr>
+<tr>
+<td>\D</td>
+<td>匹配非数字字符（等价于 [^0-9]）</td>
+<td><strong>不支持</strong></td>
+<td><strong>不支持</strong></td>
+<td>\D</td>
+<td>\D</td>
+</tr>
+<tr>
+<td>\S</td>
+<td>匹配任何非空白字符（等价于[^\f\n\r\t\v]）</td>
+<td><strong>不支持</strong></td>
+<td><strong>不支持</strong></td>
+<td>\S</td>
+<td>\S</td>
+</tr>
+<tr>
+<td>\s</td>
+<td>匹配任何空白字符，包括空格、制表符、换页符等等（等价于[ \f\n\r\t\v]）</td>
+<td><strong>不支持</strong></td>
+<td><strong>不支持</strong></td>
+<td>\s</td>
+<td>\s</td>
+</tr>
+<tr>
+<td>\W</td>
+<td>匹配任何非单词字符 (等价于[^A-Za-z0-9_])</td>
+<td>\W</td>
+<td>\W</td>
+<td>\W</td>
+<td>\W</td>
+</tr>
+<tr>
+<td>\w</td>
+<td>匹配包括下划线的任何单词字符（等价于[A-Za-z0-9_]）</td>
+<td>\w</td>
+<td>\w</td>
+<td>\w</td>
+<td>\w</td>
+</tr>
+<tr>
+<td>\B</td>
+<td>匹配非单词边界，例如：’er\B’ 能匹配 “verb” 中的’er’，但不能匹配”never” 中的’er’</td>
+<td>\B</td>
+<td>\B</td>
+<td>\B</td>
+<td>\B</td>
+</tr>
+<tr>
+<td>\b</td>
+<td>匹配一个单词边界，也就是指单词和空格间的位置，例如： ‘er\b’ 可以匹配”never” 中的 ‘er’，但不能匹配 “verb” 中的’er’</td>
+<td>\b</td>
+<td>\b</td>
+<td>\b</td>
+<td>\b</td>
+</tr>
+<tr>
+<td>\t</td>
+<td>匹配一个横向制表符（等价于 \x09和 \cI）</td>
+<td><strong>不支持</strong></td>
+<td><strong>不支持</strong></td>
+<td>\t</td>
+<td>\t</td>
+</tr>
+<tr>
+<td>\v</td>
+<td>匹配一个垂直制表符（等价于 \x0b和 \cK）</td>
+<td><strong>不支持</strong></td>
+<td><strong>不支持</strong></td>
+<td>\v</td>
+<td>\v</td>
+</tr>
+<tr>
+<td>\n</td>
+<td>匹配一个换行符（等价于 \x0a 和\cJ）</td>
+<td><strong>不支持</strong></td>
+<td><strong>不支持</strong></td>
+<td>\n</td>
+<td>\n</td>
+</tr>
+<tr>
+<td>\f</td>
+<td>匹配一个换页符（等价于\x0c 和\cL）</td>
+<td><strong>不支持</strong></td>
+<td><strong>不支持</strong></td>
+<td>\f</td>
+<td>\f</td>
+</tr>
+<tr>
+<td>\r</td>
+<td>匹配一个回车符（等价于 \x0d 和\cM）</td>
+<td><strong>不支持</strong></td>
+<td><strong>不支持</strong></td>
+<td>\r</td>
+<td>\r</td>
+</tr>
+<tr>
+<td>\</td>
+<td>匹配转义字符本身”\”</td>
+<td>\</td>
+<td>\</td>
+<td>\</td>
+<td>\</td>
+</tr>
+<tr>
+<td>\cx</td>
+<td>匹配由 x 指明的控制字符，例如：\cM匹配一个Control-M 或回车符，x 的值必须为A-Z 或 a-z 之一，否则，将 c 视为一个原义的 ‘c’ 字符</td>
+<td><strong>不支持</strong></td>
+<td><strong>不支持</strong></td>
+<td></td>
+<td>\cx</td>
+</tr>
+<tr>
+<td>\xn</td>
+<td>匹配 n，其中 n 为十六进制转义值。十六进制转义值必须为确定的两个数字长，例如：’\x41’ 匹配 “A”。’\x041’ 则等价于’\x04’ &amp; “1”。正则表达式中可以使用 ASCII 编码</td>
+<td><strong>不支持</strong></td>
+<td><strong>不支持</strong></td>
+<td></td>
+<td>\xn</td>
+</tr>
+<tr>
+<td>\num</td>
+<td>匹配 num，其中 num是一个正整数。表示对所获取的匹配的引用</td>
+<td><strong>不支持</strong></td>
+<td>\num</td>
+<td>\num</td>
+<td></td>
+</tr>
+<tr>
+<td>[:alnum:]</td>
+<td>匹配任何一个字母或数字（[A-Za-z0-9]），例如：’[[:alnum:]] ‘</td>
+<td>[:alnum:]</td>
+<td>[:alnum:]</td>
+<td>[:alnum:]</td>
+<td>[:alnum:]</td>
+</tr>
+<tr>
+<td>[:alpha:]</td>
+<td>匹配任何一个字母（[A－Za－z]）， 例如：’ [[:alpha:]] ‘</td>
+<td>[:alpha:]</td>
+<td>[:alpha:]</td>
+<td>[:alpha:]</td>
+<td>[:alpha:]</td>
+</tr>
+<tr>
+<td>[:digit:]</td>
+<td>匹配任何一个数字（[0-9]），例如：’[[:digit:]] ‘</td>
+<td>[:digit:]</td>
+<td>[:digit:]</td>
+<td>[:digit:]</td>
+<td>[:digit:]</td>
+</tr>
+<tr>
+<td>[:lower:]</td>
+<td>匹配任何一个小写字母（[a-z]）， 例如：’ [[:lower:]] ‘</td>
+<td>[:lower:]</td>
+<td>[:lower:]</td>
+<td>[:lower:]</td>
+<td>[:lower:]</td>
+</tr>
+<tr>
+<td>[:upper:]</td>
+<td>匹配任何一个大写字母（[A-Z]）</td>
+<td>[:upper:]</td>
+<td>[:upper:]</td>
+<td>[:upper:]</td>
+<td>[:upper:]</td>
+</tr>
+<tr>
+<td>[:space:]</td>
+<td>任何一个空白字符： 支持制表符、空格，例如：’ [[:space:]] ‘</td>
+<td>[:space:]</td>
+<td>[:space:]</td>
+<td>[:space:]</td>
+<td>[:space:]</td>
+</tr>
+<tr>
+<td>[:blank:]</td>
+<td>空格和制表符（横向和纵向），例如：’[[:blank:]]’ó’[\s\t\v]’</td>
+<td>[:blank:]</td>
+<td>[:blank:]</td>
+<td>[:blank:]</td>
+<td>[:blank:]</td>
+</tr>
+<tr>
+<td>[:graph:]</td>
+<td>任何一个可以看得见的且可以打印的字符（注意：不包括空格和换行符等），例如：’[[:graph:]] ‘</td>
+<td>[:graph:]</td>
+<td>[:graph:]</td>
+<td>[:graph:]</td>
+<td>[:graph:]</td>
+</tr>
+<tr>
+<td>[:print:]</td>
+<td>任何一个可以打印的字符（注意：不包括：[:cntrl:]、字符串结束符’\0’、EOF 文件结束符（-1）， 但包括空格符号），例如：’[[:print:]] ‘</td>
+<td>[:print:]</td>
+<td>[:print:]</td>
+<td>[:print:]</td>
+<td>[:print:]</td>
+</tr>
+<tr>
+<td>[:cntrl:]</td>
+<td>任何一个控制字符（ASCII 字符集中的前 32 个字符，即：用十进制表示为从 0 到31，例如：换行符、制表符等等），例如：’ [[:cntrl:]]’</td>
+<td>[:cntrl:]</td>
+<td>[:cntrl:]</td>
+<td>[:cntrl:]</td>
+<td>[:cntrl:]</td>
+</tr>
+<tr>
+<td>[:punct:]</td>
+<td>任何一个标点符号（不包括：[:alnum:]、[:cntrl:]、[:space:]这些字符集）</td>
+<td>[:punct:]</td>
+<td>[:punct:]</td>
+<td>[:punct:]</td>
+<td>[:punct:]</td>
+</tr>
+<tr>
+<td>[:xdigit:]</td>
+<td>任何一个十六进制数（即：0-9，a-f，A-F）</td>
+<td>[:xdigit:]</td>
+<td>[:xdigit:]</td>
+<td>[:xdigit:]</td>
+<td>[:xdigit:]</td>
+</tr>
+</tbody>
+</table>
+<p><strong>注意:</strong> 当使用 BERs ( 基本正则表达式 ) 时，必须在下列这些符号(?,+,|,{,},(,))前加上转义字符 \ .</p>
+<h3 id="linux/osx_u4E0B_u5E38_u7528_u547D_u4EE4_u4E0E_u6B63_u5219_u8868_u8FBE_u5F0F_u7684_u5173_u7CFB"><a href="#linux/osx_u4E0B_u5E38_u7528_u547D_u4EE4_u4E0E_u6B63_u5219_u8868_u8FBE_u5F0F_u7684_u5173_u7CFB" class="headerlink" title="linux/osx下常用命令与正则表达式的关系"></a>linux/osx下常用命令与正则表达式的关系</h3><h4 id="grep__2C_egrep__2C_sed__2C_awk__u6B63_u5219_u8868_u8FBE_u5F0F_u7279_u70B9"><a href="#grep__2C_egrep__2C_sed__2C_awk__u6B63_u5219_u8868_u8FBE_u5F0F_u7279_u70B9" class="headerlink" title="grep , egrep , sed , awk  正则表达式特点"></a>grep , egrep , sed , awk  正则表达式特点</h4><ol>
+<li><p>grep 支持：BREs、EREs、PREs 正则表达式</p>
+<p>grep 指令后不跟任何参数, 则表示要使用 “BREs”</p>
+<p>grep 指令后跟 ”-E” 参数, 则表示要使用 “EREs”</p>
+<p>grep 指令后跟 “-P” 参数, 则表示要使用 “PREs”</p>
+</li>
+<li><p>egrep 支持：EREs、PREs 正则表达式</p>
+<p>egrep 指令后不跟任何参数, 则表示要使用 “EREs”</p>
+<p>egrep 指令后跟 “-P” 参数, 则表示要使用 “PREs”</p>
+</li>
+<li><p>sed 支持: BREs、EREs</p>
+<p>sed 指令默认是使用 “BREs”</p>
+<p>sed 指令后跟 “-r” 参数 , 则表示要使用“EREs”</p>
+</li>
+<li><p>awk 支持 EREs, 并且默认使用 “EREs”</p>
+</li>
+</ol>
+<h4 id="u96F6_u5BBD_u65AD_u8A00"><a href="#u96F6_u5BBD_u65AD_u8A00" class="headerlink" title="零宽断言"></a>零宽断言</h4><table>
+<thead>
+<tr>
+<th><strong>字符</strong></th>
+<th><strong>描述</strong></th>
+<th><strong>示例</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>(?:<em>pattern</em>)</td>
+<td>匹配pattern，但不捕获匹配结果。</td>
+<td>‘industr(?:y\</td>
+<td>ies)匹配’industry’或’industries’。</td>
+</tr>
+<tr>
+<td>(?=<em>pattern</em>)</td>
+<td>零宽度正向预查，不捕获匹配结果。</td>
+<td>‘Windows (?=95\</td>
+<td>98\</td>
+<td>NT\</td>
+<td>2000)’匹配 “Windows2000” 中的 “Windows”不匹配 “Windows3.1” 中的 “Windows”。</td>
+</tr>
+<tr>
+<td>(?!<em>pattern</em>)</td>
+<td>零宽度负向预查，不捕获匹配结果。</td>
+<td>‘Windows (?!95\</td>
+<td>98\</td>
+<td>NT\</td>
+<td>2000)’匹配 “Windows3.1” 中的 “Windows”不匹配 “Windows2000” 中的 “Windows”。</td>
+</tr>
+<tr>
+<td>(?&lt;=<em>pattern</em>)</td>
+<td>零宽度正向回查，不捕获匹配结果。</td>
+<td>‘2000 (?&lt;=Office\</td>
+<td>Word\</td>
+<td>Excel)’匹配 “ Office2000” 中的 “2000”不匹配 “Windows2000” 中的 “2000”。</td>
+</tr>
+<tr>
+<td>(?&lt;!<em>pattern</em>)</td>
+<td>零宽度负向回查，不捕获匹配结果。</td>
+<td>‘2000 (?&lt;!Office\</td>
+<td>Word\</td>
+<td>Excel)’匹配 “ Windows2000” 中的 “2000”不匹配 “ Office2000” 中的 “2000”。</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<p>本文就讨论这么多内容,大家有什么问题或好的想法欢迎在下方参与<a href="#respond">留言和评论</a>.</p>
+<p>本文作者: <a href="https://github.com/Louiszhai" target="_blank" rel="external">louis</a></p>
+<p>本文链接: <a href="http://louiszhai.github.io/2016/06/13/regular/">http://louiszhai.github.io/2016/06/13/regular/</a></p>
+<p>参考文章</p>
+<ul>
+<li>Jeffrey Friedl 的 &lt;精通正则表达式&gt;[第三版]</li>
+<li><a href="http://blog.csdn.net/fdl19881/article/details/7800877" target="_blank" rel="external">linux shell 正则表达式(BREs,EREs,PREs)差异比较</a></li>
+<li><a href="http://www.jb51.net/article/28035.htm" target="_blank" rel="external">正则表达式之捕获组/非捕获组介绍<em>正则表达式\</em>脚本之家</a></li>
+</ul>
+]]></content>
+    <summary type="html">
+    <![CDATA[regexp 正则表达式]]>
+    
+    </summary>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[详解IE7以下独有的hasLayout]]></title>
@@ -160,6 +729,122 @@
     </summary>
     
       <category term="css" scheme="http://louiszhai.github.io/tags/css/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[16种方法实现水平居中垂直居中]]></title>
+    <link href="http://louiszhai.github.io/2016/03/12/css-center/"/>
+    <id>http://louiszhai.github.io/2016/03/12/css-center/</id>
+    <published>2016-03-12T11:03:04.000Z</published>
+    <updated>2016-06-15T01:22:01.000Z</updated>
+    <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>熟悉水平居中和垂直居中的方法, 不为别的, 就为用的时候能够信手拈来. 下面直接步入正题.</p>
+<a id="more"></a>
+<h3 id="u6C34_u5E73_u5C45_u4E2D"><a href="#u6C34_u5E73_u5C45_u4E2D" class="headerlink" title="水平居中"></a>水平居中</h3><p>1) 若是行内元素, 给其父元素设置 text-align:center,即可实现行内元素水平居中.</p>
+<p>2) 若是块级元素, 该元素设置 margin:0 auto即可.</p>
+<p>3) 若子元素包含 float:left 属性, 为了让子元素水平居中, 则可让父元素宽度设置为fit-content,并且配合margin, 作如下设置:</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="class">.parent</span><span class="rules">&#123;</span><br><span class="line">  	<span class="rule"><span class="attribute">width</span>:<span class="value"> -moz-fit-content</span></span>;</span><br><span class="line">	<span class="rule"><span class="attribute">width</span>:<span class="value"> -webkit-fit-content</span></span>;</span><br><span class="line">	<span class="rule"><span class="attribute">width</span>:<span class="value">fit-content</span></span>;</span><br><span class="line">	<span class="rule"><span class="attribute">margin</span>:<span class="value"><span class="number">0</span> auto</span></span>;</span><br><span class="line">&#125;</span></span><br></pre></td></tr></table></figure>
+<p>fit-content是CSS3中给width属性新加的一个属性值,它配合margin可以轻松实现水平居中, 目前只支持Chrome 和 Firefox浏览器.</p>
+<p>4) 使用flex布局, 可以轻松的实现水平居中, 子元素设置如下:</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="class">.son</span><span class="rules">&#123;</span><br><span class="line">	<span class="rule"><span class="attribute">display</span>:<span class="value"> flex</span></span>;</span><br><span class="line">	<span class="rule"><span class="attribute">justify-content</span>:<span class="value"> center</span></span>;</span><br><span class="line">&#125;</span></span><br></pre></td></tr></table></figure>
+<p>5) 使用css3 盒模型, 父元素display: box;box-pack: center;如下设置:</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="class">.parent</span> <span class="rules">&#123;</span><br><span class="line">	<span class="rule"><span class="attribute">display</span>:<span class="value"> -webkit-box</span></span>;</span><br><span class="line">	<span class="rule"><span class="attribute">-webkit-box-orient</span>:<span class="value"> horizontal</span></span>;</span><br><span class="line">	<span class="rule"><span class="attribute">-webkit-box-pack</span>:<span class="value"> center</span></span>;</span><br><span class="line">	<span class="rule"><span class="attribute">display</span>:<span class="value"> -moz-box</span></span>;</span><br><span class="line">	<span class="rule"><span class="attribute">-moz-box-orient</span>:<span class="value"> horizontal</span></span>;</span><br><span class="line">	<span class="rule"><span class="attribute">-moz-box-pack</span>:<span class="value"> center</span></span>;</span><br><span class="line">	<span class="rule"><span class="attribute">display</span>:<span class="value"> -o-box</span></span>;</span><br><span class="line">  	<span class="rule"><span class="attribute">-o-box-orient</span>:<span class="value"> horizontal</span></span>;</span><br><span class="line">  	<span class="rule"><span class="attribute">-o-box-pack</span>:<span class="value"> center</span></span>;</span><br><span class="line">  	<span class="rule"><span class="attribute">display</span>:<span class="value"> -ms-box</span></span>;</span><br><span class="line">  	<span class="rule"><span class="attribute">-ms-box-orient</span>:<span class="value"> horizontal</span></span>;</span><br><span class="line">  	<span class="rule"><span class="attribute">-ms-box-pack</span>:<span class="value"> center</span></span>;</span><br><span class="line">  	<span class="rule"><span class="attribute">display</span>:<span class="value"> box</span></span>;</span><br><span class="line">  	<span class="rule"><span class="attribute">box-orient</span>:<span class="value"> horizontal</span></span>;</span><br><span class="line">  	<span class="rule"><span class="attribute">box-pack</span>:<span class="value"> center</span></span>;</span><br><span class="line">&#125;</span></span><br></pre></td></tr></table></figure>
+<p>6) 使用CSS3中新增的transform属性, 子元素设置如下:</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class">.son</span><span class="rules">&#123;</span><br><span class="line">	<span class="rule"><span class="attribute">position</span>:<span class="value">absolute</span></span>;</span><br><span class="line">  	<span class="rule"><span class="attribute">left</span>:<span class="value"><span class="number">50%</span></span></span>;</span><br><span class="line">  	<span class="rule"><span class="attribute">transform</span>:<span class="value"><span class="function">translate</span>(-<span class="number">50%</span>,<span class="number">0</span>)</span></span>;</span><br><span class="line">&#125;</span></span><br></pre></td></tr></table></figure>
+<p>7) 使用绝对定位方式, 以及负值的margin-left, 子元素设置如下:</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="class">.son</span><span class="rules">&#123;</span><br><span class="line">	<span class="rule"><span class="attribute">position</span>:<span class="value">absolute</span></span>;</span><br><span class="line">	<span class="rule"><span class="attribute">width</span>:<span class="value">固定</span></span>;</span><br><span class="line">    <span class="rule"><span class="attribute">left</span>:<span class="value"><span class="number">50%</span></span></span>;</span><br><span class="line">    <span class="rule"><span class="attribute">margin-left</span>:<span class="value">-<span class="number">0.5</span>宽度</span></span>;</span><br><span class="line">&#125;</span></span><br></pre></td></tr></table></figure>
+<p>8) 使用绝对定位方式, 以及left:0;right:0;margin:0 auto; 子元素设置如下:</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class">.son</span><span class="rules">&#123;</span><br><span class="line">	<span class="rule"><span class="attribute">position</span>:<span class="value">absolute</span></span>;</span><br><span class="line">	<span class="rule"><span class="attribute">width</span>:<span class="value">固定</span></span>;</span><br><span class="line">	<span class="rule"><span class="attribute">left</span>:<span class="value"><span class="number">0</span></span></span>;</span><br><span class="line">	<span class="rule"><span class="attribute">right</span>:<span class="value"><span class="number">0</span></span></span>;</span><br><span class="line">	<span class="rule"><span class="attribute">margin</span>:<span class="value"><span class="number">0</span> auto</span></span>;</span><br><span class="line">&#125;</span></span><br></pre></td></tr></table></figure>
+<h3 id="u5782_u76F4_u5C45_u4E2D"><a href="#u5782_u76F4_u5C45_u4E2D" class="headerlink" title="垂直居中"></a>垂直居中</h3><h4 id="u5355_u884C_u6587_u672C"><a href="#u5355_u884C_u6587_u672C" class="headerlink" title="单行文本"></a>单行文本</h4><p>1) 若元素是单行文本, 则可设置 line-height 等于父元素高度</p>
+<h4 id="u884C_u5185_u5757_u7EA7_u5143_u7D20"><a href="#u884C_u5185_u5757_u7EA7_u5143_u7D20" class="headerlink" title="行内块级元素"></a>行内块级元素</h4><p>2) 若元素是行内块级元素, 基本思想是使用display: inline-block, vertical-align: middle和一个伪元素让内容块处于容器中央.</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="class">.parent</span><span class="pseudo">::after</span>, <span class="class">.son</span><span class="rules">&#123;</span><br><span class="line">	<span class="rule"><span class="attribute">display</span>:<span class="value">inline-block</span></span>;</span><br><span class="line">	<span class="rule"><span class="attribute">vertical-align</span>:<span class="value">middle</span></span>;</span><br><span class="line">&#125;</span></span><br><span class="line"><span class="class">.parent</span><span class="pseudo">::after</span><span class="rules">&#123;</span><br><span class="line">	<span class="rule"><span class="attribute">content</span>:<span class="value"><span class="string">''</span></span></span>;</span><br><span class="line">	<span class="rule"><span class="attribute">height</span>:<span class="value"><span class="number">100%</span></span></span>;</span><br><span class="line">&#125;</span></span><br></pre></td></tr></table></figure>
+<p>这是一种很流行的方法, 也适应IE7.</p>
+<h4 id="u5143_u7D20_u9AD8_u5EA6_u4E0D_u5B9A"><a href="#u5143_u7D20_u9AD8_u5EA6_u4E0D_u5B9A" class="headerlink" title="元素高度不定"></a>元素高度不定</h4><p>3) 可用 <strong>vertical-align</strong> 属性, 而vertical-align只有在父层为 td 或者 th 时, 才会生效, 对于其他块级元素, 例如 div、p 等, 默认情况是不支持的. 为了使用vertical-align, 我们需要设置父元素display:table, 子元素 display:table-cell;vertical-align:middle;</p>
+<p><strong>优点</strong></p>
+<p>元素高度可以动态改变, 不需再CSS中定义, 如果父元素没有足够空间时, 该元素内容也不会被截断.</p>
+<p><strong>缺点</strong></p>
+<p>IE6~7, 甚至IE8 beta中无效.</p>
+<p>4) 可用 <strong>Flex</strong>, 这是CSS布局未来的趋势. Flexbox是CSS3新增属性, 设计初衷是为了解决像垂直居中这样的常见布局问题. 相关的文章如《<a href="http://coding.smashingmagazine.com/2013/05/22/centering-elements-with-flexbox/" target="_blank" rel="external">Centering Elements with Flexbox</a>》</p>
+<p>父元素做如下设置即可保证子元素垂直居中:</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="class">.parent</span> <span class="rules">&#123;</span><br><span class="line">  <span class="rule"><span class="attribute">display</span>:<span class="value"> flex</span></span>;</span><br><span class="line">  <span class="rule"><span class="attribute">align-items</span>:<span class="value"> center</span></span>;</span><br><span class="line">&#125;</span></span><br></pre></td></tr></table></figure>
+<p><strong>优点</strong></p>
+<ul>
+<li>内容块的宽高任意, 优雅的溢出.</li>
+</ul>
+<ul>
+<li>可用于更复杂高级的布局技术中.</li>
+</ul>
+<p><strong>缺点</strong></p>
+<ul>
+<li>IE8/IE9不支持</li>
+<li>需要浏览器厂商前缀</li>
+<li>渲染上可能会有一些问题</li>
+</ul>
+<p>5) 使用CSS3盒模型</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class">.parent</span> <span class="rules">&#123;</span><br><span class="line">  	<span class="rule"><span class="attribute">display</span>:<span class="value"> box</span></span>;</span><br><span class="line">  	<span class="rule"><span class="attribute">box-orient</span>:<span class="value"> vertical</span></span>;</span><br><span class="line">  	<span class="rule"><span class="attribute">box-pack</span>:<span class="value"> center</span></span>;</span><br><span class="line">&#125;</span></span><br></pre></td></tr></table></figure>
+<p><strong>优点</strong></p>
+<p>实现简单, 扩展性强</p>
+<p><strong>缺点</strong></p>
+<p>兼容性差, 不支持IE</p>
+<p>6) 可用 <strong>transform</strong> , 设置父元素相对定位(position:relative), 子元素如下css样式:</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class">.son</span><span class="rules">&#123;</span><br><span class="line">	<span class="rule"><span class="attribute">position</span>:<span class="value">absolute</span></span>;</span><br><span class="line">	<span class="rule"><span class="attribute">top</span>:<span class="value"><span class="number">50%</span></span></span>;</span><br><span class="line">	<span class="rule"><span class="attribute">-webkit-transform</span>:<span class="value"> <span class="function">translate</span>(-<span class="number">50%</span>,-<span class="number">50%</span>)</span></span>;  </span><br><span class="line">	<span class="rule"><span class="attribute">-ms-transform</span>:<span class="value"> <span class="function">translate</span>(-<span class="number">50%</span>,-<span class="number">50%</span>)</span></span>;</span><br><span class="line">	<span class="rule"><span class="attribute">transform</span>:<span class="value"> <span class="function">translate</span>(-<span class="number">50%</span>,-<span class="number">50%</span>)</span></span>;</span><br><span class="line">&#125;</span></span><br></pre></td></tr></table></figure>
+<p><strong>优点</strong></p>
+<p>代码量少</p>
+<p><strong>缺点</strong></p>
+<p>IE8不支持, 属性需要追加浏览器厂商前缀, 可能干扰其他 transform 效果, 某些情形下会出现文本或元素边界渲染模糊的现象.</p>
+<h4 id="u5143_u7D20_u9AD8_u5EA6_u56FA_u5B9A"><a href="#u5143_u7D20_u9AD8_u5EA6_u56FA_u5B9A" class="headerlink" title="元素高度固定"></a>元素高度固定</h4><p>7) 设置父元素相对定位(position:relative), 子元素如下css样式:</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="class">.son</span><span class="rules">&#123;</span><br><span class="line">	<span class="rule"><span class="attribute">position</span>:<span class="value">absolute</span></span>;</span><br><span class="line">	<span class="rule"><span class="attribute">top</span>:<span class="value"><span class="number">50%</span></span></span>;</span><br><span class="line">	<span class="rule"><span class="attribute">height</span>:<span class="value">固定</span></span>;</span><br><span class="line">	<span class="rule"><span class="attribute">margin-top</span>:<span class="value">-<span class="number">0.5</span>高度</span></span>;</span><br><span class="line">&#125;</span></span><br></pre></td></tr></table></figure>
+<p><strong>优点</strong></p>
+<p>适用于所有浏览器.</p>
+<p><strong>缺点</strong></p>
+<p>父元素空间不够时, 子元素可能不可见(当浏览器窗口缩小时,滚动条不出现时).如果子元素设置了overflow:auto, 则高度不够时, 会出现滚动条.</p>
+<p>8) 设置父元素相对定位(position:relative), 子元素如下css样式:</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class">.son</span><span class="rules">&#123;</span><br><span class="line">	<span class="rule"><span class="attribute">position</span>:<span class="value">absolute</span></span>;</span><br><span class="line">	<span class="rule"><span class="attribute">height</span>:<span class="value">固定</span></span>;</span><br><span class="line">	<span class="rule"><span class="attribute">top</span>:<span class="value"><span class="number">0</span></span></span>;</span><br><span class="line">	<span class="rule"><span class="attribute">bottom</span>:<span class="value"><span class="number">0</span></span></span>;</span><br><span class="line">	<span class="rule"><span class="attribute">margin</span>:<span class="value">auto <span class="number">0</span></span></span>;</span><br><span class="line">&#125;</span></span><br></pre></td></tr></table></figure>
+<p><strong>优点</strong></p>
+<p>简单</p>
+<p><strong>缺点</strong></p>
+<p>没有足够空间时, 子元素会被截断, 但不会有滚动条.</p>
+<h3 id="u603B_u7ED3"><a href="#u603B_u7ED3" class="headerlink" title="总结"></a>总结</h3><p>水平居中较为简单, 共提供了8种方法, 一般情况下 text-align:center,marin:0 auto; 足矣</p>
+<ul>
+<li>① text-align:center;</li>
+</ul>
+<ul>
+<li>② margin:0 auto;</li>
+<li>③ width:fit-content;</li>
+<li>④ flex</li>
+<li>⑤ 盒模型</li>
+<li>⑥ transform</li>
+<li>⑦ ⑧ 两种不同的绝对定位方法</li>
+</ul>
+<p>垂直居中, 共提供了8种方法.</p>
+<ul>
+<li>① 单行文本, line-height</li>
+<li>② 行内块级元素, 使用 display: inline-block, vertical-align: middle; 加上伪元素辅助实现</li>
+<li>③ vertical-align</li>
+<li>④ flex</li>
+<li>⑤ 盒模型</li>
+<li>⑥ transform</li>
+<li>⑦ ⑧ 两种不同的绝对定位方法</li>
+</ul>
+<p>我们发现, flex, 盒模型, transform, 绝对定位, 这几种方法同时适用于水平居中和垂直居中.</p>
+<p>希望对大家有所帮助.</p>
+<hr>
+<p>本问就讨论这么多内容,大家有什么问题或好的想法欢迎在下方参与<a href="#respond">留言和评论</a>.</p>
+<p>本文作者: <a href="https://github.com/Louiszhai" target="_blank" rel="external">louis</a></p>
+<p>本文链接: <a href="http://louiszhai.github.io/2016/03/12/css-center/">http://louiszhai.github.io/2016/03/12/css-center/</a></p>
+<p>参考文章</p>
+<ul>
+<li><a href="http://blog.csdn.net/freshlover/article/details/11579669" target="_blank" rel="external">盘点8种CSS实现垂直居中水平居中的绝对定位居中技术 - freshlover的专栏 - 博客频道 - CSDN.NET</a></li>
+<li><a href="https://www.smashingmagazine.com/2013/05/centering-elements-with-flexbox/" target="_blank" rel="external">Designing CSS Layouts With Flexbox Is As Easy As Pie – Smashing Magazine</a></li>
+<li><a href="http://www.w3cplus.com/css/elements-horizontally-center-with-css.html" target="_blank" rel="external">六种实现元素水平居中<em>水平居中, 垂直居中 教程\</em>大漠</a></li>
+</ul>
+]]></content>
+    <summary type="html">
+    <![CDATA[css 水平居中 垂直居中]]>
+    
+    </summary>
+    
+      <category term="CSS" scheme="http://louiszhai.github.io/tags/CSS/"/>
     
   </entry>
   
@@ -579,49 +1264,6 @@
   </entry>
   
   <entry>
-    <title><![CDATA[Function.prototype.bind方法指南]]></title>
-    <link href="http://louiszhai.github.io/2016/01/11/bind/"/>
-    <id>http://louiszhai.github.io/2016/01/11/bind/</id>
-    <published>2016-01-11T00:01:33.000Z</published>
-    <updated>2016-05-17T01:07:43.000Z</updated>
-    <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>ES5新增了 Function.prototype.bind 方法, 该方法不同于jquery的bind 方法, 它主要用于固定 this 作用域, 避免各种由于上下文切换造成的语义问题. 常用在 setTimeout, for循环等内部.</p>
-<a id="more"></a>
-<h3 id="bind"><a href="#bind" class="headerlink" title="bind"></a>bind</h3><p>语法: func.bind(thisArg, arg1, arg2, ….)</p>
-<p>bind() 方法会返回一个新函数, 又叫绑定函数, 当调用这个绑定函数时, 绑定函数会以创建它时传入 bind() 方法的第一个参数作为当前的上下文, 即this, 传入 bind() 方法的第二个及之后的参数加上绑定函数运行时自身的参数按照顺序作为原函数的参数来调用原函数.</p>
-<p>绑定函数也能使用new操作符创建对象; 这就好比把原函数当做构造器. 此时提供的this将被忽略, this之后的参数将依然前置到运行时的参数列表中.</p>
-<h4 id="u57FA_u672C_u7528_u6CD5"><a href="#u57FA_u672C_u7528_u6CD5" class="headerlink" title="基本用法"></a>基本用法</h4><p>下面我们来看看bind 的基本用法.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> x = <span class="number">8</span>;</span><br><span class="line"><span class="keyword">var</span> o = &#123;</span><br><span class="line">  x: <span class="number">10</span>,</span><br><span class="line">  getX: <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  	<span class="built_in">console</span>.log(<span class="keyword">this</span>.x);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">var</span> f = o.getX;</span><br><span class="line">f();<span class="comment">//8, 由于没有绑定执行时的上下文, this默认指向window, 打印了全局变量x的值</span></span><br><span class="line"><span class="keyword">var</span> g = f.bind(o);</span><br><span class="line">g();<span class="comment">//10, 绑定this后, 成功的打印了o对象的x属性的值.</span></span><br></pre></td></tr></table></figure>
-<h4 id="u5206_u79BB_u53C2_u6570"><a href="#u5206_u79BB_u53C2_u6570" class="headerlink" title="分离参数"></a>分离参数</h4><p>bind() 方法还可以设置函数拥有的初始参数. 这些参数作为bind() 的第2,3…个参数跟在this(或其他对象的后面), 调用绑定函数时, 这些参数将插入到参数列表的最开始位置, 而传递给绑定函数的参数将跟在他们后面.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//打印十个斐波那契数</span></span><br><span class="line"><span class="keyword">var</span> f = <span class="function"><span class="keyword">function</span>(<span class="params">n1, n2, length</span>)</span>&#123;</span><br><span class="line">  <span class="keyword">if</span>(<span class="built_in">arguments</span>.length&lt;<span class="number">3</span>) <span class="built_in">console</span>.log(<span class="string">'参数不够...'</span>);</span><br><span class="line">  <span class="keyword">var</span> array = [n1, n2];</span><br><span class="line">  <span class="keyword">for</span>(<span class="keyword">var</span> i=<span class="number">2</span>;i&lt;length;i++)&#123;</span><br><span class="line">  	array[i] = array[i-<span class="number">2</span>] + array[i-<span class="number">1</span>];</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> array;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> g = f.bind(<span class="literal">null</span>, <span class="number">1</span>, <span class="number">1</span>);</span><br><span class="line"><span class="built_in">console</span>.log(g(<span class="number">10</span>));<span class="comment">//[1, 1, 2, 3, 5, 8, 13, 21, 34, 55]</span></span><br></pre></td></tr></table></figure>
-<h4 id="u7ED1_u5B9A_u53C2_u6570"><a href="#u7ED1_u5B9A_u53C2_u6570" class="headerlink" title="绑定参数"></a>绑定参数</h4><p>如果使用new 操作符去构造绑定函数的实例时, 原来提供的this 将被忽略, this之后的参数将依然前置到构造函数的参数列表中. 此时 bind() 方法便具备了保留参数的能力, 我们可以此达到类似柯里化的效果.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> f = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="keyword">if</span>(<span class="built_in">arguments</span>.length!=<span class="number">0</span>)</span><br><span class="line">  	<span class="keyword">this</span>.sum = <span class="built_in">Array</span>.prototype.reduce.call(<span class="built_in">arguments</span>,<span class="function"><span class="keyword">function</span>(<span class="params">prev,item</span>)</span>&#123;<span class="comment">//对传入参数求和</span></span><br><span class="line"> 		<span class="keyword">return</span> prev + item;</span><br><span class="line">	&#125;);</span><br><span class="line">  <span class="keyword">return</span> <span class="built_in">Array</span>.prototype.join.call(<span class="built_in">arguments</span>);<span class="comment">// 返回传入参数的字符串形式</span></span><br><span class="line">&#125;</span><br><span class="line">f.prototype.toString = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">this</span>.sum;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> g = f.bind(<span class="literal">null</span>,<span class="number">2</span>);</span><br><span class="line"><span class="keyword">var</span> x = <span class="keyword">new</span> g(<span class="number">8</span>);</span><br><span class="line"><span class="built_in">console</span>.log(x.toString());<span class="comment">//10, 可见x被绑定了2+8=10</span></span><br><span class="line"><span class="built_in">console</span>.log(g(<span class="number">8</span>));<span class="comment">//2,8 这告诉我们绑定的两个参数正是2和8</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(x <span class="keyword">instanceof</span> g);<span class="comment">//true, 可见通过new创建的x继承了g</span></span><br><span class="line"><span class="built_in">console</span>.log(x <span class="keyword">instanceof</span> f);<span class="comment">//true, 可见x也继承了f</span></span><br><span class="line"><span class="built_in">console</span>.log(g <span class="keyword">instanceof</span> <span class="built_in">Function</span>);<span class="comment">//true, 可见bind f()方法之后, 返回了一个新的函数g</span></span><br><span class="line"><span class="comment">//函数g可用于求和,如下:</span></span><br><span class="line"><span class="built_in">console</span>.log(g(<span class="number">1</span>,<span class="number">3</span>,<span class="number">5</span>,<span class="number">7</span>,<span class="number">9</span>));<span class="comment">//27 2+1+3+5+7+9=27</span></span><br></pre></td></tr></table></figure>
-<h4 id="u5FEB_u6377_u8C03_u7528"><a href="#u5FEB_u6377_u8C03_u7528" class="headerlink" title="快捷调用"></a>快捷调用</h4><p>使用Array.prototype的方法处理类数组对象时(鸭式辨型), 不可避免的需要借用call 或者 apply 方法, 使用 bind() 方法, 我们可以简化这个过程. 如下:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> _slice = <span class="built_in">Array</span>.prototype.slice;</span><br><span class="line"><span class="keyword">var</span> slice = <span class="built_in">Function</span>.prototype.call.bind(_slice);</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="keyword">return</span> slice(<span class="built_in">arguments</span>,<span class="number">1</span>);</span><br><span class="line">&#125;</span><br><span class="line">f(<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>);<span class="comment">//[2, 3, 4, 5]</span></span><br></pre></td></tr></table></figure>
-<p>下面的实例将解释 bind() 方法做了一件什么事情:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> _slice = <span class="built_in">Array</span>.prototype.slice;</span><br><span class="line"><span class="keyword">var</span> slice = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="keyword">return</span> _slice.apply(<span class="built_in">arguments</span>[<span class="number">0</span>],_slice.call(<span class="built_in">arguments</span>,<span class="number">1</span>));</span><br><span class="line">&#125;;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="keyword">return</span> slice(<span class="built_in">arguments</span>,<span class="number">1</span>);</span><br><span class="line">&#125;</span><br><span class="line">f(<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>);<span class="comment">//[2, 3, 4, 5]</span></span><br></pre></td></tr></table></figure>
-<p>如下, 是bind() 方法的简单实现.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Function</span>.prototype.bind = <span class="function"><span class="keyword">function</span>(<span class="params">thisArg,argN</span>)</span>&#123;</span><br><span class="line">  <span class="keyword">var</span> _this = <span class="keyword">this</span>;</span><br><span class="line">  <span class="keyword">var</span> _arg = _slice.call(<span class="built_in">arguments</span>,<span class="number">1</span>);</span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">   	<span class="keyword">var</span> arg = _slice.call(<span class="built_in">arguments</span>);</span><br><span class="line">    arg = _arg.concat(arg);</span><br><span class="line">  	<span class="keyword">return</span> _this.apply(thisArg,arg);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>可以看出来, 使用 bind() 方法后, 代码优雅得多.</p>
-<p>注: 作为ES5标准加入的bind方法显然不支持 IE9之前的低版本IE, 如需使用, 请参考<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Function/bind#Compatibility" target="_blank" rel="external">Polyfill</a>.</p>
-<hr>
-<p>本文就讨论这么多内容,大家有什么问题或好的想法欢迎在下方参与<a href="#respond">留言和评论</a>.</p>
-<p>本文作者: <a href="https://github.com/Louiszhai" target="_blank" rel="external">louis</a></p>
-<p>本文链接: <a href="http://louiszhai.github.io/2016/01/11/bind/">http://louiszhai.github.io/2016/01/11/bind/</a></p>
-<p>参考文章</p>
-<ul>
-<li><a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Function/bind" target="_blank" rel="external">Function.prototype.bind() - JavaScript | MDN</a></li>
-</ul>
-]]></content>
-    <summary type="html">
-    <![CDATA[JavaScript bind Function.prototype.bind]]>
-    
-    </summary>
-    
-      <category term="JavaScript" scheme="http://louiszhai.github.io/tags/JavaScript/"/>
-    
-  </entry>
-  
-  <entry>
     <title><![CDATA[由同源策略到前端跨域]]></title>
     <link href="http://louiszhai.github.io/2016/01/11/cross-domain/"/>
     <id>http://louiszhai.github.io/2016/01/11/cross-domain/</id>
@@ -751,6 +1393,49 @@
 ]]></content>
     <summary type="html">
     <![CDATA[JavaScript Same-Origin 同源策略 跨域]]>
+    
+    </summary>
+    
+      <category term="JavaScript" scheme="http://louiszhai.github.io/tags/JavaScript/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[Function.prototype.bind方法指南]]></title>
+    <link href="http://louiszhai.github.io/2016/01/11/bind/"/>
+    <id>http://louiszhai.github.io/2016/01/11/bind/</id>
+    <published>2016-01-11T00:01:33.000Z</published>
+    <updated>2016-05-17T01:07:43.000Z</updated>
+    <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>ES5新增了 Function.prototype.bind 方法, 该方法不同于jquery的bind 方法, 它主要用于固定 this 作用域, 避免各种由于上下文切换造成的语义问题. 常用在 setTimeout, for循环等内部.</p>
+<a id="more"></a>
+<h3 id="bind"><a href="#bind" class="headerlink" title="bind"></a>bind</h3><p>语法: func.bind(thisArg, arg1, arg2, ….)</p>
+<p>bind() 方法会返回一个新函数, 又叫绑定函数, 当调用这个绑定函数时, 绑定函数会以创建它时传入 bind() 方法的第一个参数作为当前的上下文, 即this, 传入 bind() 方法的第二个及之后的参数加上绑定函数运行时自身的参数按照顺序作为原函数的参数来调用原函数.</p>
+<p>绑定函数也能使用new操作符创建对象; 这就好比把原函数当做构造器. 此时提供的this将被忽略, this之后的参数将依然前置到运行时的参数列表中.</p>
+<h4 id="u57FA_u672C_u7528_u6CD5"><a href="#u57FA_u672C_u7528_u6CD5" class="headerlink" title="基本用法"></a>基本用法</h4><p>下面我们来看看bind 的基本用法.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> x = <span class="number">8</span>;</span><br><span class="line"><span class="keyword">var</span> o = &#123;</span><br><span class="line">  x: <span class="number">10</span>,</span><br><span class="line">  getX: <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  	<span class="built_in">console</span>.log(<span class="keyword">this</span>.x);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">var</span> f = o.getX;</span><br><span class="line">f();<span class="comment">//8, 由于没有绑定执行时的上下文, this默认指向window, 打印了全局变量x的值</span></span><br><span class="line"><span class="keyword">var</span> g = f.bind(o);</span><br><span class="line">g();<span class="comment">//10, 绑定this后, 成功的打印了o对象的x属性的值.</span></span><br></pre></td></tr></table></figure>
+<h4 id="u5206_u79BB_u53C2_u6570"><a href="#u5206_u79BB_u53C2_u6570" class="headerlink" title="分离参数"></a>分离参数</h4><p>bind() 方法还可以设置函数拥有的初始参数. 这些参数作为bind() 的第2,3…个参数跟在this(或其他对象的后面), 调用绑定函数时, 这些参数将插入到参数列表的最开始位置, 而传递给绑定函数的参数将跟在他们后面.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//打印十个斐波那契数</span></span><br><span class="line"><span class="keyword">var</span> f = <span class="function"><span class="keyword">function</span>(<span class="params">n1, n2, length</span>)</span>&#123;</span><br><span class="line">  <span class="keyword">if</span>(<span class="built_in">arguments</span>.length&lt;<span class="number">3</span>) <span class="built_in">console</span>.log(<span class="string">'参数不够...'</span>);</span><br><span class="line">  <span class="keyword">var</span> array = [n1, n2];</span><br><span class="line">  <span class="keyword">for</span>(<span class="keyword">var</span> i=<span class="number">2</span>;i&lt;length;i++)&#123;</span><br><span class="line">  	array[i] = array[i-<span class="number">2</span>] + array[i-<span class="number">1</span>];</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> array;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> g = f.bind(<span class="literal">null</span>, <span class="number">1</span>, <span class="number">1</span>);</span><br><span class="line"><span class="built_in">console</span>.log(g(<span class="number">10</span>));<span class="comment">//[1, 1, 2, 3, 5, 8, 13, 21, 34, 55]</span></span><br></pre></td></tr></table></figure>
+<h4 id="u7ED1_u5B9A_u53C2_u6570"><a href="#u7ED1_u5B9A_u53C2_u6570" class="headerlink" title="绑定参数"></a>绑定参数</h4><p>如果使用new 操作符去构造绑定函数的实例时, 原来提供的this 将被忽略, this之后的参数将依然前置到构造函数的参数列表中. 此时 bind() 方法便具备了保留参数的能力, 我们可以此达到类似柯里化的效果.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> f = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="keyword">if</span>(<span class="built_in">arguments</span>.length!=<span class="number">0</span>)</span><br><span class="line">  	<span class="keyword">this</span>.sum = <span class="built_in">Array</span>.prototype.reduce.call(<span class="built_in">arguments</span>,<span class="function"><span class="keyword">function</span>(<span class="params">prev,item</span>)</span>&#123;<span class="comment">//对传入参数求和</span></span><br><span class="line"> 		<span class="keyword">return</span> prev + item;</span><br><span class="line">	&#125;);</span><br><span class="line">  <span class="keyword">return</span> <span class="built_in">Array</span>.prototype.join.call(<span class="built_in">arguments</span>);<span class="comment">// 返回传入参数的字符串形式</span></span><br><span class="line">&#125;</span><br><span class="line">f.prototype.toString = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">this</span>.sum;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> g = f.bind(<span class="literal">null</span>,<span class="number">2</span>);</span><br><span class="line"><span class="keyword">var</span> x = <span class="keyword">new</span> g(<span class="number">8</span>);</span><br><span class="line"><span class="built_in">console</span>.log(x.toString());<span class="comment">//10, 可见x被绑定了2+8=10</span></span><br><span class="line"><span class="built_in">console</span>.log(g(<span class="number">8</span>));<span class="comment">//2,8 这告诉我们绑定的两个参数正是2和8</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(x <span class="keyword">instanceof</span> g);<span class="comment">//true, 可见通过new创建的x继承了g</span></span><br><span class="line"><span class="built_in">console</span>.log(x <span class="keyword">instanceof</span> f);<span class="comment">//true, 可见x也继承了f</span></span><br><span class="line"><span class="built_in">console</span>.log(g <span class="keyword">instanceof</span> <span class="built_in">Function</span>);<span class="comment">//true, 可见bind f()方法之后, 返回了一个新的函数g</span></span><br><span class="line"><span class="comment">//函数g可用于求和,如下:</span></span><br><span class="line"><span class="built_in">console</span>.log(g(<span class="number">1</span>,<span class="number">3</span>,<span class="number">5</span>,<span class="number">7</span>,<span class="number">9</span>));<span class="comment">//27 2+1+3+5+7+9=27</span></span><br></pre></td></tr></table></figure>
+<h4 id="u5FEB_u6377_u8C03_u7528"><a href="#u5FEB_u6377_u8C03_u7528" class="headerlink" title="快捷调用"></a>快捷调用</h4><p>使用Array.prototype的方法处理类数组对象时(鸭式辨型), 不可避免的需要借用call 或者 apply 方法, 使用 bind() 方法, 我们可以简化这个过程. 如下:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> _slice = <span class="built_in">Array</span>.prototype.slice;</span><br><span class="line"><span class="keyword">var</span> slice = <span class="built_in">Function</span>.prototype.call.bind(_slice);</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="keyword">return</span> slice(<span class="built_in">arguments</span>,<span class="number">1</span>);</span><br><span class="line">&#125;</span><br><span class="line">f(<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>);<span class="comment">//[2, 3, 4, 5]</span></span><br></pre></td></tr></table></figure>
+<p>下面的实例将解释 bind() 方法做了一件什么事情:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> _slice = <span class="built_in">Array</span>.prototype.slice;</span><br><span class="line"><span class="keyword">var</span> slice = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="keyword">return</span> _slice.apply(<span class="built_in">arguments</span>[<span class="number">0</span>],_slice.call(<span class="built_in">arguments</span>,<span class="number">1</span>));</span><br><span class="line">&#125;;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="keyword">return</span> slice(<span class="built_in">arguments</span>,<span class="number">1</span>);</span><br><span class="line">&#125;</span><br><span class="line">f(<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>);<span class="comment">//[2, 3, 4, 5]</span></span><br></pre></td></tr></table></figure>
+<p>如下, 是bind() 方法的简单实现.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Function</span>.prototype.bind = <span class="function"><span class="keyword">function</span>(<span class="params">thisArg,argN</span>)</span>&#123;</span><br><span class="line">  <span class="keyword">var</span> _this = <span class="keyword">this</span>;</span><br><span class="line">  <span class="keyword">var</span> _arg = _slice.call(<span class="built_in">arguments</span>,<span class="number">1</span>);</span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">   	<span class="keyword">var</span> arg = _slice.call(<span class="built_in">arguments</span>);</span><br><span class="line">    arg = _arg.concat(arg);</span><br><span class="line">  	<span class="keyword">return</span> _this.apply(thisArg,arg);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以看出来, 使用 bind() 方法后, 代码优雅得多.</p>
+<p>注: 作为ES5标准加入的bind方法显然不支持 IE9之前的低版本IE, 如需使用, 请参考<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Function/bind#Compatibility" target="_blank" rel="external">Polyfill</a>.</p>
+<hr>
+<p>本文就讨论这么多内容,大家有什么问题或好的想法欢迎在下方参与<a href="#respond">留言和评论</a>.</p>
+<p>本文作者: <a href="https://github.com/Louiszhai" target="_blank" rel="external">louis</a></p>
+<p>本文链接: <a href="http://louiszhai.github.io/2016/01/11/bind/">http://louiszhai.github.io/2016/01/11/bind/</a></p>
+<p>参考文章</p>
+<ul>
+<li><a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Function/bind" target="_blank" rel="external">Function.prototype.bind() - JavaScript | MDN</a></li>
+</ul>
+]]></content>
+    <summary type="html">
+    <![CDATA[JavaScript bind Function.prototype.bind]]>
     
     </summary>
     
