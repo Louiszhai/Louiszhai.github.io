@@ -4,7 +4,7 @@
   <subtitle><![CDATA[程序猿 前端攻城师]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://louiszhai.github.io/"/>
-  <updated>2016-04-27T01:26:57.000Z</updated>
+  <updated>2016-06-20T10:54:38.000Z</updated>
   <id>http://louiszhai.github.io/</id>
   
   <author>
@@ -13,6 +13,897 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[正则表达式前端使用手册]]></title>
+    <link href="http://louiszhai.github.io/2016/06/13/regexp/"/>
+    <id>http://louiszhai.github.io/2016/06/13/regexp/</id>
+    <published>2016-06-13T00:24:55.000Z</published>
+    <updated>2016-06-20T10:54:38.000Z</updated>
+    <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>有关正则表达的介绍, 无须我多言. 这里借助 Jeffrey Friedl 的&lt;精通正则表达式&gt; 一书的序言抛个砖.</p>
+<blockquote>
+<p>​    “如果罗列计算机软件领域的伟大发明, 我相信绝对不会超过二十项, 在这个名单当中, 当然应该包括分组交换网络, Web, Lisp, 哈希算法, UNIX, 编译技术, 关系模型, 面向对象, XML这些大名鼎鼎的家伙, 而正则表达式也绝对不应该被漏掉. </p>
+<p>​     对很多实际工作而言, 正则表达式简直是灵丹妙药, 能够成百倍的提高开发效率和程序质量, 正则表达式在生物信息学和人类基因图谱的研究中所发挥的关键作用, 更是被传为佳话. CSDN的创始人蒋涛先生在早年开发专业软件产品时, 就曾经体验过这一工具的巨大威力, 并且一直印象深刻.”</p>
+</blockquote>
+<p>因此, 我们没有理由不去了解正则表达式, 甚至是熟练掌握并运行它.</p>
+<p>本文以正则基础语法开篇, 结合具体实例, 逐步讲解正则表达式匹配原理. 代码实例使用语言包括 js, php, python, java(因有些匹配模式, js并未支持, 需要借助其他语言讲解). 本文内容包括初阶技能和高阶技能, 适合新手学习和进阶.</p>
+<a id="more"></a>
+<h3 id="u56DE_u987E_u5386_u53F2"><a href="#u56DE_u987E_u5386_u53F2" class="headerlink" title="回顾历史"></a>回顾历史</h3><p>如果非要讨论正则表达式的渊源, 最早可以追溯至对人类神经系统如何工作的早期研究. Warren McCulloch 和 Walter Pitts 这两位神经生理学家研究出一种数学方式来描述这些神经网络.</p>
+<p>1956 年, 一位叫 Stephen Kleene 的数学家在 McCulloch 和 Pitts 早期工作的基础上, 发表了一篇标题为”神经网事件的表示法”的论文, 引入了正则表达式的概念.</p>
+<p>随后, 发现可以将这一工作应用于使用 Ken Thompson 的计算搜索算法的一些早期研究, Ken Thompson 是 Unix 的主要发明人. 正则表达式的第一个实用应用程序就是 Unix 中的  qed 编辑器.</p>
+<p>至此之后, 正则表达式成为家喻户晓的文本处理工具, 几乎各大编程语言都以支持正则表达式作为卖点, 当然 JavaScript 也不例外.</p>
+<h3 id="u6B63_u5219_u8868_u8FBE_u5F0F_u7684_u5B9A_u4E49"><a href="#u6B63_u5219_u8868_u8FBE_u5F0F_u7684_u5B9A_u4E49" class="headerlink" title="正则表达式的定义"></a>正则表达式的定义</h3><p>正则表达式是由普通字符和特殊字符(也叫元字符)组成的文字模板. 如下便是简单的匹配数字的正则表达式:</p>
+<figure class="highlight coffeescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="regexp">/[0-9]+/</span></span><br><span class="line"><span class="regexp">/\d+/</span></span><br></pre></td></tr></table></figure>
+<h4 id="u5143_u5B57_u7B26"><a href="#u5143_u5B57_u7B26" class="headerlink" title="元字符"></a>元字符</h4><table>
+<thead>
+<tr>
+<th style="text-align:center">元字符</th>
+<th style="text-align:center">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">.</td>
+<td style="text-align:center">匹配除换行符以外的任意字符</td>
+</tr>
+<tr>
+<td style="text-align:center">\d</td>
+<td style="text-align:center">匹配数字, 等价于[0-9]</td>
+</tr>
+<tr>
+<td style="text-align:center">\w</td>
+<td style="text-align:center">匹配字母, 数字, 下划线或汉字</td>
+</tr>
+<tr>
+<td style="text-align:center">\s</td>
+<td style="text-align:center">匹配任意的空白符(包括制表符,空格,换行等)</td>
+</tr>
+<tr>
+<td style="text-align:center">\b</td>
+<td style="text-align:center">匹配单词开始或结束的位置</td>
+</tr>
+<tr>
+<td style="text-align:center">^</td>
+<td style="text-align:center">匹配行首</td>
+</tr>
+<tr>
+<td style="text-align:center">$</td>
+<td style="text-align:center">匹配行尾</td>
+</tr>
+</tbody>
+</table>
+<h4 id="u53CD_u4E49_u5143_u5B57_u7B26"><a href="#u53CD_u4E49_u5143_u5B57_u7B26" class="headerlink" title="反义元字符"></a>反义元字符</h4><table>
+<thead>
+<tr>
+<th style="text-align:center">元字符</th>
+<th style="text-align:center">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">\D</td>
+<td style="text-align:center">匹配非数字的任意字符, 等价于[^0-9]</td>
+</tr>
+<tr>
+<td style="text-align:center">\W</td>
+<td style="text-align:center">匹配除字母,数字,下划线或汉字之外的任意字符</td>
+</tr>
+<tr>
+<td style="text-align:center">\S</td>
+<td style="text-align:center">匹配非空白的任意字符</td>
+</tr>
+<tr>
+<td style="text-align:center">\B</td>
+<td style="text-align:center">匹配非单词开始或结束的位置</td>
+</tr>
+<tr>
+<td style="text-align:center">[^x]</td>
+<td style="text-align:center">匹配除x以外的任意字符</td>
+</tr>
+</tbody>
+</table>
+<p>可以看出正则表达式严格区分大小写.</p>
+<h4 id="u91CD_u590D_u9650_u5B9A_u7B26"><a href="#u91CD_u590D_u9650_u5B9A_u7B26" class="headerlink" title="重复限定符"></a>重复限定符</h4><p>限定符共有6个, 假设重复次数为x次, 那么将有如下规则:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">限定符</th>
+<th style="text-align:center">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">*</td>
+<td style="text-align:center">x&gt;=0</td>
+</tr>
+<tr>
+<td style="text-align:center">+</td>
+<td style="text-align:center">x&gt;=1</td>
+</tr>
+<tr>
+<td style="text-align:center">?</td>
+<td style="text-align:center">x=0 or x=1</td>
+</tr>
+<tr>
+<td style="text-align:center">{n}</td>
+<td style="text-align:center">x=n</td>
+</tr>
+<tr>
+<td style="text-align:center">{n,}</td>
+<td style="text-align:center">x&gt;=n</td>
+</tr>
+<tr>
+<td style="text-align:center">{n,m}</td>
+<td style="text-align:center">n&lt;=x&lt;=m</td>
+</tr>
+</tbody>
+</table>
+<h4 id="u5B57_u7B26_u7EC4"><a href="#u5B57_u7B26_u7EC4" class="headerlink" title="字符组"></a>字符组</h4><p>[…] 匹配中括号内字符之一. 如: [xyz]  匹配字符 x, y 或 z.</p>
+<h4 id="u6392_u9664_u6027_u5B57_u7B26_u7EC4"><a href="#u6392_u9664_u6027_u5B57_u7B26_u7EC4" class="headerlink" title="排除性字符组"></a>排除性字符组</h4><p>[^…] 匹配任何未列出的字符,. 如:  [^x]  匹配除x以外的任意字符.</p>
+<h4 id="u591A_u9009_u7ED3_u6784"><a href="#u591A_u9009_u7ED3_u6784" class="headerlink" title="多选结构"></a>多选结构</h4><p>| 就是或的意思, 表示两者中的一个. 如: a|b 匹配a或者b字符.</p>
+<h4 id="u62EC_u53F7"><a href="#u62EC_u53F7" class="headerlink" title="括号"></a>括号</h4><p>括号 常用来界定重复限定符的范围, 以及将字符<strong>分组</strong>. 如: (ab)+ 可以匹配abab..等, 其中 ab 便是一个分组.</p>
+<h4 id="u8F6C_u4E49_u5B57_u7B26"><a href="#u8F6C_u4E49_u5B57_u7B26" class="headerlink" title="转义字符"></a>转义字符</h4><p>\ 即转义字符, 通常 <strong>\ * + ? | { [ ( ) ] }^ $ . # 和 空白</strong> 这些字符都需要转义.</p>
+<h4 id="u64CD_u4F5C_u7B26_u7684_u8FD0_u7B97_u4F18_u5148_u7EA7"><a href="#u64CD_u4F5C_u7B26_u7684_u8FD0_u7B97_u4F18_u5148_u7EA7" class="headerlink" title="操作符的运算优先级"></a>操作符的运算优先级</h4><ol>
+<li>\ 转义符</li>
+<li>(), (?:), (?=), [] 圆括号或方括号</li>
+<li>*, +, ?, {n}, {n,}, {n,m} 限定符</li>
+<li>^, $ 位置</li>
+<li>| “或” 操作</li>
+</ol>
+<h4 id="u6D4B_u8BD5"><a href="#u6D4B_u8BD5" class="headerlink" title="测试"></a>测试</h4><p>我们来测试下上面的知识点, 写一个匹配手机号码的正则表达式, 如下:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(\+<span class="number">86</span>)?<span class="number">1</span>\d&#123;<span class="number">10</span>&#125;</span><br></pre></td></tr></table></figure>
+<p>匹配结果如下:</p>
+<p><img src="/docImages/regexp01.png" alt=""></p>
+<h3 id="u4FEE_u9970_u7B26"><a href="#u4FEE_u9970_u7B26" class="headerlink" title="修饰符"></a>修饰符</h3><p>javaScript中正则表达式有如下三种修饰符:</p>
+<ul>
+<li>g (全文查找)</li>
+<li>i (忽略大小写查找)</li>
+<li>m (多行查找)</li>
+</ul>
+<p>如上述截图, 实际上就开启了全文查找模式.</p>
+<h3 id="u5E38_u7528_u7684_u6B63_u5219_u8868_u8FBE_u5F0F"><a href="#u5E38_u7528_u7684_u6B63_u5219_u8868_u8FBE_u5F0F" class="headerlink" title="常用的正则表达式"></a>常用的正则表达式</h3><ol>
+<li>汉字: ^[\u4e00-\u9fa5]{0,}$</li>
+<li>Email: ^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$</li>
+<li>URL: ^https?://([\w-]+.)+[\w-]+(/[\w-./?%&amp;=]*)?$</li>
+<li>手机号码: ^1\d{10}$</li>
+<li>身份证号: ^\d{15}|\d{17}(\d|X)$</li>
+<li>中国邮政编码: [1-9]\d{5}(?!\d) (邮政编码为6位数字)</li>
+</ol>
+<h3 id="u6B63_u5219_u7684_u51E0_u5927_u5BB6_u65CF"><a href="#u6B63_u5219_u7684_u51E0_u5927_u5BB6_u65CF" class="headerlink" title="正则的几大家族"></a>正则的几大家族</h3><h4 id="u6B63_u5219_u8868_u8FBE_u5F0F_u5206_u7C7B"><a href="#u6B63_u5219_u8868_u8FBE_u5F0F_u5206_u7C7B" class="headerlink" title="正则表达式分类"></a>正则表达式分类</h4><p>在 linux 和 osx 下, 常见的正则表达式, 至少有以下三种: </p>
+<ul>
+<li>基本的正则表达式( Basic Regular Expression 又叫 Basic RegEx  简称 <strong>BREs</strong> )</li>
+<li>扩展的正则表达式( Extended Regular Expression 又叫 Extended RegEx 简称 <strong>EREs</strong> )</li>
+<li>Perl 的正则表达式( Perl Regular Expression 又叫 Perl RegEx 简称 <strong>PREs</strong> )</li>
+</ul>
+<h4 id="u6B63_u5219_u8868_u8FBE_u5F0F_u6BD4_u8F83"><a href="#u6B63_u5219_u8868_u8FBE_u5F0F_u6BD4_u8F83" class="headerlink" title="正则表达式比较"></a>正则表达式比较</h4><table>
+<thead>
+<tr>
+<th>字符</th>
+<th>说明</th>
+<th>Basic RegEx</th>
+<th>Extended RegEx</th>
+<th>python RegEx</th>
+<th>Perl regEx</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>转义</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>^</td>
+<td>匹配行首，例如’^dog’匹配以字符串dog开头的行（注意：awk 指令中，’^’则是匹配字符串的开始）</td>
+<td>^</td>
+<td>^</td>
+<td>^</td>
+<td>^</td>
+</tr>
+<tr>
+<td>$</td>
+<td>匹配行尾，例如：’^、dog$’匹配以字符串 dog 为结尾的行（注意：awk 指令中，’$’则是匹配字符串的结尾）</td>
+<td>$</td>
+<td>$</td>
+<td>$</td>
+<td>$</td>
+</tr>
+<tr>
+<td>^$</td>
+<td>匹配空行</td>
+<td>^$</td>
+<td>^$</td>
+<td>^$</td>
+<td>^$</td>
+</tr>
+<tr>
+<td>^string$</td>
+<td>匹配行，例如：’^dog$’匹配只含一个字符串 dog 的行</td>
+<td>^string$</td>
+<td>^string$</td>
+<td>^string$</td>
+<td>^string$</td>
+</tr>
+<tr>
+<td>\&lt;</td>
+<td>匹配单词，例如：’\&lt;frog’ （等价于’\bfrog’），匹配以 frog 开头的单词</td>
+<td>\&lt;</td>
+<td>\&lt;</td>
+<td><strong>不支持</strong></td>
+<td><strong>不支持</strong>（但可以使用\b来匹配单词，例如：’\bfrog’）</td>
+</tr>
+<tr>
+<td>></td>
+<td>匹配单词，例如：’frog>‘（等价于’frog\b ‘），匹配以 frog 结尾的单词</td>
+<td>></td>
+<td>></td>
+<td><strong>不支持</strong></td>
+<td><strong>不支持</strong>（但可以使用\b来匹配单词，例如：’frog\b’）</td>
+</tr>
+<tr>
+<td><x></x></td>
+<td>匹配一个单词或者一个特定字符，例如：’\<frog\>‘（等价于’\bfrog\b’）、’\<g\>‘</g\></frog\></td>
+<td><x></x></td>
+<td><x></x></td>
+<td><strong>不支持</strong></td>
+<td><strong>不支持</strong>（但可以使用\b来匹配单词，例如：’\bfrog\b’</td>
+</tr>
+<tr>
+<td>()</td>
+<td>匹配表达式，例如：不支持’（frog）’</td>
+<td><strong>不支持</strong>（但可以使用，如：dog</td>
+<td>()</td>
+<td>()</td>
+<td>()</td>
+</tr>
+<tr>
+<td></td>
+<td>匹配表达式，例如：不支持’（frog）’</td>
+<td></td>
+<td><strong>不支持</strong>（同())</td>
+<td><strong>不支持</strong>（同())</td>
+<td><strong>不支持</strong>（同())</td>
+</tr>
+<tr>
+<td>？</td>
+<td>匹配前面的子表达式 0 次或 1 次（等价于{0,1}），例如：where(is)?能匹配”where” 以及”whereis”</td>
+<td><strong>不支持</strong>（同\?)</td>
+<td>？</td>
+<td>？</td>
+<td>？</td>
+</tr>
+<tr>
+<td>\?</td>
+<td>匹配前面的子表达式 0 次或 1 次（等价于’{0,1}‘），例如：’whereis\? ‘能匹配 “where”以及”whereis”</td>
+<td>\?</td>
+<td><strong>不支持</strong>（同?)</td>
+<td><strong>不支持</strong>（同?)</td>
+<td><strong>不支持</strong>（同?)</td>
+</tr>
+<tr>
+<td>?</td>
+<td>当该字符紧跟在任何一个其他限制符（*, +, ?, {n},{n,}, {n,m}） 后面时，匹配模式是非贪婪的。非贪婪模式尽可能少的匹配所搜索的字符串，而默认的贪婪模式则尽可能多的匹配所搜索的字符串。例如，对于字符串 “oooo”，’o+?’ 将匹配单个”o”，而 ‘o+’ 将匹配所有 ‘o’</td>
+<td><strong>不支持</strong></td>
+<td><strong>不支持</strong></td>
+<td><strong>不支持</strong></td>
+<td><strong>不支持</strong></td>
+</tr>
+<tr>
+<td>.</td>
+<td>匹配除换行符（’\n’）之外的任意单个字符（注意：awk 指令中的句点能匹配换行符）</td>
+<td>.</td>
+<td>.（如果要匹配包括“\n”在内的任何一个字符，请使用: [\s\S]</td>
+<td>.</td>
+<td>.（如果要匹配包括“\n”在内的任何一个字符，请使用：’ [.\n] ‘</td>
+</tr>
+<tr>
+<td>*</td>
+<td>匹配前面的子表达式 0 次或多次（等价于{0, }），例如：zo* 能匹配 “z”以及 “zoo”</td>
+<td>*</td>
+<td>*</td>
+<td>*</td>
+<td>*</td>
+</tr>
+<tr>
+<td>+</td>
+<td>匹配前面的子表达式 1 次或多次（等价于’{1, }‘），例如：’whereis+ ‘能匹配 “whereis”以及”whereisis”</td>
+<td>+</td>
+<td><strong>不支持</strong>（同+)</td>
+<td><strong>不支持</strong>（同+)</td>
+<td><strong>不支持</strong>（同+)</td>
+</tr>
+<tr>
+<td>+</td>
+<td>匹配前面的子表达式 1 次或多次（等价于{1, }），例如：zo+能匹配 “zo”以及 “zoo”，但不能匹配 “z”</td>
+<td><strong>不支持</strong>（同\+)</td>
+<td>+</td>
+<td>+</td>
+<td>+</td>
+</tr>
+<tr>
+<td>{n}</td>
+<td>n 必须是一个 0 或者正整数，匹配子表达式 n 次，例如：zo{2}能匹配</td>
+<td><strong>不支持</strong>（同\{n\})</td>
+<td>{n}</td>
+<td>{n}</td>
+<td>{n}</td>
+</tr>
+<tr>
+<td>{n,}</td>
+<td>“zooz”，但不能匹配 “Bob”n 必须是一个 0 或者正整数，匹配子表达式大于等于 n次，例如：go{2,}</td>
+<td><strong>不支持</strong>（同\{n,\})</td>
+<td>{n,}</td>
+<td>{n,}</td>
+<td>{n,}</td>
+</tr>
+<tr>
+<td>{n,m}</td>
+<td>能匹配 “good”，但不能匹配 godm 和 n 均为非负整数，其中 n &lt;= m，最少匹配 n 次且最多匹配 m 次 ，例如：o{1,3}将配”fooooood” 中的前三个 o（请注意在逗号和两个数之间不能有空格）</td>
+<td><strong>不支持</strong>（同\{n,m\})</td>
+<td>{n,m}</td>
+<td>{n,m}</td>
+<td>{n,m}</td>
+</tr>
+<tr>
+<td>x l y</td>
+<td>匹配 x 或 y</td>
+<td><strong>不支持</strong>（同x \l y</td>
+<td>x l y</td>
+<td>x l y</td>
+<td>x l y</td>
+</tr>
+<tr>
+<td>[0-9]</td>
+<td>匹配从 0 到 9 中的任意一个数字字符（注意：要写成递增）</td>
+<td>[0-9]</td>
+<td>[0-9]</td>
+<td>[0-9]</td>
+<td>[0-9]</td>
+</tr>
+<tr>
+<td>[xyz]</td>
+<td>字符集合，匹配所包含的任意一个字符，例如：’[abc]’可以匹配”lay” 中的 ‘a’（注意：如果元字符，例如：. *等，它们被放在[ ]中，那么它们将变成一个普通字符）</td>
+<td>[xyz]</td>
+<td>[xyz]</td>
+<td>[xyz]</td>
+<td>[xyz]</td>
+</tr>
+<tr>
+<td>[^xyz]</td>
+<td>负值字符集合，匹配未包含的任意一个字符（注意：不包括换行符），例如：’[^abc]’ 可以匹配 “Lay” 中的’L’（注意：[^xyz]在awk 指令中则是匹配未包含的任意一个字符+换行符）</td>
+<td>[^xyz]</td>
+<td>[^xyz]</td>
+<td>[^xyz]</td>
+<td>[^xyz]</td>
+</tr>
+<tr>
+<td>[A-Za-z]</td>
+<td>匹配大写字母或者小写字母中的任意一个字符（注意：要写成递增）</td>
+<td>[A-Za-z]</td>
+<td>[A-Za-z]</td>
+<td>[A-Za-z]</td>
+<td>[A-Za-z]</td>
+</tr>
+<tr>
+<td>[^A-Za-z]</td>
+<td>匹配除了大写与小写字母之外的任意一个字符（注意：写成递增）</td>
+<td>[^A-Za-z]</td>
+<td>[^A-Za-z]</td>
+<td>[^A-Za-z]</td>
+<td>[^A-Za-z]</td>
+</tr>
+<tr>
+<td>\d</td>
+<td>匹配从 0 到 9 中的任意一个数字字符（等价于 [0-9]）</td>
+<td><strong>不支持</strong></td>
+<td><strong>不支持</strong></td>
+<td>\d</td>
+<td>\d</td>
+</tr>
+<tr>
+<td>\D</td>
+<td>匹配非数字字符（等价于 [^0-9]）</td>
+<td><strong>不支持</strong></td>
+<td><strong>不支持</strong></td>
+<td>\D</td>
+<td>\D</td>
+</tr>
+<tr>
+<td>\S</td>
+<td>匹配任何非空白字符（等价于[^\f\n\r\t\v]）</td>
+<td><strong>不支持</strong></td>
+<td><strong>不支持</strong></td>
+<td>\S</td>
+<td>\S</td>
+</tr>
+<tr>
+<td>\s</td>
+<td>匹配任何空白字符，包括空格、制表符、换页符等等（等价于[ \f\n\r\t\v]）</td>
+<td><strong>不支持</strong></td>
+<td><strong>不支持</strong></td>
+<td>\s</td>
+<td>\s</td>
+</tr>
+<tr>
+<td>\W</td>
+<td>匹配任何非单词字符 (等价于[^A-Za-z0-9_])</td>
+<td>\W</td>
+<td>\W</td>
+<td>\W</td>
+<td>\W</td>
+</tr>
+<tr>
+<td>\w</td>
+<td>匹配包括下划线的任何单词字符（等价于[A-Za-z0-9_]）</td>
+<td>\w</td>
+<td>\w</td>
+<td>\w</td>
+<td>\w</td>
+</tr>
+<tr>
+<td>\B</td>
+<td>匹配非单词边界，例如：’er\B’ 能匹配 “verb” 中的’er’，但不能匹配”never” 中的’er’</td>
+<td>\B</td>
+<td>\B</td>
+<td>\B</td>
+<td>\B</td>
+</tr>
+<tr>
+<td>\b</td>
+<td>匹配一个单词边界，也就是指单词和空格间的位置，例如： ‘er\b’ 可以匹配”never” 中的 ‘er’，但不能匹配 “verb” 中的’er’</td>
+<td>\b</td>
+<td>\b</td>
+<td>\b</td>
+<td>\b</td>
+</tr>
+<tr>
+<td>\t</td>
+<td>匹配一个横向制表符（等价于 \x09和 \cI）</td>
+<td><strong>不支持</strong></td>
+<td><strong>不支持</strong></td>
+<td>\t</td>
+<td>\t</td>
+</tr>
+<tr>
+<td>\v</td>
+<td>匹配一个垂直制表符（等价于 \x0b和 \cK）</td>
+<td><strong>不支持</strong></td>
+<td><strong>不支持</strong></td>
+<td>\v</td>
+<td>\v</td>
+</tr>
+<tr>
+<td>\n</td>
+<td>匹配一个换行符（等价于 \x0a 和\cJ）</td>
+<td><strong>不支持</strong></td>
+<td><strong>不支持</strong></td>
+<td>\n</td>
+<td>\n</td>
+</tr>
+<tr>
+<td>\f</td>
+<td>匹配一个换页符（等价于\x0c 和\cL）</td>
+<td><strong>不支持</strong></td>
+<td><strong>不支持</strong></td>
+<td>\f</td>
+<td>\f</td>
+</tr>
+<tr>
+<td>\r</td>
+<td>匹配一个回车符（等价于 \x0d 和\cM）</td>
+<td><strong>不支持</strong></td>
+<td><strong>不支持</strong></td>
+<td>\r</td>
+<td>\r</td>
+</tr>
+<tr>
+<td>\</td>
+<td>匹配转义字符本身”\”</td>
+<td>\</td>
+<td>\</td>
+<td>\</td>
+<td>\</td>
+</tr>
+<tr>
+<td>\cx</td>
+<td>匹配由 x 指明的控制字符，例如：\cM匹配一个Control-M 或回车符，x 的值必须为A-Z 或 a-z 之一，否则，将 c 视为一个原义的 ‘c’ 字符</td>
+<td><strong>不支持</strong></td>
+<td><strong>不支持</strong></td>
+<td></td>
+<td>\cx</td>
+</tr>
+<tr>
+<td>\xn</td>
+<td>匹配 n，其中 n 为十六进制转义值。十六进制转义值必须为确定的两个数字长，例如：’\x41’ 匹配 “A”。’\x041’ 则等价于’\x04’ &amp; “1”。正则表达式中可以使用 ASCII 编码</td>
+<td><strong>不支持</strong></td>
+<td><strong>不支持</strong></td>
+<td></td>
+<td>\xn</td>
+</tr>
+<tr>
+<td>\num</td>
+<td>匹配 num，其中 num是一个正整数。表示对所获取的匹配的引用</td>
+<td><strong>不支持</strong></td>
+<td>\num</td>
+<td>\num</td>
+<td></td>
+</tr>
+<tr>
+<td>[:alnum:]</td>
+<td>匹配任何一个字母或数字（[A-Za-z0-9]），例如：’[[:alnum:]] ‘</td>
+<td>[:alnum:]</td>
+<td>[:alnum:]</td>
+<td>[:alnum:]</td>
+<td>[:alnum:]</td>
+</tr>
+<tr>
+<td>[:alpha:]</td>
+<td>匹配任何一个字母（[A－Za－z]）， 例如：’ [[:alpha:]] ‘</td>
+<td>[:alpha:]</td>
+<td>[:alpha:]</td>
+<td>[:alpha:]</td>
+<td>[:alpha:]</td>
+</tr>
+<tr>
+<td>[:digit:]</td>
+<td>匹配任何一个数字（[0-9]），例如：’[[:digit:]] ‘</td>
+<td>[:digit:]</td>
+<td>[:digit:]</td>
+<td>[:digit:]</td>
+<td>[:digit:]</td>
+</tr>
+<tr>
+<td>[:lower:]</td>
+<td>匹配任何一个小写字母（[a-z]）， 例如：’ [[:lower:]] ‘</td>
+<td>[:lower:]</td>
+<td>[:lower:]</td>
+<td>[:lower:]</td>
+<td>[:lower:]</td>
+</tr>
+<tr>
+<td>[:upper:]</td>
+<td>匹配任何一个大写字母（[A-Z]）</td>
+<td>[:upper:]</td>
+<td>[:upper:]</td>
+<td>[:upper:]</td>
+<td>[:upper:]</td>
+</tr>
+<tr>
+<td>[:space:]</td>
+<td>任何一个空白字符： 支持制表符、空格，例如：’ [[:space:]] ‘</td>
+<td>[:space:]</td>
+<td>[:space:]</td>
+<td>[:space:]</td>
+<td>[:space:]</td>
+</tr>
+<tr>
+<td>[:blank:]</td>
+<td>空格和制表符（横向和纵向），例如：’[[:blank:]]’ó’[\s\t\v]’</td>
+<td>[:blank:]</td>
+<td>[:blank:]</td>
+<td>[:blank:]</td>
+<td>[:blank:]</td>
+</tr>
+<tr>
+<td>[:graph:]</td>
+<td>任何一个可以看得见的且可以打印的字符（注意：不包括空格和换行符等），例如：’[[:graph:]] ‘</td>
+<td>[:graph:]</td>
+<td>[:graph:]</td>
+<td>[:graph:]</td>
+<td>[:graph:]</td>
+</tr>
+<tr>
+<td>[:print:]</td>
+<td>任何一个可以打印的字符（注意：不包括：[:cntrl:]、字符串结束符’\0’、EOF 文件结束符（-1）， 但包括空格符号），例如：’[[:print:]] ‘</td>
+<td>[:print:]</td>
+<td>[:print:]</td>
+<td>[:print:]</td>
+<td>[:print:]</td>
+</tr>
+<tr>
+<td>[:cntrl:]</td>
+<td>任何一个控制字符（ASCII 字符集中的前 32 个字符，即：用十进制表示为从 0 到31，例如：换行符、制表符等等），例如：’ [[:cntrl:]]’</td>
+<td>[:cntrl:]</td>
+<td>[:cntrl:]</td>
+<td>[:cntrl:]</td>
+<td>[:cntrl:]</td>
+</tr>
+<tr>
+<td>[:punct:]</td>
+<td>任何一个标点符号（不包括：[:alnum:]、[:cntrl:]、[:space:]这些字符集）</td>
+<td>[:punct:]</td>
+<td>[:punct:]</td>
+<td>[:punct:]</td>
+<td>[:punct:]</td>
+</tr>
+<tr>
+<td>[:xdigit:]</td>
+<td>任何一个十六进制数（即：0-9，a-f，A-F）</td>
+<td>[:xdigit:]</td>
+<td>[:xdigit:]</td>
+<td>[:xdigit:]</td>
+<td>[:xdigit:]</td>
+</tr>
+</tbody>
+</table>
+<p><strong>注意</strong> </p>
+<ul>
+<li>js中支持的是EREs.</li>
+<li>当使用 BREs ( 基本正则表达式 ) 时，必须在下列这些符号(?,+,|,{,},(,))前加上转义字符 \ .</li>
+<li>上述[[:xxxx:]] 形式的正则表达式, 是php中内置的通用字符簇, js中并不支持.</li>
+</ul>
+<h3 id="linux/osx_u4E0B_u5E38_u7528_u547D_u4EE4_u4E0E_u6B63_u5219_u8868_u8FBE_u5F0F_u7684_u5173_u7CFB"><a href="#linux/osx_u4E0B_u5E38_u7528_u547D_u4EE4_u4E0E_u6B63_u5219_u8868_u8FBE_u5F0F_u7684_u5173_u7CFB" class="headerlink" title="linux/osx下常用命令与正则表达式的关系"></a>linux/osx下常用命令与正则表达式的关系</h3><h4 id="grep__2C_egrep__2C_sed__2C_awk__u6B63_u5219_u8868_u8FBE_u5F0F_u7279_u70B9"><a href="#grep__2C_egrep__2C_sed__2C_awk__u6B63_u5219_u8868_u8FBE_u5F0F_u7279_u70B9" class="headerlink" title="grep , egrep , sed , awk  正则表达式特点"></a>grep , egrep , sed , awk  正则表达式特点</h4><ol>
+<li><p>grep 支持：BREs、EREs、PREs 正则表达式</p>
+<p>grep 指令后不跟任何参数, 则表示要使用 “BREs”</p>
+<p>grep 指令后跟 ”-E” 参数, 则表示要使用 “EREs”</p>
+<p>grep 指令后跟 “-P” 参数, 则表示要使用 “PREs”</p>
+</li>
+<li><p>egrep 支持：EREs、PREs 正则表达式</p>
+<p>egrep 指令后不跟任何参数, 则表示要使用 “EREs”</p>
+<p>egrep 指令后跟 “-P” 参数, 则表示要使用 “PREs”</p>
+</li>
+<li><p>sed 支持: BREs、EREs</p>
+<p>sed 指令默认是使用 “BREs”</p>
+<p>sed 指令后跟 “-r” 参数 , 则表示要使用“EREs”</p>
+</li>
+<li><p>awk 支持 EREs, 并且默认使用 “EREs”</p>
+</li>
+</ol>
+<h3 id="u6B63_u5219_u8868_u8FBE_u5F0F_u521D_u9636_u6280_u80FD"><a href="#u6B63_u5219_u8868_u8FBE_u5F0F_u521D_u9636_u6280_u80FD" class="headerlink" title="正则表达式初阶技能"></a>正则表达式初阶技能</h3><h4 id="u8D2A_u5A6A_u6A21_u5F0F_u4E0E_u975E_u8D2A_u5A6A_u6A21_u5F0F"><a href="#u8D2A_u5A6A_u6A21_u5F0F_u4E0E_u975E_u8D2A_u5A6A_u6A21_u5F0F" class="headerlink" title="贪婪模式与非贪婪模式"></a>贪婪模式与非贪婪模式</h4><p>默认情况下, 所有的限定词都是贪婪模式, 表示尽可能多的去捕获字符; 而在限定词后增加?, 则是非贪婪模式, 表示尽可能少的去捕获字符. 如下:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> str = <span class="string">"aaab"</span>,</span><br><span class="line">    reg1 = <span class="regexp">/a+/</span>, <span class="comment">//贪婪模式</span></span><br><span class="line">    reg2 = <span class="regexp">/a+?/</span>;<span class="comment">//非贪婪模式</span></span><br><span class="line"><span class="built_in">console</span>.log(str.match(reg1)); <span class="comment">//["aaa"], 由于是贪婪模式, 捕获了所有的a</span></span><br><span class="line"><span class="built_in">console</span>.log(str.match(regs)); <span class="comment">//["a"], 由于是非贪婪模式, 只捕获到第一个a</span></span><br></pre></td></tr></table></figure>
+<p>实际上, 非贪婪模式非常有效, 特别是当匹配html标签时. 比如匹配一个配对出现的div, 方案一可能会匹配到很多的div标签对, 而方案二则只会匹配一个div标签对.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">/<span class="xml"><span class="tag">&lt;<span class="title">div</span>&gt;</span>.*<span class="tag">&lt;/<span class="title">div</span>&gt;</span>/</span><br><span class="line">/<span class="tag">&lt;<span class="title">div</span>&gt;</span>.*?<span class="tag">&lt;/<span class="title">div</span>&gt;</span>/</span></span><br></pre></td></tr></table></figure>
+<h5 id="u533A_u95F4_u91CF_u8BCD_u7684_u975E_u8D2A_u5A6A_u6A21_u5F0F"><a href="#u533A_u95F4_u91CF_u8BCD_u7684_u975E_u8D2A_u5A6A_u6A21_u5F0F" class="headerlink" title="区间量词的非贪婪模式"></a>区间量词的非贪婪模式</h5><p>一般情况下, 非贪婪模式, 我们使用的是”*?”, 或 “+?” 这种形式, 还有一种是 “{n,m}?”.</p>
+<p>区间量词”{n,m}” 也是匹配优先, 虽有匹配次数上限, 但是在到达上限之前, 它依然是尽可能多的匹配, 而”{n,m}?” 则表示在区间范围内, 尽可能少的匹配.</p>
+<p><strong>需要注意的是</strong>: </p>
+<ul>
+<li>能达到同样匹配结果的贪婪与非贪婪模式, 通常是贪婪模式的匹配效率较高.</li>
+<li>所有的非贪婪模式, 都可以通过修改量词修饰的子表达式, 转换为贪婪模式.</li>
+<li>贪婪模式可以与<code>固化分组</code>(后面会讲到)结合，提升匹配效率，而非贪婪模式却不可以.</li>
+</ul>
+<h4 id="u5206_u7EC4"><a href="#u5206_u7EC4" class="headerlink" title="分组"></a>分组</h4><p>正则的分组主要通过小括号来实现, 括号包裹的子表达式作为一个分组, 括号后可以紧跟限定词表示重复次数. 如下, 小括号内包裹的abc便是一个分组:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/(abc)+<span class="regexp">/.test("abc123") == true</span></span><br></pre></td></tr></table></figure>
+<p>那么分组有什么用呢? 一般来说, 分组是为了方便的表示重复次数, 除此之外, 还有一个作用就是用于捕获, 请往下看.</p>
+<h4 id="u6355_u83B7_u6027_u5206_u7EC4_u4E0E_u975E_u6355_u83B7_u6027_u5206_u7EC4"><a href="#u6355_u83B7_u6027_u5206_u7EC4_u4E0E_u975E_u6355_u83B7_u6027_u5206_u7EC4" class="headerlink" title="捕获性分组与非捕获性分组"></a>捕获性分组与非捕获性分组</h4><p><strong>捕获性分组</strong>, 通常由一对小括号加上子表达式组成. 捕获性分组会创建反向引用, 每个反向引用都由一个编号或名称来标识, 并通过“$”+”编号”表示法进行引用. 如下便是一个捕获性分组的例子.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> color = <span class="string">"#808080"</span>;</span><br><span class="line"><span class="keyword">var</span> output = color.replace(<span class="regexp">/#(\d+)/</span>,<span class="string">"$1"</span>+<span class="string">"~~"</span>);</span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">RegExp</span>.$<span class="number">1</span>);<span class="comment">//808080</span></span><br><span class="line"><span class="built_in">console</span>.log(output);<span class="comment">//808080~~</span></span><br></pre></td></tr></table></figure>
+<p>以上, (\d+) 表示一个捕获性分组, “$1” 指向该分组捕获的内容.</p>
+<p>非捕获性分组**, 通常由一对括号加上”?:”加上子表达式组成, 非捕获性分组不会创建反向引用. 如下:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> color = <span class="string">"#808080"</span>;</span><br><span class="line"><span class="keyword">var</span> output = color.replace(<span class="regexp">/#(?:\d+)/</span>,<span class="string">"$1"</span>+<span class="string">"~~"</span>);</span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">RegExp</span>.$<span class="number">1</span>);<span class="comment">//""</span></span><br><span class="line"><span class="built_in">console</span>.log(output);<span class="comment">//$1~~</span></span><br></pre></td></tr></table></figure>
+<p>以上, (?:\d+) 表示一个非捕获性分组, 由于分组不捕获任何内容, 所以, “$1” 指向空字符串.</p>
+<p>实际上, 捕获性分组和无捕获性分组在搜索效率方面也没什么不同, 没有哪一个比另一个更快.</p>
+<h4 id="u547D_u540D_u5206_u7EC4"><a href="#u547D_u540D_u5206_u7EC4" class="headerlink" title="命名分组"></a>命名分组</h4><p>语法: (?<name>…)</name></p>
+<p>命名分组也是捕获性分组,  它将匹配的字符串捕获到一个组名称或编号名称中, 在获得匹配结果后, 可通过分组名进行获取. 如下是一个python的命名分组的例子.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> re</span><br><span class="line">data = <span class="string">"#808080"</span></span><br><span class="line">regExp = <span class="string">r"#(?P&lt;one&gt;\d+)"</span></span><br><span class="line">replaceString = <span class="string">"\g&lt;one&gt;"</span> + <span class="string">"~~"</span></span><br><span class="line"><span class="keyword">print</span> re.sub(regExp,replaceString,data) <span class="comment"># 808080~~</span></span><br></pre></td></tr></table></figure>
+<p>python的命名分组表达式与标准格式相比, 在 ? 后多了一大写的 P 字符, 并且python通过“\g&lt;命名&gt;”表示法进行引用. (如果是捕获性分组, python通过”\g&lt;编号&gt;”表示法进行引用)</p>
+<p>与python不同的是, javaScript 中并不支持命名分组.</p>
+<h4 id="u56FA_u5316_u5206_u7EC4"><a href="#u56FA_u5316_u5206_u7EC4" class="headerlink" title="固化分组"></a>固化分组</h4><p>语法: (?&gt;…)</p>
+<p>如上所述, 我们在使用非贪婪模式时, 匹配过程中可能会进行多次的回溯, 回溯越多, 正则表达式的运行效率就越低. 而固化分组就是用来减少回溯次数的.</p>
+<p>实际上, 固化分组(?&gt;…)的匹配与正常的匹配并无分别, 它并不会改变匹配结果. 唯一的不同就是: 固化分组匹配结束时, 它匹配到的文本已经固化为一个单元, 只能作为整体而保留或放弃, 括号内的子表达式中未尝试过的备用状态都会被放弃, 所以回溯永远也不能选择其中的状态(因此不能参与回溯). 下面我们来通过一个例子更好地理解固化分组.</p>
+<p>假如要处理一批数据, 原格式为 123.456, 因为浮点数显示问题, 部分数据格式会变为123.456000000789这种, 现要求只保留小数点后2~3位, 当时最后一位不能为0, 那么这个正则怎么写呢?</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> str = <span class="string">"123.456000000789"</span>;</span><br><span class="line">str = str.replace(<span class="regexp">/(\.\d\d[1-9]?)\d*/</span>,<span class="string">"$1"</span>); <span class="comment">//123.456</span></span><br></pre></td></tr></table></figure>
+<p>以上的正则, 对于”123.456” 这种格式的数据, 将白白处理一遍. 为了提高效率, 我们将正则最后的一个”*”改为”+”. 如下:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> str = <span class="string">"123.456"</span>;</span><br><span class="line">str = str.replace(<span class="regexp">/(\.\d\d[1-9]?)\d+/</span>,<span class="string">"$1"</span>); <span class="comment">//123.45</span></span><br></pre></td></tr></table></figure>
+<p>此时, “\d\d[1-9]?” 子表达式, 匹配是 “45”, 而不是 “456”, 这是因为正则末尾使用了”+”, 表示末尾至少要匹配一个数字, 因此末尾的子表达式”\d+” 匹配到了 “6”. 显然 “123.45” 不是我们期望的匹配结果, 那我们应该怎么做呢? 能否让 “[1-9]?” 一旦匹配成功, 便不再进行回溯, 这里就要用到我们上面说的固化分组.</p>
+<p>“(\.\d\d(?&gt;[1-9]?))\d+” 便是上述正则的固化分组形式. 由于字符串 “123.456” 不满足该固化分组的正则, 所以, 匹配会失败, 符合我们期望.</p>
+<p>下面我们来分析下固化分组的正则 (\.\d\d(?&gt;[1-9]?))\d+ 为什么匹配不到字符串”123.456”.</p>
+<p>很明显, 对于上述固化分组, 只存在两种匹配结果.</p>
+<p>情况①: 若 [1-9] 匹配失败, 正则会返回 ? 留下的备用状态. 然后匹配脱离固化分组, 继续前进到[\d+]. 当控制权离开固化分组时, 没有备用状态需要放弃(因固化分组中根本没有创建任何备用状态).</p>
+<p>情况②: 若 [1-9] 匹配成功, 匹配脱离固化分组之后,  ? 保存的备用状态仍然存在, 但是, 由于它属于已经结束的固化分组, 所以会被抛弃.</p>
+<p>对于字符串 “123.456”, 由于 [1-9] 能够匹配成功, 所以它符合情况②. 下面我们来还原情况②的执行现场. </p>
+<ol>
+<li>匹配所处的状态:  匹配已经走到了 “6” 的位置, 匹配将继续前进;==&gt;</li>
+<li>子表达式 \d+ 发现无法匹配, 正则引擎便尝试回溯;==&gt;</li>
+<li>查看是否存在备用状态以供回溯?==&gt;</li>
+<li>“?” 保存的备用状态属于已经结束的固化分组, 所以该备用状态会被放弃;==&gt;</li>
+<li>此时固化分组匹配到的 “6”, 便不能用于正则引擎的回溯;==&gt;</li>
+<li>尝试回溯失败;==&gt;</li>
+<li>正则匹配失败.==&gt;</li>
+<li>文本 “123.456” 没有被正则表达式匹配上, 符合预期.</li>
+</ol>
+<p>相应的流程图如下:</p>
+<style>
+
+.fancy-ctn img[src="/docImages/regexp02.png"]{height:500px;width:396px;}
+
+</style>
+
+<p><img src="/docImages/regexp02.png" alt="正则表达式流程图"></p>
+<p>遗憾的是, javaScript, java 和 python中并不支持固化分组的语法, 不过, 它在php和.NET中表现良好. 下面提供了一个php版的固化分组形式的正则表达式, 以供尝试.</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$str</span> = <span class="string">"123.456"</span>;</span><br><span class="line"><span class="keyword">echo</span> preg_replace(<span class="string">"/(\.\d\d(?&gt;[1-9]?))\d+/"</span>,<span class="string">"\\1"</span>,<span class="variable">$str</span>); <span class="comment">//固化分组</span></span><br></pre></td></tr></table></figure>
+<p>不仅如此, php还提供了占有量词优先的语法. 如下:</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$str</span> = <span class="string">"123.456"</span>;</span><br><span class="line"><span class="keyword">echo</span> preg_replace(<span class="string">"/(\.\d\d[1-9]?+)\d+/"</span>,<span class="string">"\\1"</span>,<span class="variable">$str</span>); <span class="comment">//占有量词优先</span></span><br></pre></td></tr></table></figure>
+<p>虽然java不支持固化分组的语法, 但java也提供了占有量词优先的语法, 同样能够避免正则回溯. 如下: </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">String str = <span class="string">"123.456"</span>;</span><br><span class="line">System.out.println(str.replaceAll(<span class="string">"(\\.\\d\\d[1-9]?+)\\d+"</span>, <span class="string">"$1"</span>));<span class="comment">// 123.456</span></span><br></pre></td></tr></table></figure>
+<p>值得注意的是: java中 replaceAll 方法需要转义反斜杠.</p>
+<h3 id="u6B63_u5219_u8868_u8FBE_u5F0F_u9AD8_u9636_u6280_u80FD-_u96F6_u5BBD_u65AD_u8A00"><a href="#u6B63_u5219_u8868_u8FBE_u5F0F_u9AD8_u9636_u6280_u80FD-_u96F6_u5BBD_u65AD_u8A00" class="headerlink" title="正则表达式高阶技能-零宽断言"></a>正则表达式高阶技能-零宽断言</h3><p>零宽断言, 又叫环视. 环视只进行子表达式的匹配, 匹配到的内容不保存到最终的匹配结果, 由于匹配是零宽度的, 故最终匹配到的只是一个位置. </p>
+<p>环视按照方向划分, 有顺序和逆序两种, 按照是否匹配有肯定和否定两种, 组合之, 便有4种环视. 4种环视并不复杂, 如下便是它们的描述.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center"><strong>字符</strong></th>
+<th><strong>描述</strong></th>
+<th><strong>示例</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">(?:<em>pattern</em>)</td>
+<td>非捕获性分组, 匹配pattern的位置, 但不捕获匹配结果.</td>
+<td>‘abcd(?:e)匹配’abcde</td>
+</tr>
+<tr>
+<td style="text-align:center">(?=<em>pattern</em>)</td>
+<td><strong>顺序肯定环视</strong>, 匹配后面是pattern 的位置, 不捕获匹配结果.</td>
+<td>‘Windows (?=2000)’匹配 “Windows2000” 中的 “Windows”; 不匹配 “Windows3.1” 中的 “Windows”</td>
+</tr>
+<tr>
+<td style="text-align:center">(?!<em>pattern</em>)</td>
+<td><strong>顺序否定环视</strong>, 匹配后面不是 pattern 的位置, 不捕获匹配结果.</td>
+<td>‘Windows (?!2000)’匹配 “Windows3.1” 中的 “Windows”; 不匹配 “Windows2000” 中的 “Windows”</td>
+</tr>
+<tr>
+<td style="text-align:center">(?&lt;=<em>pattern</em>)</td>
+<td><strong>逆序肯定环视</strong>, 匹配前面是 pattern 的位置, 不捕获匹配结果.</td>
+<td>‘2000 (?&lt;=Office)’匹配 “ Office2000” 中的 “2000”; 不匹配 “Windows2000” 中的 “2000”</td>
+</tr>
+<tr>
+<td style="text-align:center">(?&lt;!<em>pattern</em>)</td>
+<td><strong>逆序否定环视</strong>, 匹配前面不是 pattern 的位置, 不捕获匹配结果.</td>
+<td>‘2000 (?&lt;!Office)’匹配 “ Windows2000” 中的 “2000”; 不匹配 “ Office2000” 中的 “2000”</td>
+</tr>
+</tbody>
+</table>
+<p>以上4种环视, 十分强大. 目前 javaScript 中只支持前两种, 也就是只支持 <strong>顺序肯定环视</strong> 和 <strong>顺序否定环视</strong>. 下面我们通过实例来帮助理解下:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> str = <span class="string">"123abc789"</span>,s;</span><br><span class="line"><span class="comment">//没有使用环视,abc直接被替换</span></span><br><span class="line">s = str.replace(<span class="regexp">/abc/</span>,<span class="number">456</span>);</span><br><span class="line"><span class="built_in">console</span>.log(s); <span class="comment">//123456789</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//使用了顺序肯定环视,捕获到了a前面的位置,所以abc没有被替换,只是将3替换成了3456</span></span><br><span class="line">s = str.replace(<span class="regexp">/3(?=abc)/</span>,<span class="number">3456</span>);</span><br><span class="line"><span class="built_in">console</span>.log(s); <span class="comment">//123456abc789</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//使用了顺序否定环视,由于3后面跟着abc,不满意条件,故捕获失败,所以原字符串没有被替换</span></span><br><span class="line">s = str.replace(<span class="regexp">/3(?!abc)/</span>,<span class="number">3456</span>);</span><br><span class="line"><span class="built_in">console</span>.log(s); <span class="comment">//123abc789</span></span><br></pre></td></tr></table></figure>
+<p>下面通过python来演示下 <strong>逆序肯定环视</strong> 和 <strong>逆序否定环视</strong> 的用法.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> re</span><br><span class="line">data = <span class="string">"123abc789"</span></span><br><span class="line"><span class="comment"># 使用了逆序肯定环视,替换左边为123的连续的小写英文字母,匹配成功,故abc被替换为456</span></span><br><span class="line">regExp = <span class="string">r"(?&lt;=123)[a-z]+"</span></span><br><span class="line">replaceString = <span class="string">"456"</span></span><br><span class="line"><span class="keyword">print</span> re.sub(regExp,replaceString,data) <span class="comment"># 123456789</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用了逆序否定环视,由于英文字母左侧不能为123,故子表达式[a-z]+捕获到bc,最终bc被替换为456</span></span><br><span class="line">regExp = <span class="string">r"(?&lt;!123)[a-z]+"</span></span><br><span class="line">replaceString = <span class="string">"456"</span></span><br><span class="line"><span class="keyword">print</span> re.sub(regExp,replaceString,data) <span class="comment"># 123a456789</span></span><br></pre></td></tr></table></figure>
+<p>需要注意的是: python 和 perl 语言中的 <strong>逆序环视</strong> 的子表达式只能使用定长的文本. 比如将上述 “(?&lt;=123)” (逆序肯定环视)子表达式写成 “(?&lt;=[0-9]+)”, python解释器将会报错: “error: look-behind requires fixed-width pattern”.</p>
+<h3 id="u6B63_u5219_u8868_u8FBE_u5F0F_u5728JS_u4E2D_u7684_u5E94_u7528"><a href="#u6B63_u5219_u8868_u8FBE_u5F0F_u5728JS_u4E2D_u7684_u5E94_u7528" class="headerlink" title="正则表达式在JS中的应用"></a>正则表达式在JS中的应用</h3><p>javaScript 中与正则表达式有关的方法如下: </p>
+<table>
+<thead>
+<tr>
+<th>方法名</th>
+<th>compile</th>
+<th>test</th>
+<th>exec</th>
+<th>match</th>
+<th>search</th>
+<th>replace</th>
+<th>split</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>所属对象</td>
+<td>RegExp</td>
+<td>RegExp</td>
+<td>RegExp</td>
+<td>String</td>
+<td>String</td>
+<td>String</td>
+<td>String</td>
+</tr>
+</tbody>
+</table>
+<p>由上, 一共有7个与js相关的方法, 这些方法分别来自于 RegExp 与 String 对象. 首先我们先来看看js中的正则类 RegExp.</p>
+<h4 id="RegExp"><a href="#RegExp" class="headerlink" title="RegExp"></a>RegExp</h4><p>RegExp 对象表示正则表达式, 主要用于对字符串执行模式匹配.</p>
+<p>语法: new RegExp(pattern[, flags])</p>
+<p>参数 <em>pattern</em> 是一个字符串, 指定了正则表达式字符串或其他的正则表达式对象.</p>
+<p>参数 <em>flags</em> 是一个可选的字符串, 包含属性 “g”、”i” 和 “m”, 分别用于指定全局匹配、区分大小写的匹配和多行匹配. 如果<em>pattern</em> 是正则表达式, 而不是字符串, 则必须省略该参数.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> pattern = <span class="string">"[0-9]"</span>;</span><br><span class="line"><span class="keyword">var</span> reg = <span class="keyword">new</span> <span class="built_in">RegExp</span>(pattern,<span class="string">"g"</span>);</span><br><span class="line"><span class="comment">// 上述创建正则表达式对象,可以用对象字面量形式代替,也推荐下面这种</span></span><br><span class="line"><span class="keyword">var</span> reg = <span class="regexp">/[0-9]/g</span>;</span><br></pre></td></tr></table></figure>
+<p>以上, 通过对象字面量和构造函数创建正则表达式, 有个小插曲.</p>
+<p>“对于正则表达式的直接量, ECMAscript 3规定在每次它时都会返回同一个RegExp对象, 因此用直接量创建的正则表达式的会共享一个实例. 直到ECMAScript 5才规定每次返回不同的实例.”</p>
+<p>所以, 现在我们基本不用担心这个问题, 只需要注意在低版本的非IE浏览器中尽量使用构造函数创建正则(这点上, IE一直遵守ES5规定, 其他浏览器的低级版本遵循ES3规定).</p>
+<p>RegExp 实例对象包含如下属性:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">实例属性</th>
+<th style="text-align:center">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">global</td>
+<td style="text-align:center">是否包含全局标志(true/false)</td>
+</tr>
+<tr>
+<td style="text-align:center">ignoreCase</td>
+<td style="text-align:center">是否包含区分大小写标志(true/false)</td>
+</tr>
+<tr>
+<td style="text-align:center">multiline</td>
+<td style="text-align:center">是否包含多行标志(true/false)</td>
+</tr>
+<tr>
+<td style="text-align:center">source</td>
+<td style="text-align:center">返回创建RegExp对象实例时指定的表达式文本字符串形式</td>
+</tr>
+<tr>
+<td style="text-align:center">lastIndex</td>
+<td style="text-align:center">表示原字符串中匹配的字符串末尾的后一个位置, 默认为0</td>
+</tr>
+</tbody>
+</table>
+<h5 id="compile"><a href="#compile" class="headerlink" title="compile"></a>compile</h5><p>compile 方法用于在执行过程中改变和重新编译正则表达式.</p>
+<p>语法: compile(pattern[, flags])</p>
+<p>参数介绍请参考上述 RegExp 构造器. 用法如下:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> reg = <span class="keyword">new</span> <span class="built_in">RegExp</span>(<span class="string">"abc"</span>, <span class="string">"gi"</span>); </span><br><span class="line"><span class="keyword">var</span> reg2 = reg.compile(<span class="string">"new abc"</span>, <span class="string">"g"</span>);</span><br><span class="line"><span class="built_in">console</span>.log(reg);<span class="comment">// /new abc/g</span></span><br><span class="line"><span class="built_in">console</span>.log(reg2);<span class="comment">// undefined</span></span><br></pre></td></tr></table></figure>
+<p>可见 compile 方法会改变原正则表达式对象, 并重新编译, 而且它的返回值为空.</p>
+<h5 id="test"><a href="#test" class="headerlink" title="test"></a>test</h5><p>test 方法用于检测一个字符串是否匹配某个正则规则, 只要是字符串中含有与正则规则匹配的文本, 该方法就返回true, 否则返回 false.</p>
+<p>语法: test(string), 用法如下:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(<span class="regexp">/[0-9]+/</span>.test(<span class="string">"abc123"</span>));<span class="comment">//true</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="regexp">/[0-9]+/</span>.test(<span class="string">"abc"</span>));<span class="comment">//false</span></span><br></pre></td></tr></table></figure>
+<p>以上, 字符串”abc123” 包含数字, 故 test 方法返回 true; 而 字符串”abc” 不包含数字, 故返回 false.</p>
+<p>如果需要使用 test 方法测试字符串是否完成匹配某个正则规则, 那么可以在正则表达式里增加开始(^)和结束($)元字符. 如下: </p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(<span class="regexp">/^[0-9]+$/</span>.test(<span class="string">"abc123"</span>));<span class="comment">//false</span></span><br></pre></td></tr></table></figure>
+<p>以上, 由于字符串”abc123” 并非以数字开始, 也并非以数字结束, 故 test 方法返回false.</p>
+<h5 id="exec"><a href="#exec" class="headerlink" title="exec"></a>exec</h5><p>exec 方法用于检测字符串对正则表达式的匹配, 如果找到了匹配的文本, 则返回一个结果数组, 否则返回null.</p>
+<p>语法: exec(string)</p>
+<p>exec 方法返回的数组中包含两个额外的属性, index 和 input. 并且该数组具有如下特点:</p>
+<ul>
+<li>第 0 个项表示正则表达式捕获的文本</li>
+<li>第 1~n 项依次表示第 1~n 个分组捕获的文本</li>
+<li>index 表示匹配字符串的初始位置</li>
+<li>input 表示正在检索的字符串</li>
+</ul>
+<p>无论正则表达式有无全局标示”g”, exec 的表现都相同. 但正则表达式对象的表现却有些不同. 下面我们来详细说明下正则表达式对象的表现都有哪些不同.</p>
+<p>假设正则表达式对象为 reg , 检测的字符为 string , reg.exec(string) 返回值为 array.</p>
+<p>若 reg 包含全局标示”g”, 那么 reg.lastIndex 属性表示原字符串中匹配的字符串末尾的后一个位置, 即下次匹配开始的位置, 此时 reg.lastIndex == array.index(匹配开始的位置) + array[0].length(匹配字符串的长度). 如下:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> reg = <span class="regexp">/[a-z]+/gi</span>,</span><br><span class="line">    string = <span class="string">"World Internet Conference"</span>;</span><br><span class="line"><span class="keyword">var</span> array = reg.exec(string);</span><br><span class="line"><span class="built_in">console</span>.log(array);<span class="comment">//["World", index: 0, input: "World Internet Conference"]</span></span><br><span class="line"><span class="built_in">console</span>.log(reg.lastIndex);<span class="comment">//5, 刚好等于 array.index + array[0].length</span></span><br></pre></td></tr></table></figure>
+<p>随着检索继续, array.index 的值将往后递增, 也就是说, reg.lastIndex 的值也会同步往后递增. 因此, 我们也可以通过反复调用 exec 方法来遍历字符串中所有的匹配文本. 直到 exec 方法再也匹配不到文本时, 它将返回 null, 并把 reg.lastIndex 属性重置为 0. </p>
+<p>接着上述例子, 我们继续执行代码, 如下所示:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">array = reg.exec(string);</span><br><span class="line"><span class="built_in">console</span>.log(array);<span class="comment">//["Internet", index: 6, input: "World Internet Conference"]</span></span><br><span class="line"><span class="built_in">console</span>.log(reg.lastIndex);<span class="comment">//14</span></span><br><span class="line"></span><br><span class="line">array = reg.exec(string);</span><br><span class="line"><span class="built_in">console</span>.log(array);<span class="comment">//["Conference", index: 15, input: "World Internet Conference"]</span></span><br><span class="line"><span class="built_in">console</span>.log(reg.lastIndex);<span class="comment">//25</span></span><br><span class="line"></span><br><span class="line">array = reg.exec(string);</span><br><span class="line"><span class="built_in">console</span>.log(array);<span class="comment">//null</span></span><br><span class="line"><span class="built_in">console</span>.log(reg.lastIndex);<span class="comment">//0</span></span><br></pre></td></tr></table></figure>
+<p><strong>注意:</strong> 由于 reg.lastIndex 的值并不总是为零, 并且它决定了下次匹配开始的位置, 如果在一个字符串中完成了一次匹配之后要开始检索新的字符串, 那就必须要手动地把 lastIndex 属性重置为 0. 避免出现下面这种错误:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> reg = <span class="regexp">/[0-9]+/g</span>,</span><br><span class="line">    str1 = <span class="string">"123abc"</span>,</span><br><span class="line">    str2 = <span class="string">"123456"</span>;</span><br><span class="line">reg.exec(str1);</span><br><span class="line"><span class="built_in">console</span>.log(reg.lastIndex);<span class="comment">//3</span></span><br><span class="line"><span class="keyword">var</span> array = reg.exec(str2);</span><br><span class="line"><span class="built_in">console</span>.log(array);<span class="comment">//["456", index: 3, input: "123456"]</span></span><br></pre></td></tr></table></figure>
+<p>以上代码, 建议在第二次执行 exec 方法前, 增加一句 “reg.lastIndex = 0;”.</p>
+<p>若 reg 不包含全局标示”g”, 那么 exec 方法的执行结果(array)将与 string.match(reg) 方法执行结果完全相同.</p>
+<h4 id="String"><a href="#String" class="headerlink" title="String"></a>String</h4><p>match, search, replace, split 方法请参考 <a href="http://louiszhai.github.io/2016/01/12/js.String/"><code>字符串常用方法</code></a> 中的讲解.</p>
+<h3 id="u6B63_u5219_u8868_u8FBE_u5F0F_u5728H5_u4E2D_u7684_u5E94_u7528"><a href="#u6B63_u5219_u8868_u8FBE_u5F0F_u5728H5_u4E2D_u7684_u5E94_u7528" class="headerlink" title="正则表达式在H5中的应用"></a>正则表达式在H5中的应用</h3><p>H5中新增了 pattern 属性, 规定了用于验证输入字段的模式, pattern的模式匹配支持正则表达式的书写方式. 默认 pattern 属性是全部匹配, 即无论正则表达式中有无 “^”, “$” 元字符, 它都是匹配所有文本.</p>
+<p>注: pattern 适用于以下 \<input\> 类型：text, search, url, telephone, email 以及 password. 如果需要取消表单验证, 在form标签上增加 novalidate 属性即可.</input\></p>
+<h3 id="u6B63_u5219_u5F15_u64CE"><a href="#u6B63_u5219_u5F15_u64CE" class="headerlink" title="正则引擎"></a>正则引擎</h3><p>目前正则引擎有两种, DFA 和 NFA, NFA又可以分为传统型NFA和POSIX NFA.</p>
+<ul>
+<li>DFA Deterministic finite automaton 确定型有穷自动机</li>
+<li>NFA Non-deterministic finite automaton　非确定型有穷自动机</li>
+<li>Traditional NFA</li>
+<li>POSIX NFA</li>
+</ul>
+<p>DFA引擎不支持回溯, 匹配快速, 并且不支持捕获组, 因此也就不支持反向引用. 上述awk, egrep命令均支持 DFA引擎. </p>
+<p>POSIX NFA主要指符合POSIX标准的NFA引擎, 像 javaScript, java, php, python, c#等语言均实现了NFA引擎.</p>
+<p>有关正则表达式详细的匹配原理, 暂时没在网上看到适合的文章, 建议选读 Jeffrey Friedl 的 &lt;精通正则表达式&gt;[第三版] 中第4章-表达式的匹配原理(p143-p183), Jeffrey Friedl 对正则表达式有着深刻的理解, 相信他能够帮助您更好的学习正则.</p>
+<p>有关NFA引擎的简单实现, 可以参考文章 <a href="http://www.cnblogs.com/catch/p/3722082.html" target="_blank" rel="external">基于ε-NFA的正则表达式引擎 - twoon</a>.</p>
+<h3 id="u603B_u7ED3"><a href="#u603B_u7ED3" class="headerlink" title="总结"></a>总结</h3><p>在学习正则的初级阶段, 重在理解 ①贪婪与非贪婪模式, ②分组, ③捕获性与非捕获性分组, ④命名分组, ⑤固化分组, 体会设计的精妙之处. 而高级阶段, 主要在于熟练运用⑥零宽断言(或环视)解决问题, 并且熟悉正则匹配的原理. </p>
+<p>实际上, 正则在 javaScript 中的功能不算强大, js 仅仅支持了①贪婪与非贪婪模式, ②分组, ③捕获性与非捕获性分组 以及 ⑥零宽断言中的顺序环视. 如果再稍微熟悉些 js 中7种与正则有关的方法(compile, test, exec, match, search, replace, split), 那么处理文本或字符串将游刃有余.</p>
+<p>正则表达式, 在文本处理方面天赋异禀, 它的功能十分强大, 很多时候甚至是唯一解决方案. 正则不局限于js, 当下热门的编辑器(比如Sublime, Atom) 以及 IDE(比如WebStorm, IntelliJ IDEA) 都支持它. 您甚至可以在任何时候任何语言中, 尝试使用正则解决问题, 也许之前不能解决的问题, 现在可以轻松的解决.</p>
+<p>附其他语言正则资料:</p>
+<ul>
+<li><a href="http://wiki.ubuntu.org.cn/Python%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%93%8D%E4%BD%9C%E6%8C%87%E5%8D%97" target="_blank" rel="external">Python正则表达式操作指南</a></li>
+<li><a href="http://blog.csdn.net/allwefantasy/article/details/3136570/" target="_blank" rel="external">java正则表达式</a></li>
+</ul>
+<hr>
+<p>本文就讨论这么多内容,大家有什么问题或好的想法欢迎在下方参与<a href="#respond">留言和评论</a>.</p>
+<p>本文作者: <a href="https://github.com/Louiszhai" target="_blank" rel="external">louis</a></p>
+<p>本文链接: <a href="http://louiszhai.github.io/2016/06/13/regular/">http://louiszhai.github.io/2016/06/13/regular/</a></p>
+<p>参考文章</p>
+<ul>
+<li>Jeffrey Friedl 的 &lt;精通正则表达式&gt;[第三版]</li>
+<li><a href="http://blog.csdn.net/fdl19881/article/details/7800877" target="_blank" rel="external">linux shell 正则表达式(BREs,EREs,PREs)差异比较</a></li>
+<li><a href="http://www.jb51.net/article/28035.htm" target="_blank" rel="external">正则表达式之捕获组/非捕获组介绍_正则表达式_脚本之家</a></li>
+<li><a href="http://www.cnblogs.com/kissdodog/archive/2013/04/22/3036649.html" target="_blank" rel="external">正则表达式(一) – 元字符 - 逆心 - 博客园</a></li>
+<li><a href="http://blog.csdn.net/hguisu/article/details/8244560" target="_blank" rel="external">正则表达式详解 - guisu，程序人生。 逆水行舟，不进则退。 - 博客频道 - CSDN.NET</a></li>
+<li><a href="http://www.cnblogs.com/taek/archive/2012/02/08/2342741.html" target="_blank" rel="external">正则表达式之固化分组 - taek - 博客园</a></li>
+<li><a href="http://www.jb51.net/article/31491.htm" target="_blank" rel="external">正则表达式之 贪婪与非贪婪模式详解（概述）_正则表达式_脚本之家</a></li>
+<li><a href="http://blog.csdn.net/nebula1982/article/details/6659702" target="_blank" rel="external">JAVASCRIPT 正则表达式学习–&gt;基础与零宽断言（转自司徒正美） - 随风之羽 - 博客频道 - CSDN.NET</a></li>
+</ul>
+]]></content>
+    <summary type="html">
+    <![CDATA[regexp 正则表达式]]>
+    
+    </summary>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[详解IE7以下独有的hasLayout]]></title>
@@ -168,7 +1059,7 @@
     <link href="http://louiszhai.github.io/2016/03/12/css-center/"/>
     <id>http://louiszhai.github.io/2016/03/12/css-center/</id>
     <published>2016-03-12T11:03:04.000Z</published>
-    <updated>2016-06-15T01:31:33.000Z</updated>
+    <updated>2016-06-20T10:54:35.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>熟悉水平居中和垂直居中的方法, 不为别的, 就为用的时候能够信手拈来. 下面直接步入正题.</p>
 <a id="more"></a>
 <h3 id="u6C34_u5E73_u5C45_u4E2D"><a href="#u6C34_u5E73_u5C45_u4E2D" class="headerlink" title="水平居中"></a>水平居中</h3><p>1) 若是行内元素, 给其父元素设置 text-align:center,即可实现行内元素水平居中.</p>
@@ -511,7 +1402,7 @@
     <link href="http://louiszhai.github.io/2016/01/12/js.String/"/>
     <id>http://louiszhai.github.io/2016/01/12/js.String/</id>
     <published>2016-01-12T12:27:09.000Z</published>
-    <updated>2016-06-03T08:54:35.000Z</updated>
+    <updated>2016-06-20T10:54:38.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>javaScript 中, 字符串无处不在, 并且所有的字符串方法均来自 String.prototype, 这一节, 我们走进看一看String内部, 探讨那些常用或不常用的字符串操作方法.</p>
 <a id="more"></a>
 <h3 id="String-prototype"><a href="#String-prototype" class="headerlink" title="String.prototype"></a>String.prototype</h3><p>String.prototype 属性指向 String 的原型对象. 以下是它的属性特性:</p>
@@ -663,7 +1554,7 @@
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> str = <span class="string">"Where there is a will, there is a way."</span>;</span><br><span class="line"><span class="built_in">console</span>.log(str.startsWith(<span class="string">"Where"</span>));<span class="comment">//true</span></span><br><span class="line"><span class="built_in">console</span>.log(str.startsWith(<span class="string">"there"</span>,<span class="number">6</span>));<span class="comment">//true</span></span><br></pre></td></tr></table></figure>
 <p>目前只有 Firefox 17 版本实现了该方法, 其他浏览器请参考 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/String/startsWith#Polyfill" target="_blank" rel="external">Polyfill</a>.</p>
 <p>其它非标准的方法暂时不作介绍. 如需了解请参考 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/String/prototype" target="_blank" rel="external">String.prototype - JavaScript | MDN</a> 中标注为感叹号的方法.</p>
-<h6 id="HTML_u6709_u5173_u7684_u65B9_u6CD5"><a href="#HTML_u6709_u5173_u7684_u65B9_u6CD5" class="headerlink" title="HTML有关的方法"></a>HTML有关的方法</h6><p>常用的方法有 anchor, link 其它方法如 big, blink, bold, fixed, fontcolor, fontsize, italics, small, strike, sub, sup均已废除.</p>
+<h5 id="HTML_u6709_u5173_u7684_u65B9_u6CD5"><a href="#HTML_u6709_u5173_u7684_u65B9_u6CD5" class="headerlink" title="HTML有关的方法"></a>HTML有关的方法</h5><p>常用的方法有 anchor, link 其它方法如 big, blink, bold, fixed, fontcolor, fontsize, italics, small, strike, sub, sup均已废除.</p>
 <p>接下来我们将介绍 anchor和link 两个方法, 其他废除方法不作介绍.</p>
 <h6 id="anchor"><a href="#anchor" class="headerlink" title="anchor"></a>anchor</h6><p>anchor() 方法创建一个锚标签.</p>
 <p>语法: <em>str</em>.anchor(name)</p>
@@ -687,49 +1578,6 @@
 ]]></content>
     <summary type="html">
     <![CDATA[JavaScript String String.prototype]]>
-    
-    </summary>
-    
-      <category term="JavaScript" scheme="http://louiszhai.github.io/tags/JavaScript/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[Function.prototype.bind方法指南]]></title>
-    <link href="http://louiszhai.github.io/2016/01/11/bind/"/>
-    <id>http://louiszhai.github.io/2016/01/11/bind/</id>
-    <published>2016-01-11T00:01:33.000Z</published>
-    <updated>2016-05-17T01:07:43.000Z</updated>
-    <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>ES5新增了 Function.prototype.bind 方法, 该方法不同于jquery的bind 方法, 它主要用于固定 this 作用域, 避免各种由于上下文切换造成的语义问题. 常用在 setTimeout, for循环等内部.</p>
-<a id="more"></a>
-<h3 id="bind"><a href="#bind" class="headerlink" title="bind"></a>bind</h3><p>语法: func.bind(thisArg, arg1, arg2, ….)</p>
-<p>bind() 方法会返回一个新函数, 又叫绑定函数, 当调用这个绑定函数时, 绑定函数会以创建它时传入 bind() 方法的第一个参数作为当前的上下文, 即this, 传入 bind() 方法的第二个及之后的参数加上绑定函数运行时自身的参数按照顺序作为原函数的参数来调用原函数.</p>
-<p>绑定函数也能使用new操作符创建对象; 这就好比把原函数当做构造器. 此时提供的this将被忽略, this之后的参数将依然前置到运行时的参数列表中.</p>
-<h4 id="u57FA_u672C_u7528_u6CD5"><a href="#u57FA_u672C_u7528_u6CD5" class="headerlink" title="基本用法"></a>基本用法</h4><p>下面我们来看看bind 的基本用法.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> x = <span class="number">8</span>;</span><br><span class="line"><span class="keyword">var</span> o = &#123;</span><br><span class="line">  x: <span class="number">10</span>,</span><br><span class="line">  getX: <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  	<span class="built_in">console</span>.log(<span class="keyword">this</span>.x);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">var</span> f = o.getX;</span><br><span class="line">f();<span class="comment">//8, 由于没有绑定执行时的上下文, this默认指向window, 打印了全局变量x的值</span></span><br><span class="line"><span class="keyword">var</span> g = f.bind(o);</span><br><span class="line">g();<span class="comment">//10, 绑定this后, 成功的打印了o对象的x属性的值.</span></span><br></pre></td></tr></table></figure>
-<h4 id="u5206_u79BB_u53C2_u6570"><a href="#u5206_u79BB_u53C2_u6570" class="headerlink" title="分离参数"></a>分离参数</h4><p>bind() 方法还可以设置函数拥有的初始参数. 这些参数作为bind() 的第2,3…个参数跟在this(或其他对象的后面), 调用绑定函数时, 这些参数将插入到参数列表的最开始位置, 而传递给绑定函数的参数将跟在他们后面.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//打印十个斐波那契数</span></span><br><span class="line"><span class="keyword">var</span> f = <span class="function"><span class="keyword">function</span>(<span class="params">n1, n2, length</span>)</span>&#123;</span><br><span class="line">  <span class="keyword">if</span>(<span class="built_in">arguments</span>.length&lt;<span class="number">3</span>) <span class="built_in">console</span>.log(<span class="string">'参数不够...'</span>);</span><br><span class="line">  <span class="keyword">var</span> array = [n1, n2];</span><br><span class="line">  <span class="keyword">for</span>(<span class="keyword">var</span> i=<span class="number">2</span>;i&lt;length;i++)&#123;</span><br><span class="line">  	array[i] = array[i-<span class="number">2</span>] + array[i-<span class="number">1</span>];</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> array;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> g = f.bind(<span class="literal">null</span>, <span class="number">1</span>, <span class="number">1</span>);</span><br><span class="line"><span class="built_in">console</span>.log(g(<span class="number">10</span>));<span class="comment">//[1, 1, 2, 3, 5, 8, 13, 21, 34, 55]</span></span><br></pre></td></tr></table></figure>
-<h4 id="u7ED1_u5B9A_u53C2_u6570"><a href="#u7ED1_u5B9A_u53C2_u6570" class="headerlink" title="绑定参数"></a>绑定参数</h4><p>如果使用new 操作符去构造绑定函数的实例时, 原来提供的this 将被忽略, this之后的参数将依然前置到构造函数的参数列表中. 此时 bind() 方法便具备了保留参数的能力, 我们可以此达到类似柯里化的效果.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> f = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="keyword">if</span>(<span class="built_in">arguments</span>.length!=<span class="number">0</span>)</span><br><span class="line">  	<span class="keyword">this</span>.sum = <span class="built_in">Array</span>.prototype.reduce.call(<span class="built_in">arguments</span>,<span class="function"><span class="keyword">function</span>(<span class="params">prev,item</span>)</span>&#123;<span class="comment">//对传入参数求和</span></span><br><span class="line"> 		<span class="keyword">return</span> prev + item;</span><br><span class="line">	&#125;);</span><br><span class="line">  <span class="keyword">return</span> <span class="built_in">Array</span>.prototype.join.call(<span class="built_in">arguments</span>);<span class="comment">// 返回传入参数的字符串形式</span></span><br><span class="line">&#125;</span><br><span class="line">f.prototype.toString = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">this</span>.sum;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> g = f.bind(<span class="literal">null</span>,<span class="number">2</span>);</span><br><span class="line"><span class="keyword">var</span> x = <span class="keyword">new</span> g(<span class="number">8</span>);</span><br><span class="line"><span class="built_in">console</span>.log(x.toString());<span class="comment">//10, 可见x被绑定了2+8=10</span></span><br><span class="line"><span class="built_in">console</span>.log(g(<span class="number">8</span>));<span class="comment">//2,8 这告诉我们绑定的两个参数正是2和8</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(x <span class="keyword">instanceof</span> g);<span class="comment">//true, 可见通过new创建的x继承了g</span></span><br><span class="line"><span class="built_in">console</span>.log(x <span class="keyword">instanceof</span> f);<span class="comment">//true, 可见x也继承了f</span></span><br><span class="line"><span class="built_in">console</span>.log(g <span class="keyword">instanceof</span> <span class="built_in">Function</span>);<span class="comment">//true, 可见bind f()方法之后, 返回了一个新的函数g</span></span><br><span class="line"><span class="comment">//函数g可用于求和,如下:</span></span><br><span class="line"><span class="built_in">console</span>.log(g(<span class="number">1</span>,<span class="number">3</span>,<span class="number">5</span>,<span class="number">7</span>,<span class="number">9</span>));<span class="comment">//27 2+1+3+5+7+9=27</span></span><br></pre></td></tr></table></figure>
-<h4 id="u5FEB_u6377_u8C03_u7528"><a href="#u5FEB_u6377_u8C03_u7528" class="headerlink" title="快捷调用"></a>快捷调用</h4><p>使用Array.prototype的方法处理类数组对象时(鸭式辨型), 不可避免的需要借用call 或者 apply 方法, 使用 bind() 方法, 我们可以简化这个过程. 如下:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> _slice = <span class="built_in">Array</span>.prototype.slice;</span><br><span class="line"><span class="keyword">var</span> slice = <span class="built_in">Function</span>.prototype.call.bind(_slice);</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="keyword">return</span> slice(<span class="built_in">arguments</span>,<span class="number">1</span>);</span><br><span class="line">&#125;</span><br><span class="line">f(<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>);<span class="comment">//[2, 3, 4, 5]</span></span><br></pre></td></tr></table></figure>
-<p>下面的实例将解释 bind() 方法做了一件什么事情:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> _slice = <span class="built_in">Array</span>.prototype.slice;</span><br><span class="line"><span class="keyword">var</span> slice = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="keyword">return</span> _slice.apply(<span class="built_in">arguments</span>[<span class="number">0</span>],_slice.call(<span class="built_in">arguments</span>,<span class="number">1</span>));</span><br><span class="line">&#125;;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="keyword">return</span> slice(<span class="built_in">arguments</span>,<span class="number">1</span>);</span><br><span class="line">&#125;</span><br><span class="line">f(<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>);<span class="comment">//[2, 3, 4, 5]</span></span><br></pre></td></tr></table></figure>
-<p>如下, 是bind() 方法的简单实现.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Function</span>.prototype.bind = <span class="function"><span class="keyword">function</span>(<span class="params">thisArg,argN</span>)</span>&#123;</span><br><span class="line">  <span class="keyword">var</span> _this = <span class="keyword">this</span>;</span><br><span class="line">  <span class="keyword">var</span> _arg = _slice.call(<span class="built_in">arguments</span>,<span class="number">1</span>);</span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">   	<span class="keyword">var</span> arg = _slice.call(<span class="built_in">arguments</span>);</span><br><span class="line">    arg = _arg.concat(arg);</span><br><span class="line">  	<span class="keyword">return</span> _this.apply(thisArg,arg);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>可以看出来, 使用 bind() 方法后, 代码优雅得多.</p>
-<p>注: 作为ES5标准加入的bind方法显然不支持 IE9之前的低版本IE, 如需使用, 请参考<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Function/bind#Compatibility" target="_blank" rel="external">Polyfill</a>.</p>
-<hr>
-<p>本文就讨论这么多内容,大家有什么问题或好的想法欢迎在下方参与<a href="#respond">留言和评论</a>.</p>
-<p>本文作者: <a href="https://github.com/Louiszhai" target="_blank" rel="external">louis</a></p>
-<p>本文链接: <a href="http://louiszhai.github.io/2016/01/11/bind/">http://louiszhai.github.io/2016/01/11/bind/</a></p>
-<p>参考文章</p>
-<ul>
-<li><a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Function/bind" target="_blank" rel="external">Function.prototype.bind() - JavaScript | MDN</a></li>
-</ul>
-]]></content>
-    <summary type="html">
-    <![CDATA[JavaScript bind Function.prototype.bind]]>
     
     </summary>
     
@@ -867,6 +1715,49 @@
 ]]></content>
     <summary type="html">
     <![CDATA[JavaScript Same-Origin 同源策略 跨域]]>
+    
+    </summary>
+    
+      <category term="JavaScript" scheme="http://louiszhai.github.io/tags/JavaScript/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[Function.prototype.bind方法指南]]></title>
+    <link href="http://louiszhai.github.io/2016/01/11/bind/"/>
+    <id>http://louiszhai.github.io/2016/01/11/bind/</id>
+    <published>2016-01-11T00:01:33.000Z</published>
+    <updated>2016-05-17T01:07:43.000Z</updated>
+    <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>ES5新增了 Function.prototype.bind 方法, 该方法不同于jquery的bind 方法, 它主要用于固定 this 作用域, 避免各种由于上下文切换造成的语义问题. 常用在 setTimeout, for循环等内部.</p>
+<a id="more"></a>
+<h3 id="bind"><a href="#bind" class="headerlink" title="bind"></a>bind</h3><p>语法: func.bind(thisArg, arg1, arg2, ….)</p>
+<p>bind() 方法会返回一个新函数, 又叫绑定函数, 当调用这个绑定函数时, 绑定函数会以创建它时传入 bind() 方法的第一个参数作为当前的上下文, 即this, 传入 bind() 方法的第二个及之后的参数加上绑定函数运行时自身的参数按照顺序作为原函数的参数来调用原函数.</p>
+<p>绑定函数也能使用new操作符创建对象; 这就好比把原函数当做构造器. 此时提供的this将被忽略, this之后的参数将依然前置到运行时的参数列表中.</p>
+<h4 id="u57FA_u672C_u7528_u6CD5"><a href="#u57FA_u672C_u7528_u6CD5" class="headerlink" title="基本用法"></a>基本用法</h4><p>下面我们来看看bind 的基本用法.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> x = <span class="number">8</span>;</span><br><span class="line"><span class="keyword">var</span> o = &#123;</span><br><span class="line">  x: <span class="number">10</span>,</span><br><span class="line">  getX: <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  	<span class="built_in">console</span>.log(<span class="keyword">this</span>.x);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">var</span> f = o.getX;</span><br><span class="line">f();<span class="comment">//8, 由于没有绑定执行时的上下文, this默认指向window, 打印了全局变量x的值</span></span><br><span class="line"><span class="keyword">var</span> g = f.bind(o);</span><br><span class="line">g();<span class="comment">//10, 绑定this后, 成功的打印了o对象的x属性的值.</span></span><br></pre></td></tr></table></figure>
+<h4 id="u5206_u79BB_u53C2_u6570"><a href="#u5206_u79BB_u53C2_u6570" class="headerlink" title="分离参数"></a>分离参数</h4><p>bind() 方法还可以设置函数拥有的初始参数. 这些参数作为bind() 的第2,3…个参数跟在this(或其他对象的后面), 调用绑定函数时, 这些参数将插入到参数列表的最开始位置, 而传递给绑定函数的参数将跟在他们后面.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//打印十个斐波那契数</span></span><br><span class="line"><span class="keyword">var</span> f = <span class="function"><span class="keyword">function</span>(<span class="params">n1, n2, length</span>)</span>&#123;</span><br><span class="line">  <span class="keyword">if</span>(<span class="built_in">arguments</span>.length&lt;<span class="number">3</span>) <span class="built_in">console</span>.log(<span class="string">'参数不够...'</span>);</span><br><span class="line">  <span class="keyword">var</span> array = [n1, n2];</span><br><span class="line">  <span class="keyword">for</span>(<span class="keyword">var</span> i=<span class="number">2</span>;i&lt;length;i++)&#123;</span><br><span class="line">  	array[i] = array[i-<span class="number">2</span>] + array[i-<span class="number">1</span>];</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> array;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> g = f.bind(<span class="literal">null</span>, <span class="number">1</span>, <span class="number">1</span>);</span><br><span class="line"><span class="built_in">console</span>.log(g(<span class="number">10</span>));<span class="comment">//[1, 1, 2, 3, 5, 8, 13, 21, 34, 55]</span></span><br></pre></td></tr></table></figure>
+<h4 id="u7ED1_u5B9A_u53C2_u6570"><a href="#u7ED1_u5B9A_u53C2_u6570" class="headerlink" title="绑定参数"></a>绑定参数</h4><p>如果使用new 操作符去构造绑定函数的实例时, 原来提供的this 将被忽略, this之后的参数将依然前置到构造函数的参数列表中. 此时 bind() 方法便具备了保留参数的能力, 我们可以此达到类似柯里化的效果.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> f = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="keyword">if</span>(<span class="built_in">arguments</span>.length!=<span class="number">0</span>)</span><br><span class="line">  	<span class="keyword">this</span>.sum = <span class="built_in">Array</span>.prototype.reduce.call(<span class="built_in">arguments</span>,<span class="function"><span class="keyword">function</span>(<span class="params">prev,item</span>)</span>&#123;<span class="comment">//对传入参数求和</span></span><br><span class="line"> 		<span class="keyword">return</span> prev + item;</span><br><span class="line">	&#125;);</span><br><span class="line">  <span class="keyword">return</span> <span class="built_in">Array</span>.prototype.join.call(<span class="built_in">arguments</span>);<span class="comment">// 返回传入参数的字符串形式</span></span><br><span class="line">&#125;</span><br><span class="line">f.prototype.toString = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">this</span>.sum;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> g = f.bind(<span class="literal">null</span>,<span class="number">2</span>);</span><br><span class="line"><span class="keyword">var</span> x = <span class="keyword">new</span> g(<span class="number">8</span>);</span><br><span class="line"><span class="built_in">console</span>.log(x.toString());<span class="comment">//10, 可见x被绑定了2+8=10</span></span><br><span class="line"><span class="built_in">console</span>.log(g(<span class="number">8</span>));<span class="comment">//2,8 这告诉我们绑定的两个参数正是2和8</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(x <span class="keyword">instanceof</span> g);<span class="comment">//true, 可见通过new创建的x继承了g</span></span><br><span class="line"><span class="built_in">console</span>.log(x <span class="keyword">instanceof</span> f);<span class="comment">//true, 可见x也继承了f</span></span><br><span class="line"><span class="built_in">console</span>.log(g <span class="keyword">instanceof</span> <span class="built_in">Function</span>);<span class="comment">//true, 可见bind f()方法之后, 返回了一个新的函数g</span></span><br><span class="line"><span class="comment">//函数g可用于求和,如下:</span></span><br><span class="line"><span class="built_in">console</span>.log(g(<span class="number">1</span>,<span class="number">3</span>,<span class="number">5</span>,<span class="number">7</span>,<span class="number">9</span>));<span class="comment">//27 2+1+3+5+7+9=27</span></span><br></pre></td></tr></table></figure>
+<h4 id="u5FEB_u6377_u8C03_u7528"><a href="#u5FEB_u6377_u8C03_u7528" class="headerlink" title="快捷调用"></a>快捷调用</h4><p>使用Array.prototype的方法处理类数组对象时(鸭式辨型), 不可避免的需要借用call 或者 apply 方法, 使用 bind() 方法, 我们可以简化这个过程. 如下:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> _slice = <span class="built_in">Array</span>.prototype.slice;</span><br><span class="line"><span class="keyword">var</span> slice = <span class="built_in">Function</span>.prototype.call.bind(_slice);</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="keyword">return</span> slice(<span class="built_in">arguments</span>,<span class="number">1</span>);</span><br><span class="line">&#125;</span><br><span class="line">f(<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>);<span class="comment">//[2, 3, 4, 5]</span></span><br></pre></td></tr></table></figure>
+<p>下面的实例将解释 bind() 方法做了一件什么事情:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> _slice = <span class="built_in">Array</span>.prototype.slice;</span><br><span class="line"><span class="keyword">var</span> slice = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="keyword">return</span> _slice.apply(<span class="built_in">arguments</span>[<span class="number">0</span>],_slice.call(<span class="built_in">arguments</span>,<span class="number">1</span>));</span><br><span class="line">&#125;;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="keyword">return</span> slice(<span class="built_in">arguments</span>,<span class="number">1</span>);</span><br><span class="line">&#125;</span><br><span class="line">f(<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>);<span class="comment">//[2, 3, 4, 5]</span></span><br></pre></td></tr></table></figure>
+<p>如下, 是bind() 方法的简单实现.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Function</span>.prototype.bind = <span class="function"><span class="keyword">function</span>(<span class="params">thisArg,argN</span>)</span>&#123;</span><br><span class="line">  <span class="keyword">var</span> _this = <span class="keyword">this</span>;</span><br><span class="line">  <span class="keyword">var</span> _arg = _slice.call(<span class="built_in">arguments</span>,<span class="number">1</span>);</span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">   	<span class="keyword">var</span> arg = _slice.call(<span class="built_in">arguments</span>);</span><br><span class="line">    arg = _arg.concat(arg);</span><br><span class="line">  	<span class="keyword">return</span> _this.apply(thisArg,arg);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以看出来, 使用 bind() 方法后, 代码优雅得多.</p>
+<p>注: 作为ES5标准加入的bind方法显然不支持 IE9之前的低版本IE, 如需使用, 请参考<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Function/bind#Compatibility" target="_blank" rel="external">Polyfill</a>.</p>
+<hr>
+<p>本文就讨论这么多内容,大家有什么问题或好的想法欢迎在下方参与<a href="#respond">留言和评论</a>.</p>
+<p>本文作者: <a href="https://github.com/Louiszhai" target="_blank" rel="external">louis</a></p>
+<p>本文链接: <a href="http://louiszhai.github.io/2016/01/11/bind/">http://louiszhai.github.io/2016/01/11/bind/</a></p>
+<p>参考文章</p>
+<ul>
+<li><a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Function/bind" target="_blank" rel="external">Function.prototype.bind() - JavaScript | MDN</a></li>
+</ul>
+]]></content>
+    <summary type="html">
+    <![CDATA[JavaScript bind Function.prototype.bind]]>
     
     </summary>
     

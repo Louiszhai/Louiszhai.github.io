@@ -12,7 +12,7 @@
 <meta property="og:url" content="http://louiszhai.github.io/2016/01/12/js.String/index.html">
 <meta property="og:site_name" content="louis blog">
 <meta property="og:description" content="JavaScript String String.prototype">
-<meta property="og:updated_time" content="2016-06-03T08:54:35.000Z">
+<meta property="og:updated_time" content="2016-06-20T10:54:38.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="字符串常用方法">
 <meta name="twitter:description" content="JavaScript String String.prototype">
@@ -29,7 +29,7 @@
   <div id="container">
     <div class="left-col">
     <div class="overlay">
-	<input type="text" class="st-default-search-input" style="position:absolute;top: 50px;left: 35px;">
+	<!--<input type="text" class="st-default-search-input" style="position:absolute;top: 50px;left: 35px;">-->
 </div>
 <div class="intrude-less">
 	<header id="header" class="inner">
@@ -200,7 +200,7 @@
       
           <div id="toc" class="toc-article">
     <div class="toc-title">目录</div>
-    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#u5BFC_u8BFB"><span class="toc-text">导读</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#String-prototype"><span class="toc-text">String.prototype</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#u5C5E_u6027"><span class="toc-text">属性</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#u65B9_u6CD5"><span class="toc-text">方法</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#HTML_u65E0_u5173_u7684_u65B9_u6CD5"><span class="toc-text">HTML无关的方法</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#charAt"><span class="toc-text">charAt</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#charCodeAt"><span class="toc-text">charCodeAt</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#concat"><span class="toc-text">concat</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#indexOf"><span class="toc-text">indexOf</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#lastIndexOf"><span class="toc-text">lastIndexOf</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#locateCompare"><span class="toc-text">locateCompare</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#match"><span class="toc-text">match</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#replace"><span class="toc-text">replace</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#search"><span class="toc-text">search</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#slice"><span class="toc-text">slice</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#split"><span class="toc-text">split</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#substr"><span class="toc-text">substr</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#substring"><span class="toc-text">substring</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#toLocaleLowerCase"><span class="toc-text">toLocaleLowerCase</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#toLocaleUpperCase"><span class="toc-text">toLocaleUpperCase</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#toLowerCase"><span class="toc-text">toLowerCase</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#toUpperCase"><span class="toc-text">toUpperCase</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#toString-NaN"><span class="toc-text">toString</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#valueOf-NaN"><span class="toc-text">valueOf</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#trim"><span class="toc-text">trim</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#codePointAt"><span class="toc-text">codePointAt</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#contains"><span class="toc-text">contains</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#endsWith"><span class="toc-text">endsWith</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#normalize"><span class="toc-text">normalize</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#repeat"><span class="toc-text">repeat</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#startsWith"><span class="toc-text">startsWith</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#HTML_u6709_u5173_u7684_u65B9_u6CD5"><span class="toc-text">HTML有关的方法</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#anchor"><span class="toc-text">anchor</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#link"><span class="toc-text">link</span></a></li></ol></li></ol></li></ol></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#u5BFC_u8BFB"><span class="toc-text">导读</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#String-prototype"><span class="toc-text">String.prototype</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#u5C5E_u6027"><span class="toc-text">属性</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#u65B9_u6CD5"><span class="toc-text">方法</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#HTML_u65E0_u5173_u7684_u65B9_u6CD5"><span class="toc-text">HTML无关的方法</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#charAt"><span class="toc-text">charAt</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#charCodeAt"><span class="toc-text">charCodeAt</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#concat"><span class="toc-text">concat</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#indexOf"><span class="toc-text">indexOf</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#lastIndexOf"><span class="toc-text">lastIndexOf</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#locateCompare"><span class="toc-text">locateCompare</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#match"><span class="toc-text">match</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#replace"><span class="toc-text">replace</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#search"><span class="toc-text">search</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#slice"><span class="toc-text">slice</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#split"><span class="toc-text">split</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#substr"><span class="toc-text">substr</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#substring"><span class="toc-text">substring</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#toLocaleLowerCase"><span class="toc-text">toLocaleLowerCase</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#toLocaleUpperCase"><span class="toc-text">toLocaleUpperCase</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#toLowerCase"><span class="toc-text">toLowerCase</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#toUpperCase"><span class="toc-text">toUpperCase</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#toString-NaN"><span class="toc-text">toString</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#valueOf-NaN"><span class="toc-text">valueOf</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#trim"><span class="toc-text">trim</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#codePointAt"><span class="toc-text">codePointAt</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#contains"><span class="toc-text">contains</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#endsWith"><span class="toc-text">endsWith</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#normalize"><span class="toc-text">normalize</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#repeat"><span class="toc-text">repeat</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#startsWith"><span class="toc-text">startsWith</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#HTML_u6709_u5173_u7684_u65B9_u6CD5"><span class="toc-text">HTML有关的方法</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#anchor"><span class="toc-text">anchor</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#link"><span class="toc-text">link</span></a></li></ol></li></ol></li></ol></li></ol>
 </div>
       
         <h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>javaScript 中, 字符串无处不在, 并且所有的字符串方法均来自 String.prototype, 这一节, 我们走进看一看String内部, 探讨那些常用或不常用的字符串操作方法.</p>
@@ -354,7 +354,7 @@
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> str = <span class="string">"Where there is a will, there is a way."</span>;</span><br><span class="line"><span class="built_in">console</span>.log(str.startsWith(<span class="string">"Where"</span>));<span class="comment">//true</span></span><br><span class="line"><span class="built_in">console</span>.log(str.startsWith(<span class="string">"there"</span>,<span class="number">6</span>));<span class="comment">//true</span></span><br></pre></td></tr></table></figure>
 <p>目前只有 Firefox 17 版本实现了该方法, 其他浏览器请参考 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/String/startsWith#Polyfill" target="_blank" rel="external">Polyfill</a>.</p>
 <p>其它非标准的方法暂时不作介绍. 如需了解请参考 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/String/prototype" target="_blank" rel="external">String.prototype - JavaScript | MDN</a> 中标注为感叹号的方法.</p>
-<h6 id="HTML_u6709_u5173_u7684_u65B9_u6CD5"><a href="#HTML_u6709_u5173_u7684_u65B9_u6CD5" class="headerlink" title="HTML有关的方法"></a>HTML有关的方法</h6><p>常用的方法有 anchor, link 其它方法如 big, blink, bold, fixed, fontcolor, fontsize, italics, small, strike, sub, sup均已废除.</p>
+<h5 id="HTML_u6709_u5173_u7684_u65B9_u6CD5"><a href="#HTML_u6709_u5173_u7684_u65B9_u6CD5" class="headerlink" title="HTML有关的方法"></a>HTML有关的方法</h5><p>常用的方法有 anchor, link 其它方法如 big, blink, bold, fixed, fontcolor, fontsize, italics, small, strike, sub, sup均已废除.</p>
 <p>接下来我们将介绍 anchor和link 两个方法, 其他废除方法不作介绍.</p>
 <h6 id="anchor"><a href="#anchor" class="headerlink" title="anchor"></a>anchor</h6><p>anchor() 方法创建一个锚标签.</p>
 <p>语法: <em>str</em>.anchor(name)</p>
@@ -394,8 +394,8 @@
     </a>
   
   
-    <a href="/2016/01/11/bind/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">Function.prototype.bind方法指南</div>
+    <a href="/2016/01/11/cross-domain/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">由同源策略到前端跨域</div>
       <strong class="article-nav-caption">></strong>
     </a>
   
@@ -515,12 +515,13 @@
 </footer>
 
 <script type="text/javascript">
-  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  //swifty
+  /*(function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
   (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
   e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
   })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
   
-  _st('install','4AmBuvmx4Cy-3hvyxeh8','2.0.0');
+  _st('install','4AmBuvmx4Cy-3hvyxeh8','2.0.0');*/
 </script>
     </div>
     
