@@ -4,7 +4,7 @@
   <subtitle><![CDATA[程序猿 前端攻城师]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://louiszhai.github.io/"/>
-  <updated>2016-06-21T00:54:11.000Z</updated>
+  <updated>2016-06-21T04:54:51.000Z</updated>
   <id>http://louiszhai.github.io/</id>
   
   <author>
@@ -19,14 +19,14 @@
     <link href="http://louiszhai.github.io/2016/06/13/regexp/"/>
     <id>http://louiszhai.github.io/2016/06/13/regexp/</id>
     <published>2016-06-13T00:24:55.000Z</published>
-    <updated>2016-06-21T00:54:11.000Z</updated>
+    <updated>2016-06-21T04:54:51.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>有关正则表达的介绍, 无须我多言. 这里借助 Jeffrey Friedl 的&lt;精通正则表达式&gt; 一书的序言抛个砖.</p>
 <blockquote>
 <p>​    “如果罗列计算机软件领域的伟大发明, 我相信绝对不会超过二十项, 在这个名单当中, 当然应该包括分组交换网络, Web, Lisp, 哈希算法, UNIX, 编译技术, 关系模型, 面向对象, XML这些大名鼎鼎的家伙, 而正则表达式也绝对不应该被漏掉. </p>
 <p>​     对很多实际工作而言, 正则表达式简直是灵丹妙药, 能够成百倍的提高开发效率和程序质量, 正则表达式在生物信息学和人类基因图谱的研究中所发挥的关键作用, 更是被传为佳话. CSDN的创始人蒋涛先生在早年开发专业软件产品时, 就曾经体验过这一工具的巨大威力, 并且一直印象深刻.”</p>
 </blockquote>
 <p>因此, 我们没有理由不去了解正则表达式, 甚至是熟练掌握并运行它.</p>
-<p>本文以正则基础语法开篇, 结合具体实例, 逐步讲解正则表达式匹配原理. 代码实例使用语言包括 js, php, python, java(因有些匹配模式, js并未支持, 需要借助其他语言讲解). 本文内容包括初阶技能和高阶技能, 适合新手学习和进阶.</p>
+<p>本文以正则基础语法开篇, 结合具体实例, 逐步讲解正则表达式匹配原理. 代码实例使用语言包括 js, php, python, java(因有些匹配模式, js并未支持, 需要借助其他语言讲解). 内容包括初阶技能和高阶技能, 适合新手学习和进阶. 本文力求简单通俗易懂, 如有阅读障碍请及时<a href="#respond">联系我</a>.</p>
 <a id="more"></a>
 <h3 id="u56DE_u987E_u5386_u53F2"><a href="#u56DE_u987E_u5386_u53F2" class="headerlink" title="回顾历史"></a>回顾历史</h3><p>如果非要讨论正则表达式的渊源, 最早可以追溯至对人类神经系统如何工作的早期研究. Warren McCulloch 和 Walter Pitts 这两位神经生理学家研究出一种数学方式来描述这些神经网络.</p>
 <p>1956 年, 一位叫 Stephen Kleene 的数学家在 McCulloch 和 Pitts 早期工作的基础上, 发表了一篇标题为”神经网事件的表示法”的论文, 引入了正则表达式的概念.</p>
@@ -848,17 +848,17 @@
 <p>exec 方法返回的数组中包含两个额外的属性, index 和 input. 并且该数组具有如下特点:</p>
 <ul>
 <li>第 0 个项表示正则表达式捕获的文本</li>
-<li>第 1~n 项依次表示第 1~n 个分组捕获的文本</li>
+<li>第 1~n 项表示第 1~n 个反向引用, 依次指向第 1~n 个分组捕获的文本, 可以使用RegExp.$ + “编号1~n”  依次获取分组中的文本</li>
 <li>index 表示匹配字符串的初始位置</li>
 <li>input 表示正在检索的字符串</li>
 </ul>
 <p>无论正则表达式有无全局标示”g”, exec 的表现都相同. 但正则表达式对象的表现却有些不同. 下面我们来详细说明下正则表达式对象的表现都有哪些不同.</p>
 <p>假设正则表达式对象为 reg , 检测的字符为 string , reg.exec(string) 返回值为 array.</p>
 <p>若 reg 包含全局标示”g”, 那么 reg.lastIndex 属性表示原字符串中匹配的字符串末尾的后一个位置, 即下次匹配开始的位置, 此时 reg.lastIndex == array.index(匹配开始的位置) + array[0].length(匹配字符串的长度). 如下:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> reg = <span class="regexp">/[a-z]+/gi</span>,</span><br><span class="line">    string = <span class="string">"World Internet Conference"</span>;</span><br><span class="line"><span class="keyword">var</span> array = reg.exec(string);</span><br><span class="line"><span class="built_in">console</span>.log(array);<span class="comment">//["World", index: 0, input: "World Internet Conference"]</span></span><br><span class="line"><span class="built_in">console</span>.log(reg.lastIndex);<span class="comment">//5, 刚好等于 array.index + array[0].length</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> reg = <span class="regexp">/([a-z]+)/gi</span>,</span><br><span class="line">    string = <span class="string">"World Internet Conference"</span>;</span><br><span class="line"><span class="keyword">var</span> array = reg.exec(string);</span><br><span class="line"><span class="built_in">console</span>.log(array);<span class="comment">//["World", "World", index: 0, input: "World Internet Conference"]</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">RegExp</span>.$<span class="number">1</span>);<span class="comment">//World</span></span><br><span class="line"><span class="built_in">console</span>.log(reg.lastIndex);<span class="comment">//5, 刚好等于 array.index + array[0].length</span></span><br></pre></td></tr></table></figure>
 <p>随着检索继续, array.index 的值将往后递增, 也就是说, reg.lastIndex 的值也会同步往后递增. 因此, 我们也可以通过反复调用 exec 方法来遍历字符串中所有的匹配文本. 直到 exec 方法再也匹配不到文本时, 它将返回 null, 并把 reg.lastIndex 属性重置为 0. </p>
 <p>接着上述例子, 我们继续执行代码, 看看上面说的对不对, 如下所示:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">array = reg.exec(string);</span><br><span class="line"><span class="built_in">console</span>.log(array);<span class="comment">//["Internet", index: 6, input: "World Internet Conference"]</span></span><br><span class="line"><span class="built_in">console</span>.log(reg.lastIndex);<span class="comment">//14</span></span><br><span class="line"></span><br><span class="line">array = reg.exec(string);</span><br><span class="line"><span class="built_in">console</span>.log(array);<span class="comment">//["Conference", index: 15, input: "World Internet Conference"]</span></span><br><span class="line"><span class="built_in">console</span>.log(reg.lastIndex);<span class="comment">//25</span></span><br><span class="line"></span><br><span class="line">array = reg.exec(string);</span><br><span class="line"><span class="built_in">console</span>.log(array);<span class="comment">//null</span></span><br><span class="line"><span class="built_in">console</span>.log(reg.lastIndex);<span class="comment">//0</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">array = reg.exec(string);</span><br><span class="line"><span class="built_in">console</span>.log(array);<span class="comment">//["Internet", "Internet", index: 6, input: "World Internet Conference"]</span></span><br><span class="line"><span class="built_in">console</span>.log(reg.lastIndex);<span class="comment">//14</span></span><br><span class="line"></span><br><span class="line">array = reg.exec(string);</span><br><span class="line"><span class="built_in">console</span>.log(array);<span class="comment">//["Conference", "Conference", index: 15, input: "World Internet Conference"]</span></span><br><span class="line"><span class="built_in">console</span>.log(reg.lastIndex);<span class="comment">//25</span></span><br><span class="line"></span><br><span class="line">array = reg.exec(string);</span><br><span class="line"><span class="built_in">console</span>.log(array);<span class="comment">//null</span></span><br><span class="line"><span class="built_in">console</span>.log(reg.lastIndex);<span class="comment">//0</span></span><br></pre></td></tr></table></figure>
 <p>以上代码中, 随着反复调用 exec 方法, reg.lastIndex 属性最终被重置为 0.</p>
 <p><strong>问题回顾</strong></p>
 <p>在 test 方法的讲解中, 我们留下了一个问题. 如果正则表达式带有全局标志g, 以上 test 方法的执行结果将受 reg.lastIndex影响, 不仅如此, exec 方法也一样. 由于 reg.lastIndex 的值并不总是为零, 并且它决定了下次匹配开始的位置, 如果在一个字符串中完成了一次匹配之后要开始检索新的字符串, 那就必须要手动地把 lastIndex 属性重置为 0. 避免出现下面这种错误:</p>
@@ -866,8 +866,10 @@
 <p>以上代码, 正确执行结果应该是 “123456”,  因此建议在第二次执行 exec 方法前, 增加一句 “reg.lastIndex = 0;”.</p>
 <p>若 reg 不包含全局标示”g”, 那么 exec 方法的执行结果(array)将与 string.match(reg) 方法执行结果完全相同.</p>
 <h4 id="String"><a href="#String" class="headerlink" title="String"></a>String</h4><p>match, search, replace, split 方法请参考 <a href="http://louiszhai.github.io/2016/01/12/js.String/"><code>字符串常用方法</code></a> 中的讲解.</p>
+<p>如下展示了使用捕获性分组处理文本模板, 最终生成完整字符串的过程:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> tmp = <span class="string">"An &#123;a&#125; a &#123;b&#125; keeps the &#123;c&#125; away"</span>;</span><br><span class="line"><span class="keyword">var</span> obj = &#123;a:<span class="string">"apple"</span>,b:<span class="string">"day"</span>,c:<span class="string">"doctor"</span>&#125;;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">tmpl</span>(<span class="params">template,obj</span>)</span>&#123;</span><br><span class="line">	<span class="keyword">var</span> retu = template.replace(<span class="regexp">/([^&#123;&#125;]*)&#123;(.)&#125;/g</span>,<span class="function"><span class="keyword">function</span>(<span class="params">m,p1,p2,offset,str</span>)</span>&#123;</span><br><span class="line">		<span class="built_in">console</span>.log(<span class="string">'m:'</span>+m+<span class="string">' p1:'</span>+p1+<span class="string">' p2:'</span>+p2);</span><br><span class="line">		<span class="keyword">return</span> p1+obj[p2]</span><br><span class="line">	&#125;)</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">"==&gt;"</span>+retu);</span><br><span class="line">&#125;</span><br><span class="line">tmpl(tmp,obj);</span><br></pre></td></tr></table></figure>
 <h3 id="u6B63_u5219_u8868_u8FBE_u5F0F_u5728H5_u4E2D_u7684_u5E94_u7528"><a href="#u6B63_u5219_u8868_u8FBE_u5F0F_u5728H5_u4E2D_u7684_u5E94_u7528" class="headerlink" title="正则表达式在H5中的应用"></a>正则表达式在H5中的应用</h3><p>H5中新增了 pattern 属性, 规定了用于验证输入字段的模式, pattern的模式匹配支持正则表达式的书写方式. 默认 pattern 属性是全部匹配, 即无论正则表达式中有无 “^”, “$” 元字符, 它都是匹配所有文本.</p>
-<p>注: pattern 适用于以下 \<input\> 类型：text, search, url, telephone, email 以及 password. 如果需要取消表单验证, 在form标签上增加 novalidate 属性即可.</input\></p>
+<p>注: pattern 适用于以下 input 类型：text, search, url, telephone, email 以及 password. 如果需要取消表单验证, 在form标签上增加 novalidate 属性即可.</p>
 <h3 id="u6B63_u5219_u5F15_u64CE"><a href="#u6B63_u5219_u5F15_u64CE" class="headerlink" title="正则引擎"></a>正则引擎</h3><p>目前正则引擎有两种, DFA 和 NFA, NFA又可以分为传统型NFA和POSIX NFA.</p>
 <ul>
 <li>DFA Deterministic finite automaton 确定型有穷自动机</li>
