@@ -4,7 +4,7 @@
   <subtitle><![CDATA[程序猿 前端攻城师]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://louiszhai.github.io/"/>
-  <updated>2016-06-20T10:54:38.000Z</updated>
+  <updated>2016-06-21T00:54:11.000Z</updated>
   <id>http://louiszhai.github.io/</id>
   
   <author>
@@ -19,7 +19,7 @@
     <link href="http://louiszhai.github.io/2016/06/13/regexp/"/>
     <id>http://louiszhai.github.io/2016/06/13/regexp/</id>
     <published>2016-06-13T00:24:55.000Z</published>
-    <updated>2016-06-20T10:54:38.000Z</updated>
+    <updated>2016-06-21T00:54:11.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>有关正则表达的介绍, 无须我多言. 这里借助 Jeffrey Friedl 的&lt;精通正则表达式&gt; 一书的序言抛个砖.</p>
 <blockquote>
 <p>​    “如果罗列计算机软件领域的伟大发明, 我相信绝对不会超过二十项, 在这个名单当中, 当然应该包括分组交换网络, Web, Lisp, 哈希算法, UNIX, 编译技术, 关系模型, 面向对象, XML这些大名鼎鼎的家伙, 而正则表达式也绝对不应该被漏掉. </p>
@@ -840,6 +840,9 @@
 <p>如果需要使用 test 方法测试字符串是否完成匹配某个正则规则, 那么可以在正则表达式里增加开始(^)和结束($)元字符. 如下: </p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(<span class="regexp">/^[0-9]+$/</span>.test(<span class="string">"abc123"</span>));<span class="comment">//false</span></span><br></pre></td></tr></table></figure>
 <p>以上, 由于字符串”abc123” 并非以数字开始, 也并非以数字结束, 故 test 方法返回false.</p>
+<p>实际上, 如果正则表达式带有全局标志(带有参数g)时, test 方法还受正则对象的lastIndex属性影响,如下:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> reg = <span class="regexp">/[a-z]+/</span>;<span class="comment">//正则不带全局标志</span></span><br><span class="line"><span class="built_in">console</span>.log(reg.test(<span class="string">"abc"</span>));<span class="comment">//true</span></span><br><span class="line"><span class="built_in">console</span>.log(reg.test(<span class="string">"de"</span>));<span class="comment">//true</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> reg = <span class="regexp">/[a-z]+/g</span>;<span class="comment">//正则带有全局标志g</span></span><br><span class="line"><span class="built_in">console</span>.log(reg.test(<span class="string">"abc"</span>));<span class="comment">//true</span></span><br><span class="line"><span class="built_in">console</span>.log(reg.lastIndex);<span class="comment">//3, 下次运行test时,将从索引为3的位置开始查找</span></span><br><span class="line"><span class="built_in">console</span>.log(reg.test(<span class="string">"de"</span>));<span class="comment">//false</span></span><br></pre></td></tr></table></figure>
+<p>该影响将在exec 方法讲解中予以分析.</p>
 <h5 id="exec"><a href="#exec" class="headerlink" title="exec"></a>exec</h5><p>exec 方法用于检测字符串对正则表达式的匹配, 如果找到了匹配的文本, 则返回一个结果数组, 否则返回null.</p>
 <p>语法: exec(string)</p>
 <p>exec 方法返回的数组中包含两个额外的属性, index 和 input. 并且该数组具有如下特点:</p>
@@ -854,11 +857,13 @@
 <p>若 reg 包含全局标示”g”, 那么 reg.lastIndex 属性表示原字符串中匹配的字符串末尾的后一个位置, 即下次匹配开始的位置, 此时 reg.lastIndex == array.index(匹配开始的位置) + array[0].length(匹配字符串的长度). 如下:</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> reg = <span class="regexp">/[a-z]+/gi</span>,</span><br><span class="line">    string = <span class="string">"World Internet Conference"</span>;</span><br><span class="line"><span class="keyword">var</span> array = reg.exec(string);</span><br><span class="line"><span class="built_in">console</span>.log(array);<span class="comment">//["World", index: 0, input: "World Internet Conference"]</span></span><br><span class="line"><span class="built_in">console</span>.log(reg.lastIndex);<span class="comment">//5, 刚好等于 array.index + array[0].length</span></span><br></pre></td></tr></table></figure>
 <p>随着检索继续, array.index 的值将往后递增, 也就是说, reg.lastIndex 的值也会同步往后递增. 因此, 我们也可以通过反复调用 exec 方法来遍历字符串中所有的匹配文本. 直到 exec 方法再也匹配不到文本时, 它将返回 null, 并把 reg.lastIndex 属性重置为 0. </p>
-<p>接着上述例子, 我们继续执行代码, 如下所示:</p>
+<p>接着上述例子, 我们继续执行代码, 看看上面说的对不对, 如下所示:</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">array = reg.exec(string);</span><br><span class="line"><span class="built_in">console</span>.log(array);<span class="comment">//["Internet", index: 6, input: "World Internet Conference"]</span></span><br><span class="line"><span class="built_in">console</span>.log(reg.lastIndex);<span class="comment">//14</span></span><br><span class="line"></span><br><span class="line">array = reg.exec(string);</span><br><span class="line"><span class="built_in">console</span>.log(array);<span class="comment">//["Conference", index: 15, input: "World Internet Conference"]</span></span><br><span class="line"><span class="built_in">console</span>.log(reg.lastIndex);<span class="comment">//25</span></span><br><span class="line"></span><br><span class="line">array = reg.exec(string);</span><br><span class="line"><span class="built_in">console</span>.log(array);<span class="comment">//null</span></span><br><span class="line"><span class="built_in">console</span>.log(reg.lastIndex);<span class="comment">//0</span></span><br></pre></td></tr></table></figure>
-<p><strong>注意:</strong> 由于 reg.lastIndex 的值并不总是为零, 并且它决定了下次匹配开始的位置, 如果在一个字符串中完成了一次匹配之后要开始检索新的字符串, 那就必须要手动地把 lastIndex 属性重置为 0. 避免出现下面这种错误:</p>
+<p>以上代码中, 随着反复调用 exec 方法, reg.lastIndex 属性最终被重置为 0.</p>
+<p><strong>问题回顾</strong></p>
+<p>在 test 方法的讲解中, 我们留下了一个问题. 如果正则表达式带有全局标志g, 以上 test 方法的执行结果将受 reg.lastIndex影响, 不仅如此, exec 方法也一样. 由于 reg.lastIndex 的值并不总是为零, 并且它决定了下次匹配开始的位置, 如果在一个字符串中完成了一次匹配之后要开始检索新的字符串, 那就必须要手动地把 lastIndex 属性重置为 0. 避免出现下面这种错误:</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> reg = <span class="regexp">/[0-9]+/g</span>,</span><br><span class="line">    str1 = <span class="string">"123abc"</span>,</span><br><span class="line">    str2 = <span class="string">"123456"</span>;</span><br><span class="line">reg.exec(str1);</span><br><span class="line"><span class="built_in">console</span>.log(reg.lastIndex);<span class="comment">//3</span></span><br><span class="line"><span class="keyword">var</span> array = reg.exec(str2);</span><br><span class="line"><span class="built_in">console</span>.log(array);<span class="comment">//["456", index: 3, input: "123456"]</span></span><br></pre></td></tr></table></figure>
-<p>以上代码, 建议在第二次执行 exec 方法前, 增加一句 “reg.lastIndex = 0;”.</p>
+<p>以上代码, 正确执行结果应该是 “123456”,  因此建议在第二次执行 exec 方法前, 增加一句 “reg.lastIndex = 0;”.</p>
 <p>若 reg 不包含全局标示”g”, 那么 exec 方法的执行结果(array)将与 string.match(reg) 方法执行结果完全相同.</p>
 <h4 id="String"><a href="#String" class="headerlink" title="String"></a>String</h4><p>match, search, replace, split 方法请参考 <a href="http://louiszhai.github.io/2016/01/12/js.String/"><code>字符串常用方法</code></a> 中的讲解.</p>
 <h3 id="u6B63_u5219_u8868_u8FBE_u5F0F_u5728H5_u4E2D_u7684_u5E94_u7528"><a href="#u6B63_u5219_u8868_u8FBE_u5F0F_u5728H5_u4E2D_u7684_u5E94_u7528" class="headerlink" title="正则表达式在H5中的应用"></a>正则表达式在H5中的应用</h3><p>H5中新增了 pattern 属性, 规定了用于验证输入字段的模式, pattern的模式匹配支持正则表达式的书写方式. 默认 pattern 属性是全部匹配, 即无论正则表达式中有无 “^”, “$” 元字符, 它都是匹配所有文本.</p>
@@ -1402,7 +1407,7 @@
     <link href="http://louiszhai.github.io/2016/01/12/js.String/"/>
     <id>http://louiszhai.github.io/2016/01/12/js.String/</id>
     <published>2016-01-12T12:27:09.000Z</published>
-    <updated>2016-06-20T10:54:38.000Z</updated>
+    <updated>2016-06-21T00:11:52.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>javaScript 中, 字符串无处不在, 并且所有的字符串方法均来自 String.prototype, 这一节, 我们走进看一看String内部, 探讨那些常用或不常用的字符串操作方法.</p>
 <a id="more"></a>
 <h3 id="String-prototype"><a href="#String-prototype" class="headerlink" title="String.prototype"></a>String.prototype</h3><p>String.prototype 属性指向 String 的原型对象. 以下是它的属性特性:</p>
@@ -1467,13 +1472,15 @@
 <li>若需测试字符串是否匹配正则, 请参考 RegExp.test(str).</li>
 <li>若只需第一个匹配结果, 请参考 RegExp.exec(str).</li>
 </ul>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> str = <span class="string">"World Internet Conference"</span>;</span><br><span class="line"><span class="built_in">console</span>.log(str.match(<span class="regexp">/[a-d]/i</span>));<span class="comment">//["d", index: 4, input: "World Internet Conference"]</span></span><br><span class="line"><span class="built_in">console</span>.log(str.match(<span class="regexp">/[a-d]/gi</span>));<span class="comment">//["d", "C", "c"]</span></span><br><span class="line"><span class="comment">//RegExp 方法如下</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="regexp">/[a-d]/gi</span>.test(str));<span class="comment">//true</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="regexp">/[a-d]/gi</span>.exec(str));<span class="comment">//["d", index: 4, input: "World Internet Conference"],</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> str = <span class="string">"World Internet Conference"</span>;</span><br><span class="line"><span class="built_in">console</span>.log(str.match(<span class="regexp">/[a-d]/i</span>));<span class="comment">//["d", index: 4, input: "World Internet Conference"]</span></span><br><span class="line"><span class="built_in">console</span>.log(str.match(<span class="regexp">/[a-d]/gi</span>));<span class="comment">//["d", "C", "c"]</span></span><br><span class="line"><span class="comment">//RegExp 方法如下</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="regexp">/[a-d]/gi</span>.test(str));<span class="comment">//true</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="regexp">/[a-d]/gi</span>.exec(str));<span class="comment">//["d", index: 4, input: "World Internet Conference"]</span></span><br></pre></td></tr></table></figure>
 <p>由上可知, RegExp.test(str) 方法只要匹配到了一个字符也返回true. 而</p>
 <p>RegExp.exec(str) 方法无论正则中有没有包含 g 标志, RegExp.exec将直接返回第一个匹配结果, 且该结果同 str.match(regexp) 方法不包含 g 标志时的返回一致.</p>
 <h6 id="replace"><a href="#replace" class="headerlink" title="replace"></a>replace</h6><p>该方法在之前已经讲过, 详细请参考 <a href="http://louiszhai.github.io/2015/12/11/js.replace/"><code>String.prototype.replace高阶技能</code></a> .</p>
 <h6 id="search"><a href="#search" class="headerlink" title="search"></a>search</h6><p>search() 方法用于测试字符串对象是否包含某个正则匹配. 相当于正则表达式的 test 方法. 且该方法比 match() 方法更快. 如果匹配成功, search() 返回正则表达式在字符串中首次匹配项的索引, 否则返回-1.</p>
 <p>语法: <em>str</em>.search(regexp)</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> str = <span class="string">"abcdefg"</span>;</span><br><span class="line"><span class="built_in">console</span>.log(str.search(<span class="regexp">/[d-g]/</span>));<span class="comment">//3, 匹配到子串"defg",而d在原字符串中的索引为3</span></span><br></pre></td></tr></table></figure>
+<p>search() 方法不支持全局匹配(正则中包含g参数), 如下:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(str.search(<span class="regexp">/[d-g]/g</span>));<span class="comment">//3, 与无g参数时,返回相同</span></span><br></pre></td></tr></table></figure>
 <h6 id="slice"><a href="#slice" class="headerlink" title="slice"></a>slice</h6><p>slice() 方法提取字符串的一部分, 并返回新的字符串. 该方法有些类似Array.prototype.slice 方法.</p>
 <p>语法: <em>str</em>.slice(start, end)</p>
 <p>首先 end 参数可选, start可取正值, 也可取负值. </p>

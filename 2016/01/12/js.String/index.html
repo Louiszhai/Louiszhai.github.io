@@ -12,7 +12,7 @@
 <meta property="og:url" content="http://louiszhai.github.io/2016/01/12/js.String/index.html">
 <meta property="og:site_name" content="louis blog">
 <meta property="og:description" content="JavaScript String String.prototype">
-<meta property="og:updated_time" content="2016-06-20T10:54:38.000Z">
+<meta property="og:updated_time" content="2016-06-21T00:11:52.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="字符串常用方法">
 <meta name="twitter:description" content="JavaScript String String.prototype">
@@ -267,13 +267,15 @@
 <li>若需测试字符串是否匹配正则, 请参考 RegExp.test(str).</li>
 <li>若只需第一个匹配结果, 请参考 RegExp.exec(str).</li>
 </ul>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> str = <span class="string">"World Internet Conference"</span>;</span><br><span class="line"><span class="built_in">console</span>.log(str.match(<span class="regexp">/[a-d]/i</span>));<span class="comment">//["d", index: 4, input: "World Internet Conference"]</span></span><br><span class="line"><span class="built_in">console</span>.log(str.match(<span class="regexp">/[a-d]/gi</span>));<span class="comment">//["d", "C", "c"]</span></span><br><span class="line"><span class="comment">//RegExp 方法如下</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="regexp">/[a-d]/gi</span>.test(str));<span class="comment">//true</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="regexp">/[a-d]/gi</span>.exec(str));<span class="comment">//["d", index: 4, input: "World Internet Conference"],</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> str = <span class="string">"World Internet Conference"</span>;</span><br><span class="line"><span class="built_in">console</span>.log(str.match(<span class="regexp">/[a-d]/i</span>));<span class="comment">//["d", index: 4, input: "World Internet Conference"]</span></span><br><span class="line"><span class="built_in">console</span>.log(str.match(<span class="regexp">/[a-d]/gi</span>));<span class="comment">//["d", "C", "c"]</span></span><br><span class="line"><span class="comment">//RegExp 方法如下</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="regexp">/[a-d]/gi</span>.test(str));<span class="comment">//true</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="regexp">/[a-d]/gi</span>.exec(str));<span class="comment">//["d", index: 4, input: "World Internet Conference"]</span></span><br></pre></td></tr></table></figure>
 <p>由上可知, RegExp.test(str) 方法只要匹配到了一个字符也返回true. 而</p>
 <p>RegExp.exec(str) 方法无论正则中有没有包含 g 标志, RegExp.exec将直接返回第一个匹配结果, 且该结果同 str.match(regexp) 方法不包含 g 标志时的返回一致.</p>
 <h6 id="replace"><a href="#replace" class="headerlink" title="replace"></a>replace</h6><p>该方法在之前已经讲过, 详细请参考 <a href="http://louiszhai.github.io/2015/12/11/js.replace/"><code>String.prototype.replace高阶技能</code></a> .</p>
 <h6 id="search"><a href="#search" class="headerlink" title="search"></a>search</h6><p>search() 方法用于测试字符串对象是否包含某个正则匹配. 相当于正则表达式的 test 方法. 且该方法比 match() 方法更快. 如果匹配成功, search() 返回正则表达式在字符串中首次匹配项的索引, 否则返回-1.</p>
 <p>语法: <em>str</em>.search(regexp)</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> str = <span class="string">"abcdefg"</span>;</span><br><span class="line"><span class="built_in">console</span>.log(str.search(<span class="regexp">/[d-g]/</span>));<span class="comment">//3, 匹配到子串"defg",而d在原字符串中的索引为3</span></span><br></pre></td></tr></table></figure>
+<p>search() 方法不支持全局匹配(正则中包含g参数), 如下:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(str.search(<span class="regexp">/[d-g]/g</span>));<span class="comment">//3, 与无g参数时,返回相同</span></span><br></pre></td></tr></table></figure>
 <h6 id="slice"><a href="#slice" class="headerlink" title="slice"></a>slice</h6><p>slice() 方法提取字符串的一部分, 并返回新的字符串. 该方法有些类似Array.prototype.slice 方法.</p>
 <p>语法: <em>str</em>.slice(start, end)</p>
 <p>首先 end 参数可选, start可取正值, 也可取负值. </p>
