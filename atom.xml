@@ -4,7 +4,7 @@
   <subtitle><![CDATA[程序猿 前端攻城师]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://louiszhai.github.io/"/>
-  <updated>2016-06-21T04:54:51.000Z</updated>
+  <updated>2016-06-22T06:40:05.000Z</updated>
   <id>http://louiszhai.github.io/</id>
   
   <author>
@@ -19,7 +19,7 @@
     <link href="http://louiszhai.github.io/2016/06/13/regexp/"/>
     <id>http://louiszhai.github.io/2016/06/13/regexp/</id>
     <published>2016-06-13T00:24:55.000Z</published>
-    <updated>2016-06-21T04:54:51.000Z</updated>
+    <updated>2016-06-22T06:40:05.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>有关正则表达的介绍, 无须我多言. 这里借助 Jeffrey Friedl 的&lt;精通正则表达式&gt; 一书的序言抛个砖.</p>
 <blockquote>
 <p>​    “如果罗列计算机软件领域的伟大发明, 我相信绝对不会超过二十项, 在这个名单当中, 当然应该包括分组交换网络, Web, Lisp, 哈希算法, UNIX, 编译技术, 关系模型, 面向对象, XML这些大名鼎鼎的家伙, 而正则表达式也绝对不应该被漏掉. </p>
@@ -153,14 +153,15 @@
 <h4 id="u6D4B_u8BD5"><a href="#u6D4B_u8BD5" class="headerlink" title="测试"></a>测试</h4><p>我们来测试下上面的知识点, 写一个匹配手机号码的正则表达式, 如下:</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(\+<span class="number">86</span>)?<span class="number">1</span>\d&#123;<span class="number">10</span>&#125;</span><br></pre></td></tr></table></figure>
 <p>匹配结果如下:</p>
-<p><img src="/docImages/regexp01.png" alt=""></p>
-<h3 id="u4FEE_u9970_u7B26"><a href="#u4FEE_u9970_u7B26" class="headerlink" title="修饰符"></a>修饰符</h3><p>javaScript中正则表达式有如下三种修饰符:</p>
+<p><img src="http://louiszhai.github.io/docImages/regexp01.png" alt=""></p>
+<h3 id="u4FEE_u9970_u7B26"><a href="#u4FEE_u9970_u7B26" class="headerlink" title="修饰符"></a>修饰符</h3><p>javaScript中正则表达式默认有如下三种修饰符:</p>
 <ul>
-<li>g (全文查找)</li>
+<li>g (全文查找), 如上述截图, 实际上就开启了全文查找模式.</li>
 <li>i (忽略大小写查找)</li>
 <li>m (多行查找)</li>
+<li>y (ES6新增的粘连修饰符)</li>
+<li>u (ES6新增)</li>
 </ul>
-<p>如上述截图, 实际上就开启了全文查找模式.</p>
 <h3 id="u5E38_u7528_u7684_u6B63_u5219_u8868_u8FBE_u5F0F"><a href="#u5E38_u7528_u7684_u6B63_u5219_u8868_u8FBE_u5F0F" class="headerlink" title="常用的正则表达式"></a>常用的正则表达式</h3><ol>
 <li>汉字: ^[\u4e00-\u9fa5]{0,}$</li>
 <li>Email: ^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$</li>
@@ -205,7 +206,7 @@
 </tr>
 <tr>
 <td>$</td>
-<td>匹配行尾，例如：’^、dog$’匹配以字符串 dog 为结尾的行（注意：awk 指令中，’$’则是匹配字符串的结尾）</td>
+<td>匹配行尾，例如：’^、dog\$’ 匹配以字符串 dog 为结尾的行（注意：awk 指令中，’$’则是匹配字符串的结尾）</td>
 <td>$</td>
 <td>$</td>
 <td>$</td>
@@ -244,10 +245,10 @@
 <td><strong>不支持</strong>（但可以使用\b来匹配单词，例如：’frog\b’）</td>
 </tr>
 <tr>
-<td><x></x></td>
+<td>\<x></x></td>
 <td>匹配一个单词或者一个特定字符，例如：’\<frog\>‘（等价于’\bfrog\b’）、’\<g\>‘</g\></frog\></td>
-<td><x></x></td>
-<td><x></x></td>
+<td>\<x></x></td>
+<td>\<x></x></td>
 <td><strong>不支持</strong></td>
 <td><strong>不支持</strong>（但可以使用\b来匹配单词，例如：’\bfrog\b’</td>
 </tr>
@@ -706,11 +707,11 @@
 <p>相应的流程图如下:</p>
 <style>
 
-.fancy-ctn img[src="/docImages/regexp02.png"]{height:500px;width:396px;}
+.fancy-ctn img[src~="/docImages/regexp02.png"]{height:500px;width:396px;}
 
 </style>
 
-<p><img src="/docImages/regexp02.png" alt="正则表达式流程图"></p>
+<p><img src="http://louiszhai.github.io/docImages/regexp02.png" alt="正则表达式流程图"></p>
 <p>遗憾的是, javaScript, java 和 python中并不支持固化分组的语法, 不过, 它在php和.NET中表现良好. 下面提供了一个php版的固化分组形式的正则表达式, 以供尝试.</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$str</span> = <span class="string">"123.456"</span>;</span><br><span class="line"><span class="keyword">echo</span> preg_replace(<span class="string">"/(\.\d\d(?&gt;[1-9]?))\d+/"</span>,<span class="string">"\\1"</span>,<span class="variable">$str</span>); <span class="comment">//固化分组</span></span><br></pre></td></tr></table></figure>
 <p>不仅如此, php还提供了占有量词优先的语法. 如下:</p>
@@ -761,7 +762,28 @@
 <p>下面通过python来演示下 <strong>逆序肯定环视</strong> 和 <strong>逆序否定环视</strong> 的用法.</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> re</span><br><span class="line">data = <span class="string">"123abc789"</span></span><br><span class="line"><span class="comment"># 使用了逆序肯定环视,替换左边为123的连续的小写英文字母,匹配成功,故abc被替换为456</span></span><br><span class="line">regExp = <span class="string">r"(?&lt;=123)[a-z]+"</span></span><br><span class="line">replaceString = <span class="string">"456"</span></span><br><span class="line"><span class="keyword">print</span> re.sub(regExp,replaceString,data) <span class="comment"># 123456789</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用了逆序否定环视,由于英文字母左侧不能为123,故子表达式[a-z]+捕获到bc,最终bc被替换为456</span></span><br><span class="line">regExp = <span class="string">r"(?&lt;!123)[a-z]+"</span></span><br><span class="line">replaceString = <span class="string">"456"</span></span><br><span class="line"><span class="keyword">print</span> re.sub(regExp,replaceString,data) <span class="comment"># 123a456789</span></span><br></pre></td></tr></table></figure>
 <p>需要注意的是: python 和 perl 语言中的 <strong>逆序环视</strong> 的子表达式只能使用定长的文本. 比如将上述 “(?&lt;=123)” (逆序肯定环视)子表达式写成 “(?&lt;=[0-9]+)”, python解释器将会报错: “error: look-behind requires fixed-width pattern”.</p>
-<h3 id="u6B63_u5219_u8868_u8FBE_u5F0F_u5728JS_u4E2D_u7684_u5E94_u7528"><a href="#u6B63_u5219_u8868_u8FBE_u5F0F_u5728JS_u4E2D_u7684_u5E94_u7528" class="headerlink" title="正则表达式在JS中的应用"></a>正则表达式在JS中的应用</h3><p>javaScript 中与正则表达式有关的方法如下: </p>
+<h3 id="u6B63_u5219_u8868_u8FBE_u5F0F_u5728JS_u4E2D_u7684_u5E94_u7528"><a href="#u6B63_u5219_u8868_u8FBE_u5F0F_u5728JS_u4E2D_u7684_u5E94_u7528" class="headerlink" title="正则表达式在JS中的应用"></a>正则表达式在JS中的应用</h3><h4 id="ES6_u5BF9_u6B63_u5219_u7684_u6269_u5C55"><a href="#ES6_u5BF9_u6B63_u5219_u7684_u6269_u5C55" class="headerlink" title="ES6对正则的扩展"></a>ES6对正则的扩展</h4><p>ES6对正则扩展了又两种修饰符(其他语言可能不支持):</p>
+<ul>
+<li>y (粘连sticky修饰符), 与g类似, 也是全局匹配, 并且下一次匹配都是从上一次匹配成功的下一个位置开始, 不同之处在于, g修饰符只要剩余位置中存在匹配即可, 而y修饰符确保匹配必须从剩余的第一个位置开始.</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> s = <span class="string">"abc_ab_a"</span>;</span><br><span class="line"><span class="keyword">var</span> r1 = <span class="regexp">/[a-z]+/g</span>;</span><br><span class="line"><span class="keyword">var</span> r2 = <span class="regexp">/[a-z]+/y</span>;</span><br><span class="line"><span class="built_in">console</span>.log(r1.exec(s),r1.lastIndex); <span class="comment">// ["abc", index: 0, input: "abc_ab_a"] 3</span></span><br><span class="line"><span class="built_in">console</span>.log(r2.exec(s),r2.lastIndex); <span class="comment">// ["abc", index: 0, input: "abc_ab_a"] 3</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(r1.exec(s),r1.lastIndex); <span class="comment">// ["ab", index: 4, input: "abc_ab_a"] 6</span></span><br><span class="line"><span class="built_in">console</span>.log(r2.exec(s),r2.lastIndex); <span class="comment">// null 0</span></span><br></pre></td></tr></table></figure>
+<p>如上, 由于第二次匹配的开始位置是下标3,  对应的字符串是 “_”, 而使用y修饰符的正则对象r2, 需要从剩余的第一个位置开始, 所以匹配失败, 返回null.</p>
+<p>正则对象的 sticky 属性, 表示是否设置了y修饰符. 这点将会在后面讲到.</p>
+<ul>
+<li>u 修饰符, 提供了对正则表达式添加4字节码点的支持. 比如 “𝌆” 字符是一个4字节字符, 直接使用正则匹配将会失败, 而使用u修饰符后, 将会等到正确的结果.</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> s = <span class="string">"𝌆"</span>;</span><br><span class="line"><span class="built_in">console</span>.log(<span class="regexp">/^.$/</span>.test(s));<span class="comment">//false</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="regexp">/^.$/u</span>.test(s));<span class="comment">//true</span></span><br></pre></td></tr></table></figure>
+<h5 id="UCS-2_u5B57_u8282_u7801"><a href="#UCS-2_u5B57_u8282_u7801" class="headerlink" title="UCS-2字节码"></a>UCS-2字节码</h5><p>有关字节码点, 稍微提下. javaScript 只能处理UCS-2编码(js于1995年5月被Brendan Eich花费10天设计出来, 比1996年7月发布的编码规范UTF-16早了一年多, 当时只有UCS-2可选). 由于UCS-2先天不足, 造成了所有字符在js中都是2个字节. 如果是4个字节的字符, 将会默认被当作两个双字节字符处理. js 的字符处理函数都受到限制, 无法返回正确结果. 如下:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> s = <span class="string">"𝌆"</span>;</span><br><span class="line"><span class="built_in">console</span>.log(s == <span class="string">"\uD834\uDF06"</span>);<span class="comment">//true 𝌆相当于UTF-16中的0xD834DF06</span></span><br><span class="line"><span class="built_in">console</span>.log(s.length);<span class="comment">//2 长度为2, 表示这是4字节字符</span></span><br></pre></td></tr></table></figure>
+<p>幸运的是, ES6可以自动识别4字节的字符.因此遍历字符串可以直接使用for of循环. 同时, js中如果直接使用码点表示Unicode字符, 对于4字节字符, ES5里是没办法识别的. 为此ES6修复了这个问题, 只需将码点放在大括号内即可.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(s === <span class="string">"\u1D306"</span>);<span class="comment">//false   ES5无法识别𝌆</span></span><br><span class="line"><span class="built_in">console</span>.log(s === <span class="string">"\u&#123;1D306&#125;"</span>);<span class="comment">//true  ES6可以借助大括号识别𝌆</span></span><br></pre></td></tr></table></figure>
+<h5 id="u9644_3A_ES6_u65B0_u589E_u7684_u5904_u74064_u5B57_u8282_u7801_u7684_u51FD_u6570"><a href="#u9644_3A_ES6_u65B0_u589E_u7684_u5904_u74064_u5B57_u8282_u7801_u7684_u51FD_u6570" class="headerlink" title="附: ES6新增的处理4字节码的函数"></a>附: ES6新增的处理4字节码的函数</h5><ul>
+<li><strong>String.fromCodePoint()</strong>：从Unicode码点返回对应字符</li>
+<li><strong>String.prototype.codePointAt()</strong>：从字符返回对应的码点</li>
+<li><strong>String.prototype.at()</strong>：返回字符串给定位置的字符</li>
+</ul>
+<p>有关js中的unicode字符集, 请参考阮一峰老师的 <a href="http://www.ruanyifeng.com/blog/2014/12/unicode.html" target="_blank" rel="external"><code>Unicode与JavaScript详解</code></a>.</p>
+<p>以上是ES6对正则的扩展. 另一个方面, 从方法上看, javaScript 中与正则表达式有关的方法如下: </p>
 <table>
 <thead>
 <tr>
@@ -826,6 +848,14 @@
 <td style="text-align:center">lastIndex</td>
 <td style="text-align:center">表示原字符串中匹配的字符串末尾的后一个位置, 默认为0</td>
 </tr>
+<tr>
+<td style="text-align:center">flags(ES6)</td>
+<td style="text-align:center">返回正则表达式的修饰符</td>
+</tr>
+<tr>
+<td style="text-align:center">sticky(ES6)</td>
+<td style="text-align:center">是否设置了y(粘连)修饰符(true/false)</td>
+</tr>
 </tbody>
 </table>
 <h5 id="compile"><a href="#compile" class="headerlink" title="compile"></a>compile</h5><p>compile 方法用于在执行过程中改变和重新编译正则表达式.</p>
@@ -867,7 +897,9 @@
 <p>若 reg 不包含全局标示”g”, 那么 exec 方法的执行结果(array)将与 string.match(reg) 方法执行结果完全相同.</p>
 <h4 id="String"><a href="#String" class="headerlink" title="String"></a>String</h4><p>match, search, replace, split 方法请参考 <a href="http://louiszhai.github.io/2016/01/12/js.String/"><code>字符串常用方法</code></a> 中的讲解.</p>
 <p>如下展示了使用捕获性分组处理文本模板, 最终生成完整字符串的过程:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> tmp = <span class="string">"An &#123;a&#125; a &#123;b&#125; keeps the &#123;c&#125; away"</span>;</span><br><span class="line"><span class="keyword">var</span> obj = &#123;a:<span class="string">"apple"</span>,b:<span class="string">"day"</span>,c:<span class="string">"doctor"</span>&#125;;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">tmpl</span>(<span class="params">template,obj</span>)</span>&#123;</span><br><span class="line">	<span class="keyword">var</span> retu = template.replace(<span class="regexp">/([^&#123;&#125;]*)&#123;(.)&#125;/g</span>,<span class="function"><span class="keyword">function</span>(<span class="params">m,p1,p2,offset,str</span>)</span>&#123;</span><br><span class="line">		<span class="built_in">console</span>.log(<span class="string">'m:'</span>+m+<span class="string">' p1:'</span>+p1+<span class="string">' p2:'</span>+p2);</span><br><span class="line">		<span class="keyword">return</span> p1+obj[p2]</span><br><span class="line">	&#125;)</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">"==&gt;"</span>+retu);</span><br><span class="line">&#125;</span><br><span class="line">tmpl(tmp,obj);</span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> tmp = <span class="string">"An $&#123;a&#125; a $&#123;b&#125; keeps the $&#123;c&#125; away"</span>;</span><br><span class="line"><span class="keyword">var</span> obj = &#123;</span><br><span class="line">	a:<span class="string">"apple"</span>,</span><br><span class="line">  	b:<span class="string">"day"</span>,</span><br><span class="line">  	c:<span class="string">"doctor"</span></span><br><span class="line">&#125;;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">tmpl</span>(<span class="params">t,o</span>)</span>&#123;</span><br><span class="line">	<span class="keyword">return</span> t.replace(<span class="regexp">/\$&#123;(.)&#125;/g</span>,<span class="function"><span class="keyword">function</span>(<span class="params">m,p</span>)</span>&#123;</span><br><span class="line">		<span class="built_in">console</span>.log(<span class="string">'m:'</span>+m+<span class="string">' p:'</span>+p);</span><br><span class="line">		<span class="keyword">return</span> o[p];</span><br><span class="line">	&#125;);</span><br><span class="line">&#125;</span><br><span class="line">tmpl(tmp,obj);</span><br></pre></td></tr></table></figure>
+<p>上述功能使用ES6可这么实现:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> obj = &#123;</span><br><span class="line">	a:<span class="string">"apple"</span>,</span><br><span class="line">  	b:<span class="string">"day"</span>,</span><br><span class="line">  	c:<span class="string">"doctor"</span></span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">with</span>(obj)&#123;</span><br><span class="line">	<span class="built_in">console</span>.log(<span class="string">`An <span class="subst">$&#123;a&#125;</span> a <span class="subst">$&#123;b&#125;</span> keeps the <span class="subst">$&#123;c&#125;</span> away`</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h3 id="u6B63_u5219_u8868_u8FBE_u5F0F_u5728H5_u4E2D_u7684_u5E94_u7528"><a href="#u6B63_u5219_u8868_u8FBE_u5F0F_u5728H5_u4E2D_u7684_u5E94_u7528" class="headerlink" title="正则表达式在H5中的应用"></a>正则表达式在H5中的应用</h3><p>H5中新增了 pattern 属性, 规定了用于验证输入字段的模式, pattern的模式匹配支持正则表达式的书写方式. 默认 pattern 属性是全部匹配, 即无论正则表达式中有无 “^”, “$” 元字符, 它都是匹配所有文本.</p>
 <p>注: pattern 适用于以下 input 类型：text, search, url, telephone, email 以及 password. 如果需要取消表单验证, 在form标签上增加 novalidate 属性即可.</p>
 <h3 id="u6B63_u5219_u5F15_u64CE"><a href="#u6B63_u5219_u5F15_u64CE" class="headerlink" title="正则引擎"></a>正则引擎</h3><p>目前正则引擎有两种, DFA 和 NFA, NFA又可以分为传统型NFA和POSIX NFA.</p>
@@ -903,6 +935,7 @@
 <li><a href="http://www.cnblogs.com/taek/archive/2012/02/08/2342741.html" target="_blank" rel="external">正则表达式之固化分组 - taek - 博客园</a></li>
 <li><a href="http://www.jb51.net/article/31491.htm" target="_blank" rel="external">正则表达式之 贪婪与非贪婪模式详解（概述）_正则表达式_脚本之家</a></li>
 <li><a href="http://blog.csdn.net/nebula1982/article/details/6659702" target="_blank" rel="external">JAVASCRIPT 正则表达式学习–&gt;基础与零宽断言（转自司徒正美） - 随风之羽 - 博客频道 - CSDN.NET</a></li>
+<li><a href="http://www.ruanyifeng.com/blog/2014/12/unicode.html" target="_blank" rel="external">Unicode与JavaScript详解 - 阮一峰的网络日志</a></li>
 </ul>
 ]]></content>
     <summary type="html">
@@ -1066,7 +1099,7 @@
     <link href="http://louiszhai.github.io/2016/03/12/css-center/"/>
     <id>http://louiszhai.github.io/2016/03/12/css-center/</id>
     <published>2016-03-12T11:03:04.000Z</published>
-    <updated>2016-06-20T10:54:35.000Z</updated>
+    <updated>2016-06-21T04:59:34.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>熟悉水平居中和垂直居中的方法, 不为别的, 就为用的时候能够信手拈来. 下面直接步入正题.</p>
 <a id="more"></a>
 <h3 id="u6C34_u5E73_u5C45_u4E2D"><a href="#u6C34_u5E73_u5C45_u4E2D" class="headerlink" title="水平居中"></a>水平居中</h3><p>1) 若是行内元素, 给其父元素设置 text-align:center,即可实现行内元素水平居中.</p>
@@ -1409,7 +1442,7 @@
     <link href="http://louiszhai.github.io/2016/01/12/js.String/"/>
     <id>http://louiszhai.github.io/2016/01/12/js.String/</id>
     <published>2016-01-12T12:27:09.000Z</published>
-    <updated>2016-06-21T00:11:52.000Z</updated>
+    <updated>2016-06-21T04:58:46.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>javaScript 中, 字符串无处不在, 并且所有的字符串方法均来自 String.prototype, 这一节, 我们走进看一看String内部, 探讨那些常用或不常用的字符串操作方法.</p>
 <a id="more"></a>
 <h3 id="String-prototype"><a href="#String-prototype" class="headerlink" title="String.prototype"></a>String.prototype</h3><p>String.prototype 属性指向 String 的原型对象. 以下是它的属性特性:</p>
