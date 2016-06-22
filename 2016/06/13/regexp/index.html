@@ -14,7 +14,7 @@
 <meta property="og:description" content="regexp 正则表达式">
 <meta property="og:image" content="http://louiszhai.github.io/docImages/regexp01.png">
 <meta property="og:image" content="http://louiszhai.github.io/docImages/regexp02.png">
-<meta property="og:updated_time" content="2016-06-22T06:40:05.000Z">
+<meta property="og:updated_time" content="2016-06-22T06:57:32.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="正则表达式前端使用手册">
 <meta name="twitter:description" content="regexp 正则表达式">
@@ -954,7 +954,7 @@
 <li>u 修饰符, 提供了对正则表达式添加4字节码点的支持. 比如 “𝌆” 字符是一个4字节字符, 直接使用正则匹配将会失败, 而使用u修饰符后, 将会等到正确的结果.</li>
 </ul>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> s = <span class="string">"𝌆"</span>;</span><br><span class="line"><span class="built_in">console</span>.log(<span class="regexp">/^.$/</span>.test(s));<span class="comment">//false</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="regexp">/^.$/u</span>.test(s));<span class="comment">//true</span></span><br></pre></td></tr></table></figure>
-<h5 id="UCS-2_u5B57_u8282_u7801"><a href="#UCS-2_u5B57_u8282_u7801" class="headerlink" title="UCS-2字节码"></a>UCS-2字节码</h5><p>有关字节码点, 稍微提下. javaScript 只能处理UCS-2编码(js于1995年5月被Brendan Eich花费10天设计出来, 比1996年7月发布的编码规范UTF-16早了一年多, 当时只有UCS-2可选). 由于UCS-2先天不足, 造成了所有字符在js中都是2个字节. 如果是4个字节的字符, 将会默认被当作两个双字节字符处理. js 的字符处理函数都受到限制, 无法返回正确结果. 如下:</p>
+<h5 id="UCS-2_u5B57_u8282_u7801"><a href="#UCS-2_u5B57_u8282_u7801" class="headerlink" title="UCS-2字节码"></a>UCS-2字节码</h5><p>有关字节码点, 稍微提下. javaScript 只能处理UCS-2编码(js于1995年5月被Brendan Eich花费10天设计出来, 比1996年7月发布的编码规范UTF-16早了一年多, 当时只有UCS-2可选). 由于UCS-2先天不足, 造成了所有字符在js中都是2个字节. 如果是4个字节的字符, 将会默认被当作两个双字节字符处理. 因此 js 的字符处理函数都会受到限制, 无法返回正确结果. 如下:</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> s = <span class="string">"𝌆"</span>;</span><br><span class="line"><span class="built_in">console</span>.log(s == <span class="string">"\uD834\uDF06"</span>);<span class="comment">//true 𝌆相当于UTF-16中的0xD834DF06</span></span><br><span class="line"><span class="built_in">console</span>.log(s.length);<span class="comment">//2 长度为2, 表示这是4字节字符</span></span><br></pre></td></tr></table></figure>
 <p>幸运的是, ES6可以自动识别4字节的字符.因此遍历字符串可以直接使用for of循环. 同时, js中如果直接使用码点表示Unicode字符, 对于4字节字符, ES5里是没办法识别的. 为此ES6修复了这个问题, 只需将码点放在大括号内即可.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(s === <span class="string">"\u1D306"</span>);<span class="comment">//false   ES5无法识别𝌆</span></span><br><span class="line"><span class="built_in">console</span>.log(s === <span class="string">"\u&#123;1D306&#125;"</span>);<span class="comment">//true  ES6可以借助大括号识别𝌆</span></span><br></pre></td></tr></table></figure>
