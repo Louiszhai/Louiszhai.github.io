@@ -4,7 +4,7 @@
   <subtitle><![CDATA[程序猿 前端攻城师]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://louiszhai.github.io/"/>
-  <updated>2016-06-22T06:57:32.000Z</updated>
+  <updated>2016-06-23T06:13:12.000Z</updated>
   <id>http://louiszhai.github.io/</id>
   
   <author>
@@ -19,7 +19,7 @@
     <link href="http://louiszhai.github.io/2016/06/13/regexp/"/>
     <id>http://louiszhai.github.io/2016/06/13/regexp/</id>
     <published>2016-06-13T00:24:55.000Z</published>
-    <updated>2016-06-22T06:57:32.000Z</updated>
+    <updated>2016-06-23T06:13:12.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>有关正则表达的介绍, 无须我多言. 这里借助 Jeffrey Friedl 的&lt;精通正则表达式&gt; 一书的序言抛个砖.</p>
 <blockquote>
 <p>​    “如果罗列计算机软件领域的伟大发明, 我相信绝对不会超过二十项, 在这个名单当中, 当然应该包括分组交换网络, Web, Lisp, 哈希算法, UNIX, 编译技术, 关系模型, 面向对象, XML这些大名鼎鼎的家伙, 而正则表达式也绝对不应该被漏掉. </p>
@@ -707,7 +707,7 @@
 <p>相应的流程图如下:</p>
 <style>
 
-.fancy-ctn img[src~="/docImages/regexp02.png"]{height:500px;width:396px;}
+.fancy-ctn img[src$="regexp02.png"]{height:500px;width:396px;}
 
 </style>
 
