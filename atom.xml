@@ -4,7 +4,7 @@
   <subtitle><![CDATA[程序猿 前端攻城师]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://louiszhai.github.io/"/>
-  <updated>2016-06-23T06:13:12.000Z</updated>
+  <updated>2016-06-29T03:16:34.000Z</updated>
   <id>http://louiszhai.github.io/</id>
   
   <author>
@@ -19,21 +19,27 @@
     <link href="http://louiszhai.github.io/2016/06/13/regexp/"/>
     <id>http://louiszhai.github.io/2016/06/13/regexp/</id>
     <published>2016-06-13T00:24:55.000Z</published>
-    <updated>2016-06-23T06:13:12.000Z</updated>
-    <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>有关正则表达的介绍, 无须我多言. 这里借助 Jeffrey Friedl 的&lt;精通正则表达式&gt; 一书的序言抛个砖.</p>
+    <updated>2016-06-29T03:16:34.000Z</updated>
+    <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>你有没有在搜索文本的时候绞尽脑汁, 试了一个又一个表达式, 还是不行.</p>
+<p>你有没有在表单验证的时候, 只是做做样子(只要不为空就好), 然后烧香拜佛, 虔诚祈祷, 千万不要出错.</p>
+<p>你有没有在使用sed 和 grep 命令的时候, 感觉莫名其妙, 明明应该支持的元字符, 却就是匹配不到.</p>
+<p>甚至, 你压根没遇到过上述情况, 你只是一遍又一遍的调用 replace 而已 (把非搜索文本全部替换为空, 然后就只剩搜索文本了), 面对别人家的简洁高效的语句, 你只能在心中呐喊, replace 大法好.</p>
+<p>为什么要学正则表达式. 有位网友这么说: 江湖传说里, 程序员的正则表达式和医生的处方, 道士的鬼符齐名, 曰: 普通人看不懂的三件神器. 这个传说至少向我们透露了两点信息: 一是正则表达式很牛, 能和医生的处方, 道士的鬼符齐名, 并被大家提起, 可见其江湖地位. 二是正则表达式很难, 这也从侧面说明了, 如果你可以熟练的掌握并应用它, 在装逼的路上, 你将如日中天 (别问我中天是谁……) !</p>
+<p>显然, 有关正则表达的介绍, 无须我多言. 这里就借助 Jeffrey Friedl 的《精通正则表达式》一书的序言正式抛个砖.</p>
 <blockquote>
 <p>​    “如果罗列计算机软件领域的伟大发明, 我相信绝对不会超过二十项, 在这个名单当中, 当然应该包括分组交换网络, Web, Lisp, 哈希算法, UNIX, 编译技术, 关系模型, 面向对象, XML这些大名鼎鼎的家伙, 而正则表达式也绝对不应该被漏掉. </p>
 <p>​     对很多实际工作而言, 正则表达式简直是灵丹妙药, 能够成百倍的提高开发效率和程序质量, 正则表达式在生物信息学和人类基因图谱的研究中所发挥的关键作用, 更是被传为佳话. CSDN的创始人蒋涛先生在早年开发专业软件产品时, 就曾经体验过这一工具的巨大威力, 并且一直印象深刻.”</p>
 </blockquote>
-<p>因此, 我们没有理由不去了解正则表达式, 甚至是熟练掌握并运行它.</p>
+<p>因此, 我们没有理由不去了解正则表达式, 甚至是熟练掌握并运用它.</p>
 <p>本文以正则基础语法开篇, 结合具体实例, 逐步讲解正则表达式匹配原理. 代码实例使用语言包括 js, php, python, java(因有些匹配模式, js并未支持, 需要借助其他语言讲解). 内容包括初阶技能和高阶技能, 适合新手学习和进阶. 本文力求简单通俗易懂, 如有阅读障碍请及时<a href="#respond">联系我</a>.</p>
 <a id="more"></a>
-<h3 id="u56DE_u987E_u5386_u53F2"><a href="#u56DE_u987E_u5386_u53F2" class="headerlink" title="回顾历史"></a>回顾历史</h3><p>如果非要讨论正则表达式的渊源, 最早可以追溯至对人类神经系统如何工作的早期研究. Warren McCulloch 和 Walter Pitts 这两位神经生理学家研究出一种数学方式来描述这些神经网络.</p>
+<h3 id="u56DE_u987E_u5386_u53F2"><a href="#u56DE_u987E_u5386_u53F2" class="headerlink" title="回顾历史"></a>回顾历史</h3><p>要论正则表达式的渊源, 最早可以追溯至对人类神经系统如何工作的早期研究. Warren McCulloch 和 Walter Pitts 这两位神经大咖 (神经生理学家) 研究出一种数学方式来描述这些神经网络.</p>
 <p>1956 年, 一位叫 Stephen Kleene 的数学家在 McCulloch 和 Pitts 早期工作的基础上, 发表了一篇标题为”神经网事件的表示法”的论文, 引入了正则表达式的概念.</p>
-<p>随后, 发现可以将这一工作应用于使用 Ken Thompson 的计算搜索算法的一些早期研究, Ken Thompson 是 Unix 的主要发明人. 正则表达式的第一个实用应用程序就是 Unix 中的  qed 编辑器.</p>
+<p>随后, 发现可以将这一工作应用于使用 Ken Thompson 的计算搜索算法的一些早期研究中. 而 Ken Thompson 又是 Unix 的主要发明人. 因此半个世纪以前的Unix 中的 qed 编辑器(1966 qed编辑器问世) 成了第一个使用正则表达式的应用程序.</p>
 <p>至此之后, 正则表达式成为家喻户晓的文本处理工具, 几乎各大编程语言都以支持正则表达式作为卖点, 当然 JavaScript 也不例外.</p>
-<h3 id="u6B63_u5219_u8868_u8FBE_u5F0F_u7684_u5B9A_u4E49"><a href="#u6B63_u5219_u8868_u8FBE_u5F0F_u7684_u5B9A_u4E49" class="headerlink" title="正则表达式的定义"></a>正则表达式的定义</h3><p>正则表达式是由普通字符和特殊字符(也叫元字符)组成的文字模板. 如下便是简单的匹配数字的正则表达式:</p>
+<h3 id="u6B63_u5219_u8868_u8FBE_u5F0F_u7684_u5B9A_u4E49"><a href="#u6B63_u5219_u8868_u8FBE_u5F0F_u7684_u5B9A_u4E49" class="headerlink" title="正则表达式的定义"></a>正则表达式的定义</h3><p>正则表达式是由普通字符和特殊字符(也叫元字符或限定符)组成的文字模板. 如下便是简单的匹配连续数字的正则表达式:</p>
 <figure class="highlight coffeescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="regexp">/[0-9]+/</span></span><br><span class="line"><span class="regexp">/\d+/</span></span><br></pre></td></tr></table></figure>
+<p>“\d” 就是元字符, 而 “+” 则是限定符.</p>
 <h4 id="u5143_u5B57_u7B26"><a href="#u5143_u5B57_u7B26" class="headerlink" title="元字符"></a>元字符</h4><table>
 <thead>
 <tr>
@@ -48,7 +54,7 @@
 </tr>
 <tr>
 <td style="text-align:center">\d</td>
-<td style="text-align:center">匹配数字, 等价于[0-9]</td>
+<td style="text-align:center">匹配数字, 等价于字符组[0-9]</td>
 </tr>
 <tr>
 <td style="text-align:center">\w</td>
@@ -138,7 +144,7 @@
 </tr>
 </tbody>
 </table>
-<h4 id="u5B57_u7B26_u7EC4"><a href="#u5B57_u7B26_u7EC4" class="headerlink" title="字符组"></a>字符组</h4><p>[…] 匹配中括号内字符之一. 如: [xyz]  匹配字符 x, y 或 z.</p>
+<h4 id="u5B57_u7B26_u7EC4"><a href="#u5B57_u7B26_u7EC4" class="headerlink" title="字符组"></a>字符组</h4><p>[…] 匹配中括号内字符之一. 如: [xyz]  匹配字符 x, y 或 z. 如果中括号中包含元字符, 则元字符降级为普通字符, 不再具有元字符的功能, 如 [+.?] 匹配 加号, 点号或问号.</p>
 <h4 id="u6392_u9664_u6027_u5B57_u7B26_u7EC4"><a href="#u6392_u9664_u6027_u5B57_u7B26_u7EC4" class="headerlink" title="排除性字符组"></a>排除性字符组</h4><p>[^…] 匹配任何未列出的字符,. 如:  [^x]  匹配除x以外的任意字符.</p>
 <h4 id="u591A_u9009_u7ED3_u6784"><a href="#u591A_u9009_u7ED3_u6784" class="headerlink" title="多选结构"></a>多选结构</h4><p>| 就是或的意思, 表示两者中的一个. 如: a|b 匹配a或者b字符.</p>
 <h4 id="u62EC_u53F7"><a href="#u62EC_u53F7" class="headerlink" title="括号"></a>括号</h4><p>括号 常用来界定重复限定符的范围, 以及将字符<strong>分组</strong>. 如: (ab)+ 可以匹配abab..等, 其中 ab 便是一个分组.</p>
@@ -152,9 +158,12 @@
 </ol>
 <h4 id="u6D4B_u8BD5"><a href="#u6D4B_u8BD5" class="headerlink" title="测试"></a>测试</h4><p>我们来测试下上面的知识点, 写一个匹配手机号码的正则表达式, 如下:</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(\+<span class="number">86</span>)?<span class="number">1</span>\d&#123;<span class="number">10</span>&#125;</span><br></pre></td></tr></table></figure>
-<p>匹配结果如下:</p>
+<p>① “\+86” 匹配文本 “+86”, 后面接元字符问号, 表示可匹配1次或0次, 合起来表示 “(\+86)?” 匹配 “+86” 或者 “”.</p>
+<p>② 普通字符”1” 匹配文本 “1”.</p>
+<p>③ 元字符 “\d” 匹配数字0到9, 区间量词 “{10}” 表示匹配 10 次, 合起来表示 “\d{10}” 匹配连续的10个数字.</p>
+<p>以上, 匹配结果如下:</p>
 <p><img src="http://louiszhai.github.io/docImages/regexp01.png" alt=""></p>
-<h3 id="u4FEE_u9970_u7B26"><a href="#u4FEE_u9970_u7B26" class="headerlink" title="修饰符"></a>修饰符</h3><p>javaScript中正则表达式默认有如下三种修饰符:</p>
+<h3 id="u4FEE_u9970_u7B26"><a href="#u4FEE_u9970_u7B26" class="headerlink" title="修饰符"></a>修饰符</h3><p>javaScript中正则表达式默认有如下五种修饰符:</p>
 <ul>
 <li>g (全文查找), 如上述截图, 实际上就开启了全文查找模式.</li>
 <li>i (忽略大小写查找)</li>
@@ -636,7 +645,8 @@
 <li>当使用 BREs ( 基本正则表达式 ) 时，必须在下列这些符号(?,+,|,{,},(,))前加上转义字符 \ .</li>
 <li>上述[[:xxxx:]] 形式的正则表达式, 是php中内置的通用字符簇, js中并不支持.</li>
 </ul>
-<h3 id="linux/osx_u4E0B_u5E38_u7528_u547D_u4EE4_u4E0E_u6B63_u5219_u8868_u8FBE_u5F0F_u7684_u5173_u7CFB"><a href="#linux/osx_u4E0B_u5E38_u7528_u547D_u4EE4_u4E0E_u6B63_u5219_u8868_u8FBE_u5F0F_u7684_u5173_u7CFB" class="headerlink" title="linux/osx下常用命令与正则表达式的关系"></a>linux/osx下常用命令与正则表达式的关系</h3><h4 id="grep__2C_egrep__2C_sed__2C_awk__u6B63_u5219_u8868_u8FBE_u5F0F_u7279_u70B9"><a href="#grep__2C_egrep__2C_sed__2C_awk__u6B63_u5219_u8868_u8FBE_u5F0F_u7279_u70B9" class="headerlink" title="grep , egrep , sed , awk  正则表达式特点"></a>grep , egrep , sed , awk  正则表达式特点</h4><ol>
+<h3 id="linux/osx_u4E0B_u5E38_u7528_u547D_u4EE4_u4E0E_u6B63_u5219_u8868_u8FBE_u5F0F_u7684_u5173_u7CFB"><a href="#linux/osx_u4E0B_u5E38_u7528_u547D_u4EE4_u4E0E_u6B63_u5219_u8868_u8FBE_u5F0F_u7684_u5173_u7CFB" class="headerlink" title="linux/osx下常用命令与正则表达式的关系"></a>linux/osx下常用命令与正则表达式的关系</h3><p>我曾经尝试在 grep 和 sed 命令中书写正则表达式, 经常发现不能使用元字符, 而且有时候需要转义, 有时候不需要转义, 始终不能摸清它的规律. 如果恰好你也有同样的困惑, 那么请往下看, 相信应该能有所收获.</p>
+<h4 id="grep__2C_egrep__2C_sed__2C_awk__u6B63_u5219_u8868_u8FBE_u5F0F_u7279_u70B9"><a href="#grep__2C_egrep__2C_sed__2C_awk__u6B63_u5219_u8868_u8FBE_u5F0F_u7279_u70B9" class="headerlink" title="grep , egrep , sed , awk  正则表达式特点"></a>grep , egrep , sed , awk  正则表达式特点</h4><ol>
 <li><p>grep 支持：BREs、EREs、PREs 正则表达式</p>
 <p>grep 指令后不跟任何参数, 则表示要使用 “BREs”</p>
 <p>grep 指令后跟 ”-E” 参数, 则表示要使用 “EREs”</p>
@@ -671,7 +681,7 @@
 <h4 id="u6355_u83B7_u6027_u5206_u7EC4_u4E0E_u975E_u6355_u83B7_u6027_u5206_u7EC4"><a href="#u6355_u83B7_u6027_u5206_u7EC4_u4E0E_u975E_u6355_u83B7_u6027_u5206_u7EC4" class="headerlink" title="捕获性分组与非捕获性分组"></a>捕获性分组与非捕获性分组</h4><p><strong>捕获性分组</strong>, 通常由一对小括号加上子表达式组成. 捕获性分组会创建反向引用, 每个反向引用都由一个编号或名称来标识, 并通过“$”+”编号”表示法进行引用. 如下便是一个捕获性分组的例子.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> color = <span class="string">"#808080"</span>;</span><br><span class="line"><span class="keyword">var</span> output = color.replace(<span class="regexp">/#(\d+)/</span>,<span class="string">"$1"</span>+<span class="string">"~~"</span>);</span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">RegExp</span>.$<span class="number">1</span>);<span class="comment">//808080</span></span><br><span class="line"><span class="built_in">console</span>.log(output);<span class="comment">//808080~~</span></span><br></pre></td></tr></table></figure>
 <p>以上, (\d+) 表示一个捕获性分组, “$1” 指向该分组捕获的内容.</p>
-<p>非捕获性分组**, 通常由一对括号加上”?:”加上子表达式组成, 非捕获性分组不会创建反向引用. 如下:</p>
+<p><strong>非捕获性分组</strong>, 通常由一对括号加上”?:”加上子表达式组成, 非捕获性分组不会创建反向引用. 如下:</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> color = <span class="string">"#808080"</span>;</span><br><span class="line"><span class="keyword">var</span> output = color.replace(<span class="regexp">/#(?:\d+)/</span>,<span class="string">"$1"</span>+<span class="string">"~~"</span>);</span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">RegExp</span>.$<span class="number">1</span>);<span class="comment">//""</span></span><br><span class="line"><span class="built_in">console</span>.log(output);<span class="comment">//$1~~</span></span><br></pre></td></tr></table></figure>
 <p>以上, (?:\d+) 表示一个非捕获性分组, 由于分组不捕获任何内容, 所以, “$1” 指向空字符串.</p>
 <p>实际上, 捕获性分组和无捕获性分组在搜索效率方面也没什么不同, 没有哪一个比另一个更快.</p>
@@ -719,7 +729,8 @@
 <p>虽然java不支持固化分组的语法, 但java也提供了占有量词优先的语法, 同样能够避免正则回溯. 如下: </p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">String str = <span class="string">"123.456"</span>;</span><br><span class="line">System.out.println(str.replaceAll(<span class="string">"(\\.\\d\\d[1-9]?+)\\d+"</span>, <span class="string">"$1"</span>));<span class="comment">// 123.456</span></span><br></pre></td></tr></table></figure>
 <p>值得注意的是: java中 replaceAll 方法需要转义反斜杠.</p>
-<h3 id="u6B63_u5219_u8868_u8FBE_u5F0F_u9AD8_u9636_u6280_u80FD-_u96F6_u5BBD_u65AD_u8A00"><a href="#u6B63_u5219_u8868_u8FBE_u5F0F_u9AD8_u9636_u6280_u80FD-_u96F6_u5BBD_u65AD_u8A00" class="headerlink" title="正则表达式高阶技能-零宽断言"></a>正则表达式高阶技能-零宽断言</h3><p>零宽断言, 又叫环视. 环视只进行子表达式的匹配, 匹配到的内容不保存到最终的匹配结果, 由于匹配是零宽度的, 故最终匹配到的只是一个位置. </p>
+<h3 id="u6B63_u5219_u8868_u8FBE_u5F0F_u9AD8_u9636_u6280_u80FD-_u96F6_u5BBD_u65AD_u8A00"><a href="#u6B63_u5219_u8868_u8FBE_u5F0F_u9AD8_u9636_u6280_u80FD-_u96F6_u5BBD_u65AD_u8A00" class="headerlink" title="正则表达式高阶技能-零宽断言"></a>正则表达式高阶技能-零宽断言</h3><p>如果说正则分组是写轮眼, 那么零宽断言就是万花筒写轮眼终极奥义-须佐能乎(这里借火影忍术打个比方). 合理地使用零宽断言, 能够能分组之不能, 极大地增强正则匹配能力, 它甚至可以帮助你在匹配条件非常模糊的情况下快速地定位文本.</p>
+<p>零宽断言, 又叫环视. 环视只进行子表达式的匹配, 匹配到的内容不保存到最终的匹配结果, 由于匹配是零宽度的, 故最终匹配到的只是一个位置. </p>
 <p>环视按照方向划分, 有顺序和逆序两种, 按照是否匹配有肯定和否定两种, 组合之, 便有4种环视. 4种环视并不复杂, 如下便是它们的描述.</p>
 <table>
 <thead>
@@ -748,20 +759,28 @@
 <tr>
 <td style="text-align:center">(?&lt;=<em>pattern</em>)</td>
 <td><strong>逆序肯定环视</strong>, 匹配前面是 pattern 的位置, 不捕获匹配结果.</td>
-<td>‘2000 (?&lt;=Office)’匹配 “ Office2000” 中的 “2000”; 不匹配 “Windows2000” 中的 “2000”</td>
+<td>‘(?&lt;=Office)2000’匹配 “ Office2000” 中的 “2000”; 不匹配 “Windows2000” 中的 “2000”</td>
 </tr>
 <tr>
 <td style="text-align:center">(?&lt;!<em>pattern</em>)</td>
 <td><strong>逆序否定环视</strong>, 匹配前面不是 pattern 的位置, 不捕获匹配结果.</td>
-<td>‘2000 (?&lt;!Office)’匹配 “ Windows2000” 中的 “2000”; 不匹配 “ Office2000” 中的 “2000”</td>
+<td>‘(?&lt;!Office)2000’匹配 “ Windows2000” 中的 “2000”; 不匹配 “ Office2000” 中的 “2000”</td>
 </tr>
 </tbody>
 </table>
-<p>以上4种环视, 十分强大. 目前 javaScript 中只支持前两种, 也就是只支持 <strong>顺序肯定环视</strong> 和 <strong>顺序否定环视</strong>. 下面我们通过实例来帮助理解下:</p>
+<p>以上4种环视中, 目前 javaScript 中只支持前两种, 也就是只支持 <strong>顺序肯定环视</strong> 和 <strong>顺序否定环视</strong>. 下面我们通过实例来帮助理解下:</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> str = <span class="string">"123abc789"</span>,s;</span><br><span class="line"><span class="comment">//没有使用环视,abc直接被替换</span></span><br><span class="line">s = str.replace(<span class="regexp">/abc/</span>,<span class="number">456</span>);</span><br><span class="line"><span class="built_in">console</span>.log(s); <span class="comment">//123456789</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//使用了顺序肯定环视,捕获到了a前面的位置,所以abc没有被替换,只是将3替换成了3456</span></span><br><span class="line">s = str.replace(<span class="regexp">/3(?=abc)/</span>,<span class="number">3456</span>);</span><br><span class="line"><span class="built_in">console</span>.log(s); <span class="comment">//123456abc789</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//使用了顺序否定环视,由于3后面跟着abc,不满意条件,故捕获失败,所以原字符串没有被替换</span></span><br><span class="line">s = str.replace(<span class="regexp">/3(?!abc)/</span>,<span class="number">3456</span>);</span><br><span class="line"><span class="built_in">console</span>.log(s); <span class="comment">//123abc789</span></span><br></pre></td></tr></table></figure>
 <p>下面通过python来演示下 <strong>逆序肯定环视</strong> 和 <strong>逆序否定环视</strong> 的用法.</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> re</span><br><span class="line">data = <span class="string">"123abc789"</span></span><br><span class="line"><span class="comment"># 使用了逆序肯定环视,替换左边为123的连续的小写英文字母,匹配成功,故abc被替换为456</span></span><br><span class="line">regExp = <span class="string">r"(?&lt;=123)[a-z]+"</span></span><br><span class="line">replaceString = <span class="string">"456"</span></span><br><span class="line"><span class="keyword">print</span> re.sub(regExp,replaceString,data) <span class="comment"># 123456789</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用了逆序否定环视,由于英文字母左侧不能为123,故子表达式[a-z]+捕获到bc,最终bc被替换为456</span></span><br><span class="line">regExp = <span class="string">r"(?&lt;!123)[a-z]+"</span></span><br><span class="line">replaceString = <span class="string">"456"</span></span><br><span class="line"><span class="keyword">print</span> re.sub(regExp,replaceString,data) <span class="comment"># 123a456789</span></span><br></pre></td></tr></table></figure>
 <p>需要注意的是: python 和 perl 语言中的 <strong>逆序环视</strong> 的子表达式只能使用定长的文本. 比如将上述 “(?&lt;=123)” (逆序肯定环视)子表达式写成 “(?&lt;=[0-9]+)”, python解释器将会报错: “error: look-behind requires fixed-width pattern”.</p>
+<h4 id="u573A_u666F_u56DE_u987E"><a href="#u573A_u666F_u56DE_u987E" class="headerlink" title="场景回顾"></a>场景回顾</h4><p>假如现在, js 通过 ajax 获取到一段 html 代码如下:</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">var responseText = "<span class="tag">&lt;<span class="title">div</span> <span class="attribute">data</span>=<span class="value">'dev.xxx.txt'</span>&gt;</span><span class="tag">&lt;/<span class="title">div</span>&gt;</span><span class="tag">&lt;<span class="title">img</span> <span class="attribute">src</span>=<span class="value">'dev.xxx.png'</span> /&gt;</span>";</span><br></pre></td></tr></table></figure>
+<p>现我们需要替换img标签的src 属性中的 “dev”字符串 为 “test” 字符串. </p>
+<p>① 由于上述 responseText 字符串中包含至少两个子字符串 “dev”, 显然不能直接 replace 字符串 “dev”为 “test”. </p>
+<p>② 同时由于 js 中不支持逆序环视, 我们也不能在正则中判断前缀为 “src=’”, 然后再替换”dev”. </p>
+<p>③ 我们注意到 img 标签的 src 属性以 “.png” 结尾, 基于此, 就可以使用顺序肯定环视. 如下:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> reg = <span class="regexp">/dev(?=[^']*png)/</span>; <span class="comment">//为了防止匹配到第一个dev, 通配符前面需要排除单引号或者是尖括号</span></span><br><span class="line"><span class="keyword">var</span> str = responseText.replace(reg,<span class="string">"test"</span>);</span><br><span class="line"><span class="built_in">console</span>.log(str);<span class="comment">//&lt;div data='dev.xxx'&gt;&lt;/div&gt;&lt;img src='test.xxx.png' /&gt;</span></span><br></pre></td></tr></table></figure>
+<p>当然, 以上不止顺序肯定环视一种解法, 捕获性分组同样可以做到. 那么环视高级在哪里呢? 环视高级的地方就在于它通过一次捕获就可以定位到一个位置, 对于复杂的文本替换场景, 常有奇效, 而分组则需要更多的操作.</p>
 <h3 id="u6B63_u5219_u8868_u8FBE_u5F0F_u5728JS_u4E2D_u7684_u5E94_u7528"><a href="#u6B63_u5219_u8868_u8FBE_u5F0F_u5728JS_u4E2D_u7684_u5E94_u7528" class="headerlink" title="正则表达式在JS中的应用"></a>正则表达式在JS中的应用</h3><h4 id="ES6_u5BF9_u6B63_u5219_u7684_u6269_u5C55"><a href="#ES6_u5BF9_u6B63_u5219_u7684_u6269_u5C55" class="headerlink" title="ES6对正则的扩展"></a>ES6对正则的扩展</h4><p>ES6对正则扩展了又两种修饰符(其他语言可能不支持):</p>
 <ul>
 <li>y (粘连sticky修饰符), 与g类似, 也是全局匹配, 并且下一次匹配都是从上一次匹配成功的下一个位置开始, 不同之处在于, g修饰符只要剩余位置中存在匹配即可, 而y修饰符确保匹配必须从剩余的第一个位置开始.</li>
@@ -783,7 +802,7 @@
 <li><strong>String.prototype.at()</strong>：返回字符串给定位置的字符</li>
 </ul>
 <p>有关js中的unicode字符集, 请参考阮一峰老师的 <a href="http://www.ruanyifeng.com/blog/2014/12/unicode.html" target="_blank" rel="external"><code>Unicode与JavaScript详解</code></a>.</p>
-<p>以上是ES6对正则的扩展. 另一个方面, 从方法上看, javaScript 中与正则表达式有关的方法如下: </p>
+<p>以上是ES6对正则的扩展. 另一个方面, 从方法上看, javaScript 中与正则表达式有关的方法有: </p>
 <table>
 <thead>
 <tr>
