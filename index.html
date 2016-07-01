@@ -162,6 +162,65 @@
 
       <div class="body-wrap">
   
+    <article id="post-Math" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/07/01/Math/" class="article-date">
+  	<time datetime="2016-06-30T23:57:48.000Z" itemprop="datePublished">2016-07-01</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/07/01/Math/">全面解读Math对象</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/">JavaScript</a></li></ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a  href="/2016/07/01/Math/#more">more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+  
     <article id="post-regexp" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -193,13 +252,6 @@
 <p>你有没有在使用sed 和 grep 命令的时候, 感觉莫名其妙, 明明应该支持的元字符, 却就是匹配不到.</p>
 <p>甚至, 你压根没遇到过上述情况, 你只是一遍又一遍的调用 replace 而已 (把非搜索文本全部替换为空, 然后就只剩搜索文本了), 面对别人家的简洁高效的语句, 你只能在心中呐喊, replace 大法好.</p>
 <p>为什么要学正则表达式. 有位网友这么说: 江湖传说里, 程序员的正则表达式和医生的处方, 道士的鬼符齐名, 曰: 普通人看不懂的三件神器. 这个传说至少向我们透露了两点信息: 一是正则表达式很牛, 能和医生的处方, 道士的鬼符齐名, 并被大家提起, 可见其江湖地位. 二是正则表达式很难, 这也从侧面说明了, 如果你可以熟练的掌握并应用它, 在装逼的路上, 你将如日中天 (别问我中天是谁……) !</p>
-<p>显然, 有关正则表达的介绍, 无须我多言. 这里就借助 Jeffrey Friedl 的《精通正则表达式》一书的序言正式抛个砖.</p>
-<blockquote>
-<p>​    “如果罗列计算机软件领域的伟大发明, 我相信绝对不会超过二十项, 在这个名单当中, 当然应该包括分组交换网络, Web, Lisp, 哈希算法, UNIX, 编译技术, 关系模型, 面向对象, XML这些大名鼎鼎的家伙, 而正则表达式也绝对不应该被漏掉. </p>
-<p>​     对很多实际工作而言, 正则表达式简直是灵丹妙药, 能够成百倍的提高开发效率和程序质量, 正则表达式在生物信息学和人类基因图谱的研究中所发挥的关键作用, 更是被传为佳话. CSDN的创始人蒋涛先生在早年开发专业软件产品时, 就曾经体验过这一工具的巨大威力, 并且一直印象深刻.”</p>
-</blockquote>
-<p>因此, 我们没有理由不去了解正则表达式, 甚至是熟练掌握并运用它.</p>
-<p>本文以正则基础语法开篇, 结合具体实例, 逐步讲解正则表达式匹配原理. 代码实例使用语言包括 js, php, python, java(因有些匹配模式, js并未支持, 需要借助其他语言讲解). 内容包括初阶技能和高阶技能, 适合新手学习和进阶. 本文力求简单通俗易懂, 如有阅读障碍请及时<a href="#respond">联系我</a>.</p>
       
     </div>
     
@@ -596,65 +648,6 @@
 
 
   
-    <article id="post-cross-domain" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2016/01/11/cross-domain/" class="article-date">
-  	<time datetime="2016-01-11T00:01:33.000Z" itemprop="datePublished">2016-01-11</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/01/11/cross-domain/">由同源策略到前端跨域</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>同源策略 (Same-Origin Policy) 最早由 Netscape 公司提出, 所谓同源就是要求, 域名, 协议, 端口相同. 非同源的脚本不能访问或者操作其他域的页面对象(如DOM等). 作为著名的安全策略, 虽然它只是一个规范, 并不强制要求,  但现在所有支持 javaScript 的浏览器都会使用这个策略. 以至于该策略成为浏览器最核心最基本的安全功能, 如果缺少了同源策略, web的安全将无从谈起.</p>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/">JavaScript</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a  href="/2016/01/11/cross-domain/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-  
     <article id="post-bind" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -714,11 +707,11 @@
 
 
   
-    <article id="post-js.timer" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-cross-domain" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2016/01/10/js.timer/" class="article-date">
-  	<time datetime="2016-01-10T05:52:11.000Z" itemprop="datePublished">2016-01-10</time>
+      <a href="/2016/01/11/cross-domain/" class="article-date">
+  	<time datetime="2016-01-11T00:01:33.000Z" itemprop="datePublished">2016-01-11</time>
 </a>
     </div>
   
@@ -731,7 +724,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2016/01/10/js.timer/">setTimeout &amp; setInterval</a>
+      <a class="article-title" href="/2016/01/11/cross-domain/">由同源策略到前端跨域</a>
     </h1>
   
 
@@ -740,7 +733,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>设置web定时器应当是一个相当常见的需求, 实际上, 我们也有两大工具函数可以任意调用: setTimeout, setInterval. 然而 js 里却没有java的那种wait(), 定时又未必准时, 要想写个定时器还须得深入理解 setTimeout 和 setInterval 的运行原理才行.</p>
+        <h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>同源策略 (Same-Origin Policy) 最早由 Netscape 公司提出, 所谓同源就是要求, 域名, 协议, 端口相同. 非同源的脚本不能访问或者操作其他域的页面对象(如DOM等). 作为著名的安全策略, 虽然它只是一个规范, 并不强制要求,  但现在所有支持 javaScript 的浏览器都会使用这个策略. 以至于该策略成为浏览器最核心最基本的安全功能, 如果缺少了同源策略, web的安全将无从谈起.</p>
       
     </div>
     
@@ -755,7 +748,7 @@
 
       
         <p class="article-more-link">
-          <a  href="/2016/01/10/js.timer/#more">more >></a>
+          <a  href="/2016/01/11/cross-domain/#more">more >></a>
         </p>
       
       <div class="clearfix"></div>
