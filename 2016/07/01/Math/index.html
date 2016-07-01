@@ -4,18 +4,18 @@
   <meta charset="utf-8">
   
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
-  <title>全面解读Math对象 | louis blog</title>
+  <title>全面解读Math对象及位运算 | louis blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Math floor ~ ~ abs random ceil">
+  <meta name="description" content="Math floor ~ ~ abs random ceil 位运算">
 <meta property="og:type" content="article">
-<meta property="og:title" content="全面解读Math对象">
+<meta property="og:title" content="全面解读Math对象及位运算">
 <meta property="og:url" content="http://louiszhai.github.io/2016/07/01/Math/index.html">
 <meta property="og:site_name" content="louis blog">
-<meta property="og:description" content="Math floor ~ ~ abs random ceil">
-<meta property="og:updated_time" content="2016-07-01T00:04:45.000Z">
+<meta property="og:description" content="Math floor ~ ~ abs random ceil 位运算">
+<meta property="og:updated_time" content="2016-07-01T10:23:00.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="全面解读Math对象">
-<meta name="twitter:description" content="Math floor ~ ~ abs random ceil">
+<meta name="twitter:title" content="全面解读Math对象及位运算">
+<meta name="twitter:description" content="Math floor ~ ~ abs random ceil 位运算">
   
     <link rel="alternative" href="/atom.xml" title="louis blog" type="application/atom+xml">
   
@@ -178,7 +178,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      全面解读Math对象
+      全面解读Math对象及位运算
     </h1>
   
 
@@ -200,17 +200,270 @@
       
           <div id="toc" class="toc-article">
     <div class="toc-title">目录</div>
-    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#u5BFC_u8BFB"><span class="toc-text">导读</span></a></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#u5BFC_u8BFB"><span class="toc-text">导读</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u4E3A_u4EC0_u4E48Math_u8FD9_u4E48_u8BBE_u8BA1"><span class="toc-text">为什么Math这么设计</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Math_u4E2D_u7684_u5C5E_u6027"><span class="toc-text">Math中的属性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Math_u4E2D_u7684_u65B9_u6CD5"><span class="toc-text">Math中的方法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#u4E09_u89D2_u51FD_u6570"><span class="toc-text">三角函数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#u6570_u5B66_u8FD0_u7B97_u65B9_u6CD5"><span class="toc-text">数学运算方法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#u6570_u503C_u8FD0_u7B97_u65B9_u6CD5"><span class="toc-text">数值运算方法</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Math_u65B9_u6CD5_u7684_u4E00_u4E9B_u89C4_u5F8B"><span class="toc-text">Math方法的一些规律</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u4F4D_u8FD0_u7B97"><span class="toc-text">位运算</span></a></li></ol>
 </div>
       
-        <h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><a id="more"></a>
+        <h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>截至ES5, JavaScript 中内置(build-in)构造器/对象共有13个, 其中9个是构造器(Number,Boolean, String, Object, Function, Array, RegExp, Error, Date), Global 不能直接访问, Arguments仅在函数调用时由JS引擎创建, 而 Math, JSON 是以对象形式存在的, 本篇将带你走进 JS 内置对象-Math的世界, 一探究竟.</p>
+<a id="more"></a>
+<h3 id="u4E3A_u4EC0_u4E48Math_u8FD9_u4E48_u8BBE_u8BA1"><a href="#u4E3A_u4EC0_u4E48Math_u8FD9_u4E48_u8BBE_u8BA1" class="headerlink" title="为什么Math这么设计"></a>为什么Math这么设计</h3><p>众所周知, 如果需要使用js进行一些常规的数学运算, 是一件十分麻烦的事情. 为了解决这个问题, ECMAScript 在1.1版本中便引入了 Math. Math 之所以被设计成一个对象, 而不是构造器, 是因为对象中的方法可以作为静态方法直接被调用, 方便使用, 同时, Math 也没有创建实例的必要. 值得关注的是, ES6 规范对Math对象做了很多扩展, 增加了一系列便捷的方法.</p>
+<h3 id="Math_u4E2D_u7684_u5C5E_u6027"><a href="#Math_u4E2D_u7684_u5C5E_u6027" class="headerlink" title="Math中的属性"></a>Math中的属性</h3><table>
+<thead>
+<tr>
+<th style="text-align:center">属性名</th>
+<th style="text-align:center">描述</th>
+<th style="text-align:center">值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">Math.E</td>
+<td style="text-align:center">欧拉常数，也是自然对数的底数</td>
+<td style="text-align:center">约2.718</td>
+</tr>
+<tr>
+<td style="text-align:center">Math.LN2</td>
+<td style="text-align:center">2的自然对数</td>
+<td style="text-align:center">约0.693</td>
+</tr>
+<tr>
+<td style="text-align:center">Math.LN10</td>
+<td style="text-align:center">10的自然对数</td>
+<td style="text-align:center">约2.303</td>
+</tr>
+<tr>
+<td style="text-align:center">Math.LOG2E</td>
+<td style="text-align:center">以2为底E的对数</td>
+<td style="text-align:center">约1.443</td>
+</tr>
+<tr>
+<td style="text-align:center">Math.LOG10E</td>
+<td style="text-align:center">以10为底E的对数</td>
+<td style="text-align:center">约0.434</td>
+</tr>
+<tr>
+<td style="text-align:center">Math.PI</td>
+<td style="text-align:center">圆周率</td>
+<td style="text-align:center">约3.14</td>
+</tr>
+<tr>
+<td style="text-align:center">Math.SQRT1_2</td>
+<td style="text-align:center">1/2的平方根</td>
+<td style="text-align:center">约0.707</td>
+</tr>
+<tr>
+<td style="text-align:center">Math.SQRT2</td>
+<td style="text-align:center">2的平方根</td>
+<td style="text-align:center">约1.414</td>
+</tr>
+</tbody>
+</table>
+<h3 id="Math_u4E2D_u7684_u65B9_u6CD5"><a href="#Math_u4E2D_u7684_u65B9_u6CD5" class="headerlink" title="Math中的方法"></a>Math中的方法</h3><h4 id="u4E09_u89D2_u51FD_u6570"><a href="#u4E09_u89D2_u51FD_u6570" class="headerlink" title="三角函数"></a>三角函数</h4><table>
+<thead>
+<tr>
+<th style="text-align:center">方法名</th>
+<th style="text-align:center">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">Math.sin(x)</td>
+<td style="text-align:center">返回x的正弦值</td>
+</tr>
+<tr>
+<td style="text-align:center">Math.sinh(x) ES6新增</td>
+<td style="text-align:center">返回x的双曲正弦值</td>
+</tr>
+<tr>
+<td style="text-align:center">Math.cos(x)</td>
+<td style="text-align:center">返回x的余弦值</td>
+</tr>
+<tr>
+<td style="text-align:center">Math.cosh(x) ES6新增</td>
+<td style="text-align:center">返回x的双曲余弦值</td>
+</tr>
+<tr>
+<td style="text-align:center">Math.tan(x)</td>
+<td style="text-align:center">返回x的正切值</td>
+</tr>
+<tr>
+<td style="text-align:center">Math.tanh(x) ES6新增</td>
+<td style="text-align:center">返回x的双曲正切值</td>
+</tr>
+<tr>
+<td style="text-align:center">Math.asin(x)</td>
+<td style="text-align:center">返回x的反正弦值</td>
+</tr>
+<tr>
+<td style="text-align:center">Math.asinh(x) ES6新增</td>
+<td style="text-align:center">返回x的反双曲正弦值</td>
+</tr>
+<tr>
+<td style="text-align:center">Math.acos(x)</td>
+<td style="text-align:center">返回x的反余弦值</td>
+</tr>
+<tr>
+<td style="text-align:center">Math.atan(x)</td>
+<td style="text-align:center">返回x的反正切值</td>
+</tr>
+<tr>
+<td style="text-align:center">Math.atan2(x, y)</td>
+<td style="text-align:center">返回 y/x 的反正切值</td>
+</tr>
+<tr>
+<td style="text-align:center">Math.atanh(x) ES6新增</td>
+<td style="text-align:center">返回 x 的反双曲正切值</td>
+</tr>
+</tbody>
+</table>
+<h4 id="u6570_u5B66_u8FD0_u7B97_u65B9_u6CD5"><a href="#u6570_u5B66_u8FD0_u7B97_u65B9_u6CD5" class="headerlink" title="数学运算方法"></a>数学运算方法</h4><table>
+<thead>
+<tr>
+<th style="text-align:center">方法名</th>
+<th style="text-align:center">描述</th>
+<th style="text-align:center">例子</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">Math.sqrt(x)</td>
+<td style="text-align:center">返回x的平方根</td>
+<td style="text-align:center">Math.sqrt(9);//3</td>
+</tr>
+<tr>
+<td style="text-align:center">Math.exp(x)</td>
+<td style="text-align:center">返回欧拉常数(e)的x次幂</td>
+<td style="text-align:center">Math.exp(1);//约2.718</td>
+</tr>
+<tr>
+<td style="text-align:center">Math.pow(x, )</td>
+<td style="text-align:center">返回x的y次幂</td>
+<td style="text-align:center">Math.pow(2, 3);//8</td>
+</tr>
+<tr>
+<td style="text-align:center">Math.expm1(x) ES6新增</td>
+<td style="text-align:center">返回欧拉常数(e)的x次幂减去1的值</td>
+<td style="text-align:center">Math.exp(1);//约1.718</td>
+</tr>
+<tr>
+<td style="text-align:center">Math.log(x)</td>
+<td style="text-align:center">返回x的自然对数</td>
+<td style="text-align:center">Math.log(1);//0</td>
+</tr>
+<tr>
+<td style="text-align:center">Math.log1p(x) ES6新增</td>
+<td style="text-align:center">返回x+1后的自然对数</td>
+<td style="text-align:center">Math.log1p(0);//0</td>
+</tr>
+<tr>
+<td style="text-align:center">Math.log2(x) ES6新增</td>
+<td style="text-align:center">返回x以2为底的对数</td>
+<td style="text-align:center">Math.log2(8);//3</td>
+</tr>
+<tr>
+<td style="text-align:center">Math.log10(x) ES6新增</td>
+<td style="text-align:center">返回x以10为底的对数</td>
+<td style="text-align:center">Math.log10(100);//2</td>
+</tr>
+<tr>
+<td style="text-align:center">Math.cbrt(x) ES6新增</td>
+<td style="text-align:center">返回x的立方根</td>
+<td style="text-align:center">Math.cbrt(8);//约2</td>
+</tr>
+<tr>
+<td style="text-align:center">Math.clz32()  ES6新增</td>
+<td style="text-align:center">返回一个数字在转换成 32位无符号整型数字的二进制形式后, 开头的 0 的个数</td>
+<td style="text-align:center">Math.clz32(2);//30</td>
+</tr>
+<tr>
+<td style="text-align:center">Math.hypot(x,y,z) ES6新增</td>
+<td style="text-align:center">返回所有参数的平方和的平方根</td>
+<td style="text-align:center">Math.hypot(3,4);//5</td>
+</tr>
+<tr>
+<td style="text-align:center">Math.imul(x,y) ES6新增</td>
+<td style="text-align:center">返回两个参数的类C的32位整数乘法运算的运算结果</td>
+<td style="text-align:center">Math.imul(0xffffffff, 5);//-5</td>
+</tr>
+</tbody>
+</table>
+<h4 id="u6570_u503C_u8FD0_u7B97_u65B9_u6CD5"><a href="#u6570_u503C_u8FD0_u7B97_u65B9_u6CD5" class="headerlink" title="数值运算方法"></a>数值运算方法</h4><table>
+<thead>
+<tr>
+<th style="text-align:center">方法名</th>
+<th style="text-align:center">描述</th>
+<th style="text-align:center">例子</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">Math.abs(x)</td>
+<td style="text-align:center">返回x的绝对值</td>
+<td style="text-align:center">Math.abs(-5);//5</td>
+</tr>
+<tr>
+<td style="text-align:center">Math.floor(x)</td>
+<td style="text-align:center">返回小于x的最大整数</td>
+<td style="text-align:center">Math.floor(8.2);//8</td>
+</tr>
+<tr>
+<td style="text-align:center">Math.ceil(x)</td>
+<td style="text-align:center">返回大于x的最小整数</td>
+<td style="text-align:center">Math.ceil(8.2);//9</td>
+</tr>
+<tr>
+<td style="text-align:center">Math.trunc(x) ES6新增</td>
+<td style="text-align:center">返回x的整数部分</td>
+<td style="text-align:center">Math.trunc(1.23);//1</td>
+</tr>
+<tr>
+<td style="text-align:center">Math.fround(x) ES6新增</td>
+<td style="text-align:center">返回离它最近的<a href="https://en.wikipedia.org/wiki/Single-precision_floating-point_format" target="_blank" rel="external">单精度浮点数</a>形式的数字</td>
+<td style="text-align:center">Math.fround(1.1);//1.100000023841858</td>
+</tr>
+<tr>
+<td style="text-align:center">Math.min(x,y,z)</td>
+<td style="text-align:center">返回多个数中的最小值</td>
+<td style="text-align:center">Math.min(3,1,5);//1</td>
+</tr>
+<tr>
+<td style="text-align:center">Math.max(x,y,z)</td>
+<td style="text-align:center">返回多个数中的最大值</td>
+<td style="text-align:center">Math.max(3,1,5);//5</td>
+</tr>
+<tr>
+<td style="text-align:center">Math.round(x)</td>
+<td style="text-align:center">返回四舍五入后的整数</td>
+<td style="text-align:center">Math.round(8.2);//8</td>
+</tr>
+<tr>
+<td style="text-align:center">Math.random()</td>
+<td style="text-align:center">返回0到1之间的伪随机数</td>
+<td style="text-align:center">Math.random();</td>
+</tr>
+<tr>
+<td style="text-align:center">Math.sign(x) ES6新增</td>
+<td style="text-align:center">返回一个数的符号( 5种返回值, 分别是 1, -1, 0, -0, NaN. 代表的各是正数, 负数, 正零, 负零, NaN)</td>
+<td style="text-align:center">Math.sign(-5);//-1</td>
+</tr>
+</tbody>
+</table>
+<h3 id="Math_u65B9_u6CD5_u7684_u4E00_u4E9B_u89C4_u5F8B"><a href="#Math_u65B9_u6CD5_u7684_u4E00_u4E9B_u89C4_u5F8B" class="headerlink" title="Math方法的一些规律"></a>Math方法的一些规律</h3><p>以上, 数值运算中, 存在如下规律:</p>
+<ol>
+<li>Math.floor(x) 方法可由位运算替代, 且运行速度更快, 如 ~~2.5;//2 .</li>
+<li>Math.trunc(x) 方法当 ① x为正数时, 运算结果同 Math.floor(x); ② x为负数时, 运算结果同 Math.ceil(x).</li>
+<li>Math.min(x,y,z) 与 Math.max(x,y,z) 方法由于可接无限个参数, 可用于求数组元素的最小最大值. 如: Math.max.apply(null,[5,3,8,9]); // 9</li>
+<li>稍微利用 Math.random() 方法的特性, 就可以生成任意范围的数字. 如: 生成10到80之间的随机数, ~~(Math.random()*70 + 10);// 返回10~80之间的随机数, 包含10不包含80</li>
+</ol>
+<p>除去上述方法, Math作为对象, 继承了来之Object对象的方法. 其中一些如下:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Math</span>.valueOf();<span class="comment">//返回Math对象本身</span></span><br><span class="line">+<span class="built_in">Math</span>; <span class="comment">//NaN, 试图转换成数字,由于不能转换为数字,返回NaN</span></span><br><span class="line"><span class="built_in">Math</span>.toString();<span class="comment">//"[object Math]"</span></span><br></pre></td></tr></table></figure>
+<h3 id="u4F4D_u8FD0_u7B97"><a href="#u4F4D_u8FD0_u7B97" class="headerlink" title="位运算"></a>位运算</h3><p>未完待续~~</p>
 <hr>
 <p>本问就讨论这么多内容,大家有什么问题或好的想法欢迎在下方参与<a href="#respond">留言和评论</a>.</p>
 <p>本文作者: <a href="https://github.com/Louiszhai" target="_blank" rel="external">louis</a></p>
-<p>本文链接: </p>
+<p>本文链接: <a href="http://louiszhai.github.io/2016/07/01/Math/">http://louiszhai.github.io/2016/07/01/Math/</a></p>
 <p>参考文章</p>
 <ul>
-<li>​</li>
+<li><a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Math" target="_blank" rel="external">Math - JavaScript | MDN</a></li>
 </ul>
 
       
@@ -257,7 +510,7 @@
 
 
 <div class="duoshuo">
-	<div class="ds-thread" data-thread-key="Math" data-title="全面解读Math对象" data-url="http://louiszhai.github.io/2016/07/01/Math/"></div>
+	<div class="ds-thread" data-thread-key="Math" data-title="全面解读Math对象及位运算" data-url="http://louiszhai.github.io/2016/07/01/Math/"></div>
 	<style>
 		#ds-reset .ds-avatar img{width:54px;height:54px;border-radius:27px;-webkit-border-radius:27px;-moz-border-radius:27px;box-shadow:inset 0 -1px 0 #3333sf;-webkit-box-shadow:inset 0 -1px 0 #3333sf;-webkit-transition:0.4s;-webkit-transition:-webkit-transform 0.4s ease-out;transition:transform 0.4s ease-out;-moz-transition:-moz-transform 0.4s ease-out;}
 		#ds-reset .ds-avatar img:hover{box-shadow:0 0 10px #fff;rgba(255,255,255,.6),inset 0 0 20px rgba(255,255,255,1);-webkit-box-shadow:0 0 10px #fff;rgba(255,255,255,.6),inset 0 0 20px rgba(255,255,255,1);transform:rotateZ(360deg);-webkit-transform:rotateZ(360deg);-moz-transform:rotateZ(360deg);}
