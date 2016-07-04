@@ -12,7 +12,7 @@
 <meta property="og:url" content="http://louiszhai.github.io/2016/07/01/Math/index.html">
 <meta property="og:site_name" content="louis blog">
 <meta property="og:description" content="Math floor ~ ~ abs random ceil 位运算">
-<meta property="og:updated_time" content="2016-07-01T10:23:00.000Z">
+<meta property="og:updated_time" content="2016-07-02T12:22:51.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="全面解读Math对象及位运算">
 <meta name="twitter:description" content="Math floor ~ ~ abs random ceil 位运算">
@@ -200,12 +200,12 @@
       
           <div id="toc" class="toc-article">
     <div class="toc-title">目录</div>
-    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#u5BFC_u8BFB"><span class="toc-text">导读</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u4E3A_u4EC0_u4E48Math_u8FD9_u4E48_u8BBE_u8BA1"><span class="toc-text">为什么Math这么设计</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Math_u4E2D_u7684_u5C5E_u6027"><span class="toc-text">Math中的属性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Math_u4E2D_u7684_u65B9_u6CD5"><span class="toc-text">Math中的方法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#u4E09_u89D2_u51FD_u6570"><span class="toc-text">三角函数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#u6570_u5B66_u8FD0_u7B97_u65B9_u6CD5"><span class="toc-text">数学运算方法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#u6570_u503C_u8FD0_u7B97_u65B9_u6CD5"><span class="toc-text">数值运算方法</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Math_u65B9_u6CD5_u7684_u4E00_u4E9B_u89C4_u5F8B"><span class="toc-text">Math方法的一些规律</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u4F4D_u8FD0_u7B97"><span class="toc-text">位运算</span></a></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#u5BFC_u8BFB"><span class="toc-text">导读</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u4E3A_u4EC0_u4E48Math_u8FD9_u4E48_u8BBE_u8BA1"><span class="toc-text">为什么Math这么设计</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Math_u4E2D_u7684_u5C5E_u6027"><span class="toc-text">Math中的属性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Math_u4E2D_u7684_u65B9_u6CD5"><span class="toc-text">Math中的方法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#u4E09_u89D2_u51FD_u6570"><span class="toc-text">三角函数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#u6570_u5B66_u8FD0_u7B97_u65B9_u6CD5"><span class="toc-text">数学运算方法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#u6570_u503C_u8FD0_u7B97_u65B9_u6CD5"><span class="toc-text">数值运算方法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#u9644_3ANumber_u7C7B_u578B_u7684_u6570_u503C_u8FD0_u7B97_u65B9_u6CD5"><span class="toc-text">附:Number类型的数值运算方法</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Math_u65B9_u6CD5_u7684_u4E00_u4E9B_u89C4_u5F8B"><span class="toc-text">Math方法的一些规律</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u4F4D_u8FD0_u7B97"><span class="toc-text">位运算</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#u6309_u4F4D_u4E0E_28_26amp_3B_29"><span class="toc-text">按位与(&)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#u6309_u4F4D_u6216_28_7C_29"><span class="toc-text">按位或(|)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#u6309_u4F4D_u975E_28_7E_29"><span class="toc-text">按位非(~)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#u6309_u4F4D_u5F02_u6216_28_5E_29"><span class="toc-text">按位异或(^)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#u6709_u7B26_u53F7_u5DE6_u79FB_28_26lt_3B_26lt_3B_29"><span class="toc-text">有符号左移(<<)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#u6709_u7B26_u53F7_u53F3_u79FB_28_26gt_3B_26gt_3B_29"><span class="toc-text">有符号右移(>>)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#u65E0_u7B26_u53F7_u53F3_u79FB_28_26gt_3B_26gt_3B_26gt_3B_29"><span class="toc-text">无符号右移(>>>)</span></a></li></ol></li></ol>
 </div>
       
         <h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>截至ES5, JavaScript 中内置(build-in)构造器/对象共有13个, 其中9个是构造器(Number,Boolean, String, Object, Function, Array, RegExp, Error, Date), Global 不能直接访问, Arguments仅在函数调用时由JS引擎创建, 而 Math, JSON 是以对象形式存在的, 本篇将带你走进 JS 内置对象-Math的世界, 一探究竟.</p>
 <a id="more"></a>
-<h3 id="u4E3A_u4EC0_u4E48Math_u8FD9_u4E48_u8BBE_u8BA1"><a href="#u4E3A_u4EC0_u4E48Math_u8FD9_u4E48_u8BBE_u8BA1" class="headerlink" title="为什么Math这么设计"></a>为什么Math这么设计</h3><p>众所周知, 如果需要使用js进行一些常规的数学运算, 是一件十分麻烦的事情. 为了解决这个问题, ECMAScript 在1.1版本中便引入了 Math. Math 之所以被设计成一个对象, 而不是构造器, 是因为对象中的方法可以作为静态方法直接被调用, 方便使用, 同时, Math 也没有创建实例的必要. 值得关注的是, ES6 规范对Math对象做了很多扩展, 增加了一系列便捷的方法.</p>
+<h3 id="u4E3A_u4EC0_u4E48Math_u8FD9_u4E48_u8BBE_u8BA1"><a href="#u4E3A_u4EC0_u4E48Math_u8FD9_u4E48_u8BBE_u8BA1" class="headerlink" title="为什么Math这么设计"></a>为什么Math这么设计</h3><p>众所周知, 如果需要使用js进行一些常规的数学运算, 是一件十分麻烦的事情. 为了解决这个问题, ECMAScript 在1.1版本中便引入了 Math. Math 之所以被设计成一个对象, 而不是构造器, 是因为对象中的方法可以作为静态方法直接被调用, 方便使用, 同时, Math 也没有创建实例的必要.</p>
 <h3 id="Math_u4E2D_u7684_u5C5E_u6027"><a href="#Math_u4E2D_u7684_u5C5E_u6027" class="headerlink" title="Math中的属性"></a>Math中的属性</h3><table>
 <thead>
 <tr>
@@ -257,7 +257,8 @@
 </tr>
 </tbody>
 </table>
-<h3 id="Math_u4E2D_u7684_u65B9_u6CD5"><a href="#Math_u4E2D_u7684_u65B9_u6CD5" class="headerlink" title="Math中的方法"></a>Math中的方法</h3><h4 id="u4E09_u89D2_u51FD_u6570"><a href="#u4E09_u89D2_u51FD_u6570" class="headerlink" title="三角函数"></a>三角函数</h4><table>
+<h3 id="Math_u4E2D_u7684_u65B9_u6CD5"><a href="#Math_u4E2D_u7684_u65B9_u6CD5" class="headerlink" title="Math中的方法"></a>Math中的方法</h3><p>Math对象本就有很多用于运算的方法, 值得关注的是, ES6 规范又对Math对象做了一些扩展, 增加了一系列便捷的方法. 而这些方法大致可以分为以下三类.</p>
+<h4 id="u4E09_u89D2_u51FD_u6570"><a href="#u4E09_u89D2_u51FD_u6570" class="headerlink" title="三角函数"></a>三角函数</h4><table>
 <thead>
 <tr>
 <th style="text-align:center">方法名</th>
@@ -447,16 +448,33 @@
 </tr>
 </tbody>
 </table>
+<h4 id="u9644_3ANumber_u7C7B_u578B_u7684_u6570_u503C_u8FD0_u7B97_u65B9_u6CD5"><a href="#u9644_3ANumber_u7C7B_u578B_u7684_u6570_u503C_u8FD0_u7B97_u65B9_u6CD5" class="headerlink" title="附:Number类型的数值运算方法"></a>附:Number类型的数值运算方法</h4><p>Number.prototype中有一个方法叫做toFixed(), 用于将数值装换为指定小数位数的形式. </p>
+<ul>
+<li>没有参数或者参数为零的情况下, toFixed() 方法返回该数值的四舍五入后的整数形式, 等同于 Math.round(x);</li>
+<li>其他情况下, 返回该数的指定小数位数的四舍五入后的结果.</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> num = <span class="number">1234.56789</span>;</span><br><span class="line"><span class="built_in">console</span>.log(num.toFixed(),num.toFixed(<span class="number">0</span>));<span class="comment">//1235,1235</span></span><br><span class="line"><span class="built_in">console</span>.log(num.toFixed(<span class="number">1</span>));<span class="comment">//1234.6</span></span><br><span class="line"><span class="built_in">console</span>.log(-<span class="number">1.235</span>.toFixed(<span class="number">2</span>));<span class="comment">//-1.24</span></span><br></pre></td></tr></table></figure>
 <h3 id="Math_u65B9_u6CD5_u7684_u4E00_u4E9B_u89C4_u5F8B"><a href="#Math_u65B9_u6CD5_u7684_u4E00_u4E9B_u89C4_u5F8B" class="headerlink" title="Math方法的一些规律"></a>Math方法的一些规律</h3><p>以上, 数值运算中, 存在如下规律:</p>
 <ol>
-<li>Math.floor(x) 方法可由位运算替代, 且运行速度更快, 如 ~~2.5;//2 .</li>
+<li>Math.floor(x) 方法可由位运算替代, 且运行速度更快, 如 ~~2.5; 或 2.5|0; 运算结果都为2 .</li>
 <li>Math.trunc(x) 方法当 ① x为正数时, 运算结果同 Math.floor(x); ② x为负数时, 运算结果同 Math.ceil(x).</li>
 <li>Math.min(x,y,z) 与 Math.max(x,y,z) 方法由于可接无限个参数, 可用于求数组元素的最小最大值. 如: Math.max.apply(null,[5,3,8,9]); // 9</li>
 <li>稍微利用 Math.random() 方法的特性, 就可以生成任意范围的数字. 如: 生成10到80之间的随机数, ~~(Math.random()*70 + 10);// 返回10~80之间的随机数, 包含10不包含80</li>
 </ol>
 <p>除去上述方法, Math作为对象, 继承了来之Object对象的方法. 其中一些如下:</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Math</span>.valueOf();<span class="comment">//返回Math对象本身</span></span><br><span class="line">+<span class="built_in">Math</span>; <span class="comment">//NaN, 试图转换成数字,由于不能转换为数字,返回NaN</span></span><br><span class="line"><span class="built_in">Math</span>.toString();<span class="comment">//"[object Math]"</span></span><br></pre></td></tr></table></figure>
-<h3 id="u4F4D_u8FD0_u7B97"><a href="#u4F4D_u8FD0_u7B97" class="headerlink" title="位运算"></a>位运算</h3><p>未完待续~~</p>
+<h3 id="u4F4D_u8FD0_u7B97"><a href="#u4F4D_u8FD0_u7B97" class="headerlink" title="位运算"></a>位运算</h3><p>Math对象提供的方法种类繁多, 且覆盖面非常全面, 基本上能够满足日常开发所需. 但同时我们也都知道, 使用Math对象的方法进行数值运算时, js代码经过解释编译, 最终会以二进制的方式进行运算. 这种运算方式效率较低, 那么能不能进一步提高运算的效率的呢? 如果我们使用位运算就可. 这是因为位运算本就是直接进行二进制运算. 下面让我们一起来看看都有哪些位运算.</p>
+<h4 id="u6309_u4F4D_u4E0E_28_26amp_3B_29"><a href="#u6309_u4F4D_u4E0E_28_26amp_3B_29" class="headerlink" title="按位与(&amp;)"></a>按位与(&amp;)</h4><p>&amp;运算符用于连接两个数, 连接的两个数它们二进制形式的值每位都将参与运算, 只有相对应的位上都为1时, 该位的运算才返回1. 比如 3 和 9 进行按位与运算, 以下是运算过程:</p>
+<figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">0011	//3的二进制形式</span><br><span class="line"><span class="header">&amp;	1001	//9的二进制形式</span><br><span class="line">----------</span></span><br><span class="line"><span class="code">	0001	//1,相同位数依次运算,除最后一位都是1,返回1以外, 其它位数由于不同时为1都返回0</span></span><br></pre></td></tr></table></figure>
+<p>由上, 3&amp;9的运算结果为1. <strong>对于按位与(&amp;)运算, 数字1是比较特殊的, 任意整数与1进行按位与运算, 都只有0 或1 两个返回值</strong>. 我们可以由此数值是否为奇数. 如下:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(<span class="number">1</span> &amp; x)&#123;<span class="comment">//如果x为奇数,它的二进制形式最后一位必然是1,同1进行按位与运算后,将返回1,而1又会隐式转换为true</span></span><br><span class="line">	<span class="built_in">console</span>.log(<span class="string">"x为奇数"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="u6309_u4F4D_u6216_28_7C_29"><a href="#u6309_u4F4D_u6216_28_7C_29" class="headerlink" title="按位或(|)"></a>按位或(|)</h4><p>|不同于&amp;, |运算符连接的两个数, 只要其二进制形式的各位上有一个为1, 该位的运算就返回1, 否则返回0. 比如 3 和 12 进行按位或运算, 以下是运算过程:</p>
+<figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">0011	//3的二进制形式</span><br><span class="line"><span class="header">&amp;	1100	//12的二进制形式</span><br><span class="line">----------</span></span><br><span class="line"><span class="code">	1111	//15, 相同位数依次运算,遇1返回1,故最终结果为4个1.</span></span><br></pre></td></tr></table></figure>
+<p>由上, 3|12的运算结果为15. <strong>对于按位或(|)运算, 数字0是比较特殊的, 任意整数与0进行按位或运算, 都将会返回它本身</strong>. 稍微利用这个特性, 我们便可以将非整数向下取整. 如下:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(<span class="number">5.2</span>|<span class="number">0</span>);<span class="comment">//5</span></span><br></pre></td></tr></table></figure>
+<p>为什么 5.2|0 运算后会返回5呢? 这是因为浮点数并不支持位运算, 运算前, 5.2会转换为整数5再和0进行位运算, 故, 最终返回5.</p>
+<h4 id="u6309_u4F4D_u975E_28_7E_29"><a href="#u6309_u4F4D_u975E_28_7E_29" class="headerlink" title="按位非(~)"></a>按位非(~)</h4><p>~运算符, 返回数值二进制形式的反码.</p>
+<h4 id="u6309_u4F4D_u5F02_u6216_28_5E_29"><a href="#u6309_u4F4D_u5F02_u6216_28_5E_29" class="headerlink" title="按位异或(^)"></a>按位异或(^)</h4><h4 id="u6709_u7B26_u53F7_u5DE6_u79FB_28_26lt_3B_26lt_3B_29"><a href="#u6709_u7B26_u53F7_u5DE6_u79FB_28_26lt_3B_26lt_3B_29" class="headerlink" title="有符号左移(&lt;&lt;)"></a>有符号左移(&lt;&lt;)</h4><h4 id="u6709_u7B26_u53F7_u53F3_u79FB_28_26gt_3B_26gt_3B_29"><a href="#u6709_u7B26_u53F7_u53F3_u79FB_28_26gt_3B_26gt_3B_29" class="headerlink" title="有符号右移(&gt;&gt;)"></a>有符号右移(&gt;&gt;)</h4><h4 id="u65E0_u7B26_u53F7_u53F3_u79FB_28_26gt_3B_26gt_3B_26gt_3B_29"><a href="#u65E0_u7B26_u53F7_u53F3_u79FB_28_26gt_3B_26gt_3B_26gt_3B_29" class="headerlink" title="无符号右移(&gt;&gt;&gt;)"></a>无符号右移(&gt;&gt;&gt;)</h4><p>未完待续~~</p>
 <hr>
 <p>本问就讨论这么多内容,大家有什么问题或好的想法欢迎在下方参与<a href="#respond">留言和评论</a>.</p>
 <p>本文作者: <a href="https://github.com/Louiszhai" target="_blank" rel="external">louis</a></p>
