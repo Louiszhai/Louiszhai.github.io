@@ -315,7 +315,7 @@
     <link href="http://louiszhai.github.io/2016/06/13/regexp/"/>
     <id>http://louiszhai.github.io/2016/06/13/regexp/</id>
     <published>2016-06-13T00:24:55.000Z</published>
-    <updated>2016-07-04T01:22:28.000Z</updated>
+    <updated>2016-07-12T10:14:00.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>你有没有在搜索文本的时候绞尽脑汁, 试了一个又一个表达式, 还是不行.</p>
 <p>你有没有在表单验证的时候, 只是做做样子(只要不为空就好), 然后烧香拜佛, 虔诚祈祷, 千万不要出错.</p>
 <p>你有没有在使用sed 和 grep 命令的时候, 感觉莫名其妙, 明明应该支持的元字符, 却就是匹配不到.</p>
@@ -475,6 +475,8 @@
 <li>身份证号: ^\d{15}|\d{17}(\d|X)$</li>
 <li>中国邮政编码: [1-9]\d{5}(?!\d) (邮政编码为6位数字)</li>
 </ol>
+<h4 id="u5BC6_u7801_u9A8C_u8BC1"><a href="#u5BC6_u7801_u9A8C_u8BC1" class="headerlink" title="密码验证"></a>密码验证</h4><p>密码验证是常见的需求, 一般来说, 常规密码大致会满足规律: 6-16位, 数字, 字母, 字符至少包含两种, 同时不能包含中文和空格. 如下便是常规密码验证的正则描述:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> reg = <span class="regexp">/(?!^[0-9]+$)(?!^[A-z]+$)(?!^[^A-z0-9]+$)^[^\s\u4e00-\u9fa5]&#123;6,16&#125;$/</span>;</span><br></pre></td></tr></table></figure>
 <h3 id="u6B63_u5219_u7684_u51E0_u5927_u5BB6_u65CF"><a href="#u6B63_u5219_u7684_u51E0_u5927_u5BB6_u65CF" class="headerlink" title="正则的几大家族"></a>正则的几大家族</h3><h4 id="u6B63_u5219_u8868_u8FBE_u5F0F_u5206_u7C7B"><a href="#u6B63_u5219_u8868_u8FBE_u5F0F_u5206_u7C7B" class="headerlink" title="正则表达式分类"></a>正则表达式分类</h4><p>在 linux 和 osx 下, 常见的正则表达式, 至少有以下三种: </p>
 <ul>
 <li>基本的正则表达式( Basic Regular Expression 又叫 Basic RegEx  简称 <strong>BREs</strong> )</li>
