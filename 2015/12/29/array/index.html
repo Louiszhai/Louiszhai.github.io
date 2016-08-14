@@ -12,7 +12,7 @@
 <meta property="og:url" content="http://louiszhai.github.io/2015/12/29/array/index.html">
 <meta property="og:site_name" content="louis blog">
 <meta property="og:description" content="JavaScript Array isArray map filter forEach every some push shift unshift sort indexOf">
-<meta property="og:updated_time" content="2016-05-17T01:07:43.000Z">
+<meta property="og:updated_time" content="2016-08-04T01:01:59.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="捋一捋JS的数组">
 <meta name="twitter:description" content="JavaScript Array isArray map filter forEach every some push shift unshift sort indexOf">
@@ -413,6 +413,8 @@
 <p>同上, splice一样受益于鸭式辨型, 比如:</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> o = &#123;<span class="number">0</span>:<span class="string">"apple"</span>,<span class="number">1</span>:<span class="string">"boy"</span>,length:<span class="number">2</span>&#125;;</span><br><span class="line"><span class="keyword">var</span> splices = <span class="built_in">Array</span>.prototype.splice.call(o,<span class="number">1</span>,<span class="number">1</span>);</span><br><span class="line"><span class="built_in">console</span>.log(o);<span class="comment">//Object &#123;0: "apple", length: 1&#125;, 可见对象o删除了一个属性,并且length-1</span></span><br><span class="line"><span class="built_in">console</span>.log(splices);<span class="comment">//["boy"]</span></span><br></pre></td></tr></table></figure>
 <p>注: 如果类数组对象没有length属性, splice将为该类数组对象添加length属性,并初始化为0. 此处栗子忽略. 如果需要请在<a href="https://github.com/Louiszhai" target="_blank" rel="external">评论</a>里反馈.</p>
+<p>如果需要删除数组中一个已存在的元素, 可参考如下:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> array = [<span class="string">'a'</span>,<span class="string">'b'</span>,<span class="string">'c'</span>];</span><br><span class="line">array.splice(array.indexOf(<span class="string">'b'</span>),<span class="number">1</span>);</span><br></pre></td></tr></table></figure>
 <h5 id="unshift"><a href="#unshift" class="headerlink" title="unshift"></a>unshift</h5><p>unshift() 方法用于在数组开始处插入一些元素(感觉像栈底插入), 并返回数组新的长度.</p>
 <p>语法: arr.unshift(element1, …, elementN)</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> array = [<span class="string">"red"</span>, <span class="string">"green"</span>, <span class="string">"blue"</span>];</span><br><span class="line"><span class="keyword">var</span> length = array.unshift(<span class="string">"yellow"</span>);</span><br><span class="line"><span class="built_in">console</span>.log(array);<span class="comment">//["yellow", "red", "green", "blue"]</span></span><br><span class="line"><span class="built_in">console</span>.log(length);<span class="comment">//4</span></span><br></pre></td></tr></table></figure>

@@ -14,7 +14,7 @@
 <meta property="og:description" content="regexp 正则表达式">
 <meta property="og:image" content="http://louiszhai.github.io/docImages/regexp01.png">
 <meta property="og:image" content="http://louiszhai.github.io/docImages/regexp02.png">
-<meta property="og:updated_time" content="2016-07-12T10:14:00.000Z">
+<meta property="og:updated_time" content="2016-08-02T01:18:23.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="正则表达式前端使用手册">
 <meta name="twitter:description" content="regexp 正则表达式">
@@ -876,7 +876,7 @@
 <h4 id="u56FA_u5316_u5206_u7EC4"><a href="#u56FA_u5316_u5206_u7EC4" class="headerlink" title="固化分组"></a>固化分组</h4><p>语法: (?&gt;…)</p>
 <p>如上所述, 我们在使用非贪婪模式时, 匹配过程中可能会进行多次的回溯, 回溯越多, 正则表达式的运行效率就越低. 而固化分组就是用来减少回溯次数的.</p>
 <p>实际上, 固化分组(?&gt;…)的匹配与正常的匹配并无分别, 它并不会改变匹配结果. 唯一的不同就是: 固化分组匹配结束时, 它匹配到的文本已经固化为一个单元, 只能作为整体而保留或放弃, 括号内的子表达式中未尝试过的备用状态都会被放弃, 所以回溯永远也不能选择其中的状态(因此不能参与回溯). 下面我们来通过一个例子更好地理解固化分组.</p>
-<p>假如要处理一批数据, 原格式为 123.456, 因为浮点数显示问题, 部分数据格式会变为123.456000000789这种, 现要求只保留小数点后2~3位, 当时最后一位不能为0, 那么这个正则怎么写呢?</p>
+<p>假如要处理一批数据, 原格式为 123.456, 因为浮点数显示问题, 部分数据格式会变为123.456000000789这种, 现要求只保留小数点后2~3位, 但是最后一位不能为0, 那么这个正则怎么写呢?</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> str = <span class="string">"123.456000000789"</span>;</span><br><span class="line">str = str.replace(<span class="regexp">/(\.\d\d[1-9]?)\d*/</span>,<span class="string">"$1"</span>); <span class="comment">//123.456</span></span><br></pre></td></tr></table></figure>
 <p>以上的正则, 对于”123.456” 这种格式的数据, 将白白处理一遍. 为了提高效率, 我们将正则最后的一个”*”改为”+”. 如下:</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> str = <span class="string">"123.456"</span>;</span><br><span class="line">str = str.replace(<span class="regexp">/(\.\d\d[1-9]?)\d+/</span>,<span class="string">"$1"</span>); <span class="comment">//123.45</span></span><br></pre></td></tr></table></figure>

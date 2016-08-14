@@ -6,16 +6,16 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <title>全面解读Math对象及位运算 | louis blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Math floor ~ ~ abs random ceil 位运算">
+  <meta name="description" content="Math floor ~ ~ abs random ceil 位运算 &amp; | ^ &amp;lt;&amp;lt; &amp;gt;&amp;gt; &amp;gt;&amp;gt;&amp;gt;">
 <meta property="og:type" content="article">
 <meta property="og:title" content="全面解读Math对象及位运算">
 <meta property="og:url" content="http://louiszhai.github.io/2016/07/01/Math/index.html">
 <meta property="og:site_name" content="louis blog">
-<meta property="og:description" content="Math floor ~ ~ abs random ceil 位运算">
-<meta property="og:updated_time" content="2016-07-02T12:22:51.000Z">
+<meta property="og:description" content="Math floor ~ ~ abs random ceil 位运算 &amp; | ^ &amp;lt;&amp;lt; &amp;gt;&amp;gt; &amp;gt;&amp;gt;&amp;gt;">
+<meta property="og:updated_time" content="2016-08-14T14:14:32.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="全面解读Math对象及位运算">
-<meta name="twitter:description" content="Math floor ~ ~ abs random ceil 位运算">
+<meta name="twitter:description" content="Math floor ~ ~ abs random ceil 位运算 &amp; | ^ &amp;lt;&amp;lt; &amp;gt;&amp;gt; &amp;gt;&amp;gt;&amp;gt;">
   
     <link rel="alternative" href="/atom.xml" title="louis blog" type="application/atom+xml">
   
@@ -200,7 +200,7 @@
       
           <div id="toc" class="toc-article">
     <div class="toc-title">目录</div>
-    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#u5BFC_u8BFB"><span class="toc-text">导读</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u4E3A_u4EC0_u4E48Math_u8FD9_u4E48_u8BBE_u8BA1"><span class="toc-text">为什么Math这么设计</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Math_u4E2D_u7684_u5C5E_u6027"><span class="toc-text">Math中的属性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Math_u4E2D_u7684_u65B9_u6CD5"><span class="toc-text">Math中的方法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#u4E09_u89D2_u51FD_u6570"><span class="toc-text">三角函数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#u6570_u5B66_u8FD0_u7B97_u65B9_u6CD5"><span class="toc-text">数学运算方法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#u6570_u503C_u8FD0_u7B97_u65B9_u6CD5"><span class="toc-text">数值运算方法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#u9644_3ANumber_u7C7B_u578B_u7684_u6570_u503C_u8FD0_u7B97_u65B9_u6CD5"><span class="toc-text">附:Number类型的数值运算方法</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Math_u65B9_u6CD5_u7684_u4E00_u4E9B_u89C4_u5F8B"><span class="toc-text">Math方法的一些规律</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u4F4D_u8FD0_u7B97"><span class="toc-text">位运算</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#u6309_u4F4D_u4E0E_28_26amp_3B_29"><span class="toc-text">按位与(&)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#u6309_u4F4D_u6216_28_7C_29"><span class="toc-text">按位或(|)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#u6309_u4F4D_u975E_28_7E_29"><span class="toc-text">按位非(~)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#u6309_u4F4D_u5F02_u6216_28_5E_29"><span class="toc-text">按位异或(^)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#u6709_u7B26_u53F7_u5DE6_u79FB_28_26lt_3B_26lt_3B_29"><span class="toc-text">有符号左移(<<)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#u6709_u7B26_u53F7_u53F3_u79FB_28_26gt_3B_26gt_3B_29"><span class="toc-text">有符号右移(>>)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#u65E0_u7B26_u53F7_u53F3_u79FB_28_26gt_3B_26gt_3B_26gt_3B_29"><span class="toc-text">无符号右移(>>>)</span></a></li></ol></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#u5BFC_u8BFB"><span class="toc-text">导读</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u4E3A_u4EC0_u4E48Math_u8FD9_u4E48_u8BBE_u8BA1"><span class="toc-text">为什么Math这么设计</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Math_u4E2D_u7684_u5C5E_u6027"><span class="toc-text">Math中的属性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Math_u4E2D_u7684_u65B9_u6CD5"><span class="toc-text">Math中的方法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#u4E09_u89D2_u51FD_u6570"><span class="toc-text">三角函数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#u6570_u5B66_u8FD0_u7B97_u65B9_u6CD5"><span class="toc-text">数学运算方法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#u6570_u503C_u8FD0_u7B97_u65B9_u6CD5"><span class="toc-text">数值运算方法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#u9644_3ANumber_u7C7B_u578B_u7684_u6570_u503C_u8FD0_u7B97_u65B9_u6CD5"><span class="toc-text">附:Number类型的数值运算方法</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Math_u65B9_u6CD5_u7684_u4E00_u4E9B_u89C4_u5F8B"><span class="toc-text">Math方法的一些规律</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u4F4D_u8FD0_u7B97"><span class="toc-text">位运算</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#u6570_u503C_u7684_u4E8C_u8FDB_u5236_u503C"><span class="toc-text">数值的二进制值</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#u5E38_u7528_u7684_u4E8C_u8FDB_u5236_u6570"><span class="toc-text">常用的二进制数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#u6309_u4F4D_u4E0E_28_26amp_3B_29"><span class="toc-text">按位与(&)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#u6309_u4F4D_u6216_28_7C_29"><span class="toc-text">按位或(|)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#u6309_u4F4D_u975E_28_7E_29"><span class="toc-text">按位非(~)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#u6309_u4F4D_u5F02_u6216_28_5E_29"><span class="toc-text">按位异或(^)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#u4F4D_u8FD0_u7B97_u5C0F_u7ED3"><span class="toc-text">位运算小结</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#u6709_u7B26_u53F7_u5DE6_u79FB_28_26lt_3B_26lt_3B_29"><span class="toc-text">有符号左移(<<)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#u6709_u7B26_u53F7_u53F3_u79FB_28_26gt_3B_26gt_3B_29"><span class="toc-text">有符号右移(>>)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#u65E0_u7B26_u53F7_u53F3_u79FB_28_26gt_3B_26gt_3B_26gt_3B_29"><span class="toc-text">无符号右移(>>>)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#u8FD0_u7B97_u7B26_u4F18_u5148_u7EA7"><span class="toc-text">运算符优先级</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u7EFC_u5408_u8FD0_u7528"><span class="toc-text">综合运用</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#u8BA1_u7B97_u7EDD_u5BF9_u503C"><span class="toc-text">计算绝对值</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#u6BD4_u8F83_u4E24_u6570_u662F_u5426_u7B26_u53F7_u76F8_u540C"><span class="toc-text">比较两数是否符号相同</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#u5BF92_u7684n_u6B21_u65B9_u53D6_u6A21_28n_u4E3A_u6B63_u6574_u6570_29"><span class="toc-text">对2的n次方取模(n为正整数)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#u7EDF_u8BA1_u6B63_u6570_u4E8C_u8FDB_u5236_u503C_u4E2D1_u7684_u4E2A_u6570"><span class="toc-text">统计正数二进制值中1的个数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#u5B9E_u73B0_u52A0_u6CD5_u8FD0_u7B97"><span class="toc-text">实现加法运算</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u603B_u7ED3"><span class="toc-text">总结</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u6CE8_u89E3"><span class="toc-text">注解</span></a></li></ol>
 </div>
       
         <h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>截至ES5, JavaScript 中内置(build-in)构造器/对象共有13个, 其中9个是构造器(Number,Boolean, String, Object, Function, Array, RegExp, Error, Date), Global 不能直接访问, Arguments仅在函数调用时由JS引擎创建, 而 Math, JSON 是以对象形式存在的, 本篇将带你走进 JS 内置对象-Math的世界, 一探究竟.</p>
@@ -336,8 +336,8 @@
 <td style="text-align:center">Math.exp(1);//约2.718</td>
 </tr>
 <tr>
-<td style="text-align:center">Math.pow(x, )</td>
-<td style="text-align:center">返回x的y次幂</td>
+<td style="text-align:center">Math.pow(x,y)</td>
+<td style="text-align:center">返回x的y次幂, 如果y未初始化, 则返回x</td>
 <td style="text-align:center">Math.pow(2, 3);//8</td>
 </tr>
 <tr>
@@ -456,25 +456,272 @@
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> num = <span class="number">1234.56789</span>;</span><br><span class="line"><span class="built_in">console</span>.log(num.toFixed(),num.toFixed(<span class="number">0</span>));<span class="comment">//1235,1235</span></span><br><span class="line"><span class="built_in">console</span>.log(num.toFixed(<span class="number">1</span>));<span class="comment">//1234.6</span></span><br><span class="line"><span class="built_in">console</span>.log(-<span class="number">1.235</span>.toFixed(<span class="number">2</span>));<span class="comment">//-1.24</span></span><br></pre></td></tr></table></figure>
 <h3 id="Math_u65B9_u6CD5_u7684_u4E00_u4E9B_u89C4_u5F8B"><a href="#Math_u65B9_u6CD5_u7684_u4E00_u4E9B_u89C4_u5F8B" class="headerlink" title="Math方法的一些规律"></a>Math方法的一些规律</h3><p>以上, 数值运算中, 存在如下规律:</p>
 <ol>
-<li>Math.floor(x) 方法可由位运算替代, 且运行速度更快, 如 ~~2.5; 或 2.5|0; 运算结果都为2 .</li>
-<li>Math.trunc(x) 方法当 ① x为正数时, 运算结果同 Math.floor(x); ② x为负数时, 运算结果同 Math.ceil(x).</li>
-<li>Math.min(x,y,z) 与 Math.max(x,y,z) 方法由于可接无限个参数, 可用于求数组元素的最小最大值. 如: Math.max.apply(null,[5,3,8,9]); // 9</li>
+<li>Math.trunc(x) 方法当 ① x为正数时, 运算结果同 Math.floor(x); ② x为负数时, 运算结果同 Math.ceil(x). 实际上, 它完全可以由位运算替代, 且运算速度更快, 如 2.5&amp;-1 或 2.5|0 或 ~~2.5 或 2.5^0 , 它们的运算结果都为2; 如 -2.5&amp;-1 或 -2.5|0 或 ~~-2.5 或 -2.5^0 , 它们的运算结果都为-2;</li>
+<li>Math.min(x,y,z) 与 Math.max(x,y,z) 方法由于可接无限个参数, 可用于求数组元素的最小最大值. 如: <code>Math.max.apply(null,[5,3,8,9]); // 9</code> . 但是Math.min 不传参数返回 <code>Infinity</code>, Math.max 不传参数返回 <code>-Infinity</code> .</li>
 <li>稍微利用 Math.random() 方法的特性, 就可以生成任意范围的数字. 如: 生成10到80之间的随机数, ~~(Math.random()*70 + 10);// 返回10~80之间的随机数, 包含10不包含80</li>
 </ol>
 <p>除去上述方法, Math作为对象, 继承了来之Object对象的方法. 其中一些如下:</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Math</span>.valueOf();<span class="comment">//返回Math对象本身</span></span><br><span class="line">+<span class="built_in">Math</span>; <span class="comment">//NaN, 试图转换成数字,由于不能转换为数字,返回NaN</span></span><br><span class="line"><span class="built_in">Math</span>.toString();<span class="comment">//"[object Math]"</span></span><br></pre></td></tr></table></figure>
-<h3 id="u4F4D_u8FD0_u7B97"><a href="#u4F4D_u8FD0_u7B97" class="headerlink" title="位运算"></a>位运算</h3><p>Math对象提供的方法种类繁多, 且覆盖面非常全面, 基本上能够满足日常开发所需. 但同时我们也都知道, 使用Math对象的方法进行数值运算时, js代码经过解释编译, 最终会以二进制的方式进行运算. 这种运算方式效率较低, 那么能不能进一步提高运算的效率的呢? 如果我们使用位运算就可. 这是因为位运算本就是直接进行二进制运算. 下面让我们一起来看看都有哪些位运算.</p>
+<h3 id="u4F4D_u8FD0_u7B97"><a href="#u4F4D_u8FD0_u7B97" class="headerlink" title="位运算"></a>位运算</h3><p>Math对象提供的方法种类繁多, 且覆盖面非常全面, 基本上能够满足日常开发所需. 但同时我们也都知道, 使用Math对象的方法进行数值运算时, js代码经过解释编译, 最终会以二进制的方式进行运算. 这种运算方式效率较低, 那么能不能进一步提高运算的效率的呢? 如果我们使用位运算就可. 这是因为位运算本就是直接进行二进制运算.</p>
+<h4 id="u6570_u503C_u7684_u4E8C_u8FDB_u5236_u503C"><a href="#u6570_u503C_u7684_u4E8C_u8FDB_u5236_u503C" class="headerlink" title="数值的二进制值"></a>数值的二进制值</h4><p>由于位运算是基于二进制的, 因此我们需要先获取数值的二进制值. 实际上, toString 方法已经帮我们做好了一部分工作, 如下:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//正整数可通过toString获取</span></span><br><span class="line"><span class="number">12.</span>.toString(<span class="number">2</span>);<span class="comment">//1100</span></span><br><span class="line"><span class="comment">//负整数问题就来了</span></span><br><span class="line">(-<span class="number">12</span>).toString(<span class="number">2</span>);<span class="comment">//-1100</span></span><br></pre></td></tr></table></figure>
+<p>已知: 负数在计算机内部是采用补码表示的. 例如 -1, 1的原码是 0000 0001, 那么1的反码是 1111 1110, 补码是 1111 1111.</p>
+<p>故: 负数的十进制转换为二进制时,符号位不变,其它位取反后+1. 即: <strong><code>-x的二进制 = x的二进制取反+1</code></strong> . 由按位取反可借助^运算符, 故负整数的二进制可以借助下面这个函数来获取:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">getBinary</span>(<span class="params">num</span>)</span>&#123;</span><br><span class="line">  <span class="keyword">var</span> s = (-num).toString(<span class="number">2</span>),</span><br><span class="line">      array = [].map.call(s,<span class="function"><span class="keyword">function</span>(<span class="params">v</span>)</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> v^<span class="number">1</span>;</span><br><span class="line">      &#125;);</span><br><span class="line">  array.reduceRight(<span class="function"><span class="keyword">function</span>(<span class="params">previousValue, value, index, array</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">var</span> v = previousValue ^ value;</span><br><span class="line">    array[index] = v;</span><br><span class="line">    <span class="keyword">return</span> +!v;</span><br><span class="line">  &#125;,<span class="number">1</span>);</span><br><span class="line">  <span class="keyword">return</span> array.join(<span class="string">''</span>);</span><br><span class="line">&#125;</span><br><span class="line">getBinary(-<span class="number">12</span>);<span class="comment">//0100, 前面未补全的部分全部为1</span></span><br></pre></td></tr></table></figure>
+<p>然后, 多试几次就会发现:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">getBinary(-<span class="number">1</span>) == <span class="number">1.</span>.toString(<span class="number">2</span>); <span class="comment">//true</span></span><br><span class="line">getBinary(-<span class="number">2</span>) == <span class="number">2.</span>.toString(<span class="number">2</span>); <span class="comment">//true</span></span><br><span class="line">getBinary(-<span class="number">4</span>) == <span class="number">4.</span>.toString(<span class="number">2</span>); <span class="comment">//true</span></span><br><span class="line">getBinary(-<span class="number">8</span>) == <span class="number">8.</span>.toString(<span class="number">2</span>); <span class="comment">//true</span></span><br></pre></td></tr></table></figure>
+<p>这表明:</p>
+<ul>
+<li><strong>2的整数次方的值与它的相对数, 他们后面真正有效的那几位都相同</strong>.</li>
+</ul>
+<p>同样, 负数的二进制转十进制时, 符号位不变, 其他位取反后+1. 可参考:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">translateBinary2Decimal</span>(<span class="params">binaryString</span>)</span>&#123;</span><br><span class="line">  <span class="keyword">var</span> array = [].map.call(binaryString,<span class="function"><span class="keyword">function</span>(<span class="params">v</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> v^<span class="number">1</span>;</span><br><span class="line">  &#125;);</span><br><span class="line">  array.reduceRight(<span class="function"><span class="keyword">function</span>(<span class="params">previousValue, value, index, array</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">var</span> v = previousValue ^ value;</span><br><span class="line">    array[index] = v;</span><br><span class="line">    <span class="keyword">return</span> +!v;</span><br><span class="line">  &#125;,<span class="number">1</span>);</span><br><span class="line">  <span class="keyword">return</span> <span class="built_in">parseInt</span>(array.join(<span class="string">''</span>),<span class="number">2</span>);</span><br><span class="line">&#125;</span><br><span class="line">translateBinary2Decimal(getBinary(-<span class="number">12</span>));<span class="comment">//12</span></span><br></pre></td></tr></table></figure>
+<p>由上, 二进制转十进制和十进制转二进制的函数, 大部分都可以共用, 因此下面提供一个统一的函数解决它们的互转问题:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">translateBinary</span>(<span class="params">item</span>)</span>&#123;</span><br><span class="line">  <span class="keyword">var</span> s = <span class="literal">null</span>,</span><br><span class="line">      array = <span class="literal">null</span>,</span><br><span class="line">      type = <span class="keyword">typeof</span> item,</span><br><span class="line">      symbol = !<span class="regexp">/^-/</span>.test(item+<span class="string">''</span>);</span><br><span class="line">  <span class="keyword">switch</span>(type)&#123;</span><br><span class="line">    <span class="keyword">case</span> <span class="string">"number"</span>: </span><br><span class="line">      s = <span class="built_in">Math</span>.abs(item).toString(<span class="number">2</span>);</span><br><span class="line">      <span class="keyword">if</span>(symbol)&#123;</span><br><span class="line">        <span class="keyword">return</span> s;</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">case</span> <span class="string">"string"</span>:</span><br><span class="line">      <span class="keyword">if</span>(symbol)&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">parseInt</span>(item,<span class="number">2</span>);</span><br><span class="line">      &#125;</span><br><span class="line">      s = item.substring(<span class="number">1</span>);</span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">default</span>:</span><br><span class="line">      <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">//按位取反</span></span><br><span class="line">  array = [].map.call(s,<span class="function"><span class="keyword">function</span>(<span class="params">v</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> v^<span class="number">1</span>;</span><br><span class="line">  &#125;);</span><br><span class="line">  <span class="comment">//+1</span></span><br><span class="line">  array.reduceRight(<span class="function"><span class="keyword">function</span>(<span class="params">previousValue, value, index, array</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">var</span> v = (previousValue + value)==<span class="number">2</span>;</span><br><span class="line">    array[index] = previousValue ^ value;</span><br><span class="line">    <span class="keyword">return</span> +v;</span><br><span class="line">  &#125;,<span class="number">1</span>);</span><br><span class="line">  s = array.join(<span class="string">''</span>);</span><br><span class="line">  <span class="keyword">return</span> type==<span class="string">"number"</span>?<span class="string">'-'</span>+s:-<span class="built_in">parseInt</span>(s,<span class="number">2</span>);</span><br><span class="line">&#125;</span><br><span class="line">translateBinary(-<span class="number">12</span>);<span class="comment">//-0100</span></span><br><span class="line">translateBinary(<span class="string">'-0100'</span>);<span class="comment">//-12</span></span><br></pre></td></tr></table></figure>
+<h4 id="u5E38_u7528_u7684_u4E8C_u8FDB_u5236_u6570"><a href="#u5E38_u7528_u7684_u4E8C_u8FDB_u5236_u6570" class="headerlink" title="常用的二进制数"></a>常用的二进制数</h4><table>
+<thead>
+<tr>
+<th style="text-align:center">二进制数</th>
+<th style="text-align:center">二进制值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">0xAAAAAAAA</td>
+<td style="text-align:center">10101010101010101010101010101010</td>
+</tr>
+<tr>
+<td style="text-align:center">0x55555555</td>
+<td style="text-align:center">01010101010101010101010101010101</td>
+</tr>
+<tr>
+<td style="text-align:center">0xCCCCCCCC</td>
+<td style="text-align:center">11001100110011001100110011001100</td>
+</tr>
+<tr>
+<td style="text-align:center">0x33333333</td>
+<td style="text-align:center">00110011001100110011001100110011</td>
+</tr>
+<tr>
+<td style="text-align:center">0xF0F0F0F0</td>
+<td style="text-align:center">11110000111100001111000011110000</td>
+</tr>
+<tr>
+<td style="text-align:center">0x0F0F0F0F</td>
+<td style="text-align:center">00001111000011110000111100001111</td>
+</tr>
+<tr>
+<td style="text-align:center">0xFF00FF00</td>
+<td style="text-align:center">11111111000000001111111100000000</td>
+</tr>
+<tr>
+<td style="text-align:center">0x00FF00FF</td>
+<td style="text-align:center">00000000111111110000000011111111</td>
+</tr>
+<tr>
+<td style="text-align:center">0xFFFF0000</td>
+<td style="text-align:center">11111111111111110000000000000000</td>
+</tr>
+<tr>
+<td style="text-align:center">0x0000FFFF</td>
+<td style="text-align:center">00000000000000001111111111111111</td>
+</tr>
+</tbody>
+</table>
+<p>现在也可以使用上述方法来验证下常用的二进制值对不对. 如下:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">translateBinary(<span class="number">0xAAAAAAAA</span>);<span class="comment">//10101010101010101010101010101010</span></span><br></pre></td></tr></table></figure>
 <h4 id="u6309_u4F4D_u4E0E_28_26amp_3B_29"><a href="#u6309_u4F4D_u4E0E_28_26amp_3B_29" class="headerlink" title="按位与(&amp;)"></a>按位与(&amp;)</h4><p>&amp;运算符用于连接两个数, 连接的两个数它们二进制形式的值每位都将参与运算, 只有相对应的位上都为1时, 该位的运算才返回1. 比如 3 和 9 进行按位与运算, 以下是运算过程:</p>
 <figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">0011	//3的二进制形式</span><br><span class="line"><span class="header">&amp;	1001	//9的二进制形式</span><br><span class="line">----------</span></span><br><span class="line"><span class="code">	0001	//1,相同位数依次运算,除最后一位都是1,返回1以外, 其它位数由于不同时为1都返回0</span></span><br></pre></td></tr></table></figure>
-<p>由上, 3&amp;9的运算结果为1. <strong>对于按位与(&amp;)运算, 数字1是比较特殊的, 任意整数与1进行按位与运算, 都只有0 或1 两个返回值</strong>. 我们可以由此数值是否为奇数. 如下:</p>
+<p>由上, 3&amp;9的运算结果为1. 实际上, 对于按位与(&amp;)运算, 满足如下规律:</p>
+<ol>
+<li><strong>数值与自身(或者-1)按位与运算返回数值自身</strong>.</li>
+<li><strong>2的整数次方的值与它的相对数按位与运算返回它自身</strong>.</li>
+<li><strong>任意整数与0进行按位与运算, 都将会返回0</strong>.</li>
+<li><strong>任意整数与1进行按位与运算, 都只有0 或1 两个返回值</strong>.</li>
+<li><strong>按位与运算的结果不大于两数中的最大值</strong>.</li>
+</ol>
+<p>由公式1, 我们可以对非整数取整. 即 <code>x&amp;x === x&amp;-1 === Math.trunc(x)</code> 如下:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(<span class="number">5.2</span>&amp;<span class="number">5.2</span>);<span class="comment">//5</span></span><br><span class="line"><span class="built_in">console</span>.log(-<span class="number">5.2</span>&amp;-<span class="number">1</span>);<span class="comment">//-5</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">Math</span>.trunc(-<span class="number">5.2</span>)===(-<span class="number">5.2</span>&amp;-<span class="number">1</span>));<span class="comment">//true</span></span><br></pre></td></tr></table></figure>
+<p>由公式4, 我们可以由此判断数值是否为奇数. 如下:</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(<span class="number">1</span> &amp; x)&#123;<span class="comment">//如果x为奇数,它的二进制形式最后一位必然是1,同1进行按位与运算后,将返回1,而1又会隐式转换为true</span></span><br><span class="line">	<span class="built_in">console</span>.log(<span class="string">"x为奇数"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h4 id="u6309_u4F4D_u6216_28_7C_29"><a href="#u6309_u4F4D_u6216_28_7C_29" class="headerlink" title="按位或(|)"></a>按位或(|)</h4><p>|不同于&amp;, |运算符连接的两个数, 只要其二进制形式的各位上有一个为1, 该位的运算就返回1, 否则返回0. 比如 3 和 12 进行按位或运算, 以下是运算过程:</p>
-<figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">0011	//3的二进制形式</span><br><span class="line"><span class="header">&amp;	1100	//12的二进制形式</span><br><span class="line">----------</span></span><br><span class="line"><span class="code">	1111	//15, 相同位数依次运算,遇1返回1,故最终结果为4个1.</span></span><br></pre></td></tr></table></figure>
-<p>由上, 3|12的运算结果为15. <strong>对于按位或(|)运算, 数字0是比较特殊的, 任意整数与0进行按位或运算, 都将会返回它本身</strong>. 稍微利用这个特性, 我们便可以将非整数向下取整. 如下:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(<span class="number">5.2</span>|<span class="number">0</span>);<span class="comment">//5</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">0011	//3的二进制形式</span><br><span class="line"><span class="header">|	1100	//12的二进制形式</span><br><span class="line">----------</span></span><br><span class="line"><span class="code">	1111	//15, 相同位数依次运算,遇1返回1,故最终结果为4个1.</span></span><br></pre></td></tr></table></figure>
+<p>由上, 3|12的运算结果为15. 实际上, 对于按位或(|)运算, 满足如下规律: </p>
+<ol>
+<li><strong>数值与自身按位或运算返回数值自身</strong>.</li>
+<li><strong>2的整数次方的值与它的相对数按位或运算返回它的相对数</strong>.</li>
+<li><strong>任意整数与0进行按位或运算, 都将会返回它本身</strong>.</li>
+<li><strong>任意整数与-1进行按位或运算, 都将返回-1</strong>.</li>
+<li><strong>按位或运算的结果介于参与运算的两个数值之间</strong>.</li>
+</ol>
+<p>稍微利用公式1, 我们便可以将非整数取整.   即 <strong><code>x|0 === Math.trunc(x)</code></strong> 如下:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(<span class="number">5.2</span>|<span class="number">0</span>);<span class="comment">//5</span></span><br><span class="line"><span class="built_in">console</span>.log(-<span class="number">5.2</span>|<span class="number">0</span>);<span class="comment">//-5</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">Math</span>.trunc(-<span class="number">5.2</span>)===(-<span class="number">5.2</span>|<span class="number">0</span>));<span class="comment">//true</span></span><br></pre></td></tr></table></figure>
 <p>为什么 5.2|0 运算后会返回5呢? 这是因为浮点数并不支持位运算, 运算前, 5.2会转换为整数5再和0进行位运算, 故, 最终返回5.</p>
-<h4 id="u6309_u4F4D_u975E_28_7E_29"><a href="#u6309_u4F4D_u975E_28_7E_29" class="headerlink" title="按位非(~)"></a>按位非(~)</h4><p>~运算符, 返回数值二进制形式的反码.</p>
-<h4 id="u6309_u4F4D_u5F02_u6216_28_5E_29"><a href="#u6309_u4F4D_u5F02_u6216_28_5E_29" class="headerlink" title="按位异或(^)"></a>按位异或(^)</h4><h4 id="u6709_u7B26_u53F7_u5DE6_u79FB_28_26lt_3B_26lt_3B_29"><a href="#u6709_u7B26_u53F7_u5DE6_u79FB_28_26lt_3B_26lt_3B_29" class="headerlink" title="有符号左移(&lt;&lt;)"></a>有符号左移(&lt;&lt;)</h4><h4 id="u6709_u7B26_u53F7_u53F3_u79FB_28_26gt_3B_26gt_3B_29"><a href="#u6709_u7B26_u53F7_u53F3_u79FB_28_26gt_3B_26gt_3B_29" class="headerlink" title="有符号右移(&gt;&gt;)"></a>有符号右移(&gt;&gt;)</h4><h4 id="u65E0_u7B26_u53F7_u53F3_u79FB_28_26gt_3B_26gt_3B_26gt_3B_29"><a href="#u65E0_u7B26_u53F7_u53F3_u79FB_28_26gt_3B_26gt_3B_26gt_3B_29" class="headerlink" title="无符号右移(&gt;&gt;&gt;)"></a>无符号右移(&gt;&gt;&gt;)</h4><p>未完待续~~</p>
+<h4 id="u6309_u4F4D_u975E_28_7E_29"><a href="#u6309_u4F4D_u975E_28_7E_29" class="headerlink" title="按位非(~)"></a>按位非(~)</h4><p>~运算符, 返回数值二进制形式的反码. 什么意思呢, 就是说一个数值二进制形式中的每一位都将取反, 如果该位为1, 取反为0, 如果该位为0, 取反为1. 我们来举个例子理解下:</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">~	<span class="number">0000</span> <span class="number">0000</span> <span class="number">0000</span> <span class="number">0000</span> <span class="number">0000</span> <span class="number">0000</span> <span class="number">0000</span> <span class="number">0011</span>	<span class="comment">//3的32位二进制形式</span></span><br><span class="line">--------------------------------------------</span><br><span class="line">	<span class="number">1111</span> <span class="number">1111</span> <span class="number">1111</span> <span class="number">1111</span> <span class="number">1111</span> <span class="number">1111</span> <span class="number">1111</span> <span class="number">1100</span>	<span class="comment">//按位取反后为负数(最高位(第一位)表示正负,1代表负,0代表正)</span></span><br><span class="line">--------------------------------------------</span><br><span class="line">	<span class="number">1000</span> <span class="number">0000</span> <span class="number">0000</span> <span class="number">0000</span> <span class="number">0000</span> <span class="number">0000</span> <span class="number">0000</span> <span class="number">0011</span>	<span class="comment">//负数的二进制转换为十进制时,符号位不变,其它位取反(后+1)</span></span><br><span class="line">	<span class="number">1000</span> <span class="number">0000</span> <span class="number">0000</span> <span class="number">0000</span> <span class="number">0000</span> <span class="number">0000</span> <span class="number">0000</span> <span class="number">0100</span> <span class="comment">// +1</span></span><br><span class="line">--------------------------------------------</span><br><span class="line">									-<span class="number">4</span>	 <span class="comment">//最终运算结果为-4</span></span><br></pre></td></tr></table></figure>
+<p>实际上, 按位非(~)操作不需要这么兴师动众地去计算, 它有且仅有一条运算规律:</p>
+<ul>
+<li><strong>按位非操作一个数值, 等同于这个数值加1然后符号改变. 即: <code>~x === -x-1</code></strong>.</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">~<span class="number">5</span> ==&gt; -<span class="number">5</span>-<span class="number">1</span> === -<span class="number">6</span>;</span><br><span class="line">~-<span class="number">2016</span> ==&gt; <span class="number">2016</span>-<span class="number">1</span> === <span class="number">2015</span>;</span><br></pre></td></tr></table></figure>
+<p>由上述公式可推出: <strong><code>~~x === -(-x-1)-1 === x</code></strong>. 由于位运算摈除小数部分的特性, 连续两次按位非也可用于将非整数取整. 即, <strong><code>~~x === Math.trunc(x)</code></strong> 如下:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(~~<span class="number">5.2</span>);<span class="comment">//5</span></span><br><span class="line"><span class="built_in">console</span>.log(~~-<span class="number">5.2</span>);<span class="comment">//-5</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">Math</span>.trunc(-<span class="number">5.2</span>)===(~~-<span class="number">5.2</span>));<span class="comment">//true</span></span><br></pre></td></tr></table></figure>
+<p>按位非(~)运算符只能用来求数值的反码, 并且还不能输出反码的二进制字符串. 我们来稍微扩展下, 使它变得更易用.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">waveExtend</span>(<span class="params">item</span>)</span>&#123;</span><br><span class="line">  <span class="keyword">var</span> s = <span class="keyword">typeof</span> item == <span class="string">'number'</span> &amp;&amp; translateBinary(~item);</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">typeof</span> s == <span class="string">'string'</span>?s:[].map.call(item,<span class="function"><span class="keyword">function</span>(<span class="params">v</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> v===<span class="string">'-'</span>?v:v^<span class="number">1</span>;</span><br><span class="line">  &#125;).join(<span class="string">''</span>).replace(<span class="regexp">/^-?/</span>,<span class="function"><span class="keyword">function</span>(<span class="params">m</span>)</span>&#123;<span class="keyword">return</span> m==<span class="string">''</span>?<span class="string">'-'</span>:<span class="string">''</span>&#125;);</span><br><span class="line">&#125;</span><br><span class="line">waveExtend(-<span class="number">8</span>);<span class="comment">//111 -8反码,正数省略的位全部为0</span></span><br><span class="line">waveExtend(<span class="number">12</span>);<span class="comment">//-0011 12的反码,负数省略的位全部为1</span></span><br></pre></td></tr></table></figure>
+<h4 id="u6309_u4F4D_u5F02_u6216_28_5E_29"><a href="#u6309_u4F4D_u5F02_u6216_28_5E_29" class="headerlink" title="按位异或(^)"></a>按位异或(^)</h4><p>^运算符连接的两个数, 它们二进制形式的值每位参与运算, 只有相对应的每位值不同, 才返回1, 否则返回0.<br>(相同则消去, 有些类似两两消失的消消乐). 如下:</p>
+<figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="code">	0011	//3的二进制形式</span></span><br><span class="line"><span class="header">^	1000	//8的二进制形式</span><br><span class="line">-----------</span></span><br><span class="line"><span class="code">	1011	//11, 相同位数依次运算, 值不同的返回1</span></span><br></pre></td></tr></table></figure>
+<p>对于按位异或(^)操作, 满足如下规律:</p>
+<ol>
+<li><strong>由于按位异或位运算的特殊性, 数值与自身按位异或运算返回0</strong>. 如: <code>8^8=0</code> , 公式为 <code>a^a=0</code> .</li>
+<li><strong>任意整数与0进行按位异或运算, 都将会返回它本身</strong>. 如: <code>0^-98=-98</code> , 公式为 <code>0^a=a</code>.</li>
+<li><strong>任意整数x与1(2的0次方)进行按位异或运算, 若它为奇数, 则返回 <code>x-1</code>, 若它为偶数, 则返回 <code>x+1</code> </strong>. 如: <code>1^-9=-10</code> , <code>1^100=101</code>  . 公式为 <code>1^奇=奇-1</code> , <code>1^偶=偶+1</code> ; 推而广之, <strong>任意整数x与2的n次方进行按位异或运算, 若它的二进制形式的倒数第n+1位是1, 则返回 <code>x-2的n次方</code>, 反之若为0, 则返回 <code>x+2的n次方</code> </strong>.</li>
+<li><strong>任意整数x与-1(负2的1次方+1)进行按位异或运算, 则将返回 <code>-x-1</code>, 相当于~x运算 </strong>. 如: <code>-1^100=-101</code> , <code>-1^-9=8</code> . 公式为 <code>-1^x=-x-1=~x</code> .</li>
+<li><strong>任意整数连续按位异或两次相同的数值, 返回它本身</strong>. 如: <code>3^8^8=3</code> , 公式为 <code>a^b^b=a</code> 或 <code>a^b^a=b</code> .</li>
+<li><strong>按位异或满足操作数与运算结果3个数值之间的交换律: 按位异或的两个数值, 以及他们运算的结果, 共三个数值可以两两异或得到另外一个数值</strong> . 如: <code>3^9=10</code> , <code>3^10=9</code> , <code>9^10=3</code> ; 公式为 <code>a^b=c</code> , <code>a^c=b</code> , <code>b^c=a</code> .</li>
+</ol>
+<p>以上公式中, 1, 2, 3和4都是由按位异或运算特性推出的, 公式5可由公式1和2推出, 公式6可由公式5推出.</p>
+<p>由于按位异或运算的这种可交换的性质, 我们可用它辅助交换两个整数的值. 如下, 假设这两个值为a和b:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> a=<span class="number">1</span>,b=<span class="number">2</span>;</span><br><span class="line"><span class="comment">//常规方法</span></span><br><span class="line"><span class="keyword">var</span> tmp = a;</span><br><span class="line">a=b;</span><br><span class="line">b=tmp;</span><br><span class="line"><span class="built_in">console</span>.log(a,b);<span class="comment">//2 1</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//使用按位异或~的方法</span></span><br><span class="line">a=a^b;	<span class="comment">//假设a,b的原始值分别为a0,b0</span></span><br><span class="line">b=a^b;	<span class="comment">//等价于 b=a0^b0^b0 ==&gt; b=a0</span></span><br><span class="line">a=a^b;	<span class="comment">//等价于 a=a0^b0^a0 ==&gt; a=b0</span></span><br><span class="line"><span class="built_in">console</span>.log(a,b);<span class="comment">//2 1</span></span><br><span class="line"><span class="comment">//以上可简写为</span></span><br><span class="line">a^=b;b^=a;a^=b;</span><br></pre></td></tr></table></figure>
+<h4 id="u4F4D_u8FD0_u7B97_u5C0F_u7ED3"><a href="#u4F4D_u8FD0_u7B97_u5C0F_u7ED3" class="headerlink" title="位运算小结"></a>位运算小结</h4><p>由上可以看出:</p>
+<ul>
+<li>由于连接两个数值的位运算均是对相同的位进行比较操作, 故运算数值的先后位置并不重要, 这些位运算(&amp; | ^)满足交换律. 即: <code>a操作符b === b操作符a</code>.</li>
+<li>位运算中, 数字0和1都比较特殊. 记住它们的规律, 常可简化运算.</li>
+<li>位运算(&amp;|~^)可用于取整, 同 Math.trunc().</li>
+</ul>
+<h4 id="u6709_u7B26_u53F7_u5DE6_u79FB_28_26lt_3B_26lt_3B_29"><a href="#u6709_u7B26_u53F7_u5DE6_u79FB_28_26lt_3B_26lt_3B_29" class="headerlink" title="有符号左移(&lt;&lt;)"></a>有符号左移(&lt;&lt;)</h4><p>&lt;&lt;运算符, 表示将数值的32位二进制形式的除符号位之外的其他位都往左移动若干位数. 当x为整数时, 有: <code>x&lt;&lt;n === x*Math.pow(2,n)</code> 如下:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(<span class="number">1</span>&lt;&lt;<span class="number">3</span>);<span class="comment">//8</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="number">100</span>&lt;&lt;<span class="number">4</span>);<span class="comment">//1600</span></span><br></pre></td></tr></table></figure>
+<p>如此, Math.pow(2,n) 便可简写为 1&lt;&lt;n.</p>
+<p>据说, 乘上一个2的倍数数值, 可以改用有符号左移(&lt;&lt;)运算符, 将加速 300%.</p>
+<h4 id="u6709_u7B26_u53F7_u53F3_u79FB_28_26gt_3B_26gt_3B_29"><a href="#u6709_u7B26_u53F7_u53F3_u79FB_28_26gt_3B_26gt_3B_29" class="headerlink" title="有符号右移(&gt;&gt;)"></a>有符号右移(&gt;&gt;)</h4><p>>&gt;运算符, 除了方向向右, 其他同&lt;&lt;运算符. 当x为整数时, 有: <code>x&gt;&gt;n === x*Math.pow(2,-n)</code> . 如下:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(-<span class="number">5</span>&gt;&gt;<span class="number">2</span>);<span class="comment">//-2</span></span><br><span class="line"><span class="built_in">console</span>.log(-<span class="number">7</span>&gt;&gt;<span class="number">3</span>);<span class="comment">//-1</span></span><br></pre></td></tr></table></figure>
+<p>右移负整数时, 返回值最大为-1.</p>
+<p>右移正整数时, 返回值最小为0.</p>
+<p>据说, 除以一个2的倍数数值, 可以改用有符号左移(&gt;&gt;)运算符, 将加速 350%.</p>
+<h4 id="u65E0_u7B26_u53F7_u53F3_u79FB_28_26gt_3B_26gt_3B_26gt_3B_29"><a href="#u65E0_u7B26_u53F7_u53F3_u79FB_28_26gt_3B_26gt_3B_26gt_3B_29" class="headerlink" title="无符号右移(&gt;&gt;&gt;)"></a>无符号右移(&gt;&gt;&gt;)</h4><p>>&gt;&gt;运算符, 表示连同符号也一起右移. </p>
+<p>注意:无符号右移(&gt;&gt;&gt;)会把负数的二进制码当成正数的二进制码. 如下:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(-<span class="number">8</span>&gt;&gt;&gt;<span class="number">5</span>);<span class="comment">//134217727</span></span><br><span class="line"><span class="built_in">console</span>.log(-<span class="number">1</span>&gt;&gt;&gt;<span class="number">0</span>);<span class="comment">//4294967295</span></span><br></pre></td></tr></table></figure>
+<p>以上, 虽然-1没有发生向右位移, 但是-1的二进制码, 已经变成了正数的二进制码. 我们来回顾下这个过程.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">translateAry(-<span class="number">1</span>);<span class="comment">//-1,补全-1的二进制码至32位: 11111111111111111111111111111111</span></span><br><span class="line">translateAry(<span class="string">'11111111111111111111111111111111'</span>);<span class="comment">//4294967295</span></span><br></pre></td></tr></table></figure>
+<p>可见, -1的二进制形式本就是32个1, 将这32个1当正数的二进制处理, 直接还原成十进制, 刚好就是 4294967295.</p>
+<p>由此, 使用 &gt;&gt;&gt;运算符, 即使是右移0位, 对于负数而言也是翻天覆地的变化. 但是对于正数却没有改变. 利用这个特性, 可以判断数值的正负. 如下:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">getSymbol</span>(<span class="params">num</span>)</span>&#123;</span><br><span class="line">  <span class="keyword">return</span> num === (num&gt;&gt;&gt;<span class="number">0</span>)?<span class="string">"正数"</span>:<span class="string">"负数"</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">console</span>.log(getSymbol(-<span class="number">100</span>), getSymbol(<span class="number">123</span>));<span class="comment">//负数 正数</span></span><br></pre></td></tr></table></figure>
+<h4 id="u8FD0_u7B97_u7B26_u4F18_u5148_u7EA7"><a href="#u8FD0_u7B97_u7B26_u4F18_u5148_u7EA7" class="headerlink" title="运算符优先级"></a>运算符优先级</h4><table>
+<thead>
+<tr>
+<th style="text-align:center">优先级</th>
+<th style="text-align:center">运算符</th>
+<th style="text-align:center">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:center">后置++ , 后置– , [] , () 或 .</td>
+<td style="text-align:center">后置++,后置–,数组下标,括号 或 属性选择</td>
+</tr>
+<tr>
+<td style="text-align:center">2</td>
+<td style="text-align:center">- , 前置++ , 前置– , ! 或 ~</td>
+<td style="text-align:center">负号,前置++,前置–, 逻辑非 或 按位非</td>
+</tr>
+<tr>
+<td style="text-align:center">3</td>
+<td style="text-align:center">* , / 或 %</td>
+<td style="text-align:center">乘 , 除 或 取模</td>
+</tr>
+<tr>
+<td style="text-align:center">4</td>
+<td style="text-align:center">+ 或 -</td>
+<td style="text-align:center">加 或 减</td>
+</tr>
+<tr>
+<td style="text-align:center">5</td>
+<td style="text-align:center">&lt;&lt; 或 &gt;&gt;</td>
+<td style="text-align:center">左移 或 右移</td>
+</tr>
+<tr>
+<td style="text-align:center">6</td>
+<td style="text-align:center">> , &gt;= , &lt; 或 &lt;=</td>
+<td style="text-align:center">大于, 大于等于, 小于 或 小于等于</td>
+</tr>
+<tr>
+<td style="text-align:center">7</td>
+<td style="text-align:center">== 或 !=</td>
+<td style="text-align:center">等于 或 不等于</td>
+</tr>
+<tr>
+<td style="text-align:center">8</td>
+<td style="text-align:center">&amp;</td>
+<td style="text-align:center">按位与</td>
+</tr>
+<tr>
+<td style="text-align:center">9</td>
+<td style="text-align:center">^</td>
+<td style="text-align:center">按位异或</td>
+</tr>
+<tr>
+<td style="text-align:center">10</td>
+<td style="text-align:center">\</td>
+<td style="text-align:center"></td>
+<td>按位或</td>
+</tr>
+<tr>
+<td style="text-align:center">11</td>
+<td style="text-align:center">&amp;&amp;</td>
+<td style="text-align:center">逻辑与</td>
+</tr>
+<tr>
+<td style="text-align:center">12</td>
+<td style="text-align:center">\</td>
+<td style="text-align:center">\</td>
+<td></td>
+<td>逻辑或</td>
+</tr>
+<tr>
+<td style="text-align:center">13</td>
+<td style="text-align:center">?:</td>
+<td style="text-align:center">条件运算符</td>
+</tr>
+<tr>
+<td style="text-align:center">14</td>
+<td style="text-align:center">=,/=,*=,%=,+=,-=,&lt;&lt;=,&gt;&gt;=,&amp;=,^=,\</td>
+<td style="text-align:center">=</td>
+<td>各种运算后赋值</td>
+</tr>
+<tr>
+<td style="text-align:center">15</td>
+<td style="text-align:center">,</td>
+<td style="text-align:center">逗号</td>
+</tr>
+</tbody>
+</table>
+<p>可以看到, ① 除了按位非(~)以外, 其他的位运算符的优先级都是低于+-运算符的; ② 按位与(&amp;), 按位异或(^) 或 按位或(|) 的运算优先级均低于比较运算符(&gt;,&lt;,=等); ③位运算符中按位或(|)优先级最低.</p>
+<h3 id="u7EFC_u5408_u8FD0_u7528"><a href="#u7EFC_u5408_u8FD0_u7528" class="headerlink" title="综合运用"></a>综合运用</h3><h4 id="u8BA1_u7B97_u7EDD_u5BF9_u503C"><a href="#u8BA1_u7B97_u7EDD_u5BF9_u503C" class="headerlink" title="计算绝对值"></a>计算绝对值</h4><p>使用有符号右移(&gt;&gt;)运算符, 以及按位异或(^)运算符, 我们可以实现一个 Math.abs方法. 如下:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">abs</span>(<span class="params">num</span>)</span>&#123;</span><br><span class="line">  <span class="keyword">var</span> x = num&gt;&gt;<span class="number">31</span>,	<span class="comment">//保留32二进制中的符号位,根据num的正负性分别返回0或-1</span></span><br><span class="line">      y = num^x;	<span class="comment">//返回正数,且利用按位异或中的公式2,若num为正数,num^0则返回num本身;若num为负数,则相当于num^-1,利用公式4, 此时返回-num-1</span></span><br><span class="line">  <span class="keyword">return</span> y-x;		<span class="comment">//若num为正数,则返回num-0即num;若num为负数则返回-num-1-(-1)即|num|</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="u6BD4_u8F83_u4E24_u6570_u662F_u5426_u7B26_u53F7_u76F8_u540C"><a href="#u6BD4_u8F83_u4E24_u6570_u662F_u5426_u7B26_u53F7_u76F8_u540C" class="headerlink" title="比较两数是否符号相同"></a>比较两数是否符号相同</h4><p>通常, 比较两个数是否符号相同, 我们使用x*y&gt;0 来判断即可. 但如果利用按位异或(^), 运算速度将更快.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(-<span class="number">17</span> ^ <span class="number">9</span> &gt; <span class="number">0</span>);<span class="comment">//false</span></span><br></pre></td></tr></table></figure>
+<h4 id="u5BF92_u7684n_u6B21_u65B9_u53D6_u6A21_28n_u4E3A_u6B63_u6574_u6570_29"><a href="#u5BF92_u7684n_u6B21_u65B9_u53D6_u6A21_28n_u4E3A_u6B63_u6574_u6570_29" class="headerlink" title="对2的n次方取模(n为正整数)"></a>对2的n次方取模(n为正整数)</h4><p>比如 123%8, 实际上就是求一个余数, 并且这个余数还不大于8, 最大为7. 然后剩下的就是比较二进制值里, 123与7有几成相似了. 便不难推出公式: <code>x%(1&lt;&lt;n)==x&amp;(1&lt;&lt;n)-1</code> . </p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(<span class="number">123</span>%<span class="number">8</span>);<span class="comment">//3</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="number">123</span>&amp;(<span class="number">1</span>&lt;&lt;<span class="number">3</span>)-<span class="number">1</span>);<span class="comment">//3 , 为什么-1时不用括号括起来, 这是因为-优先级高于&amp;</span></span><br></pre></td></tr></table></figure>
+<h4 id="u7EDF_u8BA1_u6B63_u6570_u4E8C_u8FDB_u5236_u503C_u4E2D1_u7684_u4E2A_u6570"><a href="#u7EDF_u8BA1_u6B63_u6570_u4E8C_u8FDB_u5236_u503C_u4E2D1_u7684_u4E2A_u6570" class="headerlink" title="统计正数二进制值中1的个数"></a>统计正数二进制值中1的个数</h4><p>不妨先判断n的奇偶性, 为奇数时计数器增加1, 然后将n右移一位, 重复上面步骤, 直到递归退出.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">getTotalForOne</span>(<span class="params">n</span>)</span>&#123;</span><br><span class="line">  	<span class="keyword">return</span> n?(n&amp;<span class="number">1</span>)+<span class="built_in">arguments</span>.callee(n&gt;&gt;<span class="number">1</span>):<span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line">getTotalForOne(<span class="number">9</span>);<span class="comment">//2</span></span><br></pre></td></tr></table></figure>
+<h4 id="u5B9E_u73B0_u52A0_u6CD5_u8FD0_u7B97"><a href="#u5B9E_u73B0_u52A0_u6CD5_u8FD0_u7B97" class="headerlink" title="实现加法运算"></a>实现加法运算</h4><p>加法运算, 从二进制值的角度看, 有 ①同位相加 和 ②遇2进1 两种运算(实际上, 十进制运算也是一样, 同位相加, 遇10进1). </p>
+<p>首先我们看看第①种, 同位相加, 不考虑②遇2进1.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1</span> + <span class="number">1</span> = <span class="number">0</span></span><br><span class="line"><span class="number">1</span> + <span class="number">0</span> = <span class="number">1</span></span><br><span class="line"><span class="number">0</span> + <span class="number">1</span> = <span class="number">1</span></span><br><span class="line"><span class="number">0</span> + <span class="number">0</span> = <span class="number">0</span></span><br></pre></td></tr></table></figure>
+<p>以上运算过程有没有很熟悉. 是不是和按位异或(^)运算有着惊人的相似. 如:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1</span> ^ <span class="number">1</span> = <span class="number">0</span></span><br><span class="line"><span class="number">1</span> ^ <span class="number">0</span> = <span class="number">1</span></span><br><span class="line"><span class="number">0</span> ^ <span class="number">1</span> = <span class="number">1</span></span><br><span class="line"><span class="number">0</span> ^ <span class="number">0</span> = <span class="number">1</span></span><br></pre></td></tr></table></figure>
+<p>因此①同位相加的运算, 完全可由按位异或(^)代替, 即: x^y.</p>
+<p>那么②遇2进1 应该怎么实现呢? 实际上, 非位移位运算中, 只有按位与(&amp;)才能满足遇2的场景, 且只有有符号左移(&lt;&lt;)能满足进1的场景.</p>
+<p>现在范围缩小了, 就看&amp;和&lt;&lt;运算符能不能真正满足需要了. 值得高兴的是, 按位与(&amp;)只有在同位都是1的情况下才返回1, 其他情况均返回0. 如果对其运算结果再做左移一位的运算, 即: (x&amp;y)&lt;&lt;1. 刚好满足了②遇2进1的场景.</p>
+<p>因为我们是将①同位相加和②遇2进1的两种运算分开进行. 那么最终的加法运算结果应该还要做一次加法. 如下:</p>
+<p>最终公式: <code>x + y = x^y + (x&amp;y)&lt;&lt;1</code> </p>
+<p>这个公式并不完美, 因为它还是使用了加法, 推导公式怎么能直接使用推导结果呢? 太可怕了, 就不怕掉入递归深渊吗? 下面我们就来绕过这个坑. 而绕过这个坑有一个前提, 那就是只要 x^y 或 (x&amp;y)&lt;&lt;1中有一个值为0就行了, 这样便不用进行加法运算了. 讲了这么多, 不如看代码.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">add</span>(<span class="params">x, y</span>)</span>&#123;</span><br><span class="line">  <span class="keyword">var</span> _x = x^y,</span><br><span class="line">      _y = (x&amp;y)&lt;&lt;<span class="number">1</span>;</span><br><span class="line">  <span class="keyword">return</span> !_x &amp;&amp; _y || !_y &amp;&amp; _x || <span class="built_in">arguments</span>.callee(_x,_y);</span><br><span class="line">&#125;</span><br><span class="line">add(<span class="number">12345678</span>,<span class="number">87654321</span>);<span class="comment">//999999999</span></span><br><span class="line">add(<span class="number">9527</span>,-<span class="number">12</span>);<span class="comment">//9515</span></span><br></pre></td></tr></table></figure>
+<h3 id="u603B_u7ED3"><a href="#u603B_u7ED3" class="headerlink" title="总结"></a>总结</h3><p>Math对象中, 比较常用的就是数值运算方法, 不妨多看看, 其他的知道有这个api就行了. 而位运算中, 则需要基本了解每种位运算符的运算方式, 如果能注意运算中 0和1等特殊数值 的一些妙用就更好了. 同时, 如果对负数的位运算不甚理解, 建议去补下计算机的补码.希望能对您有所帮助.</p>
+<p>实际上, 位运算一般只适用 [-2^31, 2^31-1] (即 -2147483648~2147483647) 以内的正负数. 超过这个范围, 计算将可能出现错误. 如下: </p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(<span class="number">1</span>&lt;&lt;<span class="number">31</span>);<span class="comment">//-2147483648 由于数值(2^31)超过了31位(加上保留的一个符号位,共32位), 故计算出错, 按照负数的方式解释二进制的值了.说好的不改变符号呢!!!</span></span><br></pre></td></tr></table></figure>
+<h3 id="u6CE8_u89E3"><a href="#u6CE8_u89E3" class="headerlink" title="注解"></a>注解</h3><ol>
+<li><code>相反数</code> : 只有符号不同的两个数, 我们就说其中一个是另一个的相反数.</li>
+</ol>
 <hr>
 <p>本问就讨论这么多内容,大家有什么问题或好的想法欢迎在下方参与<a href="#respond">留言和评论</a>.</p>
 <p>本文作者: <a href="https://github.com/Louiszhai" target="_blank" rel="external">louis</a></p>
@@ -482,6 +729,9 @@
 <p>参考文章</p>
 <ul>
 <li><a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Math" target="_blank" rel="external">Math - JavaScript | MDN</a></li>
+<li><a href="http://www.cnblogs.com/xljzlw/p/4231354.html?utm_source=tuicool&amp;utm_medium=referral" target="_blank" rel="external">js中位运算的运用 - 那时候的我 - 博客园</a></li>
+<li><a href="http://blog.csdn.net/yunyu5120/article/details/6692072" target="_blank" rel="external">编程技巧–位运算的巧妙运用</a></li>
+<li><a href="http://www.jb51.net/article/32130.htm" target="_blank" rel="external">c语言中用位运算实现加法技巧介绍_C 语言_脚本之家</a></li>
 </ul>
 
       
