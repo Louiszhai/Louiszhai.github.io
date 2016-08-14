@@ -4,7 +4,7 @@
   <subtitle><![CDATA[程序猿 前端攻城师]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://louiszhai.github.io/"/>
-  <updated>2016-08-14T14:46:52.000Z</updated>
+  <updated>2016-08-14T14:52:47.000Z</updated>
   <id>http://louiszhai.github.io/</id>
   
   <author>
@@ -19,7 +19,7 @@
     <link href="http://louiszhai.github.io/2016/07/01/Math/"/>
     <id>http://louiszhai.github.io/2016/07/01/Math/</id>
     <published>2016-06-30T23:57:48.000Z</published>
-    <updated>2016-08-14T14:46:52.000Z</updated>
+    <updated>2016-08-14T14:52:47.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>截至ES5, JavaScript 中内置(build-in)构造器/对象共有13个, 其中9个是构造器(Number,Boolean, String, Object, Function, Array, RegExp, Error, Date), Global 不能直接访问, Arguments仅在函数调用时由JS引擎创建, 而 Math, JSON 是以对象形式存在的, 本篇将带你走进 JS 内置对象-Math以及与之息息相关的位运算, 一探究竟.</p>
 <a id="more"></a>
 <h3 id="u4E3A_u4EC0_u4E48Math_u8FD9_u4E48_u8BBE_u8BA1"><a href="#u4E3A_u4EC0_u4E48Math_u8FD9_u4E48_u8BBE_u8BA1" class="headerlink" title="为什么Math这么设计"></a>为什么Math这么设计</h3><p>众所周知, 如果需要使用js进行一些常规的数学运算, 是一件十分麻烦的事情. 为了解决这个问题, ECMAScript 在1.1版本中便引入了 Math. Math 之所以被设计成一个对象, 而不是构造器, 是因为对象中的方法可以作为静态方法直接被调用, 方便使用, 同时, Math 也没有创建实例的必要.</p>
@@ -348,7 +348,7 @@
 <p>现在也可以使用上述方法来验证下常用的二进制值对不对. 如下:</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">translateBinary(<span class="number">0xAAAAAAAA</span>);<span class="comment">//10101010101010101010101010101010</span></span><br></pre></td></tr></table></figure>
 <h4 id="u6309_u4F4D_u4E0E_28_26amp_3B_29"><a href="#u6309_u4F4D_u4E0E_28_26amp_3B_29" class="headerlink" title="按位与(&amp;)"></a>按位与(&amp;)</h4><p>&amp;运算符用于连接两个数, 连接的两个数它们二进制形式的值每位都将参与运算, 只有相对应的位上都为1时, 该位的运算才返回1. 比如 3 和 9 进行按位与运算, 以下是运算过程:</p>
-<figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="code">	0011	//3的二进制形式</span></span><br><span class="line"><span class="header">&amp;	1001	//9的二进制形式</span><br><span class="line">-----------</span></span><br><span class="line"><span class="code">	0001	//1,相同位数依次运算,除最后一位都是1,返回1以外, 其它位数由于不同时为1都返回0</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="code">	0011	//3的二进制形式</span></span><br><span class="line"><span class="header">&amp;	1001	//9的二进制形式</span><br><span class="line">--------------------</span></span><br><span class="line"><span class="code">	0001	//1,相同位数依次运算,除最后一位都是1,返回1以外, 其它位数由于不同时为1都返回0</span></span><br></pre></td></tr></table></figure>
 <p>由上, 3&amp;9的运算结果为1. 实际上, 对于按位与(&amp;)运算, 满足如下规律:</p>
 <ol>
 <li><strong>数值与自身(或者-1)按位与运算返回数值自身</strong>.</li>
@@ -362,7 +362,7 @@
 <p>由公式4, 我们可以由此判断数值是否为奇数. 如下:</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(<span class="number">1</span> &amp; x)&#123;<span class="comment">//如果x为奇数,它的二进制形式最后一位必然是1,同1进行按位与运算后,将返回1,而1又会隐式转换为true</span></span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">"x为奇数"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h4 id="u6309_u4F4D_u6216_28_7C_29"><a href="#u6309_u4F4D_u6216_28_7C_29" class="headerlink" title="按位或(|)"></a>按位或(|)</h4><p>|不同于&amp;, |运算符连接的两个数, 只要其二进制形式的各位上有一个为1, 该位的运算就返回1, 否则返回0. 比如 3 和 12 进行按位或运算, 以下是运算过程:</p>
-<figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="code">	0011	//3的二进制形式</span></span><br><span class="line"><span class="header">|	1100	//12的二进制形式</span><br><span class="line">-----------</span></span><br><span class="line"><span class="code">	1111	//15, 相同位数依次运算,遇1返回1,故最终结果为4个1.</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="code">	0011	//3的二进制形式</span></span><br><span class="line"><span class="header">|	1100	//12的二进制形式</span><br><span class="line">--------------------</span></span><br><span class="line"><span class="code">	1111	//15, 相同位数依次运算,遇1返回1,故最终结果为4个1.</span></span><br></pre></td></tr></table></figure>
 <p>由上, 3|12的运算结果为15. 实际上, 对于按位或(|)运算, 满足如下规律: </p>
 <ol>
 <li><strong>数值与自身按位或运算返回数值自身</strong>.</li>
@@ -386,7 +386,7 @@
 <p>按位非(~)运算符只能用来求数值的反码, 并且还不能输出反码的二进制字符串. 我们来稍微扩展下, 使它变得更易用.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">waveExtend</span>(<span class="params">item</span>)</span>&#123;</span><br><span class="line">  <span class="keyword">var</span> s = <span class="keyword">typeof</span> item == <span class="string">'number'</span> &amp;&amp; translateBinary(~item);</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">typeof</span> s == <span class="string">'string'</span>?s:[].map.call(item,<span class="function"><span class="keyword">function</span>(<span class="params">v</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> v===<span class="string">'-'</span>?v:v^<span class="number">1</span>;</span><br><span class="line">  &#125;).join(<span class="string">''</span>).replace(<span class="regexp">/^-?/</span>,<span class="function"><span class="keyword">function</span>(<span class="params">m</span>)</span>&#123;<span class="keyword">return</span> m==<span class="string">''</span>?<span class="string">'-'</span>:<span class="string">''</span>&#125;);</span><br><span class="line">&#125;</span><br><span class="line">waveExtend(-<span class="number">8</span>);<span class="comment">//111 -8反码,正数省略的位全部为0</span></span><br><span class="line">waveExtend(<span class="number">12</span>);<span class="comment">//-0011 12的反码,负数省略的位全部为1</span></span><br></pre></td></tr></table></figure>
 <h4 id="u6309_u4F4D_u5F02_u6216_28_5E_29"><a href="#u6309_u4F4D_u5F02_u6216_28_5E_29" class="headerlink" title="按位异或(^)"></a>按位异或(^)</h4><p>^运算符连接的两个数, 它们二进制形式的值每位参与运算, 只有相对应的每位值不同, 才返回1, 否则返回0.<br>(相同则消去, 有些类似两两消失的消消乐). 如下:</p>
-<figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="code">	0011	//3的二进制形式</span></span><br><span class="line"><span class="header">^	1000	//8的二进制形式</span><br><span class="line">-----------</span></span><br><span class="line"><span class="code">	1011	//11, 相同位数依次运算, 值不同的返回1</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="code">	0011	//3的二进制形式</span></span><br><span class="line"><span class="header">^	1000	//8的二进制形式</span><br><span class="line">--------------------</span></span><br><span class="line"><span class="code">	1011	//11, 相同位数依次运算, 值不同的返回1</span></span><br></pre></td></tr></table></figure>
 <p>对于按位异或(^)操作, 满足如下规律:</p>
 <ol>
 <li><strong>由于按位异或位运算的特殊性, 数值与自身按位异或运算返回0</strong>. 如: <code>8^8=0</code> , 公式为 <code>a^a=0</code> .</li>
@@ -408,12 +408,12 @@
 <h4 id="u6709_u7B26_u53F7_u5DE6_u79FB_28_26lt_3B_26lt_3B_29"><a href="#u6709_u7B26_u53F7_u5DE6_u79FB_28_26lt_3B_26lt_3B_29" class="headerlink" title="有符号左移(&lt;&lt;)"></a>有符号左移(&lt;&lt;)</h4><p>&lt;&lt;运算符, 表示将数值的32位二进制形式的除符号位之外的其他位都往左移动若干位数. 当x为整数时, 有: <code>x&lt;&lt;n === x*Math.pow(2,n)</code> 如下:</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(<span class="number">1</span>&lt;&lt;<span class="number">3</span>);<span class="comment">//8</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="number">100</span>&lt;&lt;<span class="number">4</span>);<span class="comment">//1600</span></span><br></pre></td></tr></table></figure>
 <p>如此, Math.pow(2,n) 便可简写为 1&lt;&lt;n.</p>
-<p>据说, 乘上一个2的倍数数值, 可以改用有符号左移(&lt;&lt;)运算符, 将加速 300%.</p>
+<p>据说, 乘上一个2的倍数数值, 可以使用有符号左移(&lt;&lt;)运算符, 将加速 300%.</p>
 <h4 id="u6709_u7B26_u53F7_u53F3_u79FB_28_26gt_3B_26gt_3B_29"><a href="#u6709_u7B26_u53F7_u53F3_u79FB_28_26gt_3B_26gt_3B_29" class="headerlink" title="有符号右移(&gt;&gt;)"></a>有符号右移(&gt;&gt;)</h4><p>>&gt;运算符, 除了方向向右, 其他同&lt;&lt;运算符. 当x为整数时, 有: <code>x&gt;&gt;n === x*Math.pow(2,-n)</code> . 如下:</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(-<span class="number">5</span>&gt;&gt;<span class="number">2</span>);<span class="comment">//-2</span></span><br><span class="line"><span class="built_in">console</span>.log(-<span class="number">7</span>&gt;&gt;<span class="number">3</span>);<span class="comment">//-1</span></span><br></pre></td></tr></table></figure>
 <p>右移负整数时, 返回值最大为-1.</p>
 <p>右移正整数时, 返回值最小为0.</p>
-<p>据说, 除以一个2的倍数数值, 可以改用有符号左移(&gt;&gt;)运算符, 将加速 350%.</p>
+<p>据说, 除以一个2的倍数数值, 可以使用有符号左移(&gt;&gt;)运算符, 将加速 350%.</p>
 <h4 id="u65E0_u7B26_u53F7_u53F3_u79FB_28_26gt_3B_26gt_3B_26gt_3B_29"><a href="#u65E0_u7B26_u53F7_u53F3_u79FB_28_26gt_3B_26gt_3B_26gt_3B_29" class="headerlink" title="无符号右移(&gt;&gt;&gt;)"></a>无符号右移(&gt;&gt;&gt;)</h4><p>>&gt;&gt;运算符, 表示连同符号也一起右移. </p>
 <p>注意:无符号右移(&gt;&gt;&gt;)会把负数的二进制码当成正数的二进制码. 如下:</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(-<span class="number">8</span>&gt;&gt;&gt;<span class="number">5</span>);<span class="comment">//134217727</span></span><br><span class="line"><span class="built_in">console</span>.log(-<span class="number">1</span>&gt;&gt;&gt;<span class="number">0</span>);<span class="comment">//4294967295</span></span><br></pre></td></tr></table></figure>
