@@ -12,7 +12,7 @@
 <meta property="og:url" content="http://louiszhai.github.io/2016/07/01/Math/index.html">
 <meta property="og:site_name" content="louis blog">
 <meta property="og:description" content="Math floor ~ ~ abs random ceil 位运算 &amp; | ^ &amp;lt;&amp;lt; &amp;gt;&amp;gt; &amp;gt;&amp;gt;&amp;gt;">
-<meta property="og:updated_time" content="2016-08-15T02:04:12.000Z">
+<meta property="og:updated_time" content="2016-08-15T09:25:27.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="全面解读Math对象及位运算">
 <meta name="twitter:description" content="Math floor ~ ~ abs random ceil 位运算 &amp; | ^ &amp;lt;&amp;lt; &amp;gt;&amp;gt; &amp;gt;&amp;gt;&amp;gt;">
@@ -712,9 +712,10 @@
 <p>最终公式: <code>x + y = x^y + (x&amp;y)&lt;&lt;1</code> </p>
 <p>这个公式并不完美, 因为它还是使用了加法, 推导公式怎么能直接使用推导结果呢? 太可怕了, 就不怕掉入递归深渊吗? 下面我们就来绕过这个坑. 而绕过这个坑有一个前提, 那就是只要 x^y 或 (x&amp;y)&lt;&lt;1中有一个值为0就行了, 这样便不用进行加法运算了. 讲了这么多, 不如看代码.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">add</span>(<span class="params">x, y</span>)</span>&#123;</span><br><span class="line">  <span class="keyword">var</span> _x = x^y,</span><br><span class="line">      _y = (x&amp;y)&lt;&lt;<span class="number">1</span>;</span><br><span class="line">  <span class="keyword">return</span> !_x &amp;&amp; _y || !_y &amp;&amp; _x || <span class="built_in">arguments</span>.callee(_x,_y);</span><br><span class="line">&#125;</span><br><span class="line">add(<span class="number">12345678</span>,<span class="number">87654321</span>);<span class="comment">//999999999</span></span><br><span class="line">add(<span class="number">9527</span>,-<span class="number">12</span>);<span class="comment">//9515</span></span><br></pre></td></tr></table></figure>
-<h3 id="u603B_u7ED3"><a href="#u603B_u7ED3" class="headerlink" title="总结"></a>总结</h3><p>Math对象中, 比较常用的就是数值运算方法, 不妨多看看, 其他的知道有这个api就行了. 而位运算中, 则需要基本了解每种位运算符的运算方式, 如果能注意运算中 0和1等特殊数值 的一些妙用就更好了. 同时, 如果对负数的位运算不甚理解, 建议去补下计算机的补码.希望能对您有所帮助.</p>
-<p>实际上, 位运算一般只适用 [-2^31, 2^31-1] (即 -2147483648~2147483647) 以内的正负数. 超过这个范围, 计算将可能出现错误. 如下: </p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(<span class="number">1</span>&lt;&lt;<span class="number">31</span>);<span class="comment">//-2147483648 由于数值(2^31)超过了31位(加上保留的一个符号位,共32位), 故计算出错, 按照负数的方式解释二进制的值了.说好的不改变符号呢!!!</span></span><br></pre></td></tr></table></figure>
+<h3 id="u603B_u7ED3"><a href="#u603B_u7ED3" class="headerlink" title="总结"></a>总结</h3><p>最后补充一点: 位运算一般只适用 [-2^31, 2^31-1] (即 -2147483648~2147483647) 以内的正负数. 超过这个范围, 计算将可能出现错误. 如下: </p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(<span class="number">1</span>&lt;&lt;<span class="number">31</span>);<span class="comment">//-2147483648</span></span><br></pre></td></tr></table></figure>
+<p>由于数值(2^31)超过了31位(加上保留的一个符号位,共32位), 故计算出错, 于是按照负数的方式解释二进制的值了.说好的不改变符号呢!!!</p>
+<p>可以看到, Math对象中, 比较常用的就是数值运算方法, 不妨多看看, 其他的知道有这个api就行了. 而位运算中, 则需要基本了解每种位运算符的运算方式, 如果能注意运算中 0和1等特殊数值 的一些妙用就更好了. 同时, 如果对负数的位运算不甚理解, 建议去补下计算机的补码.希望能对您有所帮助.</p>
 <h3 id="u6CE8_u89E3"><a href="#u6CE8_u89E3" class="headerlink" title="注解"></a>注解</h3><ol>
 <li><code>相反数</code> : 只有符号不同的两个数, 我们就说其中一个是另一个的相反数.</li>
 </ol>
