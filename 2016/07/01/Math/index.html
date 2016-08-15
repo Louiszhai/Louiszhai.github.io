@@ -12,7 +12,7 @@
 <meta property="og:url" content="http://louiszhai.github.io/2016/07/01/Math/index.html">
 <meta property="og:site_name" content="louis blog">
 <meta property="og:description" content="Math floor ~ ~ abs random ceil 位运算 &amp; | ^ &amp;lt;&amp;lt; &amp;gt;&amp;gt; &amp;gt;&amp;gt;&amp;gt;">
-<meta property="og:updated_time" content="2016-08-15T09:25:27.000Z">
+<meta property="og:updated_time" content="2016-08-15T09:54:24.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="全面解读Math对象及位运算">
 <meta name="twitter:description" content="Math floor ~ ~ abs random ceil 位运算 &amp; | ^ &amp;lt;&amp;lt; &amp;gt;&amp;gt; &amp;gt;&amp;gt;&amp;gt;">
@@ -605,7 +605,8 @@
 <p>可见, -1的二进制形式本就是32个1, 将这32个1当正数的二进制处理, 直接还原成十进制, 刚好就是 4294967295.</p>
 <p>由此, 使用 &gt;&gt;&gt;运算符, 即使是右移0位, 对于负数而言也是翻天覆地的变化. 但是对于正数却没有改变. 利用这个特性, 可以判断数值的正负. 如下:</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">getSymbol</span>(<span class="params">num</span>)</span>&#123;</span><br><span class="line">  <span class="keyword">return</span> num === (num&gt;&gt;&gt;<span class="number">0</span>)?<span class="string">"正数"</span>:<span class="string">"负数"</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">console</span>.log(getSymbol(-<span class="number">100</span>), getSymbol(<span class="number">123</span>));<span class="comment">//负数 正数</span></span><br></pre></td></tr></table></figure>
-<h4 id="u8FD0_u7B97_u7B26_u4F18_u5148_u7EA7"><a href="#u8FD0_u7B97_u7B26_u4F18_u5148_u7EA7" class="headerlink" title="运算符优先级"></a>运算符优先级</h4><table>
+<h4 id="u8FD0_u7B97_u7B26_u4F18_u5148_u7EA7"><a href="#u8FD0_u7B97_u7B26_u4F18_u5148_u7EA7" class="headerlink" title="运算符优先级"></a>运算符优先级</h4><p>使用运算符, 如果不知道它们的运算优先级. 就像驾驶法拉利却分不清楚油门和刹车一样恐怖. 因此我为您准备了常用运算符的运算优先级表. 请对号入座.</p>
+<table>
 <thead>
 <tr>
 <th style="text-align:center">优先级</th>
@@ -715,12 +716,12 @@
 <h3 id="u603B_u7ED3"><a href="#u603B_u7ED3" class="headerlink" title="总结"></a>总结</h3><p>最后补充一点: 位运算一般只适用 [-2^31, 2^31-1] (即 -2147483648~2147483647) 以内的正负数. 超过这个范围, 计算将可能出现错误. 如下: </p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(<span class="number">1</span>&lt;&lt;<span class="number">31</span>);<span class="comment">//-2147483648</span></span><br></pre></td></tr></table></figure>
 <p>由于数值(2^31)超过了31位(加上保留的一个符号位,共32位), 故计算出错, 于是按照负数的方式解释二进制的值了.说好的不改变符号呢!!!</p>
-<p>可以看到, Math对象中, 比较常用的就是数值运算方法, 不妨多看看, 其他的知道有这个api就行了. 而位运算中, 则需要基本了解每种位运算符的运算方式, 如果能注意运算中 0和1等特殊数值 的一些妙用就更好了. 同时, 如果对负数的位运算不甚理解, 建议去补下计算机的补码.希望能对您有所帮助.</p>
+<p>本文啰嗦几千字, 就为了说清楚两个事儿. ① Math对象中, 比较常用的就是数值运算方法, 不妨多看看, 其他的知道有这个api就行了. ② 位运算中, 则需要基本了解每种位运算符的运算方式, 如果能注意运算中 0和1等特殊数值 的一些妙用就更好了. 无论如何, 本文不可能面面俱到. 如果您对负数的位运算不甚理解, 建议去补下计算机的补码. 希望能对您有所帮助.</p>
 <h3 id="u6CE8_u89E3"><a href="#u6CE8_u89E3" class="headerlink" title="注解"></a>注解</h3><ol>
 <li><code>相反数</code> : 只有符号不同的两个数, 我们就说其中一个是另一个的相反数.</li>
 </ol>
 <hr>
-<p>本问就讨论这么多内容,大家有什么问题或好的想法欢迎在下方参与<a href="#respond">留言和评论</a>.</p>
+<p>本问就讨论这么多内容, 如果您有什么问题或好的想法欢迎在下方参与<a href="#respond">留言和评论</a>.</p>
 <p>本文作者: <a href="https://github.com/Louiszhai" target="_blank" rel="external">louis</a></p>
 <p>本文链接: <a href="http://louiszhai.github.io/2016/07/01/Math/">http://louiszhai.github.io/2016/07/01/Math/</a></p>
 <p>参考文章</p>
