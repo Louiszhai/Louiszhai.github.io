@@ -12,7 +12,7 @@
 <meta property="og:url" content="http://louiszhai.github.io/2016/07/01/Math/index.html">
 <meta property="og:site_name" content="louis blog">
 <meta property="og:description" content="Math floor ~ ~ abs random ceil 位运算 &amp; | ^ &amp;lt;&amp;lt; &amp;gt;&amp;gt; &amp;gt;&amp;gt;&amp;gt;">
-<meta property="og:updated_time" content="2016-08-14T14:52:47.000Z">
+<meta property="og:updated_time" content="2016-08-15T02:04:12.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="全面解读Math对象及位运算">
 <meta name="twitter:description" content="Math floor ~ ~ abs random ceil 位运算 &amp; | ^ &amp;lt;&amp;lt; &amp;gt;&amp;gt; &amp;gt;&amp;gt;&amp;gt;">
@@ -532,7 +532,7 @@
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">translateBinary(<span class="number">0xAAAAAAAA</span>);<span class="comment">//10101010101010101010101010101010</span></span><br></pre></td></tr></table></figure>
 <h4 id="u6309_u4F4D_u4E0E_28_26amp_3B_29"><a href="#u6309_u4F4D_u4E0E_28_26amp_3B_29" class="headerlink" title="按位与(&amp;)"></a>按位与(&amp;)</h4><p>&amp;运算符用于连接两个数, 连接的两个数它们二进制形式的值每位都将参与运算, 只有相对应的位上都为1时, 该位的运算才返回1. 比如 3 和 9 进行按位与运算, 以下是运算过程:</p>
 <figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="code">	0011	//3的二进制形式</span></span><br><span class="line"><span class="header">&amp;	1001	//9的二进制形式</span><br><span class="line">--------------------</span></span><br><span class="line"><span class="code">	0001	//1,相同位数依次运算,除最后一位都是1,返回1以外, 其它位数由于不同时为1都返回0</span></span><br></pre></td></tr></table></figure>
-<p>由上, 3&amp;9的运算结果为1. 实际上, 对于按位与(&amp;)运算, 满足如下规律:</p>
+<p>由上, 3&amp;9的运算结果为1. 实际上, 由于按位与(&amp;)运算同位上返回1的要求较为严苛, 因此, 它是一种趋向减小最大值的运算.(无论最大值是正数还是负数, 参与按位与运算后, 该数总是趋向减少二进制值位上1的数量, 因此总是有值减小的趋势. ) 对于按位与(&amp;)运算, 满足如下规律:</p>
 <ol>
 <li><strong>数值与自身(或者-1)按位与运算返回数值自身</strong>.</li>
 <li><strong>2的整数次方的值与它的相对数按位与运算返回它自身</strong>.</li>
@@ -546,13 +546,13 @@
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(<span class="number">1</span> &amp; x)&#123;<span class="comment">//如果x为奇数,它的二进制形式最后一位必然是1,同1进行按位与运算后,将返回1,而1又会隐式转换为true</span></span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">"x为奇数"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h4 id="u6309_u4F4D_u6216_28_7C_29"><a href="#u6309_u4F4D_u6216_28_7C_29" class="headerlink" title="按位或(|)"></a>按位或(|)</h4><p>|不同于&amp;, |运算符连接的两个数, 只要其二进制形式的各位上有一个为1, 该位的运算就返回1, 否则返回0. 比如 3 和 12 进行按位或运算, 以下是运算过程:</p>
 <figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="code">	0011	//3的二进制形式</span></span><br><span class="line"><span class="header">|	1100	//12的二进制形式</span><br><span class="line">--------------------</span></span><br><span class="line"><span class="code">	1111	//15, 相同位数依次运算,遇1返回1,故最终结果为4个1.</span></span><br></pre></td></tr></table></figure>
-<p>由上, 3|12的运算结果为15. 实际上, 对于按位或(|)运算, 满足如下规律: </p>
+<p>由上, 3|12的运算结果为15. 实际上, 由于按位与(&amp;)运算同位上返回0的要求较为严苛, 因此, 它是一种趋向增大最小值的运算. 对于按位或(|)运算, 满足如下规律: </p>
 <ol>
 <li><strong>数值与自身按位或运算返回数值自身</strong>.</li>
 <li><strong>2的整数次方的值与它的相对数按位或运算返回它的相对数</strong>.</li>
 <li><strong>任意整数与0进行按位或运算, 都将会返回它本身</strong>.</li>
 <li><strong>任意整数与-1进行按位或运算, 都将返回-1</strong>.</li>
-<li><strong>按位或运算的结果介于参与运算的两个数值之间</strong>.</li>
+<li><strong>按位或运算的结果不小于两数中的最小值</strong>.</li>
 </ol>
 <p>稍微利用公式1, 我们便可以将非整数取整.   即 <strong><code>x|0 === Math.trunc(x)</code></strong> 如下:</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(<span class="number">5.2</span>|<span class="number">0</span>);<span class="comment">//5</span></span><br><span class="line"><span class="built_in">console</span>.log(-<span class="number">5.2</span>|<span class="number">0</span>);<span class="comment">//-5</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">Math</span>.trunc(-<span class="number">5.2</span>)===(-<span class="number">5.2</span>|<span class="number">0</span>));<span class="comment">//true</span></span><br></pre></td></tr></table></figure>
