@@ -12,7 +12,7 @@
 <meta property="og:url" content="http://louiszhai.github.io/2015/12/18/traverse/index.html">
 <meta property="og:site_name" content="louis blog">
 <meta property="og:description" content="JavaScript traverse 遍历 数组 对象 map every forEach forin $.each for while">
-<meta property="og:updated_time" content="2016-04-27T01:26:36.000Z">
+<meta property="og:updated_time" content="2016-08-17T07:06:04.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="详解JS遍历">
 <meta name="twitter:description" content="JavaScript traverse 遍历 数组 对象 map every forEach forin $.each for while">
@@ -200,7 +200,7 @@
       
           <div id="toc" class="toc-article">
     <div class="toc-title">目录</div>
-    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#u5BFC_u8BFB"><span class="toc-text">导读</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u6982_u8FF0"><span class="toc-text">概述</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#for"><span class="toc-text">for</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#do/while"><span class="toc-text">do/while</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#forEach"><span class="toc-text">forEach</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#for_in"><span class="toc-text">for in</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#24-each"><span class="toc-text">$.each</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#24_28selecter_29-each"><span class="toc-text">$(selecter).each</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#map"><span class="toc-text">map</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#every"><span class="toc-text">every</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u6D4B_u8BD5_u5404_u65B9_u6CD5_u6548_u7387"><span class="toc-text">测试各方法效率</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u5206_u6790_u603B_u7ED3"><span class="toc-text">分析总结</span></a></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#u5BFC_u8BFB"><span class="toc-text">导读</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u6982_u8FF0"><span class="toc-text">概述</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#for"><span class="toc-text">for</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#do/while"><span class="toc-text">do/while</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#forEach"><span class="toc-text">forEach</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#for_in"><span class="toc-text">for in</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#24-each"><span class="toc-text">$.each</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#24_28selecter_29-each"><span class="toc-text">$(selecter).each</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#map"><span class="toc-text">map</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#every"><span class="toc-text">every</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u6D4B_u8BD5_u5404_u65B9_u6CD5_u6548_u7387"><span class="toc-text">测试各方法效率</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#u6570_u7EC4_u957F_u5EA6_u4E3A10_5E6"><span class="toc-text">数组长度为10^6</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#u6570_u7EC4_u957F_u5EA6_u4E3A10_5E7"><span class="toc-text">数组长度为10^7</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#u6570_u7EC4_u957F_u5EA6_u4E3A10_5E8"><span class="toc-text">数组长度为10^8</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#u6570_u7EC4_u8D4B_u503C_u540E_2C__u6570_u7EC4_u957F_u5EA6_u4E3A10_5E6"><span class="toc-text">数组赋值后, 数组长度为10^6</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#u6570_u7EC4_u8D4B_u503C_u540E_2C__u6570_u7EC4_u957F_u5EA6_u4E3A10_5E7"><span class="toc-text">数组赋值后, 数组长度为10^7</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u5206_u6790_u603B_u7ED3"><span class="toc-text">分析总结</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#u57FA_u4E8E_u6D4B_u8BD5_u7ED3_u679C_u7684_u4E24_u70B9_u601D_u8003"><span class="toc-text">基于测试结果的两点思考</span></a></li></ol></li></ol>
 </div>
       
         <h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>遍历数组或对象是一名程序员的基本素养之一. 然而遍历却不是一件简单的事, 优秀的程序员知道怎么去选择合适的遍历方法, 优化遍历效率. 本篇将带你走进JavaScript遍历的世界, 享受分析JS循环的快感. 本篇所有代码都可以直接运行, 希望您通读本篇后, 不止是浏览, 最好是亲手去实践下.</p>
@@ -309,25 +309,337 @@
 <li>$.each和$().each循环只能通过return false 来退出循环, 使用return 或 return true 将跳过一个元素, 继续执行后面的循环.</li>
 </ul>
 <h3 id="u6D4B_u8BD5_u5404_u65B9_u6CD5_u6548_u7387"><a href="#u6D4B_u8BD5_u5404_u65B9_u6CD5_u6548_u7387" class="headerlink" title="测试各方法效率"></a>测试各方法效率</h3><p>下面我们来测试下上述方法的效率.</p>
-<p>注: array数组默认为空, 初始长度为100 0000, 每个方法将进行5次测试, 取测试时间总和作为比较对象, 时间单位为ms.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> array = [];</span><br><span class="line">array.length = <span class="number">1000000</span>;<span class="comment">//(一百万)</span></span><br><span class="line"><span class="comment">//-------------------------for</span></span><br><span class="line"><span class="keyword">var</span> t1 = +<span class="keyword">new</span> <span class="built_in">Date</span>();</span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">var</span> i=<span class="number">0</span>,length=array.length;i&lt;length;i++)&#123;</span><br><span class="line">  <span class="comment">//array.push(i);</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> t2 = +<span class="keyword">new</span> <span class="built_in">Date</span>();</span><br><span class="line"><span class="built_in">console</span>.log(t2-t1);</span><br><span class="line"><span class="comment">//6677+7025+7356+6948+7246 = 35252(ms)</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//-------------------------do/while</span></span><br><span class="line"><span class="keyword">var</span> t1 = +<span class="keyword">new</span> <span class="built_in">Date</span>();</span><br><span class="line"><span class="keyword">var</span> i = <span class="number">0</span>,</span><br><span class="line">    length = array.length;</span><br><span class="line"><span class="keyword">do</span> &#123;</span><br><span class="line">    i++;</span><br><span class="line">&#125; <span class="keyword">while</span>(i&lt;length);</span><br><span class="line"><span class="keyword">var</span> t2 = +<span class="keyword">new</span> <span class="built_in">Date</span>();</span><br><span class="line"><span class="built_in">console</span>.log(t2-t1);</span><br><span class="line"><span class="comment">//8123+8342+8296+8368+8774 = 41903(ms)</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//-------------------------forEach</span></span><br><span class="line"><span class="keyword">var</span> t1 = +<span class="keyword">new</span> <span class="built_in">Date</span>();</span><br><span class="line">array.forEach(<span class="function"><span class="keyword">function</span>(<span class="params">item</span>)</span>&#123;&#125;);</span><br><span class="line"><span class="keyword">var</span> t2 = +<span class="keyword">new</span> <span class="built_in">Date</span>();</span><br><span class="line"><span class="built_in">console</span>.log(t2-t1);</span><br><span class="line"><span class="comment">//322+273+260+301+285 = 1441(ms)</span></span><br><span class="line"><span class="comment">//2678+2540+2625+2490+2553 = 12886(ms) 基于数组长度为1000 0000</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//-------------------------for in</span></span><br><span class="line"><span class="keyword">var</span> t1 = +<span class="keyword">new</span> <span class="built_in">Date</span>();</span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">var</span> item <span class="keyword">in</span> array)&#123;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> t2 = +<span class="keyword">new</span> <span class="built_in">Date</span>();</span><br><span class="line"><span class="built_in">console</span>.log(t2-t1);</span><br><span class="line"><span class="comment">//6+2+3+3+2 = 16(ms)</span></span><br><span class="line"><span class="comment">//17+17+20+22+19 = 95(ms) 基于数组长度为1000 0000</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//------------------------- $.each</span></span><br><span class="line"><span class="keyword">var</span> t1 = +<span class="keyword">new</span> <span class="built_in">Date</span>();</span><br><span class="line">$.each(array, <span class="function"><span class="keyword">function</span>(<span class="params">i, ele</span>)</span>&#123;</span><br><span class="line">&#125;);</span><br><span class="line"><span class="keyword">var</span> t2 = +<span class="keyword">new</span> <span class="built_in">Date</span>();</span><br><span class="line"><span class="built_in">console</span>.log(t2-t1);</span><br><span class="line"><span class="comment">//29+32+29+29+32 = 151(ms)</span></span><br><span class="line"><span class="comment">//278+294+285+278+300 = 1435(ms) 基于数组长度为1000 0000</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//-------------------------$().each</span></span><br><span class="line"><span class="keyword">var</span> t1 = +<span class="keyword">new</span> <span class="built_in">Date</span>();</span><br><span class="line">$(array).each(<span class="function"><span class="keyword">function</span>(<span class="params">i,ele</span>)</span>&#123;</span><br><span class="line">&#125;);</span><br><span class="line"><span class="keyword">var</span> t2 = +<span class="keyword">new</span> <span class="built_in">Date</span>();</span><br><span class="line"><span class="built_in">console</span>.log(t2-t1);</span><br><span class="line"><span class="comment">//96+94+97+87+106 = 480(ms)</span></span><br><span class="line"><span class="comment">//1108+1222+997+858+1007 = 5192(ms) 基于数组长度为1000 0000</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//-------------------------map</span></span><br><span class="line"><span class="keyword">var</span> t1 = +<span class="keyword">new</span> <span class="built_in">Date</span>();</span><br><span class="line">array.map(<span class="function"><span class="keyword">function</span>(<span class="params">num</span>)</span>&#123;</span><br><span class="line">&#125;);</span><br><span class="line"><span class="keyword">var</span> t2 = +<span class="keyword">new</span> <span class="built_in">Date</span>();</span><br><span class="line"><span class="built_in">console</span>.log(t2-t1);</span><br><span class="line"><span class="comment">//284+290+254+271+264 = 1363(ms)</span></span><br><span class="line"><span class="comment">//2549+2513+2493+2441+2468 = 12464(ms) 基于数组长度为1000 0000</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//-------------------------every</span></span><br><span class="line"><span class="keyword">var</span> t1 = +<span class="keyword">new</span> <span class="built_in">Date</span>();</span><br><span class="line">array.every(<span class="function"><span class="keyword">function</span>(<span class="params">e,i,arr</span>)</span>&#123;</span><br><span class="line">&#125;);</span><br><span class="line"><span class="keyword">var</span> t2 = +<span class="keyword">new</span> <span class="built_in">Date</span>();</span><br><span class="line"><span class="built_in">console</span>.log(t2-t1);</span><br><span class="line"><span class="comment">//286+264+268+271+295 = 1384(ms)</span></span><br><span class="line"><span class="comment">//2728+2815+2514+2594+2529 = 13180(ms) 基于数组长度为1000 0000</span></span><br></pre></td></tr></table></figure>
-<h3 id="u5206_u6790_u603B_u7ED3"><a href="#u5206_u6790_u603B_u7ED3" class="headerlink" title="分析总结"></a>分析总结</h3><p>通过以上测试, 发现在数组长度为100 0000时, 各方法运行五次分别需要的时间排序如下:</p>
-<p>for in (16ms) &lt; $().each (151ms) &lt; $.each (480ms) &lt; forEach (1441ms) &lt; map (1363ms) &lt; every (1384ms) &lt;&lt; for (35252ms) &lt; do/while (36665ms)</p>
-<p>其中中间3个数据过于接近, 因此将数组长度重新设置为 1000 0000, 重新统计他们的运行时间:</p>
-<p>for in (95ms) &lt; $().each (1435ms) &lt; $.each (5129ms) &lt; forEach (12886) ~ map (12464ms) ~ every (13180ms) , 其中for和do/while由于时间太长未做测试</p>
-<p>根据统计数据, 可得这8个方法的运行速度排序为:</p>
+<p>注: array数组默认为空, 依次赋值数组长度为1 000 000, 10 000 000, 100 000 000, 分别在 Chrome, Firefox, Safari 浏览器上进行两轮测试, 取测试时间平均值作为比较对象, 时间单位为ms. 如下是测试代码:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> array = [],</span><br><span class="line">	length = array.length = <span class="number">10000000</span>;<span class="comment">//(一千万)</span></span><br><span class="line"><span class="comment">//for(var i=0;i&lt;length;i++)&#123;</span></span><br><span class="line"><span class="comment">//  array[i] = 'louis';</span></span><br><span class="line"><span class="comment">//&#125;</span></span><br><span class="line"><span class="built_in">console</span>.log(array[<span class="number">0</span>]);</span><br><span class="line"><span class="comment">//-------------------------for</span></span><br><span class="line"><span class="keyword">var</span> t1 = +<span class="keyword">new</span> <span class="built_in">Date</span>();</span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">var</span> i=<span class="number">0</span>;i&lt;length;i++)&#123;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> t2 = +<span class="keyword">new</span> <span class="built_in">Date</span>();</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">'for:'</span> + (t2-t1));</span><br><span class="line"></span><br><span class="line"><span class="comment">//-------------------------do/while</span></span><br><span class="line"><span class="keyword">var</span> t1 = +<span class="keyword">new</span> <span class="built_in">Date</span>();</span><br><span class="line"><span class="keyword">var</span> i = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">do</span> &#123;</span><br><span class="line">    i++;</span><br><span class="line">&#125; <span class="keyword">while</span>(i&lt;length);</span><br><span class="line"><span class="keyword">var</span> t2 = +<span class="keyword">new</span> <span class="built_in">Date</span>();</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">'do while:'</span> + (t2-t1));</span><br><span class="line"></span><br><span class="line"><span class="comment">//-------------------------forEach</span></span><br><span class="line"><span class="keyword">var</span> t1 = +<span class="keyword">new</span> <span class="built_in">Date</span>();</span><br><span class="line">array.forEach(<span class="function"><span class="keyword">function</span>(<span class="params">item</span>)</span>&#123;</span><br><span class="line">&#125;);</span><br><span class="line"><span class="keyword">var</span> t2 = +<span class="keyword">new</span> <span class="built_in">Date</span>();</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">'forEach:'</span> + (t2-t1));</span><br><span class="line"></span><br><span class="line"><span class="comment">//-------------------------for in</span></span><br><span class="line"><span class="keyword">var</span> t1 = +<span class="keyword">new</span> <span class="built_in">Date</span>();</span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">var</span> item <span class="keyword">in</span> array)&#123;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> t2 = +<span class="keyword">new</span> <span class="built_in">Date</span>();</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">'for in:'</span> + (t2-t1));</span><br><span class="line"></span><br><span class="line"><span class="comment">//------------------------- $.each</span></span><br><span class="line"><span class="keyword">var</span> t1 = +<span class="keyword">new</span> <span class="built_in">Date</span>();</span><br><span class="line">$.each(array, <span class="function"><span class="keyword">function</span>(<span class="params">i, ele</span>)</span>&#123;</span><br><span class="line">&#125;);</span><br><span class="line"><span class="keyword">var</span> t2 = +<span class="keyword">new</span> <span class="built_in">Date</span>();</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">'$.each:'</span> + (t2-t1));</span><br><span class="line"></span><br><span class="line"><span class="comment">//-------------------------$().each</span></span><br><span class="line"><span class="keyword">var</span> t1 = +<span class="keyword">new</span> <span class="built_in">Date</span>();</span><br><span class="line">$(array).each(<span class="function"><span class="keyword">function</span>(<span class="params">i,ele</span>)</span>&#123;</span><br><span class="line">&#125;);</span><br><span class="line"><span class="keyword">var</span> t2 = +<span class="keyword">new</span> <span class="built_in">Date</span>();</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">'$(ele).each:'</span> + (t2-t1));</span><br><span class="line"></span><br><span class="line"><span class="comment">//-------------------------map</span></span><br><span class="line"><span class="keyword">var</span> t1 = +<span class="keyword">new</span> <span class="built_in">Date</span>();</span><br><span class="line">array.map(<span class="function"><span class="keyword">function</span>(<span class="params">num</span>)</span>&#123;</span><br><span class="line">&#125;);</span><br><span class="line"><span class="keyword">var</span> t2 = +<span class="keyword">new</span> <span class="built_in">Date</span>();</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">'map:'</span> + (t2-t1));</span><br><span class="line"></span><br><span class="line"><span class="comment">//-------------------------every</span></span><br><span class="line"><span class="keyword">var</span> t1 = +<span class="keyword">new</span> <span class="built_in">Date</span>();</span><br><span class="line">array.every(<span class="function"><span class="keyword">function</span>(<span class="params">e,i,arr</span>)</span>&#123;</span><br><span class="line">&#125;);</span><br><span class="line"><span class="keyword">var</span> t2 = +<span class="keyword">new</span> <span class="built_in">Date</span>();</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">'every:'</span> + (t2-t1));</span><br></pre></td></tr></table></figure>
+<p>测试机器正常运行 IDE, 编辑器, 浏览器, qq, 微信等常用应用, 系统空闲. 硬件设备如下:</p>
+<ul>
+<li>操作系统: OSX EI Capitan 版本 10.11.5</li>
+<li>MacBook Pro（13 英寸，2015 年初期）</li>
+<li>处理器: 2.7 GHz Intel Core i5</li>
+<li>内存: 8 GB 1867 MHz DDR3</li>
+</ul>
+<p>以上多轮测试结果汇总如下三张表(单位:ms):</p>
+<h4 id="u6570_u7EC4_u957F_u5EA6_u4E3A10_5E6"><a href="#u6570_u7EC4_u957F_u5EA6_u4E3A10_5E6" class="headerlink" title="数组长度为10^6"></a>数组长度为10^6</h4><table>
+<thead>
+<tr>
+<th style="text-align:center">数组长度为10^6</th>
+<th style="text-align:center">chrome 52.0.2743.116 (64-bit)</th>
+<th style="text-align:center">Firefox Developer Edition 49.0a2 (2016-08-01)</th>
+<th style="text-align:center">Safari 9.1.1 (11601.6.17)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">for</td>
+<td style="text-align:center">(16+19)/2 = 17.5</td>
+<td style="text-align:center">(6+7)/2 = 6.5</td>
+<td style="text-align:center">(6+7)/2 = 6.5</td>
+</tr>
+<tr>
+<td style="text-align:center">do while</td>
+<td style="text-align:center">(24+17)/2 = 20.5</td>
+<td style="text-align:center">(7+5)/2 = 6</td>
+<td style="text-align:center">(5+5)/2 = 5</td>
+</tr>
+<tr>
+<td style="text-align:center">for in</td>
+<td style="text-align:center">(19+28)/2 = 23.5</td>
+<td style="text-align:center">(0+0)/2 = 0</td>
+<td style="text-align:center">(0+0)/2 = 0</td>
+</tr>
+<tr>
+<td style="text-align:center">forEach</td>
+<td style="text-align:center">(41+28)/2 = 34.5</td>
+<td style="text-align:center">(4+4)/2 = 4</td>
+<td style="text-align:center">(31+29)/2 = 30</td>
+</tr>
+<tr>
+<td style="text-align:center">map</td>
+<td style="text-align:center">(26+32)/2 = 28</td>
+<td style="text-align:center">(4+4)/2 = 4</td>
+<td style="text-align:center">(32+26)/2 = 28</td>
+</tr>
+<tr>
+<td style="text-align:center">every</td>
+<td style="text-align:center">(22+24)/2 = 23</td>
+<td style="text-align:center">(4+5)/2 = 4.5</td>
+<td style="text-align:center">(41+45)/2 = 43</td>
+</tr>
+<tr>
+<td style="text-align:center">$.each</td>
+<td style="text-align:center">(29+27)/2 = 28</td>
+<td style="text-align:center">(306+311)/2 = 308.5</td>
+<td style="text-align:center">(111+97)/2 = 104</td>
+</tr>
+<tr>
+<td style="text-align:center">$(e).each</td>
+<td style="text-align:center">(94+98)/2 = 96</td>
+<td style="text-align:center">(484+488)/2 = 486</td>
+<td style="text-align:center">(79+64)/2 = 71.5</td>
+</tr>
+</tbody>
+</table>
+<h4 id="u6570_u7EC4_u957F_u5EA6_u4E3A10_5E7"><a href="#u6570_u7EC4_u957F_u5EA6_u4E3A10_5E7" class="headerlink" title="数组长度为10^7"></a>数组长度为10^7</h4><table>
+<thead>
+<tr>
+<th style="text-align:center">数组长度为10^7</th>
+<th style="text-align:center">chrome 52.0.2743.116 (64-bit)</th>
+<th style="text-align:center">Firefox Developer Edition 49.0a2 (2016-08-01)</th>
+<th style="text-align:center">Safari 9.1.1 (11601.6.17)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">for</td>
+<td style="text-align:center">(164+161)/2 = 162.5</td>
+<td style="text-align:center">(26+30)/2 = 28</td>
+<td style="text-align:center">(30+31)/2 = 30.5</td>
+</tr>
+<tr>
+<td style="text-align:center">do while</td>
+<td style="text-align:center">(163+157)/2 = 160</td>
+<td style="text-align:center">(27+25)/2 = 26</td>
+<td style="text-align:center">(28+27)/2 = 27.5</td>
+</tr>
+<tr>
+<td style="text-align:center">for in</td>
+<td style="text-align:center">(78+86)/2 = 82</td>
+<td style="text-align:center">(0+0)/2 = 0</td>
+<td style="text-align:center">(0+0)/2 = 0</td>
+</tr>
+<tr>
+<td style="text-align:center">forEach</td>
+<td style="text-align:center">(211+205)/2 = 208</td>
+<td style="text-align:center">(31+30)/2 = 30.5</td>
+<td style="text-align:center">(291+289)/2 = 290</td>
+</tr>
+<tr>
+<td style="text-align:center">map</td>
+<td style="text-align:center">(349+282)/2 = 315.5</td>
+<td style="text-align:center">(24+22)/2 = 23</td>
+<td style="text-align:center">(259+260)/2 = 259.5</td>
+</tr>
+<tr>
+<td style="text-align:center">every</td>
+<td style="text-align:center">(221+219)/2 = 220</td>
+<td style="text-align:center">(24+24)/2 = 24</td>
+<td style="text-align:center">(251+257)/2 = 254</td>
+</tr>
+<tr>
+<td style="text-align:center">$.each</td>
+<td style="text-align:center">(210+215)/2 = 212.5</td>
+<td style="text-align:center">(2868+2789)/2 = 2828.5</td>
+<td style="text-align:center">(699+724)/2 = 711.5</td>
+</tr>
+<tr>
+<td style="text-align:center">$(e).each</td>
+<td style="text-align:center">(730+669)/2 = 699.5</td>
+<td style="text-align:center">(4674+4722)/2 = 4698</td>
+<td style="text-align:center">(523+546)/2 = 534.5</td>
+</tr>
+</tbody>
+</table>
+<h4 id="u6570_u7EC4_u957F_u5EA6_u4E3A10_5E8"><a href="#u6570_u7EC4_u957F_u5EA6_u4E3A10_5E8" class="headerlink" title="数组长度为10^8"></a>数组长度为10^8</h4><table>
+<thead>
+<tr>
+<th style="text-align:center">数组长度为10^8</th>
+<th style="text-align:center">chrome 52.0.2743.116 (64-bit)</th>
+<th style="text-align:center">Firefox Developer Edition 49.0a2 (2016-08-01)</th>
+<th style="text-align:center">Safari 9.1.1 (11601.6.17)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">for</td>
+<td style="text-align:center">(1486+1583)/2 = 1534.5</td>
+<td style="text-align:center">(222+238)/2 = 230</td>
+<td style="text-align:center">(261+251)/2 = 256</td>
+</tr>
+<tr>
+<td style="text-align:center">do while</td>
+<td style="text-align:center">(1548+1608)/2 = 1578</td>
+<td style="text-align:center">(236+247)/2 = 241.5</td>
+<td style="text-align:center">(272+265)/2 = 268.5</td>
+</tr>
+<tr>
+<td style="text-align:center">for in</td>
+<td style="text-align:center">(0+0)/2 = 0</td>
+<td style="text-align:center">(0+0)/2 = 0</td>
+<td style="text-align:center">(0+0)/2 = 0</td>
+</tr>
+<tr>
+<td style="text-align:center">forEach</td>
+<td style="text-align:center">(25838+22307)/2 = 24072.5</td>
+<td style="text-align:center">(212+209)/2 = 210.5</td>
+<td style="text-align:center">(2565+2568)/2 = 2566.5</td>
+</tr>
+<tr>
+<td style="text-align:center">map</td>
+<td style="text-align:center">(23795+22787)/2 = 23291</td>
+<td style="text-align:center">(215+206)/2 = 210.5</td>
+<td style="text-align:center">(2556+2573)/2 = 2564.5</td>
+</tr>
+<tr>
+<td style="text-align:center">every</td>
+<td style="text-align:center">(22393+22378)/2 = 22385.5</td>
+<td style="text-align:center">(212+215)/2 = 213.5</td>
+<td style="text-align:center">(2550+2548)/2 = 2549</td>
+</tr>
+<tr>
+<td style="text-align:center">$.each</td>
+<td style="text-align:center">(14523+14776)/2 = 14649.5</td>
+<td style="text-align:center">(28007+27698)/2 = 27852.5</td>
+<td style="text-align:center">(7109+7156)/2 = 7132.5</td>
+</tr>
+<tr>
+<td style="text-align:center">$(e).each</td>
+<td style="text-align:center">chrome 奔溃了…</td>
+<td style="text-align:center">(49352+49530)/2 = 49441</td>
+<td style="text-align:center">(5505+4616)/2 = 5060.5</td>
+</tr>
+</tbody>
+</table>
+<p>综上, 我们发现for in 循环的性能不稳定, 猜测它可能没有进入循环. 因此将数组各元素进行如下赋值. 重新进行如下两轮测试.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> array = [],</span><br><span class="line">	length = array.length = <span class="number">1000000</span>;</span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">var</span> i=<span class="number">0</span>;i&lt;length;i++)&#123;</span><br><span class="line">  array[i] = <span class="string">'louis'</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="u6570_u7EC4_u8D4B_u503C_u540E_2C__u6570_u7EC4_u957F_u5EA6_u4E3A10_5E6"><a href="#u6570_u7EC4_u8D4B_u503C_u540E_2C__u6570_u7EC4_u957F_u5EA6_u4E3A10_5E6" class="headerlink" title="数组赋值后, 数组长度为10^6"></a>数组赋值后, 数组长度为10^6</h4><table>
+<thead>
+<tr>
+<th style="text-align:center">数组长度为10^6</th>
+<th style="text-align:center">chrome 52.0.2743.116 (64-bit)</th>
+<th style="text-align:center">Firefox Developer Edition 49.0a2 (2016-08-01)</th>
+<th style="text-align:center">Safari 9.1.1 (11601.6.17)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">for</td>
+<td style="text-align:center">(21+22)/2 = 21.5</td>
+<td style="text-align:center">(8+10)/2 = 9</td>
+<td style="text-align:center">(6+5)/2 = 5.5</td>
+</tr>
+<tr>
+<td style="text-align:center">do while</td>
+<td style="text-align:center">(22+19)/2 = 20.5</td>
+<td style="text-align:center">(6+6)/2 = 6</td>
+<td style="text-align:center">(6+5)/2 = 5.5</td>
+</tr>
+<tr>
+<td style="text-align:center">for in</td>
+<td style="text-align:center">(178+184)/2 = 181</td>
+<td style="text-align:center">(318+268)/2 = 293</td>
+<td style="text-align:center">(413+464)/2 = 438.5</td>
+</tr>
+<tr>
+<td style="text-align:center">forEach</td>
+<td style="text-align:center">(42+45)/2 = 43.5</td>
+<td style="text-align:center">(4+4)/2 = 4</td>
+<td style="text-align:center">(21+24)/2 = 22.5</td>
+</tr>
+<tr>
+<td style="text-align:center">map</td>
+<td style="text-align:center">(137+153)/2 = 145</td>
+<td style="text-align:center">(9+8)/2 = 8.5</td>
+<td style="text-align:center">(38+43)/2 = 40.5</td>
+</tr>
+<tr>
+<td style="text-align:center">every</td>
+<td style="text-align:center">(0+0)/2 = 0</td>
+<td style="text-align:center">(0+0)/2 = 0</td>
+<td style="text-align:center">(0+0)/2 = 0</td>
+</tr>
+<tr>
+<td style="text-align:center">$.each</td>
+<td style="text-align:center">(85+84)/2 = 84.5</td>
+<td style="text-align:center">(15+19)/2 = 17</td>
+<td style="text-align:center">(37+25)/2 = 31</td>
+</tr>
+<tr>
+<td style="text-align:center">$(e).each</td>
+<td style="text-align:center">(81+83)/2 = 82</td>
+<td style="text-align:center">(34+31)/2 = 32.5</td>
+<td style="text-align:center">(37+46)/2 = 41.5</td>
+</tr>
+</tbody>
+</table>
+<h4 id="u6570_u7EC4_u8D4B_u503C_u540E_2C__u6570_u7EC4_u957F_u5EA6_u4E3A10_5E7"><a href="#u6570_u7EC4_u8D4B_u503C_u540E_2C__u6570_u7EC4_u957F_u5EA6_u4E3A10_5E7" class="headerlink" title="数组赋值后, 数组长度为10^7"></a>数组赋值后, 数组长度为10^7</h4><table>
+<thead>
+<tr>
+<th style="text-align:center">数组长度为10^7</th>
+<th style="text-align:center">chrome 52.0.2743.116 (64-bit)</th>
+<th style="text-align:center">Firefox Developer Edition 49.0a2 (2016-08-01)</th>
+<th style="text-align:center">Safari 9.1.1 (11601.6.17)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">for</td>
+<td style="text-align:center">(171+157)/2 = 164</td>
+<td style="text-align:center">(27+26)/2 = 26.5</td>
+<td style="text-align:center">(26+28)/2 = 27</td>
+</tr>
+<tr>
+<td style="text-align:center">do while</td>
+<td style="text-align:center">(168+158)/2 = 163</td>
+<td style="text-align:center">(27+27)/2 = 27</td>
+<td style="text-align:center">(28+29)/2 = 28.5</td>
+</tr>
+<tr>
+<td style="text-align:center">for in</td>
+<td style="text-align:center">(1469+1715)/2 = 1592</td>
+<td style="text-align:center">(2922+3123)/2 = 3022.5</td>
+<td style="text-align:center">(5755+5742)/2 = 5748.5</td>
+</tr>
+<tr>
+<td style="text-align:center">forEach</td>
+<td style="text-align:center">(347+329)/2 = 338</td>
+<td style="text-align:center">(32+36)/2 = 34</td>
+<td style="text-align:center">(171+174)/2 = 172.5</td>
+</tr>
+<tr>
+<td style="text-align:center">map</td>
+<td style="text-align:center">(1320+1335)/2 = 1327.5</td>
+<td style="text-align:center">(147+137)/2 = 142</td>
+<td style="text-align:center">(448+469)/2 = 458.5</td>
+</tr>
+<tr>
+<td style="text-align:center">every</td>
+<td style="text-align:center">(0+0)/2 = 0</td>
+<td style="text-align:center">(0+0)/2 = 0</td>
+<td style="text-align:center">(0+0)/2 = 0</td>
+</tr>
+<tr>
+<td style="text-align:center">$.each</td>
+<td style="text-align:center">(438+441)/2 = 439.5</td>
+<td style="text-align:center">(142+141)/2 = 141.5</td>
+<td style="text-align:center">(254+248)/2 = 251</td>
+</tr>
+<tr>
+<td style="text-align:center">$(e).each</td>
+<td style="text-align:center">(876+935)/2 = 905.5</td>
+<td style="text-align:center">(315+328)/2 = 321.5</td>
+<td style="text-align:center">(450+402)/2 = 426</td>
+</tr>
+</tbody>
+</table>
+<p>可见, 对数组进行赋值后, 代码运行基本稳定.(every还不清楚为什么执行时间为0.欢迎大神告知原因.)</p>
+<h3 id="u5206_u6790_u603B_u7ED3"><a href="#u5206_u6790_u603B_u7ED3" class="headerlink" title="分析总结"></a>分析总结</h3><p>通过以上 30 次运行测试(实际上为了得到比较稳定的数据, 摈弃了许多异常的测试数据), 我们发现在数组长度为10^6, 10^7, 10^8 时, 代码运行基本稳定. 各方法运行需要的时间大致排序如下:</p>
+<p>for ~= do while &lt; forEach ~= map ~= every &lt; $.each &lt; $(e).each &lt; for in</p>
+<p>根据统计数据, 可得这8个方法的运行速度大致排序为:</p>
 <ol>
-<li>for in</li>
-<li>$.each</li>
-<li>$().each</li>
+<li>for 与 do while</li>
 <li>forEach map every (这3个不相上下,可认为运行速度差不多)</li>
-<li>for</li>
-<li>do/while</li>
+<li>$.each</li>
+<li>$(e).each</li>
+<li>for in</li>
 </ol>
-<p>我们翻看jquery代码就会知道, $.each方法内部通过调用for循环来实现 ( for循环自身为啥那么慢? ), 而$().each是先用jquery包裹数组对象, 然后再调用for循环, 因此后者效率略低于前者;</p>
-<p>那么问题就来了, 据以上测试结果反映: 作为for循环本身和do/while循环却作为耗时最长的遍历被排在了以上所有方法的末尾. 可以肯定的是: for循环和do/while循环正确的位置应该在 for in之后以及$.each之前, 想知道具体原因, 推荐您阅读下页 <a href="http://louiszhai.github.io/2015/12/22/scopeChain/"><strong>《scope chain》</strong></a>.</p>
-<p>综上, 最佳遍历选手是 for in 循环, 推荐大家优先考虑使用它, 一般情况下, 最好不使用forEach. ( Firefox浏览器由于对forEach循环做了底层优化, 效率接近native,不在我们考虑范围内 ).</p>
-<p>声明: 本文测试使用的浏览器为<code>Google Chrome</code>的47.0.2526.80 (64-bit)版本. 如果发现本文测试数据不对, 欢迎批评指正.</p>
+<p>我们翻看jquery代码就会知道, $.each方法内部通过调用for循环来实现, 而$().each是先用jquery包裹数组对象, 然后再调用for循环, 因此后者效率略低于前者.</p>
+<p>综上, 最佳遍历选手是 for/do while循环, 推荐大家优先考虑使用它, 一般情况下, 最好不使用forEach. ( Firefox浏览器由于对forEach循环做了底层优化, 效率接近native,不在我们考虑范围内 ).</p>
+<h4 id="u57FA_u4E8E_u6D4B_u8BD5_u7ED3_u679C_u7684_u4E24_u70B9_u601D_u8003"><a href="#u57FA_u4E8E_u6D4B_u8BD5_u7ED3_u679C_u7684_u4E24_u70B9_u601D_u8003" class="headerlink" title="基于测试结果的两点思考"></a>基于测试结果的两点思考</h4><ol>
+<li>从测试数据上猜测, Firefox 与 Safari 似乎对于 for, do while 等都进行了底层优化. 循环执行效率明显优于Chrome.</li>
+<li>每次浏览器执行到 for in 循环处, 便会出现卡顿, 猜测浏览器可能正在预加载循环所需资源.</li>
+</ol>
+<p>想要进一步优化循环效率, 推荐您阅读下篇 <a href="http://louiszhai.github.io/2015/12/22/scopeChain/"><strong>《详解JS作用域链及闭包》</strong></a>.</p>
+<p>声明: 本文所有数据均为单机测试, 难免存在误差, 如果发现本文测试数据不对之处, 欢迎批评斧正.</p>
 <hr>
 <p>本文就讨论这么多内容,大家有什么问题或好的想法欢迎在下方参与<a href="#respond">留言和评论</a>.</p>
 <p>本文作者: <a href="https://github.com/Louiszhai" target="_blank" rel="external">louis</a></p>
