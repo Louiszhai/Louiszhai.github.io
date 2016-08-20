@@ -198,7 +198,8 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-          <div id="toc" class="toc-article">
+          <span class="toc-arrow"></span>
+<div id="toc" class="toc-article">
     <div class="toc-title">目录</div>
     <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#u5BFC_u8BFB"><span class="toc-text">导读</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#bind"><span class="toc-text">bind</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#u57FA_u672C_u7528_u6CD5"><span class="toc-text">基本用法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#u5206_u79BB_u53C2_u6570"><span class="toc-text">分离参数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#u7ED1_u5B9A_u53C2_u6570"><span class="toc-text">绑定参数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#u5FEB_u6377_u8C03_u7528"><span class="toc-text">快捷调用</span></a></li></ol></li></ol>
 </div>
@@ -340,12 +341,6 @@
 		ds.charset = 'UTF-8';
 		(document.getElementsByTagName('head')[0] 
 		 || document.getElementsByTagName('body')[0]).appendChild(ds);
-
-		window.addEventListener('hashchange', function() {
-            if (window.location.hash === '#respond') {
-                $('.duoshuo textarea').focus();
-            }
-        });
 	})();
 	</script>
 </div>
@@ -353,9 +348,11 @@
 
 
 </div>
-      <footer id="footer">
+      <link rel="stylesheet" href="/css/content.css" type="text/css">
+<footer id="footer">
   <div class="outer">
     <div id="footer-info">
+      <img src="/img/top_arrow.png" class="top_arrow" id="top_arrow">
     	<div class="footer-left">
     		&copy; 2016 louis
 
@@ -368,7 +365,6 @@
     </div>
   </div>
 </footer>
-<link rel="stylesheet" href="/css/content.css" type="text/css">
 <script type="text/javascript">
   //swifty
   /*(function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
@@ -398,6 +394,7 @@
 </script>
 <script src="/js/jquery-1.9.1.min.js" type="text/javascript"></script>
 <script src="/js/main.js" type="text/javascript"></script>
+<script src="/js/content.js" type="text/javascript"></script>
 
 
 

@@ -198,7 +198,8 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-          <div id="toc" class="toc-article">
+          <span class="toc-arrow"></span>
+<div id="toc" class="toc-article">
     <div class="toc-title">目录</div>
     <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#u5BFC_u8BFB"><span class="toc-text">导读</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u8FD0_u884C_u539F_u7406"><span class="toc-text">运行原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#setTimeout"><span class="toc-text">setTimeout</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#u57FA_u672C_u7528_u6CD5"><span class="toc-text">基本用法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#js_u5F15_u64CE_u7684_u6392_u961F_u673A_u5236"><span class="toc-text">js引擎的排队机制</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#u5145_u5F53_u5B9A_u65F6_u5668"><span class="toc-text">充当定时器</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#this_u5E26_u6765_u7684_u95EE_u9898"><span class="toc-text">this带来的问题</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#u89E3_u51B3_u65B9_u6848"><span class="toc-text">解决方案</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#setInterval"><span class="toc-text">setInterval</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#u57FA_u672C_u7528_u6CD5-1"><span class="toc-text">基本用法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#u5B83_u771F_u7684_u53EF_u4EE5_u4F5C_u4E3A_u5B9A_u65F6_u5668_u5417"><span class="toc-text">它真的可以作为定时器吗</span></a></li></ol></li></ol>
 </div>
@@ -361,12 +362,6 @@
 		ds.charset = 'UTF-8';
 		(document.getElementsByTagName('head')[0] 
 		 || document.getElementsByTagName('body')[0]).appendChild(ds);
-
-		window.addEventListener('hashchange', function() {
-            if (window.location.hash === '#respond') {
-                $('.duoshuo textarea').focus();
-            }
-        });
 	})();
 	</script>
 </div>
@@ -374,9 +369,11 @@
 
 
 </div>
-      <footer id="footer">
+      <link rel="stylesheet" href="/css/content.css" type="text/css">
+<footer id="footer">
   <div class="outer">
     <div id="footer-info">
+      <img src="/img/top_arrow.png" class="top_arrow" id="top_arrow">
     	<div class="footer-left">
     		&copy; 2016 louis
 
@@ -389,7 +386,6 @@
     </div>
   </div>
 </footer>
-<link rel="stylesheet" href="/css/content.css" type="text/css">
 <script type="text/javascript">
   //swifty
   /*(function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
@@ -419,6 +415,7 @@
 </script>
 <script src="/js/jquery-1.9.1.min.js" type="text/javascript"></script>
 <script src="/js/main.js" type="text/javascript"></script>
+<script src="/js/content.js" type="text/javascript"></script>
 
 
 

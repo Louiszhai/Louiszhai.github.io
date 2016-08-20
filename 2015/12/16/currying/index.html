@@ -198,7 +198,8 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-          <div id="toc" class="toc-article">
+          <span class="toc-arrow"></span>
+<div id="toc" class="toc-article">
     <div class="toc-title">目录</div>
     <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#u67EF_u91CC_u5316_28Currying_29"><span class="toc-text">柯里化(Currying)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#u67EF_u91CC_u5316_u7684_u901A_u7528_u5B9E_u73B0"><span class="toc-text">柯里化的通用实现</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#u67EF_u91CC_u5316_u7684_u6817_u5B50"><span class="toc-text">柯里化的栗子</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#u591A_u6B21_u67EF_u91CC_u5316"><span class="toc-text">多次柯里化</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u53CD_u67EF_u91CC_u5316_28unCurrying_29"><span class="toc-text">反柯里化(unCurrying)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#u53CD_u67EF_u91CC_u5316_u7684_u4E09_u79CD_u5B9E_u73B0"><span class="toc-text">反柯里化的三种实现</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#u53CD_u67EF_u91CC_u5316_u7684_u524D_u56E0"><span class="toc-text">反柯里化的前因</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#u53CD_u67EF_u91CC_u5316_u7684_u6817_u5B50"><span class="toc-text">反柯里化的栗子</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#u53CD_u67EF_u91CC_u5316_u81EA_u8EAB"><span class="toc-text">反柯里化自身</span></a></li></ol></li></ol>
 </div>
@@ -378,12 +379,6 @@
 		ds.charset = 'UTF-8';
 		(document.getElementsByTagName('head')[0] 
 		 || document.getElementsByTagName('body')[0]).appendChild(ds);
-
-		window.addEventListener('hashchange', function() {
-            if (window.location.hash === '#respond') {
-                $('.duoshuo textarea').focus();
-            }
-        });
 	})();
 	</script>
 </div>
@@ -391,9 +386,11 @@
 
 
 </div>
-      <footer id="footer">
+      <link rel="stylesheet" href="/css/content.css" type="text/css">
+<footer id="footer">
   <div class="outer">
     <div id="footer-info">
+      <img src="/img/top_arrow.png" class="top_arrow" id="top_arrow">
     	<div class="footer-left">
     		&copy; 2016 louis
 
@@ -406,7 +403,6 @@
     </div>
   </div>
 </footer>
-<link rel="stylesheet" href="/css/content.css" type="text/css">
 <script type="text/javascript">
   //swifty
   /*(function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
@@ -436,6 +432,7 @@
 </script>
 <script src="/js/jquery-1.9.1.min.js" type="text/javascript"></script>
 <script src="/js/main.js" type="text/javascript"></script>
+<script src="/js/content.js" type="text/javascript"></script>
 
 
 

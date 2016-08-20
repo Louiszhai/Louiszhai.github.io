@@ -198,7 +198,8 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-          <div id="toc" class="toc-article">
+          <span class="toc-arrow"></span>
+<div id="toc" class="toc-article">
     <div class="toc-title">目录</div>
     <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#u4EC0_u4E48_u662FhasLayout"><span class="toc-text">什么是hasLayout</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u9ED8_u8BA4_u60C5_u51B5_u4E0BhasLayout_3Dtrue_u7684_u5143_u7D20"><span class="toc-text">默认情况下hasLayout=true的元素</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u600E_u4E48_u89E6_u53D1_u53CA_u6E05_u9664_hasLayout"><span class="toc-text">怎么触发及清除 hasLayout</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#hasLayout__u7684_u5F71_u54CD"><span class="toc-text">hasLayout 的影响</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#hasLayout__u5F15_u8D77_u7684bug"><span class="toc-text">hasLayout 引起的bug</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u600E_u4E48_u68C0_u6D4BIE_u4E0B_u7684_u67D0_u4E2A_u5143_u7D20_u662F_u5426_u62E5_u6709hasLayout"><span class="toc-text">怎么检测IE下的某个元素是否拥有hasLayout</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u9700_u8981_u6CE8_u610F_u7684_u662F"><span class="toc-text">需要注意的是</span></a></li></ol>
 </div>
@@ -391,12 +392,6 @@
 		ds.charset = 'UTF-8';
 		(document.getElementsByTagName('head')[0] 
 		 || document.getElementsByTagName('body')[0]).appendChild(ds);
-
-		window.addEventListener('hashchange', function() {
-            if (window.location.hash === '#respond') {
-                $('.duoshuo textarea').focus();
-            }
-        });
 	})();
 	</script>
 </div>
@@ -404,9 +399,11 @@
 
 
 </div>
-      <footer id="footer">
+      <link rel="stylesheet" href="/css/content.css" type="text/css">
+<footer id="footer">
   <div class="outer">
     <div id="footer-info">
+      <img src="/img/top_arrow.png" class="top_arrow" id="top_arrow">
     	<div class="footer-left">
     		&copy; 2016 louis
 
@@ -419,7 +416,6 @@
     </div>
   </div>
 </footer>
-<link rel="stylesheet" href="/css/content.css" type="text/css">
 <script type="text/javascript">
   //swifty
   /*(function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
@@ -449,6 +445,7 @@
 </script>
 <script src="/js/jquery-1.9.1.min.js" type="text/javascript"></script>
 <script src="/js/main.js" type="text/javascript"></script>
+<script src="/js/content.js" type="text/javascript"></script>
 
 
 

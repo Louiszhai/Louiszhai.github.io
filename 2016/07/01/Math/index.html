@@ -198,7 +198,8 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-          <div id="toc" class="toc-article">
+          <span class="toc-arrow"></span>
+<div id="toc" class="toc-article">
     <div class="toc-title">目录</div>
     <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#u5BFC_u8BFB"><span class="toc-text">导读</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u4E3A_u4EC0_u4E48Math_u8FD9_u4E48_u8BBE_u8BA1"><span class="toc-text">为什么Math这么设计</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Math_u4E2D_u7684_u5C5E_u6027"><span class="toc-text">Math中的属性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Math_u4E2D_u7684_u65B9_u6CD5"><span class="toc-text">Math中的方法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#u4E09_u89D2_u51FD_u6570"><span class="toc-text">三角函数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#u6570_u5B66_u8FD0_u7B97_u65B9_u6CD5"><span class="toc-text">数学运算方法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#u6570_u503C_u8FD0_u7B97_u65B9_u6CD5"><span class="toc-text">数值运算方法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#u9644_3ANumber_u7C7B_u578B_u7684_u6570_u503C_u8FD0_u7B97_u65B9_u6CD5"><span class="toc-text">附:Number类型的数值运算方法</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Math_u65B9_u6CD5_u7684_u4E00_u4E9B_u89C4_u5F8B"><span class="toc-text">Math方法的一些规律</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u4F4D_u8FD0_u7B97"><span class="toc-text">位运算</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#u6570_u503C_u7684_u4E8C_u8FDB_u5236_u503C"><span class="toc-text">数值的二进制值</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#u5E38_u7528_u7684_u4E8C_u8FDB_u5236_u6570"><span class="toc-text">常用的二进制数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#u6309_u4F4D_u4E0E_28_26amp_3B_29"><span class="toc-text">按位与(&)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#u6309_u4F4D_u6216_28_7C_29"><span class="toc-text">按位或(|)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#u6309_u4F4D_u975E_28_7E_29"><span class="toc-text">按位非(~)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#u6309_u4F4D_u5F02_u6216_28_5E_29"><span class="toc-text">按位异或(^)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#u4F4D_u8FD0_u7B97_u5C0F_u7ED3"><span class="toc-text">位运算小结</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#u6709_u7B26_u53F7_u5DE6_u79FB_28_26lt_3B_26lt_3B_29"><span class="toc-text">有符号左移(<<)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#u6709_u7B26_u53F7_u53F3_u79FB_28_26gt_3B_26gt_3B_29"><span class="toc-text">有符号右移(>>)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#u65E0_u7B26_u53F7_u53F3_u79FB_28_26gt_3B_26gt_3B_26gt_3B_29"><span class="toc-text">无符号右移(>>>)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#u8FD0_u7B97_u7B26_u4F18_u5148_u7EA7"><span class="toc-text">运算符优先级</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u7EFC_u5408_u8FD0_u7528"><span class="toc-text">综合运用</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#u8BA1_u7B97_u7EDD_u5BF9_u503C"><span class="toc-text">计算绝对值</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#u6BD4_u8F83_u4E24_u6570_u662F_u5426_u7B26_u53F7_u76F8_u540C"><span class="toc-text">比较两数是否符号相同</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#u5BF92_u7684n_u6B21_u65B9_u53D6_u6A21_28n_u4E3A_u6B63_u6574_u6570_29"><span class="toc-text">对2的n次方取模(n为正整数)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#u7EDF_u8BA1_u6B63_u6570_u4E8C_u8FDB_u5236_u503C_u4E2D1_u7684_u4E2A_u6570"><span class="toc-text">统计正数二进制值中1的个数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#u5B9E_u73B0_u52A0_u6CD5_u8FD0_u7B97"><span class="toc-text">实现加法运算</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u603B_u7ED3"><span class="toc-text">总结</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u6CE8_u89E3"><span class="toc-text">注解</span></a></li></ol>
 </div>
@@ -832,12 +833,6 @@
 		ds.charset = 'UTF-8';
 		(document.getElementsByTagName('head')[0] 
 		 || document.getElementsByTagName('body')[0]).appendChild(ds);
-
-		window.addEventListener('hashchange', function() {
-            if (window.location.hash === '#respond') {
-                $('.duoshuo textarea').focus();
-            }
-        });
 	})();
 	</script>
 </div>
@@ -845,9 +840,11 @@
 
 
 </div>
-      <footer id="footer">
+      <link rel="stylesheet" href="/css/content.css" type="text/css">
+<footer id="footer">
   <div class="outer">
     <div id="footer-info">
+      <img src="/img/top_arrow.png" class="top_arrow" id="top_arrow">
     	<div class="footer-left">
     		&copy; 2016 louis
 
@@ -860,7 +857,6 @@
     </div>
   </div>
 </footer>
-<link rel="stylesheet" href="/css/content.css" type="text/css">
 <script type="text/javascript">
   //swifty
   /*(function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
@@ -890,6 +886,7 @@
 </script>
 <script src="/js/jquery-1.9.1.min.js" type="text/javascript"></script>
 <script src="/js/main.js" type="text/javascript"></script>
+<script src="/js/content.js" type="text/javascript"></script>
 
 
 

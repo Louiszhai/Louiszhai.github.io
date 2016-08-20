@@ -198,7 +198,8 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-          <div id="toc" class="toc-article">
+          <span class="toc-arrow"></span>
+<div id="toc" class="toc-article">
     <div class="toc-title">目录</div>
     <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#u5BFC_u8BFB"><span class="toc-text">导读</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#xss_u653B_u51FB_u65B9_u5F0F"><span class="toc-text">xss攻击方式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u9632_u6B62xss_u653B_u51FB"><span class="toc-text">防止xss攻击</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#u8F6C_u4E49"><span class="toc-text">转义</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#u5BF9_u4E8E_u67D0_u4E9B_u4F4D_u7F6E_2C_u4E0D_u53D7_u4FE1_u4EFB_u7684_u6570_u636E_u505A_u8F6C_u4E49_u5C31_u53EF_u4EE5_u4FDD_u8BC1_u5B89_u5168"><span class="toc-text">对于某些位置,不受信任的数据做转义就可以保证安全</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#u5BF9_u4E8E_u67D0_u4E9B_u4F4D_u7F6E_uFF0C_u5373_u4F7F_u505A_u4E86_u8F6C_u4E49_u4F9D_u7136_u4E0D_u5B89_u5168"><span class="toc-text">对于某些位置，即使做了转义依然不安全</span></a></li></ol></li></ol></li></ol>
 </div>
@@ -468,12 +469,6 @@
 		ds.charset = 'UTF-8';
 		(document.getElementsByTagName('head')[0] 
 		 || document.getElementsByTagName('body')[0]).appendChild(ds);
-
-		window.addEventListener('hashchange', function() {
-            if (window.location.hash === '#respond') {
-                $('.duoshuo textarea').focus();
-            }
-        });
 	})();
 	</script>
 </div>
@@ -481,9 +476,11 @@
 
 
 </div>
-      <footer id="footer">
+      <link rel="stylesheet" href="/css/content.css" type="text/css">
+<footer id="footer">
   <div class="outer">
     <div id="footer-info">
+      <img src="/img/top_arrow.png" class="top_arrow" id="top_arrow">
     	<div class="footer-left">
     		&copy; 2016 louis
 
@@ -496,7 +493,6 @@
     </div>
   </div>
 </footer>
-<link rel="stylesheet" href="/css/content.css" type="text/css">
 <script type="text/javascript">
   //swifty
   /*(function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
@@ -526,6 +522,7 @@
 </script>
 <script src="/js/jquery-1.9.1.min.js" type="text/javascript"></script>
 <script src="/js/main.js" type="text/javascript"></script>
+<script src="/js/content.js" type="text/javascript"></script>
 
 
 

@@ -198,7 +198,8 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-          <div id="toc" class="toc-article">
+          <span class="toc-arrow"></span>
+<div id="toc" class="toc-article">
     <div class="toc-title">目录</div>
     <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#u6458_u81EAJavaScript_u9AD8_u7EA7_u7A0B_u5E8F_u8BBE_u8BA1_3A"><span class="toc-text">摘自JavaScript高级程序设计:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u6982_u5FF5"><span class="toc-text">概念</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u786E_u5B9A_u539F_u578B_u548C_u5B9E_u4F8B_u7684_u5173_u7CFB"><span class="toc-text">确定原型和实例的关系</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u539F_u578B_u94FE_u7684_u95EE_u9898"><span class="toc-text">原型链的问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u501F_u7528_u6784_u9020_u51FD_u6570"><span class="toc-text">借用构造函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u7EC4_u5408_u7EE7_u627F"><span class="toc-text">组合继承</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u539F_u578B_u7EE7_u627F"><span class="toc-text">原型继承</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u5BC4_u751F_u5F0F_u7EE7_u627F"><span class="toc-text">寄生式继承</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u5BC4_u751F_u7EC4_u5408_u5F0F_u7EE7_u627F"><span class="toc-text">寄生组合式继承</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#new__u8FD0_u7B97_u7B26"><span class="toc-text">new 运算符</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#proto____u5C5E_u6027_u662F_u6307_u5B9A_u539F_u578B_u7684_u5173_u952E"><span class="toc-text">__proto__ 属性是指定原型的关键</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u6269_u5C55_3A"><span class="toc-text">扩展:</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#u5C5E_u6027_u67E5_u627E"><span class="toc-text">属性查找</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#instanceof__26amp_3B_26amp_3B_typeof"><span class="toc-text">instanceof && typeof</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#new_u8FD0_u7B97_u7B26"><span class="toc-text">new运算符</span></a></li></ol></li></ol>
 </div>
@@ -462,12 +463,6 @@
 		ds.charset = 'UTF-8';
 		(document.getElementsByTagName('head')[0] 
 		 || document.getElementsByTagName('body')[0]).appendChild(ds);
-
-		window.addEventListener('hashchange', function() {
-            if (window.location.hash === '#respond') {
-                $('.duoshuo textarea').focus();
-            }
-        });
 	})();
 	</script>
 </div>
@@ -475,9 +470,11 @@
 
 
 </div>
-      <footer id="footer">
+      <link rel="stylesheet" href="/css/content.css" type="text/css">
+<footer id="footer">
   <div class="outer">
     <div id="footer-info">
+      <img src="/img/top_arrow.png" class="top_arrow" id="top_arrow">
     	<div class="footer-left">
     		&copy; 2016 louis
 
@@ -490,7 +487,6 @@
     </div>
   </div>
 </footer>
-<link rel="stylesheet" href="/css/content.css" type="text/css">
 <script type="text/javascript">
   //swifty
   /*(function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
@@ -520,6 +516,7 @@
 </script>
 <script src="/js/jquery-1.9.1.min.js" type="text/javascript"></script>
 <script src="/js/main.js" type="text/javascript"></script>
+<script src="/js/content.js" type="text/javascript"></script>
 
 
 

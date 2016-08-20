@@ -198,7 +198,8 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-          <div id="toc" class="toc-article">
+          <span class="toc-arrow"></span>
+<div id="toc" class="toc-article">
     <div class="toc-title">目录</div>
     <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#u5BFC_u8BFB"><span class="toc-text">导读</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#String-prototype"><span class="toc-text">String.prototype</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#u5C5E_u6027"><span class="toc-text">属性</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#u65B9_u6CD5"><span class="toc-text">方法</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#HTML_u65E0_u5173_u7684_u65B9_u6CD5"><span class="toc-text">HTML无关的方法</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#charAt"><span class="toc-text">charAt</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#charCodeAt"><span class="toc-text">charCodeAt</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#concat"><span class="toc-text">concat</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#indexOf"><span class="toc-text">indexOf</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#lastIndexOf"><span class="toc-text">lastIndexOf</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#locateCompare"><span class="toc-text">locateCompare</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#match"><span class="toc-text">match</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#replace"><span class="toc-text">replace</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#search"><span class="toc-text">search</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#slice"><span class="toc-text">slice</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#split"><span class="toc-text">split</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#substr"><span class="toc-text">substr</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#substring"><span class="toc-text">substring</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#toLocaleLowerCase"><span class="toc-text">toLocaleLowerCase</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#toLocaleUpperCase"><span class="toc-text">toLocaleUpperCase</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#toLowerCase"><span class="toc-text">toLowerCase</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#toUpperCase"><span class="toc-text">toUpperCase</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#toString-NaN"><span class="toc-text">toString</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#valueOf-NaN"><span class="toc-text">valueOf</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#trim"><span class="toc-text">trim</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#codePointAt"><span class="toc-text">codePointAt</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#contains"><span class="toc-text">contains</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#endsWith"><span class="toc-text">endsWith</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#normalize"><span class="toc-text">normalize</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#repeat"><span class="toc-text">repeat</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#startsWith"><span class="toc-text">startsWith</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#HTML_u6709_u5173_u7684_u65B9_u6CD5"><span class="toc-text">HTML有关的方法</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#anchor"><span class="toc-text">anchor</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#link"><span class="toc-text">link</span></a></li></ol></li></ol></li></ol></li></ol>
 </div>
@@ -487,12 +488,6 @@
 		ds.charset = 'UTF-8';
 		(document.getElementsByTagName('head')[0] 
 		 || document.getElementsByTagName('body')[0]).appendChild(ds);
-
-		window.addEventListener('hashchange', function() {
-            if (window.location.hash === '#respond') {
-                $('.duoshuo textarea').focus();
-            }
-        });
 	})();
 	</script>
 </div>
@@ -500,9 +495,11 @@
 
 
 </div>
-      <footer id="footer">
+      <link rel="stylesheet" href="/css/content.css" type="text/css">
+<footer id="footer">
   <div class="outer">
     <div id="footer-info">
+      <img src="/img/top_arrow.png" class="top_arrow" id="top_arrow">
     	<div class="footer-left">
     		&copy; 2016 louis
 
@@ -515,7 +512,6 @@
     </div>
   </div>
 </footer>
-<link rel="stylesheet" href="/css/content.css" type="text/css">
 <script type="text/javascript">
   //swifty
   /*(function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
@@ -545,6 +541,7 @@
 </script>
 <script src="/js/jquery-1.9.1.min.js" type="text/javascript"></script>
 <script src="/js/main.js" type="text/javascript"></script>
+<script src="/js/content.js" type="text/javascript"></script>
 
 
 

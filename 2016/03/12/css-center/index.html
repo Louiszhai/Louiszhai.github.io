@@ -198,7 +198,8 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-          <div id="toc" class="toc-article">
+          <span class="toc-arrow"></span>
+<div id="toc" class="toc-article">
     <div class="toc-title">目录</div>
     <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#u5BFC_u8BFB"><span class="toc-text">导读</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u6C34_u5E73_u5C45_u4E2D"><span class="toc-text">水平居中</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u5782_u76F4_u5C45_u4E2D"><span class="toc-text">垂直居中</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#u5355_u884C_u6587_u672C"><span class="toc-text">单行文本</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#u884C_u5185_u5757_u7EA7_u5143_u7D20"><span class="toc-text">行内块级元素</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#u5143_u7D20_u9AD8_u5EA6_u4E0D_u5B9A"><span class="toc-text">元素高度不定</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#u5143_u7D20_u9AD8_u5EA6_u56FA_u5B9A"><span class="toc-text">元素高度固定</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u603B_u7ED3"><span class="toc-text">总结</span></a></li></ol>
 </div>
@@ -413,12 +414,6 @@
 		ds.charset = 'UTF-8';
 		(document.getElementsByTagName('head')[0] 
 		 || document.getElementsByTagName('body')[0]).appendChild(ds);
-
-		window.addEventListener('hashchange', function() {
-            if (window.location.hash === '#respond') {
-                $('.duoshuo textarea').focus();
-            }
-        });
 	})();
 	</script>
 </div>
@@ -426,9 +421,11 @@
 
 
 </div>
-      <footer id="footer">
+      <link rel="stylesheet" href="/css/content.css" type="text/css">
+<footer id="footer">
   <div class="outer">
     <div id="footer-info">
+      <img src="/img/top_arrow.png" class="top_arrow" id="top_arrow">
     	<div class="footer-left">
     		&copy; 2016 louis
 
@@ -441,7 +438,6 @@
     </div>
   </div>
 </footer>
-<link rel="stylesheet" href="/css/content.css" type="text/css">
 <script type="text/javascript">
   //swifty
   /*(function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
@@ -471,6 +467,7 @@
 </script>
 <script src="/js/jquery-1.9.1.min.js" type="text/javascript"></script>
 <script src="/js/main.js" type="text/javascript"></script>
+<script src="/js/content.js" type="text/javascript"></script>
 
 
 

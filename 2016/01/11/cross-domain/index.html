@@ -201,7 +201,8 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-          <div id="toc" class="toc-article">
+          <span class="toc-arrow"></span>
+<div id="toc" class="toc-article">
     <div class="toc-title">目录</div>
     <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#u5BFC_u8BFB"><span class="toc-text">导读</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u540C_u6E90_u7B56_u7565_u7684_u9650_u5236"><span class="toc-text">同源策略的限制</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#iframe_u9650_u5236"><span class="toc-text">iframe限制</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Ajax_u9650_u5236"><span class="toc-text">Ajax限制</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Script_u9650_u5236"><span class="toc-text">Script限制</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#u6CE8_u610F"><span class="toc-text">注意</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u8DE8_u57DF_u8BBF_u95EE"><span class="toc-text">跨域访问</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#u4F7F_u7528_u4EE3_u7406"><span class="toc-text">使用代理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#JSONP"><span class="toc-text">JSONP</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#postMessage"><span class="toc-text">postMessage</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#CORS__u8DE8_u57DF_u8BBF_u95EE"><span class="toc-text">CORS 跨域访问</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#document-domain"><span class="toc-text">document.domain</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#Internet_Explorer_u540C_u6E90_u7B56_u7565_u7ED5_u8FC7"><span class="toc-text">Internet Explorer同源策略绕过</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#window-name"><span class="toc-text">window.name</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#location-hash"><span class="toc-text">location.hash</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Access_Control"><span class="toc-text">Access Control</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#flash_URLLoder"><span class="toc-text">flash URLLoder</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#WebSocket"><span class="toc-text">WebSocket</span></a></li></ol></li></ol>
 </div>
@@ -437,12 +438,6 @@
 		ds.charset = 'UTF-8';
 		(document.getElementsByTagName('head')[0] 
 		 || document.getElementsByTagName('body')[0]).appendChild(ds);
-
-		window.addEventListener('hashchange', function() {
-            if (window.location.hash === '#respond') {
-                $('.duoshuo textarea').focus();
-            }
-        });
 	})();
 	</script>
 </div>
@@ -450,9 +445,11 @@
 
 
 </div>
-      <footer id="footer">
+      <link rel="stylesheet" href="/css/content.css" type="text/css">
+<footer id="footer">
   <div class="outer">
     <div id="footer-info">
+      <img src="/img/top_arrow.png" class="top_arrow" id="top_arrow">
     	<div class="footer-left">
     		&copy; 2016 louis
 
@@ -465,7 +462,6 @@
     </div>
   </div>
 </footer>
-<link rel="stylesheet" href="/css/content.css" type="text/css">
 <script type="text/javascript">
   //swifty
   /*(function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
@@ -495,6 +491,7 @@
 </script>
 <script src="/js/jquery-1.9.1.min.js" type="text/javascript"></script>
 <script src="/js/main.js" type="text/javascript"></script>
+<script src="/js/content.js" type="text/javascript"></script>
 
 
 

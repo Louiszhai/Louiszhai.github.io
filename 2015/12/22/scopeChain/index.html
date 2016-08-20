@@ -200,7 +200,8 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-          <div id="toc" class="toc-article">
+          <span class="toc-arrow"></span>
+<div id="toc" class="toc-article">
     <div class="toc-title">目录</div>
     <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#u5BFC_u8BFB"><span class="toc-text">导读</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u56DE_u987E_u4E0A_u7BC7"><span class="toc-text">回顾上篇</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u4F5C_u7528_u57DF"><span class="toc-text">作用域</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#js_u4E2D_u53EA_u6709_u51FD_u6570_u4F5C_u7528_u57DF"><span class="toc-text">js中只有函数作用域</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#u4F7F_u7528_var__u58F0_u660E_u53D8_u91CF"><span class="toc-text">使用 var 声明变量</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#JS_u4E2D_u7684_u4F5C_u7528_u57DF_u94FE"><span class="toc-text">JS中的作用域链</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u95ED_u5305"><span class="toc-text">闭包</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#u95ED_u5305_u5185_u7684_u5FAE_u89C2_u4E16_u754C"><span class="toc-text">闭包内的微观世界</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#u95ED_u5305_u6709_u53EF_u80FD_u5BFC_u81F4IE_u6D4F_u89C8_u5668_u5185_u5B58_u6CC4_u6F0F"><span class="toc-text">闭包有可能导致IE浏览器内存泄漏</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#for_u5FAA_u73AF_u95EE_u9898_u5206_u6790"><span class="toc-text">for循环问题分析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u8E29_u4E2A_u4F5C_u7528_u57DF_u7684_u5751"><span class="toc-text">踩个作用域的坑</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#this_u4F5C_u7528_u57DF"><span class="toc-text">this作用域</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#with_u8BED_u53E5"><span class="toc-text">with语句</span></a></li></ol>
 </div>
@@ -433,12 +434,6 @@
 		ds.charset = 'UTF-8';
 		(document.getElementsByTagName('head')[0] 
 		 || document.getElementsByTagName('body')[0]).appendChild(ds);
-
-		window.addEventListener('hashchange', function() {
-            if (window.location.hash === '#respond') {
-                $('.duoshuo textarea').focus();
-            }
-        });
 	})();
 	</script>
 </div>
@@ -446,9 +441,11 @@
 
 
 </div>
-      <footer id="footer">
+      <link rel="stylesheet" href="/css/content.css" type="text/css">
+<footer id="footer">
   <div class="outer">
     <div id="footer-info">
+      <img src="/img/top_arrow.png" class="top_arrow" id="top_arrow">
     	<div class="footer-left">
     		&copy; 2016 louis
 
@@ -461,7 +458,6 @@
     </div>
   </div>
 </footer>
-<link rel="stylesheet" href="/css/content.css" type="text/css">
 <script type="text/javascript">
   //swifty
   /*(function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
@@ -491,6 +487,7 @@
 </script>
 <script src="/js/jquery-1.9.1.min.js" type="text/javascript"></script>
 <script src="/js/main.js" type="text/javascript"></script>
+<script src="/js/content.js" type="text/javascript"></script>
 
 
 
