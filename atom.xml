@@ -4,7 +4,7 @@
   <subtitle><![CDATA[程序猿 前端攻城师]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://louiszhai.github.io/"/>
-  <updated>2016-09-04T01:00:40.000Z</updated>
+  <updated>2016-09-12T02:42:58.000Z</updated>
   <id>http://louiszhai.github.io/</id>
   
   <author>
@@ -19,7 +19,7 @@
     <link href="http://louiszhai.github.io/2016/07/01/Math/"/>
     <id>http://louiszhai.github.io/2016/07/01/Math/</id>
     <published>2016-06-30T23:57:48.000Z</published>
-    <updated>2016-09-04T01:00:40.000Z</updated>
+    <updated>2016-09-12T02:42:58.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>截至ES5, JavaScript 中内置(build-in)构造器/对象共有13个, 其中9个是构造器(Number,Boolean, String, Object, Function, Array, RegExp, Error, Date), Global 不能直接访问, Arguments仅在函数调用时由JS引擎创建, 而 Math, JSON 是以对象形式存在的, 本篇将带你走进 JS 内置对象-Math以及与之息息相关的位运算, 一探究竟.</p>
 <a id="more"></a>
 <h3 id="u4E3A_u4EC0_u4E48Math_u8FD9_u4E48_u8BBE_u8BA1"><a href="#u4E3A_u4EC0_u4E48Math_u8FD9_u4E48_u8BBE_u8BA1" class="headerlink" title="为什么Math这么设计"></a>为什么Math这么设计</h3><p>众所周知, 如果需要使用js进行一些常规的数学运算, 是一件十分麻烦的事情. 为了解决这个问题, ECMAScript 在1.1版本中便引入了 Math. Math 之所以被设计成一个对象, 而不是构造器, 是因为对象中的方法或属性可以作为静态方法或常量直接被调用, 方便使用, 同时, Math 也没有创建实例的必要.</p>
@@ -532,7 +532,7 @@
 <p>首先我们看看第①种, 同位相加, 不考虑②遇2进1.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1</span> + <span class="number">1</span> = <span class="number">0</span></span><br><span class="line"><span class="number">1</span> + <span class="number">0</span> = <span class="number">1</span></span><br><span class="line"><span class="number">0</span> + <span class="number">1</span> = <span class="number">1</span></span><br><span class="line"><span class="number">0</span> + <span class="number">0</span> = <span class="number">0</span></span><br></pre></td></tr></table></figure>
 <p>以上运算过程有没有很熟悉. 是不是和按位异或(^)运算有着惊人的相似. 如:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1</span> ^ <span class="number">1</span> = <span class="number">0</span></span><br><span class="line"><span class="number">1</span> ^ <span class="number">0</span> = <span class="number">1</span></span><br><span class="line"><span class="number">0</span> ^ <span class="number">1</span> = <span class="number">1</span></span><br><span class="line"><span class="number">0</span> ^ <span class="number">0</span> = <span class="number">1</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1</span> ^ <span class="number">1</span> = <span class="number">0</span></span><br><span class="line"><span class="number">1</span> ^ <span class="number">0</span> = <span class="number">1</span></span><br><span class="line"><span class="number">0</span> ^ <span class="number">1</span> = <span class="number">1</span></span><br><span class="line"><span class="number">0</span> ^ <span class="number">0</span> = <span class="number">0</span></span><br></pre></td></tr></table></figure>
 <p>因此①同位相加的运算, 完全可由按位异或(^)代替, 即: x^y.</p>
 <p>那么②遇2进1 应该怎么实现呢? 实际上, 非位移位运算中, 只有按位与(&amp;)才能满足遇2的场景, 且只有有符号左移(&lt;&lt;)能满足进1的场景.</p>
 <p>现在范围缩小了, 就看&amp;和&lt;&lt;运算符能不能真正满足需要了. 值得高兴的是, 按位与(&amp;)只有在同位都是1的情况下才返回1, 其他情况均返回0. 如果对其运算结果再做左移一位的运算, 即: (x&amp;y)&lt;&lt;1. 刚好满足了②遇2进1的场景.</p>
@@ -2250,7 +2250,7 @@
     <link href="http://louiszhai.github.io/2016/01/11/cross-domain/"/>
     <id>http://louiszhai.github.io/2016/01/11/cross-domain/</id>
     <published>2016-01-11T00:01:33.000Z</published>
-    <updated>2016-05-17T01:07:43.000Z</updated>
+    <updated>2016-09-12T02:42:58.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>同源策略 (Same-Origin Policy) 最早由 Netscape 公司提出, 所谓同源就是要求, 域名, 协议, 端口相同. 非同源的脚本不能访问或者操作其他域的页面对象(如DOM等). 作为著名的安全策略, 虽然它只是一个规范, 并不强制要求,  但现在所有支持 javaScript 的浏览器都会使用这个策略. 以至于该策略成为浏览器最核心最基本的安全功能, 如果缺少了同源策略, web的安全将无从谈起.</p>
 <a id="more"></a>
 <h3 id="u540C_u6E90_u7B56_u7565_u7684_u9650_u5236"><a href="#u540C_u6E90_u7B56_u7565_u7684_u9650_u5236" class="headerlink" title="同源策略的限制"></a>同源策略的限制</h3><p>同源策略下的web世界, 域的壁垒高筑, 从而保证各个网页相互独立, 互相之间不能直接访问, iframe, ajax 均受其限制, 而script标签不受此限制.</p>
@@ -2302,20 +2302,22 @@
 <li>source, 表示发送消息的窗口对象</li>
 <li>origin, 表示发送消息窗口的源(协议+主机+端口号)</li>
 </ul>
-<h4 id="CORS__u8DE8_u57DF_u8BBF_u95EE"><a href="#CORS__u8DE8_u57DF_u8BBF_u95EE" class="headerlink" title="CORS 跨域访问"></a>CORS 跨域访问</h4><p>HTML5带来了一种新的跨域请求的方式 — CORS, 即 <a href="https://en.wikipedia.org/wiki/Cross-originresourcesharing" target="_blank" rel="external">Cross-origin resource sharing</a>. 它更加安全, 上述的 JSONP, postMessage 等, 资源本身没有能力保证自己不被滥用. CORS的目标是保护资源只被可信的访问源以正确的方式访问. </p>
+<h4 id="CORS__u8DE8_u57DF_u8BBF_u95EE"><a href="#CORS__u8DE8_u57DF_u8BBF_u95EE" class="headerlink" title="CORS 跨域访问"></a>CORS 跨域访问</h4><p>HTML5带来了一种新的跨域请求的方式 — CORS, 即 <a href="https://en.wikipedia.org/wiki/Cross-origin_resource_sharing" target="_blank" rel="external">Cross-origin resource sharing</a>. 它更加安全, 上述的 JSONP, postMessage 等, 资源本身没有能力保证自己不被滥用. CORS的目标是保护资源只被可信的访问源以正确的方式访问. </p>
 <p>目前, 主流的浏览器都支持此协议, 可以在caniuse.com 中查到<a href="http://caniuse.com/#search=cors" target="_blank" rel="external">http://caniuse.com/#search=cors</a>.</p>
 <p>简而言之, 浏览器不再一味禁止跨域访问, 而是需要检查目的站点返回的消息的头域, 要检查该响应是否允许当前站点访问. 通过HTTP头域的方式来通知浏览器:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Response headers[edit]</span><br><span class="line">Access-Control-Allow-Origin</span><br><span class="line">Access-Control-Allow-Credentials</span><br><span class="line">Access-Control-Expose-Headers</span><br><span class="line">Access-Control-Max-Age</span><br><span class="line">Access-Control-Allow-Methods</span><br><span class="line">Access-Control-Allow-Headers</span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Response headers[edit]</span><br><span class="line">Access-Control-Allow-Origin</span><br><span class="line">Access-Control-Allow-Credentials</span><br><span class="line">Access-Control-Allow-Methods</span><br><span class="line">Access-Control-Allow-Headers</span><br><span class="line">Access-Control-Expose-Headers</span><br><span class="line">Access-Control-Max-Age</span><br></pre></td></tr></table></figure>
 <p>CORS的解决办法是在服务端Response的HTTP头域加入资源的访问权限信息. 如: A站只需要在response头中加一个字段就能让B站跨站访问.</p>
 <figure class="highlight fortran"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">access</span>-control-allow-origin:*</span><br></pre></td></tr></table></figure>
 <p>其中<code>*</code> 表示通配, 所有的域都能访问此资源, 如果严谨一些只允许B站访问:</p>
 <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">access-control-allow-origin:<span class="tag">&lt;<span class="title">B-DOMAIN</span>&gt;</span></span><br></pre></td></tr></table></figure>
 <p>这样B站就可以直接访问此资源, 不需要JSONP 也不需要iframe了.</p>
-<p>CORS还可以约束只允许某种METHOD访问, 比如:</p>
+<p>CORS需要指定METHOD访问, 对于GET和POST请求, 至少要指定以下三种methods, 如下:</p>
 <figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">Access-Control-Allow-Methods</span>: <span class="string">POST, GET, OPTIONS</span></span><br></pre></td></tr></table></figure>
-<p>CORS为安全考据在跨站ajax访问的时候是不带cookie的, 但这点同样可以改变, 只需要加这个头, 浏览器就会把cookie 奉上!</p>
+<p>如果是POST请求, 且提交的数据类型是json, 那么, CORS需要指定headers.</p>
+<figure class="highlight fortran"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">Access</span>-Control-Allow-Headers: Content-<span class="keyword">Type</span></span><br></pre></td></tr></table></figure>
+<p>CORS为安全考据, 在跨站ajax访问的时候是不带cookie的, 但这点同样可以改变, 只需要加这个头, 浏览器就会把cookie 奉上!</p>
 <figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Access-Control-Allow-<span class="string">Credentials:</span> <span class="literal">true</span></span><br></pre></td></tr></table></figure>
-<p>在访问资源前，浏览器会先发出OPTIONS请求，获取这些权限信息，并比对当前站点的脚本是否有权限，然后再将实际的脚本的数据请求发出. 发现权限不允许, 则不会发出请求. 逻辑流程图为:</p>
+<p>在访问资源前，有时浏览器会先发出OPTIONS请求，获取这些权限信息，并比对当前站点的脚本是否有权限，然后再将实际的脚本的数据请求发出. 发现权限不允许, 则不会发出请求. 逻辑流程图为:</p>
 <p><img src="/docImages/cross-domain01.jpg" alt=""></p>
 <p>浏览器也可以直接将GET请求发出，数据和权限同时到达浏览器端，但是数据是否交给脚本处理需要浏览器检查权限对比后作出决定。</p>
 <p>一次具体的跨域访问的流程为：</p>
@@ -2363,10 +2365,10 @@
 <p>本文链接: <a href="http://louiszhai.github.io/2016/03/02/cross-domain/">http://louiszhai.github.io/2016/03/02/cross-domain/</a></p>
 <p>参考文章</p>
 <ul>
-<li>[学习总结 前端跨域请求的解决办法——JSONP-哥墨迹的iteye-ITeye技术网站][3]</li>
+<li><a href="http://lc87624.iteye.com/blog/1123148" target="_blank" rel="external">学习总结 前端跨域请求的解决办法——JSONP-哥墨迹的iteye-ITeye技术网站</a></li>
 <li><a href="http://www.cnblogs.com/dolphinX/p/3464056.html" target="_blank" rel="external">html5 postMessage解决跨域、跨窗口消息传递-Samaritans-博客园</a></li>
-<li>[深入理解前端跨域方法和原理-kongjiea笔记-博客频道-CSDN.NET][5]</li>
-<li>[跨域访问和防盗链基本原理-WEB前端-伯乐在线][6]</li>
+<li><a href="http://blog.csdn.net/kongjiea/article/details/44201021" target="_blank" rel="external">深入理解前端跨域方法和原理-kongjiea笔记-博客频道-CSDN.NET</a></li>
+<li><a href="http://web.jobbole.com/83864/" target="_blank" rel="external">跨域访问和防盗链基本原理-WEB前端-伯乐在线</a></li>
 <li><a href="http://unicorn-kid.com/fe-node/2014/08/07/JavaScript%20%E8%B7%A8%E5%9F%9F%20%E4%B9%8B%E4%B8%80%20%E5%90%8C%E6%BA%90%E7%AD%96%E7%95%A5.html" target="_blank" rel="external">Javascript 跨域 之一 同源策略 - KID</a></li>
 <li><a href="http://www.freebuf.com/articles/web/65468.html" target="_blank" rel="external">同源策略详解及绕过（Part1） - FreeBuf.COM | 关注黑客与极客</a></li>
 <li><a href="http://www.plhwin.com/2014/05/28/nodejs-socketio/" target="_blank" rel="external">使用Node.js+Socket.IO搭建WebSocket实时应用 | 潘良虎的随想录</a></li>

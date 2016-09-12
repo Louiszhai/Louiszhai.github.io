@@ -12,7 +12,7 @@
 <meta property="og:url" content="http://louiszhai.github.io/2016/07/01/Math/index.html">
 <meta property="og:site_name" content="louis blog">
 <meta property="og:description" content="Math floor ~ ~ abs random ceil 位运算 &amp; | ^ &amp;lt;&amp;lt; &amp;gt;&amp;gt; &amp;gt;&amp;gt;&amp;gt;">
-<meta property="og:updated_time" content="2016-09-04T01:00:40.000Z">
+<meta property="og:updated_time" content="2016-09-12T02:42:58.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="全面解读Math对象及位运算">
 <meta name="twitter:description" content="Math floor ~ ~ abs random ceil 位运算 &amp; | ^ &amp;lt;&amp;lt; &amp;gt;&amp;gt; &amp;gt;&amp;gt;&amp;gt;">
@@ -716,7 +716,7 @@
 <p>首先我们看看第①种, 同位相加, 不考虑②遇2进1.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1</span> + <span class="number">1</span> = <span class="number">0</span></span><br><span class="line"><span class="number">1</span> + <span class="number">0</span> = <span class="number">1</span></span><br><span class="line"><span class="number">0</span> + <span class="number">1</span> = <span class="number">1</span></span><br><span class="line"><span class="number">0</span> + <span class="number">0</span> = <span class="number">0</span></span><br></pre></td></tr></table></figure>
 <p>以上运算过程有没有很熟悉. 是不是和按位异或(^)运算有着惊人的相似. 如:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1</span> ^ <span class="number">1</span> = <span class="number">0</span></span><br><span class="line"><span class="number">1</span> ^ <span class="number">0</span> = <span class="number">1</span></span><br><span class="line"><span class="number">0</span> ^ <span class="number">1</span> = <span class="number">1</span></span><br><span class="line"><span class="number">0</span> ^ <span class="number">0</span> = <span class="number">1</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1</span> ^ <span class="number">1</span> = <span class="number">0</span></span><br><span class="line"><span class="number">1</span> ^ <span class="number">0</span> = <span class="number">1</span></span><br><span class="line"><span class="number">0</span> ^ <span class="number">1</span> = <span class="number">1</span></span><br><span class="line"><span class="number">0</span> ^ <span class="number">0</span> = <span class="number">0</span></span><br></pre></td></tr></table></figure>
 <p>因此①同位相加的运算, 完全可由按位异或(^)代替, 即: x^y.</p>
 <p>那么②遇2进1 应该怎么实现呢? 实际上, 非位移位运算中, 只有按位与(&amp;)才能满足遇2的场景, 且只有有符号左移(&lt;&lt;)能满足进1的场景.</p>
 <p>现在范围缩小了, 就看&amp;和&lt;&lt;运算符能不能真正满足需要了. 值得高兴的是, 按位与(&amp;)只有在同位都是1的情况下才返回1, 其他情况均返回0. 如果对其运算结果再做左移一位的运算, 即: (x&amp;y)&lt;&lt;1. 刚好满足了②遇2进1的场景.</p>
