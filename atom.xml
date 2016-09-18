@@ -3018,7 +3018,7 @@
     <link href="http://louiszhai.github.io/2015/12/22/scopeChain/"/>
     <id>http://louiszhai.github.io/2015/12/22/scopeChain/</id>
     <published>2015-12-22T00:06:13.000Z</published>
-    <updated>2016-08-17T06:39:12.000Z</updated>
+    <updated>2016-09-18T06:09:10.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>上一篇我们讲到数组遍历, 本文我们更进一步, 讲讲如何提高遍历的效率. 欢迎阅读本篇<strong><code>详解JS作用域链及闭包</code></strong>.</p>
 <a id="more"></a>
 <h3 id="u56DE_u987E_u4E0A_u7BC7"><a href="#u56DE_u987E_u4E0A_u7BC7" class="headerlink" title="回顾上篇"></a>回顾上篇</h3><p>请先看上一篇中提到的for循环代码:</p>
@@ -3046,7 +3046,7 @@
 <p>我们先看一个栗子:</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> e = <span class="string">"hello"</span>;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  e = <span class="string">"scope chain"</span>;</span><br><span class="line">  <span class="keyword">var</span> g = = <span class="string">"good"</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>以上作用域链的图如下所示:</p>
-<p><img src="/doc_images/scopeChain01.png" alt=""></p>
+<p><img src="/docImages/scopeChain01.png" alt=""></p>
 <p>函数执行时, 在函数 f 内部会生成一个 active object 和 scope chain. JavaScript引擎内部对象会放入 active object中, 外部的 e 变量处于scope chain的第二层, index=1, 而内部的g变量处于scope chain的顶层, index=0, 因此访问g变量总比访问e变量来的快些.</p>
 <h3 id="u95ED_u5305"><a href="#u95ED_u5305" class="headerlink" title="闭包"></a>闭包</h3><p>聊到作用域, 就不得不说闭包, 那么, 什么是闭包?</p>
 <p>“官方”的解释是：闭包是一个拥有许多变量和绑定了这些变量的环境的表达式（通常是一个函数），因而这些变量也是该表达式的一部分。</p>
@@ -3068,7 +3068,7 @@
 </ol>
 <p>到此，整个函数 f 从定义到执行的步骤就完成了。此时 f 返回函数 f2 的引用给 ff，又函数 f2 的作用域链包含了对函数 f 的活动对象的引用，也就是说 f2 可以访问到 f 中定义的所有变量和函数。函数 f2 被 ff 引用，函数 f2又依赖函数 f ，因此函数 f 在返回后不会被GC回收。</p>
 <p>当函数 f2 执行的时候亦会像以上步骤一样。因此，执行时 f2 的作用域链包含了3个对象：f2 的活动对象、f 的活动对象和window对象，如下图所示：</p>
-<p><img src="/doc_images/scopeChain02.jpg" alt=""></p>
+<p><img src="/docImages/scopeChain02.jpg" alt=""></p>
 <p>如图所示，当在函数 f2 中访问一个变量的时候，搜索顺序是：</p>
 <ol>
 <li>先搜索自身的活动对象，如果存在则返回，如果不存在将继续搜索函数 f 的活动对象，依次查找，直到找到为止。</li>
