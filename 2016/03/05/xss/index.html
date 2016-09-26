@@ -15,7 +15,7 @@
 <meta property="og:image" content="http://louiszhai.github.io/docImages/xss01.png">
 <meta property="og:image" content="http://louiszhai.github.io/docImages/xss03-csp1.png">
 <meta property="og:image" content="http://louiszhai.github.io/docImages/xss03-csp2.png">
-<meta property="og:updated_time" content="2016-09-26T02:38:06.000Z">
+<meta property="og:updated_time" content="2016-09-26T02:40:35.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="xss攻防">
 <meta name="twitter:description" content="xss xss漏洞 xss攻击">
@@ -292,7 +292,7 @@
 <p><strong>CSP2支持性</strong></p>
 <p><img src="http://louiszhai.github.io/docImages/xss03-csp2.png" alt="CSP2"></p>
 <p>CSP虽然提供了强大的安全保护, 但是他也造成了如下问题: Eval及相关函数被禁用、内嵌的JavaScript代码将不会执行、只能通过白名单来加载远程脚本.</p>
-<h4 id="X-Frame-Options"><a href="#X-Frame-Options" class="headerlink" title="X-Frame-Options"></a>X-Frame-Options</h4><p>X-Frame-Options 响应头是用来给浏览器指示允许一个页面可否在 <code>frame</code>, <code>iframe</code> 或者 <code>object</code> 等标签中展现的标记. 网站可以使用此功能, 来确保自己网站的内容没有被嵌到别人的网站中去, 也从而避免了点击劫持 (clickjacking) 的攻击. 但以后可以被CSP的 frame-ancestors取代。目前支持的状态比起 CSP frame-ancestors要好.</p>
+<h4 id="X-Frame-Options"><a href="#X-Frame-Options" class="headerlink" title="X-Frame-Options"></a>X-Frame-Options</h4><p>X-Frame-Options 响应头是用来给浏览器指示允许一个页面可否在 <code>frame</code>, <code>iframe</code> 或者 <code>object</code> 等标签中展现的标记. 网站可以使用此功能, 来确保自己网站的内容没有被嵌到别人的网站中去, 也从而避免了点击劫持 (clickjacking) 的攻击. 但以后可能被CSP的 frame-ancestors取代。目前支持的状态比起 CSP frame-ancestors要好.</p>
 <p>X-Frame-Options 共有三个值:</p>
 <ul>
 <li>DENY 表示这个页面不允许被以frame的方式加载 </li>
