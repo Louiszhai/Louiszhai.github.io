@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>angular 文件上传 demo | louis</title>
+	<script src="http://cdn.static.runoob.com/libs/angular.js/1.4.6/angular.min.js"></script>
+</head>
+<body>
+
+<div ng-app="myApp" ng-controller="myCtrl"> 
+	<input id="input" type="file" ng-model="input" ng-change="preview()"/>
+	<input id="btn" class="btn" type="button" value="上传" ng-click="upload()">
+</div>
+
+<script>
+var input = document.getElementById("input");
+
+var app = angular.module('myApp', []);
+app.controller('myCtrl', function($scope, $http) {
+	$scope.upload = function(){
+		console.log('uploading...');
+		var url = "http://localhost:10108/test",
+			method = "POST";
+		var formData = new FormData();
+		formData.append('file',input[0]);
+
+		$http({
+			method: method,
+			url: url,
+			data: formData,
+		}).success(function(res) {
+			console.log(res);
+		}).error(function(err, status) {
+			console.log(err);
+		});
+	};
+});
+</script>
+</body>
+</html>

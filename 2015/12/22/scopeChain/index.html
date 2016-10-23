@@ -14,7 +14,7 @@
 <meta property="og:description" content="JavaScript scope chain 作用域链 闭包">
 <meta property="og:image" content="http://louiszhai.github.io/docImages/scopeChain01.png">
 <meta property="og:image" content="http://louiszhai.github.io/docImages/scopeChain02.jpg">
-<meta property="og:updated_time" content="2016-10-11T05:58:30.000Z">
+<meta property="og:updated_time" content="2016-10-23T09:21:20.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="详解JS作用域链及闭包">
 <meta name="twitter:description" content="JavaScript scope chain 作用域链 闭包">
@@ -237,40 +237,43 @@
 <p>函数执行时, 在函数 f 内部会生成一个 active object 和 scope chain. JavaScript引擎内部对象会放入 active object中, 外部的 e 变量处于scope chain的第二层, index=1, 而内部的g变量处于scope chain的顶层, index=0, 因此访问g变量总比访问e变量来的快些.</p>
 <h3 id="u95ED_u5305"><a href="#u95ED_u5305" class="headerlink" title="闭包"></a>闭包</h3><p>聊到作用域, 就不得不说闭包, 那么, 什么是闭包?</p>
 <p>“官方”的解释是：闭包是一个拥有许多变量和绑定了这些变量的环境的表达式（通常是一个函数），因而这些变量也是该表达式的一部分。</p>
-<p>这是什么意思呢, 其实我也不懂.</p>
-<p>通俗的讲就是: 闭包是一个函数, 并且这个函数可以访问其他函数内的局部变量.</p>
-<p>可是我们都知道函数作用域是局部作用域, 为了做到让另一个函数访问它内部的变量, 恐怕只能将另一个函数放入它的内部, 如下:</p>
+<p>这是什么意思呢, 简单来说就是: </p>
+<ol>
+<li>函数执行时返回内部私有函数, 或者通过其他方式将内部私有函数保留在外(比如说通过将其内部私有函数的引用赋值外部变量), 从而阻止该函数内部作用域等被执行引擎回收.</li>
+<li>在函数外部通过访问暴露在外的函数内部私有函数, 从而具有访问函数内部私有作用域的效果, 就是闭包.</li>
+</ol>
+<p>ES6之前, 通常我们实现的模块就是利用了闭包. 闭包依赖的结构有个鲜明的特点, 即: 一个函数在词法作用域之外执行. 如下, f2是闭包的关键, 它的词法作用域便是函数f的内部私有作用域, 且它在f的作用域外部执行.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> h = <span class="number">1</span>;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="keyword">var</span> i = <span class="number">2</span>;</span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> <span class="title">f2</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  	<span class="keyword">var</span> j = <span class="number">3</span> + i + h;</span><br><span class="line">    <span class="built_in">console</span>.log(j);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> ff = f();</span><br><span class="line">ff();<span class="comment">//6</span></span><br></pre></td></tr></table></figure>
-<p>由于 f2 处于 f 的内部, 因此 f2 内可以访问到 f 的局部作用域, 这样通过返回 f2 就能保证在 f 函数外部也能访问到 i 变量.</p>
+<p>由于定义时 f2 处于 f 的内部, 因此 f2 内可以访问到 f 的内部私有作用域, 这样通过返回 f2 就能保证在 f 函数外部也能访问到 i 变量.</p>
 <p>当f2执行时, 变量 j 处于scope chain的 index0的位置上, 变量 i 和变量 h 分别处于 scope chain 的 index1 index2 的位置上. 因此 j 的赋值过程其实就是沿着 scope chain 第二层 第三层 依次找到 i 和 h 的值, 然后将它们和3一起求和, 最终赋值给 j .</p>
 <p>浏览器沿着 scope chain 寻找变量总是需要耗费CPU时间, 越是 scope chain 的 外层(或者离f2越远的变量), 浏览器查找起来越是需要时间, 因为 scope chain 需要历经更多次遍历. 因此全局变量(window)总是需要最多的访问时间.</p>
 <h4 id="u95ED_u5305_u5185_u7684_u5FAE_u89C2_u4E16_u754C"><a href="#u95ED_u5305_u5185_u7684_u5FAE_u89C2_u4E16_u754C" class="headerlink" title="闭包内的微观世界"></a>闭包内的微观世界</h4><p>　　如果要更加深入的了解闭包以及函数 f 和嵌套函数 f2 的关系，我们需要引入另外几个概念：函数的执行环境(excution context)、活动对象(call object)、作用域(scope)、作用域链(scope chain)。以函数a从定义到执行的过程为例阐述这几个概念。</p>
 <ol>
-<li>当<strong>定义</strong>函数 f 的时候，js解释器会将函数a的<strong>作用域链(scope chain)</strong>设置为<strong>定义 f 时 a 所在的“环境”</strong>，如果 f 是一个全局函数，则scope chain中只有window对象。</li>
-<li>当<strong>执行</strong>函数 f 的时候，f 会进入相应的<strong>执行环境(excution context)</strong>。</li>
-<li>在创建执行环境的过程中，首先会为 f 添加一个scope属性，即a的<strong>作用域</strong>，其值就为第1步中的scope chain。即a.scope=f 的作用域链。</li>
-<li>然后执行环境会创建一个<strong>活动对象(call object)</strong>。活动对象也是一个拥有属性的对象，但它不具有原型而且不能通过JavaScript代码直接访问。创建完活动对象后，把活动对象添加到 f 的作用域链的最顶端。此时a的作用域链包含了两个对象：f 的活动对象和window对象。</li>
-<li>下一步是在活动对象上添加一个arguments属性，它保存着调用函数 f 时所传递的参数。</li>
-<li>最后把所有函数 f 的形参和内部的函数 f2 的引用也添加到 f 的活动对象上。在这一步中，完成了函数 f2 的定义，因此如同第3步，函数 f2 的作用域链被设置为 f2 所被定义的环境，即 f 的作用域。</li>
+<li>当<strong>定义</strong>函数 f 的时候, js解释器会将函数a的<strong>作用域链(scope chain)</strong>设置为<strong>定义 f 时 a 所在的”环境”</strong>, 如果 f 是一个全局函数，则scope chain中只有window对象。</li>
+<li>当<strong>执行</strong>函数 f 的时候, f 会进入相应的<strong>执行环境(excution context)</strong>.</li>
+<li>在创建执行环境的过程中, 首先会为 f 添加一个scope属性, 即a的<strong>作用域</strong>, 其值就为第1步中的scope chain. 即a.scope=f 的作用域链.</li>
+<li>然后执行环境会创建一个<strong>活动对象(call object)</strong>. 活动对象也是一个拥有属性的对象, 但它不具有原型而且不能通过JavaScript代码直接访问. 创建完活动对象后, 把活动对象添加到 f 的作用域链的最顶端. 此时a的作用域链包含了两个对象: f 的活动对象和window对象.</li>
+<li>下一步是在活动对象上添加一个arguments属性, 它保存着调用函数 f 时所传递的参数.</li>
+<li>最后把所有函数 f 的形参和内部的函数 f2 的引用也添加到 f 的活动对象上. 在这一步中, 完成了函数 f2 的定义, 因此如同第3步, 函数 f2 的作用域链被设置为 f2 所被定义的环境, 即 f 的作用域.</li>
 </ol>
-<p>到此，整个函数 f 从定义到执行的步骤就完成了。此时 f 返回函数 f2 的引用给 ff，又函数 f2 的作用域链包含了对函数 f 的活动对象的引用，也就是说 f2 可以访问到 f 中定义的所有变量和函数。函数 f2 被 ff 引用，函数 f2又依赖函数 f ，因此函数 f 在返回后不会被GC回收。</p>
-<p>当函数 f2 执行的时候亦会像以上步骤一样。因此，执行时 f2 的作用域链包含了3个对象：f2 的活动对象、f 的活动对象和window对象，如下图所示：</p>
-<p><img src="/docImages/scopeChain02.jpg" alt=""></p>
-<p>如图所示，当在函数 f2 中访问一个变量的时候，搜索顺序是：</p>
+<p>到此, 整个函数 f 从定义到执行的步骤就完成了. 此时 f 返回函数 f2 的引用给 ff, 又函数 f2 的作用域链包含了对函数 f 的活动对象的引用, 也就是说 f2 可以访问到 f 中定义的所有变量和函数. 函数 f2 被 ff 引用, 函数 f2又依赖函数 f , 因此函数 f 在返回后不会被GC回收.</p>
+<p>当函数 f2 执行的时候亦会像以上步骤一样. 因此, 执行时 f2 的作用域链包含了3个对象: f2 的活动对象、f 的活动对象和window对象, 如下图所示：</p>
+<p><img src="http://louiszhai.github.io/docImages/scopeChain02.jpg" alt=""></p>
+<p>如图所示, 当在函数 f2 中访问一个变量的时候, 搜索顺序是:</p>
 <ol>
-<li>先搜索自身的活动对象，如果存在则返回，如果不存在将继续搜索函数 f 的活动对象，依次查找，直到找到为止。</li>
-<li>如果函数 f2 存在prototype原型对象，则在查找完自身的活动对象后先查找自身的原型对象，再继续查找。这就是Javascript中的变量查找机制。</li>
-<li>如果整个作用域链上都无法找到，则返回undefined。</li>
+<li>先搜索自身的活动对象, 如果存在则返回, 如果不存在将继续搜索函数 f 的活动对象, 依次查找, 直到找到为止.</li>
+<li>如果函数 f2 存在prototype原型对象, 则在查找完自身的活动对象后先查找自身的原型对象, 再继续查找. 这就是Javascript中的变量查找机制.</li>
+<li>如果整个作用域链上都无法找到, 则返回undefined.</li>
 </ol>
-<p>小结，本段中提到了两个重要的词语：函数的<strong>定义</strong>与<strong>执行</strong>。文中提到函数的作用域是在定义函数时候就已经确定，而不是在执行的时候确定（参看步骤1和3）。用一段代码来说明这个问题：</p>
+<p>小结, 本段中提到了两个重要的词语: 函数的<strong>定义</strong>与<strong>执行</strong>. 文中提到函数的作用域是在定义函数时候就已经确定, 而不是在执行的时候确定(参看步骤1和3).用一段代码来说明这个问题:</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params">x</span>) </span>&#123; </span><br><span class="line">  <span class="keyword">var</span> g = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123; <span class="keyword">return</span> x; &#125;</span><br><span class="line">  <span class="keyword">return</span> g;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> h = f(<span class="number">1</span>);</span><br><span class="line">alert(h());</span><br></pre></td></tr></table></figure>
-<p>这段代码中变量h指向了f中的那个匿名函数(由g返回)。</p>
+<p>这段代码中变量h指向了f中的那个匿名函数(由g返回).</p>
 <ul>
-<li>假设函数h的作用域是在执行alert(h())确定的，那么此时h的作用域链是：h的活动对象-&gt;alert的活动对象-&gt;window对象。</li>
-<li>假设函数h的作用域是在定义时确定的，就是说h指向的那个匿名函数在定义的时候就已经确定了作用域。那么在执行的时候，h的作用域链为：h的活动对象-&gt;f的活动对象-&gt;window对象。</li>
+<li>假设函数h的作用域是在执行alert(h())确定的, 那么此时h的作用域链是: h的活动对象-&gt;alert的活动对象-&gt;window对象.</li>
+<li>假设函数h的作用域是在定义时确定的, 就是说h指向的那个匿名函数在定义的时候就已经确定了作用域. 那么在执行的时候, h的作用域链为: h的活动对象-&gt;f的活动对象-&gt;window对象.</li>
 </ul>
-<p>如果第一种假设成立，那输出值就是undefined；如果第二种假设成立，输出值则为1。</p>
-<p>运行结果证明了第2个假设是正确的，说明函数的作用域确实是在定义这个函数的时候就已经确定了。</p>
+<p>如果第一种假设成立, 那输出值就是undefined; 如果第二种假设成立, 输出值则为1。</p>
+<p>运行结果证明了第2个假设是正确的，说明函数的作用域确实是在定义这个函数的时候就已经确定了.</p>
 <h4 id="u95ED_u5305_u6709_u53EF_u80FD_u5BFC_u81F4IE_u6D4F_u89C8_u5668_u5185_u5B58_u6CC4_u6F0F"><a href="#u95ED_u5305_u6709_u53EF_u80FD_u5BFC_u81F4IE_u6D4F_u89C8_u5668_u5185_u5B58_u6CC4_u6F0F" class="headerlink" title="闭包有可能导致IE浏览器内存泄漏"></a>闭包有可能导致IE浏览器内存泄漏</h4><p>先看一个栗子:</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="keyword">var</span> div = <span class="built_in">document</span>.createElement(<span class="string">"div"</span>);   </span><br><span class="line">  div.onclick = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>上述div的click事件就是一个闭包, 由于该闭包的存在使得 f 函数内部的 div 变量对DOM元素的引用将一直存在.</p>

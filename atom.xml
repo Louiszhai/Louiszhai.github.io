@@ -4,7 +4,7 @@
   <subtitle><![CDATA[程序猿 前端攻城师]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://louiszhai.github.io/"/>
-  <updated>2016-10-11T05:58:30.000Z</updated>
+  <updated>2016-10-23T08:48:03.000Z</updated>
   <id>http://louiszhai.github.io/</id>
   
   <author>
@@ -19,7 +19,7 @@
     <link href="http://louiszhai.github.io/2016/07/01/Math/"/>
     <id>http://louiszhai.github.io/2016/07/01/Math/</id>
     <published>2016-06-30T23:57:48.000Z</published>
-    <updated>2016-10-11T05:58:30.000Z</updated>
+    <updated>2016-10-23T08:48:03.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>截至ES5, JavaScript 中内置(build-in)构造器/对象共有13个, 其中9个是构造器(Number,Boolean, String, Object, Function, Array, RegExp, Error, Date), Global 不能直接访问, Arguments仅在函数调用时由JS引擎创建, 而 Math, JSON 是以对象形式存在的, 本篇将带你走进 JS 内置对象-Math以及与之息息相关的位运算, 一探究竟.</p>
 <a id="more"></a>
 <h3 id="u4E3A_u4EC0_u4E48Math_u8FD9_u4E48_u8BBE_u8BA1"><a href="#u4E3A_u4EC0_u4E48Math_u8FD9_u4E48_u8BBE_u8BA1" class="headerlink" title="为什么Math这么设计"></a>为什么Math这么设计</h3><p>众所周知, 如果需要使用js进行一些常规的数学运算, 是一件十分麻烦的事情. 为了解决这个问题, ECMAScript 在1.1版本中便引入了 Math. Math 之所以被设计成一个对象, 而不是构造器, 是因为对象中的方法或属性可以作为静态方法或常量直接被调用, 方便使用, 同时, Math 也没有创建实例的必要.</p>
@@ -574,7 +574,7 @@
     <link href="http://louiszhai.github.io/2016/06/13/regexp/"/>
     <id>http://louiszhai.github.io/2016/06/13/regexp/</id>
     <published>2016-06-13T00:24:55.000Z</published>
-    <updated>2016-10-11T05:59:17.000Z</updated>
+    <updated>2016-10-23T08:48:03.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>你有没有在搜索文本的时候绞尽脑汁, 试了一个又一个表达式, 还是不行.</p>
 <p>你有没有在表单验证的时候, 只是做做样子(只要不为空就好), 然后烧香拜佛, 虔诚祈祷, 千万不要出错.</p>
 <p>你有没有在使用sed 和 grep 命令的时候, 感觉莫名其妙, 明明应该支持的元字符, 却就是匹配不到.</p>
@@ -1644,7 +1644,7 @@
     <link href="http://louiszhai.github.io/2016/03/23/css-margin/"/>
     <id>http://louiszhai.github.io/2016/03/23/css-margin/</id>
     <published>2016-03-23T12:47:36.000Z</published>
-    <updated>2016-10-11T05:58:30.000Z</updated>
+    <updated>2016-10-23T08:48:03.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>margin属性处于盒子模型的最外层, 用以隔开其他元素, 它可以依次设置4个长度值, 分别表示 “上 右 下 左” 的间距, 其中第1个和第3个值相对应, 第2个与第4个相对应, 如果省略前者, 后者将取与前者相同的数值. margin属性共存在以下 4 种表示方式:</p>
 <ul>
 <li>margin: 10px 1rem 1em 5%; 共 4 个数值, 表示依次设置 上, 右, 下, 左的间距;</li>
@@ -1699,7 +1699,7 @@
     <link href="http://louiszhai.github.io/2016/03/12/css-center/"/>
     <id>http://louiszhai.github.io/2016/03/12/css-center/</id>
     <published>2016-03-12T11:03:04.000Z</published>
-    <updated>2016-10-11T05:58:30.000Z</updated>
+    <updated>2016-10-23T08:48:03.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>熟悉水平居中和垂直居中的方法, 不为别的, 就为用的时候能够信手拈来. 下面直接步入正题.</p>
 <a id="more"></a>
 <h3 id="u6C34_u5E73_u5C45_u4E2D"><a href="#u6C34_u5E73_u5C45_u4E2D" class="headerlink" title="水平居中"></a>水平居中</h3><p>1) 若是行内元素, 给其父元素设置 text-align:center,即可实现行内元素水平居中.</p>
@@ -1871,7 +1871,7 @@
     <link href="http://louiszhai.github.io/2016/03/05/xss/"/>
     <id>http://louiszhai.github.io/2016/03/05/xss/</id>
     <published>2016-03-05T01:48:09.000Z</published>
-    <updated>2016-10-11T05:58:30.000Z</updated>
+    <updated>2016-10-23T08:48:03.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p><strong>XSS</strong> (Cross-Site Script) 攻击又叫跨站脚本攻击, 本质是一种注入攻击. 其原理, 简单的说就是利用各种手段把恶意代码添加到网页中, 并让受害者执行这段脚本. XSS能做用户使用浏览器能做的一切事情. 伟大的同源策略也无法保证不受XSS攻击，因为此时攻击者就在同源之内.</p>
 <a id="more"></a>
 <h3 id="xss_u653B_u51FB_u65B9_u5F0F"><a href="#xss_u653B_u51FB_u65B9_u5F0F" class="headerlink" title="xss攻击方式"></a>xss攻击方式</h3><p>从攻击的方式可以分为</p>
@@ -2055,7 +2055,7 @@
     <link href="http://louiszhai.github.io/2016/01/12/js.String/"/>
     <id>http://louiszhai.github.io/2016/01/12/js.String/</id>
     <published>2016-01-12T12:27:09.000Z</published>
-    <updated>2016-10-11T05:58:30.000Z</updated>
+    <updated>2016-10-23T08:48:03.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>javaScript 中, 字符串无处不在, 并且所有的字符串方法均来自 String.prototype, 这一节, 我们走进看一看String内部, 探讨那些常用或不常用的字符串操作方法.</p>
 <a id="more"></a>
 <h3 id="String-prototype"><a href="#String-prototype" class="headerlink" title="String.prototype"></a>String.prototype</h3><p>String.prototype 属性指向 String 的原型对象. 以下是它的属性特性:</p>
@@ -2245,7 +2245,7 @@
     <link href="http://louiszhai.github.io/2016/01/11/bind/"/>
     <id>http://louiszhai.github.io/2016/01/11/bind/</id>
     <published>2016-01-11T00:01:33.000Z</published>
-    <updated>2016-10-11T05:58:30.000Z</updated>
+    <updated>2016-10-23T08:48:03.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>ES5新增了 Function.prototype.bind 方法, 该方法不同于jquery的bind 方法, 它主要用于固定 this 作用域, 避免各种由于上下文切换造成的语义问题. 常用在 setTimeout, for循环等内部.</p>
 <a id="more"></a>
 <h3 id="bind"><a href="#bind" class="headerlink" title="bind"></a>bind</h3><p>语法: func.bind(thisArg, arg1, arg2, ….)</p>
@@ -2288,7 +2288,7 @@
     <link href="http://louiszhai.github.io/2016/01/11/cross-domain/"/>
     <id>http://louiszhai.github.io/2016/01/11/cross-domain/</id>
     <published>2016-01-11T00:01:33.000Z</published>
-    <updated>2016-10-11T05:58:30.000Z</updated>
+    <updated>2016-10-23T08:48:03.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>同源策略 (Same-Origin Policy) 最早由 Netscape 公司提出, 所谓同源就是要求, 域名, 协议, 端口相同. 非同源的脚本不能访问或者操作其他域的页面对象(如DOM等). 作为著名的安全策略, 虽然它只是一个规范, 并不强制要求,  但现在所有支持 javaScript 的浏览器都会使用这个策略. 以至于该策略成为浏览器最核心最基本的安全功能, 如果缺少了同源策略, web的安全将无从谈起.</p>
 <a id="more"></a>
 <h3 id="u540C_u6E90_u7B56_u7565_u7684_u9650_u5236"><a href="#u540C_u6E90_u7B56_u7565_u7684_u9650_u5236" class="headerlink" title="同源策略的限制"></a>同源策略的限制</h3><p>同源策略下的web世界, 域的壁垒高筑, 从而保证各个网页相互独立, 互相之间不能直接访问, iframe, ajax 均受其限制, 而script标签不受此限制.</p>
@@ -2427,7 +2427,7 @@
     <link href="http://louiszhai.github.io/2016/01/10/js.timer/"/>
     <id>http://louiszhai.github.io/2016/01/10/js.timer/</id>
     <published>2016-01-10T05:52:11.000Z</published>
-    <updated>2016-10-11T05:58:30.000Z</updated>
+    <updated>2016-10-23T08:48:03.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>设置web定时器应当是一个相当常见的需求, 实际上, 我们也有两大工具函数可以任意调用: setTimeout, setInterval. 然而 js 里却没有java的那种wait(), 定时又未必准时, 要想写个定时器还须得深入理解 setTimeout 和 setInterval 的运行原理才行.</p>
 <a id="more"></a>
 <h3 id="u8FD0_u884C_u539F_u7406"><a href="#u8FD0_u884C_u539F_u7406" class="headerlink" title="运行原理"></a>运行原理</h3><p>setTimeout 和 setInterval 并非异步调用, 所谓的”异步调用”, 只是因它们都往 js 引擎的 <code>待处理任务队列</code> 末尾插入代码, 看起来像”异步调用”而已.</p>
@@ -2492,7 +2492,7 @@
     <link href="http://louiszhai.github.io/2015/12/29/array/"/>
     <id>http://louiszhai.github.io/2015/12/29/array/</id>
     <published>2015-12-29T01:00:17.000Z</published>
-    <updated>2016-10-11T05:58:30.000Z</updated>
+    <updated>2016-10-23T08:48:03.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>数组是一种非常重要的数据类型, 它语法简单, 灵活,高效, 在多数编程语言中, 数组都充当着至关重要的角色, 以至于很难想象没有数组的编程语言会是什么样子. 这期我们就来侃侃JavaScript的数组, 趴趴它的那点破事儿. 这篇博客从2015年写到了2016年, 权当是跨年的总结吧, 祝大家新年快乐, 2016更好, 未来更好!</p>
 <a id="more"></a>
 <p>声明: 以下未特别标明的方法均为ES5已实现的方法.</p>
@@ -3056,7 +3056,7 @@
     <link href="http://louiszhai.github.io/2015/12/22/scopeChain/"/>
     <id>http://louiszhai.github.io/2015/12/22/scopeChain/</id>
     <published>2015-12-22T00:06:13.000Z</published>
-    <updated>2016-10-11T05:58:30.000Z</updated>
+    <updated>2016-10-23T09:21:20.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>上一篇我们讲到数组遍历, 本文我们更进一步, 讲讲如何提高遍历的效率. 欢迎阅读本篇<strong><code>详解JS作用域链及闭包</code></strong>.</p>
 <a id="more"></a>
 <h3 id="u56DE_u987E_u4E0A_u7BC7"><a href="#u56DE_u987E_u4E0A_u7BC7" class="headerlink" title="回顾上篇"></a>回顾上篇</h3><p>请先看上一篇中提到的for循环代码:</p>
@@ -3088,40 +3088,43 @@
 <p>函数执行时, 在函数 f 内部会生成一个 active object 和 scope chain. JavaScript引擎内部对象会放入 active object中, 外部的 e 变量处于scope chain的第二层, index=1, 而内部的g变量处于scope chain的顶层, index=0, 因此访问g变量总比访问e变量来的快些.</p>
 <h3 id="u95ED_u5305"><a href="#u95ED_u5305" class="headerlink" title="闭包"></a>闭包</h3><p>聊到作用域, 就不得不说闭包, 那么, 什么是闭包?</p>
 <p>“官方”的解释是：闭包是一个拥有许多变量和绑定了这些变量的环境的表达式（通常是一个函数），因而这些变量也是该表达式的一部分。</p>
-<p>这是什么意思呢, 其实我也不懂.</p>
-<p>通俗的讲就是: 闭包是一个函数, 并且这个函数可以访问其他函数内的局部变量.</p>
-<p>可是我们都知道函数作用域是局部作用域, 为了做到让另一个函数访问它内部的变量, 恐怕只能将另一个函数放入它的内部, 如下:</p>
+<p>这是什么意思呢, 简单来说就是: </p>
+<ol>
+<li>函数执行时返回内部私有函数, 或者通过其他方式将内部私有函数保留在外(比如说通过将其内部私有函数的引用赋值外部变量), 从而阻止该函数内部作用域等被执行引擎回收.</li>
+<li>在函数外部通过访问暴露在外的函数内部私有函数, 从而具有访问函数内部私有作用域的效果, 就是闭包.</li>
+</ol>
+<p>ES6之前, 通常我们实现的模块就是利用了闭包. 闭包依赖的结构有个鲜明的特点, 即: 一个函数在词法作用域之外执行. 如下, f2是闭包的关键, 它的词法作用域便是函数f的内部私有作用域, 且它在f的作用域外部执行.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> h = <span class="number">1</span>;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="keyword">var</span> i = <span class="number">2</span>;</span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> <span class="title">f2</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  	<span class="keyword">var</span> j = <span class="number">3</span> + i + h;</span><br><span class="line">    <span class="built_in">console</span>.log(j);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> ff = f();</span><br><span class="line">ff();<span class="comment">//6</span></span><br></pre></td></tr></table></figure>
-<p>由于 f2 处于 f 的内部, 因此 f2 内可以访问到 f 的局部作用域, 这样通过返回 f2 就能保证在 f 函数外部也能访问到 i 变量.</p>
+<p>由于定义时 f2 处于 f 的内部, 因此 f2 内可以访问到 f 的内部私有作用域, 这样通过返回 f2 就能保证在 f 函数外部也能访问到 i 变量.</p>
 <p>当f2执行时, 变量 j 处于scope chain的 index0的位置上, 变量 i 和变量 h 分别处于 scope chain 的 index1 index2 的位置上. 因此 j 的赋值过程其实就是沿着 scope chain 第二层 第三层 依次找到 i 和 h 的值, 然后将它们和3一起求和, 最终赋值给 j .</p>
 <p>浏览器沿着 scope chain 寻找变量总是需要耗费CPU时间, 越是 scope chain 的 外层(或者离f2越远的变量), 浏览器查找起来越是需要时间, 因为 scope chain 需要历经更多次遍历. 因此全局变量(window)总是需要最多的访问时间.</p>
 <h4 id="u95ED_u5305_u5185_u7684_u5FAE_u89C2_u4E16_u754C"><a href="#u95ED_u5305_u5185_u7684_u5FAE_u89C2_u4E16_u754C" class="headerlink" title="闭包内的微观世界"></a>闭包内的微观世界</h4><p>　　如果要更加深入的了解闭包以及函数 f 和嵌套函数 f2 的关系，我们需要引入另外几个概念：函数的执行环境(excution context)、活动对象(call object)、作用域(scope)、作用域链(scope chain)。以函数a从定义到执行的过程为例阐述这几个概念。</p>
 <ol>
-<li>当<strong>定义</strong>函数 f 的时候，js解释器会将函数a的<strong>作用域链(scope chain)</strong>设置为<strong>定义 f 时 a 所在的“环境”</strong>，如果 f 是一个全局函数，则scope chain中只有window对象。</li>
-<li>当<strong>执行</strong>函数 f 的时候，f 会进入相应的<strong>执行环境(excution context)</strong>。</li>
-<li>在创建执行环境的过程中，首先会为 f 添加一个scope属性，即a的<strong>作用域</strong>，其值就为第1步中的scope chain。即a.scope=f 的作用域链。</li>
-<li>然后执行环境会创建一个<strong>活动对象(call object)</strong>。活动对象也是一个拥有属性的对象，但它不具有原型而且不能通过JavaScript代码直接访问。创建完活动对象后，把活动对象添加到 f 的作用域链的最顶端。此时a的作用域链包含了两个对象：f 的活动对象和window对象。</li>
-<li>下一步是在活动对象上添加一个arguments属性，它保存着调用函数 f 时所传递的参数。</li>
-<li>最后把所有函数 f 的形参和内部的函数 f2 的引用也添加到 f 的活动对象上。在这一步中，完成了函数 f2 的定义，因此如同第3步，函数 f2 的作用域链被设置为 f2 所被定义的环境，即 f 的作用域。</li>
+<li>当<strong>定义</strong>函数 f 的时候, js解释器会将函数a的<strong>作用域链(scope chain)</strong>设置为<strong>定义 f 时 a 所在的”环境”</strong>, 如果 f 是一个全局函数，则scope chain中只有window对象。</li>
+<li>当<strong>执行</strong>函数 f 的时候, f 会进入相应的<strong>执行环境(excution context)</strong>.</li>
+<li>在创建执行环境的过程中, 首先会为 f 添加一个scope属性, 即a的<strong>作用域</strong>, 其值就为第1步中的scope chain. 即a.scope=f 的作用域链.</li>
+<li>然后执行环境会创建一个<strong>活动对象(call object)</strong>. 活动对象也是一个拥有属性的对象, 但它不具有原型而且不能通过JavaScript代码直接访问. 创建完活动对象后, 把活动对象添加到 f 的作用域链的最顶端. 此时a的作用域链包含了两个对象: f 的活动对象和window对象.</li>
+<li>下一步是在活动对象上添加一个arguments属性, 它保存着调用函数 f 时所传递的参数.</li>
+<li>最后把所有函数 f 的形参和内部的函数 f2 的引用也添加到 f 的活动对象上. 在这一步中, 完成了函数 f2 的定义, 因此如同第3步, 函数 f2 的作用域链被设置为 f2 所被定义的环境, 即 f 的作用域.</li>
 </ol>
-<p>到此，整个函数 f 从定义到执行的步骤就完成了。此时 f 返回函数 f2 的引用给 ff，又函数 f2 的作用域链包含了对函数 f 的活动对象的引用，也就是说 f2 可以访问到 f 中定义的所有变量和函数。函数 f2 被 ff 引用，函数 f2又依赖函数 f ，因此函数 f 在返回后不会被GC回收。</p>
-<p>当函数 f2 执行的时候亦会像以上步骤一样。因此，执行时 f2 的作用域链包含了3个对象：f2 的活动对象、f 的活动对象和window对象，如下图所示：</p>
-<p><img src="/docImages/scopeChain02.jpg" alt=""></p>
-<p>如图所示，当在函数 f2 中访问一个变量的时候，搜索顺序是：</p>
+<p>到此, 整个函数 f 从定义到执行的步骤就完成了. 此时 f 返回函数 f2 的引用给 ff, 又函数 f2 的作用域链包含了对函数 f 的活动对象的引用, 也就是说 f2 可以访问到 f 中定义的所有变量和函数. 函数 f2 被 ff 引用, 函数 f2又依赖函数 f , 因此函数 f 在返回后不会被GC回收.</p>
+<p>当函数 f2 执行的时候亦会像以上步骤一样. 因此, 执行时 f2 的作用域链包含了3个对象: f2 的活动对象、f 的活动对象和window对象, 如下图所示：</p>
+<p><img src="http://louiszhai.github.io/docImages/scopeChain02.jpg" alt=""></p>
+<p>如图所示, 当在函数 f2 中访问一个变量的时候, 搜索顺序是:</p>
 <ol>
-<li>先搜索自身的活动对象，如果存在则返回，如果不存在将继续搜索函数 f 的活动对象，依次查找，直到找到为止。</li>
-<li>如果函数 f2 存在prototype原型对象，则在查找完自身的活动对象后先查找自身的原型对象，再继续查找。这就是Javascript中的变量查找机制。</li>
-<li>如果整个作用域链上都无法找到，则返回undefined。</li>
+<li>先搜索自身的活动对象, 如果存在则返回, 如果不存在将继续搜索函数 f 的活动对象, 依次查找, 直到找到为止.</li>
+<li>如果函数 f2 存在prototype原型对象, 则在查找完自身的活动对象后先查找自身的原型对象, 再继续查找. 这就是Javascript中的变量查找机制.</li>
+<li>如果整个作用域链上都无法找到, 则返回undefined.</li>
 </ol>
-<p>小结，本段中提到了两个重要的词语：函数的<strong>定义</strong>与<strong>执行</strong>。文中提到函数的作用域是在定义函数时候就已经确定，而不是在执行的时候确定（参看步骤1和3）。用一段代码来说明这个问题：</p>
+<p>小结, 本段中提到了两个重要的词语: 函数的<strong>定义</strong>与<strong>执行</strong>. 文中提到函数的作用域是在定义函数时候就已经确定, 而不是在执行的时候确定(参看步骤1和3).用一段代码来说明这个问题:</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params">x</span>) </span>&#123; </span><br><span class="line">  <span class="keyword">var</span> g = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123; <span class="keyword">return</span> x; &#125;</span><br><span class="line">  <span class="keyword">return</span> g;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> h = f(<span class="number">1</span>);</span><br><span class="line">alert(h());</span><br></pre></td></tr></table></figure>
-<p>这段代码中变量h指向了f中的那个匿名函数(由g返回)。</p>
+<p>这段代码中变量h指向了f中的那个匿名函数(由g返回).</p>
 <ul>
-<li>假设函数h的作用域是在执行alert(h())确定的，那么此时h的作用域链是：h的活动对象-&gt;alert的活动对象-&gt;window对象。</li>
-<li>假设函数h的作用域是在定义时确定的，就是说h指向的那个匿名函数在定义的时候就已经确定了作用域。那么在执行的时候，h的作用域链为：h的活动对象-&gt;f的活动对象-&gt;window对象。</li>
+<li>假设函数h的作用域是在执行alert(h())确定的, 那么此时h的作用域链是: h的活动对象-&gt;alert的活动对象-&gt;window对象.</li>
+<li>假设函数h的作用域是在定义时确定的, 就是说h指向的那个匿名函数在定义的时候就已经确定了作用域. 那么在执行的时候, h的作用域链为: h的活动对象-&gt;f的活动对象-&gt;window对象.</li>
 </ul>
-<p>如果第一种假设成立，那输出值就是undefined；如果第二种假设成立，输出值则为1。</p>
-<p>运行结果证明了第2个假设是正确的，说明函数的作用域确实是在定义这个函数的时候就已经确定了。</p>
+<p>如果第一种假设成立, 那输出值就是undefined; 如果第二种假设成立, 输出值则为1。</p>
+<p>运行结果证明了第2个假设是正确的，说明函数的作用域确实是在定义这个函数的时候就已经确定了.</p>
 <h4 id="u95ED_u5305_u6709_u53EF_u80FD_u5BFC_u81F4IE_u6D4F_u89C8_u5668_u5185_u5B58_u6CC4_u6F0F"><a href="#u95ED_u5305_u6709_u53EF_u80FD_u5BFC_u81F4IE_u6D4F_u89C8_u5668_u5185_u5B58_u6CC4_u6F0F" class="headerlink" title="闭包有可能导致IE浏览器内存泄漏"></a>闭包有可能导致IE浏览器内存泄漏</h4><p>先看一个栗子:</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="keyword">var</span> div = <span class="built_in">document</span>.createElement(<span class="string">"div"</span>);   </span><br><span class="line">  div.onclick = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>上述div的click事件就是一个闭包, 由于该闭包的存在使得 f 函数内部的 div 变量对DOM元素的引用将一直存在.</p>
@@ -3190,7 +3193,7 @@
     <link href="http://louiszhai.github.io/2015/12/18/traverse/"/>
     <id>http://louiszhai.github.io/2015/12/18/traverse/</id>
     <published>2015-12-18T02:54:48.000Z</published>
-    <updated>2016-10-11T05:58:30.000Z</updated>
+    <updated>2016-10-23T08:48:03.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>遍历数组或对象是一名程序员的基本素养之一. 然而遍历却不是一件简单的事, 优秀的程序员知道怎么去选择合适的遍历方法, 优化遍历效率. 本篇将带你走进JavaScript遍历的世界, 享受分析JS循环的快感. 本篇所有代码都可以直接运行, 希望您通读本篇后, 不止是浏览, 最好是亲手去实践下.</p>
 <a id="more"></a>
 <h3 id="u6982_u8FF0"><a href="#u6982_u8FF0" class="headerlink" title="概述"></a>概述</h3><p>js有如下两种数据需要经常遍历</p>
@@ -3654,7 +3657,7 @@
     <link href="http://louiszhai.github.io/2015/12/17/prototype/"/>
     <id>http://louiszhai.github.io/2015/12/17/prototype/</id>
     <published>2015-12-17T01:34:36.000Z</published>
-    <updated>2016-10-11T05:58:30.000Z</updated>
+    <updated>2016-10-23T08:48:03.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u6982_u5FF5"><a href="#u6982_u5FF5" class="headerlink" title="概念"></a>概念</h3><ol>
 <li><strong>prototype</strong> 是函数(function) 的一个属性, 它指向函数的原型.</li>
 <li><strong>__proto__</strong>   是对象的内部属性, 它指向构造器的原型, 对象依赖它进行原型链查询.</li>
@@ -3828,7 +3831,7 @@
     <link href="http://louiszhai.github.io/2015/12/15/arguments/"/>
     <id>http://louiszhai.github.io/2015/12/15/arguments/</id>
     <published>2015-12-15T12:44:51.000Z</published>
-    <updated>2016-10-11T05:58:30.000Z</updated>
+    <updated>2016-10-23T08:48:03.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u6982_u8FF0"><a href="#u6982_u8FF0" class="headerlink" title="概述"></a>概述</h3><p><strong>Arguments</strong> 对象已经不再是函数的属性了, 它是函数内部的本地变量,  包括如下属性：</p>
 <ol>
 <li>callee — 指向当前函数的引用</li>
@@ -3879,7 +3882,7 @@
     <link href="http://louiszhai.github.io/2015/12/15/prototypeChain/"/>
     <id>http://louiszhai.github.io/2015/12/15/prototypeChain/</id>
     <published>2015-12-15T01:26:28.000Z</published>
-    <updated>2016-10-11T05:58:30.000Z</updated>
+    <updated>2016-10-23T08:48:03.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u6458_u81EAJavaScript_u9AD8_u7EA7_u7A0B_u5E8F_u8BBE_u8BA1_3A"><a href="#u6458_u81EAJavaScript_u9AD8_u7EA7_u7A0B_u5E8F_u8BBE_u8BA1_3A" class="headerlink" title="摘自JavaScript高级程序设计:"></a>摘自JavaScript高级程序设计:</h3><p>继承是OO语言中的一个最为人津津乐道的概念.许多OO语言都支持两种继承方式: <strong>接口继承</strong> 和 <strong>实现继承</strong> .接口继承只继承方法签名,而实现继承则继承实际的方法.由于js中方法没有签名,在ECMAScript中无法实现接口继承.ECMAScript只支持实现继承,而且其 <code>实现继承</code> 主要是依靠原型链来实现的.</p>
 <a id="more"></a> 
 <h3 id="u6982_u5FF5"><a href="#u6982_u5FF5" class="headerlink" title="概念"></a>概念</h3><p>简单回顾下构造函数,原型和实例的关系:</p>
