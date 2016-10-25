@@ -2,6 +2,11 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://louiszhai.github.io/2016/06/13/regexp/</loc>
+    <lastmod>2016-10-25T01:41:24.000Z</lastmod>
+  </url>
+  
+  <url>
     <loc>http://louiszhai.github.io/2015/12/22/scopeChain/</loc>
     <lastmod>2016-10-23T09:21:20.000Z</lastmod>
   </url>
@@ -12,17 +17,12 @@
   </url>
   
   <url>
-    <loc>http://louiszhai.github.io/2015/12/18/traverse/</loc>
-    <lastmod>2016-10-23T08:48:03.000Z</lastmod>
-  </url>
-  
-  <url>
     <loc>http://louiszhai.github.io/2016/07/01/Math/</loc>
     <lastmod>2016-10-23T08:48:03.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://louiszhai.github.io/2016/06/13/regexp/</loc>
+    <loc>http://louiszhai.github.io/2015/12/18/traverse/</loc>
     <lastmod>2016-10-23T08:48:03.000Z</lastmod>
   </url>
   
