@@ -12,10 +12,8 @@
 <meta property="og:url" content="http://louiszhai.github.io/2016/01/11/cross-domain/index.html">
 <meta property="og:site_name" content="louis blog">
 <meta property="og:description" content="JavaScript Same-Origin 同源策略 跨域 jsonp postMessage CORS domain">
-<meta property="og:image" content="http://louiszhai.github.io/docImages/cross-domain01.jpg">
-<meta property="og:image" content="http://louiszhai.github.io/docImages/cross-domain02.jpg">
 <meta property="og:image" content="http://louiszhai.github.io/docImages/cross-domain03.jpg">
-<meta property="og:updated_time" content="2016-10-23T08:48:03.000Z">
+<meta property="og:updated_time" content="2016-10-29T05:03:29.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="由同源策略到前端跨域">
 <meta name="twitter:description" content="JavaScript Same-Origin 同源策略 跨域 jsonp postMessage CORS domain">
@@ -271,14 +269,11 @@
 <figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">Access-Control-Allow-Methods</span>: <span class="string">POST, GET, OPTIONS</span></span><br></pre></td></tr></table></figure>
 <p>如果是POST请求, 且提交的数据类型是json, 那么, CORS需要指定headers.</p>
 <figure class="highlight fortran"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">Access</span>-Control-Allow-Headers: Content-<span class="keyword">Type</span></span><br></pre></td></tr></table></figure>
-<p>CORS为安全考据, 在跨站ajax访问的时候是不带cookie的, 但这点同样可以改变, 只需要加这个头, 浏览器就会把cookie 奉上!</p>
+<p>CORS默认是不带cookie的, 设置以下字段将允许浏览器发送cookie.</p>
 <figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Access-Control-Allow-<span class="string">Credentials:</span> <span class="literal">true</span></span><br></pre></td></tr></table></figure>
-<p>在访问资源前，有时浏览器会先发出OPTIONS请求，获取这些权限信息，并比对当前站点的脚本是否有权限，然后再将实际的脚本的数据请求发出. 发现权限不允许, 则不会发出请求. 逻辑流程图为:</p>
-<p><img src="/docImages/cross-domain01.jpg" alt=""></p>
-<p>浏览器也可以直接将GET请求发出，数据和权限同时到达浏览器端，但是数据是否交给脚本处理需要浏览器检查权限对比后作出决定。</p>
-<p>一次具体的跨域访问的流程为：</p>
-<p><img src="/docImages/cross-domain02.jpg" alt=""></p>
-<p>因此权限控制交给了服务端，服务端一般也会提供对资源的CORS的配置.</p>
+<p>除此之外, 为了跨站发送cookie等验证信息, <code>access-control-allow-origin</code> 字段将不允许设置为<code>*</code>, 它需要明确指出与请求网页一致的域名.</p>
+<p>同时, 请求网页中需要做如下显式指定才能真正发送cookie.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">xhr.withCredentials = <span class="literal">true</span>;</span><br></pre></td></tr></table></figure>
 <h4 id="document-domain"><a href="#document-domain" class="headerlink" title="document.domain"></a>document.domain</h4><p>通过修改document的domain属性，我们可以在域和子域或者不同的子域之间通信(即它们必须在同一个一级域名下)。同域策略认为域和子域隶属于不同的域，比如a.com和 script.a.com是不同的域，这时，我们无法在a.com下的页面中调用script.a.com中定义的JavaScript方法。但是当我们把它们document的domain属性都修改为a.com，浏览器就会认为它们处于同一个域下，那么我们就可以互相获取对方数据或者操作对方DOM了。</p>
 <p>比如, 我们在 www.a.com/a.html 下, 现在想获取 www.script.a.com/b.html, 即主域名相同, 二级域名不同. 那么可以这么做:</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">document</span>.domain = <span class="string">'a.com'</span>;</span><br><span class="line"><span class="keyword">var</span> iframe = <span class="built_in">document</span>.createElement(<span class="string">'iframe'</span>);</span><br><span class="line">iframe.src = <span class="string">'http://www.script.a.com/b.html'</span>;</span><br><span class="line">iframe.style.display = <span class="string">'none'</span>;</span><br><span class="line"><span class="built_in">document</span>.body.appendChild(iframe);</span><br><span class="line">iframe.addEventListener(<span class="string">'load'</span>,<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">	<span class="comment">//TODO 载入完成时做的事情</span></span><br><span class="line">	<span class="comment">//var _document = iframe.contentWindow.document;</span></span><br><span class="line"> 	<span class="comment">//...</span></span><br><span class="line">&#125;,<span class="literal">false</span>);</span><br></pre></td></tr></table></figure>
