@@ -2,78 +2,88 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>http://louiszhai.github.io/2016/01/11/cross-domain/</loc>
-    <lastmod>2016-10-29T05:03:29.000Z</lastmod>
+    <loc>http://louiszhai.github.io/2016/11/02/ajax/</loc>
+    <lastmod>2016-11-02T04:48:32.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://louiszhai.github.io/2016/01/12/js.String/</loc>
-    <lastmod>2016-10-29T04:45:15.000Z</lastmod>
+    <loc>http://louiszhai.github.io/2016/11/02/fetch/</loc>
+    <lastmod>2016-11-02T04:48:16.000Z</lastmod>
   </url>
   
   <url>
     <loc>http://louiszhai.github.io/2015/12/18/traverse/</loc>
-    <lastmod>2016-10-29T04:45:15.000Z</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://louiszhai.github.io/2015/12/22/scopeChain/</loc>
-    <lastmod>2016-10-29T04:45:15.000Z</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://louiszhai.github.io/2016/06/13/regexp/</loc>
-    <lastmod>2016-10-29T04:45:15.000Z</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://louiszhai.github.io/2015/12/15/prototypeChain/</loc>
-    <lastmod>2016-10-29T04:45:15.000Z</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://louiszhai.github.io/2015/12/17/prototype/</loc>
-    <lastmod>2016-10-29T04:45:15.000Z</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://louiszhai.github.io/2016/01/10/js.timer/</loc>
-    <lastmod>2016-10-29T04:45:15.000Z</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://louiszhai.github.io/2015/12/29/array/</loc>
-    <lastmod>2016-10-29T04:45:15.000Z</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://louiszhai.github.io/2016/01/11/bind/</loc>
-    <lastmod>2016-10-29T04:45:15.000Z</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://louiszhai.github.io/2016/03/05/xss/</loc>
-    <lastmod>2016-10-29T04:45:15.000Z</lastmod>
+    <lastmod>2016-11-02T04:45:36.000Z</lastmod>
   </url>
   
   <url>
     <loc>http://louiszhai.github.io/2016/07/01/Math/</loc>
-    <lastmod>2016-10-29T04:45:15.000Z</lastmod>
+    <lastmod>2016-11-02T04:45:36.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://louiszhai.github.io/2016/03/23/css-margin/</loc>
-    <lastmod>2016-10-29T04:45:15.000Z</lastmod>
+    <loc>http://louiszhai.github.io/2016/06/13/regexp/</loc>
+    <lastmod>2016-11-02T04:45:36.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://louiszhai.github.io/2016/03/12/css-center/</loc>
-    <lastmod>2016-10-29T04:45:15.000Z</lastmod>
+    <loc>http://louiszhai.github.io/2015/12/15/prototypeChain/</loc>
+    <lastmod>2016-11-02T04:45:36.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://louiszhai.github.io/2015/12/17/prototype/</loc>
+    <lastmod>2016-11-02T04:45:36.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://louiszhai.github.io/2016/01/10/js.timer/</loc>
+    <lastmod>2016-11-02T04:45:36.000Z</lastmod>
   </url>
   
   <url>
     <loc>http://louiszhai.github.io/2015/12/15/arguments/</loc>
-    <lastmod>2016-10-29T04:45:15.000Z</lastmod>
+    <lastmod>2016-11-02T04:45:36.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://louiszhai.github.io/2015/12/29/array/</loc>
+    <lastmod>2016-11-02T04:45:36.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://louiszhai.github.io/2016/01/12/js.String/</loc>
+    <lastmod>2016-11-02T04:45:36.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://louiszhai.github.io/2016/03/05/xss/</loc>
+    <lastmod>2016-11-02T04:45:36.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://louiszhai.github.io/2015/12/22/scopeChain/</loc>
+    <lastmod>2016-11-02T04:45:36.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://louiszhai.github.io/2016/03/23/css-margin/</loc>
+    <lastmod>2016-11-02T04:45:36.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://louiszhai.github.io/2016/01/11/bind/</loc>
+    <lastmod>2016-11-02T04:45:36.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://louiszhai.github.io/2016/01/11/cross-domain/</loc>
+    <lastmod>2016-11-02T04:45:36.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://louiszhai.github.io/2016/03/12/css-center/</loc>
+    <lastmod>2016-11-02T04:45:36.000Z</lastmod>
   </url>
   
   <url>

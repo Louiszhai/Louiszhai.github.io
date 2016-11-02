@@ -1,0 +1,1302 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" >
+  <title>Ajax知识体系 | louis blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="ajax XMLHttpRequest xhr fetch XDomainRequest jquery.ajax overrideMimeType CORS FileReader postman angular withCredentials getAllResponseHeaders upload">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Ajax知识体系">
+<meta property="og:url" content="http://louiszhai.github.io/2016/11/02/ajax/index.html">
+<meta property="og:site_name" content="louis blog">
+<meta property="og:description" content="ajax XMLHttpRequest xhr fetch XDomainRequest jquery.ajax overrideMimeType CORS FileReader postman angular withCredentials getAllResponseHeaders upload">
+<meta property="og:image" content="http://louiszhai.github.io/docImages/ajax01.png">
+<meta property="og:image" content="http://louiszhai.github.io/docImages/ajax02.png">
+<meta property="og:image" content="http://louiszhai.github.io/docImages/ajax03.png">
+<meta property="og:image" content="http://louiszhai.github.io/docImages/ajax04.png">
+<meta property="og:image" content="http://louiszhai.github.io/docImages/ajax05.png">
+<meta property="og:image" content="http://louiszhai.github.io/docImages/ajax06.png">
+<meta property="og:image" content="http://louiszhai.github.io/docImages/cross-domain02.jpg">
+<meta property="og:image" content="http://louiszhai.github.io/docImages/ajax25.png">
+<meta property="og:image" content="http://louiszhai.github.io/docImages/cross-domain01.jpg">
+<meta property="og:image" content="http://louiszhai.github.io/docImages/ajax17.png">
+<meta property="og:image" content="http://louiszhai.github.io/docImages/ajax18.png">
+<meta property="og:image" content="http://louiszhai.github.io/docImages/ajax19.png">
+<meta property="og:image" content="http://louiszhai.github.io/docImages/ajax20.png">
+<meta property="og:image" content="http://louiszhai.github.io/docImages/ajax21.png">
+<meta property="og:image" content="http://louiszhai.github.io/docImages/ajax26.png">
+<meta property="og:updated_time" content="2016-11-02T04:48:32.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Ajax知识体系">
+<meta name="twitter:description" content="ajax XMLHttpRequest xhr fetch XDomainRequest jquery.ajax overrideMimeType CORS FileReader postman angular withCredentials getAllResponseHeaders upload">
+  
+    <link rel="alternative" href="/atom.xml" title="louis blog" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+
+<body>
+<div id="container">
+    <div class="left-col">
+        <div class="overlay">
+	<!--<input type="text" class="st-default-search-input" style="position:absolute;top: 50px;left: 35px;">-->
+</div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img src="/i.png" class="js-avatar" style="width: 100%;height: 100%;opacity: 1;">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">louis</a></h1>
+		</hgroup>
+
+		
+		<p class="header-subtitle">程序猿 前端攻城师</p>
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>菜单</li>
+						<li>標籤</li>
+						
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives/">所有文章</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="github" target="_blank" href="https://github.com/Louiszhai" title="github">github</a>
+					        
+								<a class="weibo" target="_blank" href="http://weibo.com/xingyez" title="weibo">weibo</a>
+					        
+								<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						<a href="/tags/CSS/" style="font-size: 15px;">CSS</a> <a href="/tags/JavaScript/" style="font-size: 20px;">JavaScript</a> <a href="/tags/XSS/" style="font-size: 10px;">XSS</a> <a href="/tags/css/" style="font-size: 15px;">css</a> <a href="/tags/javascript/" style="font-size: 10px;">javascript</a>
+					</div>
+				</section>
+				
+				
+				
+
+				
+			</div>
+		</div>
+	</header>				
+</div>
+
+    </div>
+    <div class="mid-col">
+        <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">louis</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+			
+				<img src="/i.png" class="js-avatar" style="width: 100%;height: 100%;opacity: 1;">
+			
+			</div>
+			<hgroup>
+			  <h1 class="header-author">louis</h1>
+			</hgroup>
+			
+			<p class="header-subtitle">程序猿 前端攻城师</p>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives/">所有文章</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="https://github.com/Louiszhai" title="github">github</a>
+			        
+						<a class="weibo" target="_blank" href="http://weibo.com/xingyez" title="weibo">weibo</a>
+			        
+						<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+
+        <div class="body-wrap"><article id="post-ajax" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/11/02/ajax/" class="article-date">
+  	<time datetime="2016-11-02T04:48:27.000Z" itemprop="datePublished">2016-11-02</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Ajax知识体系
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/">JavaScript</a></li></ul>
+	</div>
+
+        
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          <span class="toc-arrow"></span>
+<div id="toc" class="toc-article">
+    <div class="toc-title">目录</div>
+    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#u5BFC_u8BFB"><span class="toc-text">导读</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u6D4F_u89C8_u5668_u4E3Aajax_u505A_u4E86_u4EC0_u4E48"><span class="toc-text">浏览器为ajax做了什么</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#MSXML"><span class="toc-text">MSXML</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#u5168_u5E73_u53F0_u517C_u5BB9_u7684XMLHttpRequest_u5BF9_u8C61"><span class="toc-text">全平台兼容的XMLHttpRequest对象</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ajax_u6709_u6CA1_u6709_u7834_u574Fjs_u5355_u7EBF_u7A0B_u673A_u5236"><span class="toc-text">ajax有没有破坏js单线程机制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ajax_u4E0EsetTimeout_u6392_u961F_u95EE_u9898"><span class="toc-text">ajax与setTimeout排队问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#XMLHttpRequest__u5C5E_u6027_u89E3_u8BFB"><span class="toc-text">XMLHttpRequest 属性解读</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#inherit"><span class="toc-text">inherit</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#readyState"><span class="toc-text">readyState</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#onreadystatechange"><span class="toc-text">onreadystatechange</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#status"><span class="toc-text">status</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#statusText"><span class="toc-text">statusText</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#onloadstart"><span class="toc-text">onloadstart</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#onprogress"><span class="toc-text">onprogress</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#onload"><span class="toc-text">onload</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#onloadend"><span class="toc-text">onloadend</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#timeout"><span class="toc-text">timeout</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#ontimeout"><span class="toc-text">ontimeout</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#response_responseText"><span class="toc-text">response responseText</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#responseXML"><span class="toc-text">responseXML</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#responseType"><span class="toc-text">responseType</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#responseURL"><span class="toc-text">responseURL</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#withCredentials"><span class="toc-text">withCredentials</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#abort"><span class="toc-text">abort</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#getResponseHeader"><span class="toc-text">getResponseHeader</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#getAllResponseHeaders"><span class="toc-text">getAllResponseHeaders</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#onerror"><span class="toc-text">onerror</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#upload"><span class="toc-text">upload</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#overrideMimeType"><span class="toc-text">overrideMimeType</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#XHR_u4E00_u7EA7"><span class="toc-text">XHR一级</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#XHR_u4E8C_u7EA7"><span class="toc-text">XHR二级</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#XDomainRequest"><span class="toc-text">XDomainRequest</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#24-ajax"><span class="toc-text">$.ajax</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#u53C2_u6570_u5217_u8868"><span class="toc-text">参数列表</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#u652F_u6301promise"><span class="toc-text">支持promise</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#u4F7F_u7528_u8F6C_u6362_u5668"><span class="toc-text">使用转换器</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#u4E8B_u4EF6_u89E6_u53D1_u987A_u5E8F"><span class="toc-text">事件触发顺序</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Fetch"><span class="toc-text">Fetch</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ajax_u8DE8_u57DF_u8BF7_u6C42"><span class="toc-text">ajax跨域请求</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#u4EC0_u4E48_u662FCORS"><span class="toc-text">什么是CORS</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#u79FB_u52A8_u7AEFCORS_u517C_u5BB9_u6027"><span class="toc-text">移动端CORS兼容性</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#CORS_u6709_u5173_u7684headers"><span class="toc-text">CORS有关的headers</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#CORS_u8BF7_u6C42"><span class="toc-text">CORS请求</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#HTML_u542F_u7528CORS"><span class="toc-text">HTML启用CORS</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#u56FE_u7247_u542F_u7528CORS"><span class="toc-text">图片启用CORS</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ajax_u6587_u4EF6_u4E0A_u4F20"><span class="toc-text">ajax文件上传</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#js_u6587_u4EF6_u4E0A_u4F20"><span class="toc-text">js文件上传</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#fetch_u4E0A_u4F20"><span class="toc-text">fetch上传</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#jquery_u6587_u4EF6_u4E0A_u4F20"><span class="toc-text">jquery文件上传</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#angular_u6587_u4EF6_u4E0A_u4F20"><span class="toc-text">angular文件上传</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ajax_u8BF7_u6C42_u4E8C_u8FDB_u5236_u6587_u4EF6"><span class="toc-text">ajax请求二进制文件</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#FileReader"><span class="toc-text">FileReader</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#ajax_u8BF7_u6C42_u4E8C_u8FDB_u5236_u56FE_u7247_u5E76_u9884_u89C8"><span class="toc-text">ajax请求二进制图片并预览</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#ajax_u8BF7_u6C42_u4E8C_u8FDB_u5236_u6587_u672C_u5E76_u5C55_u793A"><span class="toc-text">ajax请求二进制文本并展示</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u5982_u4F55_u7B49_u5F85_u591A_u4E2Aajax_u8BF7_u6C42_u5B8C_u6210"><span class="toc-text">如何等待多个ajax请求完成</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ajax_u4E0Ehistory_u7684_u517C_u5BB9"><span class="toc-text">ajax与history的兼容</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#pjax"><span class="toc-text">pjax</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ajax_u7F13_u5B58_u5904_u7406"><span class="toc-text">ajax缓存处理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ajax_u7684_u9519_u8BEF_u5904_u7406"><span class="toc-text">ajax的错误处理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ajax_u8C03_u8BD5_u6280_u5DE7"><span class="toc-text">ajax调试技巧</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#hosts+nginx+node-webserver"><span class="toc-text">hosts+nginx+node-webserver</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#u7F16_u7801_u95EE_u9898"><span class="toc-text">编码问题</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u540E_u7AEF_u63A5_u53E3_u6D4B_u8BD5_u6280_u5DE7"><span class="toc-text">后端接口测试技巧</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#u4F7F_u7528_u547D_u4EE4_u6D4B_u8BD5OPTIONS_u8BF7_u6C42"><span class="toc-text">使用命令测试OPTIONS请求</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#postman"><span class="toc-text">postman</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ajax_u79FB_u52A8_u7AEF_u517C_u5BB9_u6027"><span class="toc-text">ajax移动端兼容性</span></a></li></ol>
+</div>
+      
+        <h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>Ajax 全称 Asynchronous JavaScript and XML, 即异步JS与XML. 它最早在IE5中被使用, 然后由Mozilla, Apple, Google推广开来. 典型的代表应用有 Outlook Web Access, 以及 GMail. 现代网页中几乎无ajax不欢. 前后端分离也正是建立在ajax异步通信的基础之上.</p>
+<a id="more"></a>
+<h3 id="u6D4F_u89C8_u5668_u4E3Aajax_u505A_u4E86_u4EC0_u4E48"><a href="#u6D4F_u89C8_u5668_u4E3Aajax_u505A_u4E86_u4EC0_u4E48" class="headerlink" title="浏览器为ajax做了什么"></a>浏览器为ajax做了什么</h3><p>现代浏览器中, 虽然几乎全部支持ajax, 但它们的技术方案却分为两种:</p>
+<p>① 标准浏览器通过 <code>XMLHttpRequest</code> 对象实现了ajax的功能. 只需要通过一行语句便可创建一个用于发送ajax请求的对象.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> xhr = <span class="keyword">new</span> XMLHttpRequest();</span><br></pre></td></tr></table></figure>
+<p>② IE 浏览器通过<code>XMLHttpRequest</code> 或者  <code>ActiveXObject</code> 对象同样实现了ajax的功能.</p>
+<h4 id="MSXML"><a href="#MSXML" class="headerlink" title="MSXML"></a>MSXML</h4><p>鉴于IE系列各种 “神级” 表现,  我们先来看看IE浏览器风骚的走位.</p>
+<p>IE下的使用环境略显复杂, IE7及更高版本浏览器可以直接使用BOM的 XMLHTTPRequest 对象. MSDN传送门: <a href="https://blogs.msdn.microsoft.com/ie/2006/01/23/native-xmlhttprequest-object/" target="_blank" rel="external">Native XMLHTTPRequest object</a>. IE6及更低版本浏览器只能使用 <code>ActiveXObject</code> 对象来创建 XMLHttpRequest 对象实例. 创建时需要指明一个类似”Microsoft.XMLHTTP”这样的ProgID. 而实际呢, windows系统环境下, 以下ProgID都应该可以创建XMLHTTP对象:</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">Microsoft</span><span class="class">.XMLHTTP</span></span><br><span class="line"><span class="tag">Microsoft</span><span class="class">.XMLHTTP</span><span class="class">.1</span><span class="class">.0</span></span><br><span class="line"><span class="tag">Msxml2</span><span class="class">.ServerXMLHTTP</span></span><br><span class="line"><span class="tag">Msxml2</span><span class="class">.ServerXMLHTTP</span><span class="class">.3</span><span class="class">.0</span></span><br><span class="line"><span class="tag">Msxml2</span><span class="class">.ServerXMLHTTP</span><span class="class">.4</span><span class="class">.0</span></span><br><span class="line"><span class="tag">Msxml2</span><span class="class">.ServerXMLHTTP</span><span class="class">.5</span><span class="class">.0</span></span><br><span class="line"><span class="tag">Msxml2</span><span class="class">.ServerXMLHTTP</span><span class="class">.6</span><span class="class">.0</span></span><br><span class="line"><span class="tag">Msxml2</span><span class="class">.XMLHTTP</span></span><br><span class="line"><span class="tag">Msxml2</span><span class="class">.XMLHTTP</span><span class="class">.3</span><span class="class">.0</span></span><br><span class="line"><span class="tag">Msxml2</span><span class="class">.XMLHTTP</span><span class="class">.4</span><span class="class">.0</span></span><br><span class="line"><span class="tag">Msxml2</span><span class="class">.XMLHTTP</span><span class="class">.5</span><span class="class">.0</span></span><br><span class="line"><span class="tag">Msxml2</span><span class="class">.XMLHTTP</span><span class="class">.6</span><span class="class">.0</span></span><br></pre></td></tr></table></figure>
+<p>简言之, Microsoft.XMLHTTP 已经非常老了, 主要用于提供对历史遗留版本的支持, 不建议使用.对于 MSXML4, 它已被 MSXML6 替代; 而 MSXML5 又是专门针对office办公场景, 在没有安装 Microsoft Office 2003 及更高版本办公软件的情况下, MSXML5 未必可用. 相比之下, MSXML6 具有比 MSXML3 更稳定, 更高性能, 更安全的优势, 同时它也提供了一些 MSXML3 中没有的功能, 比如说 XSD schema. 唯一遗憾的是, MSXML6 只在 vista 系统及以上才是默认支持的; 而 MSXML3 在 Win2k SP4及以上系统就是可用的. 因此一般情况下, MSXML3 可以作为 MSXML6 的优雅降级方案, 我们通过指定 PorgID 为 Msxml2.XMLHTTP 即可自动映射到 Msxml2.XMLHTTP.3.0. 如下所示:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> xhr = <span class="keyword">new</span> ActiveXObject(<span class="string">"Msxml2.XMLHTTP"</span>);<span class="comment">// 即MSXML3,等同于如下语句</span></span><br><span class="line"><span class="keyword">var</span> xhr = <span class="keyword">new</span> ActiveXObject(<span class="string">"MSXML2.XMLHTTP.3.0"</span>);</span><br></pre></td></tr></table></figure>
+<p>MSDN有篇文章专门讲解了各个版本的MSXML. 传送门: <a href="https://blogs.msdn.microsoft.com/xmlteam/2006/10/23/using-the-right-version-of-msxml-in-internet-explorer/" target="_blank" rel="external">Using the right version of MSXML in Internet Explorer</a>.</p>
+<p>亲测了 IE5, IE5.5, IE6, IE7, IE8, IE9, IE10, IE edge等浏览器, IE5及之后的浏览器均可以通过如下语句获取xhr对象:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> xhr = <span class="keyword">new</span> ActiveXObject(<span class="string">"Msxml2.XMLHTTP"</span>);<span class="comment">// 即MSXML3</span></span><br><span class="line"><span class="keyword">var</span> xhr = <span class="keyword">new</span> ActiveXObject(<span class="string">"Microsoft.XMLHTTP"</span>);<span class="comment">// 很老的api,虽然浏览器支持,功能可能不完善,故不建议使用</span></span><br></pre></td></tr></table></figure>
+<p>以上, 思路已经很清晰了, 下面给出个全兼容的方法.</p>
+<h4 id="u5168_u5E73_u53F0_u517C_u5BB9_u7684XMLHttpRequest_u5BF9_u8C61"><a href="#u5168_u5E73_u53F0_u517C_u5BB9_u7684XMLHttpRequest_u5BF9_u8C61" class="headerlink" title="全平台兼容的XMLHttpRequest对象"></a>全平台兼容的XMLHttpRequest对象</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> xhr = <span class="literal">null</span>;</span><br><span class="line"><span class="keyword">if</span>(<span class="built_in">window</span>.XMLHttpRequest) &#123;</span><br><span class="line">    xhr = <span class="keyword">new</span> XMLHttpRequest();</span><br><span class="line">&#125; <span class="keyword">else</span> <span class="keyword">if</span> (<span class="built_in">window</span>.ActiveXObject) &#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">    	xhr = <span class="keyword">new</span> ActiveXObject(<span class="string">"Msxml2.XMLHTTP"</span>);</span><br><span class="line">    &#125; <span class="keyword">catch</span> (e) &#123;</span><br><span class="line">    	<span class="keyword">try</span> &#123;</span><br><span class="line">    		xhr = <span class="keyword">new</span> ActiveXObject(<span class="string">"Microsoft.XMLHTTP"</span>);</span><br><span class="line">    	&#125; <span class="keyword">catch</span> (e) &#123; </span><br><span class="line">    		alert(<span class="string">"您的浏览器暂不支持Ajax!"</span>);</span><br><span class="line">    	&#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="ajax_u6709_u6CA1_u6709_u7834_u574Fjs_u5355_u7EBF_u7A0B_u673A_u5236"><a href="#ajax_u6709_u6CA1_u6709_u7834_u574Fjs_u5355_u7EBF_u7A0B_u673A_u5236" class="headerlink" title="ajax有没有破坏js单线程机制"></a>ajax有没有破坏js单线程机制</h3><p>对于这个问题, 我们先看下浏览器线程机制. 一般情况下, 浏览器有如下四种线程:</p>
+<ul>
+<li>GUI渲染线程</li>
+<li>javascript引擎线程</li>
+<li>浏览器事件触发线程</li>
+<li>HTTP请求线程</li>
+</ul>
+<p>那么这么多线程, 它们究竟是怎么同js引擎线程交互的呢?</p>
+<p>通常, 它们的线程间交互以事件的方式发生, 通过事件回调的方式予以通知. 而事件回调, 又是以先进先出的方式添加到<code>任务队列</code> 的末尾 , 等到js引擎空闲时, <code>任务队列</code> 中排队的任务将会依次被执行. 这些事件回调包括 setTimeout, setInterval, click, ajax异步请求等回调.</p>
+<p>浏览器中, js引擎线程会循环从 <code>任务队列</code> 中读取事件并且执行, 这种运行机制称作 <code>Event Loop</code> (事件循环).</p>
+<p>对于一个ajax请求, js引擎首先生成 <code>XMLHttpRequest</code> 实例对象, open过后再调用send方法. 至此, 所有的语句都是同步执行. 但从send方法内部开始, 浏览器为将要发生的网络请求创建了新的http请求线程, 这个线程独立于js引擎线程, 于是网络请求异步被发送出去了. 另一方面, js引擎并不会等待 ajax 发起的http请求收到结果, 而是直接顺序往下执行.</p>
+<p>当ajax请求被服务器响应并且收到response后, 浏览器事件触发线程捕获到了ajax的回调事件 <code>onreadystatechange</code> (当然也可能触发onload, 或者 onerror等等) . 该回调事件并没有被立即执行, 而是被添加到 <code>任务队列</code> 的末尾. 直到js引擎空闲了, <code>任务队列</code> 的任务才被捞出来, 按照添加顺序, 挨个执行, 当然也包括刚刚append到队列末尾的 <code>onreadystatechange</code> 事件.</p>
+<p>在 <code>onreadystatechange</code> 事件内部, 有可能对dom进行操作. 此时浏览器便会挂起js引擎线程, 转而执行GUI渲染线程, 进行UI重绘(repaint)或者回流(reflow). 当js引擎重新执行时, GUI渲染线程又会被挂起, GUI更新将被保存起来, 等到js引擎空闲时立即被执行.</p>
+<p>以上整个ajax请求过程中, 有涉及到浏览器的4种线程. 其中除了 <code>GUI渲染线程</code> 和 <code>js引擎线程</code> 是互斥的. 其他线程相互之间, 都是可以并行执行的. 通过这样的一种方式, ajax并没有破坏js的单线程机制.</p>
+<h3 id="ajax_u4E0EsetTimeout_u6392_u961F_u95EE_u9898"><a href="#ajax_u4E0EsetTimeout_u6392_u961F_u95EE_u9898" class="headerlink" title="ajax与setTimeout排队问题"></a>ajax与setTimeout排队问题</h3><p>这个问题为什么要单独拎出来呢, 上述浏览器线程切换的ajax例子不是讲的很清楚吗?</p>
+<p>是的, 但只对了一部分. 大部分情况下, ajax 和 setTimeout 的事件回调都被同等的对待, 自动的被添加到 <code>任务队列</code> 的末尾, 等待js引擎空闲时执行.</p>
+<h3 id="XMLHttpRequest__u5C5E_u6027_u89E3_u8BFB"><a href="#XMLHttpRequest__u5C5E_u6027_u89E3_u8BFB" class="headerlink" title="XMLHttpRequest 属性解读"></a>XMLHttpRequest 属性解读</h3><p>首先在Chrome console下创建一个 XMLHttpRequest 实例对象xhr. 如下所示:</p>
+<p><img src="http://louiszhai.github.io/docImages/ajax01.png" alt="XMLHttpRequest"></p>
+<p>运行以下代码.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> xhr = <span class="keyword">new</span> XMLHttpRequest(),</span><br><span class="line">    i=<span class="number">0</span>;</span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">var</span> key <span class="keyword">in</span> xhr)&#123;</span><br><span class="line">    <span class="keyword">if</span>(xhr.hasOwnProperty(key))&#123;</span><br><span class="line">       i++;</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">console</span>.log(i);<span class="comment">//0</span></span><br></pre></td></tr></table></figure>
+<p>就会发现 XMLHttpRequest 实例对象其实并没有一个自有属性! 这是因为它是BOM对象(Browser Object Model).</p>
+<h4 id="inherit"><a href="#inherit" class="headerlink" title="inherit"></a>inherit</h4><p>追根溯源, 看一个对象, 需要先了解它的继承关系. 虽然 XMLHttpRequest 实例对象是BOM对象, 但它依然具有如下的继承关系. (下面以a&lt;&lt;b表示a继承b)</p>
+<p><code>xhr</code> &lt;&lt; <code>XMLHttpRequest.prototype</code> &lt;&lt; <code>XMLHttpRequestEventTarget.prototype</code> &lt;&lt; <code>EventTarget.prototype</code> &lt;&lt; <code>Object.prototype</code></p>
+<p>由上, xhr也具有Object等原型中的所有方法. 如toString方法.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">xhr.toString();<span class="comment">//"[object XMLHttpRequest]"</span></span><br></pre></td></tr></table></figure>
+<p>通常, 一个xhr实例对象拥有10个普通属性+9个方法.</p>
+<h4 id="readyState"><a href="#readyState" class="headerlink" title="readyState"></a>readyState</h4><p>只读属性, readyState属性记录了ajax调用过程中所有可能的状态. 它的取值简单明了, 如下:</p>
+<table>
+<thead>
+<tr>
+<th>readyState</th>
+<th>对应常量</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0 (未初始化)</td>
+<td>xhr.UNSENT</td>
+<td>请求已建立, 但未初始化(此时未调用open方法)</td>
+</tr>
+<tr>
+<td>1 (初始化)</td>
+<td>xhr.OPENED</td>
+<td>请求已建立, 但未发送 (已调用open方法, 但未调用send方法)</td>
+</tr>
+<tr>
+<td>2 (发送数据)</td>
+<td>xhr.HEADERS_RECEIVED</td>
+<td>请求已发送 (send方法已调用, 已收到响应头)</td>
+</tr>
+<tr>
+<td>3 (数据传送中)</td>
+<td>xhr.LOADING</td>
+<td>请求处理中, 因响应内容不全, 这时通过responseBody和responseText获取可能会出现错误</td>
+</tr>
+<tr>
+<td>4 (完成)</td>
+<td>xhr.DONE</td>
+<td>数据接收完毕, 此时可以通过通过responseBody和responseText获取完整的响应数据</td>
+</tr>
+</tbody>
+</table>
+<p>注意, readyState 是一个只读属性, 想要改变它的值是不可行的.</p>
+<h4 id="onreadystatechange"><a href="#onreadystatechange" class="headerlink" title="onreadystatechange"></a>onreadystatechange</h4><p>onreadystatechange事件回调方法在readystate状态改变时触发, 在一个收到响应的ajax请求周期中, onreadystatechange 方法会被触发4次. 因此可以在 onreadystatechange 方法中绑定一些事件回调, 比如:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">xhr.onreadystatechange = <span class="function"><span class="keyword">function</span>(<span class="params">e</span>)</span>&#123;</span><br><span class="line">  <span class="keyword">if</span>(xhr.readystate==<span class="number">4</span>)&#123;</span><br><span class="line">    <span class="keyword">var</span> s = xhr.status;</span><br><span class="line">    <span class="keyword">if</span>((s &gt;= <span class="number">200</span> &amp;&amp; s &lt; <span class="number">300</span>) || s == <span class="number">304</span>)&#123;</span><br><span class="line">      <span class="keyword">var</span> resp = xhr.responseText;</span><br><span class="line">      <span class="comment">//TODO ...</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>注意: onreadystatechange回调中默认会传入Event实例, 如下:</p>
+<p><img src="http://louiszhai.github.io/docImages/ajax02.png" alt="Event"></p>
+<h4 id="status"><a href="#status" class="headerlink" title="status"></a>status</h4><p>只读属性, status表示http请求的状态, 初始值为0. 如果服务器没有显式地指定状态码, 那么status将被设置为默认值, 即200.</p>
+<h4 id="statusText"><a href="#statusText" class="headerlink" title="statusText"></a>statusText</h4><p>只读属性, statusText表示服务器的响应状态信息, 它是一个 UTF-16 的字符串, 请求成功且status==20X时, 返回大写的 <code>OK</code> . 请求失败时返回空字符串. 其他情况下返回相应的状态描述. 比如: 301的 <code>Moved Permanently</code> , 302的 <code>Found</code> , 303的 <code>See Other</code> , 307 的 <code>Temporary Redirect</code> , 400的 <code>Bad Request</code> , 401的 <code>Unauthorized</code> 等等.</p>
+<h4 id="onloadstart"><a href="#onloadstart" class="headerlink" title="onloadstart"></a>onloadstart</h4><p>onloadstart事件回调方法在ajax请求发送之前触发, 触发时机在 <code>readyState==1</code> 状态之后, <code>readyState==2</code> 状态之前.</p>
+<p>onloadstart方法中默认将传入一个ProgressEvent事件进度对象. 如下:</p>
+<p><img src="http://louiszhai.github.io/docImages/ajax03.png" alt="ProgressEvent"> </p>
+<p>ProgressEvent对象具有三个重要的Read only属性.</p>
+<ul>
+<li>lengthComputable 表示长度是否可计算, 它是一个布尔值, 初始值为false.</li>
+<li>loaded 表示已加载资源的大小, 如果使用http下载资源, 它仅仅表示已下载内容的大小, 而不包括http headers等. 它是一个无符号长整型, 初始值为0.</li>
+<li>total 表示资源总大小, 如果使用http下载资源, 它仅仅表示内容的总大小, 而不包括http headers等, 它同样是一个无符号长整型, 初始值为0.</li>
+</ul>
+<h4 id="onprogress"><a href="#onprogress" class="headerlink" title="onprogress"></a>onprogress</h4><p>onprogress事件回调方法在 <code>readyState==3</code> 状态时开始触发, 默认传入 ProgressEvent 对象, 可通过 <code>e.loaded/e.total</code> 来计算加载资源的进度, 该方法用于获取资源的下载进度.</p>
+<p>注意: 该方法在IE10+浏览器下可用, 其他浏览器均可用.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">xhr.onprogress = <span class="function"><span class="keyword">function</span>(<span class="params">e</span>)</span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'progress:'</span>, e.loaded/e.total);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="onload"><a href="#onload" class="headerlink" title="onload"></a>onload</h4><p>onload事件回调方法在ajax请求成功后触发, 触发时机在 <code>readyState==4</code> 状态之后.</p>
+<p>想要捕捉到一个ajax异步请求的成功状态, 并且执行回调, 一般下面的语句就足够了:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">xhr.onload = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="keyword">var</span> s = xhr.status;</span><br><span class="line">  <span class="keyword">if</span>((s &gt;= <span class="number">200</span> &amp;&amp; s &lt; <span class="number">300</span>) || s == <span class="number">304</span>)&#123;</span><br><span class="line">    <span class="keyword">var</span> resp = xhr.responseText;</span><br><span class="line">    <span class="comment">//TODO ...</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="onloadend"><a href="#onloadend" class="headerlink" title="onloadend"></a>onloadend</h4><p>onloadend事件回调方法在ajax请求完成后触发, 触发时机在 <code>readyState==4</code> 状态之后(收到响应时) 或者  <code>readyState==2</code> 状态之后(未收到响应时).</p>
+<p>onloadend方法中默认将传入一个ProgressEvent事件进度对象.</p>
+<h4 id="timeout"><a href="#timeout" class="headerlink" title="timeout"></a>timeout</h4><p>timeout属性用于指定ajax的超时时长. 通过它可以灵活地控制ajax请求时间的上限. timeout的值满足如下规则:</p>
+<ul>
+<li>通常设置为0时不生效.</li>
+<li>设置为字符串时, 如果字符串中全部为数字, 它会自动将字符串转化为数字, 反之该设置不生效.</li>
+<li>设置为对象时, 如果该对象能够转化为数字, 那么将设置为转化后的数字.</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">xhr.timeout = <span class="number">0</span>; <span class="comment">//不生效</span></span><br><span class="line">xhr.timeout = <span class="string">'123'</span>; <span class="comment">//生效, 值为123</span></span><br><span class="line">xhr.timeout = <span class="string">'123s'</span>; <span class="comment">//不生效</span></span><br><span class="line">xhr.timeout = [<span class="string">'123'</span>]; <span class="comment">//生效, 值为123</span></span><br><span class="line">xhr.timeout = &#123;a:<span class="number">123</span>&#125;; <span class="comment">//不生效</span></span><br></pre></td></tr></table></figure>
+<h4 id="ontimeout"><a href="#ontimeout" class="headerlink" title="ontimeout"></a>ontimeout</h4><p>ontimeout方法在ajax请求超时时触发, 通过它可以在ajax请求超时时做一些后续处理.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">xhr.ontimeout = <span class="function"><span class="keyword">function</span>(<span class="params">e</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.error(<span class="string">"请求超时!!!"</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="response_responseText"><a href="#response_responseText" class="headerlink" title="response responseText"></a>response responseText</h4><p>均为只读属性, response表示服务器的响应内容, 相应的, responseText表示服务器响应内容的文本形式.</p>
+<h4 id="responseXML"><a href="#responseXML" class="headerlink" title="responseXML"></a>responseXML</h4><p>只读属性, responseXML表示xml形式的响应数据, 缺省为null, 若数据不是有效的xml, 则会报错.</p>
+<h4 id="responseType"><a href="#responseType" class="headerlink" title="responseType"></a>responseType</h4><p>responseType表示响应的类型, 缺省为空字符串, 可取 <code>&quot;arraybuffer&quot;</code> , <code>&quot;blob&quot;</code> , <code>&quot;document&quot;</code> , <code>&quot;json&quot;</code> , and <code>&quot;text&quot;</code> 共五种类型.</p>
+<h4 id="responseURL"><a href="#responseURL" class="headerlink" title="responseURL"></a>responseURL</h4><p>responseURL返回ajax请求最终的URL, 如果请求中存在重定向, 那么responseURL表示重定向之后的URL.</p>
+<h4 id="withCredentials"><a href="#withCredentials" class="headerlink" title="withCredentials"></a>withCredentials</h4><p>withCredentials是一个布尔值, 默认为false, 表示跨域请求中不发送cookies等信息. 当它设置为true时, <code>cookies</code> , <code>authorization headers</code> 或者<code>TLS客户端证书</code> 都可以正常发送和接收. 显然它的值对同域请求没有影响.</p>
+<p>注意: 该属性在IE10+及opera12+浏览器下可用, 其他类型浏览器均可用.</p>
+<h4 id="abort"><a href="#abort" class="headerlink" title="abort"></a>abort</h4><p>abort方法用于取消ajax请求, 取消后, readyState 状态将被设置为 <code>0</code> (<code>UNSENT</code>). 如下, 调用abort 方法后, 请求将被取消.</p>
+<p><img src="http://louiszhai.github.io/docImages/ajax04.png" alt="Event"></p>
+<h4 id="getResponseHeader"><a href="#getResponseHeader" class="headerlink" title="getResponseHeader"></a>getResponseHeader</h4><p>getResponseHeader方法用于获取ajax响应头中指定name的值. 如果response headers中存在相同的name, 那么它们的值将自动以字符串的形式连接在一起.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(xhr.getResponseHeader(<span class="string">'Content-Type'</span>));<span class="comment">//"text/html"</span></span><br></pre></td></tr></table></figure>
+<h4 id="getAllResponseHeaders"><a href="#getAllResponseHeaders" class="headerlink" title="getAllResponseHeaders"></a>getAllResponseHeaders</h4><p>getAllResponseHeaders方法用于获取所有安全的ajax响应头, 响应头以字符串形式返回. 每个HTTP报头名称和值用冒号分隔, 如key:value, 并以\r\n结束.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">xhr.onreadystatechange = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span>(<span class="keyword">this</span>.readyState == <span class="keyword">this</span>.HEADERS_RECEIVED) &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="keyword">this</span>.getAllResponseHeaders());</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//Content-Type: text/html"</span></span><br></pre></td></tr></table></figure>
+<p>以上,  <code>readyState === 2</code> 状态时, 就意味着响应头已接受完整. 此时便可以打印出完整的 response headers.</p>
+<h4 id="onerror"><a href="#onerror" class="headerlink" title="onerror"></a>onerror</h4><p>onerror方法用于在ajax请求出错后执行. 通常只在网络出现问题时或者ERR_CONNECTION_RESET时触发(如果请求返回的是407状态码, chrome下也会触发onerror).</p>
+<h4 id="upload"><a href="#upload" class="headerlink" title="upload"></a>upload</h4><p>upload属性默认返回一个 <code>XMLHttpRequestUpload</code> 对象, 用于上传资源. 该对象具有如下方法:</p>
+<ul>
+<li>onloadstart</li>
+<li>onprogress</li>
+<li>onabort</li>
+<li>onerror</li>
+<li>onload</li>
+<li>ontimeout</li>
+<li>onloadend</li>
+</ul>
+<p>上述方法功能同 xhr 对象中同名方法一致. 其中, onprogress 事件回调方法可用于跟踪资源上传的进度.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">xhr.upload.onprogress = <span class="function"><span class="keyword">function</span>(<span class="params">e</span>)</span>&#123;</span><br><span class="line">  <span class="keyword">var</span> percent = <span class="number">100</span> * e.loaded / e.total |<span class="number">0</span>;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'upload: '</span> + precent + <span class="string">'%'</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="overrideMimeType"><a href="#overrideMimeType" class="headerlink" title="overrideMimeType"></a>overrideMimeType</h4><p>overrideMimeType方法用于强制指定response 的 MIME 类型, 即强制修改response的 <code>Content-Type</code> . 如下, 服务器返回的response的 MIME 类型为 <code>text/plain</code> .</p>
+<p><img src="http://louiszhai.github.io/docImages/ajax05.png" alt="response headers"></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">xhr.getResponseHeader(<span class="string">'Content-Type'</span>);<span class="comment">//"text/plain"</span></span><br><span class="line">xhr.responseXML;<span class="comment">//null</span></span><br></pre></td></tr></table></figure>
+<p>通过overrideMimeType方法将response的MIME类型设置为 <code>text/xml;charset=utf-8</code> , 如下所示:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">xhr.overrideMimeType(<span class="string">"text/xml; charset = utf-8"</span>);</span><br><span class="line">xhr.send();</span><br></pre></td></tr></table></figure>
+<p>此时虽然 response headers 如上图, 没有变化, 但 <code>Content-Type</code> 已替换为新值.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">xhr.getResponseHeader(<span class="string">'Content-Type'</span>);<span class="comment">//"text/xml; charset = utf-8"</span></span><br></pre></td></tr></table></figure>
+<p>此时, <code>xhr.responseXML</code> 也将返回DOM对象, 如下图.</p>
+<p><img src="http://louiszhai.github.io/docImages/ajax06.png" alt="response headers"></p>
+<h3 id="XHR_u4E00_u7EA7"><a href="#XHR_u4E00_u7EA7" class="headerlink" title="XHR一级"></a>XHR一级</h3><p>XHR1 即 XMLHttpRequest Level 1. XHR1时, xhr对象具有如下缺点:</p>
+<ul>
+<li>仅支持文本数据传输, 无法传输二进制数据.</li>
+<li>传输数据时, 没有进度信息提示, 只能提示是否完成.</li>
+<li>受浏览器 <code>同源策略</code> 限制, 只能请求同域资源.</li>
+<li>没有超时机制, 不方便掌控ajax请求节奏.</li>
+</ul>
+<h3 id="XHR_u4E8C_u7EA7"><a href="#XHR_u4E8C_u7EA7" class="headerlink" title="XHR二级"></a>XHR二级</h3><p>XHR2 即 XMLHttpRequest Level 2. XHR2针对XHR1的上述缺点做了如下改进:</p>
+<ul>
+<li>支持二进制数据, 可以上传文件, 可以使用FormData对象管理表单.</li>
+<li>提供进度提示, 可通过 <code>xhr.upload.onprogress</code> 事件回调方法获取传输进度.</li>
+<li>依然受 <code>同源策略</code> 限制, 这个安全机制不会变. XHR2新提供 <code>Access-Control-Allow-Origin</code> 等headers, 设置为 <code>*</code> 时表示允许任何域名请求, 从而实现跨域CORS访问(有关CORS详细介绍请耐心往下读).</li>
+<li>可以设置timeout 及 ontimeout, 方便设置超时时长和超时后续处理.</li>
+</ul>
+<p>这里就H5新增的FormData对象举个例.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//可直接创建FormData实例</span></span><br><span class="line"><span class="keyword">var</span> data = <span class="keyword">new</span> FormData();</span><br><span class="line">data.append(<span class="string">"name"</span>, <span class="string">"louis"</span>);</span><br><span class="line">xhr.send(data);</span><br><span class="line"><span class="comment">//还可以通过传入表单DOM对象来创建FormData实例</span></span><br><span class="line"><span class="keyword">var</span> form = <span class="built_in">document</span>.getElementById(<span class="string">'form'</span>);</span><br><span class="line"><span class="keyword">var</span> data = <span class="keyword">new</span> FormData(form);</span><br><span class="line">data.append(<span class="string">"password"</span>, <span class="string">"123456"</span>);</span><br><span class="line">xhr.send(data);</span><br></pre></td></tr></table></figure>
+<p>目前, 主流浏览器基本上都支持XHR2, 除了IE系列需要IE10及更高版本. 因此IE10以下是不支持XHR2的.</p>
+<p>那么问题来了, IE7, 8,9的用户怎么办? 很遗憾, 这些用户是比较尴尬的. 对于IE8,9而言, 只有一个阉割版的 <code>XDomainRequest</code> 可用,IE7则没有. 估计IE7用户只能哭晕在厕所了.</p>
+<h3 id="XDomainRequest"><a href="#XDomainRequest" class="headerlink" title="XDomainRequest"></a>XDomainRequest</h3><p>XDomainRequest 对象是IE8,9搞出来的, 用于支持CORS请求非成熟的解决方案. 以至于IE10中直接移除了它, 并重新回到了 XMLHttpRequest 的怀抱.</p>
+<p>XDomainRequest 仅可用于发送 <code>GET</code>和 <code>POST</code> 请求. 如下即创建过程.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> xdr = <span class="keyword">new</span> XDomainRequest();</span><br></pre></td></tr></table></figure>
+<p>xdr具有如下属性:</p>
+<ul>
+<li>timeout</li>
+<li>responseText</li>
+</ul>
+<p>如下方法:</p>
+<ul>
+<li>open: 只能接收Method,和url两个参数. 只能发送异步请求.</li>
+<li>send</li>
+<li>abort</li>
+</ul>
+<p>如下事件回调:</p>
+<ul>
+<li>onprogress</li>
+<li>ontimeout</li>
+<li>onerror</li>
+<li>onload</li>
+</ul>
+<p>除了缺少一些方法外, XDomainRequest 基本上就和 XMLHttpRequest 的使用方式保持一致. </p>
+<p>必须要明确的是:</p>
+<ul>
+<li>XDomainRequest 不支持跨域传输cookie.</li>
+<li>只能设置请求头的Content-Type字段, 且不能访问响应头信息.</li>
+</ul>
+<h3 id="24-ajax"><a href="#24-ajax" class="headerlink" title="$.ajax"></a>$.ajax</h3><p>$.ajax是jquery对原生ajax的一次封装. 通过封装ajax, jquery抹平了不同版本浏览器异步http的差异性, 取而代之的是高度统一的api. jquery作为js类库时代的先驱, 对前端发展有着深远的影响. 了解并熟悉其ajax方法, 不可谓不重要.</p>
+<h4 id="u53C2_u6570_u5217_u8868"><a href="#u53C2_u6570_u5217_u8868" class="headerlink" title="参数列表"></a>参数列表</h4><p>$.ajax() 只有一个参数, 该参数为key-value设置对象. 实际上, jq发送的所有ajax请求, 都是通过调用该ajax方法实现的. 它的详细参数如下表:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">序号</th>
+<th style="text-align:center">参数</th>
+<th style="text-align:center">类型</th>
+<th style="text-align:left">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:center"><strong><em>accepts</em></strong></td>
+<td style="text-align:center"><em>PlainObject</em></td>
+<td style="text-align:left">用于通知服务器该请求需要接收何种类型的返回结果. 如有必要, 推荐在 <code>$.ajaxSetup()</code> 方法中设置一次.</td>
+</tr>
+<tr>
+<td style="text-align:center">2</td>
+<td style="text-align:center"><strong><em>async</em></strong></td>
+<td style="text-align:center"><em>Boolean</em></td>
+<td style="text-align:left">默认为true, 即异步.</td>
+</tr>
+<tr>
+<td style="text-align:center">3</td>
+<td style="text-align:center"><strong><em>beforeSend</em></strong></td>
+<td style="text-align:center"><em>Function</em></td>
+<td style="text-align:left">请求发送前的回调, 默认传入参数jqXHR和settings. 函数内显式返回false将取消本次请求.</td>
+</tr>
+<tr>
+<td style="text-align:center">4</td>
+<td style="text-align:center"><strong><em>cache</em></strong></td>
+<td style="text-align:center"><em>Boolean</em></td>
+<td style="text-align:left">请求是否开启缓存, 默认为true, 如不需要缓存请设置为false. 不过, dataType为”script”和”jsonp”时默认为false.</td>
+</tr>
+<tr>
+<td style="text-align:center">5</td>
+<td style="text-align:center"><strong><em>complete</em></strong></td>
+<td style="text-align:center"><em>Function</em></td>
+<td style="text-align:left">请求完成后的回调(请求<code>success</code> 和 <code>error</code>之后均调用), 默认传入参数jqXHR和textStatus(请求状态, 取值为 “success”,”notmodified”,”error”,”timeout”,”abort”,”parsererror”之一). 从jq1.5开始, complete可以设置为一个包含函数的数组. 如此每个函数将依次被调用.</td>
+</tr>
+<tr>
+<td style="text-align:center">6</td>
+<td style="text-align:center"><strong><em>contents</em></strong></td>
+<td style="text-align:center"><em>PlainObject</em></td>
+<td style="text-align:left">一个以”{字符串/正则表达式}”配对的对象, 根据给定的内容类型, 解析请求的返回结果.</td>
+</tr>
+<tr>
+<td style="text-align:center">7</td>
+<td style="text-align:center"><strong><em>contentType</em></strong></td>
+<td style="text-align:center"><em>String</em></td>
+<td style="text-align:left">编码类型, 相对应于http请求头域的”Content-Type”字段. 默认值为”application/x-www-form-urlencoded; charset=UTF-8”.</td>
+</tr>
+<tr>
+<td style="text-align:center">8</td>
+<td style="text-align:center"><strong><em>context</em></strong></td>
+<td style="text-align:center"><em>Object</em></td>
+<td style="text-align:left">设置ajax回调函数的上下文. 默认上下文为ajax请求传入的参数设置对象. 如设置为document.body, 那么所有ajax回调函数中将以body为上下文.</td>
+</tr>
+<tr>
+<td style="text-align:center">9</td>
+<td style="text-align:center"><strong><em>converters</em></strong></td>
+<td style="text-align:center"><em>PlainObject</em></td>
+<td style="text-align:left">一个数据类型到数据类型转换器的对象. 默认为 <code>{&quot;* text&quot;: window.String, &quot;text html&quot;: true, &quot;text json&quot;: jQuery.parseJSON, &quot;text xml&quot;: jQuery.parseXML}</code> . 如设置<code>converters:{&quot;json jsonp&quot;: function(msg){}}</code></td>
+</tr>
+<tr>
+<td style="text-align:center">10</td>
+<td style="text-align:center"><strong><em>crossDomain</em></strong></td>
+<td style="text-align:center"><em>Boolean</em></td>
+<td style="text-align:left">默认同域请求为false, 跨域请求为true.</td>
+</tr>
+<tr>
+<td style="text-align:center">11</td>
+<td style="text-align:center"><strong><em>data</em></strong></td>
+<td style="text-align:center"><em>Object, Array</em></td>
+<td style="text-align:left">发送到服务器的数据, 默认data为键值对格式对象, 若data为数组则按照<code>traditional</code>参数的值, 自动转化为一个同名的多值查询字符串. 如{a:1,b:2}将转换为”&amp;a=1&amp;b=2”.</td>
+</tr>
+<tr>
+<td style="text-align:center">12</td>
+<td style="text-align:center"><strong><em>dataFilter</em></strong></td>
+<td style="text-align:center"><em>Function</em></td>
+<td style="text-align:left">处理XMLHttpRequest原始响应数据的回调, 默认传入data和type参数, data是Ajax返回的原始数据, type是调用$.ajax时提供的dataType参数</td>
+</tr>
+<tr>
+<td style="text-align:center">13</td>
+<td style="text-align:center"><strong><em>dataType</em></strong></td>
+<td style="text-align:center"><em>String</em></td>
+<td style="text-align:left">预期服务器返回的数据类型, 可设置为”xml”,”html”,”script”,”json”,”jsonp”,”text”之一, 其中设置为”xml”或”text”类型时, 数据不会经过处理.</td>
+</tr>
+<tr>
+<td style="text-align:center">14</td>
+<td style="text-align:center"><strong><em>error</em></strong></td>
+<td style="text-align:center"><em>Function</em></td>
+<td style="text-align:left">请求失败时的回调函数, 默认传入jqXHR(jq1.4以前为原生xhr对象),textStatus(请求状态,取值为null,”timeout”,”error”,”abort” 或 “parsererror”),errorString(错误内容), 当一个HTTP错误发生时, <code>errorThrown</code> 接收HTTP状态的文本部分,比如”Not Found”等. 从jq1.5开始, error可以设置为一个包含函数的数组. 如此每个函数将依次被调用.注意: 跨域脚本和JSONP请求时error不被调用.</td>
+</tr>
+<tr>
+<td style="text-align:center">15</td>
+<td style="text-align:center"><strong><em>global</em></strong></td>
+<td style="text-align:center"><em>Boolean</em></td>
+<td style="text-align:left">表示是否触发全局ajax事件, 默认为true. 设为false将不再触发ajaxStart,ajaxStop,ajaxSend,ajaxError等. 跨站脚本和jsonp请求, 该值自动设置为false.</td>
+</tr>
+<tr>
+<td style="text-align:center">16</td>
+<td style="text-align:center"><strong><em>headers</em></strong></td>
+<td style="text-align:center"><em>PlainObject</em></td>
+<td style="text-align:left">设置请求头, 格式为k-v键值对对象. 由于该设置会在beforeSend函数被调用之前生效, 因此可在beforeSend函数内覆盖该对象.</td>
+</tr>
+<tr>
+<td style="text-align:center">17</td>
+<td style="text-align:center"><strong><em>ifModified</em></strong></td>
+<td style="text-align:center"><em>Boolean</em></td>
+<td style="text-align:left">只有上次请求响应改变时, 才允许请求成功. 它使用HTTP包的Last-Modified 头信息判断, 默认为false. 若设置为true, 且数据自从上次请求后没有更改过就会报错.</td>
+</tr>
+<tr>
+<td style="text-align:center">18</td>
+<td style="text-align:center"><strong><em>isLocal</em></strong></td>
+<td style="text-align:center"><em>Boolean</em></td>
+<td style="text-align:left">运行当前环境设置为”本地”,默认为false, 若设置为true, 将影响请求发送时的协议.</td>
+</tr>
+<tr>
+<td style="text-align:center">19</td>
+<td style="text-align:center"><strong><em>jsonp</em></strong></td>
+<td style="text-align:center"><em>String</em></td>
+<td style="text-align:left">显式指定jsonp请求中的回调函数的名称. 如jsonp:cb, jq会将cb代替callback, 以 “cb=?”传给服务器. 从jq1.5开始, 若设置jsonp:false, 那么需要明确设置jsonpCallback:”callbackName”.</td>
+</tr>
+<tr>
+<td style="text-align:center">20</td>
+<td style="text-align:center"><strong><em>jsonpCallback</em></strong></td>
+<td style="text-align:center"><em>String,Function</em></td>
+<td style="text-align:left">为jsonp请求指定一个回调函数名, 以取代jq自动生成的随机函数名. 从jq1.5开始, 可以将该属性设置为一个函数, 函数的返回值就是jsonpCallback的结果.</td>
+</tr>
+<tr>
+<td style="text-align:center">21</td>
+<td style="text-align:center"><strong><em>mimeType</em></strong></td>
+<td style="text-align:center"><em>String</em></td>
+<td style="text-align:left">设置一个MIME类型, 以覆盖xhr的MIM类型(jq1.5新增)</td>
+</tr>
+<tr>
+<td style="text-align:center">22</td>
+<td style="text-align:center"><strong><em>password</em></strong></td>
+<td style="text-align:center"><em>String</em></td>
+<td style="text-align:left">设置认证请求中的密码</td>
+</tr>
+<tr>
+<td style="text-align:center">23</td>
+<td style="text-align:center"><strong><em>processData</em></strong></td>
+<td style="text-align:center"><em>Boolean</em></td>
+<td style="text-align:left">jq的ajax方法默认会将传入的data隐式转换为查询字符串(如”&amp;a=1&amp;b=2”), 以配合 默认内容类型 “application/x-www-form-urlencoded”, 如果不希望转换请设置为false. angular中想要禁用默认转换, 需要重写transformRequest方法.</td>
+</tr>
+<tr>
+<td style="text-align:center">24</td>
+<td style="text-align:center"><strong><em>scriptCharset</em></strong></td>
+<td style="text-align:center"><em>String</em></td>
+<td style="text-align:left">仅在”script”请求中使用(如跨域jsonp, dataType为”script”类型). 显式指定时, 请求中将在script标签上设置<code>charset</code>属性, 可在发现本地和远程编码不一致时使用.</td>
+</tr>
+<tr>
+<td style="text-align:center">25</td>
+<td style="text-align:center"><strong><em>statusCode</em></strong></td>
+<td style="text-align:center"><em>PlainObject</em></td>
+<td style="text-align:left">一组http状态码和回调函数对应的键值对对象. 该对象以 {404:function(){}} 这种形式表示. 可用于根据不同的http状态码, 执行不同的回调.(jq1.5新增)</td>
+</tr>
+<tr>
+<td style="text-align:center">26</td>
+<td style="text-align:center"><strong><em>timeout</em></strong></td>
+<td style="text-align:center"><em>Number</em></td>
+<td style="text-align:left">设置超时时间.</td>
+</tr>
+<tr>
+<td style="text-align:center">27</td>
+<td style="text-align:center"><strong><em>traditional</em></strong></td>
+<td style="text-align:center"><em>Boolean</em></td>
+<td style="text-align:left">是否按照默认方式序列化data对象, 默认值为false.</td>
+</tr>
+<tr>
+<td style="text-align:center">28</td>
+<td style="text-align:center"><strong><em>type</em></strong></td>
+<td style="text-align:center"><em>String</em></td>
+<td style="text-align:left">可以设置为8种http method之一, jq中不区分大小写.</td>
+</tr>
+<tr>
+<td style="text-align:center">29</td>
+<td style="text-align:center"><strong><em>url</em></strong></td>
+<td style="text-align:center"><em>String</em></td>
+<td style="text-align:left">请求的uri地址.</td>
+</tr>
+<tr>
+<td style="text-align:center">30</td>
+<td style="text-align:center"><strong><em>username</em></strong></td>
+<td style="text-align:center"><em>String</em></td>
+<td style="text-align:left">设置认证请求中的用户名</td>
+</tr>
+<tr>
+<td style="text-align:center">31</td>
+<td style="text-align:center"><strong><em>xhr</em></strong></td>
+<td style="text-align:center"><em>Function</em></td>
+<td style="text-align:left">在回调内创建并返回xhr对象</td>
+</tr>
+<tr>
+<td style="text-align:center">32</td>
+<td style="text-align:center"><strong><em>xhrFields</em></strong></td>
+<td style="text-align:center"><em>PlainObject</em></td>
+<td style="text-align:left">键值对对象, 用于设置原生的xhr对象, 如可用来设置withCredentials:true(jq1.5.1新增)</td>
+</tr>
+</tbody>
+</table>
+<h4 id="u652F_u6301promise"><a href="#u652F_u6301promise" class="headerlink" title="支持promise"></a>支持promise</h4><p>$.ajax() 方法返回jqXHR对象(jq1.5起), 如果使用的不是XMLHttpRequest对象时, 如jsonp请求, 返回的jqXHR对象将尽可能模拟原生的xhr. 从jq1.5起, 返回的jqXHR对象实现了promise接口, 具有如下新方法.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">新方法</th>
+<th style="text-align:center">被替代的老方法(jq1.8起弃用)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">done(function(data, textStatus, jqXHR) {})</td>
+<td style="text-align:center"><del>success</del></td>
+</tr>
+<tr>
+<td style="text-align:center">fail(function(jqXHR, textStatus, errorThrown) {})</td>
+<td style="text-align:center"><del>error</del></td>
+</tr>
+<tr>
+<td style="text-align:center">always(function(data\</td>
+<td style="text-align:center">jqXHR, textStatus, jqXHR\</td>
+<td>errorThrown) {})</td>
+<td><del>complete</del></td>
+</tr>
+</tbody>
+</table>
+<p>从jq1.6开始, done, fail, always按照FIFO队列可以分配多个回调.</p>
+<h4 id="u4F7F_u7528_u8F6C_u6362_u5668"><a href="#u4F7F_u7528_u8F6C_u6362_u5668" class="headerlink" title="使用转换器"></a>使用转换器</h4><p>$.ajax() 的转换器可以将支持的数据类型映射到其它数据类型. 如果需要将自定义数据类型映射到已知的类型. 需要使用 <code>contents</code> 选项在响应的 “Content-Type” 和实际数据类型之间添加一个转换函数.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">$.ajaxSetup(&#123;</span><br><span class="line">  contents: &#123;</span><br><span class="line">    myContentType: <span class="regexp">/myContentType/</span></span><br><span class="line">  &#125;,</span><br><span class="line">  converters: &#123;</span><br><span class="line">    <span class="string">"myContentType json"</span>: <span class="function"><span class="keyword">function</span>(<span class="params">data</span>) </span>&#123;</span><br><span class="line">      <span class="comment">//TODO something</span></span><br><span class="line">      <span class="keyword">return</span> newData;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>转换一个支持的类型为自定义类型, 然后再返回. 如 text—&gt;myContentType—&gt;json.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">$.ajaxSetup(&#123;</span><br><span class="line">  contents: &#123;</span><br><span class="line">    myContentType: <span class="regexp">/myContentType/</span></span><br><span class="line">  &#125;,</span><br><span class="line">  converters: &#123;</span><br><span class="line">    <span class="string">"text myContentType"</span>: <span class="literal">true</span>,</span><br><span class="line">    <span class="string">"myContentType json"</span>: <span class="function"><span class="keyword">function</span>(<span class="params">data</span>) </span>&#123;</span><br><span class="line">      <span class="comment">//TODO something</span></span><br><span class="line">      <span class="keyword">return</span> newData;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<h4 id="u4E8B_u4EF6_u89E6_u53D1_u987A_u5E8F"><a href="#u4E8B_u4EF6_u89E6_u53D1_u987A_u5E8F" class="headerlink" title="事件触发顺序"></a>事件触发顺序</h4><p>$.ajax()方法触发的事件纷繁复杂, 有将近20个之多. 为了囊括最多的事件, 这里以一次成功的上传请求为例, 以下是它们的调用顺序(请求出现错误时的顺序, 请自行对应).</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">序号</th>
+<th style="text-align:center">事件名称</th>
+<th style="text-align:center">是否全局事件</th>
+<th style="text-align:center">是否能关闭</th>
+<th style="text-align:center">默认形参</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:center">$.ajaxPrefilter</td>
+<td style="text-align:center">✔️</td>
+<td style="text-align:center">❌</td>
+<td style="text-align:center">function(options, originalOptions, jqXHR){}</td>
+</tr>
+<tr>
+<td style="text-align:center">2</td>
+<td style="text-align:center">$(document).ajaxStar</td>
+<td style="text-align:center">✔️</td>
+<td style="text-align:center">✔️</td>
+<td style="text-align:center">function(){}(只在当前无激活ajax时触发)</td>
+</tr>
+<tr>
+<td style="text-align:center">3</td>
+<td style="text-align:center">beforeSend</td>
+<td style="text-align:center">❌</td>
+<td style="text-align:center">-</td>
+<td style="text-align:center">function(jqXHR, settings){}</td>
+</tr>
+<tr>
+<td style="text-align:center">4</td>
+<td style="text-align:center">$(document).ajaxSend</td>
+<td style="text-align:center">✔️</td>
+<td style="text-align:center">✔️</td>
+<td style="text-align:center">function(){}</td>
+</tr>
+<tr>
+<td style="text-align:center">5</td>
+<td style="text-align:center">xhr.onloadstart</td>
+<td style="text-align:center">-</td>
+<td style="text-align:center">-</td>
+<td style="text-align:center">ProgressEvent</td>
+</tr>
+<tr>
+<td style="text-align:center">6</td>
+<td style="text-align:center">xhr.upload.onloadstart</td>
+<td style="text-align:center">-</td>
+<td style="text-align:center">-</td>
+<td style="text-align:center">ProgressEvent</td>
+</tr>
+<tr>
+<td style="text-align:center">7</td>
+<td style="text-align:center">xhr.upload.onprogress</td>
+<td style="text-align:center">-</td>
+<td style="text-align:center">-</td>
+<td style="text-align:center">ProgressEvent</td>
+</tr>
+<tr>
+<td style="text-align:center">8</td>
+<td style="text-align:center">xhr.upload.onload</td>
+<td style="text-align:center">-</td>
+<td style="text-align:center">-</td>
+<td style="text-align:center">ProgressEvent</td>
+</tr>
+<tr>
+<td style="text-align:center">9</td>
+<td style="text-align:center">xhr.upload.onloadend</td>
+<td style="text-align:center">-</td>
+<td style="text-align:center">-</td>
+<td style="text-align:center">ProgressEvent</td>
+</tr>
+<tr>
+<td style="text-align:center">10</td>
+<td style="text-align:center">xhr.onprogress</td>
+<td style="text-align:center">-</td>
+<td style="text-align:center">-</td>
+<td style="text-align:center">ProgressEvent</td>
+</tr>
+<tr>
+<td style="text-align:center">11</td>
+<td style="text-align:center">xhr.onload</td>
+<td style="text-align:center">-</td>
+<td style="text-align:center">-</td>
+<td style="text-align:center">ProgressEvent</td>
+</tr>
+<tr>
+<td style="text-align:center">12</td>
+<td style="text-align:center"><del>success</del>(弃用)</td>
+<td style="text-align:center">❌</td>
+<td style="text-align:center">-</td>
+<td style="text-align:center">function(data, textStatus, jqXHR){}</td>
+</tr>
+<tr>
+<td style="text-align:center">13</td>
+<td style="text-align:center">$(document).ajaxSuccess</td>
+<td style="text-align:center">✔️</td>
+<td style="text-align:center">✔️</td>
+<td style="text-align:center">function(event, jqXHR, options){}</td>
+</tr>
+<tr>
+<td style="text-align:center">14</td>
+<td style="text-align:center"><del>complete</del>(弃用)</td>
+<td style="text-align:center">❌</td>
+<td style="text-align:center">-</td>
+<td style="text-align:center">function(jqXHR, textStatus){}</td>
+</tr>
+<tr>
+<td style="text-align:center">15</td>
+<td style="text-align:center">$(document).ajaxComplete</td>
+<td style="text-align:center">✔️</td>
+<td style="text-align:center">✔️</td>
+<td style="text-align:center">function(event, jqXHR, textStatus)</td>
+</tr>
+<tr>
+<td style="text-align:center">16</td>
+<td style="text-align:center">$(document).ajaxStop</td>
+<td style="text-align:center">✔️</td>
+<td style="text-align:center">✔️</td>
+<td style="text-align:center">function(){}</td>
+</tr>
+<tr>
+<td style="text-align:center">17</td>
+<td style="text-align:center">xhr.onloadend</td>
+<td style="text-align:center">-</td>
+<td style="text-align:center">-</td>
+<td style="text-align:center">ProgressEvent</td>
+</tr>
+</tbody>
+</table>
+<p>从jq1.8起, 对于函数 <code>ajaxStart</code>, <code>ajaxSend</code>, <code>ajaxSuccess</code>, <code>ajaxComplete</code>, <code>ajaxStop</code> , 只能为<code>document</code>对象绑定事件处理函数, 为其他元素绑定的事件处理函数不会起作用.</p>
+<h3 id="Fetch"><a href="#Fetch" class="headerlink" title="Fetch"></a>Fetch</h3><p>Fetch请参考 [Web异步通信之Fetch][<a href="http://louiszhai.github.io/2016/10/19/fetch/">http://louiszhai.github.io/2016/10/19/fetch/</a>] .</p>
+<h3 id="ajax_u8DE8_u57DF_u8BF7_u6C42"><a href="#ajax_u8DE8_u57DF_u8BF7_u6C42" class="headerlink" title="ajax跨域请求"></a>ajax跨域请求</h3><h4 id="u4EC0_u4E48_u662FCORS"><a href="#u4EC0_u4E48_u662FCORS" class="headerlink" title="什么是CORS"></a>什么是CORS</h4><p>CORS是一个W3C标准, 全称是跨域资源共享(Cross-origin resource sharing).它允许浏览器向跨域服务器, 发出异步http请求, 从而克服了ajax受同源策略的限制. 实际上, 浏览器不会拦截不合法的跨域请求, 而是拦截了他们的响应, 因此即使请求不合法, 很多时候, 服务器依然收到了请求.(Chrome和Firefox下https网站不允许发送http异步请求除外)</p>
+<p>当前几乎所有的浏览器(Internet Explorer 8+, Firefox 3.5+, Safari 4+和 Chrome 3+)都可通过名为跨域资源共享的协议支持ajax跨域调用.</p>
+<p>一次具体的跨域访问的流程为:</p>
+<p><img src="http://louiszhai.github.io/docImages/cross-domain02.jpg" alt=""></p>
+<h4 id="u79FB_u52A8_u7AEFCORS_u517C_u5BB9_u6027"><a href="#u79FB_u52A8_u7AEFCORS_u517C_u5BB9_u6027" class="headerlink" title="移动端CORS兼容性"></a>移动端CORS兼容性</h4><p>如图:</p>
+<p><img src="http://louiszhai.github.io/docImages/ajax25.png" alt="cors-mobile"></p>
+<p>CORS的技术在IOS Safari7.1及Android webview2.3中就早已支持, 即使低版本webview的canvas在使用跨域的video或图片时会有问题, 也丝毫不影响CORS的在移动端的使用.</p>
+<h4 id="CORS_u6709_u5173_u7684headers"><a href="#CORS_u6709_u5173_u7684headers" class="headerlink" title="CORS有关的headers"></a>CORS有关的headers</h4><p>1) HTTP Response Header(服务器提供):</p>
+<ul>
+<li><p>Access-Control-Allow-Origin: 指定允许哪些源的网页发送请求.</p>
+</li>
+<li><p>Access-Control-Allow-Credentials: 指定是否允许cookie发送.</p>
+</li>
+<li><p>Access-Control-Allow-Methods: 指定允许哪些请求方法.</p>
+</li>
+<li><p>Access-Control-Allow-Headers: 指定允许哪些常规的头域字段, 比如说 Content-Type.</p>
+</li>
+<li><p>Access-Control-Expose-Headers: 指定允许哪些额外的头域字段, 比如说 X-Custom-Header.</p>
+<p>该字段可省略. CORS请求时, xhr.getResponseHeader() 方法默认只能获取6个基本字段: <code>Cache-Control</code>、<code>Content-Language</code>、<code>Content-Type</code>、<code>Expires</code>、<code>Last-Modified</code>、<code>Pragma</code> . 如果需要获取其他字段, 就需要在Access-Control-Expose-Headers 中指定. 如上, 这样xhr.getResponseHeader(‘X-Custom-Header’) 才能返回X-Custom-Header字段的值.(该部分摘自阮一峰老师博客)</p>
+</li>
+<li><p>Access-Control-Max-Age: 指定preflight OPTIONS请求的有效期, 单位为秒.</p>
+</li>
+</ul>
+<p>2) HTTP Request Header(浏览器OPTIONS请求默认自带):</p>
+<ul>
+<li>Access-Control-Request-Method: 告知服务器,浏览器将发送哪种请求, 比如说POST.</li>
+<li>Access-Control-Request-Headers: 告知服务器, 浏览器将包含哪些额外的头域字段.</li>
+</ul>
+<p>3) 以下所有的header name 是被拒绝的:</p>
+<ul>
+<li>Accept-Charset</li>
+<li>Accept-Encoding</li>
+<li>Access-Control-Request-Headers</li>
+<li>Access-Control-Request-Method</li>
+<li>Connection</li>
+<li>Content-Length</li>
+<li>Cookie</li>
+<li>Cookie2</li>
+<li>Date</li>
+<li>DNT</li>
+<li>Expect</li>
+<li>Host</li>
+<li>Keep-Alive</li>
+<li>Origin</li>
+<li>Referer</li>
+<li>TE</li>
+<li>Trailer</li>
+<li>Transfer-Encoding</li>
+<li>Upgrade</li>
+<li>Via</li>
+<li>包含以<code>Proxy-</code> 或 <code>Sec-</code> 开头的header name</li>
+</ul>
+<h4 id="CORS_u8BF7_u6C42"><a href="#CORS_u8BF7_u6C42" class="headerlink" title="CORS请求"></a>CORS请求</h4><p>CORS请求分为两种, ① 简单请求; ② 非简单请求.</p>
+<p>满足如下两个条件便是简单请求, 反之则为非简单请求.(CORS请求部分摘自阮一峰老师博客)</p>
+<p>1) 请求是以下三种之一:</p>
+<ul>
+<li>HEAD</li>
+<li>GET</li>
+<li>POST</li>
+</ul>
+<p>2) http头域不超出以下几种字段:</p>
+<ul>
+<li>Accept</li>
+<li>Accept-Language</li>
+<li>Content-Language</li>
+<li>Last-Event-ID</li>
+<li>Content-Type字段限三个值 <code>application/x-www-form-urlencoded</code>、<code>multipart/form-data</code>、<code>text/plain</code></li>
+</ul>
+<p>对于简单请求, 浏览器将发送一次http请求, 同时在Request头域中增加 <code>Origin</code> 字段, 用来标示请求发起的源, 服务器根据这个源采取不同的响应策略. 若服务器认为该请求合法, 那么需要往返回的 HTTP Response 中添加 <code>Access-Control-*</code> 等字段.(<code>Access-Control-*</code> 相关字段解析请阅读我之前写的[CORS 跨域访问][<a href="http://louiszhai.github.io/2016/01/11/cross-domain/#CORS__u8DE8_u57DF_u8BBF_u95EE">http://louiszhai.github.io/2016/01/11/cross-domain/#CORS__u8DE8_u57DF_u8BBF_u95EE</a>])</p>
+<p>对于非简单请求, 比如Method为<code>POST</code>且Content-Type值为 <code>application/json</code> 的请求或者Method为 <code>PUT</code> 或 <code>DELETE</code> 的请求, 浏览器将发送两次http请求. 第一次为preflight预检(Method: OPTIONS),主要验证来源是否合法. 值得注意的是:OPTION请求响应头同样需要包含 <code>Access-Control-*</code> 字段等. 第二次才是真正的HTTP请求. 所以服务器必须处理OPTIONS应答(通常需要返回20X的状态码, 否则xhr.onerror事件将被触发).</p>
+<p>以上请求流程图为:</p>
+<p><img src="http://louiszhai.github.io/docImages/cross-domain01.jpg" alt=""></p>
+<h4 id="HTML_u542F_u7528CORS"><a href="#HTML_u542F_u7528CORS" class="headerlink" title="HTML启用CORS"></a>HTML启用CORS</h4><p>http-equiv 相当于http的响应头, 它回应给浏览器一些有用的信息,以帮助正确和精确地显示网页内容. 如下html将允许任意域名下的网页跨域访问.</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="title">meta</span> <span class="attribute">http-equiv</span>=<span class="value">"Access-Control-Allow-Origin"</span> <span class="attribute">content</span>=<span class="value">"*"</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h4 id="u56FE_u7247_u542F_u7528CORS"><a href="#u56FE_u7247_u542F_u7528CORS" class="headerlink" title="图片启用CORS"></a>图片启用CORS</h4><p>通常, 图片允许跨域访问, 也可以在canvas中使用跨域的图片, 但这样做会污染画布, 一旦画布受污染, 将无法读取其数据. 比如无法调用 toBlob(), toDataURL() 或 getImageData()方法. 浏览器的这种安全机制规避了未经许可的远程服务器图片被滥用的风险.(该部分内容摘自 <a href="https://developer.mozilla.org/zh-CN/docs/Web/HTML/CORS_enabled_image" target="_blank" rel="external">启用了 CORS 的图片 - HTML（超文本标记语言） | MDN</a>)</p>
+<p>因此如需在canvas中使用跨域的图片资源, 请参考如下apache配置片段(来自<a href="https://github.com/h5bp/server-configs-apache/blob/fc379c45f52a09dd41279dbf4e60ae281110a5b0/src/.htaccess#L36-L53" target="_blank" rel="external">HTML5 Boilerplate Apache server configs</a>).</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;IfModule mod_setenvif.c&gt;</span></span><br><span class="line">    <span class="tag">&lt;IfModule mod_headers.c&gt;</span></span><br><span class="line">        <span class="tag">&lt;FilesMatch "\.(cur|gif|ico|jpe?g|png|svgz?|webp)$"&gt;</span></span><br><span class="line">            <span class="keyword">SetEnvIf</span> Origin <span class="string">":"</span> IS_CORS</span><br><span class="line">            <span class="keyword"><span class="common">Header</span></span> set Access-Control-Allow-Origin <span class="string">"*"</span> env=IS_CORS</span><br><span class="line">        <span class="tag">&lt;/FilesMatch&gt;</span></span><br><span class="line">    <span class="tag">&lt;/IfModule&gt;</span></span><br><span class="line"><span class="tag">&lt;/IfModule&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="ajax_u6587_u4EF6_u4E0A_u4F20"><a href="#ajax_u6587_u4EF6_u4E0A_u4F20" class="headerlink" title="ajax文件上传"></a>ajax文件上传</h3><p>ajax实现文件上传非常简单, 这里我选取原生js, jq, angular 分别来比较下, 并顺便聊聊使用它们时的注意事项.(ajax文件上传的代码已上传至github, 请戳这里预览效果: <a href="http://louiszhai.github.io/res/ajaxUpload.html">ajax 文件上传 demo | louis</a>)</p>
+<p>1) 为了上传文件, 我们得先选中一个文件. 一个type为file的input框就够了.</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="title">input</span> <span class="attribute">id</span>=<span class="value">"input"</span> <span class="attribute">type</span>=<span class="value">"file"</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>2) 然后用FormData对象包裹📦选中的文件.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> input = <span class="built_in">document</span>.getElementById(<span class="string">"input"</span>),</span><br><span class="line">    formData = <span class="keyword">new</span> FormData();</span><br><span class="line">formData.append(<span class="string">"file"</span>,input.files[<span class="number">0</span>]);<span class="comment">//key可以随意定义,只要后台能理解就行</span></span><br></pre></td></tr></table></figure>
+<p>3) 定义上传的URL, 以及方法. github上我搭建了一个 <a href="https://github.com/Louiszhai/node-webserver" target="_blank" rel="external">node-webserver</a>, 根据需要可以自行克隆下来npm start后便可调试本篇代码.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> url = <span class="string">"http://localhost:10108/test"</span>,</span><br><span class="line">    method = <span class="string">"POST"</span>;</span><br></pre></td></tr></table></figure>
+<h4 id="js_u6587_u4EF6_u4E0A_u4F20"><a href="#js_u6587_u4EF6_u4E0A_u4F20" class="headerlink" title="js文件上传"></a>js文件上传</h4><p>4.1) 封装一个用于发送ajax请求的方法.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">ajax</span>(<span class="params">url, method, data</span>)</span>&#123;</span><br><span class="line">  <span class="keyword">var</span> xhr = <span class="literal">null</span>;</span><br><span class="line">  <span class="keyword">if</span>(<span class="built_in">window</span>.XMLHttpRequest) &#123;</span><br><span class="line">    xhr = <span class="keyword">new</span> XMLHttpRequest();</span><br><span class="line">  &#125; <span class="keyword">else</span> <span class="keyword">if</span> (<span class="built_in">window</span>.ActiveXObject) &#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">      xhr = <span class="keyword">new</span> ActiveXObject(<span class="string">"Msxml2.XMLHTTP"</span>);</span><br><span class="line">    &#125; <span class="keyword">catch</span> (e) &#123;</span><br><span class="line">      <span class="keyword">try</span> &#123;</span><br><span class="line">        xhr = <span class="keyword">new</span> ActiveXObject(<span class="string">"Microsoft.XMLHTTP"</span>);</span><br><span class="line">      &#125; <span class="keyword">catch</span> (e) &#123; </span><br><span class="line">        alert(<span class="string">"您的浏览器暂不支持Ajax!"</span>);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  xhr.onerror = <span class="function"><span class="keyword">function</span>(<span class="params">e</span>)</span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(e);</span><br><span class="line">  &#125;</span><br><span class="line">  xhr.open(method, url);</span><br><span class="line">  <span class="keyword">try</span>&#123;</span><br><span class="line">    setTimeout(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">      xhr.send(data);</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;<span class="keyword">catch</span>(e)&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'error:'</span>,e);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> xhr;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>4.2) 上传文件并绑定事件.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> xhr = ajax(url, method, formData);</span><br><span class="line">xhr.upload.onprogress = <span class="function"><span class="keyword">function</span>(<span class="params">e</span>)</span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">"upload progress:"</span>, e.loaded/e.total*<span class="number">100</span> + <span class="string">"%"</span>);</span><br><span class="line">&#125;;</span><br><span class="line">xhr.upload.onload = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">"upload onload."</span>);</span><br><span class="line">&#125;;</span><br><span class="line">xhr.onload = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">"onload."</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上传结果如下所示:</p>
+<p><img src="http://louiszhai.github.io/docImages/ajax17.png" alt="js file upload"></p>
+<h4 id="fetch_u4E0A_u4F20"><a href="#fetch_u4E0A_u4F20" class="headerlink" title="fetch上传"></a>fetch上传</h4><p>5) fetch只要发送一个post请求, 并且body属性设置为formData即可. 遗憾的是, fetch无法跟踪上传的进度信息.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">fetch(url, &#123;</span><br><span class="line">  method: method,</span><br><span class="line">  body: formData</span><br><span class="line">  &#125;).then(<span class="function"><span class="keyword">function</span>(<span class="params">res</span>)</span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(res);</span><br><span class="line">  &#125;).catch(<span class="function"><span class="keyword">function</span>(<span class="params">e</span>)</span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(e);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<h4 id="jquery_u6587_u4EF6_u4E0A_u4F20"><a href="#jquery_u6587_u4EF6_u4E0A_u4F20" class="headerlink" title="jquery文件上传"></a>jquery文件上传</h4><p>jq提供了各式各样的上传插件, 其原理都是利用jq自身的ajax方法.</p>
+<p>6) jq的ajax提供了xhr属性用于自定义各种事件.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">$.ajax(&#123;</span><br><span class="line">  type: method,</span><br><span class="line">  url: url,</span><br><span class="line">  data: formData,</span><br><span class="line">  processData : <span class="literal">false</span>,</span><br><span class="line">  contentType : <span class="literal">false</span> ,<span class="comment">//必须false才会自动加上正确的Content-Type</span></span><br><span class="line">  xhr: <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">var</span> xhr = $.ajaxSettings.xhr();<span class="comment">//实际上就是return new window.XMLHttpRequest()对象</span></span><br><span class="line">    <span class="keyword">if</span>(xhr.upload) &#123;</span><br><span class="line">      xhr.upload.addEventListener(<span class="string">"progress"</span>, <span class="function"><span class="keyword">function</span>(<span class="params">e</span>)</span>&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">"jq upload progress:"</span>, e.loaded/e.total*<span class="number">100</span> + <span class="string">"%"</span>);</span><br><span class="line">      &#125;, <span class="literal">false</span>);</span><br><span class="line">      xhr.upload.addEventListener(<span class="string">"load"</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">"jq upload onload."</span>);</span><br><span class="line">      &#125;);</span><br><span class="line">      xhr.addEventListener(<span class="string">"load"</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">"jq onload."</span>);</span><br><span class="line">      &#125;);</span><br><span class="line">      <span class="keyword">return</span> xhr;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>jq上传结果如下所示:</p>
+<p><img src="http://louiszhai.github.io/docImages/ajax18.png" alt="jq file upload"></p>
+<p>有关jq ajax更多的api, 请参考中文文档 <a href="http://www.jquery123.com/jQuery.ajax/" target="_blank" rel="external">jQuery.ajax() | jQuery API 中文文档</a> .</p>
+<h4 id="angular_u6587_u4EF6_u4E0A_u4F20"><a href="#angular_u6587_u4EF6_u4E0A_u4F20" class="headerlink" title="angular文件上传"></a>angular文件上传</h4><p>7.1) angular提供了$http方法用于发送http请求, 该方法返回一个promise对象.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">$http(&#123;</span><br><span class="line">  method: method,</span><br><span class="line">  url: url,</span><br><span class="line">  data: formData,</span><br><span class="line">&#125;).success(<span class="function"><span class="keyword">function</span>(<span class="params">res</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(res);</span><br><span class="line">&#125;).error(<span class="function"><span class="keyword">function</span>(<span class="params">err, status</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(err);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>angular文件上传的代码已上传至github, 请戳这里预览效果: <a href="http://louiszhai.github.io/res/angularUpload.html">angular 文件上传 demo | louis</a>.</p>
+<p>低版本angular中文件上传的功能并不完整,  直到angular1.5.5才在$http中加入了eventHandler和uploadEventHandlers等方法, 使得它支持上传进度信息. 如下:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">$http(&#123;</span><br><span class="line">  method: method,</span><br><span class="line">  url: url,</span><br><span class="line">  eventHandlers: &#123;</span><br><span class="line">    progress: <span class="function"><span class="keyword">function</span>(<span class="params">c</span>) </span>&#123;<span class="comment">//下载进度</span></span><br><span class="line">      <span class="built_in">console</span>.log(<span class="string">'Progress -&gt; '</span> + c);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  uploadEventHandlers: &#123;</span><br><span class="line">    progress: <span class="function"><span class="keyword">function</span>(<span class="params">e</span>) </span>&#123;<span class="comment">//上传进度</span></span><br><span class="line">      <span class="built_in">console</span>.log(<span class="string">'UploadProgress -&gt; '</span> + e);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  data: formData,</span><br><span class="line">&#125;).success(<span class="function"><span class="keyword">function</span>(<span class="params">res</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(res);</span><br><span class="line">&#125;).error(<span class="function"><span class="keyword">function</span>(<span class="params">err, status</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(err);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>angular1.5.5以下低版本中, 请参考成熟的实现方案 <a href="https://github.com/nervgh/angular-file-upload" target="_blank" rel="external">angular-file-upload</a> 以及它提供的demo <a href="http://nervgh.github.io/pages/angular-file-upload/examples/simple/" target="_blank" rel="external">Simple example</a> .</p>
+<h3 id="ajax_u8BF7_u6C42_u4E8C_u8FDB_u5236_u6587_u4EF6"><a href="#ajax_u8BF7_u6C42_u4E8C_u8FDB_u5236_u6587_u4EF6" class="headerlink" title="ajax请求二进制文件"></a>ajax请求二进制文件</h3><h4 id="FileReader"><a href="#FileReader" class="headerlink" title="FileReader"></a>FileReader</h4><p>处理二进制文件主要使用的是H5的FileReader.</p>
+<p>PC支持性如下:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">IE</th>
+<th style="text-align:center">Edge</th>
+<th style="text-align:center">Firefox</th>
+<th style="text-align:center">Chrome</th>
+<th style="text-align:center">Safari</th>
+<th style="text-align:center">Opera</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">10</td>
+<td style="text-align:center">12</td>
+<td style="text-align:center">3.6</td>
+<td style="text-align:center">6</td>
+<td style="text-align:center">6</td>
+<td style="text-align:center">11.5</td>
+</tr>
+</tbody>
+</table>
+<p>Mobile支持性如下:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">IOS Safari</th>
+<th style="text-align:center">Opera Mini</th>
+<th style="text-align:center">Android Browser</th>
+<th style="text-align:center">Chrome/Android</th>
+<th style="text-align:center">UC/Android</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">7.1</td>
+<td style="text-align:center">-</td>
+<td style="text-align:center">4</td>
+<td style="text-align:center">53</td>
+<td style="text-align:center">11</td>
+</tr>
+</tbody>
+</table>
+<p>以下是其API:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">属性/方法名称</th>
+<th style="text-align:left">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><strong><em>error</em></strong></td>
+<td style="text-align:left">表示读取文件期间发生的错误.</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong><em>readyState</em></strong></td>
+<td style="text-align:left">表示读取文件的状态.默认有三个值:0表示文件还没有加载;1表示文件正在读取;2表示文件读取完成.</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong><em>result</em></strong></td>
+<td style="text-align:left">读取的文件内容.</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong><em>abort()</em></strong></td>
+<td style="text-align:left">取消文件读取操作, 此时<code>readyState</code>属性将置为2.</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong><em>readAsArrayBuffer()</em></strong></td>
+<td style="text-align:left">读取文件(或blob对象)为类型化数组(<a href="http://blog.csdn.net/lichwei1983/article/details/43893025" target="_blank" rel="external">ArrayBuffer</a>),  类型化数组允许开发者以数组下标的方式, 直接操作内存, 由于数据以二进制形式传递, 效率非常高.</td>
+</tr>
+<tr>
+<td style="text-align:center"><em><del>readAsBinaryString()</del></em></td>
+<td style="text-align:left">读取文件(或blob对象)为二进制字符串, 该方法已移出标准api, 请谨慎使用.</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong><em>readAsDataURL()</em></strong></td>
+<td style="text-align:left">读取文件(或blob对象)为base64编码的URL字符串, 与window.URL.createObjectURL方法效果类似.</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong><em>readAsText()</em></strong></td>
+<td style="text-align:left">读取文件(或blob对象)为文本字符串.</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong><em>onload()</em></strong></td>
+<td style="text-align:left">文件读取完成时的事件回调, 默认传入event事件对象. 该回调内, 可通过this.result 或 event.target.result获取读取的文件内容.</td>
+</tr>
+</tbody>
+</table>
+<h4 id="ajax_u8BF7_u6C42_u4E8C_u8FDB_u5236_u56FE_u7247_u5E76_u9884_u89C8"><a href="#ajax_u8BF7_u6C42_u4E8C_u8FDB_u5236_u56FE_u7247_u5E76_u9884_u89C8" class="headerlink" title="ajax请求二进制图片并预览"></a>ajax请求二进制图片并预览</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> xhr = <span class="keyword">new</span> XMLHttpRequest(),</span><br><span class="line">    url = <span class="string">"http://louiszhai.github.io/docImages/ajax01.png"</span>;</span><br><span class="line">xhr.open(<span class="string">"GET"</span>, url);</span><br><span class="line">xhr.responseType = <span class="string">"blob"</span>;</span><br><span class="line">xhr.onload = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="keyword">if</span>(<span class="keyword">this</span>.status == <span class="number">200</span>)&#123;</span><br><span class="line">    <span class="keyword">var</span> blob = <span class="keyword">this</span>.response;</span><br><span class="line">    <span class="keyword">var</span> img = <span class="built_in">document</span>.createElement(<span class="string">"img"</span>);</span><br><span class="line">    <span class="comment">//方案一</span></span><br><span class="line">    img.src = <span class="built_in">window</span>.URL.createObjectURL(blob);<span class="comment">//这里blob依然占据着内存</span></span><br><span class="line">    img.onload = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">      <span class="built_in">window</span>.URL.revokeObjectURL(img.src);<span class="comment">//释放内存</span></span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="comment">//方案二</span></span><br><span class="line">    <span class="comment">/*var reader = new FileReader();</span><br><span class="line">    reader.readAsDataURL(blob);//FileReader将返回base64编码的data-uri对象</span><br><span class="line">    reader.onload = function()&#123;</span><br><span class="line">      img.src = this.result;</span><br><span class="line">    &#125;*/</span></span><br><span class="line">    <span class="comment">//方案三</span></span><br><span class="line">    <span class="comment">//img.src = url;//最简单方法</span></span><br><span class="line">    <span class="built_in">document</span>.body.appendChild(img);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">xhr.send();</span><br></pre></td></tr></table></figure>
+<h4 id="ajax_u8BF7_u6C42_u4E8C_u8FDB_u5236_u6587_u672C_u5E76_u5C55_u793A"><a href="#ajax_u8BF7_u6C42_u4E8C_u8FDB_u5236_u6587_u672C_u5E76_u5C55_u793A" class="headerlink" title="ajax请求二进制文本并展示"></a>ajax请求二进制文本并展示</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> xhr = <span class="keyword">new</span> XMLHttpRequest();</span><br><span class="line">xhr.open(<span class="string">"GET"</span>,<span class="string">"http://localhost:8080/Information/download.jsp?data=node-fetch.js"</span>);</span><br><span class="line">xhr.responseType = <span class="string">"blob"</span>;</span><br><span class="line">xhr.onload = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="keyword">if</span>(<span class="keyword">this</span>.status == <span class="number">200</span>)&#123;</span><br><span class="line">    <span class="keyword">var</span> blob = <span class="keyword">this</span>.response;</span><br><span class="line">    <span class="keyword">var</span> reader = <span class="keyword">new</span> FileReader();</span><br><span class="line">    reader.readAsBinaryString(blob);<span class="comment">//该方法已被移出标准api,建议使用reader.readAsText(blob);</span></span><br><span class="line">    reader.onload=<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">      <span class="built_in">document</span>.body.innerHTML = <span class="string">"&lt;div&gt;"</span> + <span class="keyword">this</span>.result + <span class="string">"&lt;/div&gt;"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">xhr.send();</span><br></pre></td></tr></table></figure>
+<p>有关二进制文件的读取, 请移步这篇博客 <a href="http://www.cnblogs.com/jscode/archive/2013/04/27/3572239.html" target="_blank" rel="external">HTML5新特性之文件和二进制数据的操作</a> .</p>
+<h3 id="u5982_u4F55_u7B49_u5F85_u591A_u4E2Aajax_u8BF7_u6C42_u5B8C_u6210"><a href="#u5982_u4F55_u7B49_u5F85_u591A_u4E2Aajax_u8BF7_u6C42_u5B8C_u6210" class="headerlink" title="如何等待多个ajax请求完成"></a>如何等待多个ajax请求完成</h3><p>原生js可以使用ES6新增的普若迷斯(Promise). ES6的Promise基于 <a href="https://promisesaplus.com/" target="_blank" rel="external">Promises/A+</a> 规范(该部分[<code>Web异步通信之Fetch</code>][<a href="http://louiszhai.github.io/2016/10/19/fetch/]一文也有提及">http://louiszhai.github.io/2016/10/19/fetch/]一文也有提及</a>).</p>
+<p>这里先提供一个解析responses的函数.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">todo</span>(<span class="params">responses</span>)</span>&#123;</span><br><span class="line">  responses.forEach(<span class="function"><span class="keyword">function</span>(<span class="params">response</span>)</span>&#123;</span><br><span class="line">    response.json().then(<span class="function"><span class="keyword">function</span>(<span class="params">res</span>)</span>&#123;</span><br><span class="line">      <span class="built_in">console</span>.log(res);</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>原生js使用 <code>Promise.all</code> 方法. 如下:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> p1 = fetch(<span class="string">"http://localhost:10108/test1"</span>),</span><br><span class="line">    p2 = fetch(<span class="string">"http://localhost:10108/test2"</span>);</span><br><span class="line"><span class="built_in">Promise</span>.all([p1, p2]).then(<span class="function"><span class="keyword">function</span>(<span class="params">responses</span>)</span>&#123;</span><br><span class="line">  todo(responses);</span><br><span class="line">  <span class="comment">//TODO do somethings</span></span><br><span class="line">&#125;);</span><br><span class="line"><span class="comment">//"test1"</span></span><br><span class="line"><span class="comment">//"test2"</span></span><br></pre></td></tr></table></figure>
+<p>jquery可以使用$.when方法. 该方法接受一个或多个Deferred对象作为参数, 只有全部成功才调用resolved状态的回调函数, 但只要其中有一个失败，就调用rejected状态的回调函数. 其实, jq的Deferred是基于 Promises/A规范实现, 但并非完全遵循. (传送门: <a href="http://www.css88.com/archives/4750/comment-page-1" target="_blank" rel="external">jQuery 中的 Deferred 和 Promises (2)</a> ).</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> p1 = $.ajax(<span class="string">"http://localhost:10108/test1"</span>),</span><br><span class="line">    p2 = $.ajax(<span class="string">"http://localhost:10108/test2"</span>);</span><br><span class="line">$.when(p1, p2).then(<span class="function"><span class="keyword">function</span>(<span class="params">res1, res2</span>)</span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(res1);<span class="comment">//["test1", "success", Object]</span></span><br><span class="line">  <span class="built_in">console</span>.log(res2);<span class="comment">//["test2", "success", Object]</span></span><br><span class="line">  <span class="comment">//TODO do somethings</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>如上, $.when默认返回一个jqXHR对象, 可以直接进行链式调用. then方法的回调中默认传入相应的请求结果, 每个请求结果的都是数组, 数组中依次是responseText, 请求状态, 请求的jqXHR对象.</p>
+<p>angular中可以借助 <code>$q.all()</code> 来实现. 别忘了, <code>$q</code> 需要在controller中注入. 此外, <code>$q</code> 相关讲解可参考 <a href="https://code.angularjs.org/1.2.6/docs/api/ng.$q" target="_blank" rel="external">AngularJS: ng.$q</a> 或 <a href="https://segmentfault.com/a/1190000000402555" target="_blank" rel="external">Angular $q service学习笔记</a> .</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> p1 = fetch(<span class="string">"http://localhost:10108/test1"</span>),</span><br><span class="line">    p2 = fetch(<span class="string">"http://localhost:10108/test2"</span>);</span><br><span class="line">$q.all([p1, p2]).then(<span class="function"><span class="keyword">function</span>(<span class="params">responses</span>)</span>&#123;</span><br><span class="line">  todo(responses);</span><br><span class="line">  <span class="comment">//TODO do somethings</span></span><br><span class="line">&#125;);</span><br><span class="line"><span class="comment">//"test1"</span></span><br><span class="line"><span class="comment">//"test2"</span></span><br></pre></td></tr></table></figure>
+<p><code>$q.all()</code> 实际上就是对 <code>Promise.all</code> 的封装.</p>
+<h3 id="ajax_u4E0Ehistory_u7684_u517C_u5BB9"><a href="#ajax_u4E0Ehistory_u7684_u517C_u5BB9" class="headerlink" title="ajax与history的兼容"></a>ajax与history的兼容</h3><p>ajax的一大痛点就是无法支持浏览器前进和后退操作. 因此早期的Gmail 采用 iframe, 来模拟ajax的前进和后退.</p>
+<p>如今, H5普及, pjax大行其道. pajax 就是 ajax+history.pushState 组合的一种技术. 使用它便可以无刷新通过浏览器前进和后退来改变页面内容.</p>
+<p>先看下兼容性.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center"></th>
+<th style="text-align:center">IE</th>
+<th style="text-align:center">Edge</th>
+<th style="text-align:center">Firefox</th>
+<th style="text-align:center">Chrome</th>
+<th style="text-align:center">Safari</th>
+<th style="text-align:center">Opera</th>
+<th style="text-align:center">iOS Safari</th>
+<th style="text-align:center">Android Browser</th>
+<th style="text-align:center">Chrome for Android</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">pushState/replaceState</td>
+<td style="text-align:center">10</td>
+<td style="text-align:center">12</td>
+<td style="text-align:center">4</td>
+<td style="text-align:center">5</td>
+<td style="text-align:center">6</td>
+<td style="text-align:center">11.5</td>
+<td style="text-align:center">7.1</td>
+<td style="text-align:center">4.3</td>
+<td style="text-align:center">53</td>
+</tr>
+<tr>
+<td style="text-align:center">history.state</td>
+<td style="text-align:center">10</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">4</td>
+<td style="text-align:center">18</td>
+<td style="text-align:center">6</td>
+<td style="text-align:center">11.5</td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+</tr>
+</tbody>
+</table>
+<p>可见IE8,9并不能使用 H5的history. 需要使用垫片 <a href="https://github.com/devote/HTML5-History-API" target="_blank" rel="external">HTML5 History API expansion for browsers not supporting pushState, replaceState</a> .</p>
+<h4 id="pjax"><a href="#pjax" class="headerlink" title="pjax"></a>pjax</h4><p>pjax简单易用, 仅需要如下三个api:</p>
+<ul>
+<li>history.pushState(obj, title, url) 表示往页面history末尾新增一个历史项(history entry), 此时history.length会+1.</li>
+<li>history.replaceState(obj, title, url) 表示替换当前历史项为新的历史项. 此时history.length保持不变.</li>
+<li>window.onpopstate 仅在浏览器前进和后退时触发(history.go(1), history.back() 及location.href=”xxx” 均会触发), 此时可在history.state中拿到刚刚塞进去的state, 即obj对象(其他数据类型亦可).</li>
+</ul>
+<p>我们注意到, 首次进入一个页面, 此时 <code>history.length</code> 值为1, <code>history.state</code> 为空. 如下:</p>
+<p><img src="http://louiszhai.github.io/docImages/ajax19.png" alt="history.state"></p>
+<p>1) 为了在onpopstate事件回调中每次都能拿到 <code>history.state</code> , 此时需要在页面载入完成后, 自动替换下当前url.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">history.replaceState(<span class="string">"init"</span>, title, <span class="string">"xxx.html?state=0"</span>);</span><br></pre></td></tr></table></figure>
+<p>2) 每次发送ajax请求时, 在请求完成后, 调用如下, 从而实现浏览器history往前进.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">history.pushState(<span class="string">"ajax请求相关参数"</span>, title, <span class="string">"xxx.html?state=标识符"</span>);</span><br></pre></td></tr></table></figure>
+<p>3) 浏览器前进和后退时, <code>popstate</code> 事件会自动触发, 此时我们手动取出 <code>history.state</code> , 构建参数并重新发送ajax请求或者直接取用state值, 从而实现无刷新还原页面.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">window</span>.addEventListener(<span class="string">"popstate"</span>, <span class="function"><span class="keyword">function</span>(<span class="params">e</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> currentState = history.state;</span><br><span class="line">	<span class="comment">//TODO 拼接ajax请求参数并重新发送ajax请求, 从而回到历史页面</span></span><br><span class="line">  	<span class="comment">//TODO 或者从state中拿到关键值直接还原历史页面</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p> <code>popstate</code> 事件触发时, 默认会传入 <code>PopStateEvent</code> 事件对象. 该对象具有如下属性.</p>
+<p><img src="http://louiszhai.github.io/docImages/ajax20.png" alt="PopStateEvent"></p>
+<p>如有不懂, 更详细讲解请移步 : <a href="http://www.zhangxinxu.com/wordpress/2013/06/html5-history-api-pushstate-replacestate-ajax/" target="_blank" rel="external">ajax与HTML5 history pushState/replaceState实例 « 张鑫旭-鑫空间-鑫生活</a> .</p>
+<h3 id="ajax_u7F13_u5B58_u5904_u7406"><a href="#ajax_u7F13_u5B58_u5904_u7406" class="headerlink" title="ajax缓存处理"></a>ajax缓存处理</h3><p>js中的http缓存没有开关, 受制于浏览器http缓存策略. 原生xhr请求中, 可通过如下设置关闭缓存.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">xhr.setRequestHeader(<span class="string">"If-Modified-Since"</span>,<span class="string">"0"</span>);</span><br><span class="line">xhr.setRequestHeader(<span class="string">"Cache-Control"</span>,<span class="string">"no-cache"</span>);</span><br><span class="line"><span class="comment">//或者 URL 参数后加上  "?timestamp=" + new Date().getTime()</span></span><br></pre></td></tr></table></figure>
+<p>jquery的http缓存是否开启可通过在settings中指定cache.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$.ajax(&#123;</span><br><span class="line">  url : <span class="string">'url'</span>,</span><br><span class="line">  dataType : <span class="string">"xml"</span>,</span><br><span class="line">  cache: <span class="literal">true</span>,<span class="comment">//true表示缓存开启, false表示缓存不开启</span></span><br><span class="line">  success : <span class="function"><span class="keyword">function</span>(<span class="params">xml, status</span>)</span>&#123;    </span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>同时jquery还可以全局设置是否缓存. 如下将全局关闭ajax缓存.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$.ajaxSetup(&#123;cache:<span class="literal">false</span>&#125;);</span><br></pre></td></tr></table></figure>
+<p>除此之外, 调试过程中出现的浏览器缓存尤为可恶. 建议开启隐私浏览器或者勾选☑️控制台的 <code>Disable cache</code> 选项. (这里以Chrome举例, 其他浏览器类似)</p>
+<p><img src="http://louiszhai.github.io/docImages/ajax21.png" alt="PopStateEvent"></p>
+<h3 id="ajax_u7684_u9519_u8BEF_u5904_u7406"><a href="#ajax_u7684_u9519_u8BEF_u5904_u7406" class="headerlink" title="ajax的错误处理"></a>ajax的错误处理</h3><p>前面已经提过, 通常只要是ajax请求收到了http状态码, 便不会进入到错误捕获里.(Chrome中407响应头除外)</p>
+<p>实际上, <code>$.ajax</code> 方法略有区别, jquery的ajax方法还会在类型解析出错时触发error回调. 最常见的便是: dataType设置为json, 但是返回的data并非json格式, 此时 <code>$.ajax</code> 的error回调便会触发.</p>
+<h3 id="ajax_u8C03_u8BD5_u6280_u5DE7"><a href="#ajax_u8C03_u8BD5_u6280_u5DE7" class="headerlink" title="ajax调试技巧"></a>ajax调试技巧</h3><p>有关调试, 如果接口只是做小部分修改. 那么可以使用charles(Mac) 或者fiddler(Windows), 做代理, 将请求的资源替换为本地文件, 或者使用其断点功能, 直接编辑response.</p>
+<p>如果是新增接口的调试, 可以本地搭建node服务. 利用hosts文件配置dns + nginx将http请求转发到本地node服务器. 简易的node调试服务器可参考我的 <a href="https://github.com/Louiszhai/node-webserver" target="_blank" rel="external">node-webserver</a> . 如下举一个栗子🌰:</p>
+<h4 id="hosts+nginx+node-webserver"><a href="#hosts+nginx+node-webserver" class="headerlink" title="hosts+nginx+node-webserver"></a>hosts+nginx+node-webserver</h4><p>假设我们要调试的是 www.test.com 的GET接口. 以下所有步骤以Mac为例, 其他系统, 请自行搜索🔍文件路径.</p>
+<p>1) hosts配置.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo vim /etc/hosts</span><br><span class="line"><span class="comment">#新增一行 127.0.0.1 www.test.com</span></span><br></pre></td></tr></table></figure>
+<p>2) nginx 配置</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">brew install nginx <span class="comment">#安装</span></span><br><span class="line"><span class="comment">#安装成功后进入目标目录</span></span><br><span class="line"><span class="built_in">cd</span> /usr/<span class="built_in">local</span>/etc/nginx/</span><br><span class="line"><span class="built_in">cd</span> servers <span class="comment">#默认配置入口为nginx.conf.同时servers目录下*.conf文件已自动加入到配置文件列表中</span></span><br><span class="line">vim test.conf</span><br><span class="line"><span class="comment">#粘贴如下内容</span></span><br><span class="line">server &#123;</span><br><span class="line">  listen       <span class="number">80</span>;</span><br><span class="line">  server_name  www.test.com;</span><br><span class="line">  index index.html;</span><br><span class="line">  error_page   <span class="number">500</span> <span class="number">502</span> <span class="number">503</span> <span class="number">504</span>  /<span class="number">50</span>x.html;</span><br><span class="line">  location = /<span class="number">50</span>x.html &#123;</span><br><span class="line">  	root   html;</span><br><span class="line">  &#125;</span><br><span class="line">  location / &#123;</span><br><span class="line">    proxy_pass http://localhost:<span class="number">10108</span>/;</span><br><span class="line">    proxy_redirect off;</span><br><span class="line">    proxy_<span class="built_in">set</span>_header Host <span class="variable">$host</span>;</span><br><span class="line">    proxy_<span class="built_in">set</span>_header        X-Read-IP       <span class="variable">$remote_addr</span>;</span><br><span class="line">    proxy_<span class="built_in">set</span>_header        X-Forwarded-For <span class="variable">$proxy_add_x_forwarded_for</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">#:wq保存并退出</span></span><br><span class="line"><span class="comment">#启动nginx</span></span><br><span class="line">sudo nginx <span class="operator">-s</span> reload <span class="comment">#如果启动了只需重启即可</span></span><br><span class="line">sudo nginx <span class="comment">#如果没有启动,便启动之</span></span><br></pre></td></tr></table></figure>
+<p>3) node-webServer 配置</p>
+<p>参考 <a href="https://github.com/Louiszhai/node-webserver" target="_blank" rel="external">node-webserver</a> . 启动服务前只需更改index.js, 在第9行后插入如下内容:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">'get': &#123;</span><br><span class="line">  '/': &#123;</span><br><span class="line">  	getKey : 'Welcome to Simple Node  WebServer!'</span><br><span class="line">  &#125;,</span><br><span class="line">  '接口api': '你的response内容'//插入的代码                               </span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure>
+<p>如需在nginx中配置CORS, 请看这里: <a href="http://mp.weixin.qq.com/s?__biz=MzI3MTI2NzkxMA==&amp;mid=2247484408&amp;idx=1&amp;sn=5c64dd43ff2060e1c4a22d93e4e887c9&amp;scene=1&amp;srcid=0901vPdwJR0crm8vJmjboYzI#rd" target="_blank" rel="external">Nginx通过CORS实现跨域</a>.</p>
+<h4 id="u7F16_u7801_u95EE_u9898"><a href="#u7F16_u7801_u95EE_u9898" class="headerlink" title="编码问题"></a>编码问题</h4><p>XMLHttpRequest 返回的数据默认的字符编码是utf-8, post方法提交数据默认的字符编码也是utf-8. 若页面编码为gbk等中文编码, 那么就会产生乱码.</p>
+<h3 id="u540E_u7AEF_u63A5_u53E3_u6D4B_u8BD5_u6280_u5DE7"><a href="#u540E_u7AEF_u63A5_u53E3_u6D4B_u8BD5_u6280_u5DE7" class="headerlink" title="后端接口测试技巧"></a>后端接口测试技巧</h3><p>通常, 如果后端接口开发OK了, 前端同学需要通过一些手段来确认接口是能正常访问的.</p>
+<h4 id="u4F7F_u7528_u547D_u4EE4_u6D4B_u8BD5OPTIONS_u8BF7_u6C42"><a href="#u4F7F_u7528_u547D_u4EE4_u6D4B_u8BD5OPTIONS_u8BF7_u6C42" class="headerlink" title="使用命令测试OPTIONS请求"></a>使用命令测试OPTIONS请求</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">curl -I -X OPTIONS -H <span class="string">"Origin: http://example.com"</span> http://localhost:<span class="number">10108</span>/</span><br><span class="line"><span class="comment"># response</span></span><br><span class="line">HTTP/<span class="number">1.1</span> <span class="number">200</span> OK</span><br><span class="line">X-Powered-By: Express</span><br><span class="line">Content-Type: text/json;charset=UTF-<span class="number">8</span></span><br><span class="line">Access-Control-Allow-Credentials: <span class="literal">true</span></span><br><span class="line">Access-Control-Allow-Headers: x-requested-with,Content-Type</span><br><span class="line">Access-Control-Allow-Methods: GET,POST,PUT,DELETE,OPTIONS</span><br><span class="line">Access-Control-Allow-Origin: http://example.com</span><br><span class="line">Access-Control-Max-Age: <span class="number">3600</span></span><br><span class="line">Server: Node WebServer</span><br><span class="line">Website: https://github.com/Louiszhai/node-webserver</span><br><span class="line">Date: Fri, <span class="number">21</span> Oct <span class="number">2016</span> <span class="number">09</span>:<span class="number">00</span>:<span class="number">40</span> GMT</span><br><span class="line">Connection: keep-alive</span><br><span class="line">Transfer-Encoding: chunked</span><br></pre></td></tr></table></figure>
+<p>以上, http状态码为200, 表示允许OPTIONS请求.</p>
+<p>GET, POST 请求与GET类似, 其他请求亦然.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">curl -I -X GET -H <span class="string">"Origin: http://example.com"</span> http://localhost:<span class="number">10108</span>/</span><br><span class="line"><span class="comment">#HTTP/1.1 200 OK</span></span><br><span class="line">curl -I -X POST -H <span class="string">"Origin: http://example.com"</span> http://localhost:<span class="number">10108</span>/<span class="built_in">test</span></span><br><span class="line"><span class="comment">#HTTP/1.1 200 OK</span></span><br></pre></td></tr></table></figure>
+<h4 id="postman"><a href="#postman" class="headerlink" title="postman"></a>postman</h4><p>除此之外, 我们还可以通过chrome的postman扩展进行测试. 请看postman素洁的界面:</p>
+<p><img src="http://louiszhai.github.io/docImages/ajax26.png" alt=""></p>
+<p>postman支持所有类型的http请求, 由于其向chrome申请了cookie访问权限及所有http(s)网站的访问权限. 因此可以放心使用它进行各种网站api的测试.</p>
+<p>同时, 强烈建议阅读本文的你升级postman的使用技巧, 这里有篇: <a href="https://segmentfault.com/a/1190000005055899" target="_blank" rel="external">基于Postman的API自动化测试</a> , 拿走不谢.</p>
+<h3 id="ajax_u79FB_u52A8_u7AEF_u517C_u5BB9_u6027"><a href="#ajax_u79FB_u52A8_u7AEF_u517C_u5BB9_u6027" class="headerlink" title="ajax移动端兼容性"></a>ajax移动端兼容性</h3><p>移动端的支持性比较弱, 使用需谨慎. 看表.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center"></th>
+<th style="text-align:center">IOS Safari</th>
+<th style="text-align:center">Opera Mini</th>
+<th style="text-align:center">Android Browser</th>
+<th style="text-align:center">Android Chrome</th>
+<th style="text-align:center">Android UC</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">XMLHttpRequest</td>
+<td style="text-align:center">8.4</td>
+<td style="text-align:center">-</td>
+<td style="text-align:center">4.4.4</td>
+<td style="text-align:center">53</td>
+<td style="text-align:center">11(part)</td>
+</tr>
+<tr>
+<td style="text-align:center">fetch</td>
+<td style="text-align:center">-</td>
+<td style="text-align:center">-</td>
+<td style="text-align:center">52</td>
+<td style="text-align:center">53</td>
+<td style="text-align:center">-</td>
+</tr>
+</tbody>
+</table>
+<p>本篇为ajax而生, 通篇介绍 XMLHTTPRequest 相关的知识, 力求简明, 本欲为梳理知识, 为读者答疑解惑, 但因本人理解所限, 难免有所局限, 希望正在阅读的你取其精华去其糟粕. 谢谢.</p>
+<hr>
+<p>本文就讨论这么多内容,大家有什么问题或好的想法欢迎在下方参与<a href="#respond">留言和评论</a>.</p>
+<p>本文作者: <a href="https://github.com/Louiszhai" target="_blank" rel="external">louis</a></p>
+<p>本文链接: <a href="http://louiszhai.github.io/2016/08/20/ajax/">http://louiszhai.github.io/2016/08/20/ajax/</a></p>
+<p>参考文章</p>
+<ul>
+<li><a href="https://xhr.spec.whatwg.org/" target="_blank" rel="external">XMLHttpRequest Standard</a></li>
+<li><a href="http://www.ruanyifeng.com/blog/2012/09/xmlhttprequest_level_2.html" target="_blank" rel="external">XMLHttpRequest Level 2 使用指南 - 阮一峰的网络日志</a></li>
+<li><a href="https://segmentfault.com/a/1190000004322487" target="_blank" rel="external">你真的会使用XMLHttpRequest吗？ - WEB前端路上踩过的坑儿 - SegmentFault</a></li>
+<li><a href="http://www.zhangxinxu.com/wordpress/2013/06/html5-history-api-pushstate-replacestate-ajax/" target="_blank" rel="external">ajax与HTML5 history pushState/replaceState实例 « 张鑫旭-鑫空间-鑫生活</a></li>
+<li><a href="http://www.ruanyifeng.com/blog/2016/04/cors.html" target="_blank" rel="external">跨域资源共享 CORS 详解 - 阮一峰的网络日志</a></li>
+<li><a href="http://www.jquery123.com/jQuery.ajax/" target="_blank" rel="external">jQuery.ajax() | jQuery API 中文文档 -- jQuery 中文网</a></li>
+</ul>
+
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2016/11/02/fetch/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Fetch入门指南</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share_jia">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">分享到: &nbsp; </span>
+		<a class="jiathis_button_facebook"></a> 
+    <a class="jiathis_button_twitter"></a>
+    <a class="jiathis_button_plus"></a> 
+    <a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+
+
+
+<div class="duoshuo">
+	<div class="ds-thread" data-thread-key="ajax" data-title="Ajax知识体系" data-url="http://louiszhai.github.io/2016/11/02/ajax/"></div>
+	<style>
+		#ds-reset .ds-avatar img{width:54px;height:54px;border-radius:27px;-webkit-border-radius:27px;-moz-border-radius:27px;box-shadow:inset 0 -1px 0 #3333sf;-webkit-box-shadow:inset 0 -1px 0 #3333sf;-webkit-transition:0.4s;-webkit-transition:-webkit-transform 0.4s ease-out;transition:transform 0.4s ease-out;-moz-transition:-moz-transform 0.4s ease-out;}
+		#ds-reset .ds-avatar img:hover{box-shadow:0 0 10px #fff;rgba(255,255,255,.6),inset 0 0 20px rgba(255,255,255,1);-webkit-box-shadow:0 0 10px #fff;rgba(255,255,255,.6),inset 0 0 20px rgba(255,255,255,1);transform:rotateZ(360deg);-webkit-transform:rotateZ(360deg);-moz-transform:rotateZ(360deg);}
+		p.ds-powered-by,#ds-sync-checkbox,.ds-sync label{display:none!important;}
+		#ds-reset .ds-rounded-top{-webkit-border-top-right-radius:0px;-webkit-border-top-left-radius:0px;border-top-right-radius:0px;border-top-left-radius:0px;}
+		#ds-thread #ds-reset .ds-textarea-wrapper{background:#fff;border:0;margin-bottom:20px;padding-right:0px;}
+		#ds-thread #ds-reset .ds-textarea-wrapper textarea{min-height:80px;border:1px solid #ccc;padding:10px;-webkit-appearance:none;border-radius:0;background-color:#FFFFFF;border-color:#cccccc;box-shadow:inset 0 1px 2px rgba(0,0,0,0.1);color:rgba(0,0,0,0.75);-webkit-box-sizing:border-box;box-sizing:border-box;-webkit-transition:border-color 0.15s linear,background 0.15s linear;-moz-transition:border-color 0.15s linear,background 0.15s linear;-ms-transition:border-color 0.15s linear,background 0.15s linear;-o-transition:border-color 0.15s linear,background 0.15s linear;transition:border-color 0.15s linear,background 0.15s linear;}
+		/*#ds-thread #ds-reset .ds-textarea-wrapper textarea:focus{border-color:#999999;background:#fafafa;outline:none;}*/
+		#ds-thread #ds-reset .ds-post-options{border-bottom-left-radius:0px;-webkit-border-bottom-left-radius:0px;border:none;background:none!important;}
+		#ds-reset .ds-textarea-wrapper textarea:focus{border-color:#66afe9;outline:0;-webkit-box-shadow:inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);box-shadow:inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);}
+		#ds-thread #ds-reset .ds-post-button:hover,#ds-thread #ds-reset .ds-post-button:focus{
+		    background-color: #51a351;
+		    background-position: 0 -32px;
+		    color:white;
+		}
+		#ds-thread #ds-reset .ds-post-toolbar,#ds-reset .ds-avatar{box-shadow:none;}
+		#ds-thread #ds-reset .ds-textarea-wrapper textarea:focus{
+	    	/*background: none repeat scroll 0 0 #F4FAFF;*/
+	    	border-color:#9DD4FD;
+	    	border-width:1px;
+	    	box-shadow:0 1px 1px rgba(0,0,0,0.075) inset, 0 0 8px rgba(82, 168, 236, 0.6);
+	    	outline:0 none;
+    	}
+		#ds-thread #ds-reset .ds-textarea-wrapper textarea:active{
+	    	/*background: none repeat scroll 0 0 #F4FAFF;*/
+	    	border-width:1px;
+	    	border-color:#9DD4FD;
+	    	box-shadow:0 1px 1px rgba(0,0,0,0.075) inset, 0 0 8px rgba(82, 168, 236, 0.6);
+	    	outline:0 none;
+    	}
+    	#ds-thread #ds-reset .ds-post-button{
+    		box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset, 0 1px 2px rgba(0, 0, 0, 0.05);
+		    border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+		    border-width: 1px;
+		    border-style: solid;
+		    border-radius: 3px;
+		    background: #5bb75b;
+		    color:white;
+		    text-shadow:none;
+		    transition:background-color 300ms ease-out;
+    	}
+    	#ds-reset .ds-avatar{
+    		background-color:initial;
+    	}
+
+	</style>
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"true"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+</div>
+
+
+
+</div>
+        <link rel="stylesheet" href="/css/content.css" type="text/css">
+<footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+      <img src="/img/top_arrow.png" class="top_arrow" id="top_arrow">
+    	<div class="footer-left">
+    		&copy; 2016 louis
+
+        <script type="text/javascript">if(location.href.indexOf('localhost')<0){var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan style='position:relative;top:2px' id='cnzz_stat_icon_1256923583'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s11.cnzz.com/z_stat.php%3Fid%3D1256923583%26show%3Dpic' type='text/javascript'%3E%3C/script%3E"));}</script>
+
+    	</div>
+      	<div class="footer-right">
+      		<a href="https://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+<script type="text/javascript">
+  //swifty
+  /*(function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+  
+  _st('install','4AmBuvmx4Cy-3hvyxeh8','2.0.0');*/
+</script>
+    </div>
+    
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+
+
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: false,
+		animate: false,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="/js/jquery-1.9.1.min.js" type="text/javascript"></script>
+<script src="/js/main.js" type="text/javascript"></script>
+<script src="/js/content.js" type="text/javascript"></script>
+
+
+
+
+
+
+
+</div>
+<script src="/js/screenfull.js" type="text/javascript"></script>
+<a href="https://github.com/Louiszhai" style="position: fixed; top: 0; right: 0; border: 0;z-index:9999"><img
+            source="https://camo.githubusercontent.com/a6677b08c955af8400f44c6298f40e7d19cc5b2d/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677261795f3664366436642e706e67"
+            src="/img/fork_me_on_github.png" alt="Fork me on GitHub"
+            data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png"></a>
+</body>
+</html>
