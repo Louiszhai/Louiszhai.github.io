@@ -27,7 +27,7 @@
 <meta property="og:image" content="http://louiszhai.github.io/docImages/ajax20.png">
 <meta property="og:image" content="http://louiszhai.github.io/docImages/ajax21.png">
 <meta property="og:image" content="http://louiszhai.github.io/docImages/ajax26.png">
-<meta property="og:updated_time" content="2016-11-02T05:36:46.000Z">
+<meta property="og:updated_time" content="2016-11-02T05:38:55.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Ajax知识体系">
 <meta name="twitter:description" content="ajax XMLHttpRequest xhr fetch XDomainRequest jquery.ajax overrideMimeType CORS FileReader postman angular withCredentials getAllResponseHeaders upload">
@@ -779,7 +779,7 @@
 </tbody>
 </table>
 <p>从jq1.8起, 对于函数 <code>ajaxStart</code>, <code>ajaxSend</code>, <code>ajaxSuccess</code>, <code>ajaxComplete</code>, <code>ajaxStop</code> , 只能为<code>document</code>对象绑定事件处理函数, 为其他元素绑定的事件处理函数不会起作用.</p>
-<h3 id="Fetch"><a href="#Fetch" class="headerlink" title="Fetch"></a>Fetch</h3><p>Fetch请参考 <a href="http://louiszhai.github.io/2016/10/19/fetch/">Web异步通信之Fetch</a> .</p>
+<h3 id="Fetch"><a href="#Fetch" class="headerlink" title="Fetch"></a>Fetch</h3><p>Fetch请参考 <a href="http://louiszhai.github.io/2016/10/19/fetch/">Fetch进阶指南</a> .</p>
 <h3 id="ajax_u8DE8_u57DF_u8BF7_u6C42"><a href="#ajax_u8DE8_u57DF_u8BF7_u6C42" class="headerlink" title="ajax跨域请求"></a>ajax跨域请求</h3><h4 id="u4EC0_u4E48_u662FCORS"><a href="#u4EC0_u4E48_u662FCORS" class="headerlink" title="什么是CORS"></a>什么是CORS</h4><p>CORS是一个W3C标准, 全称是跨域资源共享(Cross-origin resource sharing).它允许浏览器向跨域服务器, 发出异步http请求, 从而克服了ajax受同源策略的限制. 实际上, 浏览器不会拦截不合法的跨域请求, 而是拦截了他们的响应, 因此即使请求不合法, 很多时候, 服务器依然收到了请求.(Chrome和Firefox下https网站不允许发送http异步请求除外)</p>
 <p>当前几乎所有的浏览器(Internet Explorer 8+, Firefox 3.5+, Safari 4+和 Chrome 3+)都可通过名为跨域资源共享的协议支持ajax跨域调用.</p>
 <p>一次具体的跨域访问的流程为:</p>
