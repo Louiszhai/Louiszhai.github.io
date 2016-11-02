@@ -4,7 +4,7 @@
   <subtitle><![CDATA[程序猿 前端攻城师]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://louiszhai.github.io/"/>
-  <updated>2016-11-02T04:48:32.000Z</updated>
+  <updated>2016-11-02T05:12:55.000Z</updated>
   <id>http://louiszhai.github.io/</id>
   
   <author>
@@ -19,7 +19,7 @@
     <link href="http://louiszhai.github.io/2016/11/02/ajax/"/>
     <id>http://louiszhai.github.io/2016/11/02/ajax/</id>
     <published>2016-11-02T04:48:27.000Z</published>
-    <updated>2016-11-02T04:48:32.000Z</updated>
+    <updated>2016-11-02T05:12:55.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>Ajax 全称 Asynchronous JavaScript and XML, 即异步JS与XML. 它最早在IE5中被使用, 然后由Mozilla, Apple, Google推广开来. 典型的代表应用有 Outlook Web Access, 以及 GMail. 现代网页中几乎无ajax不欢. 前后端分离也正是建立在ajax异步通信的基础之上.</p>
 <a id="more"></a>
 <h3 id="u6D4F_u89C8_u5668_u4E3Aajax_u505A_u4E86_u4EC0_u4E48"><a href="#u6D4F_u89C8_u5668_u4E3Aajax_u505A_u4E86_u4EC0_u4E48" class="headerlink" title="浏览器为ajax做了什么"></a>浏览器为ajax做了什么</h3><p>现代浏览器中, 虽然几乎全部支持ajax, 但它们的技术方案却分为两种:</p>
@@ -436,10 +436,8 @@
 <td style="text-align:center"><del>error</del></td>
 </tr>
 <tr>
-<td style="text-align:center">always(function(data\</td>
-<td style="text-align:center">jqXHR, textStatus, jqXHR\</td>
-<td>errorThrown) {})</td>
-<td><del>complete</del></td>
+<td style="text-align:center">always(function(data or jqXHR, textStatus, jqXHR or errorThrown) {})</td>
+<td style="text-align:center"><del>complete</del></td>
 </tr>
 </tbody>
 </table>
@@ -582,7 +580,7 @@
 </tbody>
 </table>
 <p>从jq1.8起, 对于函数 <code>ajaxStart</code>, <code>ajaxSend</code>, <code>ajaxSuccess</code>, <code>ajaxComplete</code>, <code>ajaxStop</code> , 只能为<code>document</code>对象绑定事件处理函数, 为其他元素绑定的事件处理函数不会起作用.</p>
-<h3 id="Fetch"><a href="#Fetch" class="headerlink" title="Fetch"></a>Fetch</h3><p>Fetch请参考 [Web异步通信之Fetch][<a href="http://louiszhai.github.io/2016/10/19/fetch/">http://louiszhai.github.io/2016/10/19/fetch/</a>] .</p>
+<h3 id="Fetch"><a href="#Fetch" class="headerlink" title="Fetch"></a>Fetch</h3><p>Fetch请参考 <a href="http://louiszhai.github.io/2016/10/19/fetch/">Web异步通信之Fetch</a> .</p>
 <h3 id="ajax_u8DE8_u57DF_u8BF7_u6C42"><a href="#ajax_u8DE8_u57DF_u8BF7_u6C42" class="headerlink" title="ajax跨域请求"></a>ajax跨域请求</h3><h4 id="u4EC0_u4E48_u662FCORS"><a href="#u4EC0_u4E48_u662FCORS" class="headerlink" title="什么是CORS"></a>什么是CORS</h4><p>CORS是一个W3C标准, 全称是跨域资源共享(Cross-origin resource sharing).它允许浏览器向跨域服务器, 发出异步http请求, 从而克服了ajax受同源策略的限制. 实际上, 浏览器不会拦截不合法的跨域请求, 而是拦截了他们的响应, 因此即使请求不合法, 很多时候, 服务器依然收到了请求.(Chrome和Firefox下https网站不允许发送http异步请求除外)</p>
 <p>当前几乎所有的浏览器(Internet Explorer 8+, Firefox 3.5+, Safari 4+和 Chrome 3+)都可通过名为跨域资源共享的协议支持ajax跨域调用.</p>
 <p>一次具体的跨域访问的流程为:</p>
@@ -651,7 +649,7 @@
 <li>Last-Event-ID</li>
 <li>Content-Type字段限三个值 <code>application/x-www-form-urlencoded</code>、<code>multipart/form-data</code>、<code>text/plain</code></li>
 </ul>
-<p>对于简单请求, 浏览器将发送一次http请求, 同时在Request头域中增加 <code>Origin</code> 字段, 用来标示请求发起的源, 服务器根据这个源采取不同的响应策略. 若服务器认为该请求合法, 那么需要往返回的 HTTP Response 中添加 <code>Access-Control-*</code> 等字段.(<code>Access-Control-*</code> 相关字段解析请阅读我之前写的[CORS 跨域访问][<a href="http://louiszhai.github.io/2016/01/11/cross-domain/#CORS__u8DE8_u57DF_u8BBF_u95EE">http://louiszhai.github.io/2016/01/11/cross-domain/#CORS__u8DE8_u57DF_u8BBF_u95EE</a>])</p>
+<p>对于简单请求, 浏览器将发送一次http请求, 同时在Request头域中增加 <code>Origin</code> 字段, 用来标示请求发起的源, 服务器根据这个源采取不同的响应策略. 若服务器认为该请求合法, 那么需要往返回的 HTTP Response 中添加 <code>Access-Control-*</code> 等字段.( <code>Access-Control-*</code> 相关字段解析请阅读我之前写的<a href="http://louiszhai.github.io/2016/01/11/cross-domain/#CORS__u8DE8_u57DF_u8BBF_u95EE]">CORS 跨域访问</a> )</p>
 <p>对于非简单请求, 比如Method为<code>POST</code>且Content-Type值为 <code>application/json</code> 的请求或者Method为 <code>PUT</code> 或 <code>DELETE</code> 的请求, 浏览器将发送两次http请求. 第一次为preflight预检(Method: OPTIONS),主要验证来源是否合法. 值得注意的是:OPTION请求响应头同样需要包含 <code>Access-Control-*</code> 字段等. 第二次才是真正的HTTP请求. 所以服务器必须处理OPTIONS应答(通常需要返回20X的状态码, 否则xhr.onerror事件将被触发).</p>
 <p>以上请求流程图为:</p>
 <p><img src="http://louiszhai.github.io/docImages/cross-domain01.jpg" alt=""></p>
@@ -782,7 +780,7 @@
 <h4 id="ajax_u8BF7_u6C42_u4E8C_u8FDB_u5236_u56FE_u7247_u5E76_u9884_u89C8"><a href="#ajax_u8BF7_u6C42_u4E8C_u8FDB_u5236_u56FE_u7247_u5E76_u9884_u89C8" class="headerlink" title="ajax请求二进制图片并预览"></a>ajax请求二进制图片并预览</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> xhr = <span class="keyword">new</span> XMLHttpRequest(),</span><br><span class="line">    url = <span class="string">"http://louiszhai.github.io/docImages/ajax01.png"</span>;</span><br><span class="line">xhr.open(<span class="string">"GET"</span>, url);</span><br><span class="line">xhr.responseType = <span class="string">"blob"</span>;</span><br><span class="line">xhr.onload = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="keyword">if</span>(<span class="keyword">this</span>.status == <span class="number">200</span>)&#123;</span><br><span class="line">    <span class="keyword">var</span> blob = <span class="keyword">this</span>.response;</span><br><span class="line">    <span class="keyword">var</span> img = <span class="built_in">document</span>.createElement(<span class="string">"img"</span>);</span><br><span class="line">    <span class="comment">//方案一</span></span><br><span class="line">    img.src = <span class="built_in">window</span>.URL.createObjectURL(blob);<span class="comment">//这里blob依然占据着内存</span></span><br><span class="line">    img.onload = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">      <span class="built_in">window</span>.URL.revokeObjectURL(img.src);<span class="comment">//释放内存</span></span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="comment">//方案二</span></span><br><span class="line">    <span class="comment">/*var reader = new FileReader();</span><br><span class="line">    reader.readAsDataURL(blob);//FileReader将返回base64编码的data-uri对象</span><br><span class="line">    reader.onload = function()&#123;</span><br><span class="line">      img.src = this.result;</span><br><span class="line">    &#125;*/</span></span><br><span class="line">    <span class="comment">//方案三</span></span><br><span class="line">    <span class="comment">//img.src = url;//最简单方法</span></span><br><span class="line">    <span class="built_in">document</span>.body.appendChild(img);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">xhr.send();</span><br></pre></td></tr></table></figure>
 <h4 id="ajax_u8BF7_u6C42_u4E8C_u8FDB_u5236_u6587_u672C_u5E76_u5C55_u793A"><a href="#ajax_u8BF7_u6C42_u4E8C_u8FDB_u5236_u6587_u672C_u5E76_u5C55_u793A" class="headerlink" title="ajax请求二进制文本并展示"></a>ajax请求二进制文本并展示</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> xhr = <span class="keyword">new</span> XMLHttpRequest();</span><br><span class="line">xhr.open(<span class="string">"GET"</span>,<span class="string">"http://localhost:8080/Information/download.jsp?data=node-fetch.js"</span>);</span><br><span class="line">xhr.responseType = <span class="string">"blob"</span>;</span><br><span class="line">xhr.onload = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="keyword">if</span>(<span class="keyword">this</span>.status == <span class="number">200</span>)&#123;</span><br><span class="line">    <span class="keyword">var</span> blob = <span class="keyword">this</span>.response;</span><br><span class="line">    <span class="keyword">var</span> reader = <span class="keyword">new</span> FileReader();</span><br><span class="line">    reader.readAsBinaryString(blob);<span class="comment">//该方法已被移出标准api,建议使用reader.readAsText(blob);</span></span><br><span class="line">    reader.onload=<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">      <span class="built_in">document</span>.body.innerHTML = <span class="string">"&lt;div&gt;"</span> + <span class="keyword">this</span>.result + <span class="string">"&lt;/div&gt;"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">xhr.send();</span><br></pre></td></tr></table></figure>
 <p>有关二进制文件的读取, 请移步这篇博客 <a href="http://www.cnblogs.com/jscode/archive/2013/04/27/3572239.html" target="_blank" rel="external">HTML5新特性之文件和二进制数据的操作</a> .</p>
-<h3 id="u5982_u4F55_u7B49_u5F85_u591A_u4E2Aajax_u8BF7_u6C42_u5B8C_u6210"><a href="#u5982_u4F55_u7B49_u5F85_u591A_u4E2Aajax_u8BF7_u6C42_u5B8C_u6210" class="headerlink" title="如何等待多个ajax请求完成"></a>如何等待多个ajax请求完成</h3><p>原生js可以使用ES6新增的普若迷斯(Promise). ES6的Promise基于 <a href="https://promisesaplus.com/" target="_blank" rel="external">Promises/A+</a> 规范(该部分[<code>Web异步通信之Fetch</code>][<a href="http://louiszhai.github.io/2016/10/19/fetch/]一文也有提及">http://louiszhai.github.io/2016/10/19/fetch/]一文也有提及</a>).</p>
+<h3 id="u5982_u4F55_u7B49_u5F85_u591A_u4E2Aajax_u8BF7_u6C42_u5B8C_u6210"><a href="#u5982_u4F55_u7B49_u5F85_u591A_u4E2Aajax_u8BF7_u6C42_u5B8C_u6210" class="headerlink" title="如何等待多个ajax请求完成"></a>如何等待多个ajax请求完成</h3><p>原生js可以使用ES6新增的普若迷斯(Promise). ES6的Promise基于 <a href="https://promisesaplus.com/" target="_blank" rel="external">Promises/A+</a> 规范(该部分 <a href="http://louiszhai.github.io/2016/10/19/fetch/">Fetch入门指南</a> 一文也有提及).</p>
 <p>这里先提供一个解析responses的函数.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">todo</span>(<span class="params">responses</span>)</span>&#123;</span><br><span class="line">  responses.forEach(<span class="function"><span class="keyword">function</span>(<span class="params">response</span>)</span>&#123;</span><br><span class="line">    response.json().then(<span class="function"><span class="keyword">function</span>(<span class="params">res</span>)</span>&#123;</span><br><span class="line">      <span class="built_in">console</span>.log(res);</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>原生js使用 <code>Promise.all</code> 方法. 如下:</p>
@@ -946,8 +944,8 @@
     <link href="http://louiszhai.github.io/2016/11/02/fetch/"/>
     <id>http://louiszhai.github.io/2016/11/02/fetch/</id>
     <published>2016-11-02T04:48:08.000Z</published>
-    <updated>2016-11-02T04:48:16.000Z</updated>
-    <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>Fetch 是 web异步通信的未来—. 从chrome42, Firefox39, Opera29, EdgeHTML14(并非Edge版本)起, fetch就已经被支持了. 其中chrome42~45版本, fetch对中文支持有问题, 建议从chrome46起使用fetch. 传送门: <a href="https://bugs.chromium.org/p/chromium/issues/detail?id=511289" target="_blank" rel="external">fetch中文乱码</a> .</p>
+    <updated>2016-11-02T05:08:22.000Z</updated>
+    <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>Fetch 是 web异步通信的未来. 从chrome42, Firefox39, Opera29, EdgeHTML14(并非Edge版本)起, fetch就已经被支持了. 其中chrome42~45版本, fetch对中文支持有问题, 建议从chrome46起使用fetch. 传送门: <a href="https://bugs.chromium.org/p/chromium/issues/detail?id=511289" target="_blank" rel="external">fetch中文乱码</a> .</p>
 <a id="more"></a>
 <h3 id="Fetch"><a href="#Fetch" class="headerlink" title="Fetch"></a>Fetch</h3><p>先过一遍Fetch原生支持率.</p>
 <p><img src="http://louiszhai.github.io/docImages/ajax07.png" alt=""><br><img src="http://louiszhai.github.io/docImages/ajax08.png" alt=""></p>
@@ -997,7 +995,7 @@
 <li>cors-with-forced-preflight: 表示在发出请求前, 将执行preflight检查.</li>
 <li>no-cors: 常用于跨域请求不带CORS响应头场景, 此时响应类型为 “opaque”.</li>
 </ul>
-<p>除此之外, 还有两种不太常用的mode类型, 分别是 <code>navigate</code> , <code>websocket</code> , 它们是[HTML标准][<a href="https://html.spec.whatwg.org/multipage/]中特殊的值" target="_blank" rel="external">https://html.spec.whatwg.org/multipage/]中特殊的值</a>, 这里不做详细介绍.</p>
+<p>除此之外, 还有两种不太常用的mode类型, 分别是 <code>navigate</code> , <code>websocket</code> , 它们是[HTML标准]9<a href="https://html.spec.whatwg.org/multipage/)中特殊的值" target="_blank" rel="external">https://html.spec.whatwg.org/multipage/)中特殊的值</a>, 这里不做详细介绍.</p>
 <h4 id="header"><a href="#header" class="headerlink" title="header"></a>header</h4><p>fetch获取http响应头非常easy. 如下:</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">fetch(url).then(<span class="function"><span class="keyword">function</span>(<span class="params">response</span>) </span>&#123; </span><br><span class="line">    <span class="built_in">console</span>.log(response.headers.get(<span class="string">'Content-Type'</span>));</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
 <p>设置http请求头也一样简单.</p>
