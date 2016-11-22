@@ -4,7 +4,7 @@
   <subtitle><![CDATA[程序猿 前端攻城师]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://louiszhai.github.io/"/>
-  <updated>2016-11-22T08:02:13.000Z</updated>
+  <updated>2016-11-22T08:07:07.000Z</updated>
   <id>http://louiszhai.github.io/</id>
   
   <author>
@@ -19,7 +19,7 @@
     <link href="http://louiszhai.github.io/2016/11/02/ajax/"/>
     <id>http://louiszhai.github.io/2016/11/02/ajax/</id>
     <published>2016-11-02T04:48:27.000Z</published>
-    <updated>2016-11-22T08:02:13.000Z</updated>
+    <updated>2016-11-22T08:07:07.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>Ajax 全称 Asynchronous JavaScript and XML, 即异步JS与XML. 它最早在IE5中被使用, 然后由Mozilla, Apple, Google推广开来. 典型的代表应用有 Outlook Web Access, 以及 GMail. 现代网页中几乎无ajax不欢. 前后端分离也正是建立在ajax异步通信的基础之上.</p>
 <a id="more"></a>
 <h3 id="u6D4F_u89C8_u5668_u4E3Aajax_u505A_u4E86_u4EC0_u4E48"><a href="#u6D4F_u89C8_u5668_u4E3Aajax_u505A_u4E86_u4EC0_u4E48" class="headerlink" title="浏览器为ajax做了什么"></a>浏览器为ajax做了什么</h3><p>现代浏览器中, 虽然几乎全部支持ajax, 但它们的技术方案却分为两种:</p>
@@ -589,7 +589,7 @@
 <li>Axios基于promise语法, jq3.0才开始全面支持.</li>
 <li>Axios短小精悍, 更加适合http场景, jquery大而全, 加载较慢.</li>
 </ul>
-<p>Axios大小仅12k, 目前最新版本号如下:<a href="https://www.npmjs.org/package/axios" target="_blank" rel="external"><img src="https://camo.githubusercontent.com/9f600e10007ac86da6a8b90c16ca1e9504901730/68747470733a2f2f696d672e736869656c64732e696f2f6e706d2f762f6178696f732e7376673f7374796c653d666c61742d737175617265" alt="npm version"></a></p>
+<p>Axios大小仅12k, 目前最新版本号为: <a href="https://www.npmjs.org/package/axios" target="_blank" rel="external"><img src="https://camo.githubusercontent.com/9f600e10007ac86da6a8b90c16ca1e9504901730/68747470733a2f2f696d672e736869656c64732e696f2f6e706d2f762f6178696f732e7376673f7374796c653d666c61742d737175617265" alt="npm version"></a></p>
 <p>语法上Axios基本就和promise一样, 在then方法中处理回调, 在catch方法中处理异常. 如下:</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">axios.get(<span class="string">"https://api.github.com/users/louiszhai"</span>)</span><br><span class="line">  .then(<span class="function"><span class="keyword">function</span>(<span class="params">response</span>)</span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(response);</span><br><span class="line">  &#125;)</span><br><span class="line">  .catch(<span class="function"><span class="keyword">function</span> (<span class="params">error</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(error);</span><br><span class="line">  &#125;);</span><br></pre></td></tr></table></figure>
 <p>除了get, 它还支持post, delete, head, put, patch, request请求. 具体使用攻略, 请戳这里: <a href="http://www.bootcdn.cn/axios/readme/" target="_blank" rel="external">axios</a> .</p>
