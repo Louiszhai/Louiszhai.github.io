@@ -4,7 +4,7 @@
   <subtitle><![CDATA[程序猿 前端攻城师]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://louiszhai.github.io/"/>
-  <updated>2016-11-22T08:07:07.000Z</updated>
+  <updated>2016-11-23T03:41:01.000Z</updated>
   <id>http://louiszhai.github.io/</id>
   
   <author>
@@ -19,7 +19,7 @@
     <link href="http://louiszhai.github.io/2016/11/02/ajax/"/>
     <id>http://louiszhai.github.io/2016/11/02/ajax/</id>
     <published>2016-11-02T04:48:27.000Z</published>
-    <updated>2016-11-22T08:07:07.000Z</updated>
+    <updated>2016-11-23T03:41:01.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>Ajax 全称 Asynchronous JavaScript and XML, 即异步JS与XML. 它最早在IE5中被使用, 然后由Mozilla, Apple, Google推广开来. 典型的代表应用有 Outlook Web Access, 以及 GMail. 现代网页中几乎无ajax不欢. 前后端分离也正是建立在ajax异步通信的基础之上.</p>
 <a id="more"></a>
 <h3 id="u6D4F_u89C8_u5668_u4E3Aajax_u505A_u4E86_u4EC0_u4E48"><a href="#u6D4F_u89C8_u5668_u4E3Aajax_u505A_u4E86_u4EC0_u4E48" class="headerlink" title="浏览器为ajax做了什么"></a>浏览器为ajax做了什么</h3><p>现代浏览器中, 虽然几乎全部支持ajax, 但它们的技术方案却分为两种:</p>
@@ -148,6 +148,8 @@
 <h4 id="getAllResponseHeaders"><a href="#getAllResponseHeaders" class="headerlink" title="getAllResponseHeaders"></a>getAllResponseHeaders</h4><p>getAllResponseHeaders方法用于获取所有安全的ajax响应头, 响应头以字符串形式返回. 每个HTTP报头名称和值用冒号分隔, 如key:value, 并以\r\n结束.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">xhr.onreadystatechange = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span>(<span class="keyword">this</span>.readyState == <span class="keyword">this</span>.HEADERS_RECEIVED) &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="keyword">this</span>.getAllResponseHeaders());</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//Content-Type: text/html"</span></span><br></pre></td></tr></table></figure>
 <p>以上,  <code>readyState === 2</code> 状态时, 就意味着响应头已接受完整. 此时便可以打印出完整的 response headers.</p>
+<h4 id="setRequestHeader"><a href="#setRequestHeader" class="headerlink" title="setRequestHeader"></a>setRequestHeader</h4><p>既然可以获取响应头, 那么自然也可以设置请求头, setRequestHeader就是干这个的. 如下:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//指定请求的type为json格式</span></span><br><span class="line">xhr.setRequestHeader(<span class="string">"Content-type"</span>, <span class="string">"application/json"</span>);</span><br><span class="line"><span class="comment">//除此之外, 还可以设置其他的请求头</span></span><br><span class="line">xhr.setRequestHeader(<span class="string">'x-requested-with'</span>, <span class="string">'123456'</span>);</span><br></pre></td></tr></table></figure>
 <h4 id="onerror"><a href="#onerror" class="headerlink" title="onerror"></a>onerror</h4><p>onerror方法用于在ajax请求出错后执行. 通常只在网络出现问题时或者ERR_CONNECTION_RESET时触发(如果请求返回的是407状态码, chrome下也会触发onerror).</p>
 <h4 id="upload"><a href="#upload" class="headerlink" title="upload"></a>upload</h4><p>upload属性默认返回一个 <code>XMLHttpRequestUpload</code> 对象, 用于上传资源. 该对象具有如下方法:</p>
 <ul>
@@ -594,14 +596,14 @@
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">axios.get(<span class="string">"https://api.github.com/users/louiszhai"</span>)</span><br><span class="line">  .then(<span class="function"><span class="keyword">function</span>(<span class="params">response</span>)</span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(response);</span><br><span class="line">  &#125;)</span><br><span class="line">  .catch(<span class="function"><span class="keyword">function</span> (<span class="params">error</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(error);</span><br><span class="line">  &#125;);</span><br></pre></td></tr></table></figure>
 <p>除了get, 它还支持post, delete, head, put, patch, request请求. 具体使用攻略, 请戳这里: <a href="http://www.bootcdn.cn/axios/readme/" target="_blank" rel="external">axios</a> .</p>
 <p>如需在网页上引入 Axios, 可以链接CDN <a href="http://www.bootcdn.cn/axios/" target="_blank" rel="external">axios | Bootstrap中文网开源项目免费 CDN 服务</a> 或者将其下载到本地.</p>
-<h3 id="Fetch"><a href="#Fetch" class="headerlink" title="Fetch"></a>Fetch</h3><p>说到ajax, 就不得不提及最新的fetch, 由于篇幅较长, fetch已从本文中独立出来, 请戳 <a href="http://louiszhai.github.io/2016/10/19/fetch/">Fetch进阶指南</a> .</p>
-<h3 id="ajax_u8DE8_u57DF_u8BF7_u6C42"><a href="#ajax_u8DE8_u57DF_u8BF7_u6C42" class="headerlink" title="ajax跨域请求"></a>ajax跨域请求</h3><h4 id="u4EC0_u4E48_u662FCORS"><a href="#u4EC0_u4E48_u662FCORS" class="headerlink" title="什么是CORS"></a>什么是CORS</h4><p>CORS是一个W3C标准, 全称是跨域资源共享(Cross-origin resource sharing).它允许浏览器向跨域服务器, 发出异步http请求, 从而克服了ajax受同源策略的限制. 实际上, 浏览器不会拦截不合法的跨域请求, 而是拦截了他们的响应, 因此即使请求不合法, 很多时候, 服务器依然收到了请求.(Chrome和Firefox下https网站不允许发送http异步请求除外)</p>
-<p>当前几乎所有的浏览器(Internet Explorer 8+, Firefox 3.5+, Safari 4+和 Chrome 3+)都可通过名为跨域资源共享的协议支持ajax跨域调用.</p>
-<p>一次具体的跨域访问的流程为:</p>
+<h3 id="Fetch"><a href="#Fetch" class="headerlink" title="Fetch"></a>Fetch</h3><p>说到ajax, 就不得不提及fetch, 由于篇幅较长, fetch已从本文中独立出来, 请戳 <a href="http://louiszhai.github.io/2016/10/19/fetch/">Fetch进阶指南</a> .</p>
+<h3 id="ajax_u8DE8_u57DF_u8BF7_u6C42"><a href="#ajax_u8DE8_u57DF_u8BF7_u6C42" class="headerlink" title="ajax跨域请求"></a>ajax跨域请求</h3><h4 id="u4EC0_u4E48_u662FCORS"><a href="#u4EC0_u4E48_u662FCORS" class="headerlink" title="什么是CORS"></a>什么是CORS</h4><p>CORS是一个W3C(World Wide Web)标准, 全称是跨域资源共享(Cross-origin resource sharing).它允许浏览器向跨域服务器, 发出异步http请求, 从而克服了ajax受同源策略的限制. 实际上, 浏览器不会拦截不合法的跨域请求, 而是拦截了他们的响应, 因此即使请求不合法, 很多时候, 服务器依然收到了请求.(Chrome和Firefox下https网站不允许发送http异步请求除外)</p>
+<p>通常, 一次跨域访问拥有如下流程:</p>
 <p><img src="http://louiszhai.github.io/docImages/cross-domain02.jpg" alt=""></p>
-<h4 id="u79FB_u52A8_u7AEFCORS_u517C_u5BB9_u6027"><a href="#u79FB_u52A8_u7AEFCORS_u517C_u5BB9_u6027" class="headerlink" title="移动端CORS兼容性"></a>移动端CORS兼容性</h4><p>如图:</p>
+<h4 id="u79FB_u52A8_u7AEFCORS_u517C_u5BB9_u6027"><a href="#u79FB_u52A8_u7AEFCORS_u517C_u5BB9_u6027" class="headerlink" title="移动端CORS兼容性"></a>移动端CORS兼容性</h4><p>当前几乎所有的桌面浏览器(Internet Explorer 8+, Firefox 3.5+, Safari 4+和 Chrome 3+)都可通过名为跨域资源共享的协议支持ajax跨域调用.</p>
+<p>那么移动端兼容性又如何呢? 请看下图:</p>
 <p><img src="http://louiszhai.github.io/docImages/ajax25.png" alt="cors-mobile"></p>
-<p>CORS的技术在IOS Safari7.1及Android webview2.3中就早已支持, 即使低版本webview的canvas在使用跨域的video或图片时会有问题, 也丝毫不影响CORS的在移动端的使用.</p>
+<p>可见, CORS的技术在IOS Safari7.1及Android webview2.3中就早已支持, 即使低版本下webview的canvas在使用跨域的video或图片时会有问题, 也丝毫不影响CORS的在移动端的使用. 至此, 我们就可以放心大胆的去应用CORS了.</p>
 <h4 id="CORS_u6709_u5173_u7684headers"><a href="#CORS_u6709_u5173_u7684headers" class="headerlink" title="CORS有关的headers"></a>CORS有关的headers</h4><p>1) HTTP Response Header(服务器提供):</p>
 <ul>
 <li><p>Access-Control-Allow-Origin: 指定允许哪些源的网页发送请求.</p>
@@ -945,7 +947,7 @@
 </ul>
 ]]></content>
     <summary type="html">
-    <![CDATA[ajax XMLHttpRequest xhr fetch XDomainRequest jquery.ajax overrideMimeType CORS FileReader postman angular withCredentials getAllResponseHeaders upload]]>
+    <![CDATA[ajax XMLHttpRequest xhr fetch XDomainRequest jquery.ajax overrideMimeType CORS FileReader postman angular withCredentials setRequestHeader getAllResponseHeaders upload ajax与history的兼容 ajax跨域请求 ajax文件上传 ajax缓存处理 ajax错误处理 ajax调试技巧 pjax ajax请求二进制 多个ajax请求 options xhr一级 xhr二级 axios]]>
     
     </summary>
     
@@ -958,7 +960,7 @@
     <link href="http://louiszhai.github.io/2016/11/02/fetch/"/>
     <id>http://louiszhai.github.io/2016/11/02/fetch/</id>
     <published>2016-11-02T04:48:08.000Z</published>
-    <updated>2016-11-22T07:17:57.000Z</updated>
+    <updated>2016-11-23T03:40:30.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>Fetch 是 web异步通信的未来. 从chrome42, Firefox39, Opera29, EdgeHTML14(并非Edge版本)起, fetch就已经被支持了. 其中chrome42~45版本, fetch对中文支持有问题, 建议从chrome46起使用fetch. 传送门: <a href="https://bugs.chromium.org/p/chromium/issues/detail?id=511289" target="_blank" rel="external">fetch中文乱码</a> .</p>
 <a id="more"></a>
 <h3 id="Fetch"><a href="#Fetch" class="headerlink" title="Fetch"></a>Fetch</h3><p>先过一遍Fetch原生支持率.</p>
@@ -1144,7 +1146,7 @@
     <link href="http://louiszhai.github.io/2016/07/01/Math/"/>
     <id>http://louiszhai.github.io/2016/07/01/Math/</id>
     <published>2016-06-30T23:57:48.000Z</published>
-    <updated>2016-11-22T07:09:37.000Z</updated>
+    <updated>2016-11-23T03:40:30.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>截至ES5, JavaScript 中内置(build-in)构造器/对象共有13个, 其中9个是构造器(Number,Boolean, String, Object, Function, Array, RegExp, Error, Date), Global 不能直接访问, Arguments仅在函数调用时由JS引擎创建, 而 Math, JSON 是以对象形式存在的, 本篇将带你走进 JS 内置对象-Math以及与之息息相关的位运算, 一探究竟.</p>
 <a id="more"></a>
 <h3 id="u4E3A_u4EC0_u4E48Math_u8FD9_u4E48_u8BBE_u8BA1"><a href="#u4E3A_u4EC0_u4E48Math_u8FD9_u4E48_u8BBE_u8BA1" class="headerlink" title="为什么Math这么设计"></a>为什么Math这么设计</h3><p>众所周知, 如果需要使用js进行一些常规的数学运算, 是一件十分麻烦的事情. 为了解决这个问题, ECMAScript 在1.1版本中便引入了 Math. Math 之所以被设计成一个对象, 而不是构造器, 是因为对象中的方法或属性可以作为静态方法或常量直接被调用, 方便使用, 同时, Math 也没有创建实例的必要.</p>
@@ -1699,7 +1701,7 @@
     <link href="http://louiszhai.github.io/2016/06/13/regexp/"/>
     <id>http://louiszhai.github.io/2016/06/13/regexp/</id>
     <published>2016-06-13T00:24:55.000Z</published>
-    <updated>2016-11-22T07:09:37.000Z</updated>
+    <updated>2016-11-23T03:40:30.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>你有没有在搜索文本的时候绞尽脑汁, 试了一个又一个表达式, 还是不行.</p>
 <p>你有没有在表单验证的时候, 只是做做样子(只要不为空就好), 然后烧香拜佛, 虔诚祈祷, 千万不要出错.</p>
 <p>你有没有在使用sed 和 grep 命令的时候, 感觉莫名其妙, 明明应该支持的元字符, 却就是匹配不到.</p>
@@ -2678,7 +2680,7 @@
     <link href="http://louiszhai.github.io/2016/03/31/css-hasLayout/"/>
     <id>http://louiszhai.github.io/2016/03/31/css-hasLayout/</id>
     <published>2016-03-31T05:57:56.000Z</published>
-    <updated>2016-04-27T01:26:57.000Z</updated>
+    <updated>2016-11-23T03:36:58.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u4EC0_u4E48_u662FhasLayout"><a href="#u4EC0_u4E48_u662FhasLayout" class="headerlink" title="什么是hasLayout"></a>什么是hasLayout</h3><blockquote>
 <p>hasLayout property: Gets a value that indicates whether the object has layout.</p>
 </blockquote>
@@ -2772,7 +2774,7 @@
     <link href="http://louiszhai.github.io/2016/03/23/css-margin/"/>
     <id>http://louiszhai.github.io/2016/03/23/css-margin/</id>
     <published>2016-03-23T12:47:36.000Z</published>
-    <updated>2016-11-22T07:09:37.000Z</updated>
+    <updated>2016-11-23T03:40:30.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>margin属性处于盒子模型的最外层, 用以隔开其他元素, 它可以依次设置4个长度值, 分别表示 “上 右 下 左” 的间距, 其中第1个和第3个值相对应, 第2个与第4个相对应, 如果省略前者, 后者将取与前者相同的数值. margin属性共存在以下 4 种表示方式:</p>
 <ul>
 <li>margin: 10px 1rem 1em 5%; 共 4 个数值, 表示依次设置 上, 右, 下, 左的间距;</li>
@@ -2827,7 +2829,7 @@
     <link href="http://louiszhai.github.io/2016/03/12/css-center/"/>
     <id>http://louiszhai.github.io/2016/03/12/css-center/</id>
     <published>2016-03-12T11:03:04.000Z</published>
-    <updated>2016-11-22T07:09:37.000Z</updated>
+    <updated>2016-11-23T03:40:30.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>熟悉水平居中和垂直居中的方法, 不为别的, 就为用的时候能够信手拈来. 下面直接步入正题.</p>
 <a id="more"></a>
 <h3 id="u6C34_u5E73_u5C45_u4E2D"><a href="#u6C34_u5E73_u5C45_u4E2D" class="headerlink" title="水平居中"></a>水平居中</h3><p>1) 若是行内元素, 给其父元素设置 text-align:center,即可实现行内元素水平居中.</p>
@@ -2999,7 +3001,7 @@
     <link href="http://louiszhai.github.io/2016/03/05/xss/"/>
     <id>http://louiszhai.github.io/2016/03/05/xss/</id>
     <published>2016-03-05T01:48:09.000Z</published>
-    <updated>2016-11-22T07:09:37.000Z</updated>
+    <updated>2016-11-23T03:40:30.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p><strong>XSS</strong> (Cross-Site Script) 攻击又叫跨站脚本攻击, 本质是一种注入攻击. 其原理, 简单的说就是利用各种手段把恶意代码添加到网页中, 并让受害者执行这段脚本. XSS能做用户使用浏览器能做的一切事情. 伟大的同源策略也无法保证不受XSS攻击，因为此时攻击者就在同源之内.</p>
 <a id="more"></a>
 <h3 id="xss_u653B_u51FB_u65B9_u5F0F"><a href="#xss_u653B_u51FB_u65B9_u5F0F" class="headerlink" title="xss攻击方式"></a>xss攻击方式</h3><p>从攻击的方式可以分为</p>
@@ -3183,7 +3185,7 @@
     <link href="http://louiszhai.github.io/2016/01/12/js.String/"/>
     <id>http://louiszhai.github.io/2016/01/12/js.String/</id>
     <published>2016-01-12T12:27:09.000Z</published>
-    <updated>2016-11-22T07:09:37.000Z</updated>
+    <updated>2016-11-23T03:40:30.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>javaScript 中, 字符串无处不在, 并且所有的字符串方法均来自 String.prototype, 这一节, 我们走进看一看String内部, 探讨那些常用或不常用的字符串操作方法.</p>
 <a id="more"></a>
 <h3 id="String-prototype"><a href="#String-prototype" class="headerlink" title="String.prototype"></a>String.prototype</h3><p>String.prototype 属性指向 String 的原型对象. 以下是它的属性特性:</p>
@@ -3373,7 +3375,7 @@
     <link href="http://louiszhai.github.io/2016/01/11/cross-domain/"/>
     <id>http://louiszhai.github.io/2016/01/11/cross-domain/</id>
     <published>2016-01-11T00:01:33.000Z</published>
-    <updated>2016-11-22T07:09:37.000Z</updated>
+    <updated>2016-11-23T03:40:30.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>同源策略 (Same-Origin Policy) 最早由 Netscape 公司提出, 所谓同源就是要求, 域名, 协议, 端口相同. 非同源的脚本不能访问或者操作其他域的页面对象(如DOM等). 作为著名的安全策略, 虽然它只是一个规范, 并不强制要求,  但现在所有支持 javaScript 的浏览器都会使用这个策略. 以至于该策略成为浏览器最核心最基本的安全功能, 如果缺少了同源策略, web的安全将无从谈起.</p>
 <a id="more"></a>
 <h3 id="u540C_u6E90_u7B56_u7565_u7684_u9650_u5236"><a href="#u540C_u6E90_u7B56_u7565_u7684_u9650_u5236" class="headerlink" title="同源策略的限制"></a>同源策略的限制</h3><p>同源策略下的web世界, 域的壁垒高筑, 从而保证各个网页相互独立, 互相之间不能直接访问, iframe, ajax 均受其限制, 而script标签不受此限制.</p>
@@ -3509,7 +3511,7 @@
     <link href="http://louiszhai.github.io/2016/01/11/bind/"/>
     <id>http://louiszhai.github.io/2016/01/11/bind/</id>
     <published>2016-01-11T00:01:33.000Z</published>
-    <updated>2016-11-22T07:09:37.000Z</updated>
+    <updated>2016-11-23T03:40:30.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>ES5新增了 Function.prototype.bind 方法, 该方法不同于jquery的bind 方法, 它主要用于固定 this 作用域, 避免各种由于上下文切换造成的语义问题. 常用在 setTimeout, for循环等内部.</p>
 <a id="more"></a>
 <h3 id="bind"><a href="#bind" class="headerlink" title="bind"></a>bind</h3><p>语法: func.bind(thisArg, arg1, arg2, ….)</p>
@@ -3552,7 +3554,7 @@
     <link href="http://louiszhai.github.io/2016/01/10/js.timer/"/>
     <id>http://louiszhai.github.io/2016/01/10/js.timer/</id>
     <published>2016-01-10T05:52:11.000Z</published>
-    <updated>2016-11-22T07:09:37.000Z</updated>
+    <updated>2016-11-23T03:40:30.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>设置web定时器应当是一个相当常见的需求, 实际上, 我们也有两大工具函数可以任意调用: setTimeout, setInterval. 然而 js 里却没有java的那种wait(), 定时又未必准时, 要想写个定时器还须得深入理解 setTimeout 和 setInterval 的运行原理才行.</p>
 <a id="more"></a>
 <h3 id="u8FD0_u884C_u539F_u7406"><a href="#u8FD0_u884C_u539F_u7406" class="headerlink" title="运行原理"></a>运行原理</h3><p>setTimeout 和 setInterval 并非异步调用, 所谓的”异步调用”, 只是因它们都往 js 引擎的 <code>待处理任务队列</code> 末尾插入代码, 看起来像”异步调用”而已.</p>
@@ -3617,7 +3619,7 @@
     <link href="http://louiszhai.github.io/2015/12/29/array/"/>
     <id>http://louiszhai.github.io/2015/12/29/array/</id>
     <published>2015-12-29T01:00:17.000Z</published>
-    <updated>2016-11-22T07:09:37.000Z</updated>
+    <updated>2016-11-23T03:40:30.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>数组是一种非常重要的数据类型, 它语法简单, 灵活,高效, 在多数编程语言中, 数组都充当着至关重要的角色, 以至于很难想象没有数组的编程语言会是什么样子. 这期我们就来侃侃JavaScript的数组, 趴趴它的那点破事儿. 这篇博客从2015年写到了2016年, 权当是跨年的总结吧, 祝大家新年快乐, 2016更好, 未来更好!</p>
 <a id="more"></a>
 <p>声明: 以下未特别标明的方法均为ES5已实现的方法.</p>
@@ -4181,7 +4183,7 @@
     <link href="http://louiszhai.github.io/2015/12/22/scopeChain/"/>
     <id>http://louiszhai.github.io/2015/12/22/scopeChain/</id>
     <published>2015-12-22T00:06:13.000Z</published>
-    <updated>2016-11-22T07:09:37.000Z</updated>
+    <updated>2016-11-23T03:40:30.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>上一篇我们讲到数组遍历, 本文我们更进一步, 讲讲如何提高遍历的效率. 欢迎阅读本篇<strong><code>详解JS作用域链及闭包</code></strong>.</p>
 <a id="more"></a>
 <h3 id="u56DE_u987E_u4E0A_u7BC7"><a href="#u56DE_u987E_u4E0A_u7BC7" class="headerlink" title="回顾上篇"></a>回顾上篇</h3><p>请先看上一篇中提到的for循环代码:</p>
@@ -4318,7 +4320,7 @@
     <link href="http://louiszhai.github.io/2015/12/18/traverse/"/>
     <id>http://louiszhai.github.io/2015/12/18/traverse/</id>
     <published>2015-12-18T02:54:48.000Z</published>
-    <updated>2016-11-22T07:09:37.000Z</updated>
+    <updated>2016-11-23T03:40:30.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>遍历数组或对象是一名程序员的基本素养之一. 然而遍历却不是一件简单的事, 优秀的程序员知道怎么去选择合适的遍历方法, 优化遍历效率. 本篇将带你走进JavaScript遍历的世界, 享受分析JS循环的快感. 本篇所有代码都可以直接运行, 希望您通读本篇后, 不止是浏览, 最好是亲手去实践下.</p>
 <a id="more"></a>
 <h3 id="u6982_u8FF0"><a href="#u6982_u8FF0" class="headerlink" title="概述"></a>概述</h3><p>js有如下两种数据需要经常遍历</p>
@@ -4782,7 +4784,7 @@
     <link href="http://louiszhai.github.io/2015/12/17/prototype/"/>
     <id>http://louiszhai.github.io/2015/12/17/prototype/</id>
     <published>2015-12-17T01:34:36.000Z</published>
-    <updated>2016-11-22T07:09:37.000Z</updated>
+    <updated>2016-11-23T03:40:30.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u6982_u5FF5"><a href="#u6982_u5FF5" class="headerlink" title="概念"></a>概念</h3><ol>
 <li><strong>prototype</strong> 是函数(function) 的一个属性, 它指向函数的原型.</li>
 <li><strong>__proto__</strong>   是对象的内部属性, 它指向构造器的原型, 对象依赖它进行原型链查询.</li>
@@ -4956,7 +4958,7 @@
     <link href="http://louiszhai.github.io/2015/12/15/arguments/"/>
     <id>http://louiszhai.github.io/2015/12/15/arguments/</id>
     <published>2015-12-15T12:44:51.000Z</published>
-    <updated>2016-11-22T07:09:37.000Z</updated>
+    <updated>2016-11-23T03:40:30.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u6982_u8FF0"><a href="#u6982_u8FF0" class="headerlink" title="概述"></a>概述</h3><p><strong>Arguments</strong> 对象已经不再是函数的属性了, 它是函数内部的本地变量,  包括如下属性：</p>
 <ol>
 <li>callee — 指向当前函数的引用</li>
@@ -5007,7 +5009,7 @@
     <link href="http://louiszhai.github.io/2015/12/15/prototypeChain/"/>
     <id>http://louiszhai.github.io/2015/12/15/prototypeChain/</id>
     <published>2015-12-15T01:26:28.000Z</published>
-    <updated>2016-11-22T07:09:37.000Z</updated>
+    <updated>2016-11-23T03:40:30.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u6458_u81EAJavaScript_u9AD8_u7EA7_u7A0B_u5E8F_u8BBE_u8BA1_3A"><a href="#u6458_u81EAJavaScript_u9AD8_u7EA7_u7A0B_u5E8F_u8BBE_u8BA1_3A" class="headerlink" title="摘自JavaScript高级程序设计:"></a>摘自JavaScript高级程序设计:</h3><p>继承是OO语言中的一个最为人津津乐道的概念.许多OO语言都支持两种继承方式: <strong>接口继承</strong> 和 <strong>实现继承</strong> .接口继承只继承方法签名,而实现继承则继承实际的方法.由于js中方法没有签名,在ECMAScript中无法实现接口继承.ECMAScript只支持实现继承,而且其 <code>实现继承</code> 主要是依靠原型链来实现的.</p>
 <a id="more"></a> 
 <h3 id="u6982_u5FF5"><a href="#u6982_u5FF5" class="headerlink" title="概念"></a>概念</h3><p>简单回顾下构造函数,原型和实例的关系:</p>
