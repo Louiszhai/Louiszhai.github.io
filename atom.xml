@@ -4,7 +4,7 @@
   <subtitle><![CDATA[程序猿 前端攻城师]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://louiszhai.github.io/"/>
-  <updated>2016-11-25T03:39:27.000Z</updated>
+  <updated>2016-11-25T03:43:18.000Z</updated>
   <id>http://louiszhai.github.io/</id>
   
   <author>
@@ -19,7 +19,7 @@
     <link href="http://louiszhai.github.io/2016/11/25/manifest/"/>
     <id>http://louiszhai.github.io/2016/11/25/manifest/</id>
     <published>2016-11-25T00:08:21.000Z</published>
-    <updated>2016-11-25T03:39:27.000Z</updated>
+    <updated>2016-11-25T03:43:18.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>Manifest 是 H5提供的一种应用缓存机制, 基于它web应用可以实现离线访问(offline cache). 为此, 浏览器还提供了应用缓存的api–applicationCache. 虽然manifest的技术已被web标准废弃, 但这不影响我们尝试去了解它. 也正是因为manifest的应用缓存机制如此诱人, 饿了么 和 office 365邮箱都还在使用着它!</p>
 <a id="more"></a>
 <h3 id="u63CF_u8FF0"><a href="#u63CF_u8FF0" class="headerlink" title="描述"></a>描述</h3><p>对manifest熟悉的同学可以跳过此节.</p>
@@ -29,7 +29,7 @@
 <li>访问更快: 数据存在于本地, 省去了浏览器发起http请求的时间, 因此访问更快, 移动端效果更为明显.</li>
 <li>降低负载: 浏览器只在manifest文件改动时才去服务器下载需要缓存的资源, 大大降低了服务器负载.</li>
 </ul>
-<p>manifest缓存的过程如下:</p>
+<p>manifest缓存的过程如下(来自网络):</p>
 <p><img src="http://ww2.sinaimg.cn/large/006y8lVagw1fa479nwxhmj30pm08hdgj.jpg" alt="manifest"></p>
 <h3 id="u652F_u6301_u6027"><a href="#u652F_u6301_u6027" class="headerlink" title="支持性"></a>支持性</h3><p>主流浏览器都支持manifest应用缓存技术. 如下表格:</p>
 <table>
@@ -53,8 +53,8 @@
 <td style="text-align:center">4+</td>
 <td style="text-align:center">4+</td>
 <td style="text-align:center">11.5+</td>
-<td style="text-align:center">7.1</td>
-<td style="text-align:center">2.3</td>
+<td style="text-align:center">7.1+</td>
+<td style="text-align:center">2.3+</td>
 </tr>
 </tbody>
 </table>
@@ -67,7 +67,7 @@
 <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="title">html</span> <span class="attribute">manifest</span>=<span class="value">"test.appcache"</span>&gt;</span></span><br><span class="line">  ...</span><br><span class="line"><span class="tag">&lt;/<span class="title">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
 <p>在html标签中指定manifest文件, 便表示该网页使用manifest进行离线缓存. 该网页内需要缓存的文件列表需要在 test.appcache 文本文件中指定.</p>
 <h3 id="manifest_u7F13_u5B58_u6E05_u5355"><a href="#manifest_u7F13_u5B58_u6E05_u5355" class="headerlink" title="manifest缓存清单"></a>manifest缓存清单</h3><p>就像写作文一样, manifest采用经典的三段式. 分别为: <code>CACHE</code>, <code>NETWORK</code> 和 <code>FALLBACK</code>. 如下, 先看一个栗子🌰:</p>
-<figure class="highlight"><figcaption><span>wiki</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CACHE MANIFEST&#10;# v1.0.0&#10;content.css&#10;&#10;NETWORK:&#10;app.js&#10;&#10;FALLBACK:&#10;/other 404.html</span><br></pre></td></tr></table></figure>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">CACHE MANIFEST</span><br><span class="line"><span class="preprocessor"># v1<span class="number">.0</span><span class="number">.0</span></span></span><br><span class="line">content.css</span><br><span class="line"></span><br><span class="line">NETWORK:</span><br><span class="line">app.js</span><br><span class="line"></span><br><span class="line">FALLBACK:</span><br><span class="line">/other <span class="number">404.</span>html</span><br></pre></td></tr></table></figure>
 <p>其中第一行必须以 <code>CACHE MANIFEST</code> 开头, 后可跟若干字符注释, 注释从#号开始. 跟在  <code>CACHE MANIFEST</code>  行后的文件, 每行列出一个, 这些文件是需要缓存的文件. 因此 content.css 会被缓存, 不需要访问网络.</p>
 <p>第二段内容以 <code>NETWORK:</code> 开始, 跟在该行后的文件表示需要访问网络. 如: app.js 将直接从网络上下载, 并不走manifest cache, 如果除了第一段中缓存的文件以外, 其他文件都从网络上获取, 那么此时可将 app.js 改为 * (通配符).</p>
 <p>第三段内容以 <code>FALLBACK:</code> 开始, 跟在该行后的文件表示会有一个替代方案. 如: 当访问 /other 路径时, 如果访问失败, 那么将自动加载 404.html 作为替代.</p>
