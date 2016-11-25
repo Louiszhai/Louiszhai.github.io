@@ -4,7 +4,7 @@
   <subtitle><![CDATA[程序猿 前端攻城师]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://louiszhai.github.io/"/>
-  <updated>2016-11-23T03:41:01.000Z</updated>
+  <updated>2016-11-25T03:39:27.000Z</updated>
   <id>http://louiszhai.github.io/</id>
   
   <author>
@@ -15,11 +15,156 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title><![CDATA[聊一聊H5应用缓存-Manifest]]></title>
+    <link href="http://louiszhai.github.io/2016/11/25/manifest/"/>
+    <id>http://louiszhai.github.io/2016/11/25/manifest/</id>
+    <published>2016-11-25T00:08:21.000Z</published>
+    <updated>2016-11-25T03:39:27.000Z</updated>
+    <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>Manifest 是 H5提供的一种应用缓存机制, 基于它web应用可以实现离线访问(offline cache). 为此, 浏览器还提供了应用缓存的api–applicationCache. 虽然manifest的技术已被web标准废弃, 但这不影响我们尝试去了解它. 也正是因为manifest的应用缓存机制如此诱人, 饿了么 和 office 365邮箱都还在使用着它!</p>
+<a id="more"></a>
+<h3 id="u63CF_u8FF0"><a href="#u63CF_u8FF0" class="headerlink" title="描述"></a>描述</h3><p>对manifest熟悉的同学可以跳过此节.</p>
+<p>鉴于manifest应用缓存的技术, 我们可以做到:</p>
+<ul>
+<li>离线访问: 即使服务器挂了, 或者没有网络, 用户依然可以正常浏览网页内容.</li>
+<li>访问更快: 数据存在于本地, 省去了浏览器发起http请求的时间, 因此访问更快, 移动端效果更为明显.</li>
+<li>降低负载: 浏览器只在manifest文件改动时才去服务器下载需要缓存的资源, 大大降低了服务器负载.</li>
+</ul>
+<p>manifest缓存的过程如下:</p>
+<p><img src="http://ww2.sinaimg.cn/large/006y8lVagw1fa479nwxhmj30pm08hdgj.jpg" alt="manifest"></p>
+<h3 id="u652F_u6301_u6027"><a href="#u652F_u6301_u6027" class="headerlink" title="支持性"></a>支持性</h3><p>主流浏览器都支持manifest应用缓存技术. 如下表格:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">IE</th>
+<th style="text-align:center">Edge</th>
+<th style="text-align:center">Firefox</th>
+<th style="text-align:center">Chrome</th>
+<th style="text-align:center">Safari</th>
+<th style="text-align:center">Opera</th>
+<th style="text-align:center">ios</th>
+<th style="text-align:center">Android</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">10+</td>
+<td style="text-align:center">12+</td>
+<td style="text-align:center">3.5+</td>
+<td style="text-align:center">4+</td>
+<td style="text-align:center">4+</td>
+<td style="text-align:center">11.5+</td>
+<td style="text-align:center">7.1</td>
+<td style="text-align:center">2.3</td>
+</tr>
+</tbody>
+</table>
+<p>H5标准中, <a href="https://html.spec.whatwg.org/#offline" target="_blank" rel="external">Offline Web applications</a> 部分有如下描述:</p>
+<blockquote>
+<p>This feature is in the process of being removed from the Web platform. (This is a long process that takes many years.) Using any of the offline Web application features at this time is highly discouraged. Use service workers instead. <a href="https://html.spec.whatwg.org/#refsSW" target="_blank" rel="external">[SW]</a></p>
+</blockquote>
+<p>因此后续我将在其他文章中继续介绍 service workers, 本篇继续关注manifest.</p>
+<h3 id="u5982_u4F55_u5F00_u542F_u5E94_u7528_u7F13_u5B58"><a href="#u5982_u4F55_u5F00_u542F_u5E94_u7528_u7F13_u5B58" class="headerlink" title="如何开启应用缓存"></a>如何开启应用缓存</h3><p>manifest使用缓存清单进行管理, 缓存清单需要与html标签进行关联. 如下:</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="title">html</span> <span class="attribute">manifest</span>=<span class="value">"test.appcache"</span>&gt;</span></span><br><span class="line">  ...</span><br><span class="line"><span class="tag">&lt;/<span class="title">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>在html标签中指定manifest文件, 便表示该网页使用manifest进行离线缓存. 该网页内需要缓存的文件列表需要在 test.appcache 文本文件中指定.</p>
+<h3 id="manifest_u7F13_u5B58_u6E05_u5355"><a href="#manifest_u7F13_u5B58_u6E05_u5355" class="headerlink" title="manifest缓存清单"></a>manifest缓存清单</h3><p>就像写作文一样, manifest采用经典的三段式. 分别为: <code>CACHE</code>, <code>NETWORK</code> 和 <code>FALLBACK</code>. 如下, 先看一个栗子🌰:</p>
+<figure class="highlight"><figcaption><span>wiki</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CACHE MANIFEST&#10;# v1.0.0&#10;content.css&#10;&#10;NETWORK:&#10;app.js&#10;&#10;FALLBACK:&#10;/other 404.html</span><br></pre></td></tr></table></figure>
+<p>其中第一行必须以 <code>CACHE MANIFEST</code> 开头, 后可跟若干字符注释, 注释从#号开始. 跟在  <code>CACHE MANIFEST</code>  行后的文件, 每行列出一个, 这些文件是需要缓存的文件. 因此 content.css 会被缓存, 不需要访问网络.</p>
+<p>第二段内容以 <code>NETWORK:</code> 开始, 跟在该行后的文件表示需要访问网络. 如: app.js 将直接从网络上下载, 并不走manifest cache, 如果除了第一段中缓存的文件以外, 其他文件都从网络上获取, 那么此时可将 app.js 改为 * (通配符).</p>
+<p>第三段内容以 <code>FALLBACK:</code> 开始, 跟在该行后的文件表示会有一个替代方案. 如: 当访问 /other 路径时, 如果访问失败, 那么将自动加载 404.html 作为替代.</p>
+<h3 id="manifest_u7F13_u5B58_u72B6_u6001"><a href="#manifest_u7F13_u5B58_u72B6_u6001" class="headerlink" title="manifest缓存状态"></a>manifest缓存状态</h3><p>每个manifest缓存都有一个状态, 标示着缓存的情况. 一份缓存清单只有一个缓存状态, 即使它被多个页面引用. 以下是各个缓存状态:</p>
+<ul>
+<li><em>UNCACHED</em>(未缓存): 表明应用缓存对象还没有初始化完成.</li>
+<li><em>IDLE</em>(空闲): 应用缓存并未处于更新状态.</li>
+<li><em>CHECKING</em>(检查): 正在检查是否存在更新.</li>
+<li><em>DOWNLOADING</em>(下载): 清单更新后, 重新下载全部资源到临时缓存中.</li>
+<li><em>UPDATEREADY</em>(更新就绪): 新版本的缓存下载完成, 全部就绪, 随即触发事件 updateready.</li>
+<li><em>OBSOLETE</em>(废弃): 应用缓存已被废弃.</li>
+</ul>
+<p>上述缓存状态常量依次取值0, 1, 2, 3, 4, 5.</p>
+<h3 id="applicationCache"><a href="#applicationCache" class="headerlink" title="applicationCache"></a>applicationCache</h3><p>applicationCache是操作应用缓存的瑞士军刀, 也是唯一的一把刀.</p>
+<p>首先我们来获取该对象.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//webview下</span></span><br><span class="line"><span class="keyword">var</span> cache = <span class="built_in">window</span>.applicationCache;</span><br><span class="line"><span class="comment">//shared worker中</span></span><br><span class="line"><span class="keyword">var</span> cache = self.applicationCache;</span><br></pre></td></tr></table></figure>
+<p>以下是其属性和方法介绍(大神请绕过):</p>
+<ul>
+<li><p>status: 返回当前页面的应用缓存的状态, 通常开启应用缓存的页面可能返回1, 其他页面则返回0.</p>
+</li>
+<li><p>update(): 手动触发应用缓存的更新. </p>
+<p>(1) 若有更新, 则依次触发①检查事件(Checking event), ②下载事件(Downloading event), ③下载进度事件(Progress event), ④更新完成事件(UpdateReady event);</p>
+<p>(2) 若无更新, 则依次触发①检查事件(Checking event), ②无更新事件(NoUpdate event);</p>
+<p>(3) 在未开启应用缓存的页面调用将抛出<code>Uncaught DOMException</code> 错误.</p>
+<p>update() 方法通常在长时间不关闭的页面使用, 比如说邮箱应用, 用于定期检测可能的更新.</p>
+</li>
+<li><p>abort(): 取消应用缓存的更新. 可用于节省有限的网络带宽.</p>
+</li>
+<li><p>swapCache(): 如果存在一个更新版本的应用缓存, 那么它将切换过去, 否则将抛出 <code>Uncaught DOMException</code> 错误. 通常, 我们会在updateready事件触发之后手动调用swapCache()方法, swapCache的切换只对后续加载的缓存文件有效, 已经加载成功的资源并不会重新加载.</p>
+</li>
+</ul>
+<p>那么如何利用好上述api更新一个页面的应用缓存呢? 别急, <a href="http://www.html5rocks.com/en/tutorials/appcache/beginner/" target="_blank" rel="external">Beginner’s Guide to Using the Application Cache</a> 一文中提供了如下的样板方法:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Check if a new cache is available on page load.</span></span><br><span class="line"><span class="built_in">window</span>.addEventListener(<span class="string">'load'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">e</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">window</span>.applicationCache.addEventListener(<span class="string">'updateready'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">e</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="built_in">window</span>.applicationCache.status == <span class="built_in">window</span>.applicationCache.UPDATEREADY) &#123;</span><br><span class="line">      <span class="comment">// Browser downloaded a new app cache.</span></span><br><span class="line">      <span class="comment">// Swap it in and reload the page to get the new hotness.</span></span><br><span class="line">      <span class="built_in">window</span>.applicationCache.swapCache();</span><br><span class="line">      <span class="keyword">if</span> (confirm(<span class="string">'A new version of this site is available. Load it?'</span>)) &#123;</span><br><span class="line">        <span class="built_in">window</span>.location.reload();</span><br><span class="line">      &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="comment">// Manifest didn't changed. Nothing new to server.</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;, <span class="literal">false</span>);</span><br><span class="line">&#125;, <span class="literal">false</span>);</span><br></pre></td></tr></table></figure>
+<h3 id="manifest_u7F13_u5B58_u72EC_u7ACB_u6027"><a href="#manifest_u7F13_u5B58_u72EC_u7ACB_u6027" class="headerlink" title="manifest缓存独立性"></a>manifest缓存独立性</h3><ol>
+<li>manifest的缓存和浏览器默认的缓存是两套机制, 相互独立, 并且不受浏览器缓存大小限制(Chrome下测试结果).</li>
+<li>各个manifest文件的缓存相互独立, 各自在独立的区域进行缓存. 即使是缓存同一个文件, 也可能由于缓存的版本不一致, 而造成各个页面资源不一致.</li>
+</ol>
+<h3 id="manifest_u7F13_u5B58_u89C4_u5219"><a href="#manifest_u7F13_u5B58_u89C4_u5219" class="headerlink" title="manifest缓存规则"></a>manifest缓存规则</h3><ol>
+<li>遵循全量缓存的规律. 即: manifest文件改动后, 将重新缓存一遍所有的文件(包括html本身和动态添加的需要缓存的文件,即使缓存列表中没有该html). 第一次缓存过程中如果出现缓存失败的文件, 那么, 第二访问, 又将重新缓存一遍所有的文件. 以此类推.</li>
+<li>manifest文件本身不能写进缓存清单, 否则连同html和资源在其缓存失效之前, 将永远不能获得更新.</li>
+<li>即使manifest文件丢失, 缓存依然有效. 不过从此以后, 引入该manifest的html, 将永远不能获得更新.</li>
+</ol>
+<h3 id="webview_u7684_u7F13_u5B58_u73B0_u8C61"><a href="#webview_u7684_u7F13_u5B58_u73B0_u8C61" class="headerlink" title="webview的缓存现象"></a>webview的缓存现象</h3><p>通常, webview的缓存有如下三种现象:</p>
+<ol>
+<li>普通网页(无manifest文件), 不受manifest缓存影响, 缓存只走 http cache.</li>
+<li>包含manifest文件的网页, 缓存文件只受manifest缓存影响(只有manifest文件改变时才会更新缓存资源), 缓存资源完全与 http cache 无关, 但是 <code>NETWORK</code> 段落后需要访问网络的文件, 将继续走 http cache.</li>
+<li>webview直接加载manifest缓存过的文件时, 优先加载第一个manifest缓存的该文件, 如果没有找到manifest缓存, 那么它将自动寻找 http cache 或者 在线加载.</li>
+</ol>
+<h3 id="u6700_u4F73_u5B9E_u8DF5"><a href="#u6700_u4F73_u5B9E_u8DF5" class="headerlink" title="最佳实践"></a>最佳实践</h3><ol>
+<li>通常只使用一个manifest文件, 并保证缓存的文件尽可能的少, 以减小manifest每次更新清单中文件所耗费的时间和流量.</li>
+<li>如果一定要使用两个及以上manifest文件, 缓存文件请尽量不要相同.</li>
+<li>如果以上两条都不能保证, 那么, 请保证尽可能在manifest缓存的状态更新时, 主动去刷新网页.(此时并不能保证不同网页之间同一个缓存文件版本一致)</li>
+</ol>
+<h3 id="u5177_u4F53_u843D_u5730_u6B65_u9AA4"><a href="#u5177_u4F53_u843D_u5730_u6B65_u9AA4" class="headerlink" title="具体落地步骤"></a>具体落地步骤</h3><ol>
+<li><p>如果缓存的文件需要加参数运行, 建议将参数内容加到hash中, 如:cached-page.html#parameterName=value</p>
+</li>
+<li><p>manifest 的引入可以使用绝对路径或者相对路径, 如果你使用的是绝对路径, 那么你的manifest文件必须和你的站点处于同一个域名下.</p>
+</li>
+<li><p>manifest文件你可以保存为任意的扩展名, 但是响应头中以下字段须取以下定值, 以保证manifest文件正确被解析, 并且它没有http缓存.</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">Content-Type</span>: <span class="string">text/cache-manifest</span></span><br><span class="line"><span class="attribute">Cache-Control</span>: <span class="string">max-age=0</span></span><br><span class="line"><span class="attribute">Expires</span>: <span class="string">[CURRENT TIME]</span></span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3 id="u5982_u4F55_u66F4_u65B0_u7F13_u5B58"><a href="#u5982_u4F55_u66F4_u65B0_u7F13_u5B58" class="headerlink" title="如何更新缓存"></a>如何更新缓存</h3><ol>
+<li>更新manifest文件后, webview将自动更新缓存.</li>
+<li>js更新缓存(手动触发manifest更新): window.applicationCache.update();</li>
+</ol>
+<h3 id="u5176_u4ED6"><a href="#u5176_u4ED6" class="headerlink" title="其他"></a>其他</h3><p>chrome浏览器下通过访问 <a href="chrome://appcache-internals/" target="_blank" rel="external">chrome://appcache-internals/</a> 可以查看缓存在本地的资源文件.</p>
+<p>另外, 除了本文参考的一篇 MDN 的文章以及 HTML5 Rocks的 <a href="http://www.html5rocks.com/en/tutorials/appcache/beginner/" target="_blank" rel="external">Beginner’s Guide to Using the Application Cache</a> 一文, 还有如下三个链接可供您比较阅读, 谢谢.</p>
+<ul>
+<li><a href="http://en.wikipedia.org/wiki/Cache_manifest_in_HTML5" target="_blank" rel="external">Cache manifest in HTML5</a> on Wikipedia</li>
+<li><a href="http://www.w3.org/TR/offline-webapps/" target="_blank" rel="external">Offline Web Applications</a> W3C Working Group Note</li>
+<li><a href="http://www.whatwg.org/specs/web-apps/current-work/multipage/offline.html" target="_blank" rel="external">Offline Web applications</a> at WHATWG</li>
+</ul>
+<hr>
+<p>本问就讨论这么多内容,大家有什么问题或好的想法欢迎在下方参与<a href="#respond">留言和评论</a>.</p>
+<p>本文作者: <a href="https://github.com/Louiszhai" target="_blank" rel="external">louis</a></p>
+<p>本文链接: <a href="http://louiszhai.github.io/2016/11/25/manifest/">http://louiszhai.github.io/2016/11/25/manifest/</a></p>
+<p>参考文章</p>
+<ul>
+<li><a href="https://developer.mozilla.org/en-US/docs/HTML/Using_the_application_cache" target="_blank" rel="external">Using the application cache | MDN</a></li>
+</ul>
+]]></content>
+    <summary type="html">
+    <![CDATA[manifest offline cache applicationCache]]>
+    
+    </summary>
+    
+      <category term="Web" scheme="http://louiszhai.github.io/tags/Web/"/>
+    
+  </entry>
+  
+  <entry>
     <title><![CDATA[Ajax知识体系]]></title>
     <link href="http://louiszhai.github.io/2016/11/02/ajax/"/>
     <id>http://louiszhai.github.io/2016/11/02/ajax/</id>
     <published>2016-11-02T04:48:27.000Z</published>
-    <updated>2016-11-23T03:41:01.000Z</updated>
+    <updated>2016-11-25T00:08:09.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>Ajax 全称 Asynchronous JavaScript and XML, 即异步JS与XML. 它最早在IE5中被使用, 然后由Mozilla, Apple, Google推广开来. 典型的代表应用有 Outlook Web Access, 以及 GMail. 现代网页中几乎无ajax不欢. 前后端分离也正是建立在ajax异步通信的基础之上.</p>
 <a id="more"></a>
 <h3 id="u6D4F_u89C8_u5668_u4E3Aajax_u505A_u4E86_u4EC0_u4E48"><a href="#u6D4F_u89C8_u5668_u4E3Aajax_u505A_u4E86_u4EC0_u4E48" class="headerlink" title="浏览器为ajax做了什么"></a>浏览器为ajax做了什么</h3><p>现代浏览器中, 虽然几乎全部支持ajax, 但它们的技术方案却分为两种:</p>
@@ -960,7 +1105,7 @@
     <link href="http://louiszhai.github.io/2016/11/02/fetch/"/>
     <id>http://louiszhai.github.io/2016/11/02/fetch/</id>
     <published>2016-11-02T04:48:08.000Z</published>
-    <updated>2016-11-23T03:40:30.000Z</updated>
+    <updated>2016-11-25T00:08:09.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>Fetch 是 web异步通信的未来. 从chrome42, Firefox39, Opera29, EdgeHTML14(并非Edge版本)起, fetch就已经被支持了. 其中chrome42~45版本, fetch对中文支持有问题, 建议从chrome46起使用fetch. 传送门: <a href="https://bugs.chromium.org/p/chromium/issues/detail?id=511289" target="_blank" rel="external">fetch中文乱码</a> .</p>
 <a id="more"></a>
 <h3 id="Fetch"><a href="#Fetch" class="headerlink" title="Fetch"></a>Fetch</h3><p>先过一遍Fetch原生支持率.</p>
@@ -1146,7 +1291,7 @@
     <link href="http://louiszhai.github.io/2016/07/01/Math/"/>
     <id>http://louiszhai.github.io/2016/07/01/Math/</id>
     <published>2016-06-30T23:57:48.000Z</published>
-    <updated>2016-11-23T03:40:30.000Z</updated>
+    <updated>2016-11-25T00:08:09.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>截至ES5, JavaScript 中内置(build-in)构造器/对象共有13个, 其中9个是构造器(Number,Boolean, String, Object, Function, Array, RegExp, Error, Date), Global 不能直接访问, Arguments仅在函数调用时由JS引擎创建, 而 Math, JSON 是以对象形式存在的, 本篇将带你走进 JS 内置对象-Math以及与之息息相关的位运算, 一探究竟.</p>
 <a id="more"></a>
 <h3 id="u4E3A_u4EC0_u4E48Math_u8FD9_u4E48_u8BBE_u8BA1"><a href="#u4E3A_u4EC0_u4E48Math_u8FD9_u4E48_u8BBE_u8BA1" class="headerlink" title="为什么Math这么设计"></a>为什么Math这么设计</h3><p>众所周知, 如果需要使用js进行一些常规的数学运算, 是一件十分麻烦的事情. 为了解决这个问题, ECMAScript 在1.1版本中便引入了 Math. Math 之所以被设计成一个对象, 而不是构造器, 是因为对象中的方法或属性可以作为静态方法或常量直接被调用, 方便使用, 同时, Math 也没有创建实例的必要.</p>
@@ -1701,7 +1846,7 @@
     <link href="http://louiszhai.github.io/2016/06/13/regexp/"/>
     <id>http://louiszhai.github.io/2016/06/13/regexp/</id>
     <published>2016-06-13T00:24:55.000Z</published>
-    <updated>2016-11-23T03:40:30.000Z</updated>
+    <updated>2016-11-25T00:08:09.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>你有没有在搜索文本的时候绞尽脑汁, 试了一个又一个表达式, 还是不行.</p>
 <p>你有没有在表单验证的时候, 只是做做样子(只要不为空就好), 然后烧香拜佛, 虔诚祈祷, 千万不要出错.</p>
 <p>你有没有在使用sed 和 grep 命令的时候, 感觉莫名其妙, 明明应该支持的元字符, 却就是匹配不到.</p>
@@ -2774,7 +2919,7 @@
     <link href="http://louiszhai.github.io/2016/03/23/css-margin/"/>
     <id>http://louiszhai.github.io/2016/03/23/css-margin/</id>
     <published>2016-03-23T12:47:36.000Z</published>
-    <updated>2016-11-23T03:40:30.000Z</updated>
+    <updated>2016-11-25T00:08:09.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>margin属性处于盒子模型的最外层, 用以隔开其他元素, 它可以依次设置4个长度值, 分别表示 “上 右 下 左” 的间距, 其中第1个和第3个值相对应, 第2个与第4个相对应, 如果省略前者, 后者将取与前者相同的数值. margin属性共存在以下 4 种表示方式:</p>
 <ul>
 <li>margin: 10px 1rem 1em 5%; 共 4 个数值, 表示依次设置 上, 右, 下, 左的间距;</li>
@@ -2829,7 +2974,7 @@
     <link href="http://louiszhai.github.io/2016/03/12/css-center/"/>
     <id>http://louiszhai.github.io/2016/03/12/css-center/</id>
     <published>2016-03-12T11:03:04.000Z</published>
-    <updated>2016-11-23T03:40:30.000Z</updated>
+    <updated>2016-11-25T00:08:09.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>熟悉水平居中和垂直居中的方法, 不为别的, 就为用的时候能够信手拈来. 下面直接步入正题.</p>
 <a id="more"></a>
 <h3 id="u6C34_u5E73_u5C45_u4E2D"><a href="#u6C34_u5E73_u5C45_u4E2D" class="headerlink" title="水平居中"></a>水平居中</h3><p>1) 若是行内元素, 给其父元素设置 text-align:center,即可实现行内元素水平居中.</p>
@@ -3001,7 +3146,7 @@
     <link href="http://louiszhai.github.io/2016/03/05/xss/"/>
     <id>http://louiszhai.github.io/2016/03/05/xss/</id>
     <published>2016-03-05T01:48:09.000Z</published>
-    <updated>2016-11-23T03:40:30.000Z</updated>
+    <updated>2016-11-25T00:08:09.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p><strong>XSS</strong> (Cross-Site Script) 攻击又叫跨站脚本攻击, 本质是一种注入攻击. 其原理, 简单的说就是利用各种手段把恶意代码添加到网页中, 并让受害者执行这段脚本. XSS能做用户使用浏览器能做的一切事情. 伟大的同源策略也无法保证不受XSS攻击，因为此时攻击者就在同源之内.</p>
 <a id="more"></a>
 <h3 id="xss_u653B_u51FB_u65B9_u5F0F"><a href="#xss_u653B_u51FB_u65B9_u5F0F" class="headerlink" title="xss攻击方式"></a>xss攻击方式</h3><p>从攻击的方式可以分为</p>
@@ -3185,7 +3330,7 @@
     <link href="http://louiszhai.github.io/2016/01/12/js.String/"/>
     <id>http://louiszhai.github.io/2016/01/12/js.String/</id>
     <published>2016-01-12T12:27:09.000Z</published>
-    <updated>2016-11-23T03:40:30.000Z</updated>
+    <updated>2016-11-25T00:08:09.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>javaScript 中, 字符串无处不在, 并且所有的字符串方法均来自 String.prototype, 这一节, 我们走进看一看String内部, 探讨那些常用或不常用的字符串操作方法.</p>
 <a id="more"></a>
 <h3 id="String-prototype"><a href="#String-prototype" class="headerlink" title="String.prototype"></a>String.prototype</h3><p>String.prototype 属性指向 String 的原型对象. 以下是它的属性特性:</p>
@@ -3371,11 +3516,54 @@
   </entry>
   
   <entry>
+    <title><![CDATA[Function.prototype.bind方法指南]]></title>
+    <link href="http://louiszhai.github.io/2016/01/11/bind/"/>
+    <id>http://louiszhai.github.io/2016/01/11/bind/</id>
+    <published>2016-01-11T00:01:33.000Z</published>
+    <updated>2016-11-25T00:08:09.000Z</updated>
+    <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>ES5新增了 Function.prototype.bind 方法, 该方法不同于jquery的bind 方法, 它主要用于固定 this 作用域, 避免各种由于上下文切换造成的语义问题. 常用在 setTimeout, for循环等内部.</p>
+<a id="more"></a>
+<h3 id="bind"><a href="#bind" class="headerlink" title="bind"></a>bind</h3><p>语法: func.bind(thisArg, arg1, arg2, ….)</p>
+<p>bind() 方法会返回一个新函数, 又叫绑定函数, 当调用这个绑定函数时, 绑定函数会以创建它时传入 bind() 方法的第一个参数作为当前的上下文, 即this, 传入 bind() 方法的第二个及之后的参数加上绑定函数运行时自身的参数按照顺序作为原函数的参数来调用原函数.</p>
+<p>绑定函数也能使用new操作符创建对象; 这就好比把原函数当做构造器. 此时提供的this将被忽略, this之后的参数将依然前置到运行时的参数列表中.</p>
+<h4 id="u57FA_u672C_u7528_u6CD5"><a href="#u57FA_u672C_u7528_u6CD5" class="headerlink" title="基本用法"></a>基本用法</h4><p>下面我们来看看bind 的基本用法.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> x = <span class="number">8</span>;</span><br><span class="line"><span class="keyword">var</span> o = &#123;</span><br><span class="line">  x: <span class="number">10</span>,</span><br><span class="line">  getX: <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  	<span class="built_in">console</span>.log(<span class="keyword">this</span>.x);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">var</span> f = o.getX;</span><br><span class="line">f();<span class="comment">//8, 由于没有绑定执行时的上下文, this默认指向window, 打印了全局变量x的值</span></span><br><span class="line"><span class="keyword">var</span> g = f.bind(o);</span><br><span class="line">g();<span class="comment">//10, 绑定this后, 成功的打印了o对象的x属性的值.</span></span><br></pre></td></tr></table></figure>
+<h4 id="u5206_u79BB_u53C2_u6570"><a href="#u5206_u79BB_u53C2_u6570" class="headerlink" title="分离参数"></a>分离参数</h4><p>bind() 方法还可以设置函数拥有的初始参数. 这些参数作为bind() 的第2,3…个参数跟在this(或其他对象的后面), 调用绑定函数时, 这些参数将插入到参数列表的最开始位置, 而传递给绑定函数的参数将跟在他们后面.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//打印十个斐波那契数</span></span><br><span class="line"><span class="keyword">var</span> f = <span class="function"><span class="keyword">function</span>(<span class="params">n1, n2, length</span>)</span>&#123;</span><br><span class="line">  <span class="keyword">if</span>(<span class="built_in">arguments</span>.length&lt;<span class="number">3</span>) <span class="built_in">console</span>.log(<span class="string">'参数不够...'</span>);</span><br><span class="line">  <span class="keyword">var</span> array = [n1, n2];</span><br><span class="line">  <span class="keyword">for</span>(<span class="keyword">var</span> i=<span class="number">2</span>;i&lt;length;i++)&#123;</span><br><span class="line">  	array[i] = array[i-<span class="number">2</span>] + array[i-<span class="number">1</span>];</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> array;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> g = f.bind(<span class="literal">null</span>, <span class="number">1</span>, <span class="number">1</span>);</span><br><span class="line"><span class="built_in">console</span>.log(g(<span class="number">10</span>));<span class="comment">//[1, 1, 2, 3, 5, 8, 13, 21, 34, 55]</span></span><br></pre></td></tr></table></figure>
+<h4 id="u7ED1_u5B9A_u53C2_u6570"><a href="#u7ED1_u5B9A_u53C2_u6570" class="headerlink" title="绑定参数"></a>绑定参数</h4><p>如果使用new 操作符去构造绑定函数的实例时, 原来提供的this 将被忽略, this之后的参数将依然前置到构造函数的参数列表中. 此时 bind() 方法便具备了保留参数的能力, 我们可以此达到类似柯里化的效果.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> f = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="keyword">if</span>(<span class="built_in">arguments</span>.length!=<span class="number">0</span>)</span><br><span class="line">  	<span class="keyword">this</span>.sum = <span class="built_in">Array</span>.prototype.reduce.call(<span class="built_in">arguments</span>,<span class="function"><span class="keyword">function</span>(<span class="params">prev,item</span>)</span>&#123;<span class="comment">//对传入参数求和</span></span><br><span class="line"> 		<span class="keyword">return</span> prev + item;</span><br><span class="line">	&#125;);</span><br><span class="line">  <span class="keyword">return</span> <span class="built_in">Array</span>.prototype.join.call(<span class="built_in">arguments</span>);<span class="comment">// 返回传入参数的字符串形式</span></span><br><span class="line">&#125;</span><br><span class="line">f.prototype.toString = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">this</span>.sum;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> g = f.bind(<span class="literal">null</span>,<span class="number">2</span>);</span><br><span class="line"><span class="keyword">var</span> x = <span class="keyword">new</span> g(<span class="number">8</span>);</span><br><span class="line"><span class="built_in">console</span>.log(x.toString());<span class="comment">//10, 可见x被绑定了2+8=10</span></span><br><span class="line"><span class="built_in">console</span>.log(g(<span class="number">8</span>));<span class="comment">//2,8 这告诉我们绑定的两个参数正是2和8</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(x <span class="keyword">instanceof</span> g);<span class="comment">//true, 可见通过new创建的x继承了g</span></span><br><span class="line"><span class="built_in">console</span>.log(x <span class="keyword">instanceof</span> f);<span class="comment">//true, 可见x也继承了f</span></span><br><span class="line"><span class="built_in">console</span>.log(g <span class="keyword">instanceof</span> <span class="built_in">Function</span>);<span class="comment">//true, 可见bind f()方法之后, 返回了一个新的函数g</span></span><br><span class="line"><span class="comment">//函数g可用于求和,如下:</span></span><br><span class="line"><span class="built_in">console</span>.log(g(<span class="number">1</span>,<span class="number">3</span>,<span class="number">5</span>,<span class="number">7</span>,<span class="number">9</span>));<span class="comment">//27 2+1+3+5+7+9=27</span></span><br></pre></td></tr></table></figure>
+<h4 id="u5FEB_u6377_u8C03_u7528"><a href="#u5FEB_u6377_u8C03_u7528" class="headerlink" title="快捷调用"></a>快捷调用</h4><p>使用Array.prototype的方法处理类数组对象时(鸭式辨型), 不可避免的需要借用call 或者 apply 方法, 使用 bind() 方法, 我们可以简化这个过程. 如下:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> _slice = <span class="built_in">Array</span>.prototype.slice;</span><br><span class="line"><span class="keyword">var</span> slice = <span class="built_in">Function</span>.prototype.call.bind(_slice);</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="keyword">return</span> slice(<span class="built_in">arguments</span>,<span class="number">1</span>);</span><br><span class="line">&#125;</span><br><span class="line">f(<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>);<span class="comment">//[2, 3, 4, 5]</span></span><br></pre></td></tr></table></figure>
+<p>下面的实例将解释 bind() 方法做了一件什么事情:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> _slice = <span class="built_in">Array</span>.prototype.slice;</span><br><span class="line"><span class="keyword">var</span> slice = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="keyword">return</span> _slice.apply(<span class="built_in">arguments</span>[<span class="number">0</span>],_slice.call(<span class="built_in">arguments</span>,<span class="number">1</span>));</span><br><span class="line">&#125;;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="keyword">return</span> slice(<span class="built_in">arguments</span>,<span class="number">1</span>);</span><br><span class="line">&#125;</span><br><span class="line">f(<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>);<span class="comment">//[2, 3, 4, 5]</span></span><br></pre></td></tr></table></figure>
+<p>如下, 是bind() 方法的简单实现.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Function</span>.prototype.bind = <span class="function"><span class="keyword">function</span>(<span class="params">thisArg,argN</span>)</span>&#123;</span><br><span class="line">  <span class="keyword">var</span> _this = <span class="keyword">this</span>;</span><br><span class="line">  <span class="keyword">var</span> _arg = _slice.call(<span class="built_in">arguments</span>,<span class="number">1</span>);</span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">   	<span class="keyword">var</span> arg = _slice.call(<span class="built_in">arguments</span>);</span><br><span class="line">    arg = _arg.concat(arg);</span><br><span class="line">  	<span class="keyword">return</span> _this.apply(thisArg,arg);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以看出来, 使用 bind() 方法后, 代码优雅得多.</p>
+<p>注: 作为ES5标准加入的bind方法显然不支持 IE9之前的低版本IE, 如需使用, 请参考<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Function/bind#Compatibility" target="_blank" rel="external">Polyfill</a>.</p>
+<hr>
+<p>本文就讨论这么多内容,大家有什么问题或好的想法欢迎在下方参与<a href="#respond">留言和评论</a>.</p>
+<p>本文作者: <a href="https://github.com/Louiszhai" target="_blank" rel="external">louis</a></p>
+<p>本文链接: <a href="http://louiszhai.github.io/2016/01/11/bind/">http://louiszhai.github.io/2016/01/11/bind/</a></p>
+<p>参考文章</p>
+<ul>
+<li><a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Function/bind" target="_blank" rel="external">Function.prototype.bind() - JavaScript | MDN</a></li>
+</ul>
+]]></content>
+    <summary type="html">
+    <![CDATA[JavaScript bind Function.prototype.bind call apply]]>
+    
+    </summary>
+    
+      <category term="JavaScript" scheme="http://louiszhai.github.io/tags/JavaScript/"/>
+    
+  </entry>
+  
+  <entry>
     <title><![CDATA[由同源策略到前端跨域]]></title>
     <link href="http://louiszhai.github.io/2016/01/11/cross-domain/"/>
     <id>http://louiszhai.github.io/2016/01/11/cross-domain/</id>
     <published>2016-01-11T00:01:33.000Z</published>
-    <updated>2016-11-23T03:40:30.000Z</updated>
+    <updated>2016-11-25T00:08:09.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>同源策略 (Same-Origin Policy) 最早由 Netscape 公司提出, 所谓同源就是要求, 域名, 协议, 端口相同. 非同源的脚本不能访问或者操作其他域的页面对象(如DOM等). 作为著名的安全策略, 虽然它只是一个规范, 并不强制要求,  但现在所有支持 javaScript 的浏览器都会使用这个策略. 以至于该策略成为浏览器最核心最基本的安全功能, 如果缺少了同源策略, web的安全将无从谈起.</p>
 <a id="more"></a>
 <h3 id="u540C_u6E90_u7B56_u7565_u7684_u9650_u5236"><a href="#u540C_u6E90_u7B56_u7565_u7684_u9650_u5236" class="headerlink" title="同源策略的限制"></a>同源策略的限制</h3><p>同源策略下的web世界, 域的壁垒高筑, 从而保证各个网页相互独立, 互相之间不能直接访问, iframe, ajax 均受其限制, 而script标签不受此限制.</p>
@@ -3507,54 +3695,11 @@
   </entry>
   
   <entry>
-    <title><![CDATA[Function.prototype.bind方法指南]]></title>
-    <link href="http://louiszhai.github.io/2016/01/11/bind/"/>
-    <id>http://louiszhai.github.io/2016/01/11/bind/</id>
-    <published>2016-01-11T00:01:33.000Z</published>
-    <updated>2016-11-23T03:40:30.000Z</updated>
-    <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>ES5新增了 Function.prototype.bind 方法, 该方法不同于jquery的bind 方法, 它主要用于固定 this 作用域, 避免各种由于上下文切换造成的语义问题. 常用在 setTimeout, for循环等内部.</p>
-<a id="more"></a>
-<h3 id="bind"><a href="#bind" class="headerlink" title="bind"></a>bind</h3><p>语法: func.bind(thisArg, arg1, arg2, ….)</p>
-<p>bind() 方法会返回一个新函数, 又叫绑定函数, 当调用这个绑定函数时, 绑定函数会以创建它时传入 bind() 方法的第一个参数作为当前的上下文, 即this, 传入 bind() 方法的第二个及之后的参数加上绑定函数运行时自身的参数按照顺序作为原函数的参数来调用原函数.</p>
-<p>绑定函数也能使用new操作符创建对象; 这就好比把原函数当做构造器. 此时提供的this将被忽略, this之后的参数将依然前置到运行时的参数列表中.</p>
-<h4 id="u57FA_u672C_u7528_u6CD5"><a href="#u57FA_u672C_u7528_u6CD5" class="headerlink" title="基本用法"></a>基本用法</h4><p>下面我们来看看bind 的基本用法.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> x = <span class="number">8</span>;</span><br><span class="line"><span class="keyword">var</span> o = &#123;</span><br><span class="line">  x: <span class="number">10</span>,</span><br><span class="line">  getX: <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  	<span class="built_in">console</span>.log(<span class="keyword">this</span>.x);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">var</span> f = o.getX;</span><br><span class="line">f();<span class="comment">//8, 由于没有绑定执行时的上下文, this默认指向window, 打印了全局变量x的值</span></span><br><span class="line"><span class="keyword">var</span> g = f.bind(o);</span><br><span class="line">g();<span class="comment">//10, 绑定this后, 成功的打印了o对象的x属性的值.</span></span><br></pre></td></tr></table></figure>
-<h4 id="u5206_u79BB_u53C2_u6570"><a href="#u5206_u79BB_u53C2_u6570" class="headerlink" title="分离参数"></a>分离参数</h4><p>bind() 方法还可以设置函数拥有的初始参数. 这些参数作为bind() 的第2,3…个参数跟在this(或其他对象的后面), 调用绑定函数时, 这些参数将插入到参数列表的最开始位置, 而传递给绑定函数的参数将跟在他们后面.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//打印十个斐波那契数</span></span><br><span class="line"><span class="keyword">var</span> f = <span class="function"><span class="keyword">function</span>(<span class="params">n1, n2, length</span>)</span>&#123;</span><br><span class="line">  <span class="keyword">if</span>(<span class="built_in">arguments</span>.length&lt;<span class="number">3</span>) <span class="built_in">console</span>.log(<span class="string">'参数不够...'</span>);</span><br><span class="line">  <span class="keyword">var</span> array = [n1, n2];</span><br><span class="line">  <span class="keyword">for</span>(<span class="keyword">var</span> i=<span class="number">2</span>;i&lt;length;i++)&#123;</span><br><span class="line">  	array[i] = array[i-<span class="number">2</span>] + array[i-<span class="number">1</span>];</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> array;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> g = f.bind(<span class="literal">null</span>, <span class="number">1</span>, <span class="number">1</span>);</span><br><span class="line"><span class="built_in">console</span>.log(g(<span class="number">10</span>));<span class="comment">//[1, 1, 2, 3, 5, 8, 13, 21, 34, 55]</span></span><br></pre></td></tr></table></figure>
-<h4 id="u7ED1_u5B9A_u53C2_u6570"><a href="#u7ED1_u5B9A_u53C2_u6570" class="headerlink" title="绑定参数"></a>绑定参数</h4><p>如果使用new 操作符去构造绑定函数的实例时, 原来提供的this 将被忽略, this之后的参数将依然前置到构造函数的参数列表中. 此时 bind() 方法便具备了保留参数的能力, 我们可以此达到类似柯里化的效果.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> f = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="keyword">if</span>(<span class="built_in">arguments</span>.length!=<span class="number">0</span>)</span><br><span class="line">  	<span class="keyword">this</span>.sum = <span class="built_in">Array</span>.prototype.reduce.call(<span class="built_in">arguments</span>,<span class="function"><span class="keyword">function</span>(<span class="params">prev,item</span>)</span>&#123;<span class="comment">//对传入参数求和</span></span><br><span class="line"> 		<span class="keyword">return</span> prev + item;</span><br><span class="line">	&#125;);</span><br><span class="line">  <span class="keyword">return</span> <span class="built_in">Array</span>.prototype.join.call(<span class="built_in">arguments</span>);<span class="comment">// 返回传入参数的字符串形式</span></span><br><span class="line">&#125;</span><br><span class="line">f.prototype.toString = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">this</span>.sum;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> g = f.bind(<span class="literal">null</span>,<span class="number">2</span>);</span><br><span class="line"><span class="keyword">var</span> x = <span class="keyword">new</span> g(<span class="number">8</span>);</span><br><span class="line"><span class="built_in">console</span>.log(x.toString());<span class="comment">//10, 可见x被绑定了2+8=10</span></span><br><span class="line"><span class="built_in">console</span>.log(g(<span class="number">8</span>));<span class="comment">//2,8 这告诉我们绑定的两个参数正是2和8</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(x <span class="keyword">instanceof</span> g);<span class="comment">//true, 可见通过new创建的x继承了g</span></span><br><span class="line"><span class="built_in">console</span>.log(x <span class="keyword">instanceof</span> f);<span class="comment">//true, 可见x也继承了f</span></span><br><span class="line"><span class="built_in">console</span>.log(g <span class="keyword">instanceof</span> <span class="built_in">Function</span>);<span class="comment">//true, 可见bind f()方法之后, 返回了一个新的函数g</span></span><br><span class="line"><span class="comment">//函数g可用于求和,如下:</span></span><br><span class="line"><span class="built_in">console</span>.log(g(<span class="number">1</span>,<span class="number">3</span>,<span class="number">5</span>,<span class="number">7</span>,<span class="number">9</span>));<span class="comment">//27 2+1+3+5+7+9=27</span></span><br></pre></td></tr></table></figure>
-<h4 id="u5FEB_u6377_u8C03_u7528"><a href="#u5FEB_u6377_u8C03_u7528" class="headerlink" title="快捷调用"></a>快捷调用</h4><p>使用Array.prototype的方法处理类数组对象时(鸭式辨型), 不可避免的需要借用call 或者 apply 方法, 使用 bind() 方法, 我们可以简化这个过程. 如下:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> _slice = <span class="built_in">Array</span>.prototype.slice;</span><br><span class="line"><span class="keyword">var</span> slice = <span class="built_in">Function</span>.prototype.call.bind(_slice);</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="keyword">return</span> slice(<span class="built_in">arguments</span>,<span class="number">1</span>);</span><br><span class="line">&#125;</span><br><span class="line">f(<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>);<span class="comment">//[2, 3, 4, 5]</span></span><br></pre></td></tr></table></figure>
-<p>下面的实例将解释 bind() 方法做了一件什么事情:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> _slice = <span class="built_in">Array</span>.prototype.slice;</span><br><span class="line"><span class="keyword">var</span> slice = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="keyword">return</span> _slice.apply(<span class="built_in">arguments</span>[<span class="number">0</span>],_slice.call(<span class="built_in">arguments</span>,<span class="number">1</span>));</span><br><span class="line">&#125;;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="keyword">return</span> slice(<span class="built_in">arguments</span>,<span class="number">1</span>);</span><br><span class="line">&#125;</span><br><span class="line">f(<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>);<span class="comment">//[2, 3, 4, 5]</span></span><br></pre></td></tr></table></figure>
-<p>如下, 是bind() 方法的简单实现.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Function</span>.prototype.bind = <span class="function"><span class="keyword">function</span>(<span class="params">thisArg,argN</span>)</span>&#123;</span><br><span class="line">  <span class="keyword">var</span> _this = <span class="keyword">this</span>;</span><br><span class="line">  <span class="keyword">var</span> _arg = _slice.call(<span class="built_in">arguments</span>,<span class="number">1</span>);</span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">   	<span class="keyword">var</span> arg = _slice.call(<span class="built_in">arguments</span>);</span><br><span class="line">    arg = _arg.concat(arg);</span><br><span class="line">  	<span class="keyword">return</span> _this.apply(thisArg,arg);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>可以看出来, 使用 bind() 方法后, 代码优雅得多.</p>
-<p>注: 作为ES5标准加入的bind方法显然不支持 IE9之前的低版本IE, 如需使用, 请参考<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Function/bind#Compatibility" target="_blank" rel="external">Polyfill</a>.</p>
-<hr>
-<p>本文就讨论这么多内容,大家有什么问题或好的想法欢迎在下方参与<a href="#respond">留言和评论</a>.</p>
-<p>本文作者: <a href="https://github.com/Louiszhai" target="_blank" rel="external">louis</a></p>
-<p>本文链接: <a href="http://louiszhai.github.io/2016/01/11/bind/">http://louiszhai.github.io/2016/01/11/bind/</a></p>
-<p>参考文章</p>
-<ul>
-<li><a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Function/bind" target="_blank" rel="external">Function.prototype.bind() - JavaScript | MDN</a></li>
-</ul>
-]]></content>
-    <summary type="html">
-    <![CDATA[JavaScript bind Function.prototype.bind call apply]]>
-    
-    </summary>
-    
-      <category term="JavaScript" scheme="http://louiszhai.github.io/tags/JavaScript/"/>
-    
-  </entry>
-  
-  <entry>
     <title><![CDATA[setTimeout & setInterval]]></title>
     <link href="http://louiszhai.github.io/2016/01/10/js.timer/"/>
     <id>http://louiszhai.github.io/2016/01/10/js.timer/</id>
     <published>2016-01-10T05:52:11.000Z</published>
-    <updated>2016-11-23T03:40:30.000Z</updated>
+    <updated>2016-11-25T00:08:09.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>设置web定时器应当是一个相当常见的需求, 实际上, 我们也有两大工具函数可以任意调用: setTimeout, setInterval. 然而 js 里却没有java的那种wait(), 定时又未必准时, 要想写个定时器还须得深入理解 setTimeout 和 setInterval 的运行原理才行.</p>
 <a id="more"></a>
 <h3 id="u8FD0_u884C_u539F_u7406"><a href="#u8FD0_u884C_u539F_u7406" class="headerlink" title="运行原理"></a>运行原理</h3><p>setTimeout 和 setInterval 并非异步调用, 所谓的”异步调用”, 只是因它们都往 js 引擎的 <code>待处理任务队列</code> 末尾插入代码, 看起来像”异步调用”而已.</p>
@@ -3619,7 +3764,7 @@
     <link href="http://louiszhai.github.io/2015/12/29/array/"/>
     <id>http://louiszhai.github.io/2015/12/29/array/</id>
     <published>2015-12-29T01:00:17.000Z</published>
-    <updated>2016-11-23T03:40:30.000Z</updated>
+    <updated>2016-11-25T00:08:09.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>数组是一种非常重要的数据类型, 它语法简单, 灵活,高效, 在多数编程语言中, 数组都充当着至关重要的角色, 以至于很难想象没有数组的编程语言会是什么样子. 这期我们就来侃侃JavaScript的数组, 趴趴它的那点破事儿. 这篇博客从2015年写到了2016年, 权当是跨年的总结吧, 祝大家新年快乐, 2016更好, 未来更好!</p>
 <a id="more"></a>
 <p>声明: 以下未特别标明的方法均为ES5已实现的方法.</p>
@@ -4183,7 +4328,7 @@
     <link href="http://louiszhai.github.io/2015/12/22/scopeChain/"/>
     <id>http://louiszhai.github.io/2015/12/22/scopeChain/</id>
     <published>2015-12-22T00:06:13.000Z</published>
-    <updated>2016-11-23T03:40:30.000Z</updated>
+    <updated>2016-11-25T00:08:09.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>上一篇我们讲到数组遍历, 本文我们更进一步, 讲讲如何提高遍历的效率. 欢迎阅读本篇<strong><code>详解JS作用域链及闭包</code></strong>.</p>
 <a id="more"></a>
 <h3 id="u56DE_u987E_u4E0A_u7BC7"><a href="#u56DE_u987E_u4E0A_u7BC7" class="headerlink" title="回顾上篇"></a>回顾上篇</h3><p>请先看上一篇中提到的for循环代码:</p>
@@ -4320,7 +4465,7 @@
     <link href="http://louiszhai.github.io/2015/12/18/traverse/"/>
     <id>http://louiszhai.github.io/2015/12/18/traverse/</id>
     <published>2015-12-18T02:54:48.000Z</published>
-    <updated>2016-11-23T03:40:30.000Z</updated>
+    <updated>2016-11-25T00:08:09.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>遍历数组或对象是一名程序员的基本素养之一. 然而遍历却不是一件简单的事, 优秀的程序员知道怎么去选择合适的遍历方法, 优化遍历效率. 本篇将带你走进JavaScript遍历的世界, 享受分析JS循环的快感. 本篇所有代码都可以直接运行, 希望您通读本篇后, 不止是浏览, 最好是亲手去实践下.</p>
 <a id="more"></a>
 <h3 id="u6982_u8FF0"><a href="#u6982_u8FF0" class="headerlink" title="概述"></a>概述</h3><p>js有如下两种数据需要经常遍历</p>
@@ -4784,7 +4929,7 @@
     <link href="http://louiszhai.github.io/2015/12/17/prototype/"/>
     <id>http://louiszhai.github.io/2015/12/17/prototype/</id>
     <published>2015-12-17T01:34:36.000Z</published>
-    <updated>2016-11-23T03:40:30.000Z</updated>
+    <updated>2016-11-25T00:08:09.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u6982_u5FF5"><a href="#u6982_u5FF5" class="headerlink" title="概念"></a>概念</h3><ol>
 <li><strong>prototype</strong> 是函数(function) 的一个属性, 它指向函数的原型.</li>
 <li><strong>__proto__</strong>   是对象的内部属性, 它指向构造器的原型, 对象依赖它进行原型链查询.</li>
@@ -4958,7 +5103,7 @@
     <link href="http://louiszhai.github.io/2015/12/15/arguments/"/>
     <id>http://louiszhai.github.io/2015/12/15/arguments/</id>
     <published>2015-12-15T12:44:51.000Z</published>
-    <updated>2016-11-23T03:40:30.000Z</updated>
+    <updated>2016-11-25T00:08:09.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u6982_u8FF0"><a href="#u6982_u8FF0" class="headerlink" title="概述"></a>概述</h3><p><strong>Arguments</strong> 对象已经不再是函数的属性了, 它是函数内部的本地变量,  包括如下属性：</p>
 <ol>
 <li>callee — 指向当前函数的引用</li>
@@ -4997,171 +5142,6 @@
 ]]></content>
     <summary type="html">
     <![CDATA[JavaScript arguments callee 类数组 阶乘 鸭式辨型]]>
-    
-    </summary>
-    
-      <category term="JavaScript" scheme="http://louiszhai.github.io/tags/JavaScript/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[详解JS原型链]]></title>
-    <link href="http://louiszhai.github.io/2015/12/15/prototypeChain/"/>
-    <id>http://louiszhai.github.io/2015/12/15/prototypeChain/</id>
-    <published>2015-12-15T01:26:28.000Z</published>
-    <updated>2016-11-23T03:40:30.000Z</updated>
-    <content type="html"><![CDATA[<h3 id="u6458_u81EAJavaScript_u9AD8_u7EA7_u7A0B_u5E8F_u8BBE_u8BA1_3A"><a href="#u6458_u81EAJavaScript_u9AD8_u7EA7_u7A0B_u5E8F_u8BBE_u8BA1_3A" class="headerlink" title="摘自JavaScript高级程序设计:"></a>摘自JavaScript高级程序设计:</h3><p>继承是OO语言中的一个最为人津津乐道的概念.许多OO语言都支持两种继承方式: <strong>接口继承</strong> 和 <strong>实现继承</strong> .接口继承只继承方法签名,而实现继承则继承实际的方法.由于js中方法没有签名,在ECMAScript中无法实现接口继承.ECMAScript只支持实现继承,而且其 <code>实现继承</code> 主要是依靠原型链来实现的.</p>
-<a id="more"></a> 
-<h3 id="u6982_u5FF5"><a href="#u6982_u5FF5" class="headerlink" title="概念"></a>概念</h3><p>简单回顾下构造函数,原型和实例的关系:</p>
-<blockquote>
-<p>每个构造函数(constructor)都有一个原型对象(prototype),原型对象都包含一个指向构造函数的指针,而实例(instance)都包含一个指向原型对象的内部指针.</p>
-</blockquote>
-<p>JS对象的圈子里有这么个游戏规则:</p>
-<blockquote>
-<p>如果试图引用对象(实例instance)的某个属性,会首先在对象内部寻找该属性,直至找不到,然后才在该对象的原型(instance.prototype)里去找这个属性.</p>
-</blockquote>
-<p>如果让原型对象指向另一个类型的实例…..有趣的事情便发生了.</p>
-<p>即: constructor1.prototype = instance2</p>
-<p>鉴于上述游戏规则生效,如果试图引用constructor1构造的实例instance1的某个属性p1:</p>
-<p>1).首先会在instance1内部属性中找一遍;</p>
-<p>2).接着会在instance1.__proto__(constructor1.prototype)中找一遍,而constructor1.prototype 实际上是instance2, 也就是说在instance2中寻找该属性p1;</p>
-<p>3).如果instance2中还是没有,此时程序不会灰心,它会继续在instance2.__proto__(constructor2.prototype)中寻找…直至Object的原型对象</p>
-<blockquote>
-<p>搜索轨迹: instance1–&gt; instance2 –&gt; constructor2.prototype…–&gt;Object.prototype</p>
-</blockquote>
-<p>这种搜索的轨迹,形似一条长链, 又因prototype在这个游戏规则中充当链接的作用,于是我们把这种实例与原型的链条称作 <strong>原型链</strong> . 下面有个例子</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Father</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">	<span class="keyword">this</span>.property = <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br><span class="line">Father.prototype.getFatherValue = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">	<span class="keyword">return</span> <span class="keyword">this</span>.property;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Son</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">	<span class="keyword">this</span>.sonProperty = <span class="literal">false</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//继承 Father</span></span><br><span class="line">Son.prototype = <span class="keyword">new</span> Father();<span class="comment">//Son.prototype被重写,导致Son.prototype.constructor也一同被重写</span></span><br><span class="line">Son.prototype.getSonVaule = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">	<span class="keyword">return</span> <span class="keyword">this</span>.sonProperty;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> instance = <span class="keyword">new</span> Son();</span><br><span class="line">alert(instance.getFatherValue());<span class="comment">//true</span></span><br></pre></td></tr></table></figure>
-<p>instance实例通过原型链找到了Father原型中的getFatherValue方法.</p>
-<p>注意: 此时instance.constructor指向的是Father,这是因为Son.prototype中的constructor被重写的缘故.</p>
-<p>以上我们弄清楚了何为原型链,如有不清楚请尽量在下方<a href="#respond">给我留言</a></p>
-<hr>
-<h3 id="u786E_u5B9A_u539F_u578B_u548C_u5B9E_u4F8B_u7684_u5173_u7CFB"><a href="#u786E_u5B9A_u539F_u578B_u548C_u5B9E_u4F8B_u7684_u5173_u7CFB" class="headerlink" title="确定原型和实例的关系"></a>确定原型和实例的关系</h3><p>使用原型链后, 我们怎么去判断原型和实例的这种继承关系呢? 方法一般有两种.</p>
-<blockquote>
-<p>第一种是使用 <strong>instanceof</strong> 操作符, 只要用这个操作符来测试实例(instance)与原型链中出现过的构造函数,结果就会返回true. 以下几行代码就说明了这点.</p>
-</blockquote>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">alert(instance <span class="keyword">instanceof</span> <span class="built_in">Object</span>);<span class="comment">//true</span></span><br><span class="line">alert(instance <span class="keyword">instanceof</span> Father);<span class="comment">//true</span></span><br><span class="line">alert(instance <span class="keyword">instanceof</span> Son);<span class="comment">//true</span></span><br></pre></td></tr></table></figure>
-<p>由于原型链的关系, 我们可以说instance 是 Object, Father 或 Son中任何一个类型的实例. 因此, 这三个构造函数的结果都返回了true.</p>
-<blockquote>
-<p>第二种是使用 <strong>isPrototypeOf()</strong> 方法, 同样只要是原型链中出现过的原型,isPrototypeOf() 方法就会返回true, 如下所示.</p>
-</blockquote>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">alert(<span class="built_in">Object</span>.prototype.isPrototypeOf(instance));<span class="comment">//true</span></span><br><span class="line">alert(Father.prototype.isPrototypeOf(instance));<span class="comment">//true</span></span><br><span class="line">alert(Son.prototype.isPrototypeOf(instance));<span class="comment">//true</span></span><br></pre></td></tr></table></figure>
-<p>原理同上.</p>
-<h3 id="u539F_u578B_u94FE_u7684_u95EE_u9898"><a href="#u539F_u578B_u94FE_u7684_u95EE_u9898" class="headerlink" title="原型链的问题"></a>原型链的问题</h3><p>原型链并非十分完美, 它包含如下两个问题.</p>
-<blockquote>
-<p>问题一: 当原型链中包含引用类型值的原型时,该引用类型值会被所有实例共享;</p>
-<p>问题二: 在创建子类型(例如创建Son的实例)时,不能向超类型(例如Father)的构造函数中传递参数. </p>
-</blockquote>
-<p>有鉴于此, 实践中很少会单独使用原型链.</p>
-<p>为此,下面将有一些尝试以弥补原型链的不足.</p>
-<h3 id="u501F_u7528_u6784_u9020_u51FD_u6570"><a href="#u501F_u7528_u6784_u9020_u51FD_u6570" class="headerlink" title="借用构造函数"></a>借用构造函数</h3><p>为解决原型链中上述两个问题, 我们开始使用一种叫做<strong>借用构造函数</strong>(constructor stealing)的技术(也叫经典继承).</p>
-<blockquote>
-<p>基本思想:即在子类型构造函数的内部调用超类型构造函数.</p>
-</blockquote>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Father</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">	<span class="keyword">this</span>.colors = [<span class="string">"red"</span>,<span class="string">"blue"</span>,<span class="string">"green"</span>];</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Son</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">	Father.call(<span class="keyword">this</span>);<span class="comment">//继承了Father,且向父类型传递参数</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> instance1 = <span class="keyword">new</span> Son();</span><br><span class="line">instance1.colors.push(<span class="string">"black"</span>);</span><br><span class="line"><span class="built_in">console</span>.log(instance1.colors);<span class="comment">//"red,blue,green,black"</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> instance2 = <span class="keyword">new</span> Son();</span><br><span class="line"><span class="built_in">console</span>.log(instance2.colors);<span class="comment">//"red,blue,green" 可见引用类型值是独立的</span></span><br></pre></td></tr></table></figure>
-<p>很明显,借用构造函数一举解决了原型链的两大问题:</p>
-<p>其一, 保证了原型链中引用类型值的独立,不再被所有实例共享;</p>
-<p>其二, 子类型创建时也能够向父类型传递参数.</p>
-<p>随之而来的是, 如果仅仅借用构造函数,那么将无法避免构造函数模式存在的问题–方法都在构造函数中定义, 因此函数复用也就不可用了.而且超类型(如Father)中定义的方法,对子类型而言也是不可见的. 考虑此,借用构造函数的技术也很少单独使用.</p>
-<h3 id="u7EC4_u5408_u7EE7_u627F"><a href="#u7EC4_u5408_u7EE7_u627F" class="headerlink" title="组合继承"></a>组合继承</h3><p>组合继承, 有时候也叫做伪经典继承,指的是将原型链和借用构造函数的技术组合到一块,从而发挥两者之长的一种继承模式.</p>
-<blockquote>
-<p>基本思路: 使用原型链实现对原型属性和方法的继承,通过借用构造函数来实现对实例属性的继承.</p>
-</blockquote>
-<p>这样,既通过在原型上定义方法实现了函数复用,又能保证每个实例都有它自己的属性. 如下所示.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Father</span>(<span class="params">name</span>)</span>&#123;</span><br><span class="line">	<span class="keyword">this</span>.name = name;</span><br><span class="line">	<span class="keyword">this</span>.colors = [<span class="string">"red"</span>,<span class="string">"blue"</span>,<span class="string">"green"</span>];</span><br><span class="line">&#125;</span><br><span class="line">Father.prototype.sayName = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">	alert(<span class="keyword">this</span>.name);</span><br><span class="line">&#125;;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Son</span>(<span class="params">name,age</span>)</span>&#123;</span><br><span class="line">	Father.call(<span class="keyword">this</span>,name);<span class="comment">//继承实例属性，第一次调用Father()</span></span><br><span class="line">	<span class="keyword">this</span>.age = age;</span><br><span class="line">&#125;</span><br><span class="line">Son.prototype = <span class="keyword">new</span> Father();<span class="comment">//继承父类方法,第二次调用Father()</span></span><br><span class="line">Son.prototype.sayAge = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">	alert(<span class="keyword">this</span>.age);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> instance1 = <span class="keyword">new</span> Son(<span class="string">"louis"</span>,<span class="number">5</span>);</span><br><span class="line">instance1.colors.push(<span class="string">"black"</span>);</span><br><span class="line"><span class="built_in">console</span>.log(instance1.colors);<span class="comment">//"red,blue,green,black"</span></span><br><span class="line">instance1.sayName();<span class="comment">//louis</span></span><br><span class="line">instance1.sayAge();<span class="comment">//5</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> instance1 = <span class="keyword">new</span> Son(<span class="string">"zhai"</span>,<span class="number">10</span>);</span><br><span class="line"><span class="built_in">console</span>.log(instance1.colors);<span class="comment">//"red,blue,green"</span></span><br><span class="line">instance1.sayName();<span class="comment">//zhai</span></span><br><span class="line">instance1.sayAge();<span class="comment">//10</span></span><br></pre></td></tr></table></figure>
-<p>组合继承避免了原型链和借用构造函数的缺陷,融合了它们的优点,成为 JavaScript 中最常用的继承模式. 而且, instanceof 和 isPrototypeOf( )也能用于识别基于组合继承创建的对象.</p>
-<p>同时我们还注意到组合继承其实调用了两次父类构造函数, 造成了不必要的消耗, 那么怎样才能避免这种不必要的消耗呢, 这个我们将在后面讲到.</p>
-<h3 id="u539F_u578B_u7EE7_u627F"><a href="#u539F_u578B_u7EE7_u627F" class="headerlink" title="原型继承"></a>原型继承</h3><p>该方法最初由道格拉斯·克罗克福德于2006年在一篇题为 《Prototypal Inheritance in JavaScript》(JavaScript中的原型式继承) 的文章中提出. 他的想法是借助原型可以基于已有的对象创建新对象， 同时还不必因此创建自定义类型. 大意如下:</p>
-<blockquote>
-<p>在object()函数内部, 先创建一个临时性的构造函数, 然后将传入的对象作为这个构造函数的原型,最后返回了这个临时类型的一个新实例. </p>
-</blockquote>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">object</span>(<span class="params">o</span>)</span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">function</span> <span class="title">F</span>(<span class="params"></span>)</span>&#123;&#125;</span><br><span class="line">	F.prototype = o;</span><br><span class="line">	<span class="keyword">return</span> <span class="keyword">new</span> F();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>从本质上讲, object() 对传入其中的对象执行了一次浅复制. 下面我们来看看为什么是浅复制.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> person = &#123;</span><br><span class="line">	friends : [<span class="string">"Van"</span>,<span class="string">"Louis"</span>,<span class="string">"Nick"</span>]</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">var</span> anotherPerson = object(person);</span><br><span class="line">anotherPerson.friends.push(<span class="string">"Rob"</span>);</span><br><span class="line"><span class="keyword">var</span> yetAnotherPerson = object(person);</span><br><span class="line">yetAnotherPerson.friends.push(<span class="string">"Style"</span>);</span><br><span class="line">alert(person.friends);<span class="comment">//"Van,Louis,Nick,Rob,Style"</span></span><br></pre></td></tr></table></figure>
-<p>在这个例子中,可以作为另一个对象基础的是person对象,于是我们把它传入到object()函数中,然后该函数就会返回一个新对象. 这个新对象将person作为原型,因此它的原型中就包含引用类型值属性. 这意味着person.friends不仅属于person所有,而且也会被anotherPerson以及yetAnotherPerson共享.</p>
-<p>在 ECMAScript5 中,通过新增 <strong>object.create()</strong> 方法规范化了上面的原型式继承.</p>
-<p><strong>object.create()</strong> 接收两个参数:</p>
-<ul>
-<li>一个用作新对象原型的对象</li>
-<li>(可选的)一个为新对象定义额外属性的对象</li>
-</ul>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> person = &#123;</span><br><span class="line">	friends : [<span class="string">"Van"</span>,<span class="string">"Louis"</span>,<span class="string">"Nick"</span>]</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">var</span> anotherPerson = <span class="built_in">Object</span>.create(person);</span><br><span class="line">anotherPerson.friends.push(<span class="string">"Rob"</span>);</span><br><span class="line"><span class="keyword">var</span> yetAnotherPerson = <span class="built_in">Object</span>.create(person);</span><br><span class="line">yetAnotherPerson.friends.push(<span class="string">"Style"</span>);</span><br><span class="line">alert(person.friends);<span class="comment">//"Van,Louis,Nick,Rob,Style"</span></span><br></pre></td></tr></table></figure>
-<p><strong>object.create()</strong> 只有一个参数时功能与上述object方法相同, 它的第二个参数与Object.defineProperties()方法的第二个参数格式相同: 每个属性都是通过自己的描述符定义的.以这种方式指定的任何属性都会覆盖原型对象上的同名属性.例如:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> person = &#123;</span><br><span class="line">	name : <span class="string">"Van"</span></span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">var</span> anotherPerson = <span class="built_in">Object</span>.create(person, &#123;</span><br><span class="line">	name : &#123;</span><br><span class="line">		value : <span class="string">"Louis"</span></span><br><span class="line">	&#125;</span><br><span class="line">&#125;);</span><br><span class="line">alert(anotherPerson.name);<span class="comment">//"Louis"</span></span><br></pre></td></tr></table></figure>
-<p>目前支持 <strong>Object.create()</strong> 的浏览器有 IE9+, Firefox 4+, Safari 5+, Opera 12+ 和 Chrome.</p>
-<p><strong>提醒:</strong> 原型式继承中, 包含引用类型值的属性始终都会共享相应的值, 就像使用原型模式一样.</p>
-<h3 id="u5BC4_u751F_u5F0F_u7EE7_u627F"><a href="#u5BC4_u751F_u5F0F_u7EE7_u627F" class="headerlink" title="寄生式继承"></a>寄生式继承</h3><p>寄生式继承是与原型式继承紧密相关的一种思路， 同样是克罗克福德推而广之.</p>
-<blockquote>
-<p>寄生式继承的思路与(寄生)构造函数和工厂模式类似, 即创建一个仅用于封装继承过程的函数,该函数在内部以某种方式来增强对象,最后再像真的是它做了所有工作一样返回对象. 如下.</p>
-</blockquote>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">createAnother</span>(<span class="params">original</span>)</span>&#123;</span><br><span class="line">	<span class="keyword">var</span> clone = object(original);<span class="comment">//通过调用object函数创建一个新对象</span></span><br><span class="line">	clone.sayHi = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;<span class="comment">//以某种方式来增强这个对象</span></span><br><span class="line">		alert(<span class="string">"hi"</span>);</span><br><span class="line">	&#125;;</span><br><span class="line">	<span class="keyword">return</span> clone;<span class="comment">//返回这个对象</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>这个例子中的代码基于person返回了一个新对象–anotherPerson. 新对象不仅具有 person 的所有属性和方法, 而且还被增强了, 拥有了sayH()方法. </p>
-<p><strong>注意:</strong> 使用寄生式继承来为对象添加函数, 会由于不能做到函数复用而降低效率;这一点与构造函数模式类似.</p>
-<h3 id="u5BC4_u751F_u7EC4_u5408_u5F0F_u7EE7_u627F"><a href="#u5BC4_u751F_u7EC4_u5408_u5F0F_u7EE7_u627F" class="headerlink" title="寄生组合式继承"></a>寄生组合式继承</h3><p>前面讲过,组合继承是 JavaScript 最常用的继承模式; 不过, 它也有自己的不足. 组合继承最大的问题就是无论什么情况下,都会调用两次父类构造函数: 一次是在创建子类型原型的时候, 另一次是在子类型构造函数内部. <strong>寄生组合式继承就是为了降低调用父类构造函数的开销而出现的</strong> .</p>
-<blockquote>
-<p>其背后的基本思路是: 不必为了指定子类型的原型而调用超类型的构造函数</p>
-</blockquote>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">extend</span>(<span class="params">subClass,superClass</span>)</span>&#123;</span><br><span class="line">	<span class="keyword">var</span> prototype = object(superClass.prototype);<span class="comment">//创建对象</span></span><br><span class="line">	prototype.constructor = subClass;<span class="comment">//增强对象</span></span><br><span class="line">	subClass.prototype = prototype;<span class="comment">//指定对象</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>extend的高效率体现在它没有调用superClass构造函数,因此避免了在subClass.prototype上面创建不必要,多余的属性. 于此同时,原型链还能保持不变; 因此还能正常使用 instanceof 和 isPrototypeOf() 方法.</p>
-<p>以上,寄生组合式继承,集寄生式继承和组合继承的优点于一身,是实现基于类型继承的最有效方法.</p>
-<hr>
-<p>下面我们来看下extend的另一种更为有效的扩展.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">extend</span>(<span class="params">subClass, superClass</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> F = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;&#125;;</span><br><span class="line">  F.prototype = superClass.prototype;</span><br><span class="line">  subClass.prototype = <span class="keyword">new</span> F(); </span><br><span class="line">  subClass.prototype.constructor = subClass;</span><br><span class="line"></span><br><span class="line">  subClass.superclass = superClass.prototype;</span><br><span class="line">  <span class="keyword">if</span>(superClass.prototype.constructor == <span class="built_in">Object</span>.prototype.constructor) &#123;</span><br><span class="line">    superClass.prototype.constructor = superClass;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>我一直不太明白的是为什么要 “<strong>new F()</strong>“, 既然extend的目的是将子类型的 prototype 指向超类型的 prototype,为什么不直接做如下操作呢?</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">subClass.prototype = superClass.prototype;<span class="comment">//直接指向超类型prototype</span></span><br></pre></td></tr></table></figure>
-<p>显然, 基于如上操作, 子类型原型将与超类型原型共用, 根本就没有继承关系.</p>
-<h3 id="new__u8FD0_u7B97_u7B26"><a href="#new__u8FD0_u7B97_u7B26" class="headerlink" title="new 运算符"></a>new 运算符</h3><p>为了追本溯源, 我顺便研究了new运算符具体干了什么?发现其实很简单，就干了三件事情.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> obj  = &#123;&#125;;</span><br><span class="line">obj.__proto__ = F.prototype;</span><br><span class="line">F.call(obj);</span><br></pre></td></tr></table></figure>
-<p>第一行，我们创建了一个空对象obj;</p>
-<p>第二行，我们将这个空对象的<strong>proto</strong>成员指向了F函数对象prototype成员对象;</p>
-<p>第三行，我们将F函数对象的this指针替换成obj，然后再调用F函数.</p>
-<p>我们可以这么理解: 以 new 操作符调用构造函数的时候，函数内部实际上发生以下变化：</p>
-<p>  1、创建一个空对象，并且 this 变量引用该对象，同时还继承了该函数的原型。</p>
-<p>  2、属性和方法被加入到 this 引用的对象中。</p>
-<p>  3、新创建的对象由 this 所引用，并且最后隐式的返回 this.</p>
-<h3 id="proto____u5C5E_u6027_u662F_u6307_u5B9A_u539F_u578B_u7684_u5173_u952E"><a href="#proto____u5C5E_u6027_u662F_u6307_u5B9A_u539F_u578B_u7684_u5173_u952E" class="headerlink" title="__proto__ 属性是指定原型的关键"></a>__proto__ 属性是指定原型的关键</h3><p>以上, 通过设置 __proto__ 属性继承了父类, 如果去掉new 操作, 直接参考如下写法</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">subClass.prototype = superClass.prototype;<span class="comment">//直接指向超类型prototype</span></span><br></pre></td></tr></table></figure>
-<p>那么, 使用 instanceof 方法判断对象是否是构造器的实例时, 将会出现紊乱.</p>
-<p>假如参考如上写法, 那么extend代码应该为</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">extend</span>(<span class="params">subClass, superClass</span>) </span>&#123;</span><br><span class="line">  subClass.prototype = superClass.prototype;</span><br><span class="line"></span><br><span class="line">  subClass.superclass = superClass.prototype;</span><br><span class="line">  <span class="keyword">if</span>(superClass.prototype.constructor == <span class="built_in">Object</span>.prototype.constructor) &#123;</span><br><span class="line">    superClass.prototype.constructor = superClass;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>此时, 请看如下测试:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">a</span>(<span class="params"></span>)</span>&#123;&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">b</span>(<span class="params"></span>)</span>&#123;&#125;</span><br><span class="line">extend(b,a);</span><br><span class="line"><span class="keyword">var</span> c = <span class="keyword">new</span> a()&#123;&#125;;</span><br><span class="line"><span class="built_in">console</span>.log(c <span class="keyword">instanceof</span> a);<span class="comment">//true</span></span><br><span class="line"><span class="built_in">console</span>.log(c <span class="keyword">instanceof</span> b);<span class="comment">//true</span></span><br></pre></td></tr></table></figure>
-<p>c被认为是a的实例可以理解, 也是对的; 但c却被认为也是b的实例, 这就不对了. 究其原因, instanceof 操作符比较的应该是 c.__proto__ 与 构造器.prototype(即 b.prototype 或 a.prototype) 这两者是否相等, 又extend(b,a); 则b.prototype === a.prototype, 故这才打印出上述不合理的输出.</p>
-<hr>
-<p>那么最终,原型链继承可以这么实现,例如:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Father</span>(<span class="params">name</span>)</span>&#123;</span><br><span class="line">	<span class="keyword">this</span>.name = name;</span><br><span class="line">	<span class="keyword">this</span>.colors = [<span class="string">"red"</span>,<span class="string">"blue"</span>,<span class="string">"green"</span>];</span><br><span class="line">&#125;</span><br><span class="line">Father.prototype.sayName = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">	alert(<span class="keyword">this</span>.name);</span><br><span class="line">&#125;;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Son</span>(<span class="params">name,age</span>)</span>&#123;</span><br><span class="line">	Father.call(<span class="keyword">this</span>,name);<span class="comment">//继承实例属性，第一次调用Father()</span></span><br><span class="line">	<span class="keyword">this</span>.age = age;</span><br><span class="line">&#125;</span><br><span class="line">extend(Son,Father)<span class="comment">//继承父类方法,此处并不会第二次调用Father()</span></span><br><span class="line">Son.prototype.sayAge = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">	alert(<span class="keyword">this</span>.age);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> instance1 = <span class="keyword">new</span> Son(<span class="string">"louis"</span>,<span class="number">5</span>);</span><br><span class="line">instance1.colors.push(<span class="string">"black"</span>);</span><br><span class="line"><span class="built_in">console</span>.log(instance1.colors);<span class="comment">//"red,blue,green,black"</span></span><br><span class="line">instance1.sayName();<span class="comment">//louis</span></span><br><span class="line">instance1.sayAge();<span class="comment">//5</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> instance1 = <span class="keyword">new</span> Son(<span class="string">"zhai"</span>,<span class="number">10</span>);</span><br><span class="line"><span class="built_in">console</span>.log(instance1.colors);<span class="comment">//"red,blue,green"</span></span><br><span class="line">instance1.sayName();<span class="comment">//zhai</span></span><br><span class="line">instance1.sayAge();<span class="comment">//10</span></span><br></pre></td></tr></table></figure>
-<hr>
-<h3 id="u6269_u5C55_3A"><a href="#u6269_u5C55_3A" class="headerlink" title="扩展:"></a>扩展:</h3><h4 id="u5C5E_u6027_u67E5_u627E"><a href="#u5C5E_u6027_u67E5_u627E" class="headerlink" title="属性查找"></a>属性查找</h4><p>​    使用了原型链后, 当查找一个对象的属性时，JavaScript 会向上遍历原型链，直到找到给定名称的属性为止，到查找到达原型链的顶部 - 也就是 Object.prototype - 但是仍然没有找到指定的属性，就会返回 undefined. 此时若想避免原型链查找, 建议使用 <strong>hasOwnProperty</strong> 方法. 因为 <strong>hasOwnProperty</strong> 是 JavaScript 中唯一一个处理属性但是不查找原型链的函数. 如:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(instance1.hasOwnProperty(<span class="string">'age'</span>));<span class="comment">//true</span></span><br></pre></td></tr></table></figure>
-<p>对比: <strong>isPrototypeOf</strong> 则是用来判断该方法所属的对象是不是参数的原型对象，是则返回true，否则返回false。如:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(Father.prototype.isPrototypeOf(instance1));<span class="comment">//true</span></span><br></pre></td></tr></table></figure>
-<h4 id="instanceof__26amp_3B_26amp_3B_typeof"><a href="#instanceof__26amp_3B_26amp_3B_typeof" class="headerlink" title="instanceof &amp;&amp; typeof"></a>instanceof &amp;&amp; typeof</h4><p>上面提到几次提到 instanceof 运算符. 那么到底它是怎么玩的呢? 下面让我们来趴一趴它的使用场景.</p>
-<p><strong>instanceof</strong> 运算符是用来在运行时指出对象是否是构造器的一个实例, 例如漏写了new运算符去调用某个构造器, 此时构造器内部可以通过 instanceof 来判断.(java中功能类似)</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="keyword">if</span>(<span class="keyword">this</span> <span class="keyword">instanceof</span> <span class="built_in">arguments</span>.callee)</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'此处作为构造函数被调用'</span>);</span><br><span class="line">  <span class="keyword">else</span></span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'此处作为普通函数被调用'</span>);</span><br><span class="line">&#125;</span><br><span class="line">f();<span class="comment">//此处作为构造函数被调用</span></span><br><span class="line"><span class="keyword">new</span> f();<span class="comment">//此处作为普通函数被调用</span></span><br></pre></td></tr></table></figure>
-<p>以上, this instanceof <a href="http://louiszhai.github.io/2015/12/15/arguments/"><code>arguments</code></a>.callee 的值如果为 true 表示是作为构造函数被调用的,如果为 false 则表示是作为普通函数被调用的。</p>
-<p>对比: <strong>typeof</strong> 则用以获取一个变量或者表达式的类型, 一般只能返回如下几个结果:</p>
-<p>number,boolean,string,function（函数）,object（NULL,数组，对象）,undefined。</p>
-<h4 id="new_u8FD0_u7B97_u7B26"><a href="#new_u8FD0_u7B97_u7B26" class="headerlink" title="new运算符"></a>new运算符</h4><p>此处引用 艾伦的 <a href="http://www.cnblogs.com/aaronjs/archive/2012/07/04/2575570.html" target="_blank" rel="external">JS 对象机制深剖——new 运算符</a></p>
-<p>接着上述对new运算符的研究, 我们来考察 ECMAScript 语言规范中 <strong>new</strong> 运算符的定义：</p>
-<p>The new Operator</p>
-<blockquote>
-<p>The production <em>NewExpression : new NewExpression</em> is evaluated as follows:Evaluate NewExpression.Call GetValue(Result(1)).If Type(Result(2)) is not Object, throw a TypeError exception.If Result(2) does not implement the internal <a href="http://www.pushiming.com/blog/2009/10/the-new-operator/#appendix" target="_blank" rel="external">[[Construc]]</a> method, throw a TypeError exception.Call the [[Construct]] method on Result(2), providing no arguments (that is, an empty list of arguments).Return Result(5).</p>
-</blockquote>
-<p>其大意是，new 后必须跟一个对象并且此对象必须有一个名为 [[Construct]] 的内部方法（其实这种对象就是构造器），否则会抛出异常</p>
-<p>根据这些内容，我们完全可以构造一个伪 [[Construct]] 方法来模拟此流程</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">MyObject</span>(<span class="params">age</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.age = age;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">MyObject.construct = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> o = &#123;&#125;, Constructor = MyObject;</span><br><span class="line">    o.__proto__ = Constructor.prototype;</span><br><span class="line">    <span class="comment">// FF 支持用户引用内部属性 [[Prototype]]</span></span><br><span class="line">    Constructor.apply(o, <span class="built_in">arguments</span>);</span><br><span class="line">    <span class="keyword">return</span> o;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> obj1 = <span class="keyword">new</span> MyObject(<span class="number">10</span>);</span><br><span class="line"><span class="keyword">var</span> obj2 = MyObject.construct(<span class="number">10</span>);</span><br><span class="line">alert(obj2 <span class="keyword">instanceof</span> MyObject);<span class="comment">// true</span></span><br></pre></td></tr></table></figure>
-<hr>
-<p>不知不觉本文已经写了3天, 其实还有很多引申的东西没有讲出来, 大家有什么问题或好的想法欢迎在下方参与<a href="#respond">留言和评论</a>.</p>
-<p>本文作者: <a href="https://github.com/Louiszhai" target="_blank" rel="external">louis</a></p>
-<p>本文链接: <a href="http://louiszhai.github.io/2015/12/15/prototypeChain/">http://louiszhai.github.io/2015/12/15/prototypeChain/</a></p>
-<p>参考:</p>
-<ul>
-<li>《JavaScript高级程序设计》</li>
-<li><a href="http://www.infoq.com/cn/articles/javascript-instantiation-and-inheritance/" target="_blank" rel="external">JavaScript的实例化与继承：请停止使用new关键字</a></li>
-<li><a href="http://www.cnblogs.com/TomXu/archive/2012/01/05/2305453.html" target="_blank" rel="external">深入理解JavaScript系列（5）：强大的原型和原型链 - 汤姆大叔 - 博客园</a></li>
-</ul>
-]]></content>
-    <summary type="html">
-    <![CDATA[JavaScript 原型链 prototype instanceof typeof  hasOwnProperty new  借用构造函数 组合继承 寄生式继承 寄生组合式继承]]>
     
     </summary>
     
