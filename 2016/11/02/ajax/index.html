@@ -29,7 +29,7 @@
 <meta property="og:image" content="http://louiszhai.github.io/docImages/ajax20.png">
 <meta property="og:image" content="http://louiszhai.github.io/docImages/ajax21.png">
 <meta property="og:image" content="http://louiszhai.github.io/docImages/ajax26.png">
-<meta property="og:updated_time" content="2016-11-25T00:08:09.000Z">
+<meta property="og:updated_time" content="2016-11-30T03:24:34.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Ajax知识体系">
 <meta name="twitter:description" content="ajax XMLHttpRequest xhr fetch XDomainRequest jquery.ajax overrideMimeType CORS FileReader postman angular withCredentials setRequestHeader getAllResponseHeaders upload ajax与history的兼容 ajax跨域请求 ajax文件上">
@@ -320,7 +320,7 @@
 <li>total 表示资源总大小, 如果使用http下载资源, 它仅仅表示内容的总大小, 而不包括http headers等, 它同样是一个无符号长整型, 初始值为0.</li>
 </ul>
 <h4 id="onprogress"><a href="#onprogress" class="headerlink" title="onprogress"></a>onprogress</h4><p>onprogress事件回调方法在 <code>readyState==3</code> 状态时开始触发, 默认传入 ProgressEvent 对象, 可通过 <code>e.loaded/e.total</code> 来计算加载资源的进度, 该方法用于获取资源的下载进度.</p>
-<p>注意: 该方法在IE10+浏览器下可用, 其他浏览器均可用.</p>
+<p>注意: 该方法适用于 IE10+ 及其他现代浏览器.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">xhr.onprogress = <span class="function"><span class="keyword">function</span>(<span class="params">e</span>)</span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'progress:'</span>, e.loaded/e.total);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h4 id="onload"><a href="#onload" class="headerlink" title="onload"></a>onload</h4><p>onload事件回调方法在ajax请求成功后触发, 触发时机在 <code>readyState==4</code> 状态之后.</p>
 <p>想要捕捉到一个ajax异步请求的成功状态, 并且执行回调, 一般下面的语句就足够了:</p>
@@ -341,7 +341,7 @@
 <h4 id="responseType"><a href="#responseType" class="headerlink" title="responseType"></a>responseType</h4><p>responseType表示响应的类型, 缺省为空字符串, 可取 <code>&quot;arraybuffer&quot;</code> , <code>&quot;blob&quot;</code> , <code>&quot;document&quot;</code> , <code>&quot;json&quot;</code> , and <code>&quot;text&quot;</code> 共五种类型.</p>
 <h4 id="responseURL"><a href="#responseURL" class="headerlink" title="responseURL"></a>responseURL</h4><p>responseURL返回ajax请求最终的URL, 如果请求中存在重定向, 那么responseURL表示重定向之后的URL.</p>
 <h4 id="withCredentials"><a href="#withCredentials" class="headerlink" title="withCredentials"></a>withCredentials</h4><p>withCredentials是一个布尔值, 默认为false, 表示跨域请求中不发送cookies等信息. 当它设置为true时, <code>cookies</code> , <code>authorization headers</code> 或者<code>TLS客户端证书</code> 都可以正常发送和接收. 显然它的值对同域请求没有影响.</p>
-<p>注意: 该属性在IE10+及opera12+浏览器下可用, 其他类型浏览器均可用.</p>
+<p>注意: 该属性适用于 IE10+, opera12+及其他现代浏览器.</p>
 <h4 id="abort"><a href="#abort" class="headerlink" title="abort"></a>abort</h4><p>abort方法用于取消ajax请求, 取消后, readyState 状态将被设置为 <code>0</code> (<code>UNSENT</code>). 如下, 调用abort 方法后, 请求将被取消.</p>
 <p><img src="http://louiszhai.github.io/docImages/ajax04.png" alt="Event"></p>
 <h4 id="getResponseHeader"><a href="#getResponseHeader" class="headerlink" title="getResponseHeader"></a>getResponseHeader</h4><p>getResponseHeader方法用于获取ajax响应头中指定name的值. 如果response headers中存在相同的name, 那么它们的值将自动以字符串的形式连接在一起.</p>
@@ -797,7 +797,7 @@
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">axios.get(<span class="string">"https://api.github.com/users/louiszhai"</span>)</span><br><span class="line">  .then(<span class="function"><span class="keyword">function</span>(<span class="params">response</span>)</span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(response);</span><br><span class="line">  &#125;)</span><br><span class="line">  .catch(<span class="function"><span class="keyword">function</span> (<span class="params">error</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(error);</span><br><span class="line">  &#125;);</span><br></pre></td></tr></table></figure>
 <p>除了get, 它还支持post, delete, head, put, patch, request请求. 具体使用攻略, 请戳这里: <a href="http://www.bootcdn.cn/axios/readme/" target="_blank" rel="external">axios</a> .</p>
 <p>如需在网页上引入 Axios, 可以链接CDN <a href="http://www.bootcdn.cn/axios/" target="_blank" rel="external">axios | Bootstrap中文网开源项目免费 CDN 服务</a> 或者将其下载到本地.</p>
-<h3 id="Fetch"><a href="#Fetch" class="headerlink" title="Fetch"></a>Fetch</h3><p>说到ajax, 就不得不提及fetch, 由于篇幅较长, fetch已从本文中独立出来, 请戳 <a href="http://louiszhai.github.io/2016/10/19/fetch/">Fetch进阶指南</a> .</p>
+<h3 id="Fetch"><a href="#Fetch" class="headerlink" title="Fetch"></a>Fetch</h3><p>说到ajax, 就不得不提及fetch, 由于篇幅较长, fetch已从本文中独立出来, 请戳 <a href="http://louiszhai.github.io/2016/11/02/fetch/">Fetch进阶指南</a> .</p>
 <h3 id="ajax_u8DE8_u57DF_u8BF7_u6C42"><a href="#ajax_u8DE8_u57DF_u8BF7_u6C42" class="headerlink" title="ajax跨域请求"></a>ajax跨域请求</h3><h4 id="u4EC0_u4E48_u662FCORS"><a href="#u4EC0_u4E48_u662FCORS" class="headerlink" title="什么是CORS"></a>什么是CORS</h4><p>CORS是一个W3C(World Wide Web)标准, 全称是跨域资源共享(Cross-origin resource sharing).它允许浏览器向跨域服务器, 发出异步http请求, 从而克服了ajax受同源策略的限制. 实际上, 浏览器不会拦截不合法的跨域请求, 而是拦截了他们的响应, 因此即使请求不合法, 很多时候, 服务器依然收到了请求.(Chrome和Firefox下https网站不允许发送http异步请求除外)</p>
 <p>通常, 一次跨域访问拥有如下流程:</p>
 <p><img src="http://louiszhai.github.io/docImages/cross-domain02.jpg" alt=""></p>
