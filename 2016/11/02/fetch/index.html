@@ -23,7 +23,7 @@
 <meta property="og:image" content="http://louiszhai.github.io/docImages/ajax22.png">
 <meta property="og:image" content="http://louiszhai.github.io/docImages/ajax15.png">
 <meta property="og:image" content="http://louiszhai.github.io/docImages/ajax16.png">
-<meta property="og:updated_time" content="2016-11-30T03:15:07.000Z">
+<meta property="og:updated_time" content="2016-12-05T09:59:43.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Fetch进阶指南">
 <meta name="twitter:description" content="fetch async await mode promise progress abort">
@@ -78,7 +78,7 @@
 					<div class="tips-arrow"></div>
 					<ul class="tips-inner">
 						<li>菜单</li>
-						<li>Tags</li>
+						<li>標籤</li>
 						
 						
 					</ul>
@@ -265,7 +265,7 @@
 <li>cors-with-forced-preflight: 表示在发出请求前, 将执行preflight检查.</li>
 <li>no-cors: 常用于跨域请求不带CORS响应头场景, 此时响应类型为 “opaque”.</li>
 </ul>
-<p>除此之外, 还有两种不太常用的mode类型, 分别是 <code>navigate</code> , <code>websocket</code> , 它们是[HTML标准]9<a href="https://html.spec.whatwg.org/multipage/)中特殊的值" target="_blank" rel="external">https://html.spec.whatwg.org/multipage/)中特殊的值</a>, 这里不做详细介绍.</p>
+<p>除此之外, 还有两种不太常用的mode类型, 分别是 <code>navigate</code> , <code>websocket</code> , 它们是 <a href="https://html.spec.whatwg.org/multipage/" target="_blank" rel="external">HTML标准</a> 中特殊的值, 这里不做详细介绍.</p>
 <h4 id="header"><a href="#header" class="headerlink" title="header"></a>header</h4><p>fetch获取http响应头非常easy. 如下:</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">fetch(url).then(<span class="function"><span class="keyword">function</span>(<span class="params">response</span>) </span>&#123; </span><br><span class="line">    <span class="built_in">console</span>.log(response.headers.get(<span class="string">'Content-Type'</span>));</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
 <p>设置http请求头也一样简单.</p>
