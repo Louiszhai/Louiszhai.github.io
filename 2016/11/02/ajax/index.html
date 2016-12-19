@@ -29,7 +29,7 @@
 <meta property="og:image" content="http://louiszhai.github.io/docImages/ajax20.png">
 <meta property="og:image" content="http://louiszhai.github.io/docImages/ajax21.png">
 <meta property="og:image" content="http://louiszhai.github.io/docImages/ajax26.png">
-<meta property="og:updated_time" content="2016-12-16T09:32:17.000Z">
+<meta property="og:updated_time" content="2016-12-19T11:18:10.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Ajax知识体系">
 <meta name="twitter:description" content="ajax XMLHttpRequest xhr fetch XDomainRequest jquery.ajax overrideMimeType CORS FileReader postman angular withCredentials setRequestHeader getAllResponseHeaders upload ajax与history的兼容 ajax跨域请求 ajax文件上">
@@ -391,7 +391,7 @@
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//可直接创建FormData实例</span></span><br><span class="line"><span class="keyword">var</span> data = <span class="keyword">new</span> FormData();</span><br><span class="line">data.append(<span class="string">"name"</span>, <span class="string">"louis"</span>);</span><br><span class="line">xhr.send(data);</span><br><span class="line"><span class="comment">//还可以通过传入表单DOM对象来创建FormData实例</span></span><br><span class="line"><span class="keyword">var</span> form = <span class="built_in">document</span>.getElementById(<span class="string">'form'</span>);</span><br><span class="line"><span class="keyword">var</span> data = <span class="keyword">new</span> FormData(form);</span><br><span class="line">data.append(<span class="string">"password"</span>, <span class="string">"123456"</span>);</span><br><span class="line">xhr.send(data);</span><br></pre></td></tr></table></figure>
 <p>目前, 主流浏览器基本上都支持XHR2, 除了IE系列需要IE10及更高版本. 因此IE10以下是不支持XHR2的.</p>
 <p>那么问题来了, IE7, 8,9的用户怎么办? 很遗憾, 这些用户是比较尴尬的. 对于IE8,9而言, 只有一个阉割版的 <code>XDomainRequest</code> 可用,IE7则没有. 估计IE7用户只能哭晕在厕所了.</p>
-<h3 id="XDomainRequest"><a href="#XDomainRequest" class="headerlink" title="XDomainRequest"></a>XDomainRequest</h3><p>XDomainRequest 对象是IE8,9搞出来的, 用于支持CORS请求非成熟的解决方案. 以至于IE10中直接移除了它, 并重新回到了 XMLHttpRequest 的怀抱.</p>
+<h3 id="XDomainRequest"><a href="#XDomainRequest" class="headerlink" title="XDomainRequest"></a>XDomainRequest</h3><p>XDomainRequest 对象是IE8,9折腾出来的, 用于支持CORS请求非成熟的解决方案. 以至于IE10中直接移除了它, 并重新回到了 XMLHttpRequest 的怀抱.</p>
 <p>XDomainRequest 仅可用于发送 <code>GET</code>和 <code>POST</code> 请求. 如下即创建过程.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> xdr = <span class="keyword">new</span> XDomainRequest();</span><br></pre></td></tr></table></figure>
 <p>xdr具有如下属性:</p>
@@ -1136,7 +1136,7 @@
 <hr>
 <p>本文就讨论这么多内容,大家有什么问题或好的想法欢迎在下方参与<a href="#respond">留言和评论</a>.</p>
 <p>本文作者: <a href="https://github.com/Louiszhai" target="_blank" rel="external">louis</a></p>
-<p>本文链接: <a href="http://louiszhai.github.io/2016/08/20/ajax/">http://louiszhai.github.io/2016/08/20/ajax/</a></p>
+<p>本文链接: <a href="http://louiszhai.github.io/2016/11/02/ajax/">http://louiszhai.github.io/2016/11/02/ajax/</a></p>
 <p>参考文章</p>
 <ul>
 <li><a href="https://xhr.spec.whatwg.org/" target="_blank" rel="external">XMLHttpRequest Standard</a></li>
