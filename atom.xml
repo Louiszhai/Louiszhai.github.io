@@ -164,7 +164,7 @@
     <link href="http://louiszhai.github.io/2016/11/02/ajax/"/>
     <id>http://louiszhai.github.io/2016/11/02/ajax/</id>
     <published>2016-11-02T04:48:27.000Z</published>
-    <updated>2016-12-21T08:44:33.000Z</updated>
+    <updated>2016-12-21T08:49:07.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>Ajax 全称 Asynchronous JavaScript and XML, 即异步JS与XML. 它最早在IE5中被使用, 然后由Mozilla, Apple, Google推广开来. 典型的代表应用有 Outlook Web Access, 以及 GMail. 现代网页中几乎无ajax不欢. 前后端分离也正是建立在ajax异步通信的基础之上.</p>
 <a id="more"></a>
 <h3 id="u6D4F_u89C8_u5668_u4E3Aajax_u505A_u4E86_u4EC0_u4E48"><a href="#u6D4F_u89C8_u5668_u4E3Aajax_u505A_u4E86_u4EC0_u4E48" class="headerlink" title="浏览器为ajax做了什么"></a>浏览器为ajax做了什么</h3><p>现代浏览器中, 虽然几乎全部支持ajax, 但它们的技术方案却分为两种:</p>
@@ -735,10 +735,10 @@
 <li>Axios支持node, jquery并不支持.</li>
 <li>Axios基于promise语法, jq3.0才开始全面支持.</li>
 <li>Axios短小精悍, 更加适合http场景, jquery大而全, 加载较慢.</li>
-<li>vue作者尤大放弃推荐vue-resource, 转向推荐Axios.</li>
+<li>vue作者尤大放弃推荐vue-resource, 转向推荐Axios. 以下为尤大原话.</li>
 </ul>
 <blockquote>
-<p>最近团队讨论了一下, Ajax 本身跟 Vue 并没有什么需要特别整合的地方, 使用 fetch polyfill 或是 axios、superagent 等等都可以起到同等的效果, vue-resource 提供的价值和其维护成本相比并不划算, 所以决定在不久以后取消对 vue-resource 的官方推荐.</p>
+<p>“最近团队讨论了一下, Ajax 本身跟 Vue 并没有什么需要特别整合的地方, 使用 fetch polyfill 或是 axios、superagent 等等都可以起到同等的效果, vue-resource 提供的价值和其维护成本相比并不划算, 所以决定在不久以后取消对 vue-resource 的官方推荐.”</p>
 </blockquote>
 <p>Axios大小仅12k, 目前最新版本号为: <a href="https://www.npmjs.org/package/axios" target="_blank" rel="external"><img src="https://camo.githubusercontent.com/9f600e10007ac86da6a8b90c16ca1e9504901730/68747470733a2f2f696d672e736869656c64732e696f2f6e706d2f762f6178696f732e7376673f7374796c653d666c61742d737175617265" alt="npm version"></a></p>
 <p>语法上Axios基本就和promise一样, 在then方法中处理回调, 在catch方法中处理异常. 如下:</p>
