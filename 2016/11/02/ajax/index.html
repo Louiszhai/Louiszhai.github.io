@@ -29,7 +29,7 @@
 <meta property="og:image" content="http://louiszhai.github.io/docImages/ajax20.png">
 <meta property="og:image" content="http://louiszhai.github.io/docImages/ajax21.png">
 <meta property="og:image" content="http://louiszhai.github.io/docImages/ajax26.png">
-<meta property="og:updated_time" content="2016-12-19T11:18:10.000Z">
+<meta property="og:updated_time" content="2016-12-21T08:39:23.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Ajax知识体系">
 <meta name="twitter:description" content="ajax XMLHttpRequest xhr fetch XDomainRequest jquery.ajax overrideMimeType CORS FileReader postman angular withCredentials setRequestHeader getAllResponseHeaders upload ajax与history的兼容 ajax跨域请求 ajax文件上">
@@ -791,7 +791,11 @@
 <li>Axios支持node, jquery并不支持.</li>
 <li>Axios基于promise语法, jq3.0才开始全面支持.</li>
 <li>Axios短小精悍, 更加适合http场景, jquery大而全, 加载较慢.</li>
+<li>vue作者尤大放弃推荐vue-resource, 转向推荐Axios.</li>
 </ul>
+<blockquote>
+<p>最近团队讨论了一下, Ajax 本身跟 Vue 并没有什么需要特别整合的地方, 使用 fetch polyfill 或是 axios、superagent 等等都可以起到同等的效果, vue-resource 提供的价值和其维护成本相比并不划算, 所以决定在不久以后取消对 vue-resource 的官方推荐.</p>
+</blockquote>
 <p>Axios大小仅12k, 目前最新版本号为: <a href="https://www.npmjs.org/package/axios" target="_blank" rel="external"><img src="https://camo.githubusercontent.com/9f600e10007ac86da6a8b90c16ca1e9504901730/68747470733a2f2f696d672e736869656c64732e696f2f6e706d2f762f6178696f732e7376673f7374796c653d666c61742d737175617265" alt="npm version"></a></p>
 <p>语法上Axios基本就和promise一样, 在then方法中处理回调, 在catch方法中处理异常. 如下:</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">axios.get(<span class="string">"https://api.github.com/users/louiszhai"</span>)</span><br><span class="line">  .then(<span class="function"><span class="keyword">function</span>(<span class="params">response</span>)</span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(response);</span><br><span class="line">  &#125;)</span><br><span class="line">  .catch(<span class="function"><span class="keyword">function</span> (<span class="params">error</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(error);</span><br><span class="line">  &#125;);</span><br></pre></td></tr></table></figure>

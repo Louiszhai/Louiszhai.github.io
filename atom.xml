@@ -4,7 +4,7 @@
   <subtitle><![CDATA[程序猿 前端攻城师]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://louiszhai.github.io/"/>
-  <updated>2016-12-19T10:53:20.000Z</updated>
+  <updated>2016-12-21T08:09:43.000Z</updated>
   <id>http://louiszhai.github.io/</id>
   
   <author>
@@ -19,7 +19,7 @@
     <link href="http://louiszhai.github.io/2016/11/25/manifest/"/>
     <id>http://louiszhai.github.io/2016/11/25/manifest/</id>
     <published>2016-11-25T00:08:21.000Z</published>
-    <updated>2016-12-19T10:53:20.000Z</updated>
+    <updated>2016-12-21T08:09:43.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>Manifest 是 H5提供的一种应用缓存机制, 基于它web应用可以实现离线访问(offline cache). 为此, 浏览器还提供了应用缓存的api–applicationCache. 虽然manifest的技术已被web标准废弃, 但这不影响我们尝试去了解它. 也正是因为manifest的应用缓存机制如此诱人, 饿了么 和 office 365邮箱都还在使用着它!</p>
 <a id="more"></a>
 <h3 id="u63CF_u8FF0"><a href="#u63CF_u8FF0" class="headerlink" title="描述"></a>描述</h3><p>对manifest熟悉的同学可以跳过此节.</p>
@@ -164,7 +164,7 @@
     <link href="http://louiszhai.github.io/2016/11/02/ajax/"/>
     <id>http://louiszhai.github.io/2016/11/02/ajax/</id>
     <published>2016-11-02T04:48:27.000Z</published>
-    <updated>2016-12-19T11:18:10.000Z</updated>
+    <updated>2016-12-21T08:39:23.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>Ajax 全称 Asynchronous JavaScript and XML, 即异步JS与XML. 它最早在IE5中被使用, 然后由Mozilla, Apple, Google推广开来. 典型的代表应用有 Outlook Web Access, 以及 GMail. 现代网页中几乎无ajax不欢. 前后端分离也正是建立在ajax异步通信的基础之上.</p>
 <a id="more"></a>
 <h3 id="u6D4F_u89C8_u5668_u4E3Aajax_u505A_u4E86_u4EC0_u4E48"><a href="#u6D4F_u89C8_u5668_u4E3Aajax_u505A_u4E86_u4EC0_u4E48" class="headerlink" title="浏览器为ajax做了什么"></a>浏览器为ajax做了什么</h3><p>现代浏览器中, 虽然几乎全部支持ajax, 但它们的技术方案却分为两种:</p>
@@ -735,7 +735,11 @@
 <li>Axios支持node, jquery并不支持.</li>
 <li>Axios基于promise语法, jq3.0才开始全面支持.</li>
 <li>Axios短小精悍, 更加适合http场景, jquery大而全, 加载较慢.</li>
+<li>vue作者尤大放弃推荐vue-resource, 转向推荐Axios.</li>
 </ul>
+<blockquote>
+<p>最近团队讨论了一下, Ajax 本身跟 Vue 并没有什么需要特别整合的地方, 使用 fetch polyfill 或是 axios、superagent 等等都可以起到同等的效果, vue-resource 提供的价值和其维护成本相比并不划算, 所以决定在不久以后取消对 vue-resource 的官方推荐.</p>
+</blockquote>
 <p>Axios大小仅12k, 目前最新版本号为: <a href="https://www.npmjs.org/package/axios" target="_blank" rel="external"><img src="https://camo.githubusercontent.com/9f600e10007ac86da6a8b90c16ca1e9504901730/68747470733a2f2f696d672e736869656c64732e696f2f6e706d2f762f6178696f732e7376673f7374796c653d666c61742d737175617265" alt="npm version"></a></p>
 <p>语法上Axios基本就和promise一样, 在then方法中处理回调, 在catch方法中处理异常. 如下:</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">axios.get(<span class="string">"https://api.github.com/users/louiszhai"</span>)</span><br><span class="line">  .then(<span class="function"><span class="keyword">function</span>(<span class="params">response</span>)</span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(response);</span><br><span class="line">  &#125;)</span><br><span class="line">  .catch(<span class="function"><span class="keyword">function</span> (<span class="params">error</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(error);</span><br><span class="line">  &#125;);</span><br></pre></td></tr></table></figure>
@@ -1105,7 +1109,7 @@
     <link href="http://louiszhai.github.io/2016/11/02/fetch/"/>
     <id>http://louiszhai.github.io/2016/11/02/fetch/</id>
     <published>2016-11-02T04:48:08.000Z</published>
-    <updated>2016-12-19T10:53:20.000Z</updated>
+    <updated>2016-12-21T08:09:43.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>Fetch 是 web异步通信的未来. 从chrome42, Firefox39, Opera29, EdgeHTML14(并非Edge版本)起, fetch就已经被支持了. 其中chrome42~45版本, fetch对中文支持有问题, 建议从chrome46起使用fetch. 传送门: <a href="https://bugs.chromium.org/p/chromium/issues/detail?id=511289" target="_blank" rel="external">fetch中文乱码</a> .</p>
 <a id="more"></a>
 <h3 id="Fetch"><a href="#Fetch" class="headerlink" title="Fetch"></a>Fetch</h3><p>先过一遍Fetch原生支持率.</p>
@@ -1291,7 +1295,7 @@
     <link href="http://louiszhai.github.io/2016/07/01/Math/"/>
     <id>http://louiszhai.github.io/2016/07/01/Math/</id>
     <published>2016-06-30T23:57:48.000Z</published>
-    <updated>2016-12-19T10:53:20.000Z</updated>
+    <updated>2016-12-21T08:09:43.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>截至ES5, JavaScript 中内置(build-in)构造器/对象共有13个, 其中9个是构造器(Number,Boolean, String, Object, Function, Array, RegExp, Error, Date), Global 不能直接访问, Arguments仅在函数调用时由JS引擎创建, 而 Math, JSON 是以对象形式存在的, 本篇将带你走进 JS 内置对象-Math以及与之息息相关的位运算, 一探究竟.</p>
 <a id="more"></a>
 <h3 id="u4E3A_u4EC0_u4E48Math_u8FD9_u4E48_u8BBE_u8BA1"><a href="#u4E3A_u4EC0_u4E48Math_u8FD9_u4E48_u8BBE_u8BA1" class="headerlink" title="为什么Math这么设计"></a>为什么Math这么设计</h3><p>众所周知, 如果需要使用js进行一些常规的数学运算, 是一件十分麻烦的事情. 为了解决这个问题, ECMAScript 在1.1版本中便引入了 Math. Math 之所以被设计成一个对象, 而不是构造器, 是因为对象中的方法或属性可以作为静态方法或常量直接被调用, 方便使用, 同时, Math 也没有创建实例的必要.</p>
@@ -1846,7 +1850,7 @@
     <link href="http://louiszhai.github.io/2016/06/13/regexp/"/>
     <id>http://louiszhai.github.io/2016/06/13/regexp/</id>
     <published>2016-06-13T00:24:55.000Z</published>
-    <updated>2016-12-19T10:53:20.000Z</updated>
+    <updated>2016-12-21T08:09:43.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>你有没有在搜索文本的时候绞尽脑汁, 试了一个又一个表达式, 还是不行.</p>
 <p>你有没有在表单验证的时候, 只是做做样子(只要不为空就好), 然后烧香拜佛, 虔诚祈祷, 千万不要出错.</p>
 <p>你有没有在使用sed 和 grep 命令的时候, 感觉莫名其妙, 明明应该支持的元字符, 却就是匹配不到.</p>
@@ -2919,7 +2923,7 @@
     <link href="http://louiszhai.github.io/2016/03/23/css-margin/"/>
     <id>http://louiszhai.github.io/2016/03/23/css-margin/</id>
     <published>2016-03-23T12:47:36.000Z</published>
-    <updated>2016-12-19T10:53:20.000Z</updated>
+    <updated>2016-12-21T08:09:43.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>margin属性处于盒子模型的最外层, 用以隔开其他元素, 它可以依次设置4个长度值, 分别表示 “上 右 下 左” 的间距, 其中第1个和第3个值相对应, 第2个与第4个相对应, 如果省略前者, 后者将取与前者相同的数值. margin属性共存在以下 4 种表示方式:</p>
 <ul>
 <li>margin: 10px 1rem 1em 5%; 共 4 个数值, 表示依次设置 上, 右, 下, 左的间距;</li>
@@ -2974,7 +2978,7 @@
     <link href="http://louiszhai.github.io/2016/03/12/css-center/"/>
     <id>http://louiszhai.github.io/2016/03/12/css-center/</id>
     <published>2016-03-12T11:03:04.000Z</published>
-    <updated>2016-12-19T10:53:20.000Z</updated>
+    <updated>2016-12-21T08:09:43.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>熟悉水平居中和垂直居中的方法, 不为别的, 就为用的时候能够信手拈来. 下面直接步入正题.</p>
 <a id="more"></a>
 <h3 id="u6C34_u5E73_u5C45_u4E2D"><a href="#u6C34_u5E73_u5C45_u4E2D" class="headerlink" title="水平居中"></a>水平居中</h3><p>1) 若是行内元素, 给其父元素设置 text-align:center,即可实现行内元素水平居中.</p>
@@ -3146,7 +3150,7 @@
     <link href="http://louiszhai.github.io/2016/03/05/xss/"/>
     <id>http://louiszhai.github.io/2016/03/05/xss/</id>
     <published>2016-03-05T01:48:09.000Z</published>
-    <updated>2016-12-19T10:53:20.000Z</updated>
+    <updated>2016-12-21T08:09:43.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p><strong>XSS</strong> (Cross-Site Script) 攻击又叫跨站脚本攻击, 本质是一种注入攻击. 其原理, 简单的说就是利用各种手段把恶意代码添加到网页中, 并让受害者执行这段脚本. XSS能做用户使用浏览器能做的一切事情. 伟大的同源策略也无法保证不受XSS攻击，因为此时攻击者就在同源之内.</p>
 <a id="more"></a>
 <h3 id="xss_u653B_u51FB_u65B9_u5F0F"><a href="#xss_u653B_u51FB_u65B9_u5F0F" class="headerlink" title="xss攻击方式"></a>xss攻击方式</h3><p>从攻击的方式可以分为</p>
@@ -3330,7 +3334,7 @@
     <link href="http://louiszhai.github.io/2016/01/12/js.String/"/>
     <id>http://louiszhai.github.io/2016/01/12/js.String/</id>
     <published>2016-01-12T12:27:09.000Z</published>
-    <updated>2016-12-19T10:53:20.000Z</updated>
+    <updated>2016-12-21T08:09:43.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>javaScript 中, 字符串无处不在, 并且所有的字符串方法均来自 String.prototype, 这一节, 我们走进看一看String内部, 探讨那些常用或不常用的字符串操作方法.</p>
 <a id="more"></a>
 <h3 id="String-prototype"><a href="#String-prototype" class="headerlink" title="String.prototype"></a>String.prototype</h3><p>String.prototype 属性指向 String 的原型对象. 以下是它的属性特性:</p>
@@ -3520,7 +3524,7 @@
     <link href="http://louiszhai.github.io/2016/01/11/bind/"/>
     <id>http://louiszhai.github.io/2016/01/11/bind/</id>
     <published>2016-01-11T00:01:33.000Z</published>
-    <updated>2016-12-19T10:53:20.000Z</updated>
+    <updated>2016-12-21T08:09:43.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>ES5新增了 Function.prototype.bind 方法, 该方法不同于jquery的bind 方法, 它主要用于固定 this 作用域, 避免各种由于上下文切换造成的语义问题. 常用在 setTimeout, for循环等内部.</p>
 <a id="more"></a>
 <h3 id="bind"><a href="#bind" class="headerlink" title="bind"></a>bind</h3><p>语法: func.bind(thisArg, arg1, arg2, ….)</p>
@@ -3563,7 +3567,7 @@
     <link href="http://louiszhai.github.io/2016/01/11/cross-domain/"/>
     <id>http://louiszhai.github.io/2016/01/11/cross-domain/</id>
     <published>2016-01-11T00:01:33.000Z</published>
-    <updated>2016-12-19T10:53:20.000Z</updated>
+    <updated>2016-12-21T08:09:43.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>同源策略 (Same-Origin Policy) 最早由 Netscape 公司提出, 所谓同源就是要求, 域名, 协议, 端口相同. 非同源的脚本不能访问或者操作其他域的页面对象(如DOM等). 作为著名的安全策略, 虽然它只是一个规范, 并不强制要求,  但现在所有支持 javaScript 的浏览器都会使用这个策略. 以至于该策略成为浏览器最核心最基本的安全功能, 如果缺少了同源策略, web的安全将无从谈起.</p>
 <a id="more"></a>
 <h3 id="u540C_u6E90_u7B56_u7565_u7684_u9650_u5236"><a href="#u540C_u6E90_u7B56_u7565_u7684_u9650_u5236" class="headerlink" title="同源策略的限制"></a>同源策略的限制</h3><p>同源策略下的web世界, 域的壁垒高筑, 从而保证各个网页相互独立, 互相之间不能直接访问, iframe, ajax 均受其限制, 而script标签不受此限制.</p>
@@ -3699,7 +3703,7 @@
     <link href="http://louiszhai.github.io/2016/01/10/js.timer/"/>
     <id>http://louiszhai.github.io/2016/01/10/js.timer/</id>
     <published>2016-01-10T05:52:11.000Z</published>
-    <updated>2016-12-19T10:53:20.000Z</updated>
+    <updated>2016-12-21T08:09:43.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>设置web定时器应当是一个相当常见的需求, 实际上, 我们也有两大工具函数可以任意调用: setTimeout, setInterval. 然而 js 里却没有java的那种wait(), 定时又未必准时, 要想写个定时器还须得深入理解 setTimeout 和 setInterval 的运行原理才行.</p>
 <a id="more"></a>
 <h3 id="u8FD0_u884C_u539F_u7406"><a href="#u8FD0_u884C_u539F_u7406" class="headerlink" title="运行原理"></a>运行原理</h3><p>setTimeout 和 setInterval 并非异步调用, 所谓的”异步调用”, 只是因它们都往 js 引擎的 <code>待处理任务队列</code> 末尾插入代码, 看起来像”异步调用”而已.</p>
@@ -3764,7 +3768,7 @@
     <link href="http://louiszhai.github.io/2015/12/29/array/"/>
     <id>http://louiszhai.github.io/2015/12/29/array/</id>
     <published>2015-12-29T01:00:17.000Z</published>
-    <updated>2016-12-19T10:53:20.000Z</updated>
+    <updated>2016-12-21T08:09:43.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>数组是一种非常重要的数据类型, 它语法简单, 灵活,高效, 在多数编程语言中, 数组都充当着至关重要的角色, 以至于很难想象没有数组的编程语言会是什么样子. 这期我们就来侃侃JavaScript的数组, 趴趴它的那点破事儿. 这篇博客从2015年写到了2016年, 权当是跨年的总结吧, 祝大家新年快乐, 2016更好, 未来更好!</p>
 <a id="more"></a>
 <p>声明: 以下未特别标明的方法均为ES5已实现的方法.</p>
@@ -4326,7 +4330,7 @@
     <link href="http://louiszhai.github.io/2015/12/22/scopeChain/"/>
     <id>http://louiszhai.github.io/2015/12/22/scopeChain/</id>
     <published>2015-12-22T00:06:13.000Z</published>
-    <updated>2016-12-19T10:53:20.000Z</updated>
+    <updated>2016-12-21T08:09:43.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>上一篇我们讲到数组遍历, 本文我们更进一步, 讲讲如何提高遍历的效率. 欢迎阅读本篇<strong><code>详解JS作用域链及闭包</code></strong>.</p>
 <a id="more"></a>
 <h3 id="u56DE_u987E_u4E0A_u7BC7"><a href="#u56DE_u987E_u4E0A_u7BC7" class="headerlink" title="回顾上篇"></a>回顾上篇</h3><p>请先看上一篇中提到的for循环代码:</p>
@@ -4463,7 +4467,7 @@
     <link href="http://louiszhai.github.io/2015/12/18/traverse/"/>
     <id>http://louiszhai.github.io/2015/12/18/traverse/</id>
     <published>2015-12-18T02:54:48.000Z</published>
-    <updated>2016-12-19T10:53:20.000Z</updated>
+    <updated>2016-12-21T08:09:43.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>遍历数组或对象是一名程序员的基本素养之一. 然而遍历却不是一件简单的事, 优秀的程序员知道怎么去选择合适的遍历方法, 优化遍历效率. 本篇将带你走进JavaScript遍历的世界, 享受分析JS循环的快感. 本篇所有代码都可以直接运行, 希望您通读本篇后, 不止是浏览, 最好是亲手去实践下.</p>
 <a id="more"></a>
 <h3 id="u6982_u8FF0"><a href="#u6982_u8FF0" class="headerlink" title="概述"></a>概述</h3><p>js有如下两种数据需要经常遍历</p>
@@ -4927,7 +4931,7 @@
     <link href="http://louiszhai.github.io/2015/12/17/prototype/"/>
     <id>http://louiszhai.github.io/2015/12/17/prototype/</id>
     <published>2015-12-17T01:34:36.000Z</published>
-    <updated>2016-12-19T10:53:20.000Z</updated>
+    <updated>2016-12-21T08:09:43.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u6982_u5FF5"><a href="#u6982_u5FF5" class="headerlink" title="概念"></a>概念</h3><ol>
 <li><strong>prototype</strong> 是函数(function) 的一个属性, 它指向函数的原型.</li>
 <li><strong>__proto__</strong>   是对象的内部属性, 它指向构造器的原型, 对象依赖它进行原型链查询.</li>
@@ -5101,7 +5105,7 @@
     <link href="http://louiszhai.github.io/2015/12/15/arguments/"/>
     <id>http://louiszhai.github.io/2015/12/15/arguments/</id>
     <published>2015-12-15T12:44:51.000Z</published>
-    <updated>2016-12-19T10:53:20.000Z</updated>
+    <updated>2016-12-21T08:09:43.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u6982_u8FF0"><a href="#u6982_u8FF0" class="headerlink" title="概述"></a>概述</h3><p><strong>Arguments</strong> 对象已经不再是函数的属性了, 它是函数内部的本地变量,  包括如下属性：</p>
 <ol>
 <li>callee — 指向当前函数的引用</li>
