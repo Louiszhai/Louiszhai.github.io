@@ -3028,7 +3028,7 @@
 <p>① 由于上述 responseText 字符串中包含至少两个子字符串 “dev”, 显然不能直接 replace 字符串 “dev”为 “test”. </p>
 <p>② 同时由于 js 中不支持逆序环视, 我们也不能在正则中判断前缀为 “src=’”, 然后再替换”dev”. </p>
 <p>③ 我们注意到 img 标签的 src 属性以 “.png” 结尾, 基于此, 就可以使用顺序肯定环视. 如下:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> reg = <span class="regexp">/dev(?=[^']*png)/</span>; <span class="comment">//为了防止匹配到第一个dev, 通配符前面需要排除单引号或者是尖括号</span></span><br><span class="line"><span class="keyword">var</span> str = responseText.replace(reg,<span class="string">"test"</span>);</span><br><span class="line"><span class="built_in">console</span>.log(str);<span class="comment">//&lt;div data='dev.<span class="label">xxx'&gt;&lt;/div&gt;&lt;img src='test.xxx.png' /&gt;</span></span></span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> reg = <span class="regexp">/dev(?=[^']*png)/</span>; <span class="comment">//为了防止匹配到第一个dev, 通配符前面需要排除单引号或者是尖括号</span></span><br><span class="line"><span class="keyword">var</span> str = responseText.replace(reg,<span class="string">"test"</span>);</span><br><span class="line"><span class="built_in">console</span>.log(str);<span class="comment">//&lt;div data='dev.xxx'&gt;&lt;/div&gt;&lt;img src='test.xxx.png' /&gt;</span></span><br></pre></td></tr></table></figure>
 <p>当然, 以上不止顺序肯定环视一种解法, 捕获性分组同样可以做到. 那么环视高级在哪里呢? 环视高级的地方就在于它通过一次捕获就可以定位到一个位置, 对于复杂的文本替换场景, 常有奇效, 而分组则需要更多的操作.</p>
 <h5 id="u5343_u4F4D_u5206_u5272_u7B26"><a href="#u5343_u4F4D_u5206_u5272_u7B26" class="headerlink" title="千位分割符"></a>千位分割符</h5><blockquote>
 <p>千位分隔符, 顾名思义, 就是数字中的逗号. 参考西方的习惯, 数字之中加入一个符号, 避免因数字太长难以直观的看出它的值. 故而数字之中, 每隔三位添加一个逗号, 即千位分隔符.</p>
@@ -3559,11 +3559,11 @@
   </entry>
   
   <entry>
-    <title><![CDATA[xss攻防]]></title>
+    <title><![CDATA[xss攻防浅谈]]></title>
     <link href="http://louiszhai.github.io/2016/03/05/xss/"/>
     <id>http://louiszhai.github.io/2016/03/05/xss/</id>
     <published>2016-03-05T01:48:09.000Z</published>
-    <updated>2016-12-23T04:06:57.000Z</updated>
+    <updated>2017-01-03T02:33:27.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p><strong>XSS</strong> (Cross-Site Script) 攻击又叫跨站脚本攻击, 本质是一种注入攻击. 其原理, 简单的说就是利用各种手段把恶意代码添加到网页中, 并让受害者执行这段脚本. XSS能做用户使用浏览器能做的一切事情. 伟大的同源策略也无法保证不受XSS攻击，因为此时攻击者就在同源之内.</p>
 <a id="more"></a>
 <h3 id="xss_u653B_u51FB_u65B9_u5F0F"><a href="#xss_u653B_u51FB_u65B9_u5F0F" class="headerlink" title="xss攻击方式"></a>xss攻击方式</h3><p>从攻击的方式可以分为</p>
@@ -3734,7 +3734,7 @@
 </ul>
 ]]></content>
     <summary type="html">
-    <![CDATA[xss xss漏洞 xss攻击]]>
+    <![CDATA[xss xss漏洞 xss攻击 xss浅谈 前端xss]]>
     
     </summary>
     
@@ -3743,11 +3743,11 @@
   </entry>
   
   <entry>
-    <title><![CDATA[字符串常用方法]]></title>
+    <title><![CDATA[JS字符串常用方法]]></title>
     <link href="http://louiszhai.github.io/2016/01/12/js.String/"/>
     <id>http://louiszhai.github.io/2016/01/12/js.String/</id>
     <published>2016-01-12T12:27:09.000Z</published>
-    <updated>2016-12-23T04:06:57.000Z</updated>
+    <updated>2017-01-03T02:31:22.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>javaScript 中, 字符串无处不在, 并且所有的字符串方法均来自 String.prototype, 这一节, 我们走进看一看String内部, 探讨那些常用或不常用的字符串操作方法.</p>
 <a id="more"></a>
 <h3 id="String-prototype"><a href="#String-prototype" class="headerlink" title="String.prototype"></a>String.prototype</h3><p>String.prototype 属性指向 String 的原型对象. 以下是它的属性特性:</p>
@@ -3933,6 +3933,49 @@
   </entry>
   
   <entry>
+    <title><![CDATA[Function.prototype.bind方法指南]]></title>
+    <link href="http://louiszhai.github.io/2016/01/11/bind/"/>
+    <id>http://louiszhai.github.io/2016/01/11/bind/</id>
+    <published>2016-01-11T00:01:33.000Z</published>
+    <updated>2016-12-23T04:06:57.000Z</updated>
+    <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>ES5新增了 Function.prototype.bind 方法, 该方法不同于jquery的bind 方法, 它主要用于固定 this 作用域, 避免各种由于上下文切换造成的语义问题. 常用在 setTimeout, for循环等内部.</p>
+<a id="more"></a>
+<h3 id="bind"><a href="#bind" class="headerlink" title="bind"></a>bind</h3><p>语法: func.bind(thisArg, arg1, arg2, ….)</p>
+<p>bind() 方法会返回一个新函数, 又叫绑定函数, 当调用这个绑定函数时, 绑定函数会以创建它时传入 bind() 方法的第一个参数作为当前的上下文, 即this, 传入 bind() 方法的第二个及之后的参数加上绑定函数运行时自身的参数按照顺序作为原函数的参数来调用原函数.</p>
+<p>绑定函数也能使用new操作符创建对象; 这就好比把原函数当做构造器. 此时提供的this将被忽略, this之后的参数将依然前置到运行时的参数列表中.</p>
+<h4 id="u57FA_u672C_u7528_u6CD5"><a href="#u57FA_u672C_u7528_u6CD5" class="headerlink" title="基本用法"></a>基本用法</h4><p>下面我们来看看bind 的基本用法.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> x = <span class="number">8</span>;</span><br><span class="line"><span class="keyword">var</span> o = &#123;</span><br><span class="line">  x: <span class="number">10</span>,</span><br><span class="line">  getX: <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  	<span class="built_in">console</span>.log(<span class="keyword">this</span>.x);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">var</span> f = o.getX;</span><br><span class="line">f();<span class="comment">//8, 由于没有绑定执行时的上下文, this默认指向window, 打印了全局变量x的值</span></span><br><span class="line"><span class="keyword">var</span> g = f.bind(o);</span><br><span class="line">g();<span class="comment">//10, 绑定this后, 成功的打印了o对象的x属性的值.</span></span><br></pre></td></tr></table></figure>
+<h4 id="u5206_u79BB_u53C2_u6570"><a href="#u5206_u79BB_u53C2_u6570" class="headerlink" title="分离参数"></a>分离参数</h4><p>bind() 方法还可以设置函数拥有的初始参数. 这些参数作为bind() 的第2,3…个参数跟在this(或其他对象的后面), 调用绑定函数时, 这些参数将插入到参数列表的最开始位置, 而传递给绑定函数的参数将跟在他们后面.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//打印十个斐波那契数</span></span><br><span class="line"><span class="keyword">var</span> f = <span class="function"><span class="keyword">function</span>(<span class="params">n1, n2, length</span>)</span>&#123;</span><br><span class="line">  <span class="keyword">if</span>(<span class="built_in">arguments</span>.length&lt;<span class="number">3</span>) <span class="built_in">console</span>.log(<span class="string">'参数不够...'</span>);</span><br><span class="line">  <span class="keyword">var</span> array = [n1, n2];</span><br><span class="line">  <span class="keyword">for</span>(<span class="keyword">var</span> i=<span class="number">2</span>;i&lt;length;i++)&#123;</span><br><span class="line">  	array[i] = array[i-<span class="number">2</span>] + array[i-<span class="number">1</span>];</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> array;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> g = f.bind(<span class="literal">null</span>, <span class="number">1</span>, <span class="number">1</span>);</span><br><span class="line"><span class="built_in">console</span>.log(g(<span class="number">10</span>));<span class="comment">//[1, 1, 2, 3, 5, 8, 13, 21, 34, 55]</span></span><br></pre></td></tr></table></figure>
+<h4 id="u7ED1_u5B9A_u53C2_u6570"><a href="#u7ED1_u5B9A_u53C2_u6570" class="headerlink" title="绑定参数"></a>绑定参数</h4><p>如果使用new 操作符去构造绑定函数的实例时, 原来提供的this 将被忽略, this之后的参数将依然前置到构造函数的参数列表中. 此时 bind() 方法便具备了保留参数的能力, 我们可以此达到类似柯里化的效果.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> f = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="keyword">if</span>(<span class="built_in">arguments</span>.length!=<span class="number">0</span>)</span><br><span class="line">  	<span class="keyword">this</span>.sum = <span class="built_in">Array</span>.prototype.reduce.call(<span class="built_in">arguments</span>,<span class="function"><span class="keyword">function</span>(<span class="params">prev,item</span>)</span>&#123;<span class="comment">//对传入参数求和</span></span><br><span class="line"> 		<span class="keyword">return</span> prev + item;</span><br><span class="line">	&#125;);</span><br><span class="line">  <span class="keyword">return</span> <span class="built_in">Array</span>.prototype.join.call(<span class="built_in">arguments</span>);<span class="comment">// 返回传入参数的字符串形式</span></span><br><span class="line">&#125;</span><br><span class="line">f.prototype.toString = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">this</span>.sum;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> g = f.bind(<span class="literal">null</span>,<span class="number">2</span>);</span><br><span class="line"><span class="keyword">var</span> x = <span class="keyword">new</span> g(<span class="number">8</span>);</span><br><span class="line"><span class="built_in">console</span>.log(x.toString());<span class="comment">//10, 可见x被绑定了2+8=10</span></span><br><span class="line"><span class="built_in">console</span>.log(g(<span class="number">8</span>));<span class="comment">//2,8 这告诉我们绑定的两个参数正是2和8</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(x <span class="keyword">instanceof</span> g);<span class="comment">//true, 可见通过new创建的x继承了g</span></span><br><span class="line"><span class="built_in">console</span>.log(x <span class="keyword">instanceof</span> f);<span class="comment">//true, 可见x也继承了f</span></span><br><span class="line"><span class="built_in">console</span>.log(g <span class="keyword">instanceof</span> <span class="built_in">Function</span>);<span class="comment">//true, 可见bind f()方法之后, 返回了一个新的函数g</span></span><br><span class="line"><span class="comment">//函数g可用于求和,如下:</span></span><br><span class="line"><span class="built_in">console</span>.log(g(<span class="number">1</span>,<span class="number">3</span>,<span class="number">5</span>,<span class="number">7</span>,<span class="number">9</span>));<span class="comment">//27 2+1+3+5+7+9=27</span></span><br></pre></td></tr></table></figure>
+<h4 id="u5FEB_u6377_u8C03_u7528"><a href="#u5FEB_u6377_u8C03_u7528" class="headerlink" title="快捷调用"></a>快捷调用</h4><p>使用Array.prototype的方法处理类数组对象时(鸭式辨型), 不可避免的需要借用call 或者 apply 方法, 使用 bind() 方法, 我们可以简化这个过程. 如下:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> _slice = <span class="built_in">Array</span>.prototype.slice;</span><br><span class="line"><span class="keyword">var</span> slice = <span class="built_in">Function</span>.prototype.call.bind(_slice);</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="keyword">return</span> slice(<span class="built_in">arguments</span>,<span class="number">1</span>);</span><br><span class="line">&#125;</span><br><span class="line">f(<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>);<span class="comment">//[2, 3, 4, 5]</span></span><br></pre></td></tr></table></figure>
+<p>下面的实例将解释 bind() 方法做了一件什么事情:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> _slice = <span class="built_in">Array</span>.prototype.slice;</span><br><span class="line"><span class="keyword">var</span> slice = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="keyword">return</span> _slice.apply(<span class="built_in">arguments</span>[<span class="number">0</span>],_slice.call(<span class="built_in">arguments</span>,<span class="number">1</span>));</span><br><span class="line">&#125;;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="keyword">return</span> slice(<span class="built_in">arguments</span>,<span class="number">1</span>);</span><br><span class="line">&#125;</span><br><span class="line">f(<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>);<span class="comment">//[2, 3, 4, 5]</span></span><br></pre></td></tr></table></figure>
+<p>如下, 是bind() 方法的简单实现.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Function</span>.prototype.bind = <span class="function"><span class="keyword">function</span>(<span class="params">thisArg,argN</span>)</span>&#123;</span><br><span class="line">  <span class="keyword">var</span> _this = <span class="keyword">this</span>;</span><br><span class="line">  <span class="keyword">var</span> _arg = _slice.call(<span class="built_in">arguments</span>,<span class="number">1</span>);</span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">   	<span class="keyword">var</span> arg = _slice.call(<span class="built_in">arguments</span>);</span><br><span class="line">    arg = _arg.concat(arg);</span><br><span class="line">  	<span class="keyword">return</span> _this.apply(thisArg,arg);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以看出来, 使用 bind() 方法后, 代码优雅得多.</p>
+<p>注: 作为ES5标准加入的bind方法显然不支持 IE9之前的低版本IE, 如需使用, 请参考<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Function/bind#Compatibility" target="_blank" rel="external">Polyfill</a>.</p>
+<hr>
+<p>本文就讨论这么多内容,大家有什么问题或好的想法欢迎在下方参与<a href="#respond">留言和评论</a>.</p>
+<p>本文作者: <a href="https://github.com/Louiszhai" target="_blank" rel="external">louis</a></p>
+<p>本文链接: <a href="http://louiszhai.github.io/2016/01/11/bind/">http://louiszhai.github.io/2016/01/11/bind/</a></p>
+<p>参考文章</p>
+<ul>
+<li><a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Function/bind" target="_blank" rel="external">Function.prototype.bind() - JavaScript | MDN</a></li>
+</ul>
+]]></content>
+    <summary type="html">
+    <![CDATA[JavaScript bind Function.prototype.bind call apply]]>
+    
+    </summary>
+    
+      <category term="JavaScript" scheme="http://louiszhai.github.io/tags/JavaScript/"/>
+    
+  </entry>
+  
+  <entry>
     <title><![CDATA[由同源策略到前端跨域]]></title>
     <link href="http://louiszhai.github.io/2016/01/11/cross-domain/"/>
     <id>http://louiszhai.github.io/2016/01/11/cross-domain/</id>
@@ -4069,54 +4112,11 @@
   </entry>
   
   <entry>
-    <title><![CDATA[Function.prototype.bind方法指南]]></title>
-    <link href="http://louiszhai.github.io/2016/01/11/bind/"/>
-    <id>http://louiszhai.github.io/2016/01/11/bind/</id>
-    <published>2016-01-11T00:01:33.000Z</published>
-    <updated>2016-12-23T04:06:57.000Z</updated>
-    <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>ES5新增了 Function.prototype.bind 方法, 该方法不同于jquery的bind 方法, 它主要用于固定 this 作用域, 避免各种由于上下文切换造成的语义问题. 常用在 setTimeout, for循环等内部.</p>
-<a id="more"></a>
-<h3 id="bind"><a href="#bind" class="headerlink" title="bind"></a>bind</h3><p>语法: func.bind(thisArg, arg1, arg2, ….)</p>
-<p>bind() 方法会返回一个新函数, 又叫绑定函数, 当调用这个绑定函数时, 绑定函数会以创建它时传入 bind() 方法的第一个参数作为当前的上下文, 即this, 传入 bind() 方法的第二个及之后的参数加上绑定函数运行时自身的参数按照顺序作为原函数的参数来调用原函数.</p>
-<p>绑定函数也能使用new操作符创建对象; 这就好比把原函数当做构造器. 此时提供的this将被忽略, this之后的参数将依然前置到运行时的参数列表中.</p>
-<h4 id="u57FA_u672C_u7528_u6CD5"><a href="#u57FA_u672C_u7528_u6CD5" class="headerlink" title="基本用法"></a>基本用法</h4><p>下面我们来看看bind 的基本用法.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> x = <span class="number">8</span>;</span><br><span class="line"><span class="keyword">var</span> o = &#123;</span><br><span class="line">  x: <span class="number">10</span>,</span><br><span class="line">  getX: <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  	<span class="built_in">console</span>.log(<span class="keyword">this</span>.x);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">var</span> f = o.getX;</span><br><span class="line">f();<span class="comment">//8, 由于没有绑定执行时的上下文, this默认指向window, 打印了全局变量x的值</span></span><br><span class="line"><span class="keyword">var</span> g = f.bind(o);</span><br><span class="line">g();<span class="comment">//10, 绑定this后, 成功的打印了o对象的x属性的值.</span></span><br></pre></td></tr></table></figure>
-<h4 id="u5206_u79BB_u53C2_u6570"><a href="#u5206_u79BB_u53C2_u6570" class="headerlink" title="分离参数"></a>分离参数</h4><p>bind() 方法还可以设置函数拥有的初始参数. 这些参数作为bind() 的第2,3…个参数跟在this(或其他对象的后面), 调用绑定函数时, 这些参数将插入到参数列表的最开始位置, 而传递给绑定函数的参数将跟在他们后面.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//打印十个斐波那契数</span></span><br><span class="line"><span class="keyword">var</span> f = <span class="function"><span class="keyword">function</span>(<span class="params">n1, n2, length</span>)</span>&#123;</span><br><span class="line">  <span class="keyword">if</span>(<span class="built_in">arguments</span>.length&lt;<span class="number">3</span>) <span class="built_in">console</span>.log(<span class="string">'参数不够...'</span>);</span><br><span class="line">  <span class="keyword">var</span> array = [n1, n2];</span><br><span class="line">  <span class="keyword">for</span>(<span class="keyword">var</span> i=<span class="number">2</span>;i&lt;length;i++)&#123;</span><br><span class="line">  	array[i] = array[i-<span class="number">2</span>] + array[i-<span class="number">1</span>];</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> array;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> g = f.bind(<span class="literal">null</span>, <span class="number">1</span>, <span class="number">1</span>);</span><br><span class="line"><span class="built_in">console</span>.log(g(<span class="number">10</span>));<span class="comment">//[1, 1, 2, 3, 5, 8, 13, 21, 34, 55]</span></span><br></pre></td></tr></table></figure>
-<h4 id="u7ED1_u5B9A_u53C2_u6570"><a href="#u7ED1_u5B9A_u53C2_u6570" class="headerlink" title="绑定参数"></a>绑定参数</h4><p>如果使用new 操作符去构造绑定函数的实例时, 原来提供的this 将被忽略, this之后的参数将依然前置到构造函数的参数列表中. 此时 bind() 方法便具备了保留参数的能力, 我们可以此达到类似柯里化的效果.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> f = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="keyword">if</span>(<span class="built_in">arguments</span>.length!=<span class="number">0</span>)</span><br><span class="line">  	<span class="keyword">this</span>.sum = <span class="built_in">Array</span>.prototype.reduce.call(<span class="built_in">arguments</span>,<span class="function"><span class="keyword">function</span>(<span class="params">prev,item</span>)</span>&#123;<span class="comment">//对传入参数求和</span></span><br><span class="line"> 		<span class="keyword">return</span> prev + item;</span><br><span class="line">	&#125;);</span><br><span class="line">  <span class="keyword">return</span> <span class="built_in">Array</span>.prototype.join.call(<span class="built_in">arguments</span>);<span class="comment">// 返回传入参数的字符串形式</span></span><br><span class="line">&#125;</span><br><span class="line">f.prototype.toString = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">this</span>.sum;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> g = f.bind(<span class="literal">null</span>,<span class="number">2</span>);</span><br><span class="line"><span class="keyword">var</span> x = <span class="keyword">new</span> g(<span class="number">8</span>);</span><br><span class="line"><span class="built_in">console</span>.log(x.toString());<span class="comment">//10, 可见x被绑定了2+8=10</span></span><br><span class="line"><span class="built_in">console</span>.log(g(<span class="number">8</span>));<span class="comment">//2,8 这告诉我们绑定的两个参数正是2和8</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(x <span class="keyword">instanceof</span> g);<span class="comment">//true, 可见通过new创建的x继承了g</span></span><br><span class="line"><span class="built_in">console</span>.log(x <span class="keyword">instanceof</span> f);<span class="comment">//true, 可见x也继承了f</span></span><br><span class="line"><span class="built_in">console</span>.log(g <span class="keyword">instanceof</span> <span class="built_in">Function</span>);<span class="comment">//true, 可见bind f()方法之后, 返回了一个新的函数g</span></span><br><span class="line"><span class="comment">//函数g可用于求和,如下:</span></span><br><span class="line"><span class="built_in">console</span>.log(g(<span class="number">1</span>,<span class="number">3</span>,<span class="number">5</span>,<span class="number">7</span>,<span class="number">9</span>));<span class="comment">//27 2+1+3+5+7+9=27</span></span><br></pre></td></tr></table></figure>
-<h4 id="u5FEB_u6377_u8C03_u7528"><a href="#u5FEB_u6377_u8C03_u7528" class="headerlink" title="快捷调用"></a>快捷调用</h4><p>使用Array.prototype的方法处理类数组对象时(鸭式辨型), 不可避免的需要借用call 或者 apply 方法, 使用 bind() 方法, 我们可以简化这个过程. 如下:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> _slice = <span class="built_in">Array</span>.prototype.slice;</span><br><span class="line"><span class="keyword">var</span> slice = <span class="built_in">Function</span>.prototype.call.bind(_slice);</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="keyword">return</span> slice(<span class="built_in">arguments</span>,<span class="number">1</span>);</span><br><span class="line">&#125;</span><br><span class="line">f(<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>);<span class="comment">//[2, 3, 4, 5]</span></span><br></pre></td></tr></table></figure>
-<p>下面的实例将解释 bind() 方法做了一件什么事情:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> _slice = <span class="built_in">Array</span>.prototype.slice;</span><br><span class="line"><span class="keyword">var</span> slice = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="keyword">return</span> _slice.apply(<span class="built_in">arguments</span>[<span class="number">0</span>],_slice.call(<span class="built_in">arguments</span>,<span class="number">1</span>));</span><br><span class="line">&#125;;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="keyword">return</span> slice(<span class="built_in">arguments</span>,<span class="number">1</span>);</span><br><span class="line">&#125;</span><br><span class="line">f(<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>);<span class="comment">//[2, 3, 4, 5]</span></span><br></pre></td></tr></table></figure>
-<p>如下, 是bind() 方法的简单实现.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Function</span>.prototype.bind = <span class="function"><span class="keyword">function</span>(<span class="params">thisArg,argN</span>)</span>&#123;</span><br><span class="line">  <span class="keyword">var</span> _this = <span class="keyword">this</span>;</span><br><span class="line">  <span class="keyword">var</span> _arg = _slice.call(<span class="built_in">arguments</span>,<span class="number">1</span>);</span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">   	<span class="keyword">var</span> arg = _slice.call(<span class="built_in">arguments</span>);</span><br><span class="line">    arg = _arg.concat(arg);</span><br><span class="line">  	<span class="keyword">return</span> _this.apply(thisArg,arg);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>可以看出来, 使用 bind() 方法后, 代码优雅得多.</p>
-<p>注: 作为ES5标准加入的bind方法显然不支持 IE9之前的低版本IE, 如需使用, 请参考<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Function/bind#Compatibility" target="_blank" rel="external">Polyfill</a>.</p>
-<hr>
-<p>本文就讨论这么多内容,大家有什么问题或好的想法欢迎在下方参与<a href="#respond">留言和评论</a>.</p>
-<p>本文作者: <a href="https://github.com/Louiszhai" target="_blank" rel="external">louis</a></p>
-<p>本文链接: <a href="http://louiszhai.github.io/2016/01/11/bind/">http://louiszhai.github.io/2016/01/11/bind/</a></p>
-<p>参考文章</p>
-<ul>
-<li><a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Function/bind" target="_blank" rel="external">Function.prototype.bind() - JavaScript | MDN</a></li>
-</ul>
-]]></content>
-    <summary type="html">
-    <![CDATA[JavaScript bind Function.prototype.bind call apply]]>
-    
-    </summary>
-    
-      <category term="JavaScript" scheme="http://louiszhai.github.io/tags/JavaScript/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[setTimeout & setInterval]]></title>
+    <title><![CDATA[web定时器之setTimeout & setInterval]]></title>
     <link href="http://louiszhai.github.io/2016/01/10/js.timer/"/>
     <id>http://louiszhai.github.io/2016/01/10/js.timer/</id>
     <published>2016-01-10T05:52:11.000Z</published>
-    <updated>2016-12-23T04:06:57.000Z</updated>
+    <updated>2017-01-03T02:32:26.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>设置web定时器应当是一个相当常见的需求, 实际上, 我们也有两大工具函数可以任意调用: setTimeout, setInterval. 然而 js 里却没有java的那种wait(), 定时又未必准时, 要想写个定时器还须得深入理解 setTimeout 和 setInterval 的运行原理才行.</p>
 <a id="more"></a>
 <h3 id="u8FD0_u884C_u539F_u7406"><a href="#u8FD0_u884C_u539F_u7406" class="headerlink" title="运行原理"></a>运行原理</h3><p>setTimeout 和 setInterval 并非异步调用, 所谓的”异步调用”, 只是因它们都往 js 引擎的 <code>待处理任务队列</code> 末尾插入代码, 看起来像”异步调用”而已.</p>
@@ -4168,7 +4168,7 @@
 </ul>
 ]]></content>
     <summary type="html">
-    <![CDATA[JavaScript setTimeout setInterval 轮询 clearTimeout clearInterval]]>
+    <![CDATA[JavaScript setTimeout setInterval 轮询 clearTimeout clearInterval web定时器]]>
     
     </summary>
     
@@ -5433,11 +5433,11 @@
   </entry>
   
   <entry>
-    <title><![CDATA[Currying]]></title>
+    <title><![CDATA[函数式编程之柯里化与反柯里化]]></title>
     <link href="http://louiszhai.github.io/2015/12/16/currying/"/>
     <id>http://louiszhai.github.io/2015/12/16/currying/</id>
     <published>2015-12-16T00:57:06.000Z</published>
-    <updated>2016-04-27T01:26:52.000Z</updated>
+    <updated>2017-01-03T02:30:32.000Z</updated>
     <content type="html"><![CDATA[<p>Currying是函数式编程的一个特性，将多个参数的处理转化成单个参数的处理，类似链式调用。</p>
 <h3 id="u67EF_u91CC_u5316_28Currying_29"><a href="#u67EF_u91CC_u5316_28Currying_29" class="headerlink" title="柯里化(Currying)"></a>柯里化(Currying)</h3><p>柯里化有3个常见作用：1. 参数复用；2. 提前返回；3. 延迟计算/运行。</p>
 <p>通俗的柯里化函数原型如下:</p>

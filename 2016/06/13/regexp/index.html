@@ -966,7 +966,7 @@
 <p>① 由于上述 responseText 字符串中包含至少两个子字符串 “dev”, 显然不能直接 replace 字符串 “dev”为 “test”. </p>
 <p>② 同时由于 js 中不支持逆序环视, 我们也不能在正则中判断前缀为 “src=’”, 然后再替换”dev”. </p>
 <p>③ 我们注意到 img 标签的 src 属性以 “.png” 结尾, 基于此, 就可以使用顺序肯定环视. 如下:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> reg = <span class="regexp">/dev(?=[^']*png)/</span>; <span class="comment">//为了防止匹配到第一个dev, 通配符前面需要排除单引号或者是尖括号</span></span><br><span class="line"><span class="keyword">var</span> str = responseText.replace(reg,<span class="string">"test"</span>);</span><br><span class="line"><span class="built_in">console</span>.log(str);<span class="comment">//&lt;div data='dev.<span class="label">xxx'&gt;&lt;/div&gt;&lt;img src='test.xxx.png' /&gt;</span></span></span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> reg = <span class="regexp">/dev(?=[^']*png)/</span>; <span class="comment">//为了防止匹配到第一个dev, 通配符前面需要排除单引号或者是尖括号</span></span><br><span class="line"><span class="keyword">var</span> str = responseText.replace(reg,<span class="string">"test"</span>);</span><br><span class="line"><span class="built_in">console</span>.log(str);<span class="comment">//&lt;div data='dev.xxx'&gt;&lt;/div&gt;&lt;img src='test.xxx.png' /&gt;</span></span><br></pre></td></tr></table></figure>
 <p>当然, 以上不止顺序肯定环视一种解法, 捕获性分组同样可以做到. 那么环视高级在哪里呢? 环视高级的地方就在于它通过一次捕获就可以定位到一个位置, 对于复杂的文本替换场景, 常有奇效, 而分组则需要更多的操作.</p>
 <h5 id="u5343_u4F4D_u5206_u5272_u7B26"><a href="#u5343_u4F4D_u5206_u5272_u7B26" class="headerlink" title="千位分割符"></a>千位分割符</h5><blockquote>
 <p>千位分隔符, 顾名思义, 就是数字中的逗号. 参考西方的习惯, 数字之中加入一个符号, 避免因数字太长难以直观的看出它的值. 故而数字之中, 每隔三位添加一个逗号, 即千位分隔符.</p>
@@ -1290,7 +1290,7 @@
     <div id="footer-info">
       <img src="/img/top_arrow.png" class="top_arrow" id="top_arrow">
     	<div class="footer-left">
-    		&copy; 2016 louis
+    		&copy; 2017 louis
 
         <span style="position:relative;top:2px" id="cnzz_stat_icon_1256923583"></span>
         <script type="text/javascript">
