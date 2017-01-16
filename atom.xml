@@ -4,7 +4,7 @@
   <subtitle><![CDATA[程序猿 前端攻城师]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://louiszhai.github.io/"/>
-  <updated>2016-12-23T04:07:54.000Z</updated>
+  <updated>2017-01-16T02:43:33.000Z</updated>
   <id>http://louiszhai.github.io/</id>
   
   <author>
@@ -15,11 +15,160 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title><![CDATA[弹性盒模型flex指南]]></title>
+    <link href="http://louiszhai.github.io/2017/01/13/flex/"/>
+    <id>http://louiszhai.github.io/2017/01/13/flex/</id>
+    <published>2017-01-13T00:42:01.000Z</published>
+    <updated>2017-01-16T02:43:33.000Z</updated>
+    <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>Web layout 是Web UI中的基础架构, 重要性不言而喻. 传统的盒模型, 借助display, position, float 属性应对普通布局游刃有余, 但针对复杂的或自适应布局, 常常捉襟见肘. 比如垂直居中, 就是一个老大难的问题, 借助flex弹性盒模型, 两行代码就可以优雅的实现之. (该方法曾在 <a href="http://louiszhai.github.io/2016/03/12/css-center/">16种方法实现水平居中垂直居中</a> 一文中提到). 当然, 本次我们不会只讨论垂直居中的问题, 我将努力尽可能的还原flex的应用生态.</p>
+<a id="more"></a>
+<h3 id="Flex"><a href="#Flex" class="headerlink" title="Flex"></a>Flex</h3><p>Flex即弹性盒模型, 该布局方案由W3C于2009年提出. 此后, Flex方案便历经v2009, v2011, v2012, v2014, v2015, v2016等版本, 最近方案是2016年5月26日起草的 <a href="http://www.w3.org/TR/2016/CR-css-flexbox-1-20160526/" target="_blank" rel="external">CSS Flexible Box Layout Module Level 1</a>.</p>
+<h3 id="u517C_u5BB9_u6027"><a href="#u517C_u5BB9_u6027" class="headerlink" title="兼容性"></a>兼容性</h3><p>首先, 我们来回顾下如今PC端的兼容性(以下为完全兼容版本).</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">IE</th>
+<th style="text-align:center">Edge</th>
+<th style="text-align:center">Firefox</th>
+<th style="text-align:center">Chrome</th>
+<th style="text-align:center">Safari</th>
+<th style="text-align:center">Opera</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">-</td>
+<td style="text-align:center">12+</td>
+<td style="text-align:center">28+</td>
+<td style="text-align:center">21+</td>
+<td style="text-align:center">6.1+</td>
+<td style="text-align:center">12.1+</td>
+</tr>
+</tbody>
+</table>
+<p>以上, IE10+仅支持2012版W3C的flex语法, 且存在较多已知的bug, 此时使用flex布局需谨慎.</p>
+<p>Chrome浏览器v21~v28版本需要添加 “-webkit-“ 前缀.</p>
+<p>Safari浏览器v6.1~v8版本需要添加 “-webkit-“ 前缀.</p>
+<p>Opera浏览器v15~v16版本需要添加 “-webkit-“ 前缀.</p>
+<p>因此, 看到一些sass编译后的css文件中带有 “-webkit-“ 前缀无需惊慌.</p>
+<p>平时开发时最为担心的便是移动端兼容性, 请看:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">IOS Safari</th>
+<th style="text-align:center">Opera mini</th>
+<th style="text-align:center">Android</th>
+<th style="text-align:center">Android Chrome</th>
+<th style="text-align:center">UC</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">7.1+</td>
+<td style="text-align:center">√</td>
+<td style="text-align:center">4.4+</td>
+<td style="text-align:center">55</td>
+<td style="text-align:center">-</td>
+</tr>
+</tbody>
+</table>
+<p>UC不对外提供webview内核, 除去一些H5app的应用, 各种分享页基本无需担心对其兼容性. 可见, Android4.4以上基本可以安心使用webview.</p>
+<h3 id="u4F18_u52BF"><a href="#u4F18_u52BF" class="headerlink" title="优势"></a>优势</h3><p>Flex布局使得子项目能够”弹性”的改变其高宽, 自由填充容器剩余空间, 以适应容器变大, 或者压缩子项目自身, 以适应容器变小; 同时还可以方便的调节子项目方向和顺序. flex常用于高宽需要自适应, 或子项目大小成比例, 或水平垂直对齐等场景.</p>
+<h3 id="u6982_u5FF5_u94FA_u57AB"><a href="#u6982_u5FF5_u94FA_u57AB" class="headerlink" title="概念铺垫"></a>概念铺垫</h3><p>Flex弹性盒模型里, 有容器和项目之分. 设置<code>display:flex</code>的为容器, 容器内的元素称作它的子项目, 容器有容器的一套属性, 子项目有子项目的另一套属性. (可以这么理解: father作为弹性盒子, 制定行为规范, son享受盒子的便利, 按照规范划分各自的”辖区”).</p>
+<p>以下图片摘自大漠的<a href="6">一个完整的Flexbox指南</a>文中.</p>
+<p><img src="http://louiszhai.github.io/docImages/flex01.jpeg" alt="flexbox"></p>
+<p>father制定的规范, 基于两个方向 — 水平和垂直. </p>
+<ul>
+<li>水平方向的称之为主轴(main axis), 垂直方向的称之为交叉轴(cross axis). </li>
+<li>主轴起始位置, 叫做<code>main start</code>, 末尾位置叫做<code>main end</code>; </li>
+<li>交叉轴起始位置, 叫做<code>cross start</code>, 末尾位置叫做<code>cross end</code>.</li>
+<li>子项目在主轴上所占的宽(高)度, 叫做<code>main size</code>, 在交叉轴上所占的高(宽)度, 叫做<code>cross size</code>.</li>
+</ul>
+<h3 id="u5C5E_u6027"><a href="#u5C5E_u6027" class="headerlink" title="属性"></a>属性</h3><p>display: flex | inline-flex;(元素将升级为弹性盒子). 前者容器升级为块级盒子, 后者容器将升级为行内盒子. 元素采用flex布局以后, 子元素的float, clear, vertical-align属性都将失效.</p>
+<h4 id="u5BB9_u5668_u5C5E_u6027"><a href="#u5BB9_u5668_u5C5E_u6027" class="headerlink" title="容器属性"></a>容器属性</h4><p>容器具有以下6个属性.</p>
+<ul>
+<li><p>flex-direction 指定主轴的方向.</p>
+<p>| flex-direction的值 |         描述          |<br>| :————–: | :—————–: |<br>|     row(默认)      | 指定主轴水平, 子项目从左至右排列➜  |<br>|   row-reverse    | 指定主轴水平, 子项目从右至左排列⬅︎ |<br>|      column      | 指定主轴垂直, 子项目从上至下排列⬇︎ |<br>|  column-reverse  | 指定主轴垂直, 子项目从下至上排列⬆︎ |</p>
+</li>
+<li><p>flex-wrap 指定如何换行.</p>
+<p>| flex-wrap的值  |      描述      |<br>| :———-: | :———-: |<br>|  nowrap(默认)  |    默认不换行     |<br>|     wrap     |     正常换行     |<br>| wrap-reverse | 换行, 且前面的行在底部 |</p>
+</li>
+<li><p>flex-flow 它是flex-direction 和 flex-wrap的简写形式, 默认值为<code>row nowrap</code>.</p>
+</li>
+<li><p>justify-content 指定主轴上子项目的对齐方式.(通常为水平方向对齐方式)</p>
+<p>| justify-content的值 |             描述(子项目–主轴方向)              |<br>| :—————: | :————————————: |<br>|  flex-start(默认)   |        子项目起始位置与<code>main start</code>位置对齐        |<br>|     flex-end      |         子项目末尾位置与<code>main end</code>位置对齐         |<br>|      center       |               在主轴方向居中于容器               |<br>|   space-between   |         与交叉轴两端对齐, 子项目之间的间隔全部相等         |<br>|   space-around    | 子项目两侧的距离相等, 它们之间的距离两倍于它们与主轴起始或末尾位置的距离. |</p>
+</li>
+<li><p>align-items 指定交叉轴上子项目的对齐方式.(通常为垂直方向对齐方式)</p>
+<p>| align-items的值 |       描述(子项目—交叉轴方向)       |<br>| :———–: | :———————–: |<br>|  flex-start   | 子项目起始位置与<code>cross start</code>位置对齐 |<br>|   flex-end    |  子项目末尾位置与<code>cross end</code>位置对齐  |<br>|    center     |        在交叉轴方向居中于容器        |<br>|   baseline    |        第一行文字的基线对齐         |<br>|  stretch(默认)  |  高度未定(或auto)时, 将占满容器的高度   |</p>
+</li>
+<li><p>align-content 指定多根主轴的对齐方式, . 若只有一根主轴, 则无效.</p>
+<p>| align-content的值 |                描述(子项目)                 |<br>| :————-: | :————————————: |<br>|   flex-start    |          顶部与<code>cross start</code>位置对齐          |<br>|    flex-end     |           底部与<code>cross end</code>位置对齐           |<br>|     center      |              在交叉轴方向居中于容器               |<br>|  space-between  |            与交叉轴两端对齐, 间隔全部相等            |<br>|  space-around   | 子项目两侧的距离相等, 它们之间的距离两倍于它们与主轴起始或末尾位置的距离. |<br>|   stretch(默认)   |             多根主轴上的子项目充满交叉轴             |</p>
+</li>
+</ul>
+<h4 id="u5B50_u9879_u76EE_u5C5E_u6027"><a href="#u5B50_u9879_u76EE_u5C5E_u6027" class="headerlink" title="子项目属性"></a>子项目属性</h4><p>子项目具有以下6个属性.</p>
+<ul>
+<li><p>flex-grow 指定子项目的放大比例, 默认为0(即不放大). 该属性可取值为任何正整数. 假设各个子项目的放大比例之和为n, 那么容器内剩余的空间将分配n份, 每个子项目各自分到x/n份. (x为该子项目的放大比例)</p>
+</li>
+<li><p>flex-shrink 指定子项目的缩小比例, 默认为<code>1</code>. 设置为0时, 空间不足该子项目将不缩小. 我们知道, <code>容器的缩小总宽度=子项目所需要的总宽度-容器实际宽度</code>, 假设容器需要缩小的宽度为W, 某子项目的默认宽度为L, 其缩小比例为p, 那么该子项目实际的宽度为<code>L-p*W</code>. </p>
+<ul>
+<li><p>上面轻描淡写的给出了子项目的缩小比例, 可能会给你一种错觉— “缩小比例很容易计算”, 实际上, <strong>我们在计算元素需要缩小比例时, 总是要考虑到元素自身默认的大小</strong>.</p>
+</li>
+<li><p>假设上述子项目其flex-shrink值为x1, 另一个子项目的默认宽度为R, flex-shrink值为x2, 考虑到元素自身大小. 最终第一个子项目的缩小比例是加权了自身默认大小后的结果, 即<code>rate = L*x1/(L*x1 + R*x2)</code>.</p>
+<p><img src="http://louiszhai.github.io/docImages/flex03.png" alt=""></p>
+</li>
+<li><p>为什么计算会如此复杂, 如此不直观??? 这是因为, 子项目的大小各不一致, 假如一个子项目是另一个子项目主轴宽度的9倍, 前者的flex-shrink值为1, 后者为9, 而容器实际上只有他们默认总宽度的一半. 这意味着, 这两个子项目共计要压缩为默认的一半. 如果仅仅按照flex-shrink值来决定比例, 那么第二个子项目需要压缩其默认的9/10, 而我们知道, 它默认是如此的小, 即使全部压缩了, 也无济于事; 而第一个元素仅需要压缩其默认的1/10, 简直就是九牛一毛, 根本达不到默认总宽度压缩一半的效果. 很明显, 这种压缩比例的分配方式是不合理的. 因此最终的压缩比例加入了默认宽度值(即flex-basis值), 表达式的分子为 <code>flex-shrink * flex-basis</code>, 分母为各子项目  <code>flex-shrink * flex-basis</code> 之和.</p>
+</li>
+</ul>
+</li>
+<li><p>flex-basis 指定子项目分配的默认空间, 默认为<code>auto</code>. 即该子项目的原本大小.</p>
+</li>
+<li><p>flex 是 flex-grow, flex-shrink, flex-basis 3个属性的缩写. 默认为<code>0 1 auto</code>. 该属性取值为auto时等同于设置为<code>1 1 auto</code>, 取值为none时等同于设置为<code>0 0 auto</code>.</p>
+</li>
+<li><p>align-self 指定单个子项目独立的对齐方式. 默认为<code>auto</code>, 表示继承父元素的align-items属性, 如无父元素, 则等同于<code>stretch</code>. 该属性共有6种值, 其他值与上述align-items属性保持一致.</p>
+</li>
+<li><p>order 指定子项目的顺序, 数值越小, 顺序越靠前, 默认为<code>0</code>.</p>
+</li>
+</ul>
+<h3 id="u573A_u666F_u56DE_u987E"><a href="#u573A_u666F_u56DE_u987E" class="headerlink" title="场景回顾"></a>场景回顾</h3><ol>
+<li><p>想要实现垂直居中的效果, 只需要设置父元素为<code>display:flex;justify-content:center</code> 即可. (当然, 父元素样式采用:<code>display:table;</code>, 子元素样式采用:<code>display:table-cell;vertical-align:middle</code> 也是可以实现的), 如下图.</p>
+<p><img src="http://louiszhai.github.io/docImages/flex02.png" alt=""></p>
+</li>
+<li><p>想要实现左右两个元素等高(父元素高度由子元素撑开), 并且各占一半的宽度. 如上图.</p>
+<ul>
+<li>早期的实现方案, 需要借助负margin. 父元素样式设置为<code>overflow:hidden</code>, 子元素样式设置为<code>margin-bottom:-10000px;padding-bottom:10000px;</code>, 这样, 每个子元素便能借助padding撑开, 同时, 借助负margin和overflow合理裁剪.</li>
+<li>第二种方案就是借助IE8都支持的<code>display:table</code>属性, 父元素样式设置为<code>display:table</code> , 子元素设置为<code>display:table-cell</code>. 利用表格的行高一致性, 轻松实现行高一致.</li>
+<li>最终, 我们发现, 还是flex弹性盒模型来得方便快捷, 它只需要父级元素样式设置为<code>display:flex</code>.</li>
+</ul>
+</li>
+</ol>
+<hr>
+<p>本问就讨论这么多内容,大家有什么问题或好的想法欢迎在下方参与<a href="#respond">留言和评论</a>.</p>
+<p>本文作者: <a href="https://github.com/Louiszhai" target="_blank" rel="external">louis</a></p>
+<p>本文链接: <a href="http://louiszhai.github.io/2017/01/13/flex/">http://louiszhai.github.io/2017/01/13/flex/</a></p>
+<p>参考文章</p>
+<ul>
+<li><a href="https://www.w3.org/TR/css-flexbox-1/" target="_blank" rel="external">CSS Flexible Box Layout Module Level 1</a></li>
+<li><a href="https://www.w3.org/TR/2012/WD-css3-flexbox-20120322/" target="_blank" rel="external">2012 CSS Flexible Box Layout Module</a></li>
+<li><a href="https://www.w3.org/TR/2009/WD-css3-flexbox-20090723/" target="_blank" rel="external">2009 CSS Flexible Box Layout Module</a></li>
+<li><a href="http://www.ruanyifeng.com/blog/2015/07/flex-grammar.html" target="_blank" rel="external">Flex 布局教程：语法篇 - 阮一峰的网络日志</a></li>
+<li><a href="https://zm10.sm-tc.cn/?src=l4uLj8XQ0IiIiNGIzJyPk4qM0ZyQktCcjIzM0J7SmIqWm5rSi5DSmZOah52Qh9GXi5KT&amp;from=derive&amp;depth=2&amp;v=1&amp;link_type=12&amp;uid=5f61658d8b9f95c8d0141e9c09fa6e85&amp;hid=f2ad43235a237619a455bdb39512d4c1&amp;restype=1&amp;uc_param_str=dnntnwvepffrgibijbprsvdsei&amp;query=%E5%A4%A7%E6%BC%A0+flex" target="_blank" rel="external">一个完整的Flexbox指南–大漠</a></li>
+</ul>
+]]></content>
+    <summary type="html">
+    <![CDATA[弹性盒模型 flex flex-grow flex-shrink flex-basis align-items align-content order flex-flow flex-direction flex-wrap align-self]]>
+    
+    </summary>
+    
+      <category term="CSS" scheme="http://louiszhai.github.io/tags/CSS/"/>
+    
+  </entry>
+  
+  <entry>
     <title><![CDATA[JS中可能用得到的全部的排序算法]]></title>
     <link href="http://louiszhai.github.io/2016/12/23/sort/"/>
     <id>http://louiszhai.github.io/2016/12/23/sort/</id>
     <published>2016-12-23T03:55:14.000Z</published>
-    <updated>2016-12-23T04:07:54.000Z</updated>
+    <updated>2017-01-16T02:37:04.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>排序算法可以称得上是我的盲点, 曾几何时当我知道Chrome的Array.prototype.sort使用了快速排序时, 我的内心是奔溃的(啥是快排, 我只知道冒泡啊?!), 要知道学习一门技术最好的时间是三年前, 但愿我现在补习还来得及(捂脸).</p>
 <p>因此本篇重拾了出镜概率比较高的十来种排序算法, 逐一分析其排序思想, 并批注注意事项. 欢迎对算法提出改进和<a href="#respond">讨论</a>.</p>
 <a id="more"></a>
@@ -432,7 +581,7 @@
     <link href="http://louiszhai.github.io/2016/11/25/manifest/"/>
     <id>http://louiszhai.github.io/2016/11/25/manifest/</id>
     <published>2016-11-25T00:08:21.000Z</published>
-    <updated>2016-12-23T04:06:57.000Z</updated>
+    <updated>2017-01-16T02:37:04.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>Manifest 是 H5提供的一种应用缓存机制, 基于它web应用可以实现离线访问(offline cache). 为此, 浏览器还提供了应用缓存的api–applicationCache. 虽然manifest的技术已被web标准废弃, 但这不影响我们尝试去了解它. 也正是因为manifest的应用缓存机制如此诱人, 饿了么 和 office 365邮箱都还在使用着它!</p>
 <a id="more"></a>
 <h3 id="u63CF_u8FF0"><a href="#u63CF_u8FF0" class="headerlink" title="描述"></a>描述</h3><p>对manifest熟悉的同学可以跳过此节.</p>
@@ -577,7 +726,7 @@
     <link href="http://louiszhai.github.io/2016/11/02/ajax/"/>
     <id>http://louiszhai.github.io/2016/11/02/ajax/</id>
     <published>2016-11-02T04:48:27.000Z</published>
-    <updated>2016-12-23T04:06:57.000Z</updated>
+    <updated>2017-01-16T02:37:04.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>Ajax 全称 Asynchronous JavaScript and XML, 即异步JS与XML. 它最早在IE5中被使用, 然后由Mozilla, Apple, Google推广开来. 典型的代表应用有 Outlook Web Access, 以及 GMail. 现代网页中几乎无ajax不欢. 前后端分离也正是建立在ajax异步通信的基础之上.</p>
 <a id="more"></a>
 <h3 id="u6D4F_u89C8_u5668_u4E3Aajax_u505A_u4E86_u4EC0_u4E48"><a href="#u6D4F_u89C8_u5668_u4E3Aajax_u505A_u4E86_u4EC0_u4E48" class="headerlink" title="浏览器为ajax做了什么"></a>浏览器为ajax做了什么</h3><p>现代浏览器中, 虽然几乎全部支持ajax, 但它们的技术方案却分为两种:</p>
@@ -1522,7 +1671,7 @@
     <link href="http://louiszhai.github.io/2016/11/02/fetch/"/>
     <id>http://louiszhai.github.io/2016/11/02/fetch/</id>
     <published>2016-11-02T04:48:08.000Z</published>
-    <updated>2016-12-23T04:06:57.000Z</updated>
+    <updated>2017-01-16T02:37:04.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>Fetch 是 web异步通信的未来. 从chrome42, Firefox39, Opera29, EdgeHTML14(并非Edge版本)起, fetch就已经被支持了. 其中chrome42~45版本, fetch对中文支持有问题, 建议从chrome46起使用fetch. 传送门: <a href="https://bugs.chromium.org/p/chromium/issues/detail?id=511289" target="_blank" rel="external">fetch中文乱码</a> .</p>
 <a id="more"></a>
 <h3 id="Fetch"><a href="#Fetch" class="headerlink" title="Fetch"></a>Fetch</h3><p>先过一遍Fetch原生支持率.</p>
@@ -1708,7 +1857,7 @@
     <link href="http://louiszhai.github.io/2016/07/01/Math/"/>
     <id>http://louiszhai.github.io/2016/07/01/Math/</id>
     <published>2016-06-30T23:57:48.000Z</published>
-    <updated>2016-12-23T04:06:57.000Z</updated>
+    <updated>2017-01-16T02:37:04.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>截至ES5, JavaScript 中内置(build-in)构造器/对象共有13个, 其中9个是构造器(Number,Boolean, String, Object, Function, Array, RegExp, Error, Date), Global 不能直接访问, Arguments仅在函数调用时由JS引擎创建, 而 Math, JSON 是以对象形式存在的, 本篇将带你走进 JS 内置对象-Math以及与之息息相关的位运算, 一探究竟.</p>
 <a id="more"></a>
 <h3 id="u4E3A_u4EC0_u4E48Math_u8FD9_u4E48_u8BBE_u8BA1"><a href="#u4E3A_u4EC0_u4E48Math_u8FD9_u4E48_u8BBE_u8BA1" class="headerlink" title="为什么Math这么设计"></a>为什么Math这么设计</h3><p>众所周知, 如果需要使用js进行一些常规的数学运算, 是一件十分麻烦的事情. 为了解决这个问题, ECMAScript 在1.1版本中便引入了 Math. Math 之所以被设计成一个对象, 而不是构造器, 是因为对象中的方法或属性可以作为静态方法或常量直接被调用, 方便使用, 同时, Math 也没有创建实例的必要.</p>
@@ -2263,7 +2412,7 @@
     <link href="http://louiszhai.github.io/2016/06/13/regexp/"/>
     <id>http://louiszhai.github.io/2016/06/13/regexp/</id>
     <published>2016-06-13T00:24:55.000Z</published>
-    <updated>2016-12-23T04:06:57.000Z</updated>
+    <updated>2017-01-16T02:37:04.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>你有没有在搜索文本的时候绞尽脑汁, 试了一个又一个表达式, 还是不行.</p>
 <p>你有没有在表单验证的时候, 只是做做样子(只要不为空就好), 然后烧香拜佛, 虔诚祈祷, 千万不要出错.</p>
 <p>你有没有在使用sed 和 grep 命令的时候, 感觉莫名其妙, 明明应该支持的元字符, 却就是匹配不到.</p>
@@ -3242,7 +3391,7 @@
     <link href="http://louiszhai.github.io/2016/03/31/css-hasLayout/"/>
     <id>http://louiszhai.github.io/2016/03/31/css-hasLayout/</id>
     <published>2016-03-31T05:57:56.000Z</published>
-    <updated>2016-11-23T03:36:58.000Z</updated>
+    <updated>2017-01-16T02:37:04.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u4EC0_u4E48_u662FhasLayout"><a href="#u4EC0_u4E48_u662FhasLayout" class="headerlink" title="什么是hasLayout"></a>什么是hasLayout</h3><blockquote>
 <p>hasLayout property: Gets a value that indicates whether the object has layout.</p>
 </blockquote>
@@ -3336,7 +3485,7 @@
     <link href="http://louiszhai.github.io/2016/03/23/css-margin/"/>
     <id>http://louiszhai.github.io/2016/03/23/css-margin/</id>
     <published>2016-03-23T12:47:36.000Z</published>
-    <updated>2016-12-23T04:06:57.000Z</updated>
+    <updated>2017-01-16T02:37:04.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>margin属性处于盒子模型的最外层, 用以隔开其他元素, 它可以依次设置4个长度值, 分别表示 “上 右 下 左” 的间距, 其中第1个和第3个值相对应, 第2个与第4个相对应, 如果省略前者, 后者将取与前者相同的数值. margin属性共存在以下 4 种表示方式:</p>
 <ul>
 <li>margin: 10px 1rem 1em 5%; 共 4 个数值, 表示依次设置 上, 右, 下, 左的间距;</li>
@@ -3391,7 +3540,7 @@
     <link href="http://louiszhai.github.io/2016/03/12/css-center/"/>
     <id>http://louiszhai.github.io/2016/03/12/css-center/</id>
     <published>2016-03-12T11:03:04.000Z</published>
-    <updated>2016-12-23T04:06:57.000Z</updated>
+    <updated>2017-01-16T02:37:04.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>熟悉水平居中和垂直居中的方法, 不为别的, 就为用的时候能够信手拈来. 下面直接步入正题.</p>
 <a id="more"></a>
 <h3 id="u6C34_u5E73_u5C45_u4E2D"><a href="#u6C34_u5E73_u5C45_u4E2D" class="headerlink" title="水平居中"></a>水平居中</h3><p>1) 若是行内元素, 给其父元素设置 text-align:center,即可实现行内元素水平居中.</p>
@@ -3507,7 +3656,7 @@
     <link href="http://louiszhai.github.io/2016/03/12/css-float/"/>
     <id>http://louiszhai.github.io/2016/03/12/css-float/</id>
     <published>2016-03-12T09:55:04.000Z</published>
-    <updated>2016-04-27T01:26:58.000Z</updated>
+    <updated>2017-01-16T02:37:04.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>float即浮动, 使用float, 该浮动元素便会脱离正常的文档流, 使其浮动到父元素的行的一端(元素向左或向右移动, 直到碰到浮动元素, 或者达到父元素内容的边界, 不包括padding), 并且其他元素将忽略该浮动元素并填补其原先的空间.</p>
 <p>这里需要捋清一个概念, 所谓文档流是什么?</p>
 <p><strong>文档流</strong>: 元素按照自上到下, 自左到右的顺序依次排放, 即文档流.</p>
@@ -3563,7 +3712,7 @@
     <link href="http://louiszhai.github.io/2016/03/05/xss/"/>
     <id>http://louiszhai.github.io/2016/03/05/xss/</id>
     <published>2016-03-05T01:48:09.000Z</published>
-    <updated>2017-01-03T02:33:27.000Z</updated>
+    <updated>2017-01-16T02:37:04.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p><strong>XSS</strong> (Cross-Site Script) 攻击又叫跨站脚本攻击, 本质是一种注入攻击. 其原理, 简单的说就是利用各种手段把恶意代码添加到网页中, 并让受害者执行这段脚本. XSS能做用户使用浏览器能做的一切事情. 伟大的同源策略也无法保证不受XSS攻击，因为此时攻击者就在同源之内.</p>
 <a id="more"></a>
 <h3 id="xss_u653B_u51FB_u65B9_u5F0F"><a href="#xss_u653B_u51FB_u65B9_u5F0F" class="headerlink" title="xss攻击方式"></a>xss攻击方式</h3><p>从攻击的方式可以分为</p>
@@ -3747,7 +3896,7 @@
     <link href="http://louiszhai.github.io/2016/01/12/js.String/"/>
     <id>http://louiszhai.github.io/2016/01/12/js.String/</id>
     <published>2016-01-12T12:27:09.000Z</published>
-    <updated>2017-01-03T02:31:22.000Z</updated>
+    <updated>2017-01-16T02:37:04.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>javaScript 中, 字符串无处不在, 并且所有的字符串方法均来自 String.prototype, 这一节, 我们走进看一看String内部, 探讨那些常用或不常用的字符串操作方法.</p>
 <a id="more"></a>
 <h3 id="String-prototype"><a href="#String-prototype" class="headerlink" title="String.prototype"></a>String.prototype</h3><p>String.prototype 属性指向 String 的原型对象. 以下是它的属性特性:</p>
@@ -3937,7 +4086,7 @@
     <link href="http://louiszhai.github.io/2016/01/11/bind/"/>
     <id>http://louiszhai.github.io/2016/01/11/bind/</id>
     <published>2016-01-11T00:01:33.000Z</published>
-    <updated>2016-12-23T04:06:57.000Z</updated>
+    <updated>2017-01-16T02:37:04.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>ES5新增了 Function.prototype.bind 方法, 该方法不同于jquery的bind 方法, 它主要用于固定 this 作用域, 避免各种由于上下文切换造成的语义问题. 常用在 setTimeout, for循环等内部.</p>
 <a id="more"></a>
 <h3 id="bind"><a href="#bind" class="headerlink" title="bind"></a>bind</h3><p>语法: func.bind(thisArg, arg1, arg2, ….)</p>
@@ -3980,7 +4129,7 @@
     <link href="http://louiszhai.github.io/2016/01/11/cross-domain/"/>
     <id>http://louiszhai.github.io/2016/01/11/cross-domain/</id>
     <published>2016-01-11T00:01:33.000Z</published>
-    <updated>2016-12-23T04:06:57.000Z</updated>
+    <updated>2017-01-16T02:37:04.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>同源策略 (Same-Origin Policy) 最早由 Netscape 公司提出, 所谓同源就是要求, 域名, 协议, 端口相同. 非同源的脚本不能访问或者操作其他域的页面对象(如DOM等). 作为著名的安全策略, 虽然它只是一个规范, 并不强制要求,  但现在所有支持 javaScript 的浏览器都会使用这个策略. 以至于该策略成为浏览器最核心最基本的安全功能, 如果缺少了同源策略, web的安全将无从谈起.</p>
 <a id="more"></a>
 <h3 id="u540C_u6E90_u7B56_u7565_u7684_u9650_u5236"><a href="#u540C_u6E90_u7B56_u7565_u7684_u9650_u5236" class="headerlink" title="同源策略的限制"></a>同源策略的限制</h3><p>同源策略下的web世界, 域的壁垒高筑, 从而保证各个网页相互独立, 互相之间不能直接访问, iframe, ajax 均受其限制, 而script标签不受此限制.</p>
@@ -4116,7 +4265,7 @@
     <link href="http://louiszhai.github.io/2016/01/10/js.timer/"/>
     <id>http://louiszhai.github.io/2016/01/10/js.timer/</id>
     <published>2016-01-10T05:52:11.000Z</published>
-    <updated>2017-01-03T02:32:26.000Z</updated>
+    <updated>2017-01-16T02:37:04.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>设置web定时器应当是一个相当常见的需求, 实际上, 我们也有两大工具函数可以任意调用: setTimeout, setInterval. 然而 js 里却没有java的那种wait(), 定时又未必准时, 要想写个定时器还须得深入理解 setTimeout 和 setInterval 的运行原理才行.</p>
 <a id="more"></a>
 <h3 id="u8FD0_u884C_u539F_u7406"><a href="#u8FD0_u884C_u539F_u7406" class="headerlink" title="运行原理"></a>运行原理</h3><p>setTimeout 和 setInterval 并非异步调用, 所谓的”异步调用”, 只是因它们都往 js 引擎的 <code>待处理任务队列</code> 末尾插入代码, 看起来像”异步调用”而已.</p>
@@ -4181,7 +4330,7 @@
     <link href="http://louiszhai.github.io/2015/12/29/array/"/>
     <id>http://louiszhai.github.io/2015/12/29/array/</id>
     <published>2015-12-29T01:00:17.000Z</published>
-    <updated>2016-12-23T04:06:57.000Z</updated>
+    <updated>2017-01-16T02:37:04.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>数组是一种非常重要的数据类型, 它语法简单, 灵活,高效, 在多数编程语言中, 数组都充当着至关重要的角色, 以至于很难想象没有数组的编程语言会是什么样子. 这期我们就来侃侃JavaScript的数组, 趴趴它的那点破事儿. 这篇博客从2015年写到了2016年, 权当是跨年的总结吧, 祝大家新年快乐, 2016更好, 未来更好!</p>
 <a id="more"></a>
 <p>声明: 以下未特别标明的方法均为ES5已实现的方法.</p>
@@ -4743,7 +4892,7 @@
     <link href="http://louiszhai.github.io/2015/12/22/scopeChain/"/>
     <id>http://louiszhai.github.io/2015/12/22/scopeChain/</id>
     <published>2015-12-22T00:06:13.000Z</published>
-    <updated>2016-12-23T04:06:57.000Z</updated>
+    <updated>2017-01-16T02:37:04.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>上一篇我们讲到数组遍历, 本文我们更进一步, 讲讲如何提高遍历的效率. 欢迎阅读本篇<strong><code>详解JS作用域链及闭包</code></strong>.</p>
 <a id="more"></a>
 <h3 id="u56DE_u987E_u4E0A_u7BC7"><a href="#u56DE_u987E_u4E0A_u7BC7" class="headerlink" title="回顾上篇"></a>回顾上篇</h3><p>请先看上一篇中提到的for循环代码:</p>
@@ -4880,7 +5029,7 @@
     <link href="http://louiszhai.github.io/2015/12/18/traverse/"/>
     <id>http://louiszhai.github.io/2015/12/18/traverse/</id>
     <published>2015-12-18T02:54:48.000Z</published>
-    <updated>2016-12-23T04:06:57.000Z</updated>
+    <updated>2017-01-16T02:37:04.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>遍历数组或对象是一名程序员的基本素养之一. 然而遍历却不是一件简单的事, 优秀的程序员知道怎么去选择合适的遍历方法, 优化遍历效率. 本篇将带你走进JavaScript遍历的世界, 享受分析JS循环的快感. 本篇所有代码都可以直接运行, 希望您通读本篇后, 不止是浏览, 最好是亲手去实践下.</p>
 <a id="more"></a>
 <h3 id="u6982_u8FF0"><a href="#u6982_u8FF0" class="headerlink" title="概述"></a>概述</h3><p>js有如下两种数据需要经常遍历</p>
@@ -5344,7 +5493,7 @@
     <link href="http://louiszhai.github.io/2015/12/17/prototype/"/>
     <id>http://louiszhai.github.io/2015/12/17/prototype/</id>
     <published>2015-12-17T01:34:36.000Z</published>
-    <updated>2016-12-23T04:06:57.000Z</updated>
+    <updated>2017-01-16T02:37:04.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u6982_u5FF5"><a href="#u6982_u5FF5" class="headerlink" title="概念"></a>概念</h3><ol>
 <li><strong>prototype</strong> 是函数(function) 的一个属性, 它指向函数的原型.</li>
 <li><strong>__proto__</strong>   是对象的内部属性, 它指向构造器的原型, 对象依赖它进行原型链查询.</li>
@@ -5425,87 +5574,6 @@
 ]]></content>
     <summary type="html">
     <![CDATA[JavaScript prototype __proto__ 原型 内部原型 new constructor 原型链查询]]>
-    
-    </summary>
-    
-      <category term="JavaScript" scheme="http://louiszhai.github.io/tags/JavaScript/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[函数式编程之柯里化与反柯里化]]></title>
-    <link href="http://louiszhai.github.io/2015/12/16/currying/"/>
-    <id>http://louiszhai.github.io/2015/12/16/currying/</id>
-    <published>2015-12-16T00:57:06.000Z</published>
-    <updated>2017-01-03T02:30:32.000Z</updated>
-    <content type="html"><![CDATA[<p>Currying是函数式编程的一个特性，将多个参数的处理转化成单个参数的处理，类似链式调用。</p>
-<h3 id="u67EF_u91CC_u5316_28Currying_29"><a href="#u67EF_u91CC_u5316_28Currying_29" class="headerlink" title="柯里化(Currying)"></a>柯里化(Currying)</h3><p>柯里化有3个常见作用：1. 参数复用；2. 提前返回；3. 延迟计算/运行。</p>
-<p>通俗的柯里化函数原型如下:</p>
-<a id="more"></a>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> currying = <span class="function"><span class="keyword">function</span>(<span class="params">fn</span>) </span>&#123;</span><br><span class="line">     <span class="keyword">var</span> args = [].slice.call(<span class="built_in">arguments</span>, <span class="number">1</span>);</span><br><span class="line">     <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">          <span class="keyword">var</span> newArgs = args.concat([].slice.call(<span class="built_in">arguments</span>));</span><br><span class="line">          <span class="keyword">return</span> fn.apply(<span class="literal">null</span>, newArgs);</span><br><span class="line">     &#125;;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<h4 id="u67EF_u91CC_u5316_u7684_u901A_u7528_u5B9E_u73B0"><a href="#u67EF_u91CC_u5316_u7684_u901A_u7528_u5B9E_u73B0" class="headerlink" title="柯里化的通用实现"></a>柯里化的通用实现</h4><p>我们来定义一个比较通用的currying函数：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 第一个参数为要应用的function，第二个参数是需要传入的最少参数个数 </span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">curry</span>(<span class="params">func, minArgs</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (minArgs == <span class="literal">undefined</span>) &#123;</span><br><span class="line">        minArgs = <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">A</span>(<span class="params">frozenargs</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123; <span class="comment">// 优化处理，如果调用时没有参数，返回该函数本身 </span></span><br><span class="line">	        <span class="keyword">var</span> args = <span class="built_in">Array</span>.prototype.slice.call(<span class="built_in">arguments</span>); </span><br><span class="line">	        <span class="keyword">var</span> newArgs = frozenargs.concat(args); </span><br><span class="line">	        <span class="keyword">if</span> (newArgs.length &gt;= minArgs) &#123; </span><br><span class="line">	        	<span class="keyword">return</span> func.apply(<span class="keyword">this</span>, newArgs); </span><br><span class="line">	        &#125; <span class="keyword">else</span> &#123; </span><br><span class="line">	        	<span class="keyword">return</span> A(newArgs); </span><br><span class="line">	        &#125; </span><br><span class="line">	    &#125;; </span><br><span class="line">	&#125; </span><br><span class="line">	<span class="keyword">return</span> A([]); </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h4 id="u67EF_u91CC_u5316_u7684_u6817_u5B50"><a href="#u67EF_u91CC_u5316_u7684_u6817_u5B50" class="headerlink" title="柯里化的栗子"></a>柯里化的栗子</h4><p>这样，我们就可以随意定义我们的业务行为了，比如定义加法：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> plus = curry(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">	<span class="keyword">var</span> result = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; <span class="built_in">arguments</span>.length; ++i) &#123;</span><br><span class="line">    	result += <span class="built_in">arguments</span>[i];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">&#125;, <span class="number">2</span>);</span><br><span class="line">plus(<span class="number">3</span>, <span class="number">2</span>); <span class="comment">// 正常调用,返回 5</span></span><br><span class="line">plus(<span class="number">3</span>); <span class="comment">// 偏应用，返回一个函数（返回值为3+参数值） </span></span><br><span class="line">plus(<span class="number">3</span>)(<span class="number">2</span>); <span class="comment">// 完整应用（返回5） </span></span><br><span class="line">plus()(<span class="number">3</span>)()()(<span class="number">2</span>); <span class="comment">// 返回 5 </span></span><br><span class="line">plus(<span class="number">3</span>, <span class="number">2</span>, <span class="number">4</span>, <span class="number">5</span>); <span class="comment">// 可以接收多个参数,返回 14</span></span><br><span class="line">plus(<span class="number">3</span>)(<span class="number">2</span>, <span class="number">3</span>, <span class="number">5</span>); <span class="comment">// 同理,返回13</span></span><br></pre></td></tr></table></figure>
-<p>如下是减法的例子:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> minus = curry(<span class="function"><span class="keyword">function</span>(<span class="params">x</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> result = x;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">1</span>; i &lt; <span class="built_in">arguments</span>.length; ++i) &#123;</span><br><span class="line">        result -= <span class="built_in">arguments</span>[i];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">&#125;, <span class="number">2</span>);</span><br><span class="line">minus(<span class="number">5</span>,<span class="number">3</span>);<span class="comment">//正常调用,返回 2</span></span><br><span class="line">minus(<span class="number">5</span>)(<span class="number">3</span>);<span class="comment">//完整应用,返回 2</span></span><br><span class="line">minus()(<span class="number">3</span>)()()(<span class="number">2</span>);<span class="comment">//返回 1</span></span><br><span class="line">minus(<span class="number">8</span>)(<span class="number">2</span>, <span class="number">3</span>, <span class="number">5</span>);<span class="comment">// 接受多个参数,返回 -2</span></span><br></pre></td></tr></table></figure>
-<h4 id="u591A_u6B21_u67EF_u91CC_u5316"><a href="#u591A_u6B21_u67EF_u91CC_u5316" class="headerlink" title="多次柯里化"></a>多次柯里化</h4><p>或者如果你想交换参数的顺序，你可以这样定义:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> flip = curry(<span class="function"><span class="keyword">function</span>(<span class="params">f</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> curry(<span class="function"><span class="keyword">function</span>(<span class="params">a, b</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> f(b, a);</span><br><span class="line">    &#125;, <span class="number">2</span>);</span><br><span class="line">&#125;);</span><br><span class="line"><span class="keyword">var</span> flip_minus = flip()(minus);<span class="comment">//返回一个具有柯里化能力的函数</span></span><br><span class="line">flip_minus(<span class="number">2</span>)(<span class="number">10</span>);<span class="comment">//8</span></span><br><span class="line">flip_minus()(<span class="number">1</span>)()(<span class="number">6</span>);<span class="comment">//5</span></span><br></pre></td></tr></table></figure>
-<p>这里为什么要调用两次 curry 呢, 第一次调用是为了固定 func ,返回了curry 内部的A的内部方法,即返回:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;	<span class="comment">//该函数即flip,以下将称作`方法①`</span></span><br><span class="line">  <span class="keyword">var</span> args = <span class="built_in">Array</span>.prototype.slice.call(<span class="built_in">arguments</span>); </span><br><span class="line">  <span class="keyword">var</span> newArgs = frozenargs.concat(args); </span><br><span class="line">  <span class="keyword">if</span> (newArgs.length &gt;= minArgs) &#123; </span><br><span class="line">    <span class="keyword">return</span> func.apply(<span class="keyword">this</span>, newArgs);</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123; </span><br><span class="line">    <span class="keyword">return</span> A(newArgs); </span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//其中func指的是curry传入的第一个参数,表示一个方法,即如下:</span></span><br><span class="line"><span class="function"><span class="keyword">function</span>(<span class="params">f</span>) </span>&#123;<span class="comment">//该方法表示上述func,以下将称作`方法②`</span></span><br><span class="line">    <span class="keyword">return</span> curry(<span class="function"><span class="keyword">function</span>(<span class="params">a, b</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> f(b, a);</span><br><span class="line">    &#125;, <span class="number">2</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>分析</p>
-<ul>
-<li>此时调用 flip(minus) , 实际上是执行了一遍 “方法①” , 由于实参长度等于minArgs(即1), 因此返回 func.apply(this, newArgs); </li>
-<li>由于 newArgs=[ minus ], 然后将执行 “方法②” ;</li>
-<li>由于 f=minus, 在 “方法②” 中将第二次执行curry, 最终返回交换参数后的minus.</li>
-</ul>
-<p>因此 flip 是一个柯里化后的方法, 具有柯里化的典型特征: 能够将多个参数的处理转化成单个参数的处理. 不仅如此, flip 可以连续两次柯里化参数.</p>
-<p>如上述栗子, 第一次柯里化的参数是方法 minus, 由于长度未做限制, 默认为1, 即至少要向 flip 传递一个方法后才能返回一个柯里化的 flip_minus, 同样, 返回的 flip_minus 也具备柯里化的能力.flip_minus()(1)()(6) 等的执行结果充分说明了这点. </p>
-<h3 id="u53CD_u67EF_u91CC_u5316_28unCurrying_29"><a href="#u53CD_u67EF_u91CC_u5316_28unCurrying_29" class="headerlink" title="反柯里化(unCurrying)"></a>反柯里化(unCurrying)</h3><p>函数柯里化，是固定部分参数，返回一个接受剩余参数的函数，也称为部分计算函数，目的是为了固定参数, 延迟计算等。</p>
-<p>那么反柯里化函数，从字面讲，意义和用法跟函数柯里化相比正好相反，扩大适用范围，创建一个应用范围更广的函数。使得本来只有特定对象才适用的方法，扩展到更多的对象。</p>
-<h4 id="u53CD_u67EF_u91CC_u5316_u7684_u4E09_u79CD_u5B9E_u73B0"><a href="#u53CD_u67EF_u91CC_u5316_u7684_u4E09_u79CD_u5B9E_u73B0" class="headerlink" title="反柯里化的三种实现"></a>反柯里化的三种实现</h4><p>看一下通用函数：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Function</span>.prototype.unCurrying = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> that = <span class="keyword">this</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">Function</span>.prototype.call.apply(that, <span class="built_in">arguments</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>以上这段代码做了3件事:</p>
-<ul>
-<li>在Function原型上增加 unCurrying 方法, 方便所有方法继承;</li>
-<li>返回方法, 即暴露方法对外的接口;</li>
-<li>借用call, call 的参数由 apply提供;</li>
-</ul>
-<p>上述代码先后调用了call, apply 方法 来保证参数传递正常. 自然也可以直接调用apply(因arguments类似数组,调用apply较为方便). 如下:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Function</span>.prototype.unCurrying = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> that = <span class="keyword">this</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">var</span> a = <span class="built_in">arguments</span>;</span><br><span class="line">        <span class="keyword">return</span> that.apply(a[<span class="number">0</span>], [].slice.call(a, <span class="number">1</span>));分割<span class="built_in">arguments</span>,方便apply传参</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<p>当然, 还可以利用<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Function/bind" target="_blank" rel="external">Function.prototype.bind()</a>方法返回一个新函数.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Function</span>.prototype.unCurrying = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123; </span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">this</span>.call.bind(<span class="keyword">this</span>);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<p>bind() 方法会创建一个新函数, 称为绑定函数, 当调用这个绑定函数时, 绑定函数会以创建它时传入bind() 方法的第一个参数作为this ,也就是说, 传入的this将成为最终的上下文, 从第二个参数开始的参数, 将按照顺序作为原函数的参数来调用原函数. </p>
-<p>也就是说, 谁(假设为方法f)调用 unCurrying 方法, 将返回一个如下的方法.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="built_in">Function</span>.prototype.call.apply(f, <span class="built_in">arguments</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>原理都相同，最终就是把 this.method 转化成 method(this,arg1,arg2….) 以实现方法借用和this的泛化。</p>
-<h4 id="u53CD_u67EF_u91CC_u5316_u7684_u524D_u56E0"><a href="#u53CD_u67EF_u91CC_u5316_u7684_u524D_u56E0" class="headerlink" title="反柯里化的前因"></a>反柯里化的前因</h4><p>接下来我们来回顾下前一篇文章&lt;<a href="http://louiszhai.github.io/2015/12/15/arguments/">详解JS之Arguments对象</a>&gt;中所讲到的<a href="http://louiszhai.github.io/2015/12/15/arguments/#u9E2D_u5F0F_u8FA9_u578B">鸭式辩型</a>: 如果一个对象可以像鸭子一样走路,游泳,并且嘎嘎叫,就认为这个对象是鸭子,哪怕它并不是从鸭子对象继承过来的。</p>
-<p>Array构造器和String构造器的prototype上的方法就被特意设计成了鸭子类型。这些方法不对this的数据类型做任何校验。这也就是为什么arguments能冒充array调用push方法.</p>
-<p>下面我们来看下v8引擎里面 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array/push" target="_blank" rel="external">Array.prototype.push</a> 的代码:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">ArrayPush</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> n = TO_UINT32(<span class="keyword">this</span>.length);</span><br><span class="line">    <span class="keyword">var</span> m = % _ArgumentsLength();</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; m; i++) &#123;</span><br><span class="line">        <span class="keyword">this</span>[i + n] = % _Arguments(i); <span class="comment">//属性拷贝 </span></span><br><span class="line">        <span class="keyword">this</span>.length = n + m; <span class="comment">//修正length </span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.length; </span><br><span class="line">    &#125; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>Array.prototype.push 方法并没有去判断调用对象是不是数组, 这给对象冒充提供了天然条件, 基于此函数反柯里化(unCurrying) 才具有可行性. </p>
-<h4 id="u53CD_u67EF_u91CC_u5316_u7684_u6817_u5B50"><a href="#u53CD_u67EF_u91CC_u5316_u7684_u6817_u5B50" class="headerlink" title="反柯里化的栗子"></a>反柯里化的栗子</h4><p>下面我们让普通对象具有push方法的能力:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> push = <span class="built_in">Array</span>.prototype.push.unCurrying(),</span><br><span class="line">obj = &#123;&#125;;</span><br><span class="line">push(obj, <span class="string">'123'</span>, <span class="string">'456'</span>);</span><br><span class="line"><span class="built_in">console</span>.log(obj); <span class="comment">//Object &#123;0: "123", 1: "456", length: 2&#125;</span></span><br></pre></td></tr></table></figure>
-<p>obj本来是一个空对象, 它被push了两个元素 “123” 和 “456”, 并且拥有了 length 属性. obj实际上已经变成了一个数组(即[ “123”, “456” ]). </p>
-<p>下面我们来看看更多的例子:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*反柯里化toUpperCase*/</span></span><br><span class="line"><span class="keyword">var</span> toUpperCase = <span class="built_in">String</span>.prototype.toUpperCase.unCurrying(); <span class="built_in">console</span>.log(toUpperCase(<span class="string">'abc'</span>)); <span class="comment">// ABC</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/*反柯里化toLowerCase*/</span></span><br><span class="line"><span class="keyword">var</span> toLowerCase = <span class="built_in">String</span>.prototype.toLowerCase.unCurrying();</span><br><span class="line"><span class="built_in">console</span>.log(toLowerCase(<span class="string">'DEF'</span>)); <span class="comment">// def</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/*反柯里化call*/</span></span><br><span class="line"><span class="keyword">var</span> call = <span class="built_in">Function</span>.prototype.call.unCurrying();</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params">action</span>)</span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="keyword">this</span>.name+<span class="string">" is "</span>+action);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> obj = &#123;</span><br><span class="line">  name:<span class="string">'louis'</span></span><br><span class="line">&#125;;</span><br><span class="line">call(f,obj,<span class="string">'working.'</span>);<span class="comment">//call的3个参数分别为 函数, 上下文对象, 形参</span></span><br></pre></td></tr></table></figure>
-<p>其中反柯里化 call 可能不大好理解, 它表示 obj 对象借用方法 f , 替换了其中的this(上下文).</p>
-<h4 id="u53CD_u67EF_u91CC_u5316_u81EA_u8EAB"><a href="#u53CD_u67EF_u91CC_u5316_u81EA_u8EAB" class="headerlink" title="反柯里化自身"></a>反柯里化自身</h4><p>更有趣的是, unCurrying本身也是方法, 它同样可以被反柯里化, 这就是反柯里化的值得玩味的地方.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> unCurrying = <span class="built_in">Function</span>.prototype.unCurrying.unCurrying();</span><br><span class="line"><span class="keyword">var</span> sort = unCurrying(<span class="built_in">Array</span>.prototype.sort);</span><br><span class="line"><span class="keyword">var</span> array = sort([<span class="number">5</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">1</span>],<span class="function"><span class="keyword">function</span>(<span class="params">a,b</span>)</span>&#123;</span><br><span class="line">  <span class="keyword">return</span> a-b;</span><br><span class="line">&#125;);</span><br><span class="line"><span class="built_in">console</span>.log(array);<span class="comment">//[1,2,3,4,5]</span></span><br></pre></td></tr></table></figure>
-<p>以上是关于 <code>javaScript</code> 柯里化与反柯里化的一些理解. </p>
-<p>柯里化体现的思想是”归一”, 多个参数化为一个参数, 然后逐个处理, 便于产生偏函数, 实现链式调用; 反柯里化体现的思想是”延伸”, 通过拓展方法的作用域, 使得它变得更通用, 提高了代码的复用性. 它们都提升了代码的优雅性.</p>
-<hr>
-<p>本文就讨论这么多内容,大家有什么问题或好的想法欢迎在下方参与<a href="#respond">留言和评论</a>.</p>
-<p>本文作者: <a href="https://github.com/Louiszhai" target="_blank" rel="external">louis</a></p>
-<p>本文链接: <a href="http://louiszhai.github.io/2015/12/16/currying/">http://louiszhai.github.io/2015/12/16/currying/</a></p>
-<p>参考文章</p>
-<ul>
-<li><a href="http://www.cnblogs.com/TomXu/archive/2012/07/23/2580701.html" target="_blank" rel="external">深入理解JavaScript系列（49）：Function模式（上篇） - 汤姆大叔 - 博客园</a></li>
-<li><a href="http://www.cnblogs.com/pigtail/p/3450852.html" target="_blank" rel="external">前端开发者进阶之函数反柯里化unCurrying - 穆乙 - 博客园</a></li>
-</ul>
-]]></content>
-    <summary type="html">
-    <![CDATA[柯里化 反柯里化 Currying unCurrying 固定参数 扩大使用范围]]>
     
     </summary>
     

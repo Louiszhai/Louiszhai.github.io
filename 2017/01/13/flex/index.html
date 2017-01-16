@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" >
+  <title>弹性盒模型flex指南 | louis blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="弹性盒模型 flex flex-grow flex-shrink flex-basis align-items align-content order flex-flow flex-direction flex-wrap align-self">
+<meta property="og:type" content="article">
+<meta property="og:title" content="弹性盒模型flex指南">
+<meta property="og:url" content="http://louiszhai.github.io/2017/01/13/flex/index.html">
+<meta property="og:site_name" content="louis blog">
+<meta property="og:description" content="弹性盒模型 flex flex-grow flex-shrink flex-basis align-items align-content order flex-flow flex-direction flex-wrap align-self">
+<meta property="og:image" content="http://louiszhai.github.io/docImages/flex01.jpeg">
+<meta property="og:image" content="http://louiszhai.github.io/docImages/flex03.png">
+<meta property="og:image" content="http://louiszhai.github.io/docImages/flex02.png">
+<meta property="og:updated_time" content="2017-01-16T02:43:33.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="弹性盒模型flex指南">
+<meta name="twitter:description" content="弹性盒模型 flex flex-grow flex-shrink flex-basis align-items align-content order flex-flow flex-direction flex-wrap align-self">
+  
+    <link rel="alternative" href="/atom.xml" title="louis blog" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+
+<body>
+<div id="container">
+    <div class="left-col">
+        <div class="overlay">
+	<!--<input type="text" class="st-default-search-input" style="position:absolute;top: 50px;left: 35px;">-->
+</div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img src="/i.png" class="js-avatar" style="width: 100%;height: 100%;opacity: 1;">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">louis</a></h1>
+		</hgroup>
+
+		
+		<p class="header-subtitle">程序猿 前端攻城师</p>
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>Menu</li>
+						<li>標籤</li>
+						
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives/">所有文章</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="github" target="_blank" href="https://github.com/Louiszhai" title="github">github</a>
+					        
+								<a class="weibo" target="_blank" href="http://weibo.com/xingyez" title="weibo">weibo</a>
+					        
+								<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						<a href="/tags/CSS/" style="font-size: 16.67px;">CSS</a> <a href="/tags/JavaScript/" style="font-size: 20px;">JavaScript</a> <a href="/tags/Web/" style="font-size: 10px;">Web</a> <a href="/tags/XSS/" style="font-size: 10px;">XSS</a> <a href="/tags/css/" style="font-size: 13.33px;">css</a> <a href="/tags/javascript/" style="font-size: 10px;">javascript</a>
+					</div>
+				</section>
+				
+				
+				
+
+				
+			</div>
+		</div>
+	</header>				
+</div>
+
+    </div>
+    <div class="mid-col">
+        <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">louis</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+			
+				<img src="/i.png" class="js-avatar" style="width: 100%;height: 100%;opacity: 1;">
+			
+			</div>
+			<hgroup>
+			  <h1 class="header-author">louis</h1>
+			</hgroup>
+			
+			<p class="header-subtitle">程序猿 前端攻城师</p>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives/">所有文章</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="https://github.com/Louiszhai" title="github">github</a>
+			        
+						<a class="weibo" target="_blank" href="http://weibo.com/xingyez" title="weibo">weibo</a>
+			        
+						<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+
+        <div class="body-wrap"><article id="post-flex" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/01/13/flex/" class="article-date">
+  	<time datetime="2017-01-13T00:42:01.000Z" itemprop="datePublished">2017-01-13</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      弹性盒模型flex指南
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CSS/">CSS</a></li></ul>
+	</div>
+
+        
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          <span class="toc-arrow"></span>
+<div id="toc" class="toc-article">
+    <div class="toc-title">目录</div>
+    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#u5BFC_u8BFB"><span class="toc-text">导读</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Flex"><span class="toc-text">Flex</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u517C_u5BB9_u6027"><span class="toc-text">兼容性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u4F18_u52BF"><span class="toc-text">优势</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u6982_u5FF5_u94FA_u57AB"><span class="toc-text">概念铺垫</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u5C5E_u6027"><span class="toc-text">属性</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#u5BB9_u5668_u5C5E_u6027"><span class="toc-text">容器属性</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#u5B50_u9879_u76EE_u5C5E_u6027"><span class="toc-text">子项目属性</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u573A_u666F_u56DE_u987E"><span class="toc-text">场景回顾</span></a></li></ol>
+</div>
+      
+        <h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>Web layout 是Web UI中的基础架构, 重要性不言而喻. 传统的盒模型, 借助display, position, float 属性应对普通布局游刃有余, 但针对复杂的或自适应布局, 常常捉襟见肘. 比如垂直居中, 就是一个老大难的问题, 借助flex弹性盒模型, 两行代码就可以优雅的实现之. (该方法曾在 <a href="http://louiszhai.github.io/2016/03/12/css-center/">16种方法实现水平居中垂直居中</a> 一文中提到). 当然, 本次我们不会只讨论垂直居中的问题, 我将努力尽可能的还原flex的应用生态.</p>
+<a id="more"></a>
+<h3 id="Flex"><a href="#Flex" class="headerlink" title="Flex"></a>Flex</h3><p>Flex即弹性盒模型, 该布局方案由W3C于2009年提出. 此后, Flex方案便历经v2009, v2011, v2012, v2014, v2015, v2016等版本, 最近方案是2016年5月26日起草的 <a href="http://www.w3.org/TR/2016/CR-css-flexbox-1-20160526/" target="_blank" rel="external">CSS Flexible Box Layout Module Level 1</a>.</p>
+<h3 id="u517C_u5BB9_u6027"><a href="#u517C_u5BB9_u6027" class="headerlink" title="兼容性"></a>兼容性</h3><p>首先, 我们来回顾下如今PC端的兼容性(以下为完全兼容版本).</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">IE</th>
+<th style="text-align:center">Edge</th>
+<th style="text-align:center">Firefox</th>
+<th style="text-align:center">Chrome</th>
+<th style="text-align:center">Safari</th>
+<th style="text-align:center">Opera</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">-</td>
+<td style="text-align:center">12+</td>
+<td style="text-align:center">28+</td>
+<td style="text-align:center">21+</td>
+<td style="text-align:center">6.1+</td>
+<td style="text-align:center">12.1+</td>
+</tr>
+</tbody>
+</table>
+<p>以上, IE10+仅支持2012版W3C的flex语法, 且存在较多已知的bug, 此时使用flex布局需谨慎.</p>
+<p>Chrome浏览器v21~v28版本需要添加 “-webkit-“ 前缀.</p>
+<p>Safari浏览器v6.1~v8版本需要添加 “-webkit-“ 前缀.</p>
+<p>Opera浏览器v15~v16版本需要添加 “-webkit-“ 前缀.</p>
+<p>因此, 看到一些sass编译后的css文件中带有 “-webkit-“ 前缀无需惊慌.</p>
+<p>平时开发时最为担心的便是移动端兼容性, 请看:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">IOS Safari</th>
+<th style="text-align:center">Opera mini</th>
+<th style="text-align:center">Android</th>
+<th style="text-align:center">Android Chrome</th>
+<th style="text-align:center">UC</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">7.1+</td>
+<td style="text-align:center">√</td>
+<td style="text-align:center">4.4+</td>
+<td style="text-align:center">55</td>
+<td style="text-align:center">-</td>
+</tr>
+</tbody>
+</table>
+<p>UC不对外提供webview内核, 除去一些H5app的应用, 各种分享页基本无需担心对其兼容性. 可见, Android4.4以上基本可以安心使用webview.</p>
+<h3 id="u4F18_u52BF"><a href="#u4F18_u52BF" class="headerlink" title="优势"></a>优势</h3><p>Flex布局使得子项目能够”弹性”的改变其高宽, 自由填充容器剩余空间, 以适应容器变大, 或者压缩子项目自身, 以适应容器变小; 同时还可以方便的调节子项目方向和顺序. flex常用于高宽需要自适应, 或子项目大小成比例, 或水平垂直对齐等场景.</p>
+<h3 id="u6982_u5FF5_u94FA_u57AB"><a href="#u6982_u5FF5_u94FA_u57AB" class="headerlink" title="概念铺垫"></a>概念铺垫</h3><p>Flex弹性盒模型里, 有容器和项目之分. 设置<code>display:flex</code>的为容器, 容器内的元素称作它的子项目, 容器有容器的一套属性, 子项目有子项目的另一套属性. (可以这么理解: father作为弹性盒子, 制定行为规范, son享受盒子的便利, 按照规范划分各自的”辖区”).</p>
+<p>以下图片摘自大漠的<a href="6">一个完整的Flexbox指南</a>文中.</p>
+<p><img src="http://louiszhai.github.io/docImages/flex01.jpeg" alt="flexbox"></p>
+<p>father制定的规范, 基于两个方向 — 水平和垂直. </p>
+<ul>
+<li>水平方向的称之为主轴(main axis), 垂直方向的称之为交叉轴(cross axis). </li>
+<li>主轴起始位置, 叫做<code>main start</code>, 末尾位置叫做<code>main end</code>; </li>
+<li>交叉轴起始位置, 叫做<code>cross start</code>, 末尾位置叫做<code>cross end</code>.</li>
+<li>子项目在主轴上所占的宽(高)度, 叫做<code>main size</code>, 在交叉轴上所占的高(宽)度, 叫做<code>cross size</code>.</li>
+</ul>
+<h3 id="u5C5E_u6027"><a href="#u5C5E_u6027" class="headerlink" title="属性"></a>属性</h3><p>display: flex | inline-flex;(元素将升级为弹性盒子). 前者容器升级为块级盒子, 后者容器将升级为行内盒子. 元素采用flex布局以后, 子元素的float, clear, vertical-align属性都将失效.</p>
+<h4 id="u5BB9_u5668_u5C5E_u6027"><a href="#u5BB9_u5668_u5C5E_u6027" class="headerlink" title="容器属性"></a>容器属性</h4><p>容器具有以下6个属性.</p>
+<ul>
+<li><p>flex-direction 指定主轴的方向.</p>
+<p>| flex-direction的值 |         描述          |<br>| :————–: | :—————–: |<br>|     row(默认)      | 指定主轴水平, 子项目从左至右排列➜  |<br>|   row-reverse    | 指定主轴水平, 子项目从右至左排列⬅︎ |<br>|      column      | 指定主轴垂直, 子项目从上至下排列⬇︎ |<br>|  column-reverse  | 指定主轴垂直, 子项目从下至上排列⬆︎ |</p>
+</li>
+<li><p>flex-wrap 指定如何换行.</p>
+<p>| flex-wrap的值  |      描述      |<br>| :———-: | :———-: |<br>|  nowrap(默认)  |    默认不换行     |<br>|     wrap     |     正常换行     |<br>| wrap-reverse | 换行, 且前面的行在底部 |</p>
+</li>
+<li><p>flex-flow 它是flex-direction 和 flex-wrap的简写形式, 默认值为<code>row nowrap</code>.</p>
+</li>
+<li><p>justify-content 指定主轴上子项目的对齐方式.(通常为水平方向对齐方式)</p>
+<p>| justify-content的值 |             描述(子项目–主轴方向)              |<br>| :—————: | :————————————: |<br>|  flex-start(默认)   |        子项目起始位置与<code>main start</code>位置对齐        |<br>|     flex-end      |         子项目末尾位置与<code>main end</code>位置对齐         |<br>|      center       |               在主轴方向居中于容器               |<br>|   space-between   |         与交叉轴两端对齐, 子项目之间的间隔全部相等         |<br>|   space-around    | 子项目两侧的距离相等, 它们之间的距离两倍于它们与主轴起始或末尾位置的距离. |</p>
+</li>
+<li><p>align-items 指定交叉轴上子项目的对齐方式.(通常为垂直方向对齐方式)</p>
+<p>| align-items的值 |       描述(子项目—交叉轴方向)       |<br>| :———–: | :———————–: |<br>|  flex-start   | 子项目起始位置与<code>cross start</code>位置对齐 |<br>|   flex-end    |  子项目末尾位置与<code>cross end</code>位置对齐  |<br>|    center     |        在交叉轴方向居中于容器        |<br>|   baseline    |        第一行文字的基线对齐         |<br>|  stretch(默认)  |  高度未定(或auto)时, 将占满容器的高度   |</p>
+</li>
+<li><p>align-content 指定多根主轴的对齐方式, . 若只有一根主轴, 则无效.</p>
+<p>| align-content的值 |                描述(子项目)                 |<br>| :————-: | :————————————: |<br>|   flex-start    |          顶部与<code>cross start</code>位置对齐          |<br>|    flex-end     |           底部与<code>cross end</code>位置对齐           |<br>|     center      |              在交叉轴方向居中于容器               |<br>|  space-between  |            与交叉轴两端对齐, 间隔全部相等            |<br>|  space-around   | 子项目两侧的距离相等, 它们之间的距离两倍于它们与主轴起始或末尾位置的距离. |<br>|   stretch(默认)   |             多根主轴上的子项目充满交叉轴             |</p>
+</li>
+</ul>
+<h4 id="u5B50_u9879_u76EE_u5C5E_u6027"><a href="#u5B50_u9879_u76EE_u5C5E_u6027" class="headerlink" title="子项目属性"></a>子项目属性</h4><p>子项目具有以下6个属性.</p>
+<ul>
+<li><p>flex-grow 指定子项目的放大比例, 默认为0(即不放大). 该属性可取值为任何正整数. 假设各个子项目的放大比例之和为n, 那么容器内剩余的空间将分配n份, 每个子项目各自分到x/n份. (x为该子项目的放大比例)</p>
+</li>
+<li><p>flex-shrink 指定子项目的缩小比例, 默认为<code>1</code>. 设置为0时, 空间不足该子项目将不缩小. 我们知道, <code>容器的缩小总宽度=子项目所需要的总宽度-容器实际宽度</code>, 假设容器需要缩小的宽度为W, 某子项目的默认宽度为L, 其缩小比例为p, 那么该子项目实际的宽度为<code>L-p*W</code>. </p>
+<ul>
+<li><p>上面轻描淡写的给出了子项目的缩小比例, 可能会给你一种错觉— “缩小比例很容易计算”, 实际上, <strong>我们在计算元素需要缩小比例时, 总是要考虑到元素自身默认的大小</strong>.</p>
+</li>
+<li><p>假设上述子项目其flex-shrink值为x1, 另一个子项目的默认宽度为R, flex-shrink值为x2, 考虑到元素自身大小. 最终第一个子项目的缩小比例是加权了自身默认大小后的结果, 即<code>rate = L*x1/(L*x1 + R*x2)</code>.</p>
+<p><img src="http://louiszhai.github.io/docImages/flex03.png" alt=""></p>
+</li>
+<li><p>为什么计算会如此复杂, 如此不直观??? 这是因为, 子项目的大小各不一致, 假如一个子项目是另一个子项目主轴宽度的9倍, 前者的flex-shrink值为1, 后者为9, 而容器实际上只有他们默认总宽度的一半. 这意味着, 这两个子项目共计要压缩为默认的一半. 如果仅仅按照flex-shrink值来决定比例, 那么第二个子项目需要压缩其默认的9/10, 而我们知道, 它默认是如此的小, 即使全部压缩了, 也无济于事; 而第一个元素仅需要压缩其默认的1/10, 简直就是九牛一毛, 根本达不到默认总宽度压缩一半的效果. 很明显, 这种压缩比例的分配方式是不合理的. 因此最终的压缩比例加入了默认宽度值(即flex-basis值), 表达式的分子为 <code>flex-shrink * flex-basis</code>, 分母为各子项目  <code>flex-shrink * flex-basis</code> 之和.</p>
+</li>
+</ul>
+</li>
+<li><p>flex-basis 指定子项目分配的默认空间, 默认为<code>auto</code>. 即该子项目的原本大小.</p>
+</li>
+<li><p>flex 是 flex-grow, flex-shrink, flex-basis 3个属性的缩写. 默认为<code>0 1 auto</code>. 该属性取值为auto时等同于设置为<code>1 1 auto</code>, 取值为none时等同于设置为<code>0 0 auto</code>.</p>
+</li>
+<li><p>align-self 指定单个子项目独立的对齐方式. 默认为<code>auto</code>, 表示继承父元素的align-items属性, 如无父元素, 则等同于<code>stretch</code>. 该属性共有6种值, 其他值与上述align-items属性保持一致.</p>
+</li>
+<li><p>order 指定子项目的顺序, 数值越小, 顺序越靠前, 默认为<code>0</code>.</p>
+</li>
+</ul>
+<h3 id="u573A_u666F_u56DE_u987E"><a href="#u573A_u666F_u56DE_u987E" class="headerlink" title="场景回顾"></a>场景回顾</h3><ol>
+<li><p>想要实现垂直居中的效果, 只需要设置父元素为<code>display:flex;justify-content:center</code> 即可. (当然, 父元素样式采用:<code>display:table;</code>, 子元素样式采用:<code>display:table-cell;vertical-align:middle</code> 也是可以实现的), 如下图.</p>
+<p><img src="http://louiszhai.github.io/docImages/flex02.png" alt=""></p>
+</li>
+<li><p>想要实现左右两个元素等高(父元素高度由子元素撑开), 并且各占一半的宽度. 如上图.</p>
+<ul>
+<li>早期的实现方案, 需要借助负margin. 父元素样式设置为<code>overflow:hidden</code>, 子元素样式设置为<code>margin-bottom:-10000px;padding-bottom:10000px;</code>, 这样, 每个子元素便能借助padding撑开, 同时, 借助负margin和overflow合理裁剪.</li>
+<li>第二种方案就是借助IE8都支持的<code>display:table</code>属性, 父元素样式设置为<code>display:table</code> , 子元素设置为<code>display:table-cell</code>. 利用表格的行高一致性, 轻松实现行高一致.</li>
+<li>最终, 我们发现, 还是flex弹性盒模型来得方便快捷, 它只需要父级元素样式设置为<code>display:flex</code>.</li>
+</ul>
+</li>
+</ol>
+<hr>
+<p>本问就讨论这么多内容,大家有什么问题或好的想法欢迎在下方参与<a href="#respond">留言和评论</a>.</p>
+<p>本文作者: <a href="https://github.com/Louiszhai" target="_blank" rel="external">louis</a></p>
+<p>本文链接: <a href="http://louiszhai.github.io/2017/01/13/flex/">http://louiszhai.github.io/2017/01/13/flex/</a></p>
+<p>参考文章</p>
+<ul>
+<li><a href="https://www.w3.org/TR/css-flexbox-1/" target="_blank" rel="external">CSS Flexible Box Layout Module Level 1</a></li>
+<li><a href="https://www.w3.org/TR/2012/WD-css3-flexbox-20120322/" target="_blank" rel="external">2012 CSS Flexible Box Layout Module</a></li>
+<li><a href="https://www.w3.org/TR/2009/WD-css3-flexbox-20090723/" target="_blank" rel="external">2009 CSS Flexible Box Layout Module</a></li>
+<li><a href="http://www.ruanyifeng.com/blog/2015/07/flex-grammar.html" target="_blank" rel="external">Flex 布局教程：语法篇 - 阮一峰的网络日志</a></li>
+<li><a href="https://zm10.sm-tc.cn/?src=l4uLj8XQ0IiIiNGIzJyPk4qM0ZyQktCcjIzM0J7SmIqWm5rSi5DSmZOah52Qh9GXi5KT&amp;from=derive&amp;depth=2&amp;v=1&amp;link_type=12&amp;uid=5f61658d8b9f95c8d0141e9c09fa6e85&amp;hid=f2ad43235a237619a455bdb39512d4c1&amp;restype=1&amp;uc_param_str=dnntnwvepffrgibijbprsvdsei&amp;query=%E5%A4%A7%E6%BC%A0+flex" target="_blank" rel="external">一个完整的Flexbox指南–大漠</a></li>
+</ul>
+
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2016/12/23/sort/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">JS中可能用得到的全部的排序算法</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share_jia">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">Share to: &nbsp; </span>
+		<a class="jiathis_button_facebook"></a> 
+    <a class="jiathis_button_twitter"></a>
+    <a class="jiathis_button_plus"></a> 
+    <a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+
+
+
+<div class="duoshuo">
+	<div class="ds-thread" data-thread-key="flex" data-title="弹性盒模型flex指南" data-url="http://louiszhai.github.io/2017/01/13/flex/"></div>
+	<style>
+		#ds-reset .ds-avatar img{width:54px;height:54px;border-radius:27px;-webkit-border-radius:27px;-moz-border-radius:27px;box-shadow:inset 0 -1px 0 #3333sf;-webkit-box-shadow:inset 0 -1px 0 #3333sf;-webkit-transition:0.4s;-webkit-transition:-webkit-transform 0.4s ease-out;transition:transform 0.4s ease-out;-moz-transition:-moz-transform 0.4s ease-out;}
+		#ds-reset .ds-avatar img:hover{box-shadow:0 0 10px #fff;rgba(255,255,255,.6),inset 0 0 20px rgba(255,255,255,1);-webkit-box-shadow:0 0 10px #fff;rgba(255,255,255,.6),inset 0 0 20px rgba(255,255,255,1);transform:rotateZ(360deg);-webkit-transform:rotateZ(360deg);-moz-transform:rotateZ(360deg);}
+		p.ds-powered-by,#ds-sync-checkbox,.ds-sync label{display:none!important;}
+		#ds-reset .ds-rounded-top{-webkit-border-top-right-radius:0px;-webkit-border-top-left-radius:0px;border-top-right-radius:0px;border-top-left-radius:0px;}
+		#ds-thread #ds-reset .ds-textarea-wrapper{background:#fff;border:0;margin-bottom:20px;padding-right:0px;}
+		#ds-thread #ds-reset .ds-textarea-wrapper textarea{min-height:80px;border:1px solid #ccc;padding:10px;-webkit-appearance:none;border-radius:0;background-color:#FFFFFF;border-color:#cccccc;box-shadow:inset 0 1px 2px rgba(0,0,0,0.1);color:rgba(0,0,0,0.75);-webkit-box-sizing:border-box;box-sizing:border-box;-webkit-transition:border-color 0.15s linear,background 0.15s linear;-moz-transition:border-color 0.15s linear,background 0.15s linear;-ms-transition:border-color 0.15s linear,background 0.15s linear;-o-transition:border-color 0.15s linear,background 0.15s linear;transition:border-color 0.15s linear,background 0.15s linear;}
+		/*#ds-thread #ds-reset .ds-textarea-wrapper textarea:focus{border-color:#999999;background:#fafafa;outline:none;}*/
+		#ds-thread #ds-reset .ds-post-options{border-bottom-left-radius:0px;-webkit-border-bottom-left-radius:0px;border:none;background:none!important;}
+		#ds-reset .ds-textarea-wrapper textarea:focus{border-color:#66afe9;outline:0;-webkit-box-shadow:inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);box-shadow:inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);}
+		#ds-thread #ds-reset .ds-post-button:hover,#ds-thread #ds-reset .ds-post-button:focus{
+		    background-color: #51a351;
+		    background-position: 0 -32px;
+		    color:white;
+		}
+		#ds-thread #ds-reset .ds-post-toolbar,#ds-reset .ds-avatar{box-shadow:none;}
+		#ds-thread #ds-reset .ds-textarea-wrapper textarea:focus{
+	    	/*background: none repeat scroll 0 0 #F4FAFF;*/
+	    	border-color:#9DD4FD;
+	    	border-width:1px;
+	    	box-shadow:0 1px 1px rgba(0,0,0,0.075) inset, 0 0 8px rgba(82, 168, 236, 0.6);
+	    	outline:0 none;
+    	}
+		#ds-thread #ds-reset .ds-textarea-wrapper textarea:active{
+	    	/*background: none repeat scroll 0 0 #F4FAFF;*/
+	    	border-width:1px;
+	    	border-color:#9DD4FD;
+	    	box-shadow:0 1px 1px rgba(0,0,0,0.075) inset, 0 0 8px rgba(82, 168, 236, 0.6);
+	    	outline:0 none;
+    	}
+    	#ds-thread #ds-reset .ds-post-button{
+    		box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset, 0 1px 2px rgba(0, 0, 0, 0.05);
+		    border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+		    border-width: 1px;
+		    border-style: solid;
+		    border-radius: 3px;
+		    background: #5bb75b;
+		    color:white;
+		    text-shadow:none;
+		    transition:background-color 300ms ease-out;
+    	}
+    	#ds-reset .ds-avatar{
+    		background-color:initial;
+    	}
+
+	</style>
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"true"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+</div>
+
+
+
+</div>
+        <link rel="stylesheet" href="/css/content.css" type="text/css">
+<footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+      <img src="/img/top_arrow.png" class="top_arrow" id="top_arrow">
+    	<div class="footer-left">
+    		&copy; 2017 louis
+
+        <span style="position:relative;top:2px" id="cnzz_stat_icon_1256923583"></span>
+        <script type="text/javascript">
+          var s = document.createElement('script');
+          var cnzz_protocol = (("https:" == document.location.protocol) ? "https://" : "http://");
+          s.src = cnzz_protocol + "s11.cnzz.com/z_stat.php?id=1256923583&show=pic";
+          document.body.appendChild(s);
+        </script>
+
+    	</div>
+      	<div class="footer-right">
+      		<a href="https://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+<script type="text/javascript">
+  //swifty
+  /*(function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+  
+  _st('install','4AmBuvmx4Cy-3hvyxeh8','2.0.0');*/
+</script>
+    </div>
+    
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+
+
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: false,
+		animate: false,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="/js/jquery-1.9.1.min.js" type="text/javascript"></script>
+<script src="/js/main.js" type="text/javascript"></script>
+<script src="/js/content.js" type="text/javascript"></script>
+
+
+
+
+
+
+
+</div>
+<script src="/js/screenfull.js" type="text/javascript"></script>
+<a href="https://github.com/Louiszhai" style="position: fixed; top: 0; right: 0; border: 0;z-index:9999"><img
+            source="https://camo.githubusercontent.com/a6677b08c955af8400f44c6298f40e7d19cc5b2d/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677261795f3664366436642e706e67"
+            src="/img/fork_me_on_github.png" alt="Fork me on GitHub"
+            data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png"></a>
+</body>
+</html>
