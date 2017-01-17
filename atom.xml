@@ -4,7 +4,7 @@
   <subtitle><![CDATA[程序猿 前端攻城师]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://louiszhai.github.io/"/>
-  <updated>2017-01-16T05:52:15.000Z</updated>
+  <updated>2017-01-17T01:33:46.000Z</updated>
   <id>http://louiszhai.github.io/</id>
   
   <author>
@@ -19,7 +19,7 @@
     <link href="http://louiszhai.github.io/2017/01/13/flex/"/>
     <id>http://louiszhai.github.io/2017/01/13/flex/</id>
     <published>2017-01-13T00:42:01.000Z</published>
-    <updated>2017-01-16T05:52:15.000Z</updated>
+    <updated>2017-01-17T01:33:46.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>Web layout 是Web UI中的基础架构, 重要性不言而喻. 传统的盒模型, 借助display, position, float 属性应对普通布局游刃有余, 但针对复杂的或自适应布局, 常常捉襟见肘. 比如垂直居中, 就是一个老大难的问题, 借助flex弹性盒模型, 两行代码就可以优雅的实现之. (该方法曾在 <a href="http://louiszhai.github.io/2016/03/12/css-center/">16种方法实现水平居中垂直居中</a> 一文中提到). 当然, 本次我们不会只讨论垂直居中的问题, 我将努力尽可能的还原flex的应用生态.</p>
 <a id="more"></a>
 <h3 id="Flex"><a href="#Flex" class="headerlink" title="Flex"></a>Flex</h3><p>Flex即弹性盒模型, 该布局方案由W3C于2009年提出. 此后, Flex方案便历经v2009, v2011, v2012, v2014, v2015, v2016等版本, 最近方案是2016年5月26日起草的 <a href="http://www.w3.org/TR/2016/CR-css-flexbox-1-20160526/" target="_blank" rel="external">CSS Flexible Box Layout Module Level 1</a>.</p>
@@ -98,19 +98,19 @@
 </thead>
 <tbody>
 <tr>
-<td style="text-align:center">row(默认)</td>
+<td style="text-align:center"><strong>row</strong>(默认)</td>
 <td style="text-align:center">指定主轴水平, 子项目从左至右排列➜</td>
 </tr>
 <tr>
-<td style="text-align:center">row-reverse</td>
+<td style="text-align:center"><strong>row-reverse</strong></td>
 <td style="text-align:center">指定主轴水平, 子项目从右至左排列⬅︎</td>
 </tr>
 <tr>
-<td style="text-align:center">column</td>
+<td style="text-align:center"><strong>column</strong></td>
 <td style="text-align:center">指定主轴垂直, 子项目从上至下排列⬇︎</td>
 </tr>
 <tr>
-<td style="text-align:center">column-reverse</td>
+<td style="text-align:center"><strong>column-reverse</strong></td>
 <td style="text-align:center">指定主轴垂直, 子项目从下至上排列⬆︎</td>
 </tr>
 </tbody>
@@ -127,15 +127,15 @@
 </thead>
 <tbody>
 <tr>
-<td style="text-align:center">nowrap(默认)</td>
+<td style="text-align:center"><strong>nowrap</strong>(默认)</td>
 <td style="text-align:center">默认不换行</td>
 </tr>
 <tr>
-<td style="text-align:center">wrap</td>
+<td style="text-align:center"><strong>wrap</strong></td>
 <td style="text-align:center">正常换行</td>
 </tr>
 <tr>
-<td style="text-align:center">wrap-reverse</td>
+<td style="text-align:center"><strong>wrap-reverse</strong></td>
 <td style="text-align:center">换行, 且前面的行在底部</td>
 </tr>
 </tbody>
@@ -153,23 +153,23 @@
 </thead>
 <tbody>
 <tr>
-<td style="text-align:center">flex-start(默认)</td>
+<td style="text-align:center"><strong>flex-start</strong>(默认)</td>
 <td style="text-align:center">子项目起始位置与<code>main start</code>位置对齐</td>
 </tr>
 <tr>
-<td style="text-align:center">flex-end</td>
+<td style="text-align:center"><strong>flex-end</strong></td>
 <td style="text-align:center">子项目末尾位置与<code>main end</code>位置对齐</td>
 </tr>
 <tr>
-<td style="text-align:center">center</td>
+<td style="text-align:center"><strong>center</strong></td>
 <td style="text-align:center">在主轴方向居中于容器</td>
 </tr>
 <tr>
-<td style="text-align:center">space-between</td>
+<td style="text-align:center"><strong>space-between</strong></td>
 <td style="text-align:center">与交叉轴两端对齐, 子项目之间的间隔全部相等</td>
 </tr>
 <tr>
-<td style="text-align:center">space-around</td>
+<td style="text-align:center"><strong>space-around</strong></td>
 <td style="text-align:center">子项目两侧的距离相等, 它们之间的距离两倍于它们与主轴起始或末尾位置的距离.</td>
 </tr>
 </tbody>
@@ -186,23 +186,23 @@
 </thead>
 <tbody>
 <tr>
-<td style="text-align:center">flex-start</td>
+<td style="text-align:center"><strong>flex-start</strong></td>
 <td style="text-align:center">子项目起始位置与<code>cross start</code>位置对齐</td>
 </tr>
 <tr>
-<td style="text-align:center">flex-end</td>
+<td style="text-align:center"><strong>flex-end</strong></td>
 <td style="text-align:center">子项目末尾位置与<code>cross end</code>位置对齐</td>
 </tr>
 <tr>
-<td style="text-align:center">center</td>
+<td style="text-align:center"><strong>center</strong></td>
 <td style="text-align:center">在交叉轴方向居中于容器</td>
 </tr>
 <tr>
-<td style="text-align:center">baseline</td>
+<td style="text-align:center"><strong>baseline</strong></td>
 <td style="text-align:center">第一行文字的基线对齐</td>
 </tr>
 <tr>
-<td style="text-align:center">stretch(默认)</td>
+<td style="text-align:center"><strong>stretch</strong>(默认)</td>
 <td style="text-align:center">高度未定(或auto)时, 将占满容器的高度</td>
 </tr>
 </tbody>
@@ -219,36 +219,36 @@
 </thead>
 <tbody>
 <tr>
-<td style="text-align:center">flex-start</td>
+<td style="text-align:center"><strong>flex-start</strong></td>
 <td style="text-align:center">顶部与<code>cross start</code>位置对齐</td>
 </tr>
 <tr>
-<td style="text-align:center">flex-end</td>
+<td style="text-align:center"><strong>flex-end</strong></td>
 <td style="text-align:center">底部与<code>cross end</code>位置对齐</td>
 </tr>
 <tr>
-<td style="text-align:center">center</td>
+<td style="text-align:center"><strong>center</strong></td>
 <td style="text-align:center">在交叉轴方向居中于容器</td>
 </tr>
 <tr>
-<td style="text-align:center">space-between</td>
+<td style="text-align:center"><strong>space-between</strong></td>
 <td style="text-align:center">与交叉轴两端对齐, 间隔全部相等</td>
 </tr>
 <tr>
-<td style="text-align:center">space-around</td>
+<td style="text-align:center"><strong>space-around</strong></td>
 <td style="text-align:center">子项目两侧的距离相等, 它们之间的距离两倍于它们与主轴起始或末尾位置的距离.</td>
 </tr>
 <tr>
-<td style="text-align:center">stretch(默认)</td>
+<td style="text-align:center"><strong>stretch</strong>(默认)</td>
 <td style="text-align:center">多根主轴上的子项目充满交叉轴</td>
 </tr>
 </tbody>
 </table>
 <h4 id="u5B50_u9879_u76EE_u5C5E_u6027"><a href="#u5B50_u9879_u76EE_u5C5E_u6027" class="headerlink" title="子项目属性"></a>子项目属性</h4><p>子项目具有以下6个属性.</p>
 <ul>
-<li><p>flex-grow 指定子项目的放大比例, 默认为0(即不放大). 该属性可取值为任何正整数. 假设各个子项目的放大比例之和为n, 那么容器内剩余的空间将分配n份, 每个子项目各自分到x/n份. (x为该子项目的放大比例)</p>
+<li><p><strong>flex-grow</strong> 指定子项目的放大比例, 默认为0(即不放大). 该属性可取值为任何正整数. 假设各个子项目的放大比例之和为n, 那么容器内剩余的空间将分配n份, 每个子项目各自分到x/n份. (x为该子项目的放大比例)</p>
 </li>
-<li><p>flex-shrink 指定子项目的缩小比例, 默认为<code>1</code>. 设置为0时, 空间不足该子项目将不缩小. 我们知道, <code>容器的缩小总宽度=子项目所需要的总宽度-容器实际宽度</code>, 假设容器需要缩小的宽度为W, 某子项目的默认宽度为L, 其缩小比例为p, 那么该子项目实际的宽度为<code>L-p*W</code>. </p>
+<li><p><strong>flex-shrink</strong> 指定子项目的缩小比例, 默认为<code>1</code>. 设置为0时, 空间不足该子项目将不缩小. 我们知道, <code>容器的缩小总宽度=子项目所需要的总宽度-容器实际宽度</code>, 假设容器需要缩小的宽度为W, 某子项目的默认宽度为L, 其缩小比例为p, 那么该子项目实际的宽度为<code>L-p*W</code>. </p>
 <ul>
 <li><p>上面轻描淡写的给出了子项目的缩小比例, 可能会给你一种错觉— “缩小比例很容易计算”, 实际上, <strong>我们在计算元素需要缩小比例时, 总是要考虑到元素自身默认的大小</strong>.</p>
 </li>
@@ -259,13 +259,13 @@
 </li>
 </ul>
 </li>
-<li><p>flex-basis 指定子项目分配的默认空间, 默认为<code>auto</code>. 即该子项目的原本大小.</p>
+<li><p><strong>flex-basis</strong> 指定子项目分配的默认空间, 默认为<code>auto</code>. 即该子项目的原本大小.</p>
 </li>
-<li><p>flex 是 flex-grow, flex-shrink, flex-basis 3个属性的缩写. 默认为<code>0 1 auto</code>. 该属性取值为auto时等同于设置为<code>1 1 auto</code>, 取值为none时等同于设置为<code>0 0 auto</code>.</p>
+<li><p><strong>flex</strong> 是 flex-grow, flex-shrink, flex-basis 3个属性的缩写. 默认为<code>0 1 auto</code>. 该属性取值为auto时等同于设置为<code>1 1 auto</code>, 取值为none时等同于设置为<code>0 0 auto</code>.</p>
 </li>
-<li><p>align-self 指定单个子项目独立的对齐方式. 默认为<code>auto</code>, 表示继承父元素的align-items属性, 如无父元素, 则等同于<code>stretch</code>. 该属性共有6种值, 其他值与上述align-items属性保持一致.</p>
+<li><p><strong>align-self</strong> 指定单个子项目独立的对齐方式. 默认为<code>auto</code>, 表示继承父元素的align-items属性, 如无父元素, 则等同于<code>stretch</code>. 该属性共有6种值, 其他值与上述align-items属性保持一致.</p>
 </li>
-<li><p>order 指定子项目的顺序, 数值越小, 顺序越靠前, 默认为<code>0</code>.</p>
+<li><p><strong>order</strong> 指定子项目的顺序, 数值越小, 顺序越靠前, 默认为<code>0</code>.</p>
 </li>
 </ul>
 <h3 id="u573A_u666F_u56DE_u987E"><a href="#u573A_u666F_u56DE_u987E" class="headerlink" title="场景回顾"></a>场景回顾</h3><ol>
