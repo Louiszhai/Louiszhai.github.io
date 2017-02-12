@@ -4,7 +4,7 @@
   <subtitle><![CDATA[程序猿 前端攻城师]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://louiszhai.github.io/"/>
-  <updated>2017-01-17T01:33:46.000Z</updated>
+  <updated>2017-02-12T08:22:48.000Z</updated>
   <id>http://louiszhai.github.io/</id>
   
   <author>
@@ -19,7 +19,7 @@
     <link href="http://louiszhai.github.io/2017/01/13/flex/"/>
     <id>http://louiszhai.github.io/2017/01/13/flex/</id>
     <published>2017-01-13T00:42:01.000Z</published>
-    <updated>2017-01-17T01:33:46.000Z</updated>
+    <updated>2017-02-12T08:22:48.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>Web layout 是Web UI中的基础架构, 重要性不言而喻. 传统的盒模型, 借助display, position, float 属性应对普通布局游刃有余, 但针对复杂的或自适应布局, 常常捉襟见肘. 比如垂直居中, 就是一个老大难的问题, 借助flex弹性盒模型, 两行代码就可以优雅的实现之. (该方法曾在 <a href="http://louiszhai.github.io/2016/03/12/css-center/">16种方法实现水平居中垂直居中</a> 一文中提到). 当然, 本次我们不会只讨论垂直居中的问题, 我将努力尽可能的还原flex的应用生态.</p>
 <a id="more"></a>
 <h3 id="Flex"><a href="#Flex" class="headerlink" title="Flex"></a>Flex</h3><p>Flex即弹性盒模型, 该布局方案由W3C于2009年提出. 此后, Flex方案便历经v2009, v2011, v2012, v2014, v2015, v2016等版本, 最近方案是2016年5月26日起草的 <a href="http://www.w3.org/TR/2016/CR-css-flexbox-1-20160526/" target="_blank" rel="external">CSS Flexible Box Layout Module Level 1</a>.</p>
@@ -60,6 +60,7 @@
 <th style="text-align:center">Android</th>
 <th style="text-align:center">Android Chrome</th>
 <th style="text-align:center">UC</th>
+<th style="text-align:center">微信</th>
 </tr>
 </thead>
 <tbody>
@@ -69,10 +70,18 @@
 <td style="text-align:center">4.4+</td>
 <td style="text-align:center">55</td>
 <td style="text-align:center">-</td>
+<td style="text-align:center">当前支持</td>
 </tr>
 </tbody>
 </table>
-<p>UC不对外提供webview内核, 除去一些H5app的应用, 各种分享页基本无需担心对其兼容性. 可见, Android4.4以上基本可以安心使用webview.</p>
+<p>微信当前版本已支持flex.</p>
+<p>UC不对外提供webview内核, 除去一些H5app的应用, 各种分享页基本(常在微信下打开)基本不需要担心对其兼容性, 实在需要实现, UC还是支持老版本的弹性盒子的, 可以优雅降级. 可见, Android4.4以上基本可以安心使用flex.</p>
+<h3 id="Autoprefixer"><a href="#Autoprefixer" class="headerlink" title="Autoprefixer"></a>Autoprefixer</h3><p>强记各种浏览器的前缀是没有必要的, 因为autoprefixer该做的, 都帮我们做了. 因此建议尝试下以下三个插件之一.</p>
+<ul>
+<li><a href="https://github.com/nDmitry/grunt-autoprefixer" target="_blank" rel="external">grunt-autoprefixer</a></li>
+<li><a href="https://www.npmjs.com/package/gulp-autoprefixer" target="_blank" rel="external">gulp-autoprefixer</a></li>
+<li><a href="https://github.com/postcss/autoprefixer" target="_blank" rel="external">PostCSS-autoprefixer</a></li>
+</ul>
 <h3 id="u4F18_u52BF"><a href="#u4F18_u52BF" class="headerlink" title="优势"></a>优势</h3><p>Flex布局使得子项目能够”弹性”的改变其高宽, 自由填充容器剩余空间, 以适应容器变大, 或者压缩子项目自身, 以适应容器变小; 同时还可以方便的调节子项目方向和顺序. flex常用于高宽需要自适应, 或子项目大小成比例, 或水平垂直对齐等场景.</p>
 <h3 id="u6982_u5FF5_u94FA_u57AB"><a href="#u6982_u5FF5_u94FA_u57AB" class="headerlink" title="概念铺垫"></a>概念铺垫</h3><p>Flex弹性盒模型里, 有容器和项目之分. 设置<code>display:flex</code>的为容器, 容器内的元素称作它的子项目, 容器有容器的一套属性, 子项目有子项目的另一套属性. (可以这么理解: father作为弹性盒子, 制定行为规范, son享受盒子的便利, 按照规范划分各自的”辖区”).</p>
 <p>以下图片摘自大漠的<a href="6">一个完整的Flexbox指南</a>文中.</p>
@@ -279,8 +288,12 @@
 <li>最终, 我们发现, 还是flex弹性盒模型来得方便快捷, 它只需要父级元素样式设置为<code>display:flex</code>.</li>
 </ul>
 </li>
+<li><p>给input元素设置<code>flex:1</code>时需要注意, 通常input拥有一个默认宽度(用于展示默认数量的字符), 在chrome v55下, 这个宽度默认为126px(同时还包含2px的border). 因此想要实现input宽度自适应, 可以设置其width为0.</p>
+</li>
 </ol>
-<p>注: 有关flex的旧语法, 请戳这篇回顾  <a href="https://segmentfault.com/a/1190000003978624" target="_blank" rel="external">Flex布局新旧混合写法详解（兼容微信）</a> .</p>
+<p>有关flex的旧语法, 请戳这篇回顾  <a href="https://segmentfault.com/a/1190000003978624" target="_blank" rel="external">Flex布局新旧混合写法详解（兼容微信）</a> .</p>
+<p>有关移动端的最佳实践, 请戳这篇围观 <a href="https://isux.tencent.com/flexbox.html" target="_blank" rel="external">移动端全兼容的flexbox速成班</a> .</p>
+<p>当然, 这里还有一个 <a href="https://github.com/philipwalton/flexbugs" target="_blank" rel="external">Flexbugs</a> 列表, github上已有近6k的star, 感兴趣可以前去看看.</p>
 <hr>
 <p>本问就讨论这么多内容,大家有什么问题或好的想法欢迎在下方参与<a href="#respond">留言和评论</a>.</p>
 <p>本文作者: <a href="https://github.com/Louiszhai" target="_blank" rel="external">louis</a></p>
