@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" >
+  <title>box-shadow属性探秘 | louis blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="box-shadow">
+<meta property="og:type" content="article">
+<meta property="og:title" content="box-shadow属性探秘">
+<meta property="og:url" content="http://louiszhai.github.io/2017/02/12/box-shadow/index.html">
+<meta property="og:site_name" content="louis blog">
+<meta property="og:description" content="box-shadow">
+<meta property="og:image" content="http://louiszhai.github.io/docImages/box-shadow01.png">
+<meta property="og:image" content="http://louiszhai.github.io/docImages/box-shadow02.png">
+<meta property="og:image" content="http://louiszhai.github.io/docImages/box-shadow03.png">
+<meta property="og:image" content="http://louiszhai.github.io/docImages/box-shadow04.png">
+<meta property="og:image" content="http://louiszhai.github.io/docImages/box-shadow05.png">
+<meta property="og:image" content="http://louiszhai.github.io/docImages/box-shadow06.png">
+<meta property="og:image" content="http://louiszhai.github.io/docImages/box-shadow07.png">
+<meta property="og:image" content="http://louiszhai.github.io/docImages/box-shadow08.png">
+<meta property="og:image" content="http://louiszhai.github.io/docImages/box-shadow09.png">
+<meta property="og:image" content="http://louiszhai.github.io/docImages/box-shadow10.png">
+<meta property="og:image" content="http://louiszhai.github.io/docImages/box-shadow19.png">
+<meta property="og:image" content="http://louiszhai.github.io/docImages/box-shadow11.png">
+<meta property="og:image" content="http://louiszhai.github.io/docImages/box-shadow12.png">
+<meta property="og:image" content="http://louiszhai.github.io/docImages/box-shadow13.png">
+<meta property="og:image" content="http://louiszhai.github.io/docImages/box-shadow20.png">
+<meta property="og:image" content="http://louiszhai.github.io/docImages/box-shadow14.png">
+<meta property="og:image" content="http://louiszhai.github.io/docImages/box-shadow15.png">
+<meta property="og:image" content="http://louiszhai.github.io/docImages/box-shadow16.png">
+<meta property="og:image" content="http://louiszhai.github.io/docImages/box-shadow17.png">
+<meta property="og:image" content="http://louiszhai.github.io/docImages/box-shadow14.png">
+<meta property="og:image" content="http://louiszhai.github.io/docImages/box-shadow18.gif">
+<meta property="og:image" content="http://louiszhai.github.io/docImages/box-shadow21.png">
+<meta property="og:image" content="http://louiszhai.github.io/docImages/box-shadow22.png">
+<meta property="og:updated_time" content="2017-02-19T08:03:26.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="box-shadow属性探秘">
+<meta name="twitter:description" content="box-shadow">
+  
+    <link rel="alternative" href="/atom.xml" title="louis blog" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+
+<body>
+<div id="container">
+    <div class="left-col">
+        <div class="overlay">
+	<!--<input type="text" class="st-default-search-input" style="position:absolute;top: 50px;left: 35px;">-->
+</div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img src="/i.png" class="js-avatar" style="width: 100%;height: 100%;opacity: 1;">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">louis</a></h1>
+		</hgroup>
+
+		
+		<p class="header-subtitle">程序猿 前端攻城师</p>
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>菜单</li>
+						<li>標籤</li>
+						
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives/">所有文章</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="github" target="_blank" href="https://github.com/Louiszhai" title="github">github</a>
+					        
+								<a class="weibo" target="_blank" href="http://weibo.com/xingyez" title="weibo">weibo</a>
+					        
+								<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						<a href="/tags/CSS/" style="font-size: 16.67px;">CSS</a> <a href="/tags/JavaScript/" style="font-size: 20px;">JavaScript</a> <a href="/tags/Web/" style="font-size: 10px;">Web</a> <a href="/tags/XSS/" style="font-size: 10px;">XSS</a> <a href="/tags/css/" style="font-size: 13.33px;">css</a> <a href="/tags/javascript/" style="font-size: 10px;">javascript</a>
+					</div>
+				</section>
+				
+				
+				
+
+				
+			</div>
+		</div>
+	</header>				
+</div>
+
+    </div>
+    <div class="mid-col">
+        <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">louis</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+			
+				<img src="/i.png" class="js-avatar" style="width: 100%;height: 100%;opacity: 1;">
+			
+			</div>
+			<hgroup>
+			  <h1 class="header-author">louis</h1>
+			</hgroup>
+			
+			<p class="header-subtitle">程序猿 前端攻城师</p>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives/">所有文章</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="https://github.com/Louiszhai" title="github">github</a>
+			        
+						<a class="weibo" target="_blank" href="http://weibo.com/xingyez" title="weibo">weibo</a>
+			        
+						<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+
+        <div class="body-wrap"><article id="post-box-shadow" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/02/12/box-shadow/" class="article-date">
+  	<time datetime="2017-02-12T09:19:23.000Z" itemprop="datePublished">2017-02-12</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      box-shadow属性探秘
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CSS/">CSS</a></li></ul>
+	</div>
+
+        
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          <span class="toc-arrow"></span>
+<div id="toc" class="toc-article">
+    <div class="toc-title">目录</div>
+    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#u5BFC_u8BFB"><span class="toc-text">导读</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#box-shadow"><span class="toc-text">box-shadow</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#offsetX"><span class="toc-text">offsetX</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#offsetY"><span class="toc-text">offsetY</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#blur"><span class="toc-text">blur</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#spread"><span class="toc-text">spread</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#color"><span class="toc-text">color</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#position"><span class="toc-text">position</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u591A_u91CD_u9634_u5F71"><span class="toc-text">多重阴影</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u6709_u8DA3_u7684_u6548_u679C"><span class="toc-text">有趣的效果</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#u7EB8_u5F20_u6295_u5F71_u6548_u679C"><span class="toc-text">纸张投影效果</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#u51C6_u5907_u5143_u7D20"><span class="toc-text">准备元素</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#u6DFB_u52A0_u9634_u5F71_u6837_u5F0F"><span class="toc-text">添加阴影样式</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#u7ED9_u9634_u5F71_u52A0_u4E2A_u89D2_u5EA6_u5E76_u6536_u7F29_u4E00_u4E9B"><span class="toc-text">给阴影加个角度并收缩一些</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#u5347_u8D77_u6548_u679C"><span class="toc-text">升起效果</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#u51C6_u5907_u5143_u7D20_u548C_u9634_u5F71"><span class="toc-text">准备元素和阴影</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#u6DFB_u52A0_u52A8_u753B"><span class="toc-text">添加动画</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#box-decoration-break"><span class="toc-text">box-decoration-break</span></a></li></ol>
+</div>
+      
+        <h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>我总是记不住css3的box-shadow属性拥有几个值, 它们的顺序究竟如何? 对我来说, 这是一个大难题. 我们都知道, 使用一个属性, 总是可以不停地在开发者工具上测试UI表现, 直到表现令人满意. 好吧, 有些时候它是奏效的; 而其它时候呢, 我们会消耗时间, 积攒疲劳值, 以及成就感下降等. 一旦短时记忆失效, 我们完全有可能重复一遍之前不愉快地尝试. 因此我选择多花些时间, 用力一次记住它. 如果你恰好也有同样的疑惑, 请读下去.</p>
+<a id="more"></a>
+<h3 id="box-shadow"><a href="#box-shadow" class="headerlink" title="box-shadow"></a>box-shadow</h3><p>box-shadow用于创建阴影, 使得元素更有立体感, 它的值由以下六个部分组成:</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">box-shadow</span>: <span class="tag">offsetX</span> <span class="tag">offsetY</span> <span class="tag">blur</span> <span class="tag">spread</span> <span class="tag">color</span> <span class="tag">position</span>;</span><br></pre></td></tr></table></figure>
+<p>它们分别为: x轴偏移 y轴偏移 模糊半径 大小 颜色 位置.</p>
+<p>xy轴偏移, 参照css中的坐标系, 水平向右(→)为X轴正方向, 垂直向下(↓)为Y轴正方向.</p>
+<h4 id="offsetX"><a href="#offsetX" class="headerlink" title="offsetX"></a>offsetX</h4><p>即水平偏移, 值取正数时, 阴影位于元素右边, 值取负数时, 阴影位于元素左边.</p>
+<p>为了便于观察到效果, 我将模糊半径默认设置成10px.</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">box-shadow</span>: 20<span class="tag">px</span> 0 10<span class="tag">px</span> 0 <span class="tag">lightblue</span>; <span class="comment">/*阴影向右偏移20px*/</span></span><br></pre></td></tr></table></figure>
+<p><img src="http://louiszhai.github.io/docImages/box-shadow01.png" alt="offsetX为正值"></p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">box-shadow</span>: <span class="tag">-20px</span> 0 10<span class="tag">px</span> 0 <span class="tag">lightblue</span>; <span class="comment">/*阴影向左偏移20px*/</span></span><br></pre></td></tr></table></figure>
+<p><img src="http://louiszhai.github.io/docImages/box-shadow02.png" alt="offsetX为负值"></p>
+<h4 id="offsetY"><a href="#offsetY" class="headerlink" title="offsetY"></a>offsetY</h4><p>即垂直偏移, 值取正数时, 阴影位于元素下方, 值取负数时, 阴影位于元素上方.</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">box-shadow</span>: 0 10<span class="tag">px</span> 10<span class="tag">px</span> 0 <span class="tag">lightblue</span>; <span class="comment">/*阴影向下偏移10px*/</span></span><br></pre></td></tr></table></figure>
+<p><img src="http://louiszhai.github.io/docImages/box-shadow03.png" alt="offsetY为正值"></p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">box-shadow</span>: 0 <span class="tag">-10px</span> 10<span class="tag">px</span> 0 <span class="tag">lightblue</span>; <span class="comment">/*阴影向上偏移10px*/</span></span><br></pre></td></tr></table></figure>
+<p><img src="http://louiszhai.github.io/docImages/box-shadow04.png" alt="offsetY为负值"></p>
+<h4 id="blur"><a href="#blur" class="headerlink" title="blur"></a>blur</h4><p>设置阴影的模糊半径, 值越大时, 阴影就越模糊, 值为0时则完全不模糊, 值小于0时则按照0处理.</p>
+<p>我试着加大模糊半径, 取值为50px, 可以看到阴影变得非常模糊.</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">box-shadow</span>: 20<span class="tag">px</span> 0 50<span class="tag">px</span> 0 <span class="tag">lightblue</span>; <span class="comment">/*阴影向右偏移20px, 模糊半径由10px放大至50px*/</span></span><br></pre></td></tr></table></figure>
+<p><img src="http://louiszhai.github.io/docImages/box-shadow05.png" alt="offsetX+blur"></p>
+<p>同时, 上下边界也有模糊阴影, 理论上讲, 模糊半径在上下左右各个方向应该都有效果, 下面我们来验证之:</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">box-shadow</span>: 0 0 50<span class="tag">px</span> 0 <span class="tag">lightblue</span>; <span class="comment">/*模糊半径设置为50px, 无偏移*/</span></span><br></pre></td></tr></table></figure>
+<p><img src="http://louiszhai.github.io/docImages/box-shadow06.png" alt="blur"></p>
+<p>如上图, 同猜想一致, 模糊阴影在上下左右4个方向分别发散. 此时, 对角线方向上阴影是最淡的, 要想模糊阴影均匀分布在元素周围, 只需将元素设置为圆形即可.</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">box-shadow</span>: 0 0 50<span class="tag">px</span> 0 <span class="tag">lightblue</span>; <span class="comment">/*模糊半径设置为50px, 无偏移*/</span></span><br><span class="line"><span class="tag">border-radius</span>: 100%; <span class="comment">/*元素设置为圆形*/</span></span><br></pre></td></tr></table></figure>
+<p><img src="http://louiszhai.github.io/docImages/box-shadow07.png" alt="blur-circle"></p>
+<h4 id="spread"><a href="#spread" class="headerlink" title="spread"></a>spread</h4><p>设置阴影大小. 当blur值为0时, spread就像是元素背后的一块幕布, spread值越大, 阴影越宽, 当其取负值时, 阴影大小为元素高宽分别减去spread值, 此时, blur设置的模糊阴影则会向内靠拢.</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">box-shadow</span>: 0 0 0 10<span class="tag">px</span> <span class="tag">lightblue</span>; <span class="comment">/*阴影大小设置为+10px*/</span></span><br></pre></td></tr></table></figure>
+<p><img src="http://louiszhai.github.io/docImages/box-shadow08.png" alt="spread"></p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">box-shadow</span>: 0 0 10<span class="tag">px</span> 10<span class="tag">px</span> <span class="tag">lightblue</span>; <span class="comment">/*模糊半径设置为10px, 阴影大下为+10px*/</span></span><br></pre></td></tr></table></figure>
+<p><img src="http://louiszhai.github.io/docImages/box-shadow09.png" alt="spread"></p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">box-shadow</span>: 0 0 10<span class="tag">px</span> <span class="tag">-1px</span> <span class="tag">lightblue</span>; <span class="comment">/*模糊半径设置为10px, 阴影大下为-1px, 由于模糊阴影部分向内靠拢, 阴影变得非常薄*/</span></span><br></pre></td></tr></table></figure>
+<p><img src="http://louiszhai.github.io/docImages/box-shadow10.png" alt="spread+blur"></p>
+<p>不知道你有没有注意到 ,对于阴影大小, 我使用的是+10px 或者 -1px这样的单位, 这是为什么呢? 这里卖个关子先, 请看如下效果.</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">box-shadow</span>: 150<span class="tag">px</span> 0 0 0<span class="tag">px</span> <span class="tag">lightblue</span>;</span><br></pre></td></tr></table></figure>
+<p><img src="http://louiszhai.github.io/docImages/box-shadow19.png" alt="offsetX+spread"></p>
+<p>仅仅将阴影水平向右移动一段距离, 可见, 阴影是有默认大小的, 并且默认与元素是一般大小. 而这几乎打破了我一度的认知, 说好的阴影呢, 不是环绕吗!</p>
+<p>前面提到了圆形阴影, 实际上, 就是<code>border-radius:100%</code>的特例, 那么如果border-radius是一个具体的值呢, 此时阴影又该当如何呈现? 请耐心往下看, 我将在多重阴影的节点给出分析.</p>
+<h4 id="color"><a href="#color" class="headerlink" title="color"></a>color</h4><p>设置阴影的颜色. 支持常用色值, HEX(16进制), RGB, RGBA, HSL, HSLA等颜色单位. 以下颜色全部都是浅蓝色.</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">box-shadow</span>: 0 0 10<span class="tag">px</span> 0 <span class="tag">lightblue</span>;</span><br><span class="line"><span class="tag">box-shadow</span>: 0 0 10<span class="tag">px</span> 0 <span class="id">#add8e6</span>;</span><br><span class="line"><span class="tag">box-shadow</span>: 0 0 10<span class="tag">px</span> 0 <span class="tag">rgba</span>(173, 216, 230, 1);</span><br><span class="line"><span class="tag">box-shadow</span>: 0 0 10<span class="tag">px</span> 0 <span class="tag">hsla</span>(195, 53%, 79%, 1);</span><br></pre></td></tr></table></figure>
+<h4 id="position"><a href="#position" class="headerlink" title="position"></a>position</h4><p>设置阴影的位置, 默认为外部阴影, 可通过inset值来设置内部阴影.</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">box-shadow</span>: 0 0 20<span class="tag">px</span> 10<span class="tag">px</span> <span class="tag">lightblue</span>; <span class="comment">/*默认为外部阴影*/</span></span><br><span class="line"><span class="tag">box-shadow</span>: 0 0 20<span class="tag">px</span> 10<span class="tag">px</span> <span class="tag">lightblue</span> <span class="tag">inset</span>; <span class="comment">/*设置为inset时, 为内部阴影*/</span></span><br></pre></td></tr></table></figure>
+<p><img src="http://louiszhai.github.io/docImages/box-shadow11.png" alt="inset"></p>
+<h3 id="u591A_u91CD_u9634_u5F71"><a href="#u591A_u91CD_u9634_u5F71" class="headerlink" title="多重阴影"></a>多重阴影</h3><p>box-shadow同background属性一样, 它们都支持多重效果的设置, 且多重值以逗号分隔.</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">box-shadow</span>: 0 0 20<span class="tag">px</span> 10<span class="tag">px</span> <span class="tag">lightblue</span>,</span><br><span class="line">            0 0 20<span class="tag">px</span> 10<span class="tag">px</span> <span class="tag">lightblue</span> <span class="tag">inset</span>; <span class="comment">/*同时设置内外阴影*/</span></span><br></pre></td></tr></table></figure>
+<p><img src="http://louiszhai.github.io/docImages/box-shadow12.png" alt="内外阴影"></p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">box-shadow</span>: 10<span class="tag">px</span> 10<span class="tag">px</span> 0<span class="tag">px</span> 10<span class="tag">px</span> <span class="id">#d0268c</span>,</span><br><span class="line">            <span class="tag">-10px</span> <span class="tag">-10px</span> 0<span class="tag">px</span> 10<span class="tag">px</span> <span class="tag">rgba</span>(95, 167, 44, 0<span class="class">.56</span>),</span><br><span class="line">            0<span class="tag">px</span> 0<span class="tag">px</span> 0<span class="tag">px</span> 20<span class="tag">px</span> <span class="tag">lightgrey</span>; <span class="comment">/*多重阴影效果*/</span></span><br></pre></td></tr></table></figure>
+<p><img src="http://louiszhai.github.io/docImages/box-shadow13.png" alt="多重阴影"></p>
+<p>上面留下了一个问题, 答案就在下面的样式中.</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">border-radius</span>: 10<span class="tag">px</span>;</span><br><span class="line"><span class="tag">box-shadow</span>: 110<span class="tag">px</span> 0 0 <span class="tag">-10px</span> <span class="id">#ccc</span>, 220<span class="tag">px</span> 0 0 0 <span class="id">#808080</span>, 360<span class="tag">px</span> 0 0 10<span class="tag">px</span> <span class="tag">grey</span>;</span><br></pre></td></tr></table></figure>
+<p>直接上效果.</p>
+<p><img src="http://louiszhai.github.io/docImages/box-shadow20.png" alt="border-radius影响spread的效果"></p>
+<p>从第一个阴影开始(上图左二), 随着阴影spread值的变化, 阴影经历了边框直角, 边框圆角, 边框更圆角(词穷)的过程.</p>
+<p>这两个属性的关系如下: </p>
+<ul>
+<li>spread值越大, border-radius的值就越大, 当spread&lt;0时, border-radius会变小, 最小为0.</li>
+</ul>
+<h3 id="u6709_u8DA3_u7684_u6548_u679C"><a href="#u6709_u8DA3_u7684_u6548_u679C" class="headerlink" title="有趣的效果"></a>有趣的效果</h3><h4 id="u7EB8_u5F20_u6295_u5F71_u6548_u679C"><a href="#u7EB8_u5F20_u6295_u5F71_u6548_u679C" class="headerlink" title="纸张投影效果"></a>纸张投影效果</h4><p>先来看以下纸张投影效果是个什么样.</p>
+<p><img src="http://louiszhai.github.io/docImages/box-shadow14.png" alt="paper-shadow"></p>
+<p>不就是在纸张底部加个投影吗, 是的, 你没看错. 这样的投影, 实现起来灰常简单, 只需要元素底部左右各加一个box-shadow, 然后佐以transform变换, 稍微改变个角度就大功告成了. 下面我们来用三步实现完成它.</p>
+<h5 id="u51C6_u5907_u5143_u7D20"><a href="#u51C6_u5907_u5143_u7D20" class="headerlink" title="准备元素"></a>准备元素</h5><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="title">style</span>&gt;</span><span class="css"></span><br><span class="line">  <span class="class">.drop-shadow</span> <span class="rules">&#123;</span><br><span class="line">    <span class="rule"><span class="attribute">position</span>:<span class="value"> relative</span></span>;</span><br><span class="line">    <span class="rule"><span class="attribute">width</span>:<span class="value"> <span class="number">300px</span></span></span>;</span><br><span class="line">    <span class="rule"><span class="attribute">height</span>:<span class="value"> <span class="number">200px</span></span></span>;</span><br><span class="line">    <span class="rule"><span class="attribute">background</span>:<span class="value"> <span class="hexcolor">#CCC</span></span></span>;</span><br><span class="line">  &#125;</span></span><br><span class="line">  <span class="class">.vertical-line</span><span class="rules">&#123;</span><br><span class="line">    <span class="rule"><span class="attribute">position</span>:<span class="value"> relative</span></span>;</span><br><span class="line">    <span class="rule"><span class="attribute">height</span>:<span class="value"> <span class="number">96%</span></span></span>;</span><br><span class="line">    <span class="rule"><span class="attribute">width</span>:<span class="value"> <span class="number">0</span></span></span>;</span><br><span class="line">    <span class="rule"><span class="attribute">top</span>:<span class="value"> <span class="number">2%</span></span></span>;</span><br><span class="line">    <span class="rule"><span class="attribute">margin</span>:<span class="value"> <span class="number">0</span> auto</span></span>;</span><br><span class="line">    <span class="rule"><span class="attribute">border</span>:<span class="value"> <span class="number">1px</span> dashed <span class="hexcolor">#808080</span></span></span>;</span><br><span class="line">  &#125;</span></span><br><span class="line"></span><span class="tag">&lt;/<span class="title">style</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="title">div</span> <span class="attribute">class</span>=<span class="value">"shadow"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="title">div</span> <span class="attribute">class</span>=<span class="value">"vertical-line"</span>&gt;</span><span class="tag">&lt;/<span class="title">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="title">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>阶段性效果如下:</p>
+<p><img src="http://louiszhai.github.io/docImages/box-shadow15.png" alt="paper-shadow-part01"></p>
+<h5 id="u6DFB_u52A0_u9634_u5F71_u6837_u5F0F"><a href="#u6DFB_u52A0_u9634_u5F71_u6837_u5F0F" class="headerlink" title="添加阴影样式"></a>添加阴影样式</h5><p>先在元素底部左右两边各生成一个阴影, 阴影应该是垂直向下的, 和模糊的, 那么属性如下设置.</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="class">.shadow</span><span class="pseudo">::before</span>, <span class="class">.shadow</span><span class="pseudo">::after</span> <span class="rules">&#123;</span><br><span class="line">    <span class="rule"><span class="attribute">content</span>:<span class="value"> <span class="string">""</span></span></span>;</span><br><span class="line">    <span class="rule"><span class="attribute">position</span>:<span class="value"> absolute</span></span>;</span><br><span class="line">    <span class="rule"><span class="attribute">bottom</span>:<span class="value"> <span class="number">0</span></span></span>;</span><br><span class="line">    <span class="rule"><span class="attribute">left</span>:<span class="value"> <span class="number">0</span></span></span>;</span><br><span class="line">    <span class="rule"><span class="attribute">width</span>:<span class="value"> <span class="number">50%</span></span></span>;</span><br><span class="line">    <span class="rule"><span class="attribute">height</span>:<span class="value"> <span class="number">10%</span></span></span>;</span><br><span class="line">    <span class="rule"><span class="attribute">box-shadow</span>:<span class="value"> <span class="number">0</span> <span class="number">15px</span> <span class="number">20px</span> <span class="function">rgba</span>(<span class="number">125</span>, <span class="number">125</span>, <span class="number">125</span>, <span class="number">0.9</span>)</span></span>;</span><br><span class="line">&#125;</span></span><br><span class="line"><span class="class">.drop-shadow</span><span class="pseudo">::after</span><span class="rules">&#123;</span><br><span class="line">  <span class="rule"><span class="attribute">right</span>:<span class="value"> <span class="number">0</span></span></span>;</span><br><span class="line">  <span class="rule"><span class="attribute">left</span>:<span class="value"> auto</span></span>;</span><br><span class="line">&#125;</span></span><br></pre></td></tr></table></figure>
+<p>阶段性效果如下:</p>
+<p><img src="http://louiszhai.github.io/docImages/box-shadow16.png" alt="paper-shadow-part02"></p>
+<p>这个时候, 阴影基本上呈现了, 但有两点不太完美:</p>
+<ul>
+<li>左右阴影应该是倾斜的;</li>
+<li>底部阴影有些太厚, 且边缘部分应该淡化.</li>
+</ul>
+<p>倾斜可使用 <code>transform: rotate(5deg)</code> 实现. 阴影太厚或边缘淡化只需将阴影往内收一些就行, 如 <code>bottom: 20px; left:10px</code> 等.</p>
+<h5 id="u7ED9_u9634_u5F71_u52A0_u4E2A_u89D2_u5EA6_u5E76_u6536_u7F29_u4E00_u4E9B"><a href="#u7ED9_u9634_u5F71_u52A0_u4E2A_u89D2_u5EA6_u5E76_u6536_u7F29_u4E00_u4E9B" class="headerlink" title="给阴影加个角度并收缩一些"></a>给阴影加个角度并收缩一些</h5><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="class">.shadow</span><span class="pseudo">::before</span>, <span class="class">.shadow</span><span class="pseudo">::after</span> <span class="rules">&#123;</span><br><span class="line">    <span class="rule"><span class="attribute">content</span>:<span class="value"> <span class="string">""</span></span></span>;</span><br><span class="line">    <span class="rule"><span class="attribute">position</span>:<span class="value"> absolute</span></span>;</span><br><span class="line">    <span class="rule"><span class="attribute">bottom</span>:<span class="value"> <span class="number">20px</span></span></span>;</span><br><span class="line">    <span class="rule"><span class="attribute">left</span>:<span class="value"> <span class="number">10px</span></span></span>;</span><br><span class="line">    <span class="rule"><span class="attribute">width</span>:<span class="value"> <span class="number">50%</span></span></span>;</span><br><span class="line">    <span class="rule"><span class="attribute">height</span>:<span class="value"> <span class="number">10%</span></span></span>;</span><br><span class="line">    <span class="rule"><span class="attribute">box-shadow</span>:<span class="value"> <span class="number">0</span> <span class="number">20px</span> <span class="number">30px</span> <span class="function">rgba</span>(<span class="number">125</span>, <span class="number">125</span>, <span class="number">125</span>, <span class="number">0.9</span>)</span></span>;</span><br><span class="line">    <span class="rule"><span class="attribute">transform</span>:<span class="value"> <span class="function">rotate</span>(-<span class="number">5deg</span>)</span></span>;</span><br><span class="line">&#125;</span></span><br><span class="line"><span class="class">.drop-shadow</span><span class="pseudo">::after</span><span class="rules">&#123;</span><br><span class="line">  <span class="rule"><span class="attribute">right</span>:<span class="value"> <span class="number">10px</span></span></span>;</span><br><span class="line">  <span class="rule"><span class="attribute">left</span>:<span class="value"> auto</span></span>;</span><br><span class="line">  <span class="rule"><span class="attribute">transform</span>:<span class="value"> <span class="function">rotate</span>(<span class="number">5deg</span>)</span></span>;</span><br><span class="line">&#125;</span></span><br></pre></td></tr></table></figure>
+<p>阶段性效果如下:</p>
+<p><img src="http://louiszhai.github.io/docImages/box-shadow17.png" alt="paper-shadow-part03"></p>
+<p>可以看到, 阴影出现在元素之上. 可设置<code>z-index</code> 为-1, 将阴影层级降低一些, 这样就实现了上述所说的纸张阴影效果.</p>
+<p><img src="http://louiszhai.github.io/docImages/box-shadow14.png" alt="paper-shadow"></p>
+<h4 id="u5347_u8D77_u6548_u679C"><a href="#u5347_u8D77_u6548_u679C" class="headerlink" title="升起效果"></a>升起效果</h4><p>同样, 我们先来看下升起效果长什么样. 如下:</p>
+<p><img src="http://louiszhai.github.io/docImages/box-shadow18.gif" alt="paper-shadow-part02"></p>
+<p>这是一个简单的动画, 鼠标移入, 元素上移, 同时阴影缩小, 鼠标移出则反之. 这里, 我们分两步来实现它.</p>
+<h5 id="u51C6_u5907_u5143_u7D20_u548C_u9634_u5F71"><a href="#u51C6_u5907_u5143_u7D20_u548C_u9634_u5F71" class="headerlink" title="准备元素和阴影"></a>准备元素和阴影</h5><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="title">style</span>&gt;</span><span class="css"></span><br><span class="line">  <span class="class">.rose</span> <span class="rules">&#123;</span><br><span class="line">    <span class="rule"><span class="attribute">position</span>:<span class="value"> relative</span></span>;</span><br><span class="line">    <span class="rule"><span class="attribute">width</span>:<span class="value"> <span class="number">80px</span></span></span>;</span><br><span class="line">    <span class="rule"><span class="attribute">height</span>:<span class="value"> <span class="number">120px</span></span></span>;</span><br><span class="line">    <span class="rule"><span class="attribute">background</span>:<span class="value"> <span class="function">rgba</span>(<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0.2</span>)</span></span>;</span><br><span class="line">    <span class="rule"><span class="attribute">transition</span>:<span class="value"> transform <span class="number">1s</span></span></span>;</span><br><span class="line">  &#125;</span></span><br><span class="line">  <span class="class">.rose</span><span class="pseudo">::after</span> <span class="rules">&#123;</span><br><span class="line">    <span class="rule"><span class="attribute">content</span>:<span class="value"> <span class="string">""</span></span></span>;</span><br><span class="line">    <span class="rule"><span class="attribute">position</span>:<span class="value"> absolute</span></span>;</span><br><span class="line">    <span class="rule"><span class="attribute">bottom</span>:<span class="value"> -<span class="number">30px</span></span></span>;</span><br><span class="line">    <span class="rule"><span class="attribute">left</span>:<span class="value"> <span class="number">50%</span></span></span>;</span><br><span class="line">    <span class="rule"><span class="attribute">height</span>:<span class="value"> <span class="number">8px</span></span></span>;</span><br><span class="line">    <span class="rule"><span class="attribute">width</span>:<span class="value"> <span class="number">100%</span></span></span>;</span><br><span class="line">    <span class="rule"><span class="attribute">border-radius</span>:<span class="value"> <span class="number">50%</span></span></span>;</span><br><span class="line">    <span class="rule"><span class="attribute">background-color</span>:<span class="value"> <span class="function">rgba</span>(<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0.2</span>)</span></span>;</span><br><span class="line">    <span class="rule"><span class="attribute">transform</span>:<span class="value"> <span class="function">translate</span>(-<span class="number">50%</span>, <span class="number">0</span>)</span></span>;</span><br><span class="line">    <span class="rule"><span class="attribute">transition</span>:<span class="value"> transform <span class="number">1s</span></span></span>;</span><br><span class="line">    <span class="rule"><span class="attribute">box-shadow</span>:<span class="value"> <span class="number">0px</span> <span class="number">0px</span> <span class="number">15px</span> <span class="number">0px</span> <span class="function">rgba</span>(<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0.2</span>)</span></span>;</span><br><span class="line">  &#125;</span></span><br><span class="line"></span><span class="tag">&lt;/<span class="title">style</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="title">div</span> <span class="attribute">class</span>=<span class="value">"rose"</span>&gt;</span><span class="tag">&lt;/<span class="title">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h5 id="u6DFB_u52A0_u52A8_u753B"><a href="#u6DFB_u52A0_u52A8_u753B" class="headerlink" title="添加动画"></a>添加动画</h5><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="class">.rose</span><span class="pseudo">:hover</span> <span class="rules">&#123;</span><br><span class="line">    <span class="rule"><span class="attribute">transform</span>:<span class="value"> <span class="function">translateY</span>(-<span class="number">40px</span>)</span></span>;</span><br><span class="line">    <span class="rule"><span class="attribute">transition</span>:<span class="value"> transform <span class="number">1s</span></span></span>;</span><br><span class="line">&#125;</span></span><br><span class="line"><span class="class">.rose</span><span class="pseudo">:hover</span><span class="pseudo">::after</span> <span class="rules">&#123;</span><br><span class="line">  <span class="rule"><span class="attribute">transform</span>:<span class="value"> <span class="function">translate</span>(-<span class="number">50%</span>, <span class="number">40px</span>) <span class="function">scale</span>(<span class="number">0.75</span>)</span></span>;</span><br><span class="line">  <span class="rule"><span class="attribute">transition</span>:<span class="value"> transform <span class="number">1s</span></span></span>;</span><br><span class="line">&#125;</span></span><br></pre></td></tr></table></figure>
+<h3 id="box-decoration-break"><a href="#box-decoration-break" class="headerlink" title="box-decoration-break"></a>box-decoration-break</h3><p>欲了解这个属性, 我们先读一则规范.</p>
+<p>2016年1月14日, W3C发布了CSS片段模块(<a href="https://www.w3.org/TR/2016/CR-css-break-3-20160114/" target="_blank" rel="external">CSS Fragmentation Module Level 3</a>)的候选推荐标准, 明确定义了在盒间、盒内、行间、页间进行断行的属性和规则.</p>
+<p>简言之, 对于一个盒子模型, 如果它被分裂成多个长度不等的小碎片, 那么它将遵循以下规则来调整布局:</p>
+<ul>
+<li>布局将在每个碎片中生效, 并在断点处衔接起来. 但是重新计算大小和位置.</li>
+<li>后续碎片必须遵循定位规则, 并且不能高于前面碎片的边缘. 如果想延续碎片开始时的边缘, 需指定 <code>box-decoration-break</code> 为 <code>clone</code>, 那么padding 和 border 将包裹后续碎片的边缘.</li>
+</ul>
+<p>也就是说, 当行内元素换行后, border, background将会出现截断现象, box-shadow也会如此. 如下:</p>
+<p><img src="http://louiszhai.github.io/docImages/box-shadow21.png" alt="box-decoration-break:slice"></p>
+<p>实际上, 这种效果并非不可改变, 设置 <code>box-decoration-break:clone</code> , 以上各个css效果将每行重新渲染, 彼此相互独立.</p>
+<p><img src="http://louiszhai.github.io/docImages/box-shadow22.png" alt="box-decoration-break:clone"></p>
+<p>box-decoration-break属性用于描述盒子碎片(如跨行的inline元素的各个部分)如何渲染上述border, background, box-shadow等css效果. 该属性拥有两个值, slice 和 clone, 默认值为slice, 如上图一效果. 以下是官方原文.</p>
+<blockquote>
+<p>For <a href="https://www.w3.org/TR/css-break-3/#propdef-box-decoration-break" target="_blank" rel="external">box-decoration-break: slice</a>, backgrounds (and <a href="https://www.w3.org/TR/css3-background/#border-image" target="_blank" rel="external">border-image</a>) are drawn as if applied to a composite box consisting of all of the box’s fragments reassembled in visual order. This theoretical assembly occurs after the element has been laid out (including any justification, bidi reordering, page breaks, etc.). To assemble the composite box…</p>
+</blockquote>
+<p>从box-decoration-break属性的支持性来看, 目前firefox遥遥领先, 它从v32版本开始就已经全部支持. 以下浏览器均需要 -webkit-前缀, 并且不支持跨列和跨页的截断效果, 其他浏览器目前还不支持.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">Chrome</th>
+<th style="text-align:center">Safari</th>
+<th style="text-align:center">Opera</th>
+<th style="text-align:center">ios Safari</th>
+<th style="text-align:center">Opera mini</th>
+<th style="text-align:center">Android</th>
+<th style="text-align:center">Chrome Android</th>
+<th style="text-align:center">QQ</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">22+</td>
+<td style="text-align:center">6.1+</td>
+<td style="text-align:center">15+</td>
+<td style="text-align:center">7.1+</td>
+<td style="text-align:center">all</td>
+<td style="text-align:center">4.4+</td>
+<td style="text-align:center">55+</td>
+<td style="text-align:center">1.2+</td>
+</tr>
+</tbody>
+</table>
+<p>注: 不支持box-decoration-break的浏览器默认按照<code>box-decoration-break:slice</code> 效果来渲染盒子碎片.</p>
+<hr>
+<p>本问就讨论这么多内容,大家有什么问题或好的想法欢迎在下方参与<a href="#respond">留言和评论</a>.</p>
+<p>本文作者: <a href="https://github.com/Louiszhai" target="_blank" rel="external">louis</a></p>
+<p>本文链接: <a href="http://louiszhai.github.io/2017/02/12/box-shadow/">http://louiszhai.github.io/2017/02/12/box-shadow/</a></p>
+<p>参考文章</p>
+<ul>
+<li><a href="https://gold.xitu.io/entry/574664ba5bbb5000578cd2a0" target="_blank" rel="external">[译] box-shadow 属性 - 掘金</a></li>
+<li><a href="https://segmentfault.com/a/1190000002793308" target="_blank" rel="external">CSS3实现Drop-shadow - MockingBird 博客 - SegmentFault</a></li>
+<li><a href="https://www.w3.org/TR/css-break-3/#breaking-boxes" target="_blank" rel="external">CSS Fragmentation Module Level 3</a></li>
+<li><a href="http://www.chinaw3c.org/archives/1236/" target="_blank" rel="external">W3C发布CSS片段模块（CSS Fragmentation Module Level 3）候选推荐标准 征集参考实现 - W3C中国</a></li>
+</ul>
+
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2017/01/13/flex/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">弹性盒模型Flex指南</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share_jia">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">分享到: &nbsp; </span>
+		<a class="jiathis_button_facebook"></a> 
+    <a class="jiathis_button_twitter"></a>
+    <a class="jiathis_button_plus"></a> 
+    <a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+
+
+
+<div class="duoshuo">
+	<div class="ds-thread" data-thread-key="box-shadow" data-title="box-shadow属性探秘" data-url="http://louiszhai.github.io/2017/02/12/box-shadow/"></div>
+	<style>
+		#ds-reset .ds-avatar img{width:54px;height:54px;border-radius:27px;-webkit-border-radius:27px;-moz-border-radius:27px;box-shadow:inset 0 -1px 0 #3333sf;-webkit-box-shadow:inset 0 -1px 0 #3333sf;-webkit-transition:0.4s;-webkit-transition:-webkit-transform 0.4s ease-out;transition:transform 0.4s ease-out;-moz-transition:-moz-transform 0.4s ease-out;}
+		#ds-reset .ds-avatar img:hover{box-shadow:0 0 10px #fff;rgba(255,255,255,.6),inset 0 0 20px rgba(255,255,255,1);-webkit-box-shadow:0 0 10px #fff;rgba(255,255,255,.6),inset 0 0 20px rgba(255,255,255,1);transform:rotateZ(360deg);-webkit-transform:rotateZ(360deg);-moz-transform:rotateZ(360deg);}
+		p.ds-powered-by,#ds-sync-checkbox,.ds-sync label{display:none!important;}
+		#ds-reset .ds-rounded-top{-webkit-border-top-right-radius:0px;-webkit-border-top-left-radius:0px;border-top-right-radius:0px;border-top-left-radius:0px;}
+		#ds-thread #ds-reset .ds-textarea-wrapper{background:#fff;border:0;margin-bottom:20px;padding-right:0px;}
+		#ds-thread #ds-reset .ds-textarea-wrapper textarea{min-height:80px;border:1px solid #ccc;padding:10px;-webkit-appearance:none;border-radius:0;background-color:#FFFFFF;border-color:#cccccc;box-shadow:inset 0 1px 2px rgba(0,0,0,0.1);color:rgba(0,0,0,0.75);-webkit-box-sizing:border-box;box-sizing:border-box;-webkit-transition:border-color 0.15s linear,background 0.15s linear;-moz-transition:border-color 0.15s linear,background 0.15s linear;-ms-transition:border-color 0.15s linear,background 0.15s linear;-o-transition:border-color 0.15s linear,background 0.15s linear;transition:border-color 0.15s linear,background 0.15s linear;}
+		/*#ds-thread #ds-reset .ds-textarea-wrapper textarea:focus{border-color:#999999;background:#fafafa;outline:none;}*/
+		#ds-thread #ds-reset .ds-post-options{border-bottom-left-radius:0px;-webkit-border-bottom-left-radius:0px;border:none;background:none!important;}
+		#ds-reset .ds-textarea-wrapper textarea:focus{border-color:#66afe9;outline:0;-webkit-box-shadow:inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);box-shadow:inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);}
+		#ds-thread #ds-reset .ds-post-button:hover,#ds-thread #ds-reset .ds-post-button:focus{
+		    background-color: #51a351;
+		    background-position: 0 -32px;
+		    color:white;
+		}
+		#ds-thread #ds-reset .ds-post-toolbar,#ds-reset .ds-avatar{box-shadow:none;}
+		#ds-thread #ds-reset .ds-textarea-wrapper textarea:focus{
+	    	/*background: none repeat scroll 0 0 #F4FAFF;*/
+	    	border-color:#9DD4FD;
+	    	border-width:1px;
+	    	box-shadow:0 1px 1px rgba(0,0,0,0.075) inset, 0 0 8px rgba(82, 168, 236, 0.6);
+	    	outline:0 none;
+    	}
+		#ds-thread #ds-reset .ds-textarea-wrapper textarea:active{
+	    	/*background: none repeat scroll 0 0 #F4FAFF;*/
+	    	border-width:1px;
+	    	border-color:#9DD4FD;
+	    	box-shadow:0 1px 1px rgba(0,0,0,0.075) inset, 0 0 8px rgba(82, 168, 236, 0.6);
+	    	outline:0 none;
+    	}
+    	#ds-thread #ds-reset .ds-post-button{
+    		box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset, 0 1px 2px rgba(0, 0, 0, 0.05);
+		    border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+		    border-width: 1px;
+		    border-style: solid;
+		    border-radius: 3px;
+		    background: #5bb75b;
+		    color:white;
+		    text-shadow:none;
+		    transition:background-color 300ms ease-out;
+    	}
+    	#ds-reset .ds-avatar{
+    		background-color:initial;
+    	}
+
+	</style>
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"true"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+</div>
+
+
+
+</div>
+        <link rel="stylesheet" href="/css/content.css" type="text/css">
+<footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+      <img src="/img/top_arrow.png" class="top_arrow" id="top_arrow">
+    	<div class="footer-left">
+    		&copy; 2017 louis
+
+        <span style="position:relative;top:2px" id="cnzz_stat_icon_1256923583"></span>
+        <script type="text/javascript">
+          var s = document.createElement('script');
+          var cnzz_protocol = (("https:" == document.location.protocol) ? "https://" : "http://");
+          s.src = cnzz_protocol + "s11.cnzz.com/z_stat.php?id=1256923583&show=pic";
+          document.body.appendChild(s);
+        </script>
+
+    	</div>
+      	<div class="footer-right">
+      		<a href="https://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+<script type="text/javascript">
+  //swifty
+  /*(function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+  
+  _st('install','4AmBuvmx4Cy-3hvyxeh8','2.0.0');*/
+</script>
+    </div>
+    
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+
+
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: false,
+		animate: false,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="/js/jquery-1.9.1.min.js" type="text/javascript"></script>
+<script src="/js/main.js" type="text/javascript"></script>
+<script src="/js/content.js" type="text/javascript"></script>
+
+
+
+
+
+
+
+</div>
+<script src="/js/screenfull.js" type="text/javascript"></script>
+<a href="https://github.com/Louiszhai" style="position: fixed; top: 0; right: 0; border: 0;z-index:9999"><img
+            source="https://camo.githubusercontent.com/a6677b08c955af8400f44c6298f40e7d19cc5b2d/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677261795f3664366436642e706e67"
+            src="/img/fork_me_on_github.png" alt="Fork me on GitHub"
+            data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png"></a>
+</body>
+</html>

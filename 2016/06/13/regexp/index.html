@@ -14,7 +14,7 @@
 <meta property="og:description" content="regexp 正则表达式 反向引用 贪婪模式 非贪婪模式 元字符 字符组 限定符 操作符 ES6扩展 固化分组 占有量词优先 环视 顺序环视 逆序环视">
 <meta property="og:image" content="http://louiszhai.github.io/docImages/regexp01.png">
 <meta property="og:image" content="http://louiszhai.github.io/docImages/regexp02.png">
-<meta property="og:updated_time" content="2017-01-16T05:34:42.000Z">
+<meta property="og:updated_time" content="2017-02-17T00:51:12.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="正则表达式前端使用手册">
 <meta name="twitter:description" content="regexp 正则表达式 反向引用 贪婪模式 非贪婪模式 元字符 字符组 限定符 操作符 ES6扩展 固化分组 占有量词优先 环视 顺序环视 逆序环视">
@@ -864,12 +864,13 @@
 <p>那么分组有什么用呢? 一般来说, 分组是为了方便的表示重复次数, 除此之外, 还有一个作用就是用于捕获, 请往下看.</p>
 <h4 id="u6355_u83B7_u6027_u5206_u7EC4"><a href="#u6355_u83B7_u6027_u5206_u7EC4" class="headerlink" title="捕获性分组"></a>捕获性分组</h4><p>捕获性分组, 通常由一对小括号加上子表达式组成. 捕获性分组会创建反向引用, 每个反向引用都由一个编号或名称来标识, js中主要是通过 <code>$+编号</code> 或者 <code>\+编号</code> 表示法进行引用. 如下便是一个捕获性分组的例子.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> color = <span class="string">"#808080"</span>;</span><br><span class="line"><span class="keyword">var</span> output = color.replace(<span class="regexp">/#(\d+)/</span>,<span class="string">"$1"</span>+<span class="string">"~~"</span>);<span class="comment">//自然也可以写成 "$1~~"</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">RegExp</span>.$<span class="number">1</span>);<span class="comment">//808080</span></span><br><span class="line"><span class="built_in">console</span>.log(output);<span class="comment">//808080~~</span></span><br></pre></td></tr></table></figure>
-<p>以上, (\d+) 表示一个捕获性分组, “RegExp.\$1” 指向该分组捕获的内容. <code>$+编号</code> 这种引用通常在正则表达式之外使用. <code>\+编号</code> 这种引用却可以在正则表达式中使用, 可用于匹配不同位置相同部分的子串.</p>
+<p>以上, (\d+) 表示一个捕获性分组, <code>RegExp.$1</code> 指向该分组捕获的内容. <code>$+编号</code> 这种引用通常在正则表达式之外使用. <code>\+编号</code> 这种引用却可以在正则表达式中使用, 可用于匹配不同位置相同部分的子串.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> url = <span class="string">"www.google.google.com"</span>;</span><br><span class="line"><span class="keyword">var</span> re = <span class="regexp">/([a-z]+)\.\1/</span>;</span><br><span class="line"><span class="built_in">console</span>.log(url.replace(re,<span class="string">"$1"</span>));<span class="comment">//"www.google.com"</span></span><br></pre></td></tr></table></figure>
 <p>以上, 相同部分的”google”字符串只被替换一次.</p>
 <h4 id="u975E_u6355_u83B7_u6027_u5206_u7EC4"><a href="#u975E_u6355_u83B7_u6027_u5206_u7EC4" class="headerlink" title="非捕获性分组"></a>非捕获性分组</h4><p>非捕获性分组, 通常由一对括号加上”?:”加上子表达式组成, 非捕获性分组不会创建反向引用, 就好像没有括号一样. 如下:</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> color = <span class="string">"#808080"</span>;</span><br><span class="line"><span class="keyword">var</span> output = color.replace(<span class="regexp">/#(?:\d+)/</span>,<span class="string">"$1"</span>+<span class="string">"~~"</span>);</span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">RegExp</span>.$<span class="number">1</span>);<span class="comment">//""</span></span><br><span class="line"><span class="built_in">console</span>.log(output);<span class="comment">//$1~~</span></span><br></pre></td></tr></table></figure>
-<p>以上, (?:\d+) 表示一个非捕获性分组, 由于分组不捕获任何内容, 所以, “$1” 指向空字符串.</p>
+<p>以上, (?:\d+) 表示一个非捕获性分组, 由于分组不捕获任何内容, 所以, <code>RegExp.$1</code> 就指向了空字符串.</p>
+<p>同时, 由于<code>$1</code> 的反向引用不存在, 因此最终它被当成了普通字符串进行替换.</p>
 <p>实际上, 捕获性分组和无捕获性分组在搜索效率方面也没什么不同, 没有哪一个比另一个更快.</p>
 <h4 id="u547D_u540D_u5206_u7EC4"><a href="#u547D_u540D_u5206_u7EC4" class="headerlink" title="命名分组"></a>命名分组</h4><p>语法: (?<name>…)</name></p>
 <p>命名分组也是捕获性分组,  它将匹配的字符串捕获到一个组名称或编号名称中, 在获得匹配结果后, 可通过分组名进行获取. 如下是一个python的命名分组的例子.</p>
@@ -967,7 +968,7 @@
 <p>② 同时由于 js 中不支持逆序环视, 我们也不能在正则中判断前缀为 “src=’”, 然后再替换”dev”. </p>
 <p>③ 我们注意到 img 标签的 src 属性以 “.png” 结尾, 基于此, 就可以使用顺序肯定环视. 如下:</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> reg = <span class="regexp">/dev(?=[^']*png)/</span>; <span class="comment">//为了防止匹配到第一个dev, 通配符前面需要排除单引号或者是尖括号</span></span><br><span class="line"><span class="keyword">var</span> str = responseText.replace(reg,<span class="string">"test"</span>);</span><br><span class="line"><span class="built_in">console</span>.log(str);<span class="comment">//&lt;div data='dev.xxx'&gt;&lt;/div&gt;&lt;img src='test.xxx.png' /&gt;</span></span><br></pre></td></tr></table></figure>
-<p>当然, 以上不止顺序肯定环视一种解法, 捕获性分组同样可以做到. 那么环视高级在哪里呢? 环视高级的地方就在于它通过一次捕获就可以定位到一个位置, 对于复杂的文本替换场景, 常有奇效, 而分组则需要更多的操作.</p>
+<p>当然, 以上不止顺序肯定环视一种解法, 捕获性分组同样可以做到. 那么环视高级在哪里呢? 环视高级的地方就在于它通过一次捕获就可以定位到一个位置, 对于复杂的文本替换场景, 常有奇效, 而分组则需要更多的操作. 请往下看.</p>
 <h5 id="u5343_u4F4D_u5206_u5272_u7B26"><a href="#u5343_u4F4D_u5206_u5272_u7B26" class="headerlink" title="千位分割符"></a>千位分割符</h5><blockquote>
 <p>千位分隔符, 顾名思义, 就是数字中的逗号. 参考西方的习惯, 数字之中加入一个符号, 避免因数字太长难以直观的看出它的值. 故而数字之中, 每隔三位添加一个逗号, 即千位分隔符.</p>
 </blockquote>
