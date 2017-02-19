@@ -4,7 +4,7 @@
   <subtitle><![CDATA[程序猿 前端攻城师]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://louiszhai.github.io/"/>
-  <updated>2017-02-19T08:03:26.000Z</updated>
+  <updated>2017-02-19T08:24:37.000Z</updated>
   <id>http://louiszhai.github.io/</id>
   
   <author>
@@ -16,10 +16,10 @@
   
   <entry>
     <title><![CDATA[box-shadow属性探秘]]></title>
-    <link href="http://louiszhai.github.io/2017/02/12/box-shadow/"/>
-    <id>http://louiszhai.github.io/2017/02/12/box-shadow/</id>
-    <published>2017-02-12T09:19:23.000Z</published>
-    <updated>2017-02-19T08:03:26.000Z</updated>
+    <link href="http://louiszhai.github.io/2017/02/19/box-shadow/"/>
+    <id>http://louiszhai.github.io/2017/02/19/box-shadow/</id>
+    <published>2017-02-19T08:23:34.000Z</published>
+    <updated>2017-02-19T08:24:37.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>我总是记不住css3的box-shadow属性拥有几个值, 它们的顺序究竟如何? 对我来说, 这是一个大难题. 我们都知道, 使用一个属性, 总是可以不停地在开发者工具上测试UI表现, 直到表现令人满意. 好吧, 有些时候它是奏效的; 而其它时候呢, 我们会消耗时间, 积攒疲劳值, 以及成就感下降等. 一旦短时记忆失效, 我们完全有可能重复一遍之前不愉快地尝试. 因此我选择多花些时间, 用力一次记住它. 如果你恰好也有同样的疑惑, 请读下去.</p>
 <a id="more"></a>
 <h3 id="box-shadow"><a href="#box-shadow" class="headerlink" title="box-shadow"></a>box-shadow</h3><p>box-shadow用于创建阴影, 使得元素更有立体感, 它的值由以下六个部分组成:</p>
@@ -160,7 +160,7 @@
 </ul>
 ]]></content>
     <summary type="html">
-    <![CDATA[box-shadow]]>
+    <![CDATA[box-shadow 阴影 多重阴影 纸张投影 升起效果 box-decoration-break]]>
     
     </summary>
     
@@ -2719,7 +2719,7 @@
     <link href="http://louiszhai.github.io/2016/06/13/regexp/"/>
     <id>http://louiszhai.github.io/2016/06/13/regexp/</id>
     <published>2016-06-13T00:24:55.000Z</published>
-    <updated>2017-02-17T00:51:12.000Z</updated>
+    <updated>2017-02-19T08:13:04.000Z</updated>
     <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>你有没有在搜索文本的时候绞尽脑汁, 试了一个又一个表达式, 还是不行.</p>
 <p>你有没有在表单验证的时候, 只是做做样子(只要不为空就好), 然后烧香拜佛, 虔诚祈祷, 千万不要出错.</p>
 <p>你有没有在使用sed 和 grep 命令的时候, 感觉莫名其妙, 明明应该支持的元字符, 却就是匹配不到.</p>
