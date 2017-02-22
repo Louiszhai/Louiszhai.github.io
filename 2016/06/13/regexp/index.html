@@ -14,7 +14,7 @@
 <meta property="og:description" content="regexp 正则表达式 反向引用 贪婪模式 非贪婪模式 元字符 字符组 限定符 操作符 ES6扩展 固化分组 占有量词优先 环视 顺序环视 逆序环视">
 <meta property="og:image" content="http://louiszhai.github.io/docImages/regexp01.png">
 <meta property="og:image" content="http://louiszhai.github.io/docImages/regexp02.png">
-<meta property="og:updated_time" content="2017-02-19T08:13:04.000Z">
+<meta property="og:updated_time" content="2017-02-22T02:46:31.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="正则表达式前端使用手册">
 <meta name="twitter:description" content="regexp 正则表达式 反向引用 贪婪模式 非贪婪模式 元字符 字符组 限定符 操作符 ES6扩展 固化分组 占有量词优先 环视 顺序环视 逆序环视">
@@ -358,7 +358,7 @@
 <li>Email: ^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$</li>
 <li>URL: ^https?://([\w-]+.)+[\w-]+(/[\w-./?%&amp;=]*)?$</li>
 <li>手机号码: ^1\d{10}$</li>
-<li>身份证号: ^\d{15}|\d{17}(\d|X)$</li>
+<li>身份证号: ^(\d{15}|\d{17}(\d|X))$</li>
 <li>中国邮政编码: [1-9]\d{5}(?!\d) (邮政编码为6位数字)</li>
 </ol>
 <h4 id="u5BC6_u7801_u9A8C_u8BC1"><a href="#u5BC6_u7801_u9A8C_u8BC1" class="headerlink" title="密码验证"></a>密码验证</h4><p>密码验证是常见的需求, 一般来说, 常规密码大致会满足规律: 6-16位, 数字, 字母, 字符至少包含两种, 同时不能包含中文和空格. 如下便是常规密码验证的正则描述:</p>
