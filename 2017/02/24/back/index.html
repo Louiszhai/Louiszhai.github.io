@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" >
+  <title>为什么Web App的返回逻辑如此复杂 | louis blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="web返回 HybirdApp返回 H5返回 app返回">
+<meta property="og:type" content="article">
+<meta property="og:title" content="为什么Web App的返回逻辑如此复杂">
+<meta property="og:url" content="http://louiszhai.github.io/2017/02/24/back/index.html">
+<meta property="og:site_name" content="louis blog">
+<meta property="og:description" content="web返回 HybirdApp返回 H5返回 app返回">
+<meta property="og:image" content="http://louiszhai.github.io/docImages/back01.png">
+<meta property="og:image" content="http://louiszhai.github.io/docImages/back02.png">
+<meta property="og:updated_time" content="2017-02-24T08:00:15.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="为什么Web App的返回逻辑如此复杂">
+<meta name="twitter:description" content="web返回 HybirdApp返回 H5返回 app返回">
+  
+    <link rel="alternative" href="/atom.xml" title="louis blog" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+
+<body>
+<div id="container">
+    <div class="left-col">
+        <div class="overlay">
+	<!--<input type="text" class="st-default-search-input" style="position:absolute;top: 50px;left: 35px;">-->
+</div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img src="/i.png" class="js-avatar" style="width: 100%;height: 100%;opacity: 1;">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">louis</a></h1>
+		</hgroup>
+
+		
+		<p class="header-subtitle">程序猿 前端攻城师</p>
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>菜单</li>
+						<li>標籤</li>
+						
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives/">所有文章</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="github" target="_blank" href="https://github.com/Louiszhai" title="github">github</a>
+					        
+								<a class="weibo" target="_blank" href="http://weibo.com/xingyez" title="weibo">weibo</a>
+					        
+								<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						<a href="/tags/CSS/" style="font-size: 16.67px;">CSS</a> <a href="/tags/JavaScript/" style="font-size: 20px;">JavaScript</a> <a href="/tags/Web/" style="font-size: 13.33px;">Web</a> <a href="/tags/XSS/" style="font-size: 10px;">XSS</a> <a href="/tags/css/" style="font-size: 13.33px;">css</a> <a href="/tags/javascript/" style="font-size: 10px;">javascript</a>
+					</div>
+				</section>
+				
+				
+				
+
+				
+			</div>
+		</div>
+	</header>				
+</div>
+
+    </div>
+    <div class="mid-col">
+        <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">louis</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+			
+				<img src="/i.png" class="js-avatar" style="width: 100%;height: 100%;opacity: 1;">
+			
+			</div>
+			<hgroup>
+			  <h1 class="header-author">louis</h1>
+			</hgroup>
+			
+			<p class="header-subtitle">程序猿 前端攻城师</p>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives/">所有文章</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="https://github.com/Louiszhai" title="github">github</a>
+			        
+						<a class="weibo" target="_blank" href="http://weibo.com/xingyez" title="weibo">weibo</a>
+			        
+						<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+
+        <div class="body-wrap"><article id="post-back" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/02/24/back/" class="article-date">
+  	<time datetime="2017-02-24T07:59:01.000Z" itemprop="datePublished">2017-02-24</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      为什么Web App的返回逻辑如此复杂
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Web/">Web</a></li></ul>
+	</div>
+
+        
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          <span class="toc-arrow"></span>
+<div id="toc" class="toc-article">
+    <div class="toc-title">目录</div>
+    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#u5BFC_u8BFB"><span class="toc-text">导读</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u53EF_u4F9B_u5C1D_u8BD5_u7684api"><span class="toc-text">可供尝试的api</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u91CD_u5B9A_u5411_u8FC7_u540E_u600E_u4E48_u8FD4_u56DE"><span class="toc-text">重定向过后怎么返回</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#H5_u662F_u5426_u53EF_u4EE5_u6253_u5F00_u65B0_u7684_u7F51_u9875_u7A97_u53E3"><span class="toc-text">H5是否可以打开新的网页窗口</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#native_u63D0_u4F9BjsBridge"><span class="toc-text">native提供jsBridge</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#native_u7EF4_u62A4H5_u7684_u5386_u53F2_u8BB0_u5F55"><span class="toc-text">native维护H5的历史记录</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u5982_u4F55_u5728webview_u4E2D_u5224_u65AD_u9875_u9762_u662F_u5426_u52A0_u8F7D_u5B8C_u6210"><span class="toc-text">如何在webview中判断页面是否加载完成</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u57FA_u4E8Ehash_u8DF3_u8F6C_u4EA7_u751F_u7684_u5386_u53F2_u9879_u5982_u4F55_u8BB0_u5F55"><span class="toc-text">基于hash跳转产生的历史项如何记录</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u5C0F_u7ED3"><span class="toc-text">小结</span></a></li></ol>
+</div>
+      
+        <h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>最近我在梳理公司web app新产品线的返回逻辑, 推演了N种方案, 竟然没有一种完全通用的. 这让我迷惑不已. 仔细体验了公司的各种H5页面, 发现返回逻辑还真是五花八门. 那么, 问题来了, 为什么Web App的返回逻辑如此难以设计?</p>
+<a id="more"></a>
+<h3 id="u53EF_u4F9B_u5C1D_u8BD5_u7684api"><a href="#u53EF_u4F9B_u5C1D_u8BD5_u7684api" class="headerlink" title="可供尝试的api"></a>可供尝试的api</h3><p>相对于较复杂的返回场景, 可用的api少得可怜. webview的history对象中, 仅 back 和 go 方法可用. 它们遵循如下规律:</p>
+<ul>
+<li>调用<code>history.back</code> 如果存在历史的话, 只能回到前一个页面, 否则将静默失败.</li>
+<li>调用<code>history.go(-n)</code> 如果存在历史的话, 可以回到前n个页面, 否则将静默失败.</li>
+</ul>
+<p>从这里看起来, 似乎想回到哪就回到哪. 自然不是, 不然就不会有这篇文章了.</p>
+<p>不得不说的是, H5中有个堪称坑爹的设定, 就是<code>history.length</code>属性, 该属性无论何时, 都是当前webview历史栈的总长度. 也就是说, 无论你的网页是第一个打开的, 还是中间打开的, 还是最后一个打开的, 只要返回到你的网页, 你获取到的<code>history.length</code>都是相同的值. 无论如何你都不能直接拿到你的网页在webview历史栈中的位置(或者序号), 这将导致你不知道要往前跳几步(假设要跳过若干个历史), 因此你不能随心所欲的调用<code>history.go</code>方法.</p>
+<p>通常情况下,若web app自带返回按钮, 如果其中一个网页A是通过重定向模拟返回到它之前的某个网页B, 用户在新的网页B点击返回按钮, 将返回到网页A, 此时再点击网页A的返回按钮, 那么又将进入到新的网页B2中. 如下:</p>
+<p>①—&gt;A —②重定向—&gt; B —③返回—&gt; A —④重定向—&gt; B2 —⑤返回—&gt; A</p>
+<p>我们来看看webview历史栈发生了什么, 假设历史栈已经存储了n项历史:</p>
+<ul>
+<li>①栈顶压入A页面, 此时当前页面指针后移1位, 指向A页面, 且A页面位于栈顶, 此时历史栈长度为n+1;</li>
+<li>②栈顶压入B页面, 此时当前页面指针后移1位, 指向B页面, 且B页面位于栈顶, 此时历史栈长度为n+2;</li>
+<li>③当前页面指针前移1位, 指向A页面, 此时B页面位于栈顶, 历史栈长度依然为n+2;</li>
+<li>④当前页面指针后的栈被清空, 历史栈长度为n+1, 栈顶压入B2页面, 当前页面指针后移1位, 指向B2页面, 且B2页面位于栈顶, 此时历史栈长度为n+2;</li>
+<li>⑤当前页面指针前移1位, 指向A页面, 此时B2页面位于栈顶, 历史栈长度依然为n+2;</li>
+</ul>
+<p>B和B2其实是同一个网页, 除了历史栈中的位置不同, 他们没有任何不同. 如此逻辑将使得我们将陷入返回的死循环中. 为避免这种体验上的缺陷, 请尽量不要在返回逻辑中重定向到某个之前的页面.</p>
+<blockquote>
+<p>webview中通过location.href方式跳转链接, 可起到清理浏览历史项的作用, 如此时webview中共存在100个历史项, 我们一路返回至第90个页面(该页面的history.length依然是100), 然后在该页面通过location.href跳转至另一个页面, 那么新的页面将处于历史项的第91项, 原来的第91~100项历史将被清空. 于是新的页面中获取的history.length将准确地标示了该页面处于历史项的第几项.</p>
+</blockquote>
+<h3 id="u91CD_u5B9A_u5411_u8FC7_u540E_u600E_u4E48_u8FD4_u56DE"><a href="#u91CD_u5B9A_u5411_u8FC7_u540E_u600E_u4E48_u8FD4_u56DE" class="headerlink" title="重定向过后怎么返回"></a>重定向过后怎么返回</h3><p>愿望是美好的, 现实是残酷的. 纯H5下想要在返回逻辑中不重定向, 先砍了这些需求再说:</p>
+<ul>
+<li>从网页A跳走, 中间经过n个其他域名的网页, 最终不希望用户按步返回, 希望能够直接返回网页A的场景.</li>
+<li>从详情页B跳走, 中间需要经过各种支付中间页, 然后进入web版收银台, 弹出支付宝或者微信支付弹框, 支付成功后进入到成功页, 从成功页返回时希望直接回到详情页B的场景.</li>
+</ul>
+<p>从产品上看, 这些需求都是合理的. 那么如何从最后一个页面, 成功地返回到初始的A或B页面, 这里我想到了一个解决方案. 思路如下:</p>
+<p><code>history.go</code>方法是可用的. 只要get到了网页处于历史栈的位置, 就可以正常的返回n步. 虽然通常情况下从初始页面A跳出时, <code>history.length</code>并不可靠, 但是从A页面跳到(通过location.href跳转)的第一个页面X中, <code>history.length</code>却是可靠的, 此时该值准确地记录了页面X在历史栈中的位置.(不懂的可以去看上述第④步解析) 只要在页面X中执行如下语句, 便可记录页面A的位置.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//假定原页面A中跳转时执行如下语句</span></span><br><span class="line"><span class="keyword">let</span> linkA = <span class="string">"http://www.a.com/a?params=abc"</span>;</span><br><span class="line">linkA = <span class="built_in">window</span>.encodeURIComponent(linkA);</span><br><span class="line"><span class="keyword">const</span> targetLink = <span class="string">`http://www.x.com/x?from=<span class="subst">$&#123;linkA&#125;</span>#test`</span>;</span><br><span class="line">location.href = targetLink;</span><br><span class="line"></span><br><span class="line"><span class="comment">//在页面X执行如下语句</span></span><br><span class="line"><span class="keyword">const</span> cursor = history.length - <span class="number">1</span>;</span><br><span class="line"><span class="keyword">let</span> params = location.search.match(<span class="regexp">/from=([^&amp;]*)/</span>),</span><br><span class="line">    from;</span><br><span class="line"><span class="keyword">if</span> (params <span class="keyword">instanceof</span> <span class="built_in">Array</span> &amp;&amp; params.length === <span class="number">2</span>) &#123;</span><br><span class="line">  <span class="comment">// 获取原页面A的链接</span></span><br><span class="line">  from = <span class="built_in">window</span>.decodeURIComponent(params[<span class="number">1</span>]);</span><br><span class="line">  <span class="keyword">const</span> a = <span class="built_in">document</span>.createElement(<span class="string">'a'</span>);</span><br><span class="line">  a.href = from;</span><br><span class="line">  <span class="keyword">const</span> paramStr = <span class="string">`historyCursor=<span class="subst">$&#123;history.length - 1&#125;</span>`</span>;</span><br><span class="line">  <span class="comment">// 追加historyCursor=history.length参数</span></span><br><span class="line">  <span class="keyword">const</span> searchStr = a.search ? <span class="string">`<span class="subst">$&#123;a.search&#125;</span>&amp;<span class="subst">$&#123;paramStr&#125;</span>`</span> : <span class="string">`?<span class="subst">$&#123;paramStr&#125;</span>`</span>;</span><br><span class="line">  from = a.origin + a.pathname + searchStr + a.hash;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>页面X经过n次跳转, 其中可能经过了各种支付中间页, 最终又重定向回到页面X’(与页面x链接相同, 但是新的页面), 在页面X’上点击返回按钮时, 此时可以直接重定向回到原页面A’(与页面A链接相似, 仅仅多了参数historyCursor, 是新的页面).</p>
+<p>待用户回到了页面A’后, 此时点击返回按钮时, 走的并不是通常的<code>history.back</code> , 而应该是回到页面A的前一个页面, 换句话说 , 此时用户将往回跳n个页面. 这里的主要判断逻辑如下:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">goBack</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> start, current, step;</span><br><span class="line">  <span class="keyword">const</span> params = location.search.match(<span class="regexp">/historyCursor=(\d+)/</span>);</span><br><span class="line">  <span class="keyword">if</span>(params <span class="keyword">instanceof</span> <span class="built_in">Array</span> &amp;&amp; params.length === <span class="number">2</span>) &#123;</span><br><span class="line">    <span class="comment">// 如参数中带有historyCursor, 返回时将回跳n步</span></span><br><span class="line">    start = +params[<span class="number">1</span>];</span><br><span class="line">    current = history.length;</span><br><span class="line">    step = current - start + <span class="number">1</span>;</span><br><span class="line">    location.go(-step);</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="comment">// 默认将返回上一个页面</span></span><br><span class="line">    history.back();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>以上, 由多个页面传递historyCursor的值, 基本将需求中的返回逻辑落地了. 美中不足的是, 页面A的返回逻辑依赖了页面X的代码(页面X中需要设置对的historyCursor值), 存在耦合. 这样开发页面A的同学将通知开发页面X的同学, 返回时你要给我加一个historyCursor的参数, 巴拉巴拉. 开发页面X的同学也很纠结, 因为他始终要确认是不是从页面A跳过来的, 如果是, 那他就要加一个historyCursor参数, 并且重定向到页面A. 同时Android系统自带的返回键也会让这套方案更加雪上加霜.</p>
+<p>有鉴于此, 以上纯H5的解决方案便不太完美.</p>
+<h3 id="H5_u662F_u5426_u53EF_u4EE5_u6253_u5F00_u65B0_u7684_u7F51_u9875_u7A97_u53E3"><a href="#H5_u662F_u5426_u53EF_u4EE5_u6253_u5F00_u65B0_u7684_u7F51_u9875_u7A97_u53E3" class="headerlink" title="H5是否可以打开新的网页窗口"></a>H5是否可以打开新的网页窗口</h3><p>对于非嵌入app的H5应用, 那么使用场景就是各家的浏览器, 应用中对于有可能打乱历史记录的网页, 直接新开窗口就行.</p>
+<p>对于嵌入app内的H5应用, 通常来说, H5本身不具备新开webview的能力. 这里需要native辅助. 接下来我们将主要关注嵌入app内的H5的应用.</p>
+<h3 id="native_u63D0_u4F9BjsBridge"><a href="#native_u63D0_u4F9BjsBridge" class="headerlink" title="native提供jsBridge"></a>native提供jsBridge</h3><p>app内嵌的H5应用, 可借助native的jsBridge新开webview, 从而避免历史记录混乱. 为此, native客户端(包括Android和IOS以及其他)将提供接口以便js打开或关闭webview. 值得考虑的是, 这里面可能带来一个负面影响, js有可能多次申请新开webview, 从而大量消耗内存和电量. 因此, native有必要对webview的个数予以限制.</p>
+<h3 id="native_u7EF4_u62A4H5_u7684_u5386_u53F2_u8BB0_u5F55"><a href="#native_u7EF4_u62A4H5_u7684_u5386_u53F2_u8BB0_u5F55" class="headerlink" title="native维护H5的历史记录"></a>native维护H5的历史记录</h3><p>既然开多个webview开销会增大, 基于此, 我突发奇想, 有没有可能由native客户端来维护单个webview的历史记录, 从而所有的页面跳转将由native接管?</p>
+<p>我认为这是有可能的. 首先native可以保留每次加载的页面链接, 同时, 页面跳转时可提前设置下一个页面的返回逻辑. 既然历史记录和返回逻辑都在native中注册, 剩下的问题就是, js怎么通知native返回了? 这个也很简单, native不止可以loadUrl, 还可以load页面上的方法. 又页面上用于返回的两个js方法: <code>history.go</code> 和 <code>history.back</code> 都是可以重写的. 因此, native可在页面DOMContentLoaded事件回调中重写go和back方法, 改为调用jsBridge接口(此前, 为了解决第三方OAuth2.0登录后返回到空白页的问题, 我写了部分native逻辑, 用于重写js原生go和back方法已在生产环境下使用).</p>
+<p>思路如下:</p>
+<ol>
+<li><p><strong>记录历史栈</strong>: native存储webview中加载的每一个页面, 形成一个历史记录栈. 并且标记当前页面处于该历史记录栈的位置.</p>
+</li>
+<li><p><strong>重写返回方法</strong>: webview中每个页面加载完成后, 重写<code>history.go</code> 和 <code>history.back</code>方法, 改为调用jsBridge接口, 方便native感知网页的后退. (下面将详细说明重写的时机)</p>
+</li>
+<li><p><strong>设置下一个页面的返回逻辑</strong>: 页面跳转之前, 可调用jsBridge强制设置下一个页面的返回url(如从a跳转至b页面, 设置后, 无论b处于历史记录栈的哪一项, 从b返回都将回到a页面)</p>
+</li>
+<li><p><strong>回退时检查当前页面的返回逻辑</strong>: 一旦H5中调用<code>history.go</code> 和 <code>history.back</code>方法返回之前的页面, native自动检查该页面之前是否设置过返回url, 如有则从历史记录栈中捞出该url的位置, 继续调用js原生的<code>history.go</code>方法进行跳转, 同时忽略本次历史; 如无则直接通过原方法跳转页面, 同时忽略本次历史.</p>
+</li>
+<li><p>重写Android自带的物理返回键.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//改写物理返回键的逻辑</span></span><br><span class="line"><span class="annotation">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">onKeyDown</span><span class="params">(<span class="keyword">int</span> keyCode, KeyEvent event)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">if</span>(keyCode==KeyEvent.KEYCODE_BACK)&#123;</span><br><span class="line">    <span class="comment">//参照第4步策略实现</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>激进策略—拦截页面主动发起的重定向(选用)</strong>: 每次加载url前, 都将检查该url是否在当前页面之前的历史记录栈中出现过, 如有则直接调用js原生的<code>history.go</code>方法, 回退到该url原来的页面.</p>
+</li>
+</ol>
+<p>注: 虽然返回时shouldOverrideUrlLoading事件不会触发, 但onPageStarted和onPageFinished会依次触发一次. 因此上述第4步返回时需要忽略本次历史.</p>
+<p>那么如何记录webview历史栈, 并且重写js方法呢? </p>
+<p>嫌我啰嗦, 你可能会说 “Talk is cheap, show me the code.” 那么, 请看如下Android代码:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">History</span> </span>&#123;</span><br><span class="line">  <span class="keyword">public</span> url;</span><br><span class="line">  <span class="keyword">public</span> backItem;</span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="title">History</span><span class="params">(String url)</span></span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.url = url;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="title">History</span><span class="params">(String url, History backItem)</span></span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.url = url;</span><br><span class="line">    <span class="keyword">this</span>.backItem = backItem;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/*-----------华丽丽的class分界线------------*/</span></span><br><span class="line"></span><br><span class="line">ArrayList&lt;History&gt; historyList = <span class="keyword">new</span> ArrayList&lt;History&gt;;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*-----------华丽丽的class分界线------------*/</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">WebViewManager</span> </span>&#123;</span><br><span class="line">  <span class="comment">//此处略去webView元素的获取</span></span><br><span class="line">  webView.setWebViewClient(<span class="keyword">new</span> WebViewClient() &#123;</span><br><span class="line">    <span class="annotation">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onPageStarted</span><span class="params">(WebView view, String url, Bitmap favicon)</span> </span>&#123;</span><br><span class="line">      <span class="comment">// 存储当前页面URL</span></span><br><span class="line">      History history = <span class="keyword">new</span> History(url);</span><br><span class="line">      historyList.append(history);</span><br><span class="line">      <span class="comment">// 重写js返回方法</span></span><br><span class="line">      String fnString = <span class="string">"(function()&#123;/*在这里重写history.go和history.back方法*/&#125;)()"</span>;</span><br><span class="line">      webView.loadUrl(<span class="string">"javascript:"</span> + fnString);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面只是Simple的体验, 实际请求中, 一定会有url重定向场景. 接下来我们将着重讨论这种场景.</p>
+<h3 id="u5982_u4F55_u5728webview_u4E2D_u5224_u65AD_u9875_u9762_u662F_u5426_u52A0_u8F7D_u5B8C_u6210"><a href="#u5982_u4F55_u5728webview_u4E2D_u5224_u65AD_u9875_u9762_u662F_u5426_u52A0_u8F7D_u5B8C_u6210" class="headerlink" title="如何在webview中判断页面是否加载完成"></a>如何在webview中判断页面是否加载完成</h3><p>首先, 加载页面有两种方式:</p>
+<ol>
+<li>webview主动loadUrl.</li>
+<li>页面上触发的url加载行为.</li>
+</ol>
+<p>我们先来模拟一个<strong>两次</strong>重定向的场景, 通常情况下, 直接访问 <a href="http://www.baidu.com" target="_blank" rel="external">http://www.baidu.com</a> 将发生一次重定向. 在此之前用一个短链接重定向到 <a href="http://www.baidu.com" target="_blank" rel="external">http://www.baidu.com</a> 这样便多了一次重定向. 下面将基于这个场景进行两次测试.</p>
+<p>那么第一种方式, 将依次触发webview的以下事件回调:</p>
+<p><img src="http://louiszhai.github.io/docImages/back01.png" alt="webview主动loadUrl"></p>
+<p>整理如下:</p>
+<ol>
+<li>onPageStarted</li>
+<li>onPageStarted</li>
+<li>shouldOverrideUrlLoading</li>
+<li>onPageFinished</li>
+<li>onPageStarted</li>
+<li>onPageStarted</li>
+<li>shouldOverrideUrlLoading</li>
+<li>onPageFinished</li>
+<li>onPageStarted</li>
+<li>onPageFinished</li>
+</ol>
+<p>第二种方式, 将依次触发webview的以下事件回调:</p>
+<p><img src="http://louiszhai.github.io/docImages/back02.png" alt="页面上触发的url加载行为"></p>
+<p>整理如下:</p>
+<ol>
+<li>shouldOverrideUrlLoading</li>
+<li>onPageStarted</li>
+<li>onPageStarted</li>
+<li>shouldOverrideUrlLoading</li>
+<li>onPageFinished</li>
+<li>onPageStarted</li>
+<li>onPageStarted</li>
+<li>shouldOverrideUrlLoading</li>
+<li>onPageFinished</li>
+<li>onPageStarted</li>
+<li>onPageFinished</li>
+</ol>
+<p>可见, 除了最后一次onPageFinished事件, 其他的onPageFinished事件都紧跟shouldOverrideUrlLoading事件之后触发.</p>
+<p>基于上述现象, 可以设置全局状态位(flag), onPageStarted触发时设置为<code>true</code>, shouldOverrideUrlLoading触发时设置为<code>false</code>, onPageFinished触发时, 判断flag是否为true, 如果为true则意味着页面加载完成, 此时便可放心的记录页面url以及重写js原生返回方法.</p>
+<h3 id="u57FA_u4E8Ehash_u8DF3_u8F6C_u4EA7_u751F_u7684_u5386_u53F2_u9879_u5982_u4F55_u8BB0_u5F55"><a href="#u57FA_u4E8Ehash_u8DF3_u8F6C_u4EA7_u751F_u7684_u5386_u53F2_u9879_u5982_u4F55_u8BB0_u5F55" class="headerlink" title="基于hash跳转产生的历史项如何记录"></a>基于hash跳转产生的历史项如何记录</h3><p>上述方法真的可以记录webview所有的历史项吗?</p>
+<p>其实还不能. 实际上, webview的网页上进行hash跳转时, onPageStarted 和 shouldOverrideUrlLoading 都不会触发. 所幸的是 onPageFinished 能够感知到hash值的变化. 我们可以在该方法内继续维护历史记录栈.</p>
+<h3 id="u5C0F_u7ED3"><a href="#u5C0F_u7ED3" class="headerlink" title="小结"></a>小结</h3><p>至此, 我想, 基于native的这套返回方案应该是可行. 但有native的同学告知: 有些页面native无法记录页面url? 这是为什么呢? 至少到目前为止, 我还没有发现这样的场景. 欢迎阅读本文的你留下个脚印, 一起讨论和完善web app返回方案.</p>
+<hr>
+<p>本问就讨论这么多内容,大家有什么问题或好的想法欢迎在下方参与<a href="#respond">留言和评论</a>.</p>
+<p>本文作者: <a href="https://github.com/Louiszhai" target="_blank" rel="external">louis</a></p>
+<p>本文链接: <a href="http://louiszhai.github.io/2017/02/20/back/">http://louiszhai.github.io/2017/02/20/back/</a></p>
+<p>参考文章</p>
+<ul>
+<li><a href="http://chuansong.me/n/361100051028" target="_blank" rel="external">浅谈WebView的页面跳转_郭霖_传送门</a></li>
+</ul>
+
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2017/02/19/box-shadow/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">box-shadow属性探秘</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share_jia">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">分享到: &nbsp; </span>
+		<a class="jiathis_button_facebook"></a> 
+    <a class="jiathis_button_twitter"></a>
+    <a class="jiathis_button_plus"></a> 
+    <a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+
+
+
+<div class="duoshuo">
+	<div class="ds-thread" data-thread-key="back" data-title="为什么Web App的返回逻辑如此复杂" data-url="http://louiszhai.github.io/2017/02/24/back/"></div>
+	<style>
+		#ds-reset .ds-avatar img{width:54px;height:54px;border-radius:27px;-webkit-border-radius:27px;-moz-border-radius:27px;box-shadow:inset 0 -1px 0 #3333sf;-webkit-box-shadow:inset 0 -1px 0 #3333sf;-webkit-transition:0.4s;-webkit-transition:-webkit-transform 0.4s ease-out;transition:transform 0.4s ease-out;-moz-transition:-moz-transform 0.4s ease-out;}
+		#ds-reset .ds-avatar img:hover{box-shadow:0 0 10px #fff;rgba(255,255,255,.6),inset 0 0 20px rgba(255,255,255,1);-webkit-box-shadow:0 0 10px #fff;rgba(255,255,255,.6),inset 0 0 20px rgba(255,255,255,1);transform:rotateZ(360deg);-webkit-transform:rotateZ(360deg);-moz-transform:rotateZ(360deg);}
+		p.ds-powered-by,#ds-sync-checkbox,.ds-sync label{display:none!important;}
+		#ds-reset .ds-rounded-top{-webkit-border-top-right-radius:0px;-webkit-border-top-left-radius:0px;border-top-right-radius:0px;border-top-left-radius:0px;}
+		#ds-thread #ds-reset .ds-textarea-wrapper{background:#fff;border:0;margin-bottom:20px;padding-right:0px;}
+		#ds-thread #ds-reset .ds-textarea-wrapper textarea{min-height:80px;border:1px solid #ccc;padding:10px;-webkit-appearance:none;border-radius:0;background-color:#FFFFFF;border-color:#cccccc;box-shadow:inset 0 1px 2px rgba(0,0,0,0.1);color:rgba(0,0,0,0.75);-webkit-box-sizing:border-box;box-sizing:border-box;-webkit-transition:border-color 0.15s linear,background 0.15s linear;-moz-transition:border-color 0.15s linear,background 0.15s linear;-ms-transition:border-color 0.15s linear,background 0.15s linear;-o-transition:border-color 0.15s linear,background 0.15s linear;transition:border-color 0.15s linear,background 0.15s linear;}
+		/*#ds-thread #ds-reset .ds-textarea-wrapper textarea:focus{border-color:#999999;background:#fafafa;outline:none;}*/
+		#ds-thread #ds-reset .ds-post-options{border-bottom-left-radius:0px;-webkit-border-bottom-left-radius:0px;border:none;background:none!important;}
+		#ds-reset .ds-textarea-wrapper textarea:focus{border-color:#66afe9;outline:0;-webkit-box-shadow:inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);box-shadow:inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);}
+		#ds-thread #ds-reset .ds-post-button:hover,#ds-thread #ds-reset .ds-post-button:focus{
+		    background-color: #51a351;
+		    background-position: 0 -32px;
+		    color:white;
+		}
+		#ds-thread #ds-reset .ds-post-toolbar,#ds-reset .ds-avatar{box-shadow:none;}
+		#ds-thread #ds-reset .ds-textarea-wrapper textarea:focus{
+	    	/*background: none repeat scroll 0 0 #F4FAFF;*/
+	    	border-color:#9DD4FD;
+	    	border-width:1px;
+	    	box-shadow:0 1px 1px rgba(0,0,0,0.075) inset, 0 0 8px rgba(82, 168, 236, 0.6);
+	    	outline:0 none;
+    	}
+		#ds-thread #ds-reset .ds-textarea-wrapper textarea:active{
+	    	/*background: none repeat scroll 0 0 #F4FAFF;*/
+	    	border-width:1px;
+	    	border-color:#9DD4FD;
+	    	box-shadow:0 1px 1px rgba(0,0,0,0.075) inset, 0 0 8px rgba(82, 168, 236, 0.6);
+	    	outline:0 none;
+    	}
+    	#ds-thread #ds-reset .ds-post-button{
+    		box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset, 0 1px 2px rgba(0, 0, 0, 0.05);
+		    border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+		    border-width: 1px;
+		    border-style: solid;
+		    border-radius: 3px;
+		    background: #5bb75b;
+		    color:white;
+		    text-shadow:none;
+		    transition:background-color 300ms ease-out;
+    	}
+    	#ds-reset .ds-avatar{
+    		background-color:initial;
+    	}
+
+	</style>
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"true"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+</div>
+
+
+
+</div>
+        <link rel="stylesheet" href="/css/content.css" type="text/css">
+<footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+      <img src="/img/top_arrow.png" class="top_arrow" id="top_arrow">
+    	<div class="footer-left">
+    		&copy; 2017 louis
+
+        <span style="position:relative;top:2px" id="cnzz_stat_icon_1256923583"></span>
+        <script type="text/javascript">
+          var s = document.createElement('script');
+          var cnzz_protocol = (("https:" == document.location.protocol) ? "https://" : "http://");
+          s.src = cnzz_protocol + "s11.cnzz.com/z_stat.php?id=1256923583&show=pic";
+          document.body.appendChild(s);
+        </script>
+
+    	</div>
+      	<div class="footer-right">
+      		<a href="https://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+<script type="text/javascript">
+  //swifty
+  /*(function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+  
+  _st('install','4AmBuvmx4Cy-3hvyxeh8','2.0.0');*/
+</script>
+    </div>
+    
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+
+
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: false,
+		animate: false,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="/js/jquery-1.9.1.min.js" type="text/javascript"></script>
+<script src="/js/main.js" type="text/javascript"></script>
+<script src="/js/content.js" type="text/javascript"></script>
+
+
+
+
+
+
+
+</div>
+<script src="/js/screenfull.js" type="text/javascript"></script>
+<a href="https://github.com/Louiszhai" style="position: fixed; top: 0; right: 0; border: 0;z-index:9999"><img
+            source="https://camo.githubusercontent.com/a6677b08c955af8400f44c6298f40e7d19cc5b2d/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677261795f3664366436642e706e67"
+            src="/img/fork_me_on_github.png" alt="Fork me on GitHub"
+            data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png"></a>
+</body>
+</html>

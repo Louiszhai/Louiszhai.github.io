@@ -4,7 +4,7 @@
   <subtitle><![CDATA[程序猿 前端攻城师]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://louiszhai.github.io/"/>
-  <updated>2017-02-19T08:24:37.000Z</updated>
+  <updated>2017-02-24T08:00:15.000Z</updated>
   <id>http://louiszhai.github.io/</id>
   
   <author>
@@ -13,6 +13,134 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[为什么Web App的返回逻辑如此复杂]]></title>
+    <link href="http://louiszhai.github.io/2017/02/24/back/"/>
+    <id>http://louiszhai.github.io/2017/02/24/back/</id>
+    <published>2017-02-24T07:59:01.000Z</published>
+    <updated>2017-02-24T08:00:15.000Z</updated>
+    <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>最近我在梳理公司web app新产品线的返回逻辑, 推演了N种方案, 竟然没有一种完全通用的. 这让我迷惑不已. 仔细体验了公司的各种H5页面, 发现返回逻辑还真是五花八门. 那么, 问题来了, 为什么Web App的返回逻辑如此难以设计?</p>
+<a id="more"></a>
+<h3 id="u53EF_u4F9B_u5C1D_u8BD5_u7684api"><a href="#u53EF_u4F9B_u5C1D_u8BD5_u7684api" class="headerlink" title="可供尝试的api"></a>可供尝试的api</h3><p>相对于较复杂的返回场景, 可用的api少得可怜. webview的history对象中, 仅 back 和 go 方法可用. 它们遵循如下规律:</p>
+<ul>
+<li>调用<code>history.back</code> 如果存在历史的话, 只能回到前一个页面, 否则将静默失败.</li>
+<li>调用<code>history.go(-n)</code> 如果存在历史的话, 可以回到前n个页面, 否则将静默失败.</li>
+</ul>
+<p>从这里看起来, 似乎想回到哪就回到哪. 自然不是, 不然就不会有这篇文章了.</p>
+<p>不得不说的是, H5中有个堪称坑爹的设定, 就是<code>history.length</code>属性, 该属性无论何时, 都是当前webview历史栈的总长度. 也就是说, 无论你的网页是第一个打开的, 还是中间打开的, 还是最后一个打开的, 只要返回到你的网页, 你获取到的<code>history.length</code>都是相同的值. 无论如何你都不能直接拿到你的网页在webview历史栈中的位置(或者序号), 这将导致你不知道要往前跳几步(假设要跳过若干个历史), 因此你不能随心所欲的调用<code>history.go</code>方法.</p>
+<p>通常情况下,若web app自带返回按钮, 如果其中一个网页A是通过重定向模拟返回到它之前的某个网页B, 用户在新的网页B点击返回按钮, 将返回到网页A, 此时再点击网页A的返回按钮, 那么又将进入到新的网页B2中. 如下:</p>
+<p>①—&gt;A —②重定向—&gt; B —③返回—&gt; A —④重定向—&gt; B2 —⑤返回—&gt; A</p>
+<p>我们来看看webview历史栈发生了什么, 假设历史栈已经存储了n项历史:</p>
+<ul>
+<li>①栈顶压入A页面, 此时当前页面指针后移1位, 指向A页面, 且A页面位于栈顶, 此时历史栈长度为n+1;</li>
+<li>②栈顶压入B页面, 此时当前页面指针后移1位, 指向B页面, 且B页面位于栈顶, 此时历史栈长度为n+2;</li>
+<li>③当前页面指针前移1位, 指向A页面, 此时B页面位于栈顶, 历史栈长度依然为n+2;</li>
+<li>④当前页面指针后的栈被清空, 历史栈长度为n+1, 栈顶压入B2页面, 当前页面指针后移1位, 指向B2页面, 且B2页面位于栈顶, 此时历史栈长度为n+2;</li>
+<li>⑤当前页面指针前移1位, 指向A页面, 此时B2页面位于栈顶, 历史栈长度依然为n+2;</li>
+</ul>
+<p>B和B2其实是同一个网页, 除了历史栈中的位置不同, 他们没有任何不同. 如此逻辑将使得我们将陷入返回的死循环中. 为避免这种体验上的缺陷, 请尽量不要在返回逻辑中重定向到某个之前的页面.</p>
+<blockquote>
+<p>webview中通过location.href方式跳转链接, 可起到清理浏览历史项的作用, 如此时webview中共存在100个历史项, 我们一路返回至第90个页面(该页面的history.length依然是100), 然后在该页面通过location.href跳转至另一个页面, 那么新的页面将处于历史项的第91项, 原来的第91~100项历史将被清空. 于是新的页面中获取的history.length将准确地标示了该页面处于历史项的第几项.</p>
+</blockquote>
+<h3 id="u91CD_u5B9A_u5411_u8FC7_u540E_u600E_u4E48_u8FD4_u56DE"><a href="#u91CD_u5B9A_u5411_u8FC7_u540E_u600E_u4E48_u8FD4_u56DE" class="headerlink" title="重定向过后怎么返回"></a>重定向过后怎么返回</h3><p>愿望是美好的, 现实是残酷的. 纯H5下想要在返回逻辑中不重定向, 先砍了这些需求再说:</p>
+<ul>
+<li>从网页A跳走, 中间经过n个其他域名的网页, 最终不希望用户按步返回, 希望能够直接返回网页A的场景.</li>
+<li>从详情页B跳走, 中间需要经过各种支付中间页, 然后进入web版收银台, 弹出支付宝或者微信支付弹框, 支付成功后进入到成功页, 从成功页返回时希望直接回到详情页B的场景.</li>
+</ul>
+<p>从产品上看, 这些需求都是合理的. 那么如何从最后一个页面, 成功地返回到初始的A或B页面, 这里我想到了一个解决方案. 思路如下:</p>
+<p><code>history.go</code>方法是可用的. 只要get到了网页处于历史栈的位置, 就可以正常的返回n步. 虽然通常情况下从初始页面A跳出时, <code>history.length</code>并不可靠, 但是从A页面跳到(通过location.href跳转)的第一个页面X中, <code>history.length</code>却是可靠的, 此时该值准确地记录了页面X在历史栈中的位置.(不懂的可以去看上述第④步解析) 只要在页面X中执行如下语句, 便可记录页面A的位置.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//假定原页面A中跳转时执行如下语句</span></span><br><span class="line"><span class="keyword">let</span> linkA = <span class="string">"http://www.a.com/a?params=abc"</span>;</span><br><span class="line">linkA = <span class="built_in">window</span>.encodeURIComponent(linkA);</span><br><span class="line"><span class="keyword">const</span> targetLink = <span class="string">`http://www.x.com/x?from=<span class="subst">$&#123;linkA&#125;</span>#test`</span>;</span><br><span class="line">location.href = targetLink;</span><br><span class="line"></span><br><span class="line"><span class="comment">//在页面X执行如下语句</span></span><br><span class="line"><span class="keyword">const</span> cursor = history.length - <span class="number">1</span>;</span><br><span class="line"><span class="keyword">let</span> params = location.search.match(<span class="regexp">/from=([^&amp;]*)/</span>),</span><br><span class="line">    from;</span><br><span class="line"><span class="keyword">if</span> (params <span class="keyword">instanceof</span> <span class="built_in">Array</span> &amp;&amp; params.length === <span class="number">2</span>) &#123;</span><br><span class="line">  <span class="comment">// 获取原页面A的链接</span></span><br><span class="line">  from = <span class="built_in">window</span>.decodeURIComponent(params[<span class="number">1</span>]);</span><br><span class="line">  <span class="keyword">const</span> a = <span class="built_in">document</span>.createElement(<span class="string">'a'</span>);</span><br><span class="line">  a.href = from;</span><br><span class="line">  <span class="keyword">const</span> paramStr = <span class="string">`historyCursor=<span class="subst">$&#123;history.length - 1&#125;</span>`</span>;</span><br><span class="line">  <span class="comment">// 追加historyCursor=history.length参数</span></span><br><span class="line">  <span class="keyword">const</span> searchStr = a.search ? <span class="string">`<span class="subst">$&#123;a.search&#125;</span>&amp;<span class="subst">$&#123;paramStr&#125;</span>`</span> : <span class="string">`?<span class="subst">$&#123;paramStr&#125;</span>`</span>;</span><br><span class="line">  from = a.origin + a.pathname + searchStr + a.hash;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>页面X经过n次跳转, 其中可能经过了各种支付中间页, 最终又重定向回到页面X’(与页面x链接相同, 但是新的页面), 在页面X’上点击返回按钮时, 此时可以直接重定向回到原页面A’(与页面A链接相似, 仅仅多了参数historyCursor, 是新的页面).</p>
+<p>待用户回到了页面A’后, 此时点击返回按钮时, 走的并不是通常的<code>history.back</code> , 而应该是回到页面A的前一个页面, 换句话说 , 此时用户将往回跳n个页面. 这里的主要判断逻辑如下:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">goBack</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> start, current, step;</span><br><span class="line">  <span class="keyword">const</span> params = location.search.match(<span class="regexp">/historyCursor=(\d+)/</span>);</span><br><span class="line">  <span class="keyword">if</span>(params <span class="keyword">instanceof</span> <span class="built_in">Array</span> &amp;&amp; params.length === <span class="number">2</span>) &#123;</span><br><span class="line">    <span class="comment">// 如参数中带有historyCursor, 返回时将回跳n步</span></span><br><span class="line">    start = +params[<span class="number">1</span>];</span><br><span class="line">    current = history.length;</span><br><span class="line">    step = current - start + <span class="number">1</span>;</span><br><span class="line">    location.go(-step);</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="comment">// 默认将返回上一个页面</span></span><br><span class="line">    history.back();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>以上, 由多个页面传递historyCursor的值, 基本将需求中的返回逻辑落地了. 美中不足的是, 页面A的返回逻辑依赖了页面X的代码(页面X中需要设置对的historyCursor值), 存在耦合. 这样开发页面A的同学将通知开发页面X的同学, 返回时你要给我加一个historyCursor的参数, 巴拉巴拉. 开发页面X的同学也很纠结, 因为他始终要确认是不是从页面A跳过来的, 如果是, 那他就要加一个historyCursor参数, 并且重定向到页面A. 同时Android系统自带的返回键也会让这套方案更加雪上加霜.</p>
+<p>有鉴于此, 以上纯H5的解决方案便不太完美.</p>
+<h3 id="H5_u662F_u5426_u53EF_u4EE5_u6253_u5F00_u65B0_u7684_u7F51_u9875_u7A97_u53E3"><a href="#H5_u662F_u5426_u53EF_u4EE5_u6253_u5F00_u65B0_u7684_u7F51_u9875_u7A97_u53E3" class="headerlink" title="H5是否可以打开新的网页窗口"></a>H5是否可以打开新的网页窗口</h3><p>对于非嵌入app的H5应用, 那么使用场景就是各家的浏览器, 应用中对于有可能打乱历史记录的网页, 直接新开窗口就行.</p>
+<p>对于嵌入app内的H5应用, 通常来说, H5本身不具备新开webview的能力. 这里需要native辅助. 接下来我们将主要关注嵌入app内的H5的应用.</p>
+<h3 id="native_u63D0_u4F9BjsBridge"><a href="#native_u63D0_u4F9BjsBridge" class="headerlink" title="native提供jsBridge"></a>native提供jsBridge</h3><p>app内嵌的H5应用, 可借助native的jsBridge新开webview, 从而避免历史记录混乱. 为此, native客户端(包括Android和IOS以及其他)将提供接口以便js打开或关闭webview. 值得考虑的是, 这里面可能带来一个负面影响, js有可能多次申请新开webview, 从而大量消耗内存和电量. 因此, native有必要对webview的个数予以限制.</p>
+<h3 id="native_u7EF4_u62A4H5_u7684_u5386_u53F2_u8BB0_u5F55"><a href="#native_u7EF4_u62A4H5_u7684_u5386_u53F2_u8BB0_u5F55" class="headerlink" title="native维护H5的历史记录"></a>native维护H5的历史记录</h3><p>既然开多个webview开销会增大, 基于此, 我突发奇想, 有没有可能由native客户端来维护单个webview的历史记录, 从而所有的页面跳转将由native接管?</p>
+<p>我认为这是有可能的. 首先native可以保留每次加载的页面链接, 同时, 页面跳转时可提前设置下一个页面的返回逻辑. 既然历史记录和返回逻辑都在native中注册, 剩下的问题就是, js怎么通知native返回了? 这个也很简单, native不止可以loadUrl, 还可以load页面上的方法. 又页面上用于返回的两个js方法: <code>history.go</code> 和 <code>history.back</code> 都是可以重写的. 因此, native可在页面DOMContentLoaded事件回调中重写go和back方法, 改为调用jsBridge接口(此前, 为了解决第三方OAuth2.0登录后返回到空白页的问题, 我写了部分native逻辑, 用于重写js原生go和back方法已在生产环境下使用).</p>
+<p>思路如下:</p>
+<ol>
+<li><p><strong>记录历史栈</strong>: native存储webview中加载的每一个页面, 形成一个历史记录栈. 并且标记当前页面处于该历史记录栈的位置.</p>
+</li>
+<li><p><strong>重写返回方法</strong>: webview中每个页面加载完成后, 重写<code>history.go</code> 和 <code>history.back</code>方法, 改为调用jsBridge接口, 方便native感知网页的后退. (下面将详细说明重写的时机)</p>
+</li>
+<li><p><strong>设置下一个页面的返回逻辑</strong>: 页面跳转之前, 可调用jsBridge强制设置下一个页面的返回url(如从a跳转至b页面, 设置后, 无论b处于历史记录栈的哪一项, 从b返回都将回到a页面)</p>
+</li>
+<li><p><strong>回退时检查当前页面的返回逻辑</strong>: 一旦H5中调用<code>history.go</code> 和 <code>history.back</code>方法返回之前的页面, native自动检查该页面之前是否设置过返回url, 如有则从历史记录栈中捞出该url的位置, 继续调用js原生的<code>history.go</code>方法进行跳转, 同时忽略本次历史; 如无则直接通过原方法跳转页面, 同时忽略本次历史.</p>
+</li>
+<li><p>重写Android自带的物理返回键.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//改写物理返回键的逻辑</span></span><br><span class="line"><span class="annotation">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">onKeyDown</span><span class="params">(<span class="keyword">int</span> keyCode, KeyEvent event)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">if</span>(keyCode==KeyEvent.KEYCODE_BACK)&#123;</span><br><span class="line">    <span class="comment">//参照第4步策略实现</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>激进策略—拦截页面主动发起的重定向(选用)</strong>: 每次加载url前, 都将检查该url是否在当前页面之前的历史记录栈中出现过, 如有则直接调用js原生的<code>history.go</code>方法, 回退到该url原来的页面.</p>
+</li>
+</ol>
+<p>注: 虽然返回时shouldOverrideUrlLoading事件不会触发, 但onPageStarted和onPageFinished会依次触发一次. 因此上述第4步返回时需要忽略本次历史.</p>
+<p>那么如何记录webview历史栈, 并且重写js方法呢? </p>
+<p>嫌我啰嗦, 你可能会说 “Talk is cheap, show me the code.” 那么, 请看如下Android代码:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">History</span> </span>&#123;</span><br><span class="line">  <span class="keyword">public</span> url;</span><br><span class="line">  <span class="keyword">public</span> backItem;</span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="title">History</span><span class="params">(String url)</span></span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.url = url;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="title">History</span><span class="params">(String url, History backItem)</span></span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.url = url;</span><br><span class="line">    <span class="keyword">this</span>.backItem = backItem;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/*-----------华丽丽的class分界线------------*/</span></span><br><span class="line"></span><br><span class="line">ArrayList&lt;History&gt; historyList = <span class="keyword">new</span> ArrayList&lt;History&gt;;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*-----------华丽丽的class分界线------------*/</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">WebViewManager</span> </span>&#123;</span><br><span class="line">  <span class="comment">//此处略去webView元素的获取</span></span><br><span class="line">  webView.setWebViewClient(<span class="keyword">new</span> WebViewClient() &#123;</span><br><span class="line">    <span class="annotation">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onPageStarted</span><span class="params">(WebView view, String url, Bitmap favicon)</span> </span>&#123;</span><br><span class="line">      <span class="comment">// 存储当前页面URL</span></span><br><span class="line">      History history = <span class="keyword">new</span> History(url);</span><br><span class="line">      historyList.append(history);</span><br><span class="line">      <span class="comment">// 重写js返回方法</span></span><br><span class="line">      String fnString = <span class="string">"(function()&#123;/*在这里重写history.go和history.back方法*/&#125;)()"</span>;</span><br><span class="line">      webView.loadUrl(<span class="string">"javascript:"</span> + fnString);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面只是Simple的体验, 实际请求中, 一定会有url重定向场景. 接下来我们将着重讨论这种场景.</p>
+<h3 id="u5982_u4F55_u5728webview_u4E2D_u5224_u65AD_u9875_u9762_u662F_u5426_u52A0_u8F7D_u5B8C_u6210"><a href="#u5982_u4F55_u5728webview_u4E2D_u5224_u65AD_u9875_u9762_u662F_u5426_u52A0_u8F7D_u5B8C_u6210" class="headerlink" title="如何在webview中判断页面是否加载完成"></a>如何在webview中判断页面是否加载完成</h3><p>首先, 加载页面有两种方式:</p>
+<ol>
+<li>webview主动loadUrl.</li>
+<li>页面上触发的url加载行为.</li>
+</ol>
+<p>我们先来模拟一个<strong>两次</strong>重定向的场景, 通常情况下, 直接访问 <a href="http://www.baidu.com" target="_blank" rel="external">http://www.baidu.com</a> 将发生一次重定向. 在此之前用一个短链接重定向到 <a href="http://www.baidu.com" target="_blank" rel="external">http://www.baidu.com</a> 这样便多了一次重定向. 下面将基于这个场景进行两次测试.</p>
+<p>那么第一种方式, 将依次触发webview的以下事件回调:</p>
+<p><img src="http://louiszhai.github.io/docImages/back01.png" alt="webview主动loadUrl"></p>
+<p>整理如下:</p>
+<ol>
+<li>onPageStarted</li>
+<li>onPageStarted</li>
+<li>shouldOverrideUrlLoading</li>
+<li>onPageFinished</li>
+<li>onPageStarted</li>
+<li>onPageStarted</li>
+<li>shouldOverrideUrlLoading</li>
+<li>onPageFinished</li>
+<li>onPageStarted</li>
+<li>onPageFinished</li>
+</ol>
+<p>第二种方式, 将依次触发webview的以下事件回调:</p>
+<p><img src="http://louiszhai.github.io/docImages/back02.png" alt="页面上触发的url加载行为"></p>
+<p>整理如下:</p>
+<ol>
+<li>shouldOverrideUrlLoading</li>
+<li>onPageStarted</li>
+<li>onPageStarted</li>
+<li>shouldOverrideUrlLoading</li>
+<li>onPageFinished</li>
+<li>onPageStarted</li>
+<li>onPageStarted</li>
+<li>shouldOverrideUrlLoading</li>
+<li>onPageFinished</li>
+<li>onPageStarted</li>
+<li>onPageFinished</li>
+</ol>
+<p>可见, 除了最后一次onPageFinished事件, 其他的onPageFinished事件都紧跟shouldOverrideUrlLoading事件之后触发.</p>
+<p>基于上述现象, 可以设置全局状态位(flag), onPageStarted触发时设置为<code>true</code>, shouldOverrideUrlLoading触发时设置为<code>false</code>, onPageFinished触发时, 判断flag是否为true, 如果为true则意味着页面加载完成, 此时便可放心的记录页面url以及重写js原生返回方法.</p>
+<h3 id="u57FA_u4E8Ehash_u8DF3_u8F6C_u4EA7_u751F_u7684_u5386_u53F2_u9879_u5982_u4F55_u8BB0_u5F55"><a href="#u57FA_u4E8Ehash_u8DF3_u8F6C_u4EA7_u751F_u7684_u5386_u53F2_u9879_u5982_u4F55_u8BB0_u5F55" class="headerlink" title="基于hash跳转产生的历史项如何记录"></a>基于hash跳转产生的历史项如何记录</h3><p>上述方法真的可以记录webview所有的历史项吗?</p>
+<p>其实还不能. 实际上, webview的网页上进行hash跳转时, onPageStarted 和 shouldOverrideUrlLoading 都不会触发. 所幸的是 onPageFinished 能够感知到hash值的变化. 我们可以在该方法内继续维护历史记录栈.</p>
+<h3 id="u5C0F_u7ED3"><a href="#u5C0F_u7ED3" class="headerlink" title="小结"></a>小结</h3><p>至此, 我想, 基于native的这套返回方案应该是可行. 但有native的同学告知: 有些页面native无法记录页面url? 这是为什么呢? 至少到目前为止, 我还没有发现这样的场景. 欢迎阅读本文的你留下个脚印, 一起讨论和完善web app返回方案.</p>
+<hr>
+<p>本问就讨论这么多内容,大家有什么问题或好的想法欢迎在下方参与<a href="#respond">留言和评论</a>.</p>
+<p>本文作者: <a href="https://github.com/Louiszhai" target="_blank" rel="external">louis</a></p>
+<p>本文链接: <a href="http://louiszhai.github.io/2017/02/20/back/">http://louiszhai.github.io/2017/02/20/back/</a></p>
+<p>参考文章</p>
+<ul>
+<li><a href="http://chuansong.me/n/361100051028" target="_blank" rel="external">浅谈WebView的页面跳转_郭霖_传送门</a></li>
+</ul>
+]]></content>
+    <summary type="html">
+    <![CDATA[web返回 HybirdApp返回 H5返回 app返回]]>
+    
+    </summary>
+    
+      <category term="Web" scheme="http://louiszhai.github.io/tags/Web/"/>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[box-shadow属性探秘]]></title>
@@ -5325,470 +5453,6 @@
 ]]></content>
     <summary type="html">
     <![CDATA[JavaScript scope chain 作用域链 闭包]]>
-    
-    </summary>
-    
-      <category term="JavaScript" scheme="http://louiszhai.github.io/tags/JavaScript/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[详解JS遍历]]></title>
-    <link href="http://louiszhai.github.io/2015/12/18/traverse/"/>
-    <id>http://louiszhai.github.io/2015/12/18/traverse/</id>
-    <published>2015-12-18T02:54:48.000Z</published>
-    <updated>2017-01-16T05:34:42.000Z</updated>
-    <content type="html"><![CDATA[<h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>遍历数组或对象是一名程序员的基本素养之一. 然而遍历却不是一件简单的事, 优秀的程序员知道怎么去选择合适的遍历方法, 优化遍历效率. 本篇将带你走进JavaScript遍历的世界, 享受分析JS循环的快感. 本篇所有代码都可以直接运行, 希望您通读本篇后, 不止是浏览, 最好是亲手去实践下.</p>
-<a id="more"></a>
-<h3 id="u6982_u8FF0"><a href="#u6982_u8FF0" class="headerlink" title="概述"></a>概述</h3><p>js有如下两种数据需要经常遍历</p>
-<ul>
-<li>数组(Array)</li>
-<li>对象(Object)</li>
-</ul>
-<p>同时又提供了如下8种方法方便我们遍历元素</p>
-<ul>
-<li>for</li>
-<li>while(或do~while)</li>
-<li>forEach</li>
-<li>for in</li>
-<li>$.each</li>
-<li>$(selecter).each</li>
-<li>map</li>
-<li>every</li>
-</ul>
-<p>最终我们将分析遍历效率选出最佳遍历选手.</p>
-<p>本文将针对如下两种数据进行详细的分析和举栗. 下面举栗中如果不加特殊说明将会用到如下数据.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> array = [<span class="string">"囚徒"</span>,<span class="string">"过客"</span>,<span class="string">"领袖"</span>];<span class="comment">//职场3种人</span></span><br><span class="line"><span class="keyword">var</span> o = &#123;<span class="number">0</span>:<span class="string">"linda"</span>,<span class="number">1</span>:<span class="string">"style"</span>,<span class="number">2</span>:<span class="string">"nick"</span>,length:<span class="number">3</span>&#125;;</span><br></pre></td></tr></table></figure>
-<h3 id="for"><a href="#for" class="headerlink" title="for"></a>for</h3><p>语法: for(初始化; 循环执行条件; 每遍历一个元素后做的事情;){}</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;<span class="comment">//循环置于闭包之内</span></span><br><span class="line">  <span class="keyword">for</span>(<span class="keyword">var</span> i=<span class="number">0</span>,length=array.length;i&lt;length;i++)&#123;<span class="comment">//缓存数组长度</span></span><br><span class="line">  	<span class="built_in">console</span>.log(array[i]);<span class="comment">//内部方法若有可能相互影响,也要置于闭包之内</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;)();</span><br></pre></td></tr></table></figure>
-<p>for循环只能遍历数组, 不能遍历对象. 写for循环时有两点需要注意.</p>
-<ul>
-<li>其一, 为了避免遍历时执行多遍计算数组长度的操作, 影响效率,  建议在循环开始以变量的形式缓存下数组长度, 若在循环内部有可能改变数组长度, 请务必慎重处理, 避免数组越界.</li>
-<li>JavaScript中并没有类似java的块级作用域, for循环内部定义的变量会直接暴露在外(如 i,循环退出后,i变量将等于数组长度, 后续代码将能访问到 i 变量的值), 因此建议将for循环置于闭包内. 特别要注意的是: <strong>如果在循环内部, 前一个元素的遍历有可能影响到后一个元素的遍历, 那么for循环内部方法也需要置于闭包之内.</strong></li>
-</ul>
-<h3 id="do/while"><a href="#do/while" class="headerlink" title="do/while"></a>do/while</h3><p>语法: do{…}while(true);</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"> <span class="keyword">do</span> <span class="keyword">while</span></span><br><span class="line">(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> i = <span class="number">0</span>,</span><br><span class="line">        len = array.length;</span><br><span class="line">    <span class="keyword">do</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (i == <span class="number">2</span>) &#123;</span><br><span class="line">            <span class="keyword">break</span>; <span class="comment">// 循环被终止, 此处如果是continue就会造成循环无法退出</span></span><br><span class="line">        &#125;;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">'array['</span>+ i +<span class="string">']:'</span> + array[i]);</span><br><span class="line">        i++;<span class="comment">//此句建议放置循环while头部</span></span><br><span class="line">    &#125; <span class="keyword">while</span>(i&lt;len);</span><br><span class="line">&#125;)();</span><br></pre></td></tr></table></figure>
-<p>do/while的语法简化了循环的实现, 只保留对循环条件的判断, 所以我们要在循环内部构造出循环退出的条件, 否则有可能造成死循环. 特别要注意的是: <strong>使用 continue 跳出本次遍历时, 要保证循环能够自动进入到下一次遍历, 因此保证循环走到下一次遍历的语句需要放到 continue 前面执行, 建议置于循环头部</strong>.(如上, i++ 语句最好放置循环头部)</p>
-<p>do/while 循环与for循环大体差不多,只支持数组遍历, 多用于对循环退出条件不是很明确的场景. 一般来说不建议使用这种方式遍历数组.</p>
-<h3 id="forEach"><a href="#forEach" class="headerlink" title="forEach"></a>forEach</h3><p>语法: array.forEach(function(item){}), 参数item表示数组每一项的元素</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">array.forEach(<span class="function"><span class="keyword">function</span>(<span class="params">item</span>)</span>&#123;</span><br><span class="line">  <span class="keyword">if</span>(item==<span class="string">"囚徒"</span>)</span><br><span class="line">    <span class="keyword">return</span>;<span class="comment">//这里只能使用return跳过当前元素处理</span></span><br><span class="line">  <span class="built_in">console</span>.log(item);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-<p>forEach的语法特点和 java的for each有些类似, 都丢掉了数组的索引信息.</p>
-<p>使用forEach循环有几点需要特别注意:</p>
-<ul>
-<li>forEach无法遍历对象</li>
-<li>forEach无法在IE中使用，只是在firefox和chrome中实现了该方法</li>
-<li>forEach无法使用break，continue跳出循环，使用return时，效果和在for循环中使用continue一致</li>
-</ul>
-<h3 id="for_in"><a href="#for_in" class="headerlink" title="for in"></a>for in</h3><p>语法: for(var item in array){}</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(<span class="keyword">var</span> item <span class="keyword">in</span> array)&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(item);</span><br><span class="line">&#125;<span class="comment">//0 1 2</span></span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">var</span> item <span class="keyword">in</span> o)&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(item);</span><br><span class="line">&#125;<span class="comment">//0 1 2 length</span></span><br></pre></td></tr></table></figure>
-<p>for in 可用于遍历数组和对象, 但它输出的只是数组的索引和对象的key, 我们可以通过索引和key取到对应的值. 如下:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(<span class="keyword">var</span> item <span class="keyword">in</span> array)&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(array[item]);</span><br><span class="line">&#125;<span class="comment">//"囚徒" "过客" "领袖"</span></span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">var</span> item <span class="keyword">in</span> o)&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(o[item]);</span><br><span class="line">&#125;<span class="comment">//"linda" "style" "nick" "length"</span></span><br></pre></td></tr></table></figure>
-<h3 id="24-each"><a href="#24-each" class="headerlink" title="$.each"></a>$.each</h3><p>语法: $.each(array|o, function(i, ele){}) 支持数组和对象</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">$.each(array, <span class="function"><span class="keyword">function</span>(<span class="params">i, ele</span>)</span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(i,ele,<span class="keyword">this</span>==ele);</span><br><span class="line">&#125;);</span><br><span class="line"><span class="comment">//0 "囚徒" true</span></span><br><span class="line"><span class="comment">//1 "过客" true</span></span><br><span class="line"><span class="comment">//2 "领袖" true</span></span><br><span class="line">$.each(o, <span class="function"><span class="keyword">function</span>(<span class="params">i, ele</span>)</span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(i,ele,<span class="keyword">this</span>==ele);</span><br><span class="line">&#125;);</span><br><span class="line"><span class="comment">//0 "linda" true</span></span><br><span class="line"><span class="comment">//1 "style" true</span></span><br><span class="line"><span class="comment">//2 "nick" true</span></span><br></pre></td></tr></table></figure>
-<p>这里我们注意到 <strong>this对象 指向当前属性的值</strong>,这是因为:</p>
-<p>参考jQuery api:</p>
-<blockquote>
-<p><code>$.each()</code> 方法会迭代jQuery对象中的每一个DOM元素。每次回调函数执行时，会传递当前循环次数作为参数(从0开始计数)。更重要的是，回调函数是在当前DOM元素为上下文的语境中触发的。因此关键字 <code>this</code> 总是指向这个元素。</p>
-</blockquote>
-<p>同时,上述遍历时, o 对象的属性中有一个length属性并没有被输出. 这是为什么呢? 请耐心往下看.</p>
-<p>首先, 我们来看看遍历对象o时, 当前的this对象到底是什么?</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">$.each(o, <span class="function"><span class="keyword">function</span>(<span class="params">i, ele</span>)</span>&#123;</span><br><span class="line">  <span class="keyword">if</span>(<span class="keyword">this</span>==<span class="string">"linda"</span>)&#123;<span class="comment">//我们随机选取第一个属性</span></span><br><span class="line">    <span class="built_in">console</span>.log(<span class="keyword">this</span>,<span class="keyword">this</span>==ele);</span><br><span class="line">    $.each(<span class="keyword">this</span>, <span class="function"><span class="keyword">function</span>(<span class="params">e, ele2</span>) </span>&#123;</span><br><span class="line">    	<span class="built_in">console</span>.log(e, ele2);</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br><span class="line"><span class="comment">//String &#123;0: "l", 1: "i", 2: "n", 3: "d", 4: "a", length: 5, [[PrimitiveValue]]: "linda"&#125; true</span></span><br><span class="line"><span class="comment">//0 "l"</span></span><br><span class="line"><span class="comment">//1 "i"</span></span><br><span class="line"><span class="comment">//2 "n"</span></span><br><span class="line"><span class="comment">//3 "d"</span></span><br><span class="line"><span class="comment">//4 "a"</span></span><br></pre></td></tr></table></figure>
-<p>我们发现, this对象等于回调函数的第二个形参, 是一个字符串.且它的 length 属性和 [[PrimitiveValue]] 属性并没有被打印出来, 为此我们来查看下length的内部属性.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$.each(o, <span class="function"><span class="keyword">function</span>(<span class="params">i, ele</span>)</span>&#123;</span><br><span class="line">  <span class="keyword">if</span>(<span class="keyword">this</span>==<span class="string">"linda"</span>)<span class="comment">//我们还是随机选取第一个属性(这还是随机吗?)</span></span><br><span class="line">    <span class="built_in">console</span>.log(<span class="built_in">Object</span>.getOwnPropertyDescriptor(<span class="keyword">this</span>, <span class="string">'length'</span>));</span><br><span class="line">&#125;);</span><br><span class="line"><span class="comment">//Object &#123;value: 5, writable: false, enumerable: false, configurable: false&#125;</span></span><br></pre></td></tr></table></figure>
-<p>可见, this对象的length属性的 enumerable 属性被设置成了false, 这表示该对象不能被列举或遍历, 同时还不能被配置(configurable: false), 也不能被赋值(writable: false).</p>
-<p>此时, 前面遍历 o 对象时,它的 length 属性没有被打印出来的疑问似乎有解了. 让我们来看看 o.length 的内部属性吧.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(<span class="built_in">Object</span>.getOwnPropertyDescriptor(o, <span class="string">'length'</span>));</span><br><span class="line"><span class="comment">//Object &#123;value: 3, writable: true, enumerable: true, configurable: true&#125;</span></span><br></pre></td></tr></table></figure>
-<p>o.length 值为3, 可赋值, 可列举, 可配置. 这可不对, 刚刚不是说 enumerable 属性被设置成了false 才不会被遍历吗. 现在该值为 true, 并且还不可遍历. 这不合常理, 自然该有别的原因. 我们接着往下看.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> o = &#123;<span class="number">0</span>:<span class="string">"linda"</span>,<span class="number">1</span>:<span class="string">"style"</span>,<span class="number">2</span>:<span class="string">"nick"</span>,length:<span class="number">1</span>&#125;; <span class="comment">// 试着改变length的值</span></span><br><span class="line">$.each(o, <span class="function"><span class="keyword">function</span>(<span class="params">i, ele</span>)</span>&#123;<span class="comment">//再遍历一次</span></span><br><span class="line">  <span class="built_in">console</span>.log(i,ele);</span><br><span class="line">&#125;);</span><br><span class="line"><span class="comment">//0 "linda"</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> o = &#123;<span class="number">0</span>:<span class="string">"linda"</span>,<span class="number">1</span>:<span class="string">"style"</span>,<span class="number">2</span>:<span class="string">"nick"</span>,length:<span class="number">5</span>&#125;; <span class="comment">// 坚持改变length的值</span></span><br><span class="line">$.each(o, <span class="function"><span class="keyword">function</span>(<span class="params">i, ele</span>)</span>&#123;<span class="comment">//再遍历一次</span></span><br><span class="line">  <span class="built_in">console</span>.log(i,ele);</span><br><span class="line">&#125;);</span><br><span class="line"><span class="comment">// 0 linda</span></span><br><span class="line"><span class="comment">// 1 style</span></span><br><span class="line"><span class="comment">// 2 nick</span></span><br><span class="line"><span class="comment">// length 5</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> o = &#123;<span class="number">0</span>:<span class="string">"linda"</span>,<span class="number">1</span>:<span class="string">"style"</span>,<span class="number">2</span>:<span class="string">"nick"</span>&#125;; <span class="comment">// 试试去掉length属性</span></span><br><span class="line">$.each(o, <span class="function"><span class="keyword">function</span>(<span class="params">i, ele</span>)</span>&#123;<span class="comment">//再遍历一次</span></span><br><span class="line">  <span class="built_in">console</span>.log(i,ele);</span><br><span class="line">&#125;);</span><br><span class="line"><span class="comment">// 0 linda</span></span><br><span class="line"><span class="comment">// 1 style</span></span><br><span class="line"><span class="comment">// 2 nick</span></span><br></pre></td></tr></table></figure>
-<p>现象明了, 结合jquery源码, 当对象中存在length属性时, $.each 内部使用for循环去遍历对象, 否则它将使用for in循环去遍历, 因此$.each遍历对象遵循如下规律:</p>
-<ul>
-<li>如果对象中存在 length 属性, 遍历深度以length属性为准, 即length多大, 遍历多少个元素.</li>
-<li>如果对象中不存在 length 属性, 遍历深度以实际内部属性个数为准.</li>
-</ul>
-<p>不仅如此, $.each的具体使用过程中还有以下几点需要注意:</p>
-<ul>
-<li>使用 <code>return</code> 或者 <code>return true</code> 为跳过一个元素，继续执行后面的循环;</li>
-<li>使用 <code>return false</code> 为终止循环的执行，但是并不终止函数执行, 这是因为在 jquery.each 中, 若返回值指定为false, 才跳出循环, 如果感兴趣请翻看 jquery.each 源码;</li>
-<li>无法使用 break 与 continue 来跳过循环.</li>
-</ul>
-<h3 id="24_28selecter_29-each"><a href="#24_28selecter_29-each" class="headerlink" title="$(selecter).each"></a>$(selecter).each</h3><p>语法: $(selecter|array|o).each(function(i, ele){})  支持数组和对象, 该方法基本上与$.each方法相同.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">$(<span class="string">'div'</span>).each(<span class="function"><span class="keyword">function</span>(<span class="params">i,ele</span>)</span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="keyword">this</span>,i,<span class="keyword">this</span> == ele);</span><br><span class="line">&#125;);</span><br><span class="line"><span class="comment">//dom... 0 dom.... true</span></span><br><span class="line">$(array).each(<span class="function"><span class="keyword">function</span>(<span class="params">i,ele</span>)</span>&#123;<span class="comment">//处理数组</span></span><br><span class="line">  <span class="keyword">if</span>(<span class="keyword">this</span> == <span class="string">"领袖"</span>)</span><br><span class="line">  	<span class="built_in">console</span>.log(<span class="keyword">this</span>,i,<span class="keyword">this</span> == ele);</span><br><span class="line">&#125;);</span><br><span class="line"><span class="comment">//String &#123;0: "领", 1: "袖", length: 2, [[PrimitiveValue]]: "领袖"&#125; 2 true</span></span><br><span class="line">$(o).each(<span class="function"><span class="keyword">function</span>(<span class="params">i,ele</span>)</span>&#123;<span class="comment">//处理对象</span></span><br><span class="line">  <span class="keyword">if</span>(<span class="keyword">this</span> == <span class="string">"nick"</span>)</span><br><span class="line">  	<span class="built_in">console</span>.log(<span class="keyword">this</span>,i,<span class="keyword">this</span> == ele);</span><br><span class="line">&#125;);</span><br><span class="line"><span class="comment">//String &#123;0: "n", 1: "i", 2: "c", 3: "k", length: 4, [[PrimitiveValue]]: "nick"&#125; 2 true</span></span><br></pre></td></tr></table></figure>
-<p>dom表示div元素, 由于this恒等ele, 说明this也表示div元素, 所以this并不是jquery对象, 而是普通的<a href="https://developer.mozilla.org/en-US/docs/Using_Web_Standards_in_your_Web_Pages/Using_the_W3C_DOM" target="_blank" rel="external"><code>DOM对象</code></a>(可以在this上随意使用DOM方法). 使用$(selecter).each方法,请注意以下几点:</p>
-<ul>
-<li>i: 即序列值 ele: 表示当前被遍历的DOM元素</li>
-<li>this 表示当前被遍历的DOM元素，不能调用jQuery方法, 如需调用jquery方法需要用$符号包裹.如, $(this)</li>
-</ul>
-<h3 id="map"><a href="#map" class="headerlink" title="map"></a>map</h3><p>即 Array.prototype.map,该方法只支持数组</p>
-<p>语法: array.map(callback[,thisArg]) map方法使用其提供函数的每次返回结果生成一个新的数组.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> array = [<span class="number">1</span>, <span class="number">4</span>, <span class="number">9</span>];</span><br><span class="line"><span class="keyword">var</span> roots = array.map(<span class="built_in">Math</span>.sqrt);<span class="comment">//map包裹方法名</span></span><br><span class="line"><span class="comment">// roots is now [1, 2, 3], array is still [1, 4, 9]</span></span><br><span class="line"><span class="keyword">var</span> array = [<span class="number">1</span>, <span class="number">4</span>, <span class="number">9</span>];</span><br><span class="line"><span class="keyword">var</span> doubles = array.map(<span class="function"><span class="keyword">function</span>(<span class="params">num</span>) </span>&#123;<span class="comment">//map包裹方法实体</span></span><br><span class="line">  <span class="keyword">return</span> num * <span class="number">2</span>;</span><br><span class="line">&#125;);</span><br><span class="line"><span class="comment">// doubles is now [2, 8, 18]. array is still [1, 4, 9]</span></span><br></pre></td></tr></table></figure>
-<p>实际上,由于map方法被设计成支持 [<code>鸭式辨型</code>][] , 该方法也可以用来处理形似数组的对象, 例如 NodeList.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> elems = <span class="built_in">document</span>.querySelectorAll(<span class="string">'select option:checked'</span>);</span><br><span class="line"><span class="keyword">var</span> values = <span class="built_in">Array</span>.prototype.map.call(elems, <span class="function"><span class="keyword">function</span>(<span class="params">obj</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> obj.value;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-<p>甚至还可以用来处理字符串, 如下:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> map = <span class="built_in">Array</span>.prototype.map;</span><br><span class="line"><span class="keyword">var</span> array = map.call(<span class="string">'Hello 中国'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">x</span>) </span>&#123; </span><br><span class="line">  <span class="keyword">return</span> x.charCodeAt(<span class="number">0</span>);</span><br><span class="line">&#125;);</span><br><span class="line"><span class="built_in">console</span>.log(array);</span><br><span class="line"><span class="comment">//[72, 101, 108, 108, 111, 32, 20013, 22269]</span></span><br></pre></td></tr></table></figure>
-<p>map处理字符串的方式多种多样, 例如 反转等.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> str = <span class="string">'12345'</span>;</span><br><span class="line"><span class="keyword">var</span> output = <span class="built_in">Array</span>.prototype.map.call(str, <span class="function"><span class="keyword">function</span>(<span class="params">x</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> x;</span><br><span class="line">&#125;).reverse().join(<span class="string">''</span>);</span><br><span class="line"><span class="built_in">console</span>.log(output);<span class="comment">//54321</span></span><br></pre></td></tr></table></figure>
-<p>例如 将字符串数组转换为数字数组, 只需一条语句, 如下:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log([<span class="string">'1'</span>, <span class="string">'2'</span>, <span class="string">'3'</span>].map(<span class="built_in">Number</span>));<span class="comment">//[1,2,3]</span></span><br></pre></td></tr></table></figure>
-<p>目前map方法支持大部分浏览器, 除了IE 6,7,8.</p>
-<h3 id="every"><a href="#every" class="headerlink" title="every"></a>every</h3><p>即 Array.prototype.every, 该方法同上述map方法也只支持数组</p>
-<p>语法: arr.every(callback[, thisArg]) every 方法用于检验数组中的每一项是否符合某个条件, 若符合则放回true, 反之则返回false.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">isBigEnough</span>(<span class="params">element, index, array</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> element &gt;= <span class="number">10</span>;</span><br><span class="line">&#125;</span><br><span class="line">[<span class="number">12</span>, <span class="number">5</span>, <span class="number">8</span>, <span class="number">130</span>, <span class="number">44</span>].every(isBigEnough);   <span class="comment">// false</span></span><br><span class="line">[<span class="number">12</span>, <span class="number">54</span>, <span class="number">18</span>, <span class="number">130</span>, <span class="number">44</span>].every(isBigEnough); <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
-<p>该方法还有简写方式, 如下:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[<span class="number">12</span>, <span class="number">5</span>, <span class="number">8</span>, <span class="number">130</span>, <span class="number">44</span>].every(elem =&gt; elem &gt;= <span class="number">10</span>); <span class="comment">// false</span></span><br><span class="line">[<span class="number">12</span>, <span class="number">54</span>, <span class="number">18</span>, <span class="number">130</span>, <span class="number">44</span>].every(elem =&gt; elem &gt;= <span class="number">10</span>); <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
-<p>以上, 遍历数组和对象的8种方法简单的介绍完, 总结如下:</p>
-<ul>
-<li>for in , $.each , $().each 既支持对象也支持数组遍历;</li>
-<li>for , do/while , forEach 只支持数组;</li>
-<li>Array.prototype.map, Array.prototype.every 只支持数组和形似数组的对象;</li>
-<li>forEach不能退出循环,只能通过return来进入到下一个元素的遍历中(相当于for循环的continue), 且在IE没有实现该方法, 尽量避免使用它;</li>
-<li>$.each和$().each循环只能通过return false 来退出循环, 使用return 或 return true 将跳过一个元素, 继续执行后面的循环.</li>
-</ul>
-<h3 id="u6D4B_u8BD5_u5404_u65B9_u6CD5_u6548_u7387"><a href="#u6D4B_u8BD5_u5404_u65B9_u6CD5_u6548_u7387" class="headerlink" title="测试各方法效率"></a>测试各方法效率</h3><p>下面我们来测试下上述方法的效率.</p>
-<p>注: array数组默认为空, 依次赋值数组长度为1 000 000, 10 000 000, 100 000 000, 分别在 Chrome, Firefox, Safari 浏览器上进行两轮测试, 取测试时间平均值作为比较对象, 时间单位为ms. 如下是测试代码:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> array = [],</span><br><span class="line">	length = array.length = <span class="number">10000000</span>;<span class="comment">//(一千万)</span></span><br><span class="line"><span class="comment">//for(var i=0;i&lt;length;i++)&#123;</span></span><br><span class="line"><span class="comment">//  array[i] = 'louis';</span></span><br><span class="line"><span class="comment">//&#125;</span></span><br><span class="line"><span class="built_in">console</span>.log(array[<span class="number">0</span>]);</span><br><span class="line"><span class="comment">//-------------------------for</span></span><br><span class="line"><span class="keyword">var</span> t1 = +<span class="keyword">new</span> <span class="built_in">Date</span>();</span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">var</span> i=<span class="number">0</span>;i&lt;length;i++)&#123;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> t2 = +<span class="keyword">new</span> <span class="built_in">Date</span>();</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">'for:'</span> + (t2-t1));</span><br><span class="line"></span><br><span class="line"><span class="comment">//-------------------------do/while</span></span><br><span class="line"><span class="keyword">var</span> t1 = +<span class="keyword">new</span> <span class="built_in">Date</span>();</span><br><span class="line"><span class="keyword">var</span> i = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">do</span> &#123;</span><br><span class="line">    i++;</span><br><span class="line">&#125; <span class="keyword">while</span>(i&lt;length);</span><br><span class="line"><span class="keyword">var</span> t2 = +<span class="keyword">new</span> <span class="built_in">Date</span>();</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">'do while:'</span> + (t2-t1));</span><br><span class="line"></span><br><span class="line"><span class="comment">//-------------------------forEach</span></span><br><span class="line"><span class="keyword">var</span> t1 = +<span class="keyword">new</span> <span class="built_in">Date</span>();</span><br><span class="line">array.forEach(<span class="function"><span class="keyword">function</span>(<span class="params">item</span>)</span>&#123;</span><br><span class="line">&#125;);</span><br><span class="line"><span class="keyword">var</span> t2 = +<span class="keyword">new</span> <span class="built_in">Date</span>();</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">'forEach:'</span> + (t2-t1));</span><br><span class="line"></span><br><span class="line"><span class="comment">//-------------------------for in</span></span><br><span class="line"><span class="keyword">var</span> t1 = +<span class="keyword">new</span> <span class="built_in">Date</span>();</span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">var</span> item <span class="keyword">in</span> array)&#123;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> t2 = +<span class="keyword">new</span> <span class="built_in">Date</span>();</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">'for in:'</span> + (t2-t1));</span><br><span class="line"></span><br><span class="line"><span class="comment">//------------------------- $.each</span></span><br><span class="line"><span class="keyword">var</span> t1 = +<span class="keyword">new</span> <span class="built_in">Date</span>();</span><br><span class="line">$.each(array, <span class="function"><span class="keyword">function</span>(<span class="params">i, ele</span>)</span>&#123;</span><br><span class="line">&#125;);</span><br><span class="line"><span class="keyword">var</span> t2 = +<span class="keyword">new</span> <span class="built_in">Date</span>();</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">'$.each:'</span> + (t2-t1));</span><br><span class="line"></span><br><span class="line"><span class="comment">//-------------------------$().each</span></span><br><span class="line"><span class="keyword">var</span> t1 = +<span class="keyword">new</span> <span class="built_in">Date</span>();</span><br><span class="line">$(array).each(<span class="function"><span class="keyword">function</span>(<span class="params">i,ele</span>)</span>&#123;</span><br><span class="line">&#125;);</span><br><span class="line"><span class="keyword">var</span> t2 = +<span class="keyword">new</span> <span class="built_in">Date</span>();</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">'$(ele).each:'</span> + (t2-t1));</span><br><span class="line"></span><br><span class="line"><span class="comment">//-------------------------map</span></span><br><span class="line"><span class="keyword">var</span> t1 = +<span class="keyword">new</span> <span class="built_in">Date</span>();</span><br><span class="line">array.map(<span class="function"><span class="keyword">function</span>(<span class="params">num</span>)</span>&#123;</span><br><span class="line">&#125;);</span><br><span class="line"><span class="keyword">var</span> t2 = +<span class="keyword">new</span> <span class="built_in">Date</span>();</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">'map:'</span> + (t2-t1));</span><br><span class="line"></span><br><span class="line"><span class="comment">//-------------------------every</span></span><br><span class="line"><span class="keyword">var</span> t1 = +<span class="keyword">new</span> <span class="built_in">Date</span>();</span><br><span class="line">array.every(<span class="function"><span class="keyword">function</span>(<span class="params">e,i,arr</span>)</span>&#123;</span><br><span class="line">&#125;);</span><br><span class="line"><span class="keyword">var</span> t2 = +<span class="keyword">new</span> <span class="built_in">Date</span>();</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">'every:'</span> + (t2-t1));</span><br></pre></td></tr></table></figure>
-<p>测试机器正常运行 IDE, 编辑器, 浏览器, qq, 微信等常用应用, 系统空闲. 硬件设备如下:</p>
-<ul>
-<li>操作系统: OSX EI Capitan 版本 10.11.5</li>
-<li>MacBook Pro（13 英寸，2015 年初期）</li>
-<li>处理器: 2.7 GHz Intel Core i5</li>
-<li>内存: 8 GB 1867 MHz DDR3</li>
-</ul>
-<p>以上多轮测试结果汇总如下三张表(单位:ms):</p>
-<h4 id="u6570_u7EC4_u957F_u5EA6_u4E3A10_5E6"><a href="#u6570_u7EC4_u957F_u5EA6_u4E3A10_5E6" class="headerlink" title="数组长度为10^6"></a>数组长度为10^6</h4><table>
-<thead>
-<tr>
-<th style="text-align:center">数组长度为10^6</th>
-<th style="text-align:center">chrome 52.0.2743.116 (64-bit)</th>
-<th style="text-align:center">Firefox Developer Edition 49.0a2 (2016-08-01)</th>
-<th style="text-align:center">Safari 9.1.1 (11601.6.17)</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">for</td>
-<td style="text-align:center">(16+19)/2 = 17.5</td>
-<td style="text-align:center">(6+7)/2 = 6.5</td>
-<td style="text-align:center">(6+7)/2 = 6.5</td>
-</tr>
-<tr>
-<td style="text-align:center">do while</td>
-<td style="text-align:center">(24+17)/2 = 20.5</td>
-<td style="text-align:center">(7+5)/2 = 6</td>
-<td style="text-align:center">(5+5)/2 = 5</td>
-</tr>
-<tr>
-<td style="text-align:center">for in</td>
-<td style="text-align:center">(19+28)/2 = 23.5</td>
-<td style="text-align:center">(0+0)/2 = 0</td>
-<td style="text-align:center">(0+0)/2 = 0</td>
-</tr>
-<tr>
-<td style="text-align:center">forEach</td>
-<td style="text-align:center">(41+28)/2 = 34.5</td>
-<td style="text-align:center">(4+4)/2 = 4</td>
-<td style="text-align:center">(31+29)/2 = 30</td>
-</tr>
-<tr>
-<td style="text-align:center">map</td>
-<td style="text-align:center">(26+32)/2 = 28</td>
-<td style="text-align:center">(4+4)/2 = 4</td>
-<td style="text-align:center">(32+26)/2 = 28</td>
-</tr>
-<tr>
-<td style="text-align:center">every</td>
-<td style="text-align:center">(22+24)/2 = 23</td>
-<td style="text-align:center">(4+5)/2 = 4.5</td>
-<td style="text-align:center">(41+45)/2 = 43</td>
-</tr>
-<tr>
-<td style="text-align:center">$.each</td>
-<td style="text-align:center">(29+27)/2 = 28</td>
-<td style="text-align:center">(306+311)/2 = 308.5</td>
-<td style="text-align:center">(111+97)/2 = 104</td>
-</tr>
-<tr>
-<td style="text-align:center">$(e).each</td>
-<td style="text-align:center">(94+98)/2 = 96</td>
-<td style="text-align:center">(484+488)/2 = 486</td>
-<td style="text-align:center">(79+64)/2 = 71.5</td>
-</tr>
-</tbody>
-</table>
-<h4 id="u6570_u7EC4_u957F_u5EA6_u4E3A10_5E7"><a href="#u6570_u7EC4_u957F_u5EA6_u4E3A10_5E7" class="headerlink" title="数组长度为10^7"></a>数组长度为10^7</h4><table>
-<thead>
-<tr>
-<th style="text-align:center">数组长度为10^7</th>
-<th style="text-align:center">chrome 52.0.2743.116 (64-bit)</th>
-<th style="text-align:center">Firefox Developer Edition 49.0a2 (2016-08-01)</th>
-<th style="text-align:center">Safari 9.1.1 (11601.6.17)</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">for</td>
-<td style="text-align:center">(164+161)/2 = 162.5</td>
-<td style="text-align:center">(26+30)/2 = 28</td>
-<td style="text-align:center">(30+31)/2 = 30.5</td>
-</tr>
-<tr>
-<td style="text-align:center">do while</td>
-<td style="text-align:center">(163+157)/2 = 160</td>
-<td style="text-align:center">(27+25)/2 = 26</td>
-<td style="text-align:center">(28+27)/2 = 27.5</td>
-</tr>
-<tr>
-<td style="text-align:center">for in</td>
-<td style="text-align:center">(78+86)/2 = 82</td>
-<td style="text-align:center">(0+0)/2 = 0</td>
-<td style="text-align:center">(0+0)/2 = 0</td>
-</tr>
-<tr>
-<td style="text-align:center">forEach</td>
-<td style="text-align:center">(211+205)/2 = 208</td>
-<td style="text-align:center">(31+30)/2 = 30.5</td>
-<td style="text-align:center">(291+289)/2 = 290</td>
-</tr>
-<tr>
-<td style="text-align:center">map</td>
-<td style="text-align:center">(349+282)/2 = 315.5</td>
-<td style="text-align:center">(24+22)/2 = 23</td>
-<td style="text-align:center">(259+260)/2 = 259.5</td>
-</tr>
-<tr>
-<td style="text-align:center">every</td>
-<td style="text-align:center">(221+219)/2 = 220</td>
-<td style="text-align:center">(24+24)/2 = 24</td>
-<td style="text-align:center">(251+257)/2 = 254</td>
-</tr>
-<tr>
-<td style="text-align:center">$.each</td>
-<td style="text-align:center">(210+215)/2 = 212.5</td>
-<td style="text-align:center">(2868+2789)/2 = 2828.5</td>
-<td style="text-align:center">(699+724)/2 = 711.5</td>
-</tr>
-<tr>
-<td style="text-align:center">$(e).each</td>
-<td style="text-align:center">(730+669)/2 = 699.5</td>
-<td style="text-align:center">(4674+4722)/2 = 4698</td>
-<td style="text-align:center">(523+546)/2 = 534.5</td>
-</tr>
-</tbody>
-</table>
-<h4 id="u6570_u7EC4_u957F_u5EA6_u4E3A10_5E8"><a href="#u6570_u7EC4_u957F_u5EA6_u4E3A10_5E8" class="headerlink" title="数组长度为10^8"></a>数组长度为10^8</h4><table>
-<thead>
-<tr>
-<th style="text-align:center">数组长度为10^8</th>
-<th style="text-align:center">chrome 52.0.2743.116 (64-bit)</th>
-<th style="text-align:center">Firefox Developer Edition 49.0a2 (2016-08-01)</th>
-<th style="text-align:center">Safari 9.1.1 (11601.6.17)</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">for</td>
-<td style="text-align:center">(1486+1583)/2 = 1534.5</td>
-<td style="text-align:center">(222+238)/2 = 230</td>
-<td style="text-align:center">(261+251)/2 = 256</td>
-</tr>
-<tr>
-<td style="text-align:center">do while</td>
-<td style="text-align:center">(1548+1608)/2 = 1578</td>
-<td style="text-align:center">(236+247)/2 = 241.5</td>
-<td style="text-align:center">(272+265)/2 = 268.5</td>
-</tr>
-<tr>
-<td style="text-align:center">for in</td>
-<td style="text-align:center">(0+0)/2 = 0</td>
-<td style="text-align:center">(0+0)/2 = 0</td>
-<td style="text-align:center">(0+0)/2 = 0</td>
-</tr>
-<tr>
-<td style="text-align:center">forEach</td>
-<td style="text-align:center">(25838+22307)/2 = 24072.5</td>
-<td style="text-align:center">(212+209)/2 = 210.5</td>
-<td style="text-align:center">(2565+2568)/2 = 2566.5</td>
-</tr>
-<tr>
-<td style="text-align:center">map</td>
-<td style="text-align:center">(23795+22787)/2 = 23291</td>
-<td style="text-align:center">(215+206)/2 = 210.5</td>
-<td style="text-align:center">(2556+2573)/2 = 2564.5</td>
-</tr>
-<tr>
-<td style="text-align:center">every</td>
-<td style="text-align:center">(22393+22378)/2 = 22385.5</td>
-<td style="text-align:center">(212+215)/2 = 213.5</td>
-<td style="text-align:center">(2550+2548)/2 = 2549</td>
-</tr>
-<tr>
-<td style="text-align:center">$.each</td>
-<td style="text-align:center">(14523+14776)/2 = 14649.5</td>
-<td style="text-align:center">(28007+27698)/2 = 27852.5</td>
-<td style="text-align:center">(7109+7156)/2 = 7132.5</td>
-</tr>
-<tr>
-<td style="text-align:center">$(e).each</td>
-<td style="text-align:center">chrome 奔溃了…</td>
-<td style="text-align:center">(49352+49530)/2 = 49441</td>
-<td style="text-align:center">(5505+4616)/2 = 5060.5</td>
-</tr>
-</tbody>
-</table>
-<p>综上, 我们发现for in 循环的性能不稳定, 猜测它可能没有进入循环. 因此将数组各元素进行如下赋值. 重新进行如下两轮测试.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> array = [],</span><br><span class="line">	length = array.length = <span class="number">1000000</span>;</span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">var</span> i=<span class="number">0</span>;i&lt;length;i++)&#123;</span><br><span class="line">  array[i] = <span class="string">'louis'</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h4 id="u6570_u7EC4_u8D4B_u503C_u540E_2C__u6570_u7EC4_u957F_u5EA6_u4E3A10_5E6"><a href="#u6570_u7EC4_u8D4B_u503C_u540E_2C__u6570_u7EC4_u957F_u5EA6_u4E3A10_5E6" class="headerlink" title="数组赋值后, 数组长度为10^6"></a>数组赋值后, 数组长度为10^6</h4><table>
-<thead>
-<tr>
-<th style="text-align:center">数组长度为10^6</th>
-<th style="text-align:center">chrome 52.0.2743.116 (64-bit)</th>
-<th style="text-align:center">Firefox Developer Edition 49.0a2 (2016-08-01)</th>
-<th style="text-align:center">Safari 9.1.1 (11601.6.17)</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">for</td>
-<td style="text-align:center">(21+22)/2 = 21.5</td>
-<td style="text-align:center">(8+10)/2 = 9</td>
-<td style="text-align:center">(6+5)/2 = 5.5</td>
-</tr>
-<tr>
-<td style="text-align:center">do while</td>
-<td style="text-align:center">(22+19)/2 = 20.5</td>
-<td style="text-align:center">(6+6)/2 = 6</td>
-<td style="text-align:center">(6+5)/2 = 5.5</td>
-</tr>
-<tr>
-<td style="text-align:center">for in</td>
-<td style="text-align:center">(178+184)/2 = 181</td>
-<td style="text-align:center">(318+268)/2 = 293</td>
-<td style="text-align:center">(413+464)/2 = 438.5</td>
-</tr>
-<tr>
-<td style="text-align:center">forEach</td>
-<td style="text-align:center">(42+45)/2 = 43.5</td>
-<td style="text-align:center">(4+4)/2 = 4</td>
-<td style="text-align:center">(21+24)/2 = 22.5</td>
-</tr>
-<tr>
-<td style="text-align:center">map</td>
-<td style="text-align:center">(137+153)/2 = 145</td>
-<td style="text-align:center">(9+8)/2 = 8.5</td>
-<td style="text-align:center">(38+43)/2 = 40.5</td>
-</tr>
-<tr>
-<td style="text-align:center">every</td>
-<td style="text-align:center">(0+0)/2 = 0</td>
-<td style="text-align:center">(0+0)/2 = 0</td>
-<td style="text-align:center">(0+0)/2 = 0</td>
-</tr>
-<tr>
-<td style="text-align:center">$.each</td>
-<td style="text-align:center">(85+84)/2 = 84.5</td>
-<td style="text-align:center">(15+19)/2 = 17</td>
-<td style="text-align:center">(37+25)/2 = 31</td>
-</tr>
-<tr>
-<td style="text-align:center">$(e).each</td>
-<td style="text-align:center">(81+83)/2 = 82</td>
-<td style="text-align:center">(34+31)/2 = 32.5</td>
-<td style="text-align:center">(37+46)/2 = 41.5</td>
-</tr>
-</tbody>
-</table>
-<h4 id="u6570_u7EC4_u8D4B_u503C_u540E_2C__u6570_u7EC4_u957F_u5EA6_u4E3A10_5E7"><a href="#u6570_u7EC4_u8D4B_u503C_u540E_2C__u6570_u7EC4_u957F_u5EA6_u4E3A10_5E7" class="headerlink" title="数组赋值后, 数组长度为10^7"></a>数组赋值后, 数组长度为10^7</h4><table>
-<thead>
-<tr>
-<th style="text-align:center">数组长度为10^7</th>
-<th style="text-align:center">chrome 52.0.2743.116 (64-bit)</th>
-<th style="text-align:center">Firefox Developer Edition 49.0a2 (2016-08-01)</th>
-<th style="text-align:center">Safari 9.1.1 (11601.6.17)</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">for</td>
-<td style="text-align:center">(171+157)/2 = 164</td>
-<td style="text-align:center">(27+26)/2 = 26.5</td>
-<td style="text-align:center">(26+28)/2 = 27</td>
-</tr>
-<tr>
-<td style="text-align:center">do while</td>
-<td style="text-align:center">(168+158)/2 = 163</td>
-<td style="text-align:center">(27+27)/2 = 27</td>
-<td style="text-align:center">(28+29)/2 = 28.5</td>
-</tr>
-<tr>
-<td style="text-align:center">for in</td>
-<td style="text-align:center">(1469+1715)/2 = 1592</td>
-<td style="text-align:center">(2922+3123)/2 = 3022.5</td>
-<td style="text-align:center">(5755+5742)/2 = 5748.5</td>
-</tr>
-<tr>
-<td style="text-align:center">forEach</td>
-<td style="text-align:center">(347+329)/2 = 338</td>
-<td style="text-align:center">(32+36)/2 = 34</td>
-<td style="text-align:center">(171+174)/2 = 172.5</td>
-</tr>
-<tr>
-<td style="text-align:center">map</td>
-<td style="text-align:center">(1320+1335)/2 = 1327.5</td>
-<td style="text-align:center">(147+137)/2 = 142</td>
-<td style="text-align:center">(448+469)/2 = 458.5</td>
-</tr>
-<tr>
-<td style="text-align:center">every</td>
-<td style="text-align:center">(0+0)/2 = 0</td>
-<td style="text-align:center">(0+0)/2 = 0</td>
-<td style="text-align:center">(0+0)/2 = 0</td>
-</tr>
-<tr>
-<td style="text-align:center">$.each</td>
-<td style="text-align:center">(438+441)/2 = 439.5</td>
-<td style="text-align:center">(142+141)/2 = 141.5</td>
-<td style="text-align:center">(254+248)/2 = 251</td>
-</tr>
-<tr>
-<td style="text-align:center">$(e).each</td>
-<td style="text-align:center">(876+935)/2 = 905.5</td>
-<td style="text-align:center">(315+328)/2 = 321.5</td>
-<td style="text-align:center">(450+402)/2 = 426</td>
-</tr>
-</tbody>
-</table>
-<p>可见, 对数组进行赋值后, 代码运行基本稳定.(every还不清楚为什么执行时间为0.欢迎大神告知原因.)</p>
-<h3 id="u5206_u6790_u603B_u7ED3"><a href="#u5206_u6790_u603B_u7ED3" class="headerlink" title="分析总结"></a>分析总结</h3><p>通过以上 30 次运行测试(实际上为了得到比较稳定的数据, 摈弃了许多异常的测试数据), 我们发现在数组长度为10^6, 10^7, 10^8 时, 代码运行基本稳定. 各方法运行需要的时间大致排序如下:</p>
-<p>for ~= do while &lt; forEach ~= map ~= every &lt; $.each &lt; $(e).each &lt; for in</p>
-<p>根据统计数据, 可得这8个方法的运行速度大致排序为:</p>
-<ol>
-<li>for 与 do while</li>
-<li>forEach map every (这3个不相上下,可认为运行速度差不多)</li>
-<li>$.each</li>
-<li>$(e).each</li>
-<li>for in</li>
-</ol>
-<p>我们翻看jquery代码就会知道, $.each方法内部通过调用for循环来实现, 而$().each是先用jquery包裹数组对象, 然后再调用for循环, 因此后者效率略低于前者.</p>
-<p>综上, 最佳遍历选手是 for/do while循环, 推荐大家优先考虑使用它, 一般情况下, 最好不使用forEach. ( Firefox浏览器由于对forEach循环做了底层优化, 效率接近native,不在我们考虑范围内 ).</p>
-<h4 id="u57FA_u4E8E_u6D4B_u8BD5_u7ED3_u679C_u7684_u4E24_u70B9_u601D_u8003"><a href="#u57FA_u4E8E_u6D4B_u8BD5_u7ED3_u679C_u7684_u4E24_u70B9_u601D_u8003" class="headerlink" title="基于测试结果的两点思考"></a>基于测试结果的两点思考</h4><ol>
-<li>从测试数据上猜测, Firefox 与 Safari 似乎对于 for, do while 等都进行了底层优化. 循环执行效率明显优于Chrome.</li>
-<li>每次浏览器执行到 for in 循环处, 便会出现卡顿, 猜测浏览器可能正在预加载循环所需资源.</li>
-</ol>
-<p>想要进一步优化循环效率, 推荐您阅读下篇 <a href="http://louiszhai.github.io/2015/12/22/scopeChain/"><strong>《详解JS作用域链及闭包》</strong></a>.</p>
-<p>声明: 本文所有数据均为单机测试, 难免存在误差, 如果发现本文测试数据不对之处, 欢迎批评斧正.</p>
-<hr>
-<p>本文就讨论这么多内容,大家有什么问题或好的想法欢迎在下方参与<a href="#respond">留言和评论</a>.</p>
-<p>本文作者: <a href="https://github.com/Louiszhai" target="_blank" rel="external">louis</a></p>
-<p>本文链接: <a href="http://louiszhai.github.io/2015/12/18/traverse/">http://louiszhai.github.io/2015/12/18/traverse/</a></p>
-<p>参考文章</p>
-<ul>
-<li><a href="http://info.9iphp.com/javascript-loop-functions-detail/" target="_blank" rel="external">JavaScript 各种遍历方式详解，有你不知道的黑科技 | Coder | 程序员资源网</a></li>
-<li><a href="http://www.bubuko.com/infodetail-663058.html" target="_blank" rel="external">js,jquery遍历数组,对象-布布扣</a></li>
-<li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map" target="_blank" rel="external">Array.prototype.map() - JavaScript | MDN</a></li>
-<li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/every" target="_blank" rel="external">Array.prototype.every() - JavaScript | MDN</a></li>
-</ul>
-]]></content>
-    <summary type="html">
-    <![CDATA[JavaScript traverse 遍历 数组 对象 map every forEach forin $.each for while]]>
     
     </summary>
     
