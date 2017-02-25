@@ -15,7 +15,7 @@
 <meta property="og:image" content="http://louiszhai.github.io/docImages/flex01.jpeg">
 <meta property="og:image" content="http://louiszhai.github.io/docImages/flex03.png">
 <meta property="og:image" content="http://louiszhai.github.io/docImages/flex02.png">
-<meta property="og:updated_time" content="2017-02-12T08:22:48.000Z">
+<meta property="og:updated_time" content="2017-02-25T06:50:43.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="弹性盒模型Flex指南">
 <meta name="twitter:description" content="弹性盒模型 flex flex-grow flex-shrink flex-basis align-items align-content order flex-flow flex-direction flex-wrap align-self">
@@ -69,8 +69,8 @@
 				<div class="tips-box hide">
 					<div class="tips-arrow"></div>
 					<ul class="tips-inner">
-						<li>菜单</li>
-						<li>標籤</li>
+						<li>Menu</li>
+						<li>Tags</li>
 						
 						
 					</ul>
@@ -204,7 +204,7 @@
           <span class="toc-arrow"></span>
 <div id="toc" class="toc-article">
     <div class="toc-title">目录</div>
-    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#u5BFC_u8BFB"><span class="toc-text">导读</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Flex"><span class="toc-text">Flex</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u517C_u5BB9_u6027"><span class="toc-text">兼容性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Autoprefixer"><span class="toc-text">Autoprefixer</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u4F18_u52BF"><span class="toc-text">优势</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u6982_u5FF5_u94FA_u57AB"><span class="toc-text">概念铺垫</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u5C5E_u6027"><span class="toc-text">属性</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#u5BB9_u5668_u5C5E_u6027"><span class="toc-text">容器属性</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#u5B50_u9879_u76EE_u5C5E_u6027"><span class="toc-text">子项目属性</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u573A_u666F_u56DE_u987E"><span class="toc-text">场景回顾</span></a></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#u5BFC_u8BFB"><span class="toc-text">导读</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Flex"><span class="toc-text">Flex</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u517C_u5BB9_u6027"><span class="toc-text">兼容性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Autoprefixer"><span class="toc-text">Autoprefixer</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u4F18_u52BF"><span class="toc-text">优势</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u6982_u5FF5_u94FA_u57AB"><span class="toc-text">概念铺垫</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u5C5E_u6027"><span class="toc-text">属性</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#u5BB9_u5668_u5C5E_u6027"><span class="toc-text">容器属性</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#u5B50_u9879_u76EE_u5C5E_u6027"><span class="toc-text">子项目属性</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#flex_u5C5E_u6027_u7684_u4F18_u5148_u7EA7"><span class="toc-text">flex属性的优先级</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u573A_u666F_u56DE_u987E"><span class="toc-text">场景回顾</span></a></li></ol>
 </div>
       
         <h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>Web layout 是Web UI中的基础架构, 重要性不言而喻. 传统的盒模型, 借助display, position, float 属性应对普通布局游刃有余, 但针对复杂的或自适应布局, 常常捉襟见肘. 比如垂直居中, 就是一个老大难的问题, 借助flex弹性盒模型, 两行代码就可以优雅的实现之. (该方法曾在 <a href="http://louiszhai.github.io/2016/03/12/css-center/">16种方法实现水平居中垂直居中</a> 一文中提到). 当然, 本次我们不会只讨论垂直居中的问题, 我将努力尽可能的还原flex的应用生态.</p>
@@ -464,6 +464,14 @@
 <li><p><strong>order</strong> 指定子项目的顺序, 数值越小, 顺序越靠前, 默认为<code>0</code>.</p>
 </li>
 </ul>
+<h3 id="flex_u5C5E_u6027_u7684_u4F18_u5148_u7EA7"><a href="#flex_u5C5E_u6027_u7684_u4F18_u5148_u7EA7" class="headerlink" title="flex属性的优先级"></a>flex属性的优先级</h3><p>我们可以给input设置<code>flex:1</code>, 使其充满一行, 并且随着父元素大小变化而变化. 也可以给div设置<code>flex:1</code>使其充满剩余高度.</p>
+<p>使用flex布局这些都不是难事, 需要注意的是, 这其中有坑. 为了避免踩坑, 我们先来看下flex属性的优先级:</p>
+<p><strong>width|height &gt; 自适应文本内容的宽度或高度 &gt; flex:数值</strong></p>
+<p>这意味着, 首先是元素宽高的值优先, 其次是内容的宽高, 再次是flex数值. 现在我们来看看坑是什么.</p>
+<ol>
+<li>给input元素设置<code>flex:1</code>时需要注意, 通常input拥有一个默认宽度(用于展示默认数量的字符), 在chrome v55下, 这个宽度默认为126px(同时还包含2px的border). 因此想要实现input宽度自适应, 可以设置其width为0.</li>
+<li>给div元素设置<code>flex:1</code>时, 因div的高度会受子级元素影响, 为了使得该div占满其父元素剩余的高度, 且不超出, 建议将该div的<code>height</code>属性设置为0.</li>
+</ol>
 <h3 id="u573A_u666F_u56DE_u987E"><a href="#u573A_u666F_u56DE_u987E" class="headerlink" title="场景回顾"></a>场景回顾</h3><ol>
 <li><p>想要实现垂直居中的效果, 只需要设置父元素为<code>display:flex;justify-content:center</code> 即可. (当然, 父元素样式采用:<code>display:table;</code>, 子元素样式采用:<code>display:table-cell;vertical-align:middle</code> 也是可以实现的), 如下图.</p>
 <p><img src="http://louiszhai.github.io/docImages/flex02.png" alt=""></p>
@@ -474,8 +482,6 @@
 <li>第二种方案就是借助IE8都支持的<code>display:table</code>属性, 父元素样式设置为<code>display:table</code> , 子元素设置为<code>display:table-cell</code>. 利用表格的行高一致性, 轻松实现行高一致.</li>
 <li>最终, 我们发现, 还是flex弹性盒模型来得方便快捷, 它只需要父级元素样式设置为<code>display:flex</code>.</li>
 </ul>
-</li>
-<li><p>给input元素设置<code>flex:1</code>时需要注意, 通常input拥有一个默认宽度(用于展示默认数量的字符), 在chrome v55下, 这个宽度默认为126px(同时还包含2px的border). 因此想要实现input宽度自适应, 可以设置其width为0.</p>
 </li>
 </ol>
 <p>有关flex的旧语法, 请戳这篇回顾  <a href="https://segmentfault.com/a/1190000003978624" target="_blank" rel="external">Flex布局新旧混合写法详解（兼容微信）</a> .</p>
@@ -526,7 +532,7 @@
 <div class="share_jia">
 	<!-- JiaThis Button BEGIN -->
 	<div class="jiathis_style">
-		<span class="jiathis_txt">分享到: &nbsp; </span>
+		<span class="jiathis_txt">Share to: &nbsp; </span>
 		<a class="jiathis_button_facebook"></a> 
     <a class="jiathis_button_twitter"></a>
     <a class="jiathis_button_plus"></a> 
