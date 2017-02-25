@@ -19,13 +19,14 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="弹性盒模型Flex指南">
 <meta name="twitter:description" content="弹性盒模型 flex flex-grow flex-shrink flex-basis align-items align-content order flex-flow flex-direction flex-wrap align-self">
+<meta name="twitter:image" content="http://louiszhai.github.io/docImages/flex01.jpeg">
   
     <link rel="alternative" href="/atom.xml" title="louis blog" type="application/atom+xml">
   
   
     <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
   
-  <link rel="stylesheet" href="/css/style.css" type="text/css">
+  <link rel="stylesheet" href="/css/style.css">
 </head>
 
 <body>
@@ -204,13 +205,13 @@
           <span class="toc-arrow"></span>
 <div id="toc" class="toc-article">
     <div class="toc-title">目录</div>
-    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#u5BFC_u8BFB"><span class="toc-text">导读</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Flex"><span class="toc-text">Flex</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u517C_u5BB9_u6027"><span class="toc-text">兼容性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Autoprefixer"><span class="toc-text">Autoprefixer</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u4F18_u52BF"><span class="toc-text">优势</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u6982_u5FF5_u94FA_u57AB"><span class="toc-text">概念铺垫</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u5C5E_u6027"><span class="toc-text">属性</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#u5BB9_u5668_u5C5E_u6027"><span class="toc-text">容器属性</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#u5B50_u9879_u76EE_u5C5E_u6027"><span class="toc-text">子项目属性</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#flex_u5C5E_u6027_u7684_u4F18_u5148_u7EA7"><span class="toc-text">flex属性的优先级</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u573A_u666F_u56DE_u987E"><span class="toc-text">场景回顾</span></a></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#导读"><span class="toc-text">导读</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Flex"><span class="toc-text">Flex</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#兼容性"><span class="toc-text">兼容性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Autoprefixer"><span class="toc-text">Autoprefixer</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#优势"><span class="toc-text">优势</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#概念铺垫"><span class="toc-text">概念铺垫</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#属性"><span class="toc-text">属性</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#容器属性"><span class="toc-text">容器属性</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#子项目属性"><span class="toc-text">子项目属性</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#flex属性的优先级"><span class="toc-text">flex属性的优先级</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#场景回顾"><span class="toc-text">场景回顾</span></a></li></ol>
 </div>
       
-        <h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>Web layout 是Web UI中的基础架构, 重要性不言而喻. 传统的盒模型, 借助display, position, float 属性应对普通布局游刃有余, 但针对复杂的或自适应布局, 常常捉襟见肘. 比如垂直居中, 就是一个老大难的问题, 借助flex弹性盒模型, 两行代码就可以优雅的实现之. (该方法曾在 <a href="http://louiszhai.github.io/2016/03/12/css-center/">16种方法实现水平居中垂直居中</a> 一文中提到). 当然, 本次我们不会只讨论垂直居中的问题, 我将努力尽可能的还原flex的应用生态.</p>
+        <h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h3><p>Web layout 是Web UI中的基础架构, 重要性不言而喻. 传统的盒模型, 借助display, position, float 属性应对普通布局游刃有余, 但针对复杂的或自适应布局, 常常捉襟见肘. 比如垂直居中, 就是一个老大难的问题, 借助flex弹性盒模型, 两行代码就可以优雅的实现之. (该方法曾在 <a href="http://louiszhai.github.io/2016/03/12/css-center/">16种方法实现水平居中垂直居中</a> 一文中提到). 当然, 本次我们不会只讨论垂直居中的问题, 我将努力尽可能的还原flex的应用生态.</p>
 <a id="more"></a>
 <h3 id="Flex"><a href="#Flex" class="headerlink" title="Flex"></a>Flex</h3><p>Flex即弹性盒模型, 该布局方案由W3C于2009年提出. 此后, Flex方案便历经v2009, v2011, v2012, v2014, v2015, v2016等版本, 最近方案是2016年5月26日起草的 <a href="http://www.w3.org/TR/2016/CR-css-flexbox-1-20160526/" target="_blank" rel="external">CSS Flexible Box Layout Module Level 1</a>.</p>
-<h3 id="u517C_u5BB9_u6027"><a href="#u517C_u5BB9_u6027" class="headerlink" title="兼容性"></a>兼容性</h3><p>首先, 我们来回顾下如今PC端的兼容性(以下为完全兼容版本).</p>
+<h3 id="兼容性"><a href="#兼容性" class="headerlink" title="兼容性"></a>兼容性</h3><p>首先, 我们来回顾下如今PC端的兼容性(以下为完全兼容版本).</p>
 <table>
 <thead>
 <tr>
@@ -269,8 +270,8 @@
 <li><a href="https://www.npmjs.com/package/gulp-autoprefixer" target="_blank" rel="external">gulp-autoprefixer</a></li>
 <li><a href="https://github.com/postcss/autoprefixer" target="_blank" rel="external">PostCSS-autoprefixer</a></li>
 </ul>
-<h3 id="u4F18_u52BF"><a href="#u4F18_u52BF" class="headerlink" title="优势"></a>优势</h3><p>Flex布局使得子项目能够”弹性”的改变其高宽, 自由填充容器剩余空间, 以适应容器变大, 或者压缩子项目自身, 以适应容器变小; 同时还可以方便的调节子项目方向和顺序. flex常用于高宽需要自适应, 或子项目大小成比例, 或水平垂直对齐等场景.</p>
-<h3 id="u6982_u5FF5_u94FA_u57AB"><a href="#u6982_u5FF5_u94FA_u57AB" class="headerlink" title="概念铺垫"></a>概念铺垫</h3><p>Flex弹性盒模型里, 有容器和项目之分. 设置<code>display:flex</code>的为容器, 容器内的元素称作它的子项目, 容器有容器的一套属性, 子项目有子项目的另一套属性. (可以这么理解: father作为弹性盒子, 制定行为规范, son享受盒子的便利, 按照规范划分各自的”辖区”).</p>
+<h3 id="优势"><a href="#优势" class="headerlink" title="优势"></a>优势</h3><p>Flex布局使得子项目能够”弹性”的改变其高宽, 自由填充容器剩余空间, 以适应容器变大, 或者压缩子项目自身, 以适应容器变小; 同时还可以方便的调节子项目方向和顺序. flex常用于高宽需要自适应, 或子项目大小成比例, 或水平垂直对齐等场景.</p>
+<h3 id="概念铺垫"><a href="#概念铺垫" class="headerlink" title="概念铺垫"></a>概念铺垫</h3><p>Flex弹性盒模型里, 有容器和项目之分. 设置<code>display:flex</code>的为容器, 容器内的元素称作它的子项目, 容器有容器的一套属性, 子项目有子项目的另一套属性. (可以这么理解: father作为弹性盒子, 制定行为规范, son享受盒子的便利, 按照规范划分各自的”辖区”).</p>
 <p>以下图片摘自大漠的<a href="6">一个完整的Flexbox指南</a>文中.</p>
 <p><img src="http://louiszhai.github.io/docImages/flex01.jpeg" alt="flexbox"></p>
 <p>father制定的规范, 基于两个方向 — 水平和垂直. </p>
@@ -280,8 +281,8 @@
 <li>交叉轴起始位置, 叫做<code>cross start</code>, 末尾位置叫做<code>cross end</code>.</li>
 <li>子项目在主轴上所占的宽(高)度, 叫做<code>main size</code>, 在交叉轴上所占的高(宽)度, 叫做<code>cross size</code>.</li>
 </ul>
-<h3 id="u5C5E_u6027"><a href="#u5C5E_u6027" class="headerlink" title="属性"></a>属性</h3><p>display: flex | inline-flex;(元素将升级为弹性盒子). 前者容器升级为块级盒子, 后者容器将升级为行内盒子. 元素采用flex布局以后, 子元素的float, clear, vertical-align属性都将失效.</p>
-<h4 id="u5BB9_u5668_u5C5E_u6027"><a href="#u5BB9_u5668_u5C5E_u6027" class="headerlink" title="容器属性"></a>容器属性</h4><p>容器具有以下6个属性.</p>
+<h3 id="属性"><a href="#属性" class="headerlink" title="属性"></a>属性</h3><p>display: flex | inline-flex;(元素将升级为弹性盒子). 前者容器升级为块级盒子, 后者容器将升级为行内盒子. 元素采用flex布局以后, 子元素的float, clear, vertical-align属性都将失效.</p>
+<h4 id="容器属性"><a href="#容器属性" class="headerlink" title="容器属性"></a>容器属性</h4><p>容器具有以下6个属性.</p>
 <ul>
 <li>flex-direction 指定主轴的方向.</li>
 </ul>
@@ -440,7 +441,7 @@
 </tr>
 </tbody>
 </table>
-<h4 id="u5B50_u9879_u76EE_u5C5E_u6027"><a href="#u5B50_u9879_u76EE_u5C5E_u6027" class="headerlink" title="子项目属性"></a>子项目属性</h4><p>子项目具有以下6个属性.</p>
+<h4 id="子项目属性"><a href="#子项目属性" class="headerlink" title="子项目属性"></a>子项目属性</h4><p>子项目具有以下6个属性.</p>
 <ul>
 <li><p><strong>flex-grow</strong> 指定子项目的放大比例, 默认为0(即不放大). 该属性可取值为任何正整数. 假设各个子项目的放大比例之和为n, 那么容器内剩余的空间将分配n份, 每个子项目各自分到x/n份. (x为该子项目的放大比例)</p>
 </li>
@@ -464,7 +465,7 @@
 <li><p><strong>order</strong> 指定子项目的顺序, 数值越小, 顺序越靠前, 默认为<code>0</code>.</p>
 </li>
 </ul>
-<h3 id="flex_u5C5E_u6027_u7684_u4F18_u5148_u7EA7"><a href="#flex_u5C5E_u6027_u7684_u4F18_u5148_u7EA7" class="headerlink" title="flex属性的优先级"></a>flex属性的优先级</h3><p>我们可以给input设置<code>flex:1</code>, 使其充满一行, 并且随着父元素大小变化而变化. 也可以给div设置<code>flex:1</code>使其充满剩余高度.</p>
+<h3 id="flex属性的优先级"><a href="#flex属性的优先级" class="headerlink" title="flex属性的优先级"></a>flex属性的优先级</h3><p>我们可以给input设置<code>flex:1</code>, 使其充满一行, 并且随着父元素大小变化而变化. 也可以给div设置<code>flex:1</code>使其充满剩余高度.</p>
 <p>使用flex布局这些都不是难事, 需要注意的是, 这其中有坑. 为了避免踩坑, 我们先来看下flex属性的优先级:</p>
 <p><strong>width|height &gt; 自适应文本内容的宽度或高度 &gt; flex:数值</strong></p>
 <p>这意味着, 首先是元素宽高的值优先, 其次是内容的宽高, 再次是flex数值. 现在我们来看看坑是什么.</p>
@@ -472,7 +473,7 @@
 <li>给input元素设置<code>flex:1</code>时需要注意, 通常input拥有一个默认宽度(用于展示默认数量的字符), 在chrome v55下, 这个宽度默认为126px(同时还包含2px的border). 因此想要实现input宽度自适应, 可以设置其width为0.</li>
 <li>给div元素设置<code>flex:1</code>时, 因div的高度会受子级元素影响, 为了使得该div占满其父元素剩余的高度, 且不超出, 建议将该div的<code>height</code>属性设置为0.</li>
 </ol>
-<h3 id="u573A_u666F_u56DE_u987E"><a href="#u573A_u666F_u56DE_u987E" class="headerlink" title="场景回顾"></a>场景回顾</h3><ol>
+<h3 id="场景回顾"><a href="#场景回顾" class="headerlink" title="场景回顾"></a>场景回顾</h3><ol>
 <li><p>想要实现垂直居中的效果, 只需要设置父元素为<code>display:flex;justify-content:center</code> 即可. (当然, 父元素样式采用:<code>display:table;</code>, 子元素样式采用:<code>display:table-cell;vertical-align:middle</code> 也是可以实现的), 如下图.</p>
 <p><img src="http://louiszhai.github.io/docImages/flex02.png" alt=""></p>
 </li>
@@ -650,7 +651,7 @@
 </script>
     </div>
     
-  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
 
 
 <script>
@@ -666,9 +667,9 @@
 		open_in_new: false
 	}
 </script>
-<script src="/js/jquery-1.9.1.min.js" type="text/javascript"></script>
-<script src="/js/main.js" type="text/javascript"></script>
-<script src="/js/content.js" type="text/javascript"></script>
+<script src="/js/jquery-1.9.1.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/content.js"></script>
 
 
 
@@ -677,7 +678,7 @@
 
 
 </div>
-<script src="/js/screenfull.js" type="text/javascript"></script>
+<script src="/js/screenfull.js"></script>
 <a href="https://github.com/Louiszhai" style="position: fixed; top: 0; right: 0; border: 0;z-index:9999"><img
             source="https://camo.githubusercontent.com/a6677b08c955af8400f44c6298f40e7d19cc5b2d/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677261795f3664366436642e706e67"
             src="/img/fork_me_on_github.png" alt="Fork me on GitHub"

@@ -22,7 +22,7 @@
   
     <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
   
-  <link rel="stylesheet" href="/css/style.css" type="text/css">
+  <link rel="stylesheet" href="/css/style.css">
 </head>
 
 <body>
@@ -201,10 +201,10 @@
           <span class="toc-arrow"></span>
 <div id="toc" class="toc-article">
     <div class="toc-title">目录</div>
-    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#u8BED_u6CD5"><span class="toc-text">语法</span></a></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#语法"><span class="toc-text">语法</span></a></li></ol>
 </div>
       
-        <h3 id="u8BED_u6CD5"><a href="#u8BED_u6CD5" class="headerlink" title="语法"></a>语法</h3><p>众所周知, JavaScript有五个基本的值类型：<strong>number</strong>、<strong>string</strong>、<strong>boolean</strong>、<strong>null</strong>和<strong>undefined。</strong>除了null和undefined以外，其他三个具有所谓的基本包装对象。可以使用内置构造函数Number()、String()、Boolean()创建包装对象。</p>
+        <h3 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h3><p>众所周知, JavaScript有五个基本的值类型：<strong>number</strong>、<strong>string</strong>、<strong>boolean</strong>、<strong>null</strong>和<strong>undefined。</strong>除了null和undefined以外，其他三个具有所谓的基本包装对象。可以使用内置构造函数Number()、String()、Boolean()创建包装对象。</p>
 <blockquote>
 <p>boolean是JS的6种数据类型(number,string,object,boolean,null,undefined)之一,有且只有两种值:true和false</p>
 </blockquote>
@@ -218,19 +218,19 @@
 <li>NaN</li>
 <li>‘’（空字符串）</li>
 </ul>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Boolean</span>(<span class="literal">undefined</span>) <span class="comment">// false</span></span><br><span class="line"><span class="built_in">Boolean</span>(<span class="literal">null</span>) <span class="comment">// false</span></span><br><span class="line"><span class="built_in">Boolean</span>(<span class="number">0</span>) <span class="comment">// false</span></span><br><span class="line"><span class="built_in">Boolean</span>(<span class="literal">NaN</span>) <span class="comment">// false</span></span><br><span class="line"><span class="built_in">Boolean</span>(<span class="string">''</span>) <span class="comment">// false</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">Boolean</span>(<span class="literal">undefined</span>) <span class="comment">// false</span></div><div class="line"><span class="built_in">Boolean</span>(<span class="literal">null</span>) <span class="comment">// false</span></div><div class="line"><span class="built_in">Boolean</span>(<span class="number">0</span>) <span class="comment">// false</span></div><div class="line"><span class="built_in">Boolean</span>(<span class="literal">NaN</span>) <span class="comment">// false</span></div><div class="line"><span class="built_in">Boolean</span>(<span class="string">''</span>) <span class="comment">// false</span></div></pre></td></tr></table></figure>
 <p>2.对象的转换规则</p>
 <blockquote>
 <p>所有对象的布尔值都是true，甚至连false对应的布尔对象也是true。</p>
 <p>请注意，空对象{}和空数组[]也会被转成true。</p>
 </blockquote>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Boolean</span>(<span class="keyword">new</span> <span class="built_in">Boolean</span>(<span class="literal">false</span>))<span class="comment">// Boolean对象会转成true</span></span><br><span class="line"><span class="built_in">Boolean</span>([]) <span class="comment">// 空数组会转成true</span></span><br><span class="line"><span class="built_in">Boolean</span>(&#123;&#125;) <span class="comment">// 空对象会转成true</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">Boolean</span>(<span class="keyword">new</span> <span class="built_in">Boolean</span>(<span class="literal">false</span>))<span class="comment">// Boolean对象会转成true</span></div><div class="line"><span class="built_in">Boolean</span>([]) <span class="comment">// 空数组会转成true</span></div><div class="line"><span class="built_in">Boolean</span>(&#123;&#125;) <span class="comment">// 空对象会转成true</span></div></pre></td></tr></table></figure>
 <p>3.其中有一些让人困惑的地方</p>
 <blockquote>
 <p><strong>&amp;&amp;</strong> 表达式从第一个开始,遇到值为false的表达式,则返回表达式本身,否则返回最后一个表达式</p>
 <p><strong>||</strong> 和 <strong>!</strong> 逻辑运算符原理类似</p>
 </blockquote>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> obj = <span class="keyword">new</span> <span class="built_in">Boolean</span>(<span class="literal">false</span>);</span><br><span class="line"><span class="built_in">console</span>.log(obj &amp;&amp; <span class="literal">true</span>);<span class="comment">//true</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="literal">true</span> &amp;&amp; obj);<span class="comment">//false</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> obj = <span class="keyword">new</span> <span class="built_in">Boolean</span>(<span class="literal">false</span>);</div><div class="line"><span class="built_in">console</span>.log(obj &amp;&amp; <span class="literal">true</span>);<span class="comment">//true</span></div><div class="line"><span class="built_in">console</span>.log(<span class="literal">true</span> &amp;&amp; obj);<span class="comment">//false</span></div></pre></td></tr></table></figure>
 <p>因此,第二个console实际上打印的是obj对象的值,即false</p>
 <hr>
 <p>本文就讨论这么多内容,大家有什么问题或好的想法欢迎在下方参与<a href="#respond">留言和评论</a>.</p>
@@ -391,7 +391,7 @@
 </script>
     </div>
     
-  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
 
 
 <script>
@@ -407,9 +407,9 @@
 		open_in_new: false
 	}
 </script>
-<script src="/js/jquery-1.9.1.min.js" type="text/javascript"></script>
-<script src="/js/main.js" type="text/javascript"></script>
-<script src="/js/content.js" type="text/javascript"></script>
+<script src="/js/jquery-1.9.1.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/content.js"></script>
 
 
 
@@ -418,7 +418,7 @@
 
 
 </div>
-<script src="/js/screenfull.js" type="text/javascript"></script>
+<script src="/js/screenfull.js"></script>
 <a href="https://github.com/Louiszhai" style="position: fixed; top: 0; right: 0; border: 0;z-index:9999"><img
             source="https://camo.githubusercontent.com/a6677b08c955af8400f44c6298f40e7d19cc5b2d/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677261795f3664366436642e706e67"
             src="/img/fork_me_on_github.png" alt="Fork me on GitHub"

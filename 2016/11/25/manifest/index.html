@@ -17,13 +17,14 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="聊一聊H5应用缓存-Manifest">
 <meta name="twitter:description" content="manifest offline cache applicationCache">
+<meta name="twitter:image" content="http://ww2.sinaimg.cn/large/006y8lVagw1fa479nwxhmj30pm08hdgj.jpg">
   
     <link rel="alternative" href="/atom.xml" title="louis blog" type="application/atom+xml">
   
   
     <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
   
-  <link rel="stylesheet" href="/css/style.css" type="text/css">
+  <link rel="stylesheet" href="/css/style.css">
 </head>
 
 <body>
@@ -202,12 +203,12 @@
           <span class="toc-arrow"></span>
 <div id="toc" class="toc-article">
     <div class="toc-title">目录</div>
-    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#u5BFC_u8BFB"><span class="toc-text">导读</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u63CF_u8FF0"><span class="toc-text">描述</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u652F_u6301_u6027"><span class="toc-text">支持性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u5982_u4F55_u5F00_u542F_u5E94_u7528_u7F13_u5B58"><span class="toc-text">如何开启应用缓存</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#manifest_u7F13_u5B58_u6E05_u5355"><span class="toc-text">manifest缓存清单</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#manifest_u7F13_u5B58_u72B6_u6001"><span class="toc-text">manifest缓存状态</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#applicationCache"><span class="toc-text">applicationCache</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#manifest_u7F13_u5B58_u72EC_u7ACB_u6027"><span class="toc-text">manifest缓存独立性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#manifest_u7F13_u5B58_u89C4_u5219"><span class="toc-text">manifest缓存规则</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#webview_u7684_u7F13_u5B58_u73B0_u8C61"><span class="toc-text">webview的缓存现象</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u6700_u4F73_u5B9E_u8DF5"><span class="toc-text">最佳实践</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u5177_u4F53_u843D_u5730_u6B65_u9AA4"><span class="toc-text">具体落地步骤</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u5982_u4F55_u66F4_u65B0_u7F13_u5B58"><span class="toc-text">如何更新缓存</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u5176_u4ED6"><span class="toc-text">其他</span></a></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#导读"><span class="toc-text">导读</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#描述"><span class="toc-text">描述</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#支持性"><span class="toc-text">支持性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#如何开启应用缓存"><span class="toc-text">如何开启应用缓存</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#manifest缓存清单"><span class="toc-text">manifest缓存清单</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#manifest缓存状态"><span class="toc-text">manifest缓存状态</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#applicationCache"><span class="toc-text">applicationCache</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#manifest缓存独立性"><span class="toc-text">manifest缓存独立性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#manifest缓存规则"><span class="toc-text">manifest缓存规则</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#webview的缓存现象"><span class="toc-text">webview的缓存现象</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#最佳实践"><span class="toc-text">最佳实践</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#具体落地步骤"><span class="toc-text">具体落地步骤</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#如何更新缓存"><span class="toc-text">如何更新缓存</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#其他"><span class="toc-text">其他</span></a></li></ol>
 </div>
       
-        <h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>Manifest 是 H5提供的一种应用缓存机制, 基于它web应用可以实现离线访问(offline cache). 为此, 浏览器还提供了应用缓存的api–applicationCache. 虽然manifest的技术已被web标准废弃, 但这不影响我们尝试去了解它. 也正是因为manifest的应用缓存机制如此诱人, 饿了么 和 office 365邮箱都还在使用着它!</p>
+        <h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h3><p>Manifest 是 H5提供的一种应用缓存机制, 基于它web应用可以实现离线访问(offline cache). 为此, 浏览器还提供了应用缓存的api–applicationCache. 虽然manifest的技术已被web标准废弃, 但这不影响我们尝试去了解它. 也正是因为manifest的应用缓存机制如此诱人, 饿了么 和 office 365邮箱都还在使用着它!</p>
 <a id="more"></a>
-<h3 id="u63CF_u8FF0"><a href="#u63CF_u8FF0" class="headerlink" title="描述"></a>描述</h3><p>对manifest熟悉的同学可以跳过此节.</p>
+<h3 id="描述"><a href="#描述" class="headerlink" title="描述"></a>描述</h3><p>对manifest熟悉的同学可以跳过此节.</p>
 <p>鉴于manifest应用缓存的技术, 我们可以做到:</p>
 <ul>
 <li>离线访问: 即使服务器挂了, 或者没有网络, 用户依然可以正常浏览网页内容.</li>
@@ -216,7 +217,7 @@
 </ul>
 <p>manifest缓存的过程如下(来自网络):</p>
 <p><img src="http://ww2.sinaimg.cn/large/006y8lVagw1fa479nwxhmj30pm08hdgj.jpg" alt="manifest"></p>
-<h3 id="u652F_u6301_u6027"><a href="#u652F_u6301_u6027" class="headerlink" title="支持性"></a>支持性</h3><p>主流浏览器都支持manifest应用缓存技术. 如下表格:</p>
+<h3 id="支持性"><a href="#支持性" class="headerlink" title="支持性"></a>支持性</h3><p>主流浏览器都支持manifest应用缓存技术. 如下表格:</p>
 <table>
 <thead>
 <tr>
@@ -248,15 +249,15 @@
 <p>This feature is in the process of being removed from the Web platform. (This is a long process that takes many years.) Using any of the offline Web application features at this time is highly discouraged. Use service workers instead. <a href="https://html.spec.whatwg.org/#refsSW" target="_blank" rel="external">[SW]</a></p>
 </blockquote>
 <p>因此后续我将在其他文章中继续介绍 service workers, 本篇继续关注manifest.</p>
-<h3 id="u5982_u4F55_u5F00_u542F_u5E94_u7528_u7F13_u5B58"><a href="#u5982_u4F55_u5F00_u542F_u5E94_u7528_u7F13_u5B58" class="headerlink" title="如何开启应用缓存"></a>如何开启应用缓存</h3><p>manifest使用缓存清单进行管理, 缓存清单需要与html标签进行关联. 如下:</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="title">html</span> <span class="attribute">manifest</span>=<span class="value">"test.appcache"</span>&gt;</span></span><br><span class="line">  ...</span><br><span class="line"><span class="tag">&lt;/<span class="title">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="如何开启应用缓存"><a href="#如何开启应用缓存" class="headerlink" title="如何开启应用缓存"></a>如何开启应用缓存</h3><p>manifest使用缓存清单进行管理, 缓存清单需要与html标签进行关联. 如下:</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">manifest</span>=<span class="string">"test.appcache"</span>&gt;</span></div><div class="line">  ...</div><div class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></div></pre></td></tr></table></figure>
 <p>在html标签中指定manifest文件, 便表示该网页使用manifest进行离线缓存. 该网页内需要缓存的文件列表需要在 test.appcache 文本文件中指定.</p>
-<h3 id="manifest_u7F13_u5B58_u6E05_u5355"><a href="#manifest_u7F13_u5B58_u6E05_u5355" class="headerlink" title="manifest缓存清单"></a>manifest缓存清单</h3><p>就像写作文一样, manifest采用经典的三段式. 分别为: <code>CACHE</code>, <code>NETWORK</code> 和 <code>FALLBACK</code>. 如下, 先看一个栗子🌰:</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">CACHE MANIFEST</span><br><span class="line"><span class="preprocessor"># v1<span class="number">.0</span><span class="number">.0</span></span></span><br><span class="line">content.css</span><br><span class="line"></span><br><span class="line">NETWORK:</span><br><span class="line">app.js</span><br><span class="line"></span><br><span class="line">FALLBACK:</span><br><span class="line">/other <span class="number">404.</span>html</span><br></pre></td></tr></table></figure>
+<h3 id="manifest缓存清单"><a href="#manifest缓存清单" class="headerlink" title="manifest缓存清单"></a>manifest缓存清单</h3><p>就像写作文一样, manifest采用经典的三段式. 分别为: <code>CACHE</code>, <code>NETWORK</code> 和 <code>FALLBACK</code>. 如下, 先看一个栗子🌰:</p>
+<figure class="highlight avrasm"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">CACHE MANIFEST</div><div class="line"><span class="meta"># v1.0.0</span></div><div class="line">content.css</div><div class="line"></div><div class="line"><span class="symbol">NETWORK:</span></div><div class="line">app.js</div><div class="line"></div><div class="line"><span class="symbol">FALLBACK:</span></div><div class="line">/other <span class="number">404.</span>html</div></pre></td></tr></table></figure>
 <p>其中第一行必须以 <code>CACHE MANIFEST</code> 开头, 后可跟若干字符注释, 注释从#号开始. 跟在  <code>CACHE MANIFEST</code>  行后的文件, 每行列出一个, 这些文件是需要缓存的文件. 因此 content.css 会被缓存, 不需要访问网络.</p>
 <p>第二段内容以 <code>NETWORK:</code> 开始, 跟在该行后的文件表示需要访问网络. 如: app.js 将直接从网络上下载, 并不走manifest cache, 如果除了第一段中缓存的文件以外, 其他文件都从网络上获取, 那么此时可将 app.js 改为 * (通配符).</p>
 <p>第三段内容以 <code>FALLBACK:</code> 开始, 跟在该行后的文件表示会有一个替代方案. 如: 当访问 /other 路径时, 如果访问失败, 那么将自动加载 404.html 作为替代.</p>
-<h3 id="manifest_u7F13_u5B58_u72B6_u6001"><a href="#manifest_u7F13_u5B58_u72B6_u6001" class="headerlink" title="manifest缓存状态"></a>manifest缓存状态</h3><p>每个manifest缓存都有一个状态, 标示着缓存的情况. 一份缓存清单只有一个缓存状态, 即使它被多个页面引用. 以下是各个缓存状态:</p>
+<h3 id="manifest缓存状态"><a href="#manifest缓存状态" class="headerlink" title="manifest缓存状态"></a>manifest缓存状态</h3><p>每个manifest缓存都有一个状态, 标示着缓存的情况. 一份缓存清单只有一个缓存状态, 即使它被多个页面引用. 以下是各个缓存状态:</p>
 <ul>
 <li><em>UNCACHED</em>(未缓存): 表明应用缓存对象还没有初始化完成.</li>
 <li><em>IDLE</em>(空闲): 应用缓存并未处于更新状态.</li>
@@ -268,7 +269,7 @@
 <p>上述缓存状态常量依次取值0, 1, 2, 3, 4, 5.</p>
 <h3 id="applicationCache"><a href="#applicationCache" class="headerlink" title="applicationCache"></a>applicationCache</h3><p>applicationCache是操作应用缓存的瑞士军刀, 也是唯一的一把刀.</p>
 <p>首先我们来获取该对象.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//webview下</span></span><br><span class="line"><span class="keyword">var</span> cache = <span class="built_in">window</span>.applicationCache;</span><br><span class="line"><span class="comment">//shared worker中</span></span><br><span class="line"><span class="keyword">var</span> cache = self.applicationCache;</span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//webview下</span></div><div class="line"><span class="keyword">var</span> cache = <span class="built_in">window</span>.applicationCache;</div><div class="line"><span class="comment">//shared worker中</span></div><div class="line"><span class="keyword">var</span> cache = self.applicationCache;</div></pre></td></tr></table></figure>
 <p>以下是其属性和方法介绍(大神请绕过):</p>
 <ul>
 <li><p>status: 返回当前页面的应用缓存的状态, 通常开启应用缓存的页面可能返回1, 其他页面则返回0.</p>
@@ -285,41 +286,41 @@
 </li>
 </ul>
 <p>那么如何利用好上述api更新一个页面的应用缓存呢? 别急, <a href="http://www.html5rocks.com/en/tutorials/appcache/beginner/" target="_blank" rel="external">Beginner’s Guide to Using the Application Cache</a> 一文中提供了如下的样板方法:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Check if a new cache is available on page load.</span></span><br><span class="line"><span class="built_in">window</span>.addEventListener(<span class="string">'load'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">e</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">window</span>.applicationCache.addEventListener(<span class="string">'updateready'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">e</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="built_in">window</span>.applicationCache.status == <span class="built_in">window</span>.applicationCache.UPDATEREADY) &#123;</span><br><span class="line">      <span class="comment">// Browser downloaded a new app cache.</span></span><br><span class="line">      <span class="comment">// Swap it in and reload the page to get the new hotness.</span></span><br><span class="line">      <span class="built_in">window</span>.applicationCache.swapCache();</span><br><span class="line">      <span class="keyword">if</span> (confirm(<span class="string">'A new version of this site is available. Load it?'</span>)) &#123;</span><br><span class="line">        <span class="built_in">window</span>.location.reload();</span><br><span class="line">      &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="comment">// Manifest didn't changed. Nothing new to server.</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;, <span class="literal">false</span>);</span><br><span class="line">&#125;, <span class="literal">false</span>);</span><br></pre></td></tr></table></figure>
-<h3 id="manifest_u7F13_u5B58_u72EC_u7ACB_u6027"><a href="#manifest_u7F13_u5B58_u72EC_u7ACB_u6027" class="headerlink" title="manifest缓存独立性"></a>manifest缓存独立性</h3><ol>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// Check if a new cache is available on page load.</span></div><div class="line"><span class="built_in">window</span>.addEventListener(<span class="string">'load'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">e</span>) </span>&#123;</div><div class="line">  <span class="built_in">window</span>.applicationCache.addEventListener(<span class="string">'updateready'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">e</span>) </span>&#123;</div><div class="line">    <span class="keyword">if</span> (<span class="built_in">window</span>.applicationCache.status == <span class="built_in">window</span>.applicationCache.UPDATEREADY) &#123;</div><div class="line">      <span class="comment">// Browser downloaded a new app cache.</span></div><div class="line">      <span class="comment">// Swap it in and reload the page to get the new hotness.</span></div><div class="line">      <span class="built_in">window</span>.applicationCache.swapCache();</div><div class="line">      <span class="keyword">if</span> (confirm(<span class="string">'A new version of this site is available. Load it?'</span>)) &#123;</div><div class="line">        <span class="built_in">window</span>.location.reload();</div><div class="line">      &#125;</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">      <span class="comment">// Manifest didn't changed. Nothing new to server.</span></div><div class="line">    &#125;</div><div class="line">  &#125;, <span class="literal">false</span>);</div><div class="line">&#125;, <span class="literal">false</span>);</div></pre></td></tr></table></figure>
+<h3 id="manifest缓存独立性"><a href="#manifest缓存独立性" class="headerlink" title="manifest缓存独立性"></a>manifest缓存独立性</h3><ol>
 <li>manifest的缓存和浏览器默认的缓存是两套机制, 相互独立, 并且不受浏览器缓存大小限制(Chrome下测试结果).</li>
 <li>各个manifest文件的缓存相互独立, 各自在独立的区域进行缓存. 即使是缓存同一个文件, 也可能由于缓存的版本不一致, 而造成各个页面资源不一致.</li>
 </ol>
-<h3 id="manifest_u7F13_u5B58_u89C4_u5219"><a href="#manifest_u7F13_u5B58_u89C4_u5219" class="headerlink" title="manifest缓存规则"></a>manifest缓存规则</h3><ol>
+<h3 id="manifest缓存规则"><a href="#manifest缓存规则" class="headerlink" title="manifest缓存规则"></a>manifest缓存规则</h3><ol>
 <li>遵循全量缓存的规律. 即: manifest文件改动后, 将重新缓存一遍所有的文件(包括html本身和动态添加的需要缓存的文件,即使缓存列表中没有该html). 第一次缓存过程中如果出现缓存失败的文件, 那么, 第二访问, 又将重新缓存一遍所有的文件. 以此类推.</li>
 <li>manifest文件本身不能写进缓存清单, 否则连同html和资源在其缓存失效之前, 将永远不能获得更新.</li>
 <li>即使manifest文件丢失, 缓存依然有效. 不过从此以后, 引入该manifest的html, 将永远不能获得更新.</li>
 </ol>
-<h3 id="webview_u7684_u7F13_u5B58_u73B0_u8C61"><a href="#webview_u7684_u7F13_u5B58_u73B0_u8C61" class="headerlink" title="webview的缓存现象"></a>webview的缓存现象</h3><p>通常, webview的缓存有如下三种现象:</p>
+<h3 id="webview的缓存现象"><a href="#webview的缓存现象" class="headerlink" title="webview的缓存现象"></a>webview的缓存现象</h3><p>通常, webview的缓存有如下三种现象:</p>
 <ol>
 <li>普通网页(无manifest文件), 不受manifest缓存影响, 缓存只走 http cache.</li>
 <li>包含manifest文件的网页, 缓存文件只受manifest缓存影响(只有manifest文件改变时才会更新缓存资源), 缓存资源完全与 http cache 无关, 但是 <code>NETWORK</code> 段落后需要访问网络的文件, 将继续走 http cache.</li>
 <li>webview直接加载manifest缓存过的文件时, 优先加载第一个manifest缓存的该文件, 如果没有找到manifest缓存, 那么它将自动寻找 http cache 或者 在线加载.</li>
 </ol>
-<h3 id="u6700_u4F73_u5B9E_u8DF5"><a href="#u6700_u4F73_u5B9E_u8DF5" class="headerlink" title="最佳实践"></a>最佳实践</h3><ol>
+<h3 id="最佳实践"><a href="#最佳实践" class="headerlink" title="最佳实践"></a>最佳实践</h3><ol>
 <li>通常只使用一个manifest文件, 并保证缓存的文件尽可能的少, 以减小manifest每次更新清单中文件所耗费的时间和流量.</li>
 <li>如果一定要使用两个及以上manifest文件, 缓存文件请尽量不要相同.</li>
 <li>如果以上两条都不能保证, 那么, 请保证尽可能在manifest缓存的状态更新时, 主动去刷新网页.(此时并不能保证不同网页之间同一个缓存文件版本一致)</li>
 </ol>
-<h3 id="u5177_u4F53_u843D_u5730_u6B65_u9AA4"><a href="#u5177_u4F53_u843D_u5730_u6B65_u9AA4" class="headerlink" title="具体落地步骤"></a>具体落地步骤</h3><ol>
+<h3 id="具体落地步骤"><a href="#具体落地步骤" class="headerlink" title="具体落地步骤"></a>具体落地步骤</h3><ol>
 <li><p>如果缓存的文件需要加参数运行, 建议将参数内容加到hash中, 如:cached-page.html#parameterName=value</p>
 </li>
 <li><p>manifest 的引入可以使用绝对路径或者相对路径, 如果你使用的是绝对路径, 那么你的manifest文件必须和你的站点处于同一个域名下.</p>
 </li>
 <li><p>manifest文件你可以保存为任意的扩展名, 但是响应头中以下字段须取以下定值, 以保证manifest文件正确被解析, 并且它没有http缓存.</p>
-<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">Content-Type</span>: <span class="string">text/cache-manifest</span></span><br><span class="line"><span class="attribute">Cache-Control</span>: <span class="string">max-age=0</span></span><br><span class="line"><span class="attribute">Expires</span>: <span class="string">[CURRENT TIME]</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="attribute">Content-Type</span>: text/cache-manifest</div><div class="line"><span class="attribute">Cache-Control</span>: max-age=0</div><div class="line"><span class="attribute">Expires</span>: [CURRENT TIME]</div></pre></td></tr></table></figure>
 </li>
 </ol>
-<h3 id="u5982_u4F55_u66F4_u65B0_u7F13_u5B58"><a href="#u5982_u4F55_u66F4_u65B0_u7F13_u5B58" class="headerlink" title="如何更新缓存"></a>如何更新缓存</h3><ol>
+<h3 id="如何更新缓存"><a href="#如何更新缓存" class="headerlink" title="如何更新缓存"></a>如何更新缓存</h3><ol>
 <li>更新manifest文件后, webview将自动更新缓存.</li>
 <li>js更新缓存(手动触发manifest更新): window.applicationCache.update();</li>
 </ol>
-<h3 id="u5176_u4ED6"><a href="#u5176_u4ED6" class="headerlink" title="其他"></a>其他</h3><p>chrome浏览器下通过访问 <a href="chrome://appcache-internals/" target="_blank" rel="external">chrome://appcache-internals/</a> 可以查看缓存在本地的资源文件.</p>
+<h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><p>chrome浏览器下通过访问 <a href="chrome://appcache-internals/" target="_blank" rel="external">chrome://appcache-internals/</a> 可以查看缓存在本地的资源文件.</p>
 <p>另外, 除了本文参考的一篇 MDN 的文章以及 HTML5 Rocks的 <a href="http://www.html5rocks.com/en/tutorials/appcache/beginner/" target="_blank" rel="external">Beginner’s Guide to Using the Application Cache</a> 一文, 还有如下三个链接可供您比较阅读, 谢谢.</p>
 <ul>
 <li><a href="http://en.wikipedia.org/wiki/Cache_manifest_in_HTML5" target="_blank" rel="external">Cache manifest in HTML5</a> on Wikipedia</li>
@@ -485,7 +486,7 @@
 </script>
     </div>
     
-  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
 
 
 <script>
@@ -501,9 +502,9 @@
 		open_in_new: false
 	}
 </script>
-<script src="/js/jquery-1.9.1.min.js" type="text/javascript"></script>
-<script src="/js/main.js" type="text/javascript"></script>
-<script src="/js/content.js" type="text/javascript"></script>
+<script src="/js/jquery-1.9.1.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/content.js"></script>
 
 
 
@@ -512,7 +513,7 @@
 
 
 </div>
-<script src="/js/screenfull.js" type="text/javascript"></script>
+<script src="/js/screenfull.js"></script>
 <a href="https://github.com/Louiszhai" style="position: fixed; top: 0; right: 0; border: 0;z-index:9999"><img
             source="https://camo.githubusercontent.com/a6677b08c955af8400f44c6298f40e7d19cc5b2d/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677261795f3664366436642e706e67"
             src="/img/fork_me_on_github.png" alt="Fork me on GitHub"

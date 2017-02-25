@@ -17,13 +17,14 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="String.prototype.replace高阶技能">
 <meta name="twitter:description" content="JavaScript string replace">
+<meta name="twitter:image" content="http://louiszhai.github.io/docImages/replace01.png">
   
     <link rel="alternative" href="/atom.xml" title="louis blog" type="application/atom+xml">
   
   
     <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
   
-  <link rel="stylesheet" href="/css/style.css" type="text/css">
+  <link rel="stylesheet" href="/css/style.css">
 </head>
 
 <body>
@@ -202,13 +203,13 @@
           <span class="toc-arrow"></span>
 <div id="toc" class="toc-article">
     <div class="toc-title">目录</div>
-    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#u5BFC_u8BFB"><span class="toc-text">导读</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u8BED_u6CD5"><span class="toc-text">语法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u53C2_u6570"><span class="toc-text">参数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u63CF_u8FF0"><span class="toc-text">描述</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Demo"><span class="toc-text">Demo</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u7B80_u6613_u7684_u5B57_u7B26_u4E32_u6A21_u677F_u5F15_u64CE"><span class="toc-text">简易的字符串模板引擎</span></a></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#导读"><span class="toc-text">导读</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#语法"><span class="toc-text">语法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#参数"><span class="toc-text">参数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#描述"><span class="toc-text">描述</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Demo"><span class="toc-text">Demo</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#简易的字符串模板引擎"><span class="toc-text">简易的字符串模板引擎</span></a></li></ol>
 </div>
       
-        <h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p>String.prototype.replace 方法虽然其貌不扬, 然混迹于江湖, 经常活跃于各大代码角落, 终于自学所成4招, 谋得一些名气. 下面我们基于它的几招, 实现一个简易的js模板引擎.</p>
+        <h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h3><p>String.prototype.replace 方法虽然其貌不扬, 然混迹于江湖, 经常活跃于各大代码角落, 终于自学所成4招, 谋得一些名气. 下面我们基于它的几招, 实现一个简易的js模板引擎.</p>
 <a id="more"></a>
-<h3 id="u8BED_u6CD5"><a href="#u8BED_u6CD5" class="headerlink" title="语法"></a>语法</h3><p><strong>str.replace( regexp | substr, newSubStr | function[, flags] )</strong></p>
-<h3 id="u53C2_u6570"><a href="#u53C2_u6570" class="headerlink" title="参数"></a>参数</h3><ul>
+<h3 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h3><p><strong>str.replace( regexp | substr, newSubStr | function[, flags] )</strong></p>
+<h3 id="参数"><a href="#参数" class="headerlink" title="参数"></a>参数</h3><ul>
 <li><strong>regexp:</strong> 一个 RegExp 对象. 该正则所匹配的内容会被第二个参数的返回值替换掉。</li>
 <li><strong>substr:</strong> 一个要被 newSubStr 替换的字符串.</li>
 <li><strong>newSubStr:</strong> 替换掉第一个参数在原字符串中的匹配部分. 该字符串中可以内插一些特殊的变量名.</li>
@@ -219,18 +220,18 @@
 <p>简单概括,replace拥有两个参数,第一个是需要替换的字符串或者正则表达式;</p>
 <p>第二个是新的字符串或者一个function,这样参数便有四种组合.</p>
 </blockquote>
-<h3 id="u63CF_u8FF0"><a href="#u63CF_u8FF0" class="headerlink" title="描述"></a>描述</h3><p>该方法并不改变调用它的字符串本身，而只是返回替换后的字符串.</p>
+<h3 id="描述"><a href="#描述" class="headerlink" title="描述"></a>描述</h3><p>该方法并不改变调用它的字符串本身，而只是返回替换后的字符串.</p>
 <h3 id="Demo"><a href="#Demo" class="headerlink" title="Demo"></a>Demo</h3><p>1.一般来说我们使用JS String对象的replace方法的姿势是这个样子:</p>
 <blockquote>
 <p>match1:    String–&gt;String</p>
 </blockquote>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> a = <span class="string">"what is this? before"</span>;</span><br><span class="line"><span class="keyword">var</span> b = a.replace(<span class="string">"before"</span>,<span class="string">"after"</span>);</span><br><span class="line"><span class="built_in">console</span>.log(b);	<span class="comment">// "what is this? after"</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> a = <span class="string">"what is this? before"</span>;</div><div class="line"><span class="keyword">var</span> b = a.replace(<span class="string">"before"</span>,<span class="string">"after"</span>);</div><div class="line"><span class="built_in">console</span>.log(b);	<span class="comment">// "what is this? after"</span></div></pre></td></tr></table></figure>
 <p>仅仅用到了文本替换为文本的功能.</p>
 <p>2.更高级些还可以摆出这样的姿势,如果第一个参数是正则表达式,新的字符串中可以用$符号取正则中匹配的子串(也就是正则中被括号包裹的部分):</p>
 <blockquote>
 <p>match2:    Regexp–&gt;String</p>
 </blockquote>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> a = <span class="string">"what is this? before"</span>;</span><br><span class="line"><span class="keyword">var</span> b = a.replace(<span class="regexp">/(^\w+).*?(\w+)$/</span>,<span class="string">"$2 $1"</span>);<span class="comment">//括号分割的部分依次为子串1....n</span></span><br><span class="line"><span class="built_in">console</span>.log(b); <span class="comment">// "before what"</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> a = <span class="string">"what is this? before"</span>;</div><div class="line"><span class="keyword">var</span> b = a.replace(<span class="regexp">/(^\w+).*?(\w+)$/</span>,<span class="string">"$2 $1"</span>);<span class="comment">//括号分割的部分依次为子串1....n</span></div><div class="line"><span class="built_in">console</span>.log(b); <span class="comment">// "before what"</span></div></pre></td></tr></table></figure>
 <p>3.依照语法,第二个参数其实可为一个function,最终字符串将以function的返回值作为replace的返回值,以下是该function的形参:<br>function(match,p1…,offset,string),可见至少包含三个形参(即arguments.length&gt;=3)</p>
 <blockquote>
 <p>match3:    Regexp–&gt;Function</p>
@@ -241,15 +242,15 @@
 <li>offset表示匹配的起点在原字符串中的偏移</li>
 <li>string表示原字符串</li>
 </ul>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">replacer</span>(<span class="params">match,p1,p2,offset,string</span>)</span>&#123;</span><br><span class="line">    <span class="comment">//此时p1=" is",p2=" this"</span></span><br><span class="line">    <span class="keyword">return</span> p1+<span class="string">" that"</span>;<span class="comment">//如果返回为空串,则匹配内容替换为空,如果不返回,则匹配内容替换为undefined</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> a = <span class="string">"what is this? before"</span>;</span><br><span class="line"><span class="keyword">var</span> b = a.replace(<span class="regexp">/(\s\w+)(\s\w+)/</span>,replacer);</span><br><span class="line"><span class="built_in">console</span>.log(b); <span class="comment">// "what is that? before"</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">replacer</span>(<span class="params">match,p1,p2,offset,string</span>)</span>&#123;</div><div class="line">    <span class="comment">//此时p1=" is",p2=" this"</span></div><div class="line">    <span class="keyword">return</span> p1+<span class="string">" that"</span>;<span class="comment">//如果返回为空串,则匹配内容替换为空,如果不返回,则匹配内容替换为undefined</span></div><div class="line">&#125;</div><div class="line"><span class="keyword">var</span> a = <span class="string">"what is this? before"</span>;</div><div class="line"><span class="keyword">var</span> b = a.replace(<span class="regexp">/(\s\w+)(\s\w+)/</span>,replacer);</div><div class="line"><span class="built_in">console</span>.log(b); <span class="comment">// "what is that? before"</span></div></pre></td></tr></table></figure>
 <p>4.这里还有一种搭配,str.replace( substr, function[, flags] )</p>
 <blockquote>
 <p>match4:    String–&gt;Function</p>
 </blockquote>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">replacer</span>(<span class="params">match,offset,string</span>)</span>&#123;</span><br><span class="line">    <span class="comment">//由于字符串中不会有括号进行分组,此时没有子串</span></span><br><span class="line">    <span class="keyword">return</span> offset+<span class="string">" that"</span>;<span class="comment">//偏移为4</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> a = <span class="string">"what is this? before"</span>;</span><br><span class="line"><span class="keyword">var</span> b = a.replace(<span class="string">" is this"</span>,replacer);</span><br><span class="line"><span class="built_in">console</span>.log(b); <span class="comment">// "what4 that? before"</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">replacer</span>(<span class="params">match,offset,string</span>)</span>&#123;</div><div class="line">    <span class="comment">//由于字符串中不会有括号进行分组,此时没有子串</span></div><div class="line">    <span class="keyword">return</span> offset+<span class="string">" that"</span>;<span class="comment">//偏移为4</span></div><div class="line">&#125;</div><div class="line"><span class="keyword">var</span> a = <span class="string">"what is this? before"</span>;</div><div class="line"><span class="keyword">var</span> b = a.replace(<span class="string">" is this"</span>,replacer);</div><div class="line"><span class="built_in">console</span>.log(b); <span class="comment">// "what4 that? before"</span></div></pre></td></tr></table></figure>
 <p>以上4种replace使用方法可以满足大部分的操作字符串场景,特别是function的引入,极大的增强了replace的实力,从而使得我们操作字符游刃有余.</p>
-<h3 id="u7B80_u6613_u7684_u5B57_u7B26_u4E32_u6A21_u677F_u5F15_u64CE"><a href="#u7B80_u6613_u7684_u5B57_u7B26_u4E32_u6A21_u677F_u5F15_u64CE" class="headerlink" title="简易的字符串模板引擎"></a>简易的字符串模板引擎</h3><p>基于 replace 方法的第三个用法, 我们可以实现一个tmpl方法,  输入一个模板字符串, 输入一个key-value对象, 即可生成新的字符串.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> template = <span class="string">"one &#123;a&#125; two &#123;b&#125; &#123;c&#125;"</span>,</span><br><span class="line">	obj = &#123;a:<span class="string">"apple"</span>,b:<span class="string">"orange"</span>,c:<span class="string">"..."</span>&#125;,</span><br><span class="line">	_array = [];</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">tmpl</span>(<span class="params">template,obj</span>)</span>&#123;</span><br><span class="line">	<span class="keyword">var</span> retu = template.replace(<span class="regexp">/([^&#123;&#125;]*)&#123;(.)&#125;/g</span>,<span class="function"><span class="keyword">function</span>(<span class="params">match,p1,p2,offset,string</span>)</span>&#123;</span><br><span class="line">		_array.push(&#123;<span class="string">'match'</span>:match, <span class="string">'p1'</span>:p1, <span class="string">'p2'</span>:p2, <span class="string">'offset'</span>:offset, <span class="string">'string'</span>:string&#125;);</span><br><span class="line">      	<span class="keyword">return</span> p1+obj[p2];</span><br><span class="line">    &#125;);</span><br><span class="line">    <span class="built_in">console</span>.table &amp;&amp; <span class="built_in">console</span>.table(_array);</span><br><span class="line">  	!<span class="built_in">console</span>.table &amp;&amp; <span class="built_in">console</span>.log(_array);</span><br><span class="line">  	<span class="built_in">console</span>.log(retu);</span><br><span class="line">&#125;</span><br><span class="line">tmpl(template,obj);</span><br></pre></td></tr></table></figure>
+<h3 id="简易的字符串模板引擎"><a href="#简易的字符串模板引擎" class="headerlink" title="简易的字符串模板引擎"></a>简易的字符串模板引擎</h3><p>基于 replace 方法的第三个用法, 我们可以实现一个tmpl方法,  输入一个模板字符串, 输入一个key-value对象, 即可生成新的字符串.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> template = <span class="string">"one &#123;a&#125; two &#123;b&#125; &#123;c&#125;"</span>,</div><div class="line">	obj = &#123;<span class="attr">a</span>:<span class="string">"apple"</span>,<span class="attr">b</span>:<span class="string">"orange"</span>,<span class="attr">c</span>:<span class="string">"..."</span>&#125;,</div><div class="line">	_array = [];</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">tmpl</span>(<span class="params">template,obj</span>)</span>&#123;</div><div class="line">	<span class="keyword">var</span> retu = template.replace(<span class="regexp">/([^&#123;&#125;]*)&#123;(.)&#125;/g</span>,<span class="function"><span class="keyword">function</span>(<span class="params">match,p1,p2,offset,string</span>)</span>&#123;</div><div class="line">		_array.push(&#123;<span class="string">'match'</span>:match, <span class="string">'p1'</span>:p1, <span class="string">'p2'</span>:p2, <span class="string">'offset'</span>:offset, <span class="string">'string'</span>:string&#125;);</div><div class="line">      	<span class="keyword">return</span> p1+obj[p2];</div><div class="line">    &#125;);</div><div class="line">    <span class="built_in">console</span>.table &amp;&amp; <span class="built_in">console</span>.table(_array);</div><div class="line">  	!<span class="built_in">console</span>.table &amp;&amp; <span class="built_in">console</span>.log(_array);</div><div class="line">  	<span class="built_in">console</span>.log(retu);</div><div class="line">&#125;</div><div class="line">tmpl(template,obj);</div></pre></td></tr></table></figure>
 <p>最终输出如下这张图:</p>
 <p><img src="/docImages/replace01.png" alt=""></p>
 <hr>
@@ -404,7 +405,7 @@
 </script>
     </div>
     
-  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
 
 
 <script>
@@ -420,9 +421,9 @@
 		open_in_new: false
 	}
 </script>
-<script src="/js/jquery-1.9.1.min.js" type="text/javascript"></script>
-<script src="/js/main.js" type="text/javascript"></script>
-<script src="/js/content.js" type="text/javascript"></script>
+<script src="/js/jquery-1.9.1.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/content.js"></script>
 
 
 
@@ -431,7 +432,7 @@
 
 
 </div>
-<script src="/js/screenfull.js" type="text/javascript"></script>
+<script src="/js/screenfull.js"></script>
 <a href="https://github.com/Louiszhai" style="position: fixed; top: 0; right: 0; border: 0;z-index:9999"><img
             source="https://camo.githubusercontent.com/a6677b08c955af8400f44c6298f40e7d19cc5b2d/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677261795f3664366436642e706e67"
             src="/img/fork_me_on_github.png" alt="Fork me on GitHub"

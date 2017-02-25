@@ -19,13 +19,14 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="xss攻防浅谈">
 <meta name="twitter:description" content="xss xss漏洞 xss攻击 xss浅谈 前端xss">
+<meta name="twitter:image" content="http://louiszhai.github.io/docImages/xss01.png">
   
     <link rel="alternative" href="/atom.xml" title="louis blog" type="application/atom+xml">
   
   
     <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
   
-  <link rel="stylesheet" href="/css/style.css" type="text/css">
+  <link rel="stylesheet" href="/css/style.css">
 </head>
 
 <body>
@@ -204,12 +205,12 @@
           <span class="toc-arrow"></span>
 <div id="toc" class="toc-article">
     <div class="toc-title">目录</div>
-    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#u5BFC_u8BFB"><span class="toc-text">导读</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#xss_u653B_u51FB_u65B9_u5F0F"><span class="toc-text">xss攻击方式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u9632_u6B62xss_u653B_u51FB"><span class="toc-text">防止xss攻击</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#u8F6C_u4E49"><span class="toc-text">转义</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#u4F7F_u7528_u6D4F_u89C8_u5668_u81EA_u5E26_u7684xss-filter"><span class="toc-text">使用浏览器自带的xss-filter</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Content_Security_Policy"><span class="toc-text">Content Security Policy</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#X-Frame-Options"><span class="toc-text">X-Frame-Options</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Http-Only"><span class="toc-text">Http-Only</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#iframe__u6C99_u7BB1_u73AF_u5883"><span class="toc-text">iframe 沙箱环境</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#u5176_u4ED6_u5B89_u5168_u76F8_u5173_u7684HTTP_u5934"><span class="toc-text">其他安全相关的HTTP头</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#X-Content-Type-Options"><span class="toc-text">X-Content-Type-Options</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#HPKP_28Public_Key_Pinning_29"><span class="toc-text">HPKP(Public Key Pinning)</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#HSTS__28HTTP_Strict-Transport-Security_29"><span class="toc-text">HSTS (HTTP Strict-Transport-Security)</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u524D_u7AEFxss_u8FC7_u6EE4"><span class="toc-text">前端xss过滤</span></a></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#导读"><span class="toc-text">导读</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#xss攻击方式"><span class="toc-text">xss攻击方式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#防止xss攻击"><span class="toc-text">防止xss攻击</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#转义"><span class="toc-text">转义</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#使用浏览器自带的xss-filter"><span class="toc-text">使用浏览器自带的xss-filter</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Content-Security-Policy"><span class="toc-text">Content Security Policy</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#X-Frame-Options"><span class="toc-text">X-Frame-Options</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Http-Only"><span class="toc-text">Http-Only</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#iframe-沙箱环境"><span class="toc-text">iframe 沙箱环境</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#其他安全相关的HTTP头"><span class="toc-text">其他安全相关的HTTP头</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#X-Content-Type-Options"><span class="toc-text">X-Content-Type-Options</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#HPKP-Public-Key-Pinning"><span class="toc-text">HPKP(Public Key Pinning)</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#HSTS-HTTP-Strict-Transport-Security"><span class="toc-text">HSTS (HTTP Strict-Transport-Security)</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#前端xss过滤"><span class="toc-text">前端xss过滤</span></a></li></ol>
 </div>
       
-        <h3 id="u5BFC_u8BFB"><a href="#u5BFC_u8BFB" class="headerlink" title="导读"></a>导读</h3><p><strong>XSS</strong> (Cross-Site Script) 攻击又叫跨站脚本攻击, 本质是一种注入攻击. 其原理, 简单的说就是利用各种手段把恶意代码添加到网页中, 并让受害者执行这段脚本. XSS能做用户使用浏览器能做的一切事情. 伟大的同源策略也无法保证不受XSS攻击，因为此时攻击者就在同源之内.</p>
+        <h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h3><p><strong>XSS</strong> (Cross-Site Script) 攻击又叫跨站脚本攻击, 本质是一种注入攻击. 其原理, 简单的说就是利用各种手段把恶意代码添加到网页中, 并让受害者执行这段脚本. XSS能做用户使用浏览器能做的一切事情. 伟大的同源策略也无法保证不受XSS攻击，因为此时攻击者就在同源之内.</p>
 <a id="more"></a>
-<h3 id="xss_u653B_u51FB_u65B9_u5F0F"><a href="#xss_u653B_u51FB_u65B9_u5F0F" class="headerlink" title="xss攻击方式"></a>xss攻击方式</h3><p>从攻击的方式可以分为</p>
+<h3 id="xss攻击方式"><a href="#xss攻击方式" class="headerlink" title="xss攻击方式"></a>xss攻击方式</h3><p>从攻击的方式可以分为</p>
 <ul>
 <li>反射型</li>
 <li>存储型</li>
@@ -221,7 +222,7 @@
 <li>server(服务端型)</li>
 </ul>
 <p>当一端xss代码是在服务端被插入的, 那么这就是服务端型xss, 同理, 如果代码在客户端插入, 就是客户端型xss.</p>
-<h3 id="u9632_u6B62xss_u653B_u51FB"><a href="#u9632_u6B62xss_u653B_u51FB" class="headerlink" title="防止xss攻击"></a>防止xss攻击</h3><h4 id="u8F6C_u4E49"><a href="#u8F6C_u4E49" class="headerlink" title="转义"></a>转义</h4><p>无论是服务端型还是客户端型xss，攻击达成都需要两个条件</p>
+<h3 id="防止xss攻击"><a href="#防止xss攻击" class="headerlink" title="防止xss攻击"></a>防止xss攻击</h3><h4 id="转义"><a href="#转义" class="headerlink" title="转义"></a>转义</h4><p>无论是服务端型还是客户端型xss，攻击达成都需要两个条件</p>
 <ul>
 <li>代码被注入</li>
 <li>代码被执行</li>
@@ -243,16 +244,16 @@
 </ul>
 <p>使用JSON.parse 而不是eval, request 的content-type要指定是Content-Type: application/json;</p>
 <p>如果链接的URL中部分是动态生成的, 一定要做转义.</p>
-<h4 id="u4F7F_u7528_u6D4F_u89C8_u5668_u81EA_u5E26_u7684xss-filter"><a href="#u4F7F_u7528_u6D4F_u89C8_u5668_u81EA_u5E26_u7684xss-filter" class="headerlink" title="使用浏览器自带的xss-filter"></a>使用浏览器自带的xss-filter</h4><p><img src="http://louiszhai.github.io/docImages/xss01.png" alt="xss-filter"></p>
+<h4 id="使用浏览器自带的xss-filter"><a href="#使用浏览器自带的xss-filter" class="headerlink" title="使用浏览器自带的xss-filter"></a>使用浏览器自带的xss-filter</h4><p><img src="http://louiszhai.github.io/docImages/xss01.png" alt="xss-filter"></p>
 <blockquote>
 <p>可以通过http头控制是否打开 xss-filter, 默认为开启.</p>
 </blockquote>
 <p>通常情况下, 在http header中加入以下字段表示启用xss-filter.</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">X-XSS-Protection:<span class="number">1</span> (默认)</span><br><span class="line">X-XSS-Protection:<span class="number">1</span>;mode=block (强制不渲染, chrome跳空白页,IE展示一个<span class="preprocessor">#号)</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="attr">X-XSS-Protection:</span><span class="number">1</span> (默认)</div><div class="line"><span class="attr">X-XSS-Protection:</span><span class="number">1</span>;mode=block (强制不渲染, chrome跳空白页,IE展示一个<span class="comment">#号)</span></div></pre></td></tr></table></figure>
 <p>如需禁用xss-filter, 将 <code>X-XSS-Protection</code> 设置为0即可.</p>
 <p>如上, 现代浏览器都对反射型xss有一定的防御力, 其原理是检查url和dom中元素的相关性. 但这并不能完全防止反射型xss. 这里有个可供测试的链接, 传送门: <a href="http://www.enhanceie.com/test/xss/" target="_blank" rel="external">XSS Test Page</a>.</p>
 <p>另外, 浏览器对于存储型xss并没有抵抗力, 原因很简单, 用户的需求是多种多样的. 所以, 抵御xss这件事情不能指望浏览器.</p>
-<h4 id="Content_Security_Policy"><a href="#Content_Security_Policy" class="headerlink" title="Content Security Policy"></a>Content Security Policy</h4><p>Content Security Policy, 即内容安全策略, 简称csp.</p>
+<h4 id="Content-Security-Policy"><a href="#Content-Security-Policy" class="headerlink" title="Content Security Policy"></a>Content Security Policy</h4><p>Content Security Policy, 即内容安全策略, 简称csp.</p>
 <p>为了缓解很大一部分潜在的跨站脚本问题, 浏览器的扩展程序系统引入了CSP. CSP 管理网站允许加载的内容, 并且使用白名单的机制对网站加载或执行的资源起作用. 在网页中, 这样的策略通过 HTTP 头信息或者 meta 元素定义.</p>
 <p>CSP 并不是用来防止 xss 攻击的, 而是最小化 xss 发生后所造成的伤害. 实际上, 除了开发者自己做好 xss 转义, 并没有别的方法可以防止 xss 的发生. CSP 可以说是HTML5给web安全带来的最实惠的东西. 那么如何引入 CSP 呢?</p>
 <ol>
@@ -283,9 +284,9 @@
 </blockquote>
 <p>可以看出, CSP是一个强大的策略, 几乎可以限制了所有能够用到的资源的来源. 使用好CSP可以很大成都降低XSS带来的风险.</p>
 <p>另外, CSP还提供一个报告的头域 <code>Content-Security-Policy-Report-Only</code>, 使用这个头域, 浏览器会向服务器报告csp状态.</p>
-<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">Content-Security-Policy-Report-Only</span>: <span class="string">script-src 'self'; report-uri http://cspReport/</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="attribute">Content-Security-Policy-Report-Only</span>: script-src 'self'; report-uri http://cspReport/</div></pre></td></tr></table></figure>
 <p>使用了上面的设置, 若页面上存在内联的js, 它依然会执行, 不过浏览器会向发送一个post请求, 包含如下信息.</p>
-<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&#123; </span><br><span class="line">  "<span class="attribute">csp-report</span>":</span><br><span class="line">  	<span class="value">&#123; </span><br><span class="line">      "<span class="attribute">document-uri</span>": <span class="value"><span class="string">"http://cspReport/test.php"</span></span>,</span><br><span class="line">      "<span class="attribute">referrer</span>": <span class="value"><span class="string">""</span></span>,</span><br><span class="line">      "<span class="attribute">violated-directive</span>": <span class="value"><span class="string">"script-src 'self'"</span></span>,</span><br><span class="line">      "<span class="attribute">original-policy</span>": <span class="value"><span class="string">"script-src 'self'; report-uri http://cspReport/"</span></span>,</span><br><span class="line">      "<span class="attribute">blocked-uri</span>": <span class="value"><span class="string">""</span></span><br><span class="line">	</span>&#125;</span><br><span class="line"></span>&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">&#123; </div><div class="line">  <span class="attr">"csp-report"</span>:</div><div class="line">  	&#123; </div><div class="line">      <span class="attr">"document-uri"</span>: <span class="string">"http://cspReport/test.php"</span>,</div><div class="line">      <span class="attr">"referrer"</span>: <span class="string">""</span>,</div><div class="line">      <span class="attr">"violated-directive"</span>: <span class="string">"script-src 'self'"</span>,</div><div class="line">      <span class="attr">"original-policy"</span>: <span class="string">"script-src 'self'; report-uri http://cspReport/"</span>,</div><div class="line">      <span class="attr">"blocked-uri"</span>: <span class="string">""</span></div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>CSP 目前有两版, [CSP1][<a href="https://www.w3.org/TR/2012/CR-CSP-20121115/" target="_blank" rel="external">https://www.w3.org/TR/2012/CR-CSP-20121115/</a>] 和 [CSP2][<a href="https://www.w3.org/TR/CSP2/" target="_blank" rel="external">https://www.w3.org/TR/CSP2/</a>]. 两版的支持状态可以在 <a href="http://caniuse.com/#search=csp" target="_blank" rel="external">http://caniuse.com/#search=csp</a> 中查到. 如下:</p>
 <p><strong>CSP1支持性</strong></p>
 <p><img src="http://louiszhai.github.io/docImages/xss03-csp1.png" alt="CSP1"></p>
@@ -301,11 +302,11 @@
 </ul>
 <p>服务器配置</p>
 <p><strong>java代码:</strong></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">response.addHeader(<span class="string">"x-frame-options"</span>,<span class="string">"SAMEORIGIN"</span>);</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">response.addHeader(<span class="string">"x-frame-options"</span>,<span class="string">"SAMEORIGIN"</span>);</div></pre></td></tr></table></figure>
 <p><strong>Nginx配置:</strong></p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">addheader X-Frame-Options SAMEORIGIN</span><br></pre></td></tr></table></figure>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">addheader X-Frame-Options SAMEORIGIN</div></pre></td></tr></table></figure>
 <p><strong>Apache配置:</strong></p>
-<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword"><span class="common">Header</span></span> always append X-Frame-Options SAMEORIGIN</span><br></pre></td></tr></table></figure>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="attribute"><span class="nomarkup">Header</span></span> always append X-Frame-Options SAMEORIGIN</div></pre></td></tr></table></figure>
 <p><strong>浏览器兼容性</strong></p>
 <table>
 <thead>
@@ -338,32 +339,32 @@
 </tbody>
 </table>
 <h4 id="Http-Only"><a href="#Http-Only" class="headerlink" title="Http-Only"></a>Http-Only</h4><p>使用 http-only后, 可禁止js读写cookie,  可以保证即使发生了xss, 用户的cookie也是安全的.</p>
-<h4 id="iframe__u6C99_u7BB1_u73AF_u5883"><a href="#iframe__u6C99_u7BB1_u73AF_u5883" class="headerlink" title="iframe 沙箱环境"></a>iframe 沙箱环境</h4><p>HTML5为iframe提供了安全属性 sandbox, 进而限制iframe的能力. 如下:</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="title">iframe</span> <span class="attribute">src</span>=<span class="value">"untrusted.html"</span> <span class="attribute">sandbox</span>=<span class="value">"allow-scripts allow-forms"</span>&gt;</span><span class="tag">&lt;/<span class="title">iframe</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<h4 id="u5176_u4ED6_u5B89_u5168_u76F8_u5173_u7684HTTP_u5934"><a href="#u5176_u4ED6_u5B89_u5168_u76F8_u5173_u7684HTTP_u5934" class="headerlink" title="其他安全相关的HTTP头"></a>其他安全相关的HTTP头</h4><h5 id="X-Content-Type-Options"><a href="#X-Content-Type-Options" class="headerlink" title="X-Content-Type-Options"></a>X-Content-Type-Options</h5><p>X-Content-Type-Options 阻止浏览器进行content-type 嗅探, 能够防止类型嗅探攻击.</p>
+<h4 id="iframe-沙箱环境"><a href="#iframe-沙箱环境" class="headerlink" title="iframe 沙箱环境"></a>iframe 沙箱环境</h4><p>HTML5为iframe提供了安全属性 sandbox, 进而限制iframe的能力. 如下:</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">iframe</span> <span class="attr">src</span>=<span class="string">"untrusted.html"</span> <span class="attr">sandbox</span>=<span class="string">"allow-scripts allow-forms"</span>&gt;</span><span class="tag">&lt;/<span class="name">iframe</span>&gt;</span></div></pre></td></tr></table></figure>
+<h4 id="其他安全相关的HTTP头"><a href="#其他安全相关的HTTP头" class="headerlink" title="其他安全相关的HTTP头"></a>其他安全相关的HTTP头</h4><h5 id="X-Content-Type-Options"><a href="#X-Content-Type-Options" class="headerlink" title="X-Content-Type-Options"></a>X-Content-Type-Options</h5><p>X-Content-Type-Options 阻止浏览器进行content-type 嗅探, 能够防止类型嗅探攻击.</p>
 <p>这个header主要用来防止在IE9、chrome和safari中的MIME类型混淆攻击. 通常浏览器可以通过嗅探内容本身的方法来决定它是什么类型, 而不是看响应中的content-type值. 通过设置 X-Content-Type-Options：如果content-type和期望的类型匹配，则不需要嗅探，只能从外部加载确定类型的资源. 举个例子, 如果加载了一个样式表, 那么资源的MIME类型只能是text/css, 对于IE中的脚本资源, 以下的内容类型是有效的:</p>
-<figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">application</span>/ecmascript  </span><br><span class="line"><span class="type">application</span>/javascript  </span><br><span class="line"><span class="type">application</span>/x-javascript  </span><br><span class="line"><span class="type">text</span>/ecmascript  </span><br><span class="line"><span class="type">text</span>/javascript  </span><br><span class="line"><span class="type">text</span>/jscript  </span><br><span class="line"><span class="type">text</span>/x-javascript  </span><br><span class="line"><span class="type">text</span>/vbs  </span><br><span class="line"><span class="type">text</span>/vbscript</span><br></pre></td></tr></table></figure>
+<figure class="highlight applescript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">application</span>/ecmascript  </div><div class="line"><span class="built_in">application</span>/javascript  </div><div class="line"><span class="built_in">application</span>/x-javascript  </div><div class="line"><span class="built_in">text</span>/ecmascript  </div><div class="line"><span class="built_in">text</span>/javascript  </div><div class="line"><span class="built_in">text</span>/jscript  </div><div class="line"><span class="built_in">text</span>/x-javascript  </div><div class="line"><span class="built_in">text</span>/vbs  </div><div class="line"><span class="built_in">text</span>/vbscript</div></pre></td></tr></table></figure>
 <p>对于chrome, 则支持下面的MIME 类型:</p>
-<figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">text</span>/javascript  </span><br><span class="line"><span class="type">text</span>/ecmascript  </span><br><span class="line"><span class="type">application</span>/javascript  </span><br><span class="line"><span class="type">application</span>/ecmascript  </span><br><span class="line"><span class="type">application</span>/x-javascript  </span><br><span class="line"><span class="type">text</span>/javascript1<span class="number">.1</span>  </span><br><span class="line"><span class="type">text</span>/javascript1<span class="number">.2</span>  </span><br><span class="line"><span class="type">text</span>/javascript1<span class="number">.3</span>  </span><br><span class="line"><span class="type">text</span>/jscript  </span><br><span class="line"><span class="type">text</span>/live <span class="keyword">script</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight applescript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">text</span>/javascript  </div><div class="line"><span class="built_in">text</span>/ecmascript  </div><div class="line"><span class="built_in">application</span>/javascript  </div><div class="line"><span class="built_in">application</span>/ecmascript  </div><div class="line"><span class="built_in">application</span>/x-javascript  </div><div class="line"><span class="built_in">text</span>/javascript1<span class="number">.1</span>  </div><div class="line"><span class="built_in">text</span>/javascript1<span class="number">.2</span>  </div><div class="line"><span class="built_in">text</span>/javascript1<span class="number">.3</span>  </div><div class="line"><span class="built_in">text</span>/jscript  </div><div class="line"><span class="built_in">text</span>/live <span class="keyword">script</span></div></pre></td></tr></table></figure>
 <p><strong>正确的设置</strong></p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nosniff &#8211; &#36825;&#20010;&#26159;&#21807;&#19968;&#27491;&#30830;&#30340;&#35774;&#32622;.</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">nosniff – 这个是唯一正确的设置.</div></pre></td></tr></table></figure>
 <p>通常不正确的设置</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#8216;nosniff&#8217; &#8211; &#24341;&#21495;&#26159;&#19981;&#20801;&#35768;&#30340;&#10;: nosniff &#8211; &#20882;&#21495;&#20063;&#26159;&#38169;&#35823;&#30340;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">‘nosniff’ – 引号是不允许的</div><div class="line">: nosniff – 冒号也是错误的</div></pre></td></tr></table></figure>
 <p><strong>如何检测</strong></p>
 <p>在IE和chrome中打开开发者工具，在控制台中观察配置了nosniff和没有配置nosniff的输出有啥区别.</p>
-<h5 id="HPKP_28Public_Key_Pinning_29"><a href="#HPKP_28Public_Key_Pinning_29" class="headerlink" title="HPKP(Public Key Pinning)"></a>HPKP(Public Key Pinning)</h5><p>HPKP 是一个response 头, 用来检测一个证书的公钥是否发生了改变, 防止中间人攻击.</p>
+<h5 id="HPKP-Public-Key-Pinning"><a href="#HPKP-Public-Key-Pinning" class="headerlink" title="HPKP(Public Key Pinning)"></a>HPKP(Public Key Pinning)</h5><p>HPKP 是一个response 头, 用来检测一个证书的公钥是否发生了改变, 防止中间人攻击.</p>
 <p>我们知道, 受信任的 CA（证书颁发机构）有好几百个, 他们成为整个网站身份认证过程中一个较大的攻击面. 现有的证书信任链机制最大的问题是, 任何一家受信任的 CA 都可以签发任意网站的站点证书, 这些证书在浏览器看来, 都是合法的.</p>
 <p>HPKP 技术给予我们主动选择信任 CA 的权利. 它的工作原理是通过响应头或者 <meta> 标签告诉浏览器当前网站的证书指纹, 以及过期时间等其它信息. 未来一段时间内, 浏览器再次访问这个网站必须验证证书链中的证书指纹, 如果跟之前指定的值不匹配, 即便证书本身是合法的, 也必须断开连接.</p>
 <p>HPKP 官方文档见 <a href="https://tools.ietf.org/html/rfc7469" target="_blank" rel="external">RFC7469</a> , 目前 Firefox 35+ 和 Chrome 38+ 已经支持. 它的基本格式如下:</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Public-Key-Pins: pin-sha256=&#34;base64==&#34;; max-age=expireTime [; includeSubdomains][; report-uri=&#34;reportURI&#34;]</span><br></pre></td></tr></table></figure>
-<h5 id="HSTS__28HTTP_Strict-Transport-Security_29"><a href="#HSTS__28HTTP_Strict-Transport-Security_29" class="headerlink" title="HSTS (HTTP Strict-Transport-Security)"></a>HSTS (HTTP Strict-Transport-Security)</h5><p>HSTS 是国际互联网工程组织IETE正在推行一种新的Web安全协议, 可以用来抵御中间人攻击, 它强制浏览器使用TSL作为数据通道, 即强制使用HTTPS与服务器创建连接.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Public-Key-Pins: pin-sha256=&quot;base64==&quot;; max-age=expireTime [; includeSubdomains][; report-uri=&quot;reportURI&quot;]</div></pre></td></tr></table></figure>
+<h5 id="HSTS-HTTP-Strict-Transport-Security"><a href="#HSTS-HTTP-Strict-Transport-Security" class="headerlink" title="HSTS (HTTP Strict-Transport-Security)"></a>HSTS (HTTP Strict-Transport-Security)</h5><p>HSTS 是国际互联网工程组织IETE正在推行一种新的Web安全协议, 可以用来抵御中间人攻击, 它强制浏览器使用TSL作为数据通道, 即强制使用HTTPS与服务器创建连接.</p>
 <p>服务器开启HSTS的方法是, 当客户端通过HTTPS发出请求时, 在服务器返回的超文本传输协议响应头中包含Strict-Transport-Security字段. 非加密传输时设置的HSTS字段无效.</p>
 <p>比如, <a href="https://xxx" target="_blank" rel="external">https://xxx</a> 的响应头含有Strict-Transport-Security: max-age=31536000; includeSubDomains. 这意味着两点:</p>
 <p>在接下来的一年（即31536000秒）中, 浏览器只要向xxx或其子域名发送HTTP请求时, 必须采用HTTPS来发起连接. 比如, 用户点击超链接或在地址栏输入 <a href="http://xxx/" target="_blank" rel="external">http://xxx/</a> , 浏览器应当自动将 http 转写成 https, 然后直接向 <a href="https://xxx/" target="_blank" rel="external">https://xxx/</a> 发送请求.</p>
 <p>在接下来的一年中, 如果 xxx 服务器发送的TLS证书无效, 用户不能忽略浏览器警告继续访问网站.</p>
 <p>不足就是, 用户首次访问网址是不受HSTS保护的, 这是因为首次还未收到HSTS. 解决方案有两个, 一是浏览器预置 HSTS域名列表, Google Chrome、Firefox 和 Internet Explorer 实现了这一方案. 二是将HSTS信息加入到域名系统记录中.</p>
-<h3 id="u524D_u7AEFxss_u8FC7_u6EE4"><a href="#u524D_u7AEFxss_u8FC7_u6EE4" class="headerlink" title="前端xss过滤"></a>前端xss过滤</h3><p>最后提供一种前端xss过滤的方法</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">xssCheck</span>(<span class="params">str,reg</span>)</span>&#123;</span><br><span class="line">  <span class="keyword">return</span> str ? str.replace(reg || <span class="regexp">/[&amp;&lt;"&gt;'](?:(amp|lt|quot|gt|#39|nbsp|#\d+);)?/g</span>, <span class="function"><span class="keyword">function</span> (<span class="params">a, b</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(b)&#123;</span><br><span class="line">      <span class="keyword">return</span> a;</span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">      <span class="keyword">return</span> &#123;</span><br><span class="line">        <span class="string">'&lt;'</span>:<span class="string">'&amp;lt;'</span>,</span><br><span class="line">        <span class="string">'&amp;'</span>:<span class="string">'&amp;amp;'</span>,</span><br><span class="line">        <span class="string">'"'</span>:<span class="string">'&amp;quot;'</span>,</span><br><span class="line">        <span class="string">'&gt;'</span>:<span class="string">'&amp;gt;'</span>,</span><br><span class="line">        <span class="string">"'"</span>:<span class="string">'&amp;#39;'</span>,</span><br><span class="line">      &#125;[a]</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;) : <span class="string">''</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="前端xss过滤"><a href="#前端xss过滤" class="headerlink" title="前端xss过滤"></a>前端xss过滤</h3><p>最后提供一种前端xss过滤的方法</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">xssCheck</span>(<span class="params">str,reg</span>)</span>&#123;</div><div class="line">  <span class="keyword">return</span> str ? str.replace(reg || <span class="regexp">/[&amp;&lt;"&gt;'](?:(amp|lt|quot|gt|#39|nbsp|#\d+);)?/g</span>, <span class="function"><span class="keyword">function</span> (<span class="params">a, b</span>) </span>&#123;</div><div class="line">    <span class="keyword">if</span>(b)&#123;</div><div class="line">      <span class="keyword">return</span> a;</div><div class="line">    &#125;<span class="keyword">else</span>&#123;</div><div class="line">      <span class="keyword">return</span> &#123;</div><div class="line">        <span class="string">'&lt;'</span>:<span class="string">'&amp;lt;'</span>,</div><div class="line">        <span class="string">'&amp;'</span>:<span class="string">'&amp;amp;'</span>,</div><div class="line">        <span class="string">'"'</span>:<span class="string">'&amp;quot;'</span>,</div><div class="line">        <span class="string">'&gt;'</span>:<span class="string">'&amp;gt;'</span>,</div><div class="line">        <span class="string">"'"</span>:<span class="string">'&amp;#39;'</span>,</div><div class="line">      &#125;[a]</div><div class="line">    &#125;</div><div class="line">  &#125;) : <span class="string">''</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <hr>
 <p>本文就讨论这么多内容,大家有什么问题或好的想法欢迎在下方参与<a href="#respond">留言和评论</a>.</p>
 <p>本文作者: <a href="https://github.com/Louiszhai" target="_blank" rel="external">louis</a></p>
@@ -526,7 +527,7 @@
 </script>
     </div>
     
-  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
 
 
 <script>
@@ -542,9 +543,9 @@
 		open_in_new: false
 	}
 </script>
-<script src="/js/jquery-1.9.1.min.js" type="text/javascript"></script>
-<script src="/js/main.js" type="text/javascript"></script>
-<script src="/js/content.js" type="text/javascript"></script>
+<script src="/js/jquery-1.9.1.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/content.js"></script>
 
 
 
@@ -553,7 +554,7 @@
 
 
 </div>
-<script src="/js/screenfull.js" type="text/javascript"></script>
+<script src="/js/screenfull.js"></script>
 <a href="https://github.com/Louiszhai" style="position: fixed; top: 0; right: 0; border: 0;z-index:9999"><img
             source="https://camo.githubusercontent.com/a6677b08c955af8400f44c6298f40e7d19cc5b2d/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677261795f3664366436642e706e67"
             src="/img/fork_me_on_github.png" alt="Fork me on GitHub"
