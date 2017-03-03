@@ -12,7 +12,7 @@
 <meta property="og:url" content="http://louiszhai.github.io/2015/12/18/traverse/index.html">
 <meta property="og:site_name" content="louis blog">
 <meta property="og:description" content="JavaScript traverse 遍历 数组 对象 map every forEach forin $.each for while">
-<meta property="og:updated_time" content="2017-02-25T05:11:56.000Z">
+<meta property="og:updated_time" content="2017-03-03T14:25:55.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="详解JS遍历">
 <meta name="twitter:description" content="JavaScript traverse 遍历 数组 对象 map every forEach forin $.each for while">
@@ -238,7 +238,7 @@
 <p>do/while 循环与for循环大体差不多,只支持数组遍历, 多用于对循环退出条件不是很明确的场景. 一般来说不建议使用这种方式遍历数组.</p>
 <h3 id="forEach"><a href="#forEach" class="headerlink" title="forEach"></a>forEach</h3><p>语法: array.forEach(function(item){}), 参数item表示数组每一项的元素</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">array.forEach(<span class="function"><span class="keyword">function</span>(<span class="params">item</span>)</span>&#123;</div><div class="line">  <span class="keyword">if</span>(item==<span class="string">"囚徒"</span>)</div><div class="line">    <span class="keyword">return</span>;<span class="comment">//这里只能使用return跳过当前元素处理</span></div><div class="line">  <span class="built_in">console</span>.log(item);</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
-<p>forEach的语法特点和 java的for each有些类似, 都丢掉了数组的索引信息.</p>
+<p>forEach回调function默认有三个参数: item, index, array.</p>
 <p>使用forEach循环有几点需要特别注意:</p>
 <ul>
 <li>forEach无法遍历对象</li>
@@ -259,7 +259,7 @@
 <p>同时,上述遍历时, o 对象的属性中有一个length属性并没有被输出. 这是为什么呢? 请耐心往下看.</p>
 <p>首先, 我们来看看遍历对象o时, 当前的this对象到底是什么?</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">$.each(o, <span class="function"><span class="keyword">function</span>(<span class="params">i, ele</span>)</span>&#123;</div><div class="line">  <span class="keyword">if</span>(<span class="keyword">this</span>==<span class="string">"linda"</span>)&#123;<span class="comment">//我们随机选取第一个属性</span></div><div class="line">    <span class="built_in">console</span>.log(<span class="keyword">this</span>,<span class="keyword">this</span>==ele);</div><div class="line">    $.each(<span class="keyword">this</span>, <span class="function"><span class="keyword">function</span>(<span class="params">e, ele2</span>) </span>&#123;</div><div class="line">    	<span class="built_in">console</span>.log(e, ele2);</div><div class="line">    &#125;);</div><div class="line">  &#125;</div><div class="line">&#125;);</div><div class="line"><span class="comment">//String &#123;0: "l", 1: "i", 2: "n", 3: "d", 4: "a", length: 5, [[PrimitiveValue]]: "linda"&#125; true</span></div><div class="line"><span class="comment">//0 "l"</span></div><div class="line"><span class="comment">//1 "i"</span></div><div class="line"><span class="comment">//2 "n"</span></div><div class="line"><span class="comment">//3 "d"</span></div><div class="line"><span class="comment">//4 "a"</span></div></pre></td></tr></table></figure>
-<p>我们发现, this对象等于回调函数的第二个形参, 是一个字符串.且它的 length 属性和 [[PrimitiveValue]] 属性并没有被打印出来, 为此我们来查看下length的内部属性.</p>
+<p>我们发现, this对象等于回调函数的第二个形参. 且它的 length 属性和 [[PrimitiveValue]] 属性并没有被打印出来, 为此我们来查看下length的内部属性.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">$.each(o, <span class="function"><span class="keyword">function</span>(<span class="params">i, ele</span>)</span>&#123;</div><div class="line">  <span class="keyword">if</span>(<span class="keyword">this</span>==<span class="string">"linda"</span>)<span class="comment">//我们还是随机选取第一个属性(这还是随机吗?)</span></div><div class="line">    <span class="built_in">console</span>.log(<span class="built_in">Object</span>.getOwnPropertyDescriptor(<span class="keyword">this</span>, <span class="string">'length'</span>));</div><div class="line">&#125;);</div><div class="line"><span class="comment">//Object &#123;value: 5, writable: false, enumerable: false, configurable: false&#125;</span></div></pre></td></tr></table></figure>
 <p>可见, this对象的length属性的 enumerable 属性被设置成了false, 这表示该对象不能被列举或遍历, 同时还不能被配置(configurable: false), 也不能被赋值(writable: false).</p>
 <p>此时, 前面遍历 o 对象时,它的 length 属性没有被打印出来的疑问似乎有解了. 让我们来看看 o.length 的内部属性吧.</p>
@@ -274,7 +274,7 @@
 <p>不仅如此, $.each的具体使用过程中还有以下几点需要注意:</p>
 <ul>
 <li>使用 <code>return</code> 或者 <code>return true</code> 为跳过一个元素，继续执行后面的循环;</li>
-<li>使用 <code>return false</code> 为终止循环的执行，但是并不终止函数执行, 这是因为在 jquery.each 中, 若返回值指定为false, 才跳出循环, 如果感兴趣请翻看 jquery.each 源码;</li>
+<li>使用 <code>return false</code> 为终止循环的执行, 这是因为在 jquery.each 中, 若返回值指定为false, 才跳出循环, 如果感兴趣请翻看 jquery.each 源码;</li>
 <li>无法使用 break 与 continue 来跳过循环.</li>
 </ul>
 <h3 id="selecter-each"><a href="#selecter-each" class="headerlink" title="$(selecter).each"></a>$(selecter).each</h3><p>语法: $(selecter|array|o).each(function(i, ele){})  支持数组和对象, 该方法基本上与$.each方法相同.</p>
@@ -295,18 +295,18 @@
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> str = <span class="string">'12345'</span>;</div><div class="line"><span class="keyword">var</span> output = <span class="built_in">Array</span>.prototype.map.call(str, <span class="function"><span class="keyword">function</span>(<span class="params">x</span>) </span>&#123;</div><div class="line">  <span class="keyword">return</span> x;</div><div class="line">&#125;).reverse().join(<span class="string">''</span>);</div><div class="line"><span class="built_in">console</span>.log(output);<span class="comment">//54321</span></div></pre></td></tr></table></figure>
 <p>例如 将字符串数组转换为数字数组, 只需一条语句, 如下:</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log([<span class="string">'1'</span>, <span class="string">'2'</span>, <span class="string">'3'</span>].map(<span class="built_in">Number</span>));<span class="comment">//[1,2,3]</span></div></pre></td></tr></table></figure>
-<p>目前map方法支持大部分浏览器, 除了IE 6,7,8.</p>
+<p>目前map方法被大部分浏览器支持, 除了IE 6,7,8.</p>
 <h3 id="every"><a href="#every" class="headerlink" title="every"></a>every</h3><p>即 Array.prototype.every, 该方法同上述map方法也只支持数组</p>
 <p>语法: arr.every(callback[, thisArg]) every 方法用于检验数组中的每一项是否符合某个条件, 若符合则放回true, 反之则返回false.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">isBigEnough</span>(<span class="params">element, index, array</span>) </span>&#123;</div><div class="line">  <span class="keyword">return</span> element &gt;= <span class="number">10</span>;</div><div class="line">&#125;</div><div class="line">[<span class="number">12</span>, <span class="number">5</span>, <span class="number">8</span>, <span class="number">130</span>, <span class="number">44</span>].every(isBigEnough);   <span class="comment">// false</span></div><div class="line">[<span class="number">12</span>, <span class="number">54</span>, <span class="number">18</span>, <span class="number">130</span>, <span class="number">44</span>].every(isBigEnough); <span class="comment">// true</span></div></pre></td></tr></table></figure>
 <p>该方法还有简写方式, 如下:</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[<span class="number">12</span>, <span class="number">5</span>, <span class="number">8</span>, <span class="number">130</span>, <span class="number">44</span>].every(<span class="function"><span class="params">elem</span> =&gt;</span> elem &gt;= <span class="number">10</span>); <span class="comment">// false</span></div><div class="line">[<span class="number">12</span>, <span class="number">54</span>, <span class="number">18</span>, <span class="number">130</span>, <span class="number">44</span>].every(<span class="function"><span class="params">elem</span> =&gt;</span> elem &gt;= <span class="number">10</span>); <span class="comment">// true</span></div></pre></td></tr></table></figure>
-<p>以上, 遍历数组和对象的8种方法简单的介绍完, 总结如下:</p>
+<p>以上, 遍历数组和对象的8种方法简单的介绍完, 小结如下:</p>
 <ul>
 <li>for in , $.each , $().each 既支持对象也支持数组遍历;</li>
 <li>for , do/while , forEach 只支持数组;</li>
 <li>Array.prototype.map, Array.prototype.every 只支持数组和形似数组的对象;</li>
-<li>forEach不能退出循环,只能通过return来进入到下一个元素的遍历中(相当于for循环的continue), 且在IE没有实现该方法, 尽量避免使用它;</li>
+<li>forEach不能退出循环,只能通过return来进入到下一个元素的遍历中(相当于for循环的continue), 且在IE没有实现该方法;</li>
 <li>$.each和$().each循环只能通过return false 来退出循环, 使用return 或 return true 将跳过一个元素, 继续执行后面的循环.</li>
 </ul>
 <h3 id="测试各方法效率"><a href="#测试各方法效率" class="headerlink" title="测试各方法效率"></a>测试各方法效率</h3><p>下面我们来测试下上述方法的效率.</p>
@@ -634,7 +634,7 @@
 <li>for in</li>
 </ol>
 <p>我们翻看jquery代码就会知道, $.each方法内部通过调用for循环来实现, 而$().each是先用jquery包裹数组对象, 然后再调用for循环, 因此后者效率略低于前者.</p>
-<p>综上, 最佳遍历选手是 for/do while循环, 推荐大家优先考虑使用它, 一般情况下, 最好不使用forEach. ( Firefox浏览器由于对forEach循环做了底层优化, 效率接近native,不在我们考虑范围内 ).</p>
+<p>综上, 最佳遍历选手是 for/do while循环, 推荐大家优先考虑使用它. ( Firefox浏览器由于对forEach循环做了底层优化, 效率接近native,不在我们考虑范围内 ).</p>
 <h4 id="基于测试结果的两点思考"><a href="#基于测试结果的两点思考" class="headerlink" title="基于测试结果的两点思考"></a>基于测试结果的两点思考</h4><ol>
 <li>从测试数据上猜测, Firefox 与 Safari 似乎对于 for, do while 等都进行了底层优化. 循环执行效率明显优于Chrome.</li>
 <li>每次浏览器执行到 for in 循环处, 便会出现卡顿, 猜测浏览器可能正在预加载循环所需资源.</li>
