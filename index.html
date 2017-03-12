@@ -162,6 +162,67 @@
 
         <div class="body-wrap">
   
+    <article id="post-promise" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/02/26/promise/" class="article-date">
+  	<time datetime="2017-02-26T02:39:16.000Z" itemprop="datePublished">2017-02-26</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/02/26/promise/">Promise使用手册</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h3><p>Promise问世已久, 其科普类文章亦不计其数. 遂本篇初衷不为科普, 只为能够温故而知新.</p>
+<p>比如说, catch能抓住所有的错误吗? 为什么有些时候会抛出”Uncaught (in promise) …”? <code>Promise.resolve</code> 和 <code>Promise.reject</code> 处理Promise对象时又有什么不一样的地方?</p>
+<p>开始写本篇文字时, 我一直不是很明白任务队列的机制, 故想写篇文章弄懂它. 于是我尝试以Promise为核心, 逐步展开, 最终分析process.nextTick , promise.then , setTimeout , setImmediate 它们的异步机制.</p>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/">JavaScript</a></li></ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a  href="/2017/02/26/promise/#more">more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+  
     <article id="post-back" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -677,68 +738,6 @@
       
         <p class="article-more-link">
           <a  href="/2016/06/13/regexp/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-  
-    <article id="post-css-hasLayout" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2016/03/31/css-hasLayout/" class="article-date">
-  	<time datetime="2016-03-31T05:57:56.000Z" itemprop="datePublished">2016-03-31</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/03/31/css-hasLayout/">详解IE7以下独有的hasLayout</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="什么是hasLayout"><a href="#什么是hasLayout" class="headerlink" title="什么是hasLayout"></a>什么是hasLayout</h3><blockquote>
-<p>hasLayout property: Gets a value that indicates whether the object has layout.</p>
-</blockquote>
-<p><strong>hasLayout</strong> 是IE渲染引擎的一个内部实现. IE中, 一个元素要么自己计算大小组织内容(自己渲染), 要么依赖父元素来计算大小和组织内容(依赖祖先元素渲染). 为了区分两者, 渲染引擎采用了 hasLayout 属性, 该属性可以设置为 true 或 false. 若一个元素的 hasLayout 属性值为 true 时, 这个元素便拥有了一个布局(layout), 该元素便不在依赖某个祖先元素进行渲染, 而是它自己就去渲染自己了, 它会负责对自己和可能的子孙元素进行尺寸计算和定位, 这意味着这个元素需要花更多的代价来维护自身和里面的内容; 相反的, 若元素的 hasLayout 属性值为 false时, 它会直接依赖于某个祖先元素来完成这些工作, 最终造成很多的IE bugs.</p>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/css/">css</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a  href="/2016/03/31/css-hasLayout/#more">more >></a>
         </p>
       
       <div class="clearfix"></div>

@@ -29,7 +29,7 @@
 <meta property="og:image" content="http://louiszhai.github.io/docImages/ajax20.png">
 <meta property="og:image" content="http://louiszhai.github.io/docImages/ajax21.png">
 <meta property="og:image" content="http://louiszhai.github.io/docImages/ajax26.png">
-<meta property="og:updated_time" content="2017-02-25T05:11:56.000Z">
+<meta property="og:updated_time" content="2017-03-10T03:35:29.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Ajax知识体系">
 <meta name="twitter:description" content="ajax XMLHttpRequest xhr fetch XDomainRequest jquery.ajax overrideMimeType CORS FileReader postman angular withCredentials setRequestHeader getAllResponseHeaders upload ajax与history的兼容 ajax跨域请求 ajax文件上">
@@ -247,7 +247,7 @@
 </ul>
 <p>那么这么多线程, 它们究竟是怎么同js引擎线程交互的呢?</p>
 <p>通常, 它们的线程间交互以事件的方式发生, 通过事件回调的方式予以通知. 而事件回调, 又是以先进先出的方式添加到<code>任务队列</code> 的末尾 , 等到js引擎空闲时, <code>任务队列</code> 中排队的任务将会依次被执行. 这些事件回调包括 setTimeout, setInterval, click, ajax异步请求等回调.</p>
-<p>浏览器中, js引擎线程会循环从 <code>任务队列</code> 中读取事件并且执行, 这种运行机制称作 <code>Event Loop</code> (事件循环).</p>
+<p><strong>浏览器中, js引擎线程会循环从 <code>任务队列</code> 中读取事件并且执行, 这种运行机制称作 <code>Event Loop</code> (事件循环).</strong></p>
 <p>对于一个ajax请求, js引擎首先生成 <code>XMLHttpRequest</code> 实例对象, open过后再调用send方法. 至此, 所有的语句都是同步执行. 但从send方法内部开始, 浏览器为将要发生的网络请求创建了新的http请求线程, 这个线程独立于js引擎线程, 于是网络请求异步被发送出去了. 另一方面, js引擎并不会等待 ajax 发起的http请求收到结果, 而是直接顺序往下执行.</p>
 <p>当ajax请求被服务器响应并且收到response后, 浏览器事件触发线程捕获到了ajax的回调事件 <code>onreadystatechange</code> (当然也可能触发onload, 或者 onerror等等) . 该回调事件并没有被立即执行, 而是被添加到 <code>任务队列</code> 的末尾. 直到js引擎空闲了, <code>任务队列</code> 的任务才被捞出来, 按照添加顺序, 挨个执行, 当然也包括刚刚append到队列末尾的 <code>onreadystatechange</code> 事件.</p>
 <p>在 <code>onreadystatechange</code> 事件内部, 有可能对dom进行操作. 此时浏览器便会挂起js引擎线程, 转而执行GUI渲染线程, 进行UI重绘(repaint)或者回流(reflow). 当js引擎重新执行时, GUI渲染线程又会被挂起, GUI更新将被保存起来, 等到js引擎空闲时立即被执行.</p>

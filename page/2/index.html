@@ -162,6 +162,68 @@
 
         <div class="body-wrap">
   
+    <article id="post-css-hasLayout" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/03/31/css-hasLayout/" class="article-date">
+  	<time datetime="2016-03-31T05:57:56.000Z" itemprop="datePublished">2016-03-31</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/03/31/css-hasLayout/">详解IE7以下独有的hasLayout</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="什么是hasLayout"><a href="#什么是hasLayout" class="headerlink" title="什么是hasLayout"></a>什么是hasLayout</h3><blockquote>
+<p>hasLayout property: Gets a value that indicates whether the object has layout.</p>
+</blockquote>
+<p><strong>hasLayout</strong> 是IE渲染引擎的一个内部实现. IE中, 一个元素要么自己计算大小组织内容(自己渲染), 要么依赖父元素来计算大小和组织内容(依赖祖先元素渲染). 为了区分两者, 渲染引擎采用了 hasLayout 属性, 该属性可以设置为 true 或 false. 若一个元素的 hasLayout 属性值为 true 时, 这个元素便拥有了一个布局(layout), 该元素便不在依赖某个祖先元素进行渲染, 而是它自己就去渲染自己了, 它会负责对自己和可能的子孙元素进行尺寸计算和定位, 这意味着这个元素需要花更多的代价来维护自身和里面的内容; 相反的, 若元素的 hasLayout 属性值为 false时, 它会直接依赖于某个祖先元素来完成这些工作, 最终造成很多的IE bugs.</p>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/css/">css</a></li></ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a  href="/2016/03/31/css-hasLayout/#more">more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+  
     <article id="post-css-margin" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -687,65 +749,6 @@
       
         <p class="article-more-link">
           <a  href="/2015/12/29/array/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-  
-    <article id="post-scopeChain" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/12/22/scopeChain/" class="article-date">
-  	<time datetime="2015-12-22T00:06:13.000Z" itemprop="datePublished">2015-12-22</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/12/22/scopeChain/">详解JS作用域链及闭包</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h3><p>上一篇我们讲到数组遍历, 本文我们更进一步, 讲讲如何提高遍历的效率. 欢迎阅读本篇<strong><code>详解JS作用域链及闭包</code></strong>.</p>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/">JavaScript</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a  href="/2015/12/22/scopeChain/#more">more >></a>
         </p>
       
       <div class="clearfix"></div>
