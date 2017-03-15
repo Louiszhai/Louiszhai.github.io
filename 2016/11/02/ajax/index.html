@@ -4,11 +4,11 @@
   <meta charset="utf-8">
   
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
-  <title>Ajax知识体系 | louis blog</title>
+  <title>Ajax知识体系大梳理 | louis blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="ajax XMLHttpRequest xhr fetch XDomainRequest jquery.ajax overrideMimeType CORS FileReader postman angular withCredentials setRequestHeader getAllResponseHeaders upload ajax与history的兼容 ajax跨域请求 ajax文件上">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Ajax知识体系">
+<meta property="og:title" content="Ajax知识体系大梳理">
 <meta property="og:url" content="http://louiszhai.github.io/2016/11/02/ajax/index.html">
 <meta property="og:site_name" content="louis blog">
 <meta property="og:description" content="ajax XMLHttpRequest xhr fetch XDomainRequest jquery.ajax overrideMimeType CORS FileReader postman angular withCredentials setRequestHeader getAllResponseHeaders upload ajax与history的兼容 ajax跨域请求 ajax文件上">
@@ -29,9 +29,9 @@
 <meta property="og:image" content="http://louiszhai.github.io/docImages/ajax20.png">
 <meta property="og:image" content="http://louiszhai.github.io/docImages/ajax21.png">
 <meta property="og:image" content="http://louiszhai.github.io/docImages/ajax26.png">
-<meta property="og:updated_time" content="2017-03-13T09:53:13.000Z">
+<meta property="og:updated_time" content="2017-03-15T03:58:22.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Ajax知识体系">
+<meta name="twitter:title" content="Ajax知识体系大梳理">
 <meta name="twitter:description" content="ajax XMLHttpRequest xhr fetch XDomainRequest jquery.ajax overrideMimeType CORS FileReader postman angular withCredentials setRequestHeader getAllResponseHeaders upload ajax与history的兼容 ajax跨域请求 ajax文件上">
 <meta name="twitter:image" content="http://louiszhai.github.io/docImages/ajax27.png">
   
@@ -196,7 +196,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      Ajax知识体系
+      Ajax知识体系大梳理
     </h1>
   
 
@@ -259,10 +259,10 @@
 <p>由于ajax异步, setTimeout回调本应该最先被执行, 然而实际上, 一次ajax请求, 并非所有的部分都是异步的, 至少”readyState==1”的 <code>onreadystatechange</code> 回调以及 <code>onloadstart</code> 回调就是同步执行的. 因此它们的输出排在最前面.</p>
 <h3 id="XMLHttpRequest-属性解读"><a href="#XMLHttpRequest-属性解读" class="headerlink" title="XMLHttpRequest 属性解读"></a>XMLHttpRequest 属性解读</h3><p>首先在Chrome console下创建一个 XMLHttpRequest 实例对象xhr. 如下所示:</p>
 <p><img src="http://louiszhai.github.io/docImages/ajax01.png" alt="XMLHttpRequest"></p>
-<p>运行以下代码.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> xhr = <span class="keyword">new</span> XMLHttpRequest(),</div><div class="line">    i=<span class="number">0</span>;</div><div class="line"><span class="keyword">for</span>(<span class="keyword">var</span> key <span class="keyword">in</span> xhr)&#123;</div><div class="line">    <span class="keyword">if</span>(xhr.hasOwnProperty(key))&#123;</div><div class="line">       i++;</div><div class="line">   &#125;</div><div class="line">&#125;</div><div class="line"><span class="built_in">console</span>.log(i);<span class="comment">//0</span></div></pre></td></tr></table></figure>
-<p>就会发现 XMLHttpRequest 实例对象其实并没有一个自有属性! 这是因为它是BOM对象(Browser Object Model).</p>
-<h4 id="inherit"><a href="#inherit" class="headerlink" title="inherit"></a>inherit</h4><p>追根溯源, 看一个对象, 需要先了解它的继承关系. 虽然 XMLHttpRequest 实例对象是BOM对象, 但它依然具有如下的继承关系. (下面以a&lt;&lt;b表示a继承b)</p>
+<h4 id="inherit"><a href="#inherit" class="headerlink" title="inherit"></a>inherit</h4><p>试运行以下代码.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> xhr = <span class="keyword">new</span> XMLHttpRequest(),</div><div class="line">    i=<span class="number">0</span>;</div><div class="line"><span class="keyword">for</span>(<span class="keyword">var</span> key <span class="keyword">in</span> xhr)&#123;</div><div class="line">    <span class="keyword">if</span>(xhr.hasOwnProperty(key))&#123;</div><div class="line">       i++;</div><div class="line">   &#125;</div><div class="line">&#125;</div><div class="line"><span class="built_in">console</span>.log(i);<span class="comment">//0</span></div><div class="line"><span class="built_in">console</span>.log(XMLHttpRequest.prototype.hasOwnProperty(<span class="string">'timeout'</span>));<span class="comment">//true</span></div></pre></td></tr></table></figure>
+<p>可见,  XMLHttpRequest 实例对象没有自有属性. 实际上, 它的所有属性均来自于 <code>XMLHttpRequest.prototype</code> .</p>
+<p>追根溯源, XMLHttpRequest 实例对象具有如下的继承关系. (下面以a&lt;&lt;b表示a继承b)</p>
 <p><code>xhr</code> &lt;&lt; <code>XMLHttpRequest.prototype</code> &lt;&lt; <code>XMLHttpRequestEventTarget.prototype</code> &lt;&lt; <code>EventTarget.prototype</code> &lt;&lt; <code>Object.prototype</code></p>
 <p>由上, xhr也具有Object等原型中的所有方法. 如toString方法.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">xhr.toString();<span class="comment">//"[object XMLHttpRequest]"</span></div></pre></td></tr></table></figure>
@@ -1205,7 +1205,7 @@
 
 
 <div class="duoshuo">
-	<div class="ds-thread" data-thread-key="ajax" data-title="Ajax知识体系" data-url="http://louiszhai.github.io/2016/11/02/ajax/"></div>
+	<div class="ds-thread" data-thread-key="ajax" data-title="Ajax知识体系大梳理" data-url="http://louiszhai.github.io/2016/11/02/ajax/"></div>
 	<style>
 		#ds-reset .ds-avatar img{width:54px;height:54px;border-radius:27px;-webkit-border-radius:27px;-moz-border-radius:27px;box-shadow:inset 0 -1px 0 #3333sf;-webkit-box-shadow:inset 0 -1px 0 #3333sf;-webkit-transition:0.4s;-webkit-transition:-webkit-transform 0.4s ease-out;transition:transform 0.4s ease-out;-moz-transition:-moz-transform 0.4s ease-out;}
 		#ds-reset .ds-avatar img:hover{box-shadow:0 0 10px #fff;rgba(255,255,255,.6),inset 0 0 20px rgba(255,255,255,1);-webkit-box-shadow:0 0 10px #fff;rgba(255,255,255,.6),inset 0 0 20px rgba(255,255,255,1);transform:rotateZ(360deg);-webkit-transform:rotateZ(360deg);-moz-transform:rotateZ(360deg);}

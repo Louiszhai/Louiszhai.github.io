@@ -1349,11 +1349,11 @@
   </entry>
   
   <entry>
-    <title>Ajax知识体系</title>
+    <title>Ajax知识体系大梳理</title>
     <link href="http://louiszhai.github.io/2016/11/02/ajax/"/>
     <id>http://louiszhai.github.io/2016/11/02/ajax/</id>
     <published>2016-11-02T04:48:27.000Z</published>
-    <updated>2017-03-13T09:53:13.000Z</updated>
+    <updated>2017-03-15T03:58:22.000Z</updated>
     
     <content type="html"><![CDATA[<h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h3><p>Ajax 全称 Asynchronous JavaScript and XML, 即异步JS与XML. 它最早在IE5中被使用, 然后由Mozilla, Apple, Google推广开来. 典型的代表应用有 Outlook Web Access, 以及 GMail. 现代网页中几乎无ajax不欢. 前后端分离也正是建立在ajax异步通信的基础之上.</p>
 <a id="more"></a>
@@ -1392,10 +1392,10 @@
 <p>由于ajax异步, setTimeout回调本应该最先被执行, 然而实际上, 一次ajax请求, 并非所有的部分都是异步的, 至少”readyState==1”的 <code>onreadystatechange</code> 回调以及 <code>onloadstart</code> 回调就是同步执行的. 因此它们的输出排在最前面.</p>
 <h3 id="XMLHttpRequest-属性解读"><a href="#XMLHttpRequest-属性解读" class="headerlink" title="XMLHttpRequest 属性解读"></a>XMLHttpRequest 属性解读</h3><p>首先在Chrome console下创建一个 XMLHttpRequest 实例对象xhr. 如下所示:</p>
 <p><img src="http://louiszhai.github.io/docImages/ajax01.png" alt="XMLHttpRequest"></p>
-<p>运行以下代码.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> xhr = <span class="keyword">new</span> XMLHttpRequest(),</div><div class="line">    i=<span class="number">0</span>;</div><div class="line"><span class="keyword">for</span>(<span class="keyword">var</span> key <span class="keyword">in</span> xhr)&#123;</div><div class="line">    <span class="keyword">if</span>(xhr.hasOwnProperty(key))&#123;</div><div class="line">       i++;</div><div class="line">   &#125;</div><div class="line">&#125;</div><div class="line"><span class="built_in">console</span>.log(i);<span class="comment">//0</span></div></pre></td></tr></table></figure>
-<p>就会发现 XMLHttpRequest 实例对象其实并没有一个自有属性! 这是因为它是BOM对象(Browser Object Model).</p>
-<h4 id="inherit"><a href="#inherit" class="headerlink" title="inherit"></a>inherit</h4><p>追根溯源, 看一个对象, 需要先了解它的继承关系. 虽然 XMLHttpRequest 实例对象是BOM对象, 但它依然具有如下的继承关系. (下面以a&lt;&lt;b表示a继承b)</p>
+<h4 id="inherit"><a href="#inherit" class="headerlink" title="inherit"></a>inherit</h4><p>试运行以下代码.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> xhr = <span class="keyword">new</span> XMLHttpRequest(),</div><div class="line">    i=<span class="number">0</span>;</div><div class="line"><span class="keyword">for</span>(<span class="keyword">var</span> key <span class="keyword">in</span> xhr)&#123;</div><div class="line">    <span class="keyword">if</span>(xhr.hasOwnProperty(key))&#123;</div><div class="line">       i++;</div><div class="line">   &#125;</div><div class="line">&#125;</div><div class="line"><span class="built_in">console</span>.log(i);<span class="comment">//0</span></div><div class="line"><span class="built_in">console</span>.log(XMLHttpRequest.prototype.hasOwnProperty(<span class="string">'timeout'</span>));<span class="comment">//true</span></div></pre></td></tr></table></figure>
+<p>可见,  XMLHttpRequest 实例对象没有自有属性. 实际上, 它的所有属性均来自于 <code>XMLHttpRequest.prototype</code> .</p>
+<p>追根溯源, XMLHttpRequest 实例对象具有如下的继承关系. (下面以a&lt;&lt;b表示a继承b)</p>
 <p><code>xhr</code> &lt;&lt; <code>XMLHttpRequest.prototype</code> &lt;&lt; <code>XMLHttpRequestEventTarget.prototype</code> &lt;&lt; <code>EventTarget.prototype</code> &lt;&lt; <code>Object.prototype</code></p>
 <p>由上, xhr也具有Object等原型中的所有方法. 如toString方法.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">xhr.toString();<span class="comment">//"[object XMLHttpRequest]"</span></div></pre></td></tr></table></figure>
