@@ -787,12 +787,12 @@
     <link href="http://louiszhai.github.io/2016/12/23/sort/"/>
     <id>http://louiszhai.github.io/2016/12/23/sort/</id>
     <published>2016-12-23T03:55:14.000Z</published>
-    <updated>2017-03-13T09:53:13.000Z</updated>
+    <updated>2017-03-16T00:48:14.000Z</updated>
     
     <content type="html"><![CDATA[<h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h3><p>排序算法可以称得上是我的盲点, 曾几何时当我知道Chrome的Array.prototype.sort使用了快速排序时, 我的内心是奔溃的(啥是快排, 我只知道冒泡啊?!), 要知道学习一门技术最好的时间是三年前, 但愿我现在补习还来得及(捂脸).</p>
 <p>因此本篇重拾了出镜概率比较高的十来种排序算法, 逐一分析其排序思想, 并批注注意事项. 欢迎对算法提出改进和<a href="#respond">讨论</a>.</p>
 <a id="more"></a>
-<h3 id="冒泡排序"><a href="#冒泡排序" class="headerlink" title="冒泡排序"></a>冒泡排序</h3><p><img src="http://louiszhai.github.io/docImages/sort02.gif" alt="水泡"></p>
+<h3 id="冒泡排序"><a href="#冒泡排序" class="headerlink" title="冒泡排序"></a>冒泡排序</h3><p><img src="http://louiszhai.github.io/docImages/sort02.gif" alt="冒泡"></p>
 <p>冒泡排序需要两个嵌套的循环. 其中, <code>外层循环</code>移动游标; <code>内层循环</code>遍历游标及之后(或之前)的元素, 通过两两交换的方式, 每次只确保该内循环结束位置排序正确, 然后<code>内层循环</code>周期结束, 交由<code>外层循环</code>往后(或前)移动游标, 随即开始下一轮<code>内层循环</code>, 以此类推, 直至循环结束.</p>
 <p><strong><em>Tips</em></strong>: 由于冒泡排序只在相邻元素大小不符合要求时才调换他们的位置, 它并不改变相同元素之间的相对顺序, 因此它是稳定的排序算法.</p>
 <p>由于有两层循环, 因此可以有四种实现方式.</p>
@@ -1190,7 +1190,7 @@
     
     <summary type="html">
     
-      算法
+      算法 冒泡排序 双向冒泡排序 选择排序 插入排序 直接插入排序 折半插入排序 希尔排序 归并排序 快速排序 堆排序 计数排序 桶排序 基数排序
     
     </summary>
     
@@ -1353,7 +1353,7 @@
     <link href="http://louiszhai.github.io/2016/11/02/ajax/"/>
     <id>http://louiszhai.github.io/2016/11/02/ajax/</id>
     <published>2016-11-02T04:48:27.000Z</published>
-    <updated>2017-03-15T03:58:22.000Z</updated>
+    <updated>2017-03-16T01:57:36.000Z</updated>
     
     <content type="html"><![CDATA[<h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h3><p>Ajax 全称 Asynchronous JavaScript and XML, 即异步JS与XML. 它最早在IE5中被使用, 然后由Mozilla, Apple, Google推广开来. 典型的代表应用有 Outlook Web Access, 以及 GMail. 现代网页中几乎无ajax不欢. 前后端分离也正是建立在ajax异步通信的基础之上.</p>
 <a id="more"></a>
@@ -1386,9 +1386,9 @@
 <p>在 <code>onreadystatechange</code> 事件内部, 有可能对dom进行操作. 此时浏览器便会挂起js引擎线程, 转而执行GUI渲染线程, 进行UI重绘(repaint)或者回流(reflow). 当js引擎重新执行时, GUI渲染线程又会被挂起, GUI更新将被保存起来, 等到js引擎空闲时立即被执行.</p>
 <p>以上整个ajax请求过程中, 有涉及到浏览器的4种线程. 其中除了 <code>GUI渲染线程</code> 和 <code>js引擎线程</code> 是互斥的. 其他线程相互之间, 都是可以并行执行的. 通过这样的一种方式, ajax并没有破坏js的单线程机制.</p>
 <h3 id="ajax与setTimeout排队问题"><a href="#ajax与setTimeout排队问题" class="headerlink" title="ajax与setTimeout排队问题"></a>ajax与setTimeout排队问题</h3><p>通常, ajax 和 setTimeout 的事件回调都被同等的对待, 按照顺序自动的被添加到 <code>任务队列</code> 的末尾, 等待js引擎空闲时执行. 但请注意, 并非xhr的所有回调执行都滞后于setTImeout的回调. 请看如下代码:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">ajax</span>(<span class="params">url, method</span>)</span>&#123;</div><div class="line">  <span class="keyword">var</span> xhr = getXHR();</div><div class="line">  xhr.onreadystatechange = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  	<span class="built_in">console</span>.log(<span class="string">'xhr.readyState:'</span> + <span class="keyword">this</span>.readyState);</div><div class="line">  &#125;</div><div class="line">  xhr.onloadstart = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  	<span class="built_in">console</span>.log(<span class="string">'onloadStart'</span>);</div><div class="line">  &#125;</div><div class="line">  xhr.onload = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  	<span class="built_in">console</span>.log(<span class="string">'onload'</span>);</div><div class="line">  &#125;</div><div class="line">  xhr.open(method, url, <span class="literal">true</span>);</div><div class="line">  xhr.setRequestHeader(<span class="string">'Cache-Control'</span>,<span class="number">3600</span>);</div><div class="line">  xhr.send();</div><div class="line">&#125;</div><div class="line"><span class="keyword">var</span> timer = setTimeout(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">'setTimeout'</span>);</div><div class="line">&#125;,<span class="number">0</span>);</div><div class="line">ajax(<span class="string">'http://louiszhai.github.io/docImages/ajax01.png'</span>,<span class="string">'GET'</span>);</div></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">ajax</span>(<span class="params">url, method</span>)</span>&#123;</div><div class="line">  <span class="keyword">var</span> xhr = getXHR();</div><div class="line">  xhr.onreadystatechange = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  	<span class="built_in">console</span>.log(<span class="string">'xhr.readyState:'</span> + <span class="keyword">this</span>.readyState);</div><div class="line">  &#125;</div><div class="line">  xhr.onloadstart = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  	<span class="built_in">console</span>.log(<span class="string">'onloadStart'</span>);</div><div class="line">  &#125;</div><div class="line">  xhr.onload = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  	<span class="built_in">console</span>.log(<span class="string">'onload'</span>);</div><div class="line">  &#125;</div><div class="line">  xhr.open(method, url, <span class="literal">true</span>);</div><div class="line">  xhr.setRequestHeader(<span class="string">'Cache-Control'</span>,<span class="number">3600</span>);</div><div class="line">  xhr.send();</div><div class="line">&#125;</div><div class="line"><span class="keyword">var</span> timer = setTimeout(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">'setTimeout'</span>);</div><div class="line">&#125;,<span class="number">0</span>);</div><div class="line">ajax(<span class="string">'http://louiszhai.github.io/docImages/ajax01.png'</span>,<span class="string">'GET'</span>);</div><div class="line"><span class="built_in">console</span>.warn(<span class="string">'这里的log并不是最先打印出来的.'</span>);</div></pre></td></tr></table></figure>
 <p>上述代码执行结果如下图:</p>
-<p><img src="http://louiszhai.github.io/docImages/ajax27.png" alt="ajax &amp; setTimeout"></p>
+<p><img src="http://louiszhai.github.io/docImages/ajax27.png" alt="setTimeout &amp; ajax &amp; 同步"></p>
 <p>由于ajax异步, setTimeout回调本应该最先被执行, 然而实际上, 一次ajax请求, 并非所有的部分都是异步的, 至少”readyState==1”的 <code>onreadystatechange</code> 回调以及 <code>onloadstart</code> 回调就是同步执行的. 因此它们的输出排在最前面.</p>
 <h3 id="XMLHttpRequest-属性解读"><a href="#XMLHttpRequest-属性解读" class="headerlink" title="XMLHttpRequest 属性解读"></a>XMLHttpRequest 属性解读</h3><p>首先在Chrome console下创建一个 XMLHttpRequest 实例对象xhr. 如下所示:</p>
 <p><img src="http://louiszhai.github.io/docImages/ajax01.png" alt="XMLHttpRequest"></p>

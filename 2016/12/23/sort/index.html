@@ -6,12 +6,12 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <title>JS中可能用得到的全部的排序算法 | louis blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="算法">
+  <meta name="description" content="算法 冒泡排序 双向冒泡排序 选择排序 插入排序 直接插入排序 折半插入排序 希尔排序 归并排序 快速排序 堆排序 计数排序 桶排序 基数排序">
 <meta property="og:type" content="article">
 <meta property="og:title" content="JS中可能用得到的全部的排序算法">
 <meta property="og:url" content="http://louiszhai.github.io/2016/12/23/sort/index.html">
 <meta property="og:site_name" content="louis blog">
-<meta property="og:description" content="算法">
+<meta property="og:description" content="算法 冒泡排序 双向冒泡排序 选择排序 插入排序 直接插入排序 折半插入排序 希尔排序 归并排序 快速排序 堆排序 计数排序 桶排序 基数排序">
 <meta property="og:image" content="http://louiszhai.github.io/docImages/sort02.gif">
 <meta property="og:image" content="http://louiszhai.github.io/docImages/sort05.gif">
 <meta property="og:image" content="http://louiszhai.github.io/docImages/sort06.gif">
@@ -25,10 +25,10 @@
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1867034-bf2472770e2258a9.gif?imageMogr2/auto-orient/strip">
 <meta property="og:image" content="http://louiszhai.github.io/docImages/sort10.gif">
 <meta property="og:image" content="http://louiszhai.github.io//docImages/sort11.gif">
-<meta property="og:updated_time" content="2017-03-13T09:53:13.000Z">
+<meta property="og:updated_time" content="2017-03-16T00:48:14.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="JS中可能用得到的全部的排序算法">
-<meta name="twitter:description" content="算法">
+<meta name="twitter:description" content="算法 冒泡排序 双向冒泡排序 选择排序 插入排序 直接插入排序 折半插入排序 希尔排序 归并排序 快速排序 堆排序 计数排序 桶排序 基数排序">
 <meta name="twitter:image" content="http://louiszhai.github.io/docImages/sort02.gif">
   
     <link rel="alternative" href="/atom.xml" title="louis blog" type="application/atom+xml">
@@ -221,7 +221,7 @@
         <h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h3><p>排序算法可以称得上是我的盲点, 曾几何时当我知道Chrome的Array.prototype.sort使用了快速排序时, 我的内心是奔溃的(啥是快排, 我只知道冒泡啊?!), 要知道学习一门技术最好的时间是三年前, 但愿我现在补习还来得及(捂脸).</p>
 <p>因此本篇重拾了出镜概率比较高的十来种排序算法, 逐一分析其排序思想, 并批注注意事项. 欢迎对算法提出改进和<a href="#respond">讨论</a>.</p>
 <a id="more"></a>
-<h3 id="冒泡排序"><a href="#冒泡排序" class="headerlink" title="冒泡排序"></a>冒泡排序</h3><p><img src="http://louiszhai.github.io/docImages/sort02.gif" alt="水泡"></p>
+<h3 id="冒泡排序"><a href="#冒泡排序" class="headerlink" title="冒泡排序"></a>冒泡排序</h3><p><img src="http://louiszhai.github.io/docImages/sort02.gif" alt="冒泡"></p>
 <p>冒泡排序需要两个嵌套的循环. 其中, <code>外层循环</code>移动游标; <code>内层循环</code>遍历游标及之后(或之前)的元素, 通过两两交换的方式, 每次只确保该内循环结束位置排序正确, 然后<code>内层循环</code>周期结束, 交由<code>外层循环</code>往后(或前)移动游标, 随即开始下一轮<code>内层循环</code>, 以此类推, 直至循环结束.</p>
 <p><strong><em>Tips</em></strong>: 由于冒泡排序只在相邻元素大小不符合要求时才调换他们的位置, 它并不改变相同元素之间的相对顺序, 因此它是稳定的排序算法.</p>
 <p>由于有两层循环, 因此可以有四种实现方式.</p>
