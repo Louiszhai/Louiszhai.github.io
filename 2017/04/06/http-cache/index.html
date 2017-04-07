@@ -20,7 +20,7 @@
 <meta property="og:image" content="http://louiszhai.github.io/docImages/http-cache02.png">
 <meta property="og:image" content="http://louiszhai.github.io/docImages/http-cache04.png">
 <meta property="og:image" content="http://louiszhai.github.io/docImages/http-cache05.png">
-<meta property="og:updated_time" content="2017-04-07T00:34:40.000Z">
+<meta property="og:updated_time" content="2017-04-07T02:22:25.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="浏览器缓存机制剖析">
 <meta name="twitter:description" content="http-cache 浏览器缓存策略 浏览器缓存机制 304协商缓存 强缓存 Age Date Vary Cache-Control Expires ETag Last-Modified Pragma If-Modified-Since If-Unmodified-Since If-Match If-None-Match no-cache max-age max-stale min-fresh m">
@@ -75,7 +75,7 @@
 				<div class="tips-box hide">
 					<div class="tips-arrow"></div>
 					<ul class="tips-inner">
-						<li>Menu</li>
+						<li>菜单</li>
 						<li>Tags</li>
 						
 						
@@ -416,7 +416,7 @@
 <h3 id="Expires"><a href="#Expires" class="headerlink" title="Expires"></a><strong>Expires</strong></h3><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Expires:Wed, 05 Apr 2017 00:55:35 GMT</div></pre></td></tr></table></figure>
 <p>即到期时间, 以服务器时间为参考系, 其优先级比 <code>Cache-Control:max-age</code> 低, 两者同时出现在响应头时, <code>Expires</code>将被后者覆盖. 如果<code>Expires</code>, <code>Cache-Control: max-age</code>, 或 <code>Cache-Control:s-maxage</code> 都没有在响应头中出现, 并且也没有其它缓存的设置, 那么浏览器默认会采用一个启发式的算法, 通常会取响应头的<code>Date_value - Last-Modified_value</code>值的10%作为缓存时间.</p>
 <p>如下资源便采取了启发式缓存算法.</p>
-<p><img src="http://louiszhai.github.io/docImages/http-cache06.png" alt=""></p>
+<p><img src="http://louiszhai.github.io/docImages/http-cache06.png" alt="启发式缓存生效"></p>
 <p>其缓存时间为 <code>(Date_value - Last-Modified_value) * 10%</code>, 计算如下:</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> Date_value = <span class="keyword">new</span> <span class="built_in">Date</span>(<span class="string">'Thu, 06 Apr 2017 01:30:56 GMT'</span>).getTime();</div><div class="line"><span class="keyword">const</span> LastModified_value = <span class="keyword">new</span> <span class="built_in">Date</span>(<span class="string">'Thu, 01 Dec 2016 06:23:23 GMT'</span>).getTime();</div><div class="line"><span class="keyword">const</span> cacheTime = (Date_value - LastModified_value) / <span class="number">10</span>;</div><div class="line"><span class="keyword">const</span> Expires_timestamp = Date_value + cacheTime;</div><div class="line"><span class="keyword">const</span> Expires_value = <span class="keyword">new</span> <span class="built_in">Date</span>(Expires_timestamp);</div><div class="line"><span class="built_in">console</span>.log(<span class="string">'Expires:'</span>, Expires_value); <span class="comment">// Expires: Tue Apr 18 2017 23:25:41 GMT+0800 (CST)</span></div></pre></td></tr></table></figure>
 <p>可见该资源将于2017年4月18日23点25分41秒过期, 尝试以下两步进行验证:</p>
@@ -485,7 +485,8 @@
 <p>不仅如此, HTML也可以禁用缓存, 即在页面的\<head\>节点中加入\<meta\>标签, 代码如下:</meta\></head\></p>
 <figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">"Cache-Control"</span> <span class="attr">content</span>=<span class="string">"no-cache, no-store, must-revalidate"</span>/&gt;</span></div></pre></td></tr></table></figure>
 <p>上述虽能禁用缓存, 但只有部分浏览器支持, 而且由于代理不解析HTML文档, 故代理服务器也不支持这种方式.</p>
-<h3 id="IE8的异常表现"><a href="#IE8的异常表现" class="headerlink" title="IE8的异常表现"></a><strong>IE8的异常表现</strong></h3><p>资源缓存是否有效相关.</p>
+<h3 id="IE8的异常表现"><a href="#IE8的异常表现" class="headerlink" title="IE8的异常表现"></a><strong>IE8的异常表现</strong></h3><p>实际上, 上述缓存有关的规律, 并非所有浏览器都完全遵循. 比如说IE8.</p>
+<p>资源缓存是否有效相关.</p>
 <table>
 <thead>
 <tr>
@@ -554,29 +555,7 @@
 <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control" target="_blank" rel="external">Cache-Control - HTTP | MDN</a></li>
 <li><a href="https://mp.weixin.qq.com/s?__biz=MzA3NTYzODYzMg==&amp;mid=2653578381&amp;idx=1&amp;sn=3f676e2b2e08bcff831c69d31cf51c51&amp;key=dde62796d24517c892043e67f2520e046c13fc0558822ef7ba7fbe8003ddde05e22230fb4ccb2c31133df2a507940c5d4561c7b4f4570969a47cf1388ff57e4bfea70a3810f3fc805e2a5d9aa3192439&amp;ascene=0&amp;uin=MTM4MjU5NzA0MA%3D%3D&amp;devicetype=iMac+MacBookPro12%2C1+OSX+OSX+10.11.6+build(15G1212)&amp;version=12010110&amp;nettype=WIFI&amp;fontScale=100&amp;pass_ticket=n3plsW%2FV7Vb6O9hKzPNig5MYpXUoJo3tNUNxhJ5Jh6e9AS%2BRXmvJPbIzUeUmL3S2" target="_blank" rel="external">彻底弄懂 Http 缓存机制 - 基于缓存策略三要素分解法</a></li>
 </ul>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.2.7/raphael.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/flowchart/1.6.5/flowchart.min.js"></script><textarea id="flowchart-0-code" style="display: none">st=>start: 发起请求|past
-e=>end: 载入资源
-c1=>condition: 是否已缓存?
-c2=>condition: [过期策略] -
-缓存是否过期?
-c3=>condition: 验证是否通过?
-op1=>operation: [协商策略] -
-重新向服务器发起验证
-op2=>operation: 向服务器请求资源
-op3=>operation: http传输
-op4=>operation: 304响应
-io1=>inputoutput: [存储策略] -
-响应内容存入缓存
-io2=>inputoutput: [存储策略] -
-根据响应头更新缓存
 
-st->c1
-c1(yes,right)->c2
-c1(no)->op2
-c2(yes, right)->op1(right)->c3
-c2(no)->e
-c3(yes, right)->op4->io2->e
-c3(no)->op2->io1->e</textarea><textarea id="flowchart-0-options" style="display: none">{"scale":1,"line-width":2,"line-length":50,"text-margin":10,"font-size":12}</textarea><script>  var code = document.getElementById("flowchart-0-code").value;  var options = JSON.parse(document.getElementById("flowchart-0-options").value);  var diagram = flowchart.parse(code);  diagram.drawSVG("flowchart-0", options);</script>
       
     </div>
     
@@ -600,7 +579,7 @@ c3(no)->op2->io1->e</textarea><textarea id="flowchart-0-options" style="display:
 <div class="share_jia">
 	<!-- JiaThis Button BEGIN -->
 	<div class="jiathis_style">
-		<span class="jiathis_txt">Share to: &nbsp; </span>
+		<span class="jiathis_txt">分享到: &nbsp; </span>
 		<a class="jiathis_button_facebook"></a> 
     <a class="jiathis_button_twitter"></a>
     <a class="jiathis_button_plus"></a> 
