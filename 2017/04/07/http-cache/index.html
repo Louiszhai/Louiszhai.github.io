@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" >
+  <title>浏览器缓存机制剖析 | louis blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="http-cache 浏览器缓存策略 浏览器缓存机制 304协商缓存 强缓存 Age Date Vary Cache-Control Expires ETag Last-Modified Pragma If-Modified-Since If-Unmodified-Since If-Match If-None-Match no-cache max-age max-stale min-fresh m">
+<meta property="og:type" content="article">
+<meta property="og:title" content="浏览器缓存机制剖析">
+<meta property="og:url" content="http://louiszhai.github.io/2017/04/07/http-cache/index.html">
+<meta property="og:site_name" content="louis blog">
+<meta property="og:description" content="http-cache 浏览器缓存策略 浏览器缓存机制 304协商缓存 强缓存 Age Date Vary Cache-Control Expires ETag Last-Modified Pragma If-Modified-Since If-Unmodified-Since If-Match If-None-Match no-cache max-age max-stale min-fresh m">
+<meta property="og:image" content="http://louiszhai.github.io/docImages/http-cache03.png">
+<meta property="og:image" content="http://louiszhai.github.io/docImages/http-cache06.png">
+<meta property="og:image" content="http://louiszhai.github.io/docImages/http-cache07.png">
+<meta property="og:image" content="http://louiszhai.github.io/docImages/http-cache08.png">
+<meta property="og:image" content="http://louiszhai.github.io/docImages/http-cache01.png">
+<meta property="og:image" content="http://louiszhai.github.io/docImages/http-cache02.png">
+<meta property="og:image" content="http://louiszhai.github.io/docImages/http-cache04.png">
+<meta property="og:image" content="http://louiszhai.github.io/docImages/http-cache05.png">
+<meta property="og:updated_time" content="2017-04-07T07:42:00.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="浏览器缓存机制剖析">
+<meta name="twitter:description" content="http-cache 浏览器缓存策略 浏览器缓存机制 304协商缓存 强缓存 Age Date Vary Cache-Control Expires ETag Last-Modified Pragma If-Modified-Since If-Unmodified-Since If-Match If-None-Match no-cache max-age max-stale min-fresh m">
+<meta name="twitter:image" content="http://louiszhai.github.io/docImages/http-cache03.png">
+  
+    <link rel="alternative" href="/atom.xml" title="louis blog" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+<div id="container">
+    <div class="left-col">
+        <div class="overlay">
+	<!--<input type="text" class="st-default-search-input" style="position:absolute;top: 50px;left: 35px;">-->
+</div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img src="/i.png" class="js-avatar" style="width: 100%;height: 100%;opacity: 1;">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">louis</a></h1>
+		</hgroup>
+
+		
+		<p class="header-subtitle">程序猿 前端攻城师</p>
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>Menu</li>
+						<li>Tags</li>
+						
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives/">所有文章</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="github" target="_blank" href="https://github.com/Louiszhai" title="github">github</a>
+					        
+								<a class="weibo" target="_blank" href="http://weibo.com/xingyez" title="weibo">weibo</a>
+					        
+								<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						<a href="/tags/CSS/" style="font-size: 17.5px;">CSS</a> <a href="/tags/JavaScript/" style="font-size: 20px;">JavaScript</a> <a href="/tags/Web/" style="font-size: 15px;">Web</a> <a href="/tags/XSS/" style="font-size: 10px;">XSS</a> <a href="/tags/css/" style="font-size: 12.5px;">css</a> <a href="/tags/javascript/" style="font-size: 10px;">javascript</a>
+					</div>
+				</section>
+				
+				
+				
+
+				
+			</div>
+		</div>
+	</header>				
+</div>
+
+    </div>
+    <div class="mid-col">
+        <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">louis</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+			
+				<img src="/i.png" class="js-avatar" style="width: 100%;height: 100%;opacity: 1;">
+			
+			</div>
+			<hgroup>
+			  <h1 class="header-author">louis</h1>
+			</hgroup>
+			
+			<p class="header-subtitle">程序猿 前端攻城师</p>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives/">所有文章</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="https://github.com/Louiszhai" title="github">github</a>
+			        
+						<a class="weibo" target="_blank" href="http://weibo.com/xingyez" title="weibo">weibo</a>
+			        
+						<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+
+        <div class="body-wrap"><article id="post-http-cache" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/04/07/http-cache/" class="article-date">
+  	<time datetime="2017-04-07T00:00:00.000Z" itemprop="datePublished">2017-04-07</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      浏览器缓存机制剖析
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Web/">Web</a></li></ul>
+	</div>
+
+        
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          <span class="toc-arrow"></span>
+<div id="toc" class="toc-article">
+    <div class="toc-title">目录</div>
+    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#导读"><span class="toc-text">导读</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Cache-Control"><span class="toc-text">Cache-Control</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Pragma"><span class="toc-text">Pragma</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Expires"><span class="toc-text">Expires</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ETag"><span class="toc-text">ETag</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#If-Match"><span class="toc-text">If-Match</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#If-None-Match"><span class="toc-text">If-None-Match</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Last-Modified"><span class="toc-text">Last-Modified</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#If-Modified-Since"><span class="toc-text">If-Modified-Since</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#If-Unmodified-Since"><span class="toc-text">If-Unmodified-Since</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#强缓存"><span class="toc-text">强缓存</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#协商缓存"><span class="toc-text">协商缓存</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Age"><span class="toc-text">Age</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Date"><span class="toc-text">Date</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Vary"><span class="toc-text">Vary</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#怎么让浏览器不缓存静态资源"><span class="toc-text">怎么让浏览器不缓存静态资源</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#IE8的异常表现"><span class="toc-text">IE8的异常表现</span></a></li></ol>
+</div>
+      
+        <p>缓存一直是前端优化的主战场, 利用好缓存就成功了一半. 本篇从http请求和响应的头域入手, 让你对浏览器缓存有个整体的概念. 最终你会发现强缓存, 协商缓存 和 启发式缓存是如此的简单.</p>
+<h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a><strong>导读</strong></h3><p>我不知道拖延症是有多严重, 反正去年3月开的题, 直到今年4月才开始写.(请尽情吐槽吧)</p>
+<a id="more"></a>
+<p>浏览器对于请求资源, 拥有一系列成熟的缓存策略. 按照发生的时间顺序分别为<strong>存储策略</strong>, <strong>过期策略</strong>, <strong>协商策略</strong>, 其中<strong>存储策略</strong>在收到响应后应用, <strong>过期策略</strong>, <strong>协商策略</strong>在发送请求前应用. 流程图如下所示.</p>
+<div id="flowchart-0" class="flow-chart"></div>
+
+<p>废话不多说, 我们先来看两张表格.</p>
+<p>1.http header中与缓存有关的key.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">key</th>
+<th style="text-align:center">描述</th>
+<th style="text-align:center">存储策略</th>
+<th style="text-align:center">过期策略</th>
+<th style="text-align:center">协商策略</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><strong>Cache-Control</strong></td>
+<td style="text-align:center">指定缓存机制,覆盖其它设置</td>
+<td style="text-align:center">✔️</td>
+<td style="text-align:center">✔️</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>Pragma</strong></td>
+<td style="text-align:center">http1.0字段,指定缓存机制</td>
+<td style="text-align:center">✔️</td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>Expires</strong></td>
+<td style="text-align:center">http1.0字段,指定缓存的过期时间</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">✔️</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>Last-Modified</strong></td>
+<td style="text-align:center">资源最后一次的修改时间</td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center">✔️</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>ETag</strong></td>
+<td style="text-align:center">唯一标识请求资源的字符串</td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center">✔️</td>
+</tr>
+</tbody>
+</table>
+<p>2.缓存协商策略用于重新验证缓存资源是否有效, 有关的key如下.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">key</th>
+<th style="text-align:center">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><strong>If-Modified-Since</strong></td>
+<td style="text-align:center">缓存校验字段, 值为资源最后一次的修改时间, 即上次收到的Last-Modified值</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>If-Unmodified-Since</strong></td>
+<td style="text-align:center">同上, 处理方式与之相反</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>If-Match</strong></td>
+<td style="text-align:center">缓存校验字段, 值为唯一标识请求资源的字符串, 即上次收到的ETag值</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>If-None-Match</strong></td>
+<td style="text-align:center">同上, 处理方式与之相反</td>
+</tr>
+</tbody>
+</table>
+<p>下面我们来看下各个头域(key)的作用.</p>
+<h3 id="Cache-Control"><a href="#Cache-Control" class="headerlink" title="Cache-Control"></a><strong>Cache-Control</strong></h3><p>浏览器缓存里, Cache-Control是金字塔顶尖的规则, 它藐视一切其他设置, 只要其他设置与其抵触, 一律覆盖之.</p>
+<p>不仅如此, 它还是一个复合规则, 包含多种值, 横跨 <strong>存储策略</strong>, <strong>过期策略</strong> 两种, 同时在请求头和响应头都可设置.</p>
+<p>语法为: <em>“Cache-Control : cache-directive”</em>.</p>
+<p>Cache-directive共有如下12种(其中请求中指令7种, 响应中指令9种):</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">Cache-directive</th>
+<th style="text-align:center">描述</th>
+<th style="text-align:center">存储策略</th>
+<th style="text-align:center">过期策略</th>
+<th>请求字段</th>
+<th>响应字段</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><strong>public</strong></td>
+<td style="text-align:center">资源将被客户端和代理服务器缓存</td>
+<td style="text-align:center">✔️</td>
+<td style="text-align:center"></td>
+<td></td>
+<td>✔️</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>private</strong></td>
+<td style="text-align:center">资源仅被客户端缓存, 代理服务器不缓存</td>
+<td style="text-align:center">✔️</td>
+<td style="text-align:center"></td>
+<td></td>
+<td>✔️</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>no-store</strong></td>
+<td style="text-align:center">请求和响应都不缓存</td>
+<td style="text-align:center">✔️</td>
+<td style="text-align:center"></td>
+<td>✔️</td>
+<td>✔️</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>no-cache</strong></td>
+<td style="text-align:center">相当于<code>max-age:0,must-revalidate</code>即资源被缓存, 但是缓存立刻过期, 同时下次访问时强制验证资源有效性</td>
+<td style="text-align:center">✔️</td>
+<td style="text-align:center">✔️</td>
+<td>✔️</td>
+<td>✔️</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>max-age</strong></td>
+<td style="text-align:center">缓存资源, 但是在指定时间(单位为秒)后缓存过期</td>
+<td style="text-align:center">✔️</td>
+<td style="text-align:center">✔️</td>
+<td>✔️</td>
+<td>✔️</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>s-maxage</strong></td>
+<td style="text-align:center">同上, 依赖public设置, 覆盖max-age, 且只在代理服务器上有效.</td>
+<td style="text-align:center">✔️</td>
+<td style="text-align:center">✔️</td>
+<td></td>
+<td>✔️</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>max-stale</strong></td>
+<td style="text-align:center">指定时间内, 即使缓存过时, 资源依然有效</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">✔️</td>
+<td>✔️</td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>min-fresh</strong></td>
+<td style="text-align:center">缓存的资源至少要保持指定时间的新鲜期</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">✔️</td>
+<td>✔️</td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>must-revalidation</strong> / <strong>proxy-revalidation</strong></td>
+<td style="text-align:center">如果缓存失效, 强制重新向服务器(或代理)发起验证(因为max-stale等字段可能改变缓存的失效时间)</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">✔️</td>
+<td></td>
+<td>✔️</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>only-if-cached</strong></td>
+<td style="text-align:center">仅仅返回已经缓存的资源, 不访问网络, 若无缓存则返回504</td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td>✔️</td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>no-transform</strong></td>
+<td style="text-align:center">强制要求代理服务器不要对资源进行转换, 禁止代理服务器对 <code>Content-Encoding</code>, <code>Content-Range</code>, <code>Content-Type</code>字段的修改(因此代理的gzip压缩将不被允许)</td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td>✔️</td>
+<td>✔️</td>
+</tr>
+</tbody>
+</table>
+<p>假设所请求资源于4月5日缓存, 且在4月12日过期.</p>
+<p>当max-age 与 max-stale 和 min-fresh 同时使用时, 它们的设置相互之间独立生效, 最为保守的缓存策略总是有效. 这意味着, 如果max-age=10 days, max-stale=2 days, min-fresh=3 days, 那么:</p>
+<ul>
+<li>根据max-age的设置, 覆盖原缓存周期,  缓存资源将在4月15日失效(5+10=15);</li>
+<li>根据max-stale的设置, 缓存过期后两天依然有效, 此时响应将返回110(Response is stale)状态码, 缓存资源将在4月14日失效(12+2=14);</li>
+<li>根据min-fresh的设置, 至少要留有3天的新鲜期, 缓存资源将在4月9日失效(12-3=9);</li>
+</ul>
+<p>由于客户端总是采用最保守的缓存策略, 因此, 4月9日后, 对于该资源的请求将重新向服务器发起验证.</p>
+<h3 id="Pragma"><a href="#Pragma" class="headerlink" title="Pragma"></a><strong>Pragma</strong></h3><p>http1.0字段, 通常设置为<code>Pragma:no-cache</code>, 作用同<code>Cache-Control:no-cache</code>. 当一个no-cache请求发送给一个不遵循HTTP/1.1的服务器时, 客户端应该包含pragma指令. 为此, 勾选☑️ 上disable cache时, 浏览器自动带上了pragma字段. 如下:</p>
+<p><img src="http://louiszhai.github.io/docImages/http-cache03.png" alt="Pragma:no-cache"></p>
+<h3 id="Expires"><a href="#Expires" class="headerlink" title="Expires"></a><strong>Expires</strong></h3><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Expires:Wed, 05 Apr 2017 00:55:35 GMT</div></pre></td></tr></table></figure>
+<p>即到期时间, 以服务器时间为参考系, 其优先级比 <code>Cache-Control:max-age</code> 低, 两者同时出现在响应头时, <code>Expires</code>将被后者覆盖. 如果<code>Expires</code>, <code>Cache-Control: max-age</code>, 或 <code>Cache-Control:s-maxage</code> 都没有在响应头中出现, 并且也没有其它缓存的设置, 那么浏览器默认会采用一个启发式的算法, 通常会取响应头的<code>Date_value - Last-Modified_value</code>值的10%作为缓存时间.</p>
+<p>如下资源便采取了启发式缓存算法.</p>
+<p><img src="http://louiszhai.github.io/docImages/http-cache06.png" alt="启发式缓存生效"></p>
+<p>其缓存时间为 <code>(Date_value - Last-Modified_value) * 10%</code>, 计算如下:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> Date_value = <span class="keyword">new</span> <span class="built_in">Date</span>(<span class="string">'Thu, 06 Apr 2017 01:30:56 GMT'</span>).getTime();</div><div class="line"><span class="keyword">const</span> LastModified_value = <span class="keyword">new</span> <span class="built_in">Date</span>(<span class="string">'Thu, 01 Dec 2016 06:23:23 GMT'</span>).getTime();</div><div class="line"><span class="keyword">const</span> cacheTime = (Date_value - LastModified_value) / <span class="number">10</span>;</div><div class="line"><span class="keyword">const</span> Expires_timestamp = Date_value + cacheTime;</div><div class="line"><span class="keyword">const</span> Expires_value = <span class="keyword">new</span> <span class="built_in">Date</span>(Expires_timestamp);</div><div class="line"><span class="built_in">console</span>.log(<span class="string">'Expires:'</span>, Expires_value); <span class="comment">// Expires: Tue Apr 18 2017 23:25:41 GMT+0800 (CST)</span></div></pre></td></tr></table></figure>
+<p>可见该资源将于2017年4月18日23点25分41秒过期, 尝试以下两步进行验证:</p>
+<p>1) 试着把本地时间修改为2017年4月18日23点25分40秒, 迅速刷新页面, 发现强缓存依然有效(依旧是<code>200 OK (from disk cache)</code>).</p>
+<p>2) 然后又修改本地时间为2017年4月18日23点26分40秒(即往后拨1分钟), 刷新页面, 发现缓存已过期, 此时浏览器重新向服务器发起了验证, 且命中了304协商缓存, 如下所示.</p>
+<p><img src="http://louiszhai.github.io/docImages/http-cache07.png" alt="缓存过期, 重新发起验证, 命中304协商缓存"></p>
+<p>3) 将本地时间恢复正常(即 2017-04-06 09:54:19). 刷新页面, 发现Date依然是4月18日, 如下所示.</p>
+<p><img src="http://louiszhai.github.io/docImages/http-cache08.png" alt="本地时间恢复正常, 缓存依然有效"></p>
+<p>从<code>⚠️ Provisional headers are shown</code> 和Date字段可以看出来, 浏览器并未发出请求, 缓存依然有效, 只不过此时Status Code显示为200 OK. (甚至我还专门打开了charles, 也没有发现该资源的任何请求, 可见这个200 OK多少有些误导人的意味)</p>
+<p>可见, 启发式缓存算法采用的缓存时间可长可短, 因此对于常规资源, 建议明确设置缓存时间(如指定max-age 或 expires).</p>
+<h3 id="ETag"><a href="#ETag" class="headerlink" title="ETag"></a><strong>ETag</strong></h3><figure class="highlight http"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="attribute">ETag:"fcb82312d92970bdf0d18a4eca08ebc7efede4fe"</span></div></pre></td></tr></table></figure>
+<p>实体标签, 服务器资源的唯一标识符, 浏览器可以根据ETag值缓存数据, 节省带宽. 如果资源已经改变, etag可以帮助防止同步更新资源的相互覆盖. ETag 优先级比 Last-Modified 高.</p>
+<h3 id="If-Match"><a href="#If-Match" class="headerlink" title="If-Match"></a><strong>If-Match</strong></h3><p>语法: <em>If-Match: ETag_value</em> 或者 <em>If-Match: ETag_value, ETag_value, …</em></p>
+<p>缓存校验字段, 其值为上次收到的一个或多个<code>etag</code> 值. 常用于判断条件是否满足, 如下两种场景:</p>
+<ul>
+<li>对于 GET 或 HEAD 请求, 结合 Range 头字段, 它可以保证新范围的请求和前一个来自相同的源, 如果不匹配, 服务器将返回一个416(Range Not Satisfiable)状态码的响应.</li>
+<li>对于 PUT 或者其他不安全的请求, <code>If-Match</code> 可用于阻止错误的更新操作, 如果不匹配, 服务器将返回一个412(Precondition Failed)状态码的响应.</li>
+</ul>
+<h3 id="If-None-Match"><a href="#If-None-Match" class="headerlink" title="If-None-Match"></a><strong>If-None-Match</strong></h3><p>语法: <em>If-None-Match: ETag_value</em> 或者 <em>If-None-Match: ETag_value, ETag_value, …</em></p>
+<p>缓存校验字段, 结合ETag字段, 常用于判断缓存资源是否有效, 优先级比<code>If-Modified-Since</code>高.</p>
+<ul>
+<li>对于 GET 或 HEAD 请求, 如果其etags列表均不匹配, 服务器将返回200状态码的响应, 反之, 将返回304(Not Modified)状态码的响应. 无论是200还是304响应, 都至少返回 <code>Cache-Control</code>, <code>Content-Location</code>, <code>Date</code>, <code>ETag</code>, <code>Expires</code>, and <code>Vary</code> 中之一的字段.</li>
+<li>对于其他更新服务器资源的请求, 如果其etags列表匹配, 服务器将执行更新, 反之, 将返回412(Precondition Failed)状态码的响应.</li>
+</ul>
+<h3 id="Last-Modified"><a href="#Last-Modified" class="headerlink" title="Last-Modified"></a><strong>Last-Modified</strong></h3><p>语法: <em>Last-Modified: 星期,日期 月份 年份 时:分:秒 GMT</em></p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="attribute">Last-Modified</span>: Tue, 04 Apr 2017 10:01:15 GMT</div></pre></td></tr></table></figure>
+<p>用于标记请求资源的最后一次修改时间, 格式为GMT(格林尼治标准时间). 如可用 <code>new Date().toGMTString()</code>获取当前GMT时间. Last-Modified 是 ETag 的fallback机制, 优先级比 ETag 低, 且只能精确到秒, 因此不太适合短时间内频繁改动的资源. 不仅如此, 服务器端的静态资源, 通常需要编译打包, 可能出现资源内容没有改变, 而Last-Modified却改变的情况.</p>
+<h3 id="If-Modified-Since"><a href="#If-Modified-Since" class="headerlink" title="If-Modified-Since"></a><strong>If-Modified-Since</strong></h3><p>语法同上, 如:</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="attribute">If-Modified-Since</span>: Tue, 04 Apr 2017 10:12:27 GMT</div></pre></td></tr></table></figure>
+<p>缓存校验字段, 其值为上次响应头的Last-Modified值, 若与请求资源当前的Last-Modified值相同, 那么将返回304状态码的响应, 反之, 将返回200状态码响应.</p>
+<h3 id="If-Unmodified-Since"><a href="#If-Unmodified-Since" class="headerlink" title="If-Unmodified-Since"></a><strong>If-Unmodified-Since</strong></h3><p>缓存校验字段, 语法同上. 表示资源未修改则正常执行更新, 否则返回412(Precondition Failed)状态码的响应. 常用于如下两种场景:</p>
+<ul>
+<li>不安全的请求, 比如说使用post请求更新wiki文档, 文档未修改时才执行更新.</li>
+<li>与 If-Range 字段同时使用时, 可以用来保证新的片段请求来自一个未修改的文档.</li>
+</ul>
+<h3 id="强缓存"><a href="#强缓存" class="headerlink" title="强缓存"></a><strong>强缓存</strong></h3><p>一旦资源命中强缓存, 浏览器便不会向服务器发送请求, 而是直接读取缓存. Chrome下的现象是 <code>200 OK (from disk cache)</code> 或者 <code>200 OK (from memory cache)</code>. 如下:</p>
+<p><img src="http://louiszhai.github.io/docImages/http-cache01.png" alt="200 OK (from disk cache)"></p>
+<p><img src="http://louiszhai.github.io/docImages/http-cache02.png" alt="200 OK (from memory cache)"></p>
+<p>对于常规请求, 只要存在该资源的缓存, 且Cache-Control:max-age 或者expires没有过期, 那么就能命中强缓存.</p>
+<h3 id="协商缓存"><a href="#协商缓存" class="headerlink" title="协商缓存"></a><strong>协商缓存</strong></h3><p>缓存过期后, 继续请求该资源, 对于现代浏览器, 拥有如下两种做法:</p>
+<ul>
+<li>根据上次响应中的ETag_value, 自动往request header中添加<code>If-None-Match</code>字段. 服务器收到请求后, 拿<code>If-None-Match</code>字段的值与资源的<code>ETag</code>值进行比较, 若相同, 则命中协商缓存, 返回304响应.</li>
+<li>根据上次响应中的Last-Modified_value, 自动往request header中添加<code>If-Modified-Since</code>字段. 服务器收到请求后, 拿<code>If-Modified-Since</code>字段的值与资源的<code>Last-Modified</code>值进行比较, 若相同, 则命中协商缓存, 返回304响应.</li>
+</ul>
+<p>以上, ETag优先级比Last-Modified高, 同时存在时, 前者覆盖后者. 下面通过实例来理解下强缓存和协商缓存.</p>
+<p>如下忽略首次访问, 第二次通过 <code>If-Modified-Since</code> 命中了304协商缓存.</p>
+<p><img src="http://louiszhai.github.io/docImages/http-cache04.png" alt="304"></p>
+<p>协商缓存的响应结果, 不仅验证了资源的有效性, 同时还更新了浏览器缓存. 主要更新内容如下:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">Age:0</div><div class="line">Cache-Control:max-age=600</div><div class="line">Date: Wed, 05 Apr 2017 13:09:36 GMT</div><div class="line">Expires:Wed, 05 Apr 2017 00:55:35 GMT</div></pre></td></tr></table></figure>
+<p><code>Age:0</code> 表示命中了代理服务器的缓存, age值为0表示代理服务器刚刚刷新了一次缓存.</p>
+<p><code>Cache-Control:max-age=600</code> 覆盖 <code>Expires</code> 字段, 表示从Date_value, 即 <code>Wed, 05 Apr 2017 13:09:36 GMT</code> 起, 10分钟之后缓存过期. 因此10分钟之内访问, 将会命中强缓存, 如下所示:</p>
+<p><img src="http://louiszhai.github.io/docImages/http-cache05.png" alt="200 from cache"></p>
+<p>当然, 除了上述与缓存直接相关的字段外, http header中还包括如下间接相关的字段.</p>
+<h3 id="Age"><a href="#Age" class="headerlink" title="Age"></a><strong>Age</strong></h3><p>出现此字段, 表示命中代理服务器的缓存. 它指的是代理服务器对于请求资源的已缓存时间, 单位为秒. 如下:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Age:2383321</div><div class="line">Date:Wed, 08 Mar 2017 16:12:42 GMT</div></pre></td></tr></table></figure>
+<p>以上指的是, 代理服务器在2017年3月8日16:12:42时向源服务器发起了对该资源的请求, 目前已缓存了该资源2383321秒.</p>
+<h3 id="Date"><a href="#Date" class="headerlink" title="Date"></a><strong>Date</strong></h3><p>指的是响应生成的时间. 请求经过代理服务器时, 返回的Date未必是最新的, 通常这个时候, 代理服务器将增加一个Age字段告知该资源已缓存了多久.</p>
+<h3 id="Vary"><a href="#Vary" class="headerlink" title="Vary"></a><strong>Vary</strong></h3><p>对于服务器而言, 资源文件可能不止一个版本, 比如说压缩和未压缩, 针对不同的客户端, 通常需要返回不同的资源版本. 比如说老式的浏览器可能不支持解压缩, 这个时候, 就需要返回一个未压缩的版本; 对于新的浏览器, 支持压缩, 返回一个压缩的版本, 有利于节省带宽, 提升体验. 那么怎么区分这个版本呢, 这个时候就需要Vary了.</p>
+<p>服务器通过指定<code>Vary: Accept-Encoding</code>, 告知代理服务器, 对于这个资源, 需要缓存两个版本: 压缩和未压缩. 这样老式浏览器和新的浏览器, 通过代理, 就分别拿到了未压缩和压缩版本的资源, 避免了都拿同一个资源的尴尬.</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="attribute">Vary:Accept-Encoding,User-Agent</span></div></pre></td></tr></table></figure>
+<p>如上设置, 代理服务器将针对是否压缩和浏览器类型两个维度去缓存资源. 如此一来, 同一个url, 就能针对PC和Mobile返回不同的缓存内容.</p>
+<h3 id="怎么让浏览器不缓存静态资源"><a href="#怎么让浏览器不缓存静态资源" class="headerlink" title="怎么让浏览器不缓存静态资源"></a><strong>怎么让浏览器不缓存静态资源</strong></h3><p>实际上, 工作中很多场景都需要避免浏览器缓存, 除了浏览器隐私模式, 请求时想要禁用缓存, 还可以设置请求头: <code>Cache-Control: no-cache, no-store, must-revalidate</code> .</p>
+<p>当然, 还有一种常用做法: 即给请求的资源增加一个版本号, 如下:</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">"stylesheet"</span> <span class="attr">type</span>=<span class="string">"text/css"</span> <span class="attr">href</span>=<span class="string">"../css/style.css?version=1.8.9"</span>/&gt;</span></div></pre></td></tr></table></figure>
+<p>这样做的好处就是你可以自由控制什么时候加载最新的资源.</p>
+<p>不仅如此, HTML也可以禁用缓存, 即在页面的\<head\>节点中加入\<meta\>标签, 代码如下:</meta\></head\></p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">"Cache-Control"</span> <span class="attr">content</span>=<span class="string">"no-cache, no-store, must-revalidate"</span>/&gt;</span></div></pre></td></tr></table></figure>
+<p>上述虽能禁用缓存, 但只有部分浏览器支持, 而且由于代理不解析HTML文档, 故代理服务器也不支持这种方式.</p>
+<h3 id="IE8的异常表现"><a href="#IE8的异常表现" class="headerlink" title="IE8的异常表现"></a><strong>IE8的异常表现</strong></h3><p>实际上, 上述缓存有关的规律, 并非所有浏览器都完全遵循. 比如说IE8.</p>
+<p>资源缓存是否有效相关.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">浏览器</th>
+<th style="text-align:center">前提</th>
+<th style="text-align:center">操作</th>
+<th style="text-align:center">表现</th>
+<th style="text-align:center">正常表现</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">IE8</td>
+<td style="text-align:center">资源缓存有效</td>
+<td style="text-align:center">新开一个窗口加载网页</td>
+<td style="text-align:center">重新发送请求(返回200)</td>
+<td style="text-align:center">展示缓存的页面</td>
+</tr>
+<tr>
+<td style="text-align:center">IE8</td>
+<td style="text-align:center">资源缓存失效</td>
+<td style="text-align:center">原浏览器窗口中单击 Enter 按钮</td>
+<td style="text-align:center">展示缓存的页面</td>
+<td style="text-align:center">重新发送请求(返回200)</td>
+</tr>
+</tbody>
+</table>
+<p>Last-Modified / E-Tag 相关.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">浏览器</th>
+<th style="text-align:center">前提</th>
+<th style="text-align:center">操作</th>
+<th style="text-align:center">表现</th>
+<th style="text-align:center">正常表现</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">IE8</td>
+<td style="text-align:center">资源内容没有修改</td>
+<td style="text-align:center">新开一个窗口加载网页</td>
+<td style="text-align:center">浏览器重新发送请求(返回200)</td>
+<td style="text-align:center">重新发送请求(返回304)</td>
+</tr>
+<tr>
+<td style="text-align:center">IE8</td>
+<td style="text-align:center">资源内容已修改</td>
+<td style="text-align:center">原浏览器窗口中单击 Enter 按钮</td>
+<td style="text-align:center">浏览器展示缓存的页面</td>
+<td style="text-align:center">重新发送请求(返回200)</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<p>本问就讨论这么多内容,大家有什么问题或好的想法欢迎在下方参与<a href="#respond">留言和评论</a>.</p>
+<p>本文作者: <a href="https://github.com/Louiszhai" target="_blank" rel="external">louis</a></p>
+<p>本文链接: <a href="http://louiszhai.github.io/2017/03/13/http-cache/">http://louiszhai.github.io/2017/03/13/http-cache/</a></p>
+<p>参考文章</p>
+<ul>
+<li><a href="https://msdn.microsoft.com/en-us/library/27w3sx5e(v=vs.110).aspx" target="_blank" rel="external">Cache Policy Interaction—Maximum Age and Maximum Staleness</a></li>
+<li><a href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html" target="_blank" rel="external">HTTP/1.1: Header Field Definitions</a></li>
+<li><a href="http://stackoverflow.com/questions/1046966/whats-the-difference-between-cache-control-max-age-0-and-no-cache" target="_blank" rel="external">http - What’s the difference between Cache-Control: max-age=0 and no-cache? - Stack Overflow</a></li>
+<li><a href="http://www.baitouwei.com/2016/04/20/App-%E7%BC%93%E5%AD%98%E6%96%B9%E6%A1%88%EF%BC%9AHttp-%E7%BC%93%E5%AD%98/" target="_blank" rel="external">App 缓存方案：Http 缓存 · baitouwei</a></li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control" target="_blank" rel="external">Cache-Control - HTTP | MDN</a></li>
+<li><a href="https://mp.weixin.qq.com/s?__biz=MzA3NTYzODYzMg==&amp;mid=2653578381&amp;idx=1&amp;sn=3f676e2b2e08bcff831c69d31cf51c51&amp;key=dde62796d24517c892043e67f2520e046c13fc0558822ef7ba7fbe8003ddde05e22230fb4ccb2c31133df2a507940c5d4561c7b4f4570969a47cf1388ff57e4bfea70a3810f3fc805e2a5d9aa3192439&amp;ascene=0&amp;uin=MTM4MjU5NzA0MA%3D%3D&amp;devicetype=iMac+MacBookPro12%2C1+OSX+OSX+10.11.6+build(15G1212)&amp;version=12010110&amp;nettype=WIFI&amp;fontScale=100&amp;pass_ticket=n3plsW%2FV7Vb6O9hKzPNig5MYpXUoJo3tNUNxhJ5Jh6e9AS%2BRXmvJPbIzUeUmL3S2" target="_blank" rel="external">彻底弄懂 Http 缓存机制 - 基于缓存策略三要素分解法</a></li>
+</ul>
+
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2017/03/12/promise/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Promise使用手册</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share_jia">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">Share to: &nbsp; </span>
+		<a class="jiathis_button_facebook"></a> 
+    <a class="jiathis_button_twitter"></a>
+    <a class="jiathis_button_plus"></a> 
+    <a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+
+
+
+<div class="duoshuo">
+	<div class="ds-thread" data-thread-key="http-cache" data-title="浏览器缓存机制剖析" data-url="http://louiszhai.github.io/2017/04/07/http-cache/"></div>
+	<style>
+		#ds-reset .ds-avatar img{width:54px;height:54px;border-radius:27px;-webkit-border-radius:27px;-moz-border-radius:27px;box-shadow:inset 0 -1px 0 #3333sf;-webkit-box-shadow:inset 0 -1px 0 #3333sf;-webkit-transition:0.4s;-webkit-transition:-webkit-transform 0.4s ease-out;transition:transform 0.4s ease-out;-moz-transition:-moz-transform 0.4s ease-out;}
+		#ds-reset .ds-avatar img:hover{box-shadow:0 0 10px #fff;rgba(255,255,255,.6),inset 0 0 20px rgba(255,255,255,1);-webkit-box-shadow:0 0 10px #fff;rgba(255,255,255,.6),inset 0 0 20px rgba(255,255,255,1);transform:rotateZ(360deg);-webkit-transform:rotateZ(360deg);-moz-transform:rotateZ(360deg);}
+		p.ds-powered-by,#ds-sync-checkbox,.ds-sync label{display:none!important;}
+		#ds-reset .ds-rounded-top{-webkit-border-top-right-radius:0px;-webkit-border-top-left-radius:0px;border-top-right-radius:0px;border-top-left-radius:0px;}
+		#ds-thread #ds-reset .ds-textarea-wrapper{background:#fff;border:0;margin-bottom:20px;padding-right:0px;}
+		#ds-thread #ds-reset .ds-textarea-wrapper textarea{min-height:80px;border:1px solid #ccc;padding:10px;-webkit-appearance:none;border-radius:0;background-color:#FFFFFF;border-color:#cccccc;box-shadow:inset 0 1px 2px rgba(0,0,0,0.1);color:rgba(0,0,0,0.75);-webkit-box-sizing:border-box;box-sizing:border-box;-webkit-transition:border-color 0.15s linear,background 0.15s linear;-moz-transition:border-color 0.15s linear,background 0.15s linear;-ms-transition:border-color 0.15s linear,background 0.15s linear;-o-transition:border-color 0.15s linear,background 0.15s linear;transition:border-color 0.15s linear,background 0.15s linear;}
+		/*#ds-thread #ds-reset .ds-textarea-wrapper textarea:focus{border-color:#999999;background:#fafafa;outline:none;}*/
+		#ds-thread #ds-reset .ds-post-options{border-bottom-left-radius:0px;-webkit-border-bottom-left-radius:0px;border:none;background:none!important;}
+		#ds-reset .ds-textarea-wrapper textarea:focus{border-color:#66afe9;outline:0;-webkit-box-shadow:inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);box-shadow:inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);}
+		#ds-thread #ds-reset .ds-post-button:hover,#ds-thread #ds-reset .ds-post-button:focus{
+		    background-color: #51a351;
+		    background-position: 0 -32px;
+		    color:white;
+		}
+		#ds-thread #ds-reset .ds-post-toolbar,#ds-reset .ds-avatar{box-shadow:none;}
+		#ds-thread #ds-reset .ds-textarea-wrapper textarea:focus{
+	    	/*background: none repeat scroll 0 0 #F4FAFF;*/
+	    	border-color:#9DD4FD;
+	    	border-width:1px;
+	    	box-shadow:0 1px 1px rgba(0,0,0,0.075) inset, 0 0 8px rgba(82, 168, 236, 0.6);
+	    	outline:0 none;
+    	}
+		#ds-thread #ds-reset .ds-textarea-wrapper textarea:active{
+	    	/*background: none repeat scroll 0 0 #F4FAFF;*/
+	    	border-width:1px;
+	    	border-color:#9DD4FD;
+	    	box-shadow:0 1px 1px rgba(0,0,0,0.075) inset, 0 0 8px rgba(82, 168, 236, 0.6);
+	    	outline:0 none;
+    	}
+    	#ds-thread #ds-reset .ds-post-button{
+    		box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset, 0 1px 2px rgba(0, 0, 0, 0.05);
+		    border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+		    border-width: 1px;
+		    border-style: solid;
+		    border-radius: 3px;
+		    background: #5bb75b;
+		    color:white;
+		    text-shadow:none;
+		    transition:background-color 300ms ease-out;
+    	}
+    	#ds-reset .ds-avatar{
+    		background-color:initial;
+    	}
+
+	</style>
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"true"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+</div>
+
+
+
+</div>
+        <link rel="stylesheet" href="/css/content.css" type="text/css">
+<footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+      <img src="/img/top_arrow.png" class="top_arrow" id="top_arrow">
+    	<div class="footer-left">
+    		&copy; 2017 louis
+
+        <span style="position:relative;top:2px" id="cnzz_stat_icon_1256923583"></span>
+        <script type="text/javascript">
+          var s = document.createElement('script');
+          var cnzz_protocol = (("https:" == document.location.protocol) ? "https://" : "http://");
+          s.src = cnzz_protocol + "s11.cnzz.com/z_stat.php?id=1256923583&show=pic";
+          document.body.appendChild(s);
+        </script>
+
+    	</div>
+      	<div class="footer-right">
+      		<a href="https://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+<script type="text/javascript">
+  //swifty
+  /*(function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+  
+  _st('install','4AmBuvmx4Cy-3hvyxeh8','2.0.0');*/
+</script>
+    </div>
+    
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: false,
+		animate: false,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="/js/jquery-1.9.1.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/content.js"></script>
+
+
+
+
+
+
+
+</div>
+<script src="/js/screenfull.js"></script>
+<a href="https://github.com/Louiszhai" style="position: fixed; top: 0; right: 0; border: 0;z-index:9999"><img
+            source="https://camo.githubusercontent.com/a6677b08c955af8400f44c6298f40e7d19cc5b2d/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677261795f3664366436642e706e67"
+            src="/img/fork_me_on_github.png" alt="Fork me on GitHub"
+            data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png"></a>
+</body>
+</html>
