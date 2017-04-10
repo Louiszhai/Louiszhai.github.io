@@ -4,7 +4,7 @@
   <url>
     <loc>http://louiszhai.github.io/2017/04/07/http-cache/</loc>
     
-    <lastmod>2017-04-07T07:49:15.000Z</lastmod>
+    <lastmod>2017-04-10T00:26:21.000Z</lastmod>
     
   </url>
   
@@ -37,13 +37,6 @@
   </url>
   
   <url>
-    <loc>http://louiszhai.github.io/2017/01/13/flex/</loc>
-    
-    <lastmod>2017-03-13T09:53:13.000Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://louiszhai.github.io/2016/01/11/bind/</loc>
     
     <lastmod>2017-03-13T09:53:13.000Z</lastmod>
@@ -51,7 +44,21 @@
   </url>
   
   <url>
+    <loc>http://louiszhai.github.io/2016/01/11/cross-domain/</loc>
+    
+    <lastmod>2017-03-13T09:53:13.000Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://louiszhai.github.io/2016/03/12/css-center/</loc>
+    
+    <lastmod>2017-03-13T09:53:13.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://louiszhai.github.io/2016/03/23/css-margin/</loc>
     
     <lastmod>2017-03-13T09:53:13.000Z</lastmod>
     
@@ -72,20 +79,6 @@
   </url>
   
   <url>
-    <loc>http://louiszhai.github.io/2016/01/11/cross-domain/</loc>
-    
-    <lastmod>2017-03-13T09:53:13.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://louiszhai.github.io/2016/03/23/css-margin/</loc>
-    
-    <lastmod>2017-03-13T09:53:13.000Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://louiszhai.github.io/2015/12/16/currying/</loc>
     
     <lastmod>2017-03-13T09:53:13.000Z</lastmod>
@@ -93,21 +86,14 @@
   </url>
   
   <url>
-    <loc>http://louiszhai.github.io/2016/11/02/fetch/</loc>
-    
-    <lastmod>2017-03-13T09:53:13.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://louiszhai.github.io/2015/12/29/array/</loc>
-    
-    <lastmod>2017-03-13T09:53:13.000Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://louiszhai.github.io/2015/12/11/js.boolean/</loc>
+    
+    <lastmod>2017-03-13T09:53:13.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://louiszhai.github.io/2017/02/19/box-shadow/</loc>
     
     <lastmod>2017-03-13T09:53:13.000Z</lastmod>
     
@@ -135,7 +121,21 @@
   </url>
   
   <url>
+    <loc>http://louiszhai.github.io/2016/11/02/fetch/</loc>
+    
+    <lastmod>2017-03-13T09:53:13.000Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://louiszhai.github.io/2016/01/10/js.timer/</loc>
+    
+    <lastmod>2017-03-13T09:53:13.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://louiszhai.github.io/2017/03/12/promise/</loc>
     
     <lastmod>2017-03-13T09:53:13.000Z</lastmod>
     
@@ -156,20 +156,6 @@
   </url>
   
   <url>
-    <loc>http://louiszhai.github.io/2015/12/15/prototypeChain/</loc>
-    
-    <lastmod>2017-03-13T09:53:13.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://louiszhai.github.io/2017/03/12/promise/</loc>
-    
-    <lastmod>2017-03-13T09:53:13.000Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://louiszhai.github.io/2015/12/22/scopeChain/</loc>
     
     <lastmod>2017-03-13T09:53:13.000Z</lastmod>
@@ -177,7 +163,7 @@
   </url>
   
   <url>
-    <loc>http://louiszhai.github.io/2017/02/24/back/</loc>
+    <loc>http://louiszhai.github.io/2015/12/15/prototypeChain/</loc>
     
     <lastmod>2017-03-13T09:53:13.000Z</lastmod>
     
@@ -191,14 +177,28 @@
   </url>
   
   <url>
-    <loc>http://louiszhai.github.io/2017/02/19/box-shadow/</loc>
+    <loc>http://louiszhai.github.io/2016/03/05/xss/</loc>
     
     <lastmod>2017-03-13T09:53:13.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://louiszhai.github.io/2016/03/05/xss/</loc>
+    <loc>http://louiszhai.github.io/2017/02/24/back/</loc>
+    
+    <lastmod>2017-03-13T09:53:13.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://louiszhai.github.io/2015/12/29/array/</loc>
+    
+    <lastmod>2017-03-13T09:53:13.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://louiszhai.github.io/2017/01/13/flex/</loc>
     
     <lastmod>2017-03-13T09:53:13.000Z</lastmod>
     
