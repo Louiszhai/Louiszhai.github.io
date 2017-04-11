@@ -12,7 +12,7 @@
 <meta property="og:url" content="http://louiszhai.github.io/2016/07/01/Math/index.html">
 <meta property="og:site_name" content="louis blog">
 <meta property="og:description" content="Math floor ~ ~ abs random ceil 位运算 &amp; | ^ &amp;gt; &amp;gt;&amp;gt;&amp;gt; 按位与 按位或 按位非 按位异或 有符号左移 有符号右移 无符号右移">
-<meta property="og:updated_time" content="2017-03-22T02:47:02.000Z">
+<meta property="og:updated_time" content="2017-04-11T11:54:59.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="全面解读Math对象及位运算">
 <meta name="twitter:description" content="Math floor ~ ~ abs random ceil 位运算 &amp; | ^ &amp;gt; &amp;gt;&amp;gt;&amp;gt; 按位与 按位或 按位非 按位异或 有符号左移 有符号右移 无符号右移">
@@ -599,7 +599,7 @@
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(<span class="number">2</span>&lt;&lt;<span class="literal">NaN</span>);<span class="comment">//2</span></div></pre></td></tr></table></figure>
 <p><strong>当运算数x和n均无法被转换为整数时，运算结果为0.</strong></p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(<span class="literal">NaN</span>&lt;&lt;<span class="literal">NaN</span>);<span class="comment">//0</span></div></pre></td></tr></table></figure>
-<h4 id="有符号右移-gt-gt"><a href="#有符号右移-gt-gt" class="headerlink" title="有符号右移(&gt;&gt;)"></a>有符号右移(&gt;&gt;)</h4><p>>&gt;运算符, 除了方向向右, 其他同&lt;&lt;运算符. 当x为整数时, 有: <code>x&gt;&gt;n === x*Math.pow(2,-n)</code> . 如下:</p>
+<h4 id="有符号右移-gt-gt"><a href="#有符号右移-gt-gt" class="headerlink" title="有符号右移(&gt;&gt;)"></a>有符号右移(&gt;&gt;)</h4><p>>&gt;运算符, 除了方向向右, 其他同&lt;&lt;运算符. 当x为整数时, 有: <code>x&gt;&gt;n === Math.floor(x*Math.pow(2,-n))</code> . 如下:</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(<span class="number">-5</span>&gt;&gt;<span class="number">2</span>);<span class="comment">//-2</span></div><div class="line"><span class="built_in">console</span>.log(<span class="number">-7</span>&gt;&gt;<span class="number">3</span>);<span class="comment">//-1</span></div></pre></td></tr></table></figure>
 <p>右移负整数时, 返回值最大为-1.</p>
 <p>右移正整数时, 返回值最小为0.</p>
