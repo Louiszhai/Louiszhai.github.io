@@ -100,7 +100,7 @@
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud" id="js-tagcloud">
-						<a href="/tags/CSS/" style="font-size: 17.5px;">CSS</a> <a href="/tags/JavaScript/" style="font-size: 20px;">JavaScript</a> <a href="/tags/Web/" style="font-size: 15px;">Web</a> <a href="/tags/XSS/" style="font-size: 10px;">XSS</a> <a href="/tags/css/" style="font-size: 12.5px;">css</a> <a href="/tags/javascript/" style="font-size: 10px;">javascript</a>
+						<a href="/tags/CSS/" style="font-size: 16.67px;">CSS</a> <a href="/tags/JavaScript/" style="font-size: 20px;">JavaScript</a> <a href="/tags/Web/" style="font-size: 16.67px;">Web</a> <a href="/tags/XSS/" style="font-size: 10px;">XSS</a> <a href="/tags/css/" style="font-size: 13.33px;">css</a> <a href="/tags/javascript/" style="font-size: 10px;">javascript</a>
 					</div>
 				</section>
 				
@@ -157,6 +157,66 @@
 </nav>
 
         <div class="body-wrap">
+  
+    <article id="post-Math" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/07/01/Math/" class="article-date">
+  	<time datetime="2016-06-30T23:57:48.000Z" itemprop="datePublished">2016-07-01</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/07/01/Math/">全面解读Math对象及位运算</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Math方法和位运算几乎是被忽略得最严重的知识点, 和正则一样, 不用不知道, 一用到处查. 为了告别这种低效的编程模式, 我特地总结此篇, 系统梳理了这两个知识点. 以此为册, 助你攻破它们.</p>
+<h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h3><p>截至ES6, JavaScript 中内置(build-in)构造器/对象共有19个, 其中14个是构造器(Number,Boolean, String, Object, Function, Array, RegExp, Error, Date, Set, WeakSet, Map, Proxy, Promise), Global 不能直接访问, Arguments仅在函数调用时由JS引擎创建, 而 Math, JSON, Reflect 是以对象形式存在的, 本篇将带你走进 JS 内置对象-Math以及与之息息相关的位运算, 一探究竟.</p>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/">JavaScript</a></li></ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a  href="/2016/07/01/Math/#more">more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
   
     <article id="post-regexp" class="article article-type-post" itemscope itemprop="blogPost">
   
@@ -585,65 +645,6 @@
 
 
   
-    <article id="post-bind" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2016/01/11/bind/" class="article-date">
-  	<time datetime="2016-01-11T00:01:33.000Z" itemprop="datePublished">2016-01-11</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/01/11/bind/">Function.prototype.bind方法指南</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h3><p>ES5新增了 Function.prototype.bind 方法, 该方法不同于jquery的bind 方法, 它主要用于固定 this 作用域, 避免各种由于上下文切换造成的语义问题. 常用在 setTimeout, for循环等内部.</p>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/">JavaScript</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a  href="/2016/01/11/bind/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-  
     <article id="post-cross-domain" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -703,11 +704,11 @@
 
 
   
-    <article id="post-js.timer" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-bind" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2016/01/10/js.timer/" class="article-date">
-  	<time datetime="2016-01-10T05:52:11.000Z" itemprop="datePublished">2016-01-10</time>
+      <a href="/2016/01/11/bind/" class="article-date">
+  	<time datetime="2016-01-11T00:01:33.000Z" itemprop="datePublished">2016-01-11</time>
 </a>
     </div>
   
@@ -720,7 +721,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2016/01/10/js.timer/">web定时器之setTimeout &amp; setInterval</a>
+      <a class="article-title" href="/2016/01/11/bind/">Function.prototype.bind方法指南</a>
     </h1>
   
 
@@ -729,7 +730,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h3><p>设置web定时器应当是一个相当常见的需求, 实际上, 我们也有两大工具函数可以任意调用: setTimeout, setInterval. 然而 js 里却没有java的那种wait(), 定时又未必准时, 要想写个定时器还须得深入理解 setTimeout 和 setInterval 的运行原理才行.</p>
+        <h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h3><p>ES5新增了 Function.prototype.bind 方法, 该方法不同于jquery的bind 方法, 它主要用于固定 this 作用域, 避免各种由于上下文切换造成的语义问题. 常用在 setTimeout, for循环等内部.</p>
       
     </div>
     
@@ -744,7 +745,7 @@
 
       
         <p class="article-more-link">
-          <a  href="/2016/01/10/js.timer/#more">more >></a>
+          <a  href="/2016/01/11/bind/#more">more >></a>
         </p>
       
       <div class="clearfix"></div>

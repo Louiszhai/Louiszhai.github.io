@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://louiszhai.github.io/"/>
-  <updated>2017-04-11T11:58:28.000Z</updated>
+  <updated>2017-04-19T10:52:07.000Z</updated>
   <id>http://louiszhai.github.io/</id>
   
   <author>
@@ -16,11 +16,368 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>webpack与browser-sync热更新原理深度讲解</title>
+    <link href="http://louiszhai.github.io/2017/04/19/hmr/"/>
+    <id>http://louiszhai.github.io/2017/04/19/hmr/</id>
+    <published>2017-04-19T02:10:00.000Z</published>
+    <updated>2017-04-19T10:52:07.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>开发环境页面热更新早已是主流，我们不光要吃着火锅唱着歌，享受热更新高效率的快感，更要深入下去探求其原理。</p>
+<p>要知道，触类则旁通，常见的需求如赛事网页推送比赛结果、网页实时展示投票或点赞数据、在线评论或弹幕、在线聊天室等，都需要借助热更新功能，才能达到实时的端对端的极致体验。</p>
+<p>刚好，最近解决<code>webpack-hot-middleware</code>热更新延迟问题的过程中，我深入接触了EventSource技术。遂本文由此开篇，进一步讲解<code>webpack-hot-middleware</code>，<code>browser-sync</code>背后的技术。</p>
+<h3 id="webpack-hot-middleware"><a href="#webpack-hot-middleware" class="headerlink" title="webpack-hot-middleware"></a><strong>webpack-hot-middleware</strong></h3><p><code>webpack-hot-middleware</code>中间件是webpack的一个plugin，通常结合<code>webpack-dev-middleware</code>一起使用。借助它可以实现浏览器的无刷新更新（热更新），即webpack里的HMR（Hot Module Replacement）。如何配置请参考 <a href="https://github.com/glenjamin/webpack-hot-middleware" target="_blank" rel="external">webpack-hot-middleware</a>，如何理解其相关插件请参考 <a href="https://segmentfault.com/a/1190000005614604?utm_source=tuicool&amp;utm_medium=referral" target="_blank" rel="external">手把手深入理解 webpack dev middleware 原理與相關 plugins</a>。</p>
+<p>webpack加入<code>webpack-hot-middleware</code>后，内存中的页面将包含HMR相关js，加载页面后，Network栏可以看到如下请求：</p>
+<p><img src="http://louiszhai.github.io/docImages/hmr11.png" alt="__webpack_hmr"></p>
+<p>__webpack_hmr是一个<code>type</code>为EventSource的请求, 从<code>Time</code>栏可以看出：默认情况下，服务器每十秒推送一条信息到浏览器。</p>
+<p><img src="http://louiszhai.github.io/docImages/hmr12.png" alt="hmr每10秒推送一条信息"></p>
+<p>如果此时关闭开发服务器，浏览器由于重连机制，将持续抛出类似<code>GET http://www.test.com/__webpack_hmr 502 (Bad Gateway)</code> 这样的错误。重新启动开发服务器后，重连将会成功，此时便会刷新页面。</p>
+<p>以上这些便是我们使用时感受到的最初的印象。当然，停留在使用层面不是我们的目标，接下来我们将跳出该中间件，讲解其所使用到的<code>EventSource</code>技术。</p>
+<h3 id="EventSource"><a href="#EventSource" class="headerlink" title="EventSource"></a><strong>EventSource</strong></h3><p>EventSource 不是一个新鲜的技术，它早就随着H5规范提出了，正式一点应该叫<code>Server-sent events</code>，即<code>SSE</code>。</p>
+<p>鉴于传统的通过ajax轮训获取服务器信息的技术方案已经过时，我们迫切需要一个高效的节省资源的方式去获取服务器信息，一旦服务器资源有更新，能够及时地通知到客户端，从而实时地反馈到用户界面上。EventSource就是这样的技术，它本质上还是HTTP，通过response流实时推送服务器信息到客户端。</p>
+<p>新建一个EventSource对象非常简单。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> es = <span class="keyword">new</span> EventSource(<span class="string">'/message'</span>);<span class="comment">// /message是服务端支持EventSource的接口</span></div></pre></td></tr></table></figure>
+<p>新创建的EventSource对象拥有如下属性：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">属性</th>
+<th style="text-align:center">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">url(只读)</td>
+<td style="text-align:center">es对象请求的服务器url</td>
+</tr>
+<tr>
+<td style="text-align:center">readyState(只读)</td>
+<td style="text-align:center">es对象的状态，初始为0，包含CONNECTING (0)，OPEN (1)，CLOSED (2)三种状态</td>
+</tr>
+<tr>
+<td style="text-align:center">withCredentials</td>
+<td style="text-align:center">是否允许带凭证等，默认为false，即不支持发送cookie</td>
+</tr>
+</tbody>
+</table>
+<p>服务端实现<code>/message</code>接口，需要返回类型为 <code>text/event-stream</code>的响应头。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> http = <span class="built_in">require</span>(<span class="string">'http'</span>);</div><div class="line">http.createServer(<span class="function"><span class="keyword">function</span>(<span class="params">req，res</span>)</span>&#123;</div><div class="line">  <span class="keyword">if</span>(req.url === <span class="string">'/message'</span>)&#123;</div><div class="line">    res.writeHead(<span class="number">200</span>，&#123;</div><div class="line">      <span class="string">'Content-Type'</span>: <span class="string">'text/event-stream'</span>,</div><div class="line">      <span class="string">'Cache-Control'</span>: <span class="string">'no-cache'</span>,</div><div class="line">      <span class="string">'Connection'</span>: <span class="string">'keep-alive'</span></div><div class="line">    &#125;);</div><div class="line">    setInterval(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">      res.write(<span class="string">'data: '</span> + +<span class="keyword">new</span> <span class="built_in">Date</span>() + <span class="string">'\n\n'</span>);</div><div class="line">    &#125;, <span class="number">1000</span>);</div><div class="line">  &#125;</div><div class="line">&#125;).listen(<span class="number">8888</span>);</div></pre></td></tr></table></figure>
+<p>我们注意到，为了避免缓存，Cache-Control 特别设置成了 no-cache，为了能够发送多个response， Connection被设置成了keep-alive.。发送数据时，请务必保证服务器推送的数据以 <code>data:</code>开始，以<code>\n\n</code>结束，否则推送将会失败(原因就不说了，这是约定的)。</p>
+<p>以上，服务器每隔1s主动向客户端发送当前时间戳，为了接受这个信息，客户端需要监听服务器。如下：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">es.onmessage = <span class="function"><span class="keyword">function</span>(<span class="params">e</span>)</span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(e.data); <span class="comment">// 打印服务器推送的信息</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>如下是消息推送的过程：</p>
+<p><img src="http://louiszhai.github.io/docImages/hot-replace01.gif" alt="response size不断增加"></p>
+<p><img src="http://louiszhai.github.io/docImages/hot-replace02.gif" alt="接收消息"></p>
+<p>你以为es只能监听message事件吗？并不是，message只是缺省的事件类型。实际上，它可以监听任何指定类型的事件。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">es.addEventListener(<span class="string">"####"</span>, <span class="function"><span class="keyword">function</span>(<span class="params">e</span>) </span>&#123;<span class="comment">// 事件类型可以随你定义</span></div><div class="line">  <span class="built_in">console</span>.log(<span class="string">'####:'</span>, e.data);</div><div class="line">&#125;，<span class="literal">false</span>);</div></pre></td></tr></table></figure>
+<p>服务器发送不同类型的事件时，需要指定event字段。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">res.write(<span class="string">'event: ####\n'</span>);</div><div class="line">res.write(<span class="string">'data: 这是一个自定义的####类型事件\n'</span>);</div><div class="line">res.write(<span class="string">'data: 多个data字段将被解析成一个字段\n\n'</span>);</div></pre></td></tr></table></figure>
+<p>如下所示：</p>
+<p><img src="http://louiszhai.github.io/docImages/hot-replace04.png" alt="####消息"></p>
+<p>可以看到，服务端指定event事件名为”####”后，客户端触发了对应的事件回调，同时服务端设置的多个data字段，客户端使用换行符连接成了一个字符串。</p>
+<p>不仅如此，事件流中还可以混合多种事件，请看我们是怎么收到消息的，如下：</p>
+<p><img src="http://louiszhai.github.io/docImages/hot-replace03.gif" alt="混合消息"></p>
+<p>除此之外，es对象还拥有另外3个方法: <code>onopen()</code>、<code>onerror()</code>、<code>close()</code>，请参考如下实现。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">es.onopen = <span class="function"><span class="keyword">function</span>(<span class="params">e</span>)</span>&#123;<span class="comment">// 链接打开时的回调</span></div><div class="line">  <span class="built_in">console</span>.log(<span class="string">'当前状态readyState:'</span>, es.readyState);<span class="comment">// open时readyState===1</span></div><div class="line">&#125;</div><div class="line">es.onerror = <span class="function"><span class="keyword">function</span>(<span class="params">e</span>)</span>&#123;<span class="comment">// 出错时的回调(网络问题,或者服务下线等都有可能导致出错)</span></div><div class="line">  <span class="built_in">console</span>.log(es.readyState);<span class="comment">// 出错时readyState===0</span></div><div class="line">  es.close();<span class="comment">// 出错时，chrome浏览器会每隔3秒向服务器重发原请求,直到成功. 因此出错时，可主动断开原连接.</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>使用EventSource技术实时更新网页信息十分高效。实际使用中，我们几乎不用担心兼容性问题，主流浏览器都了支持EventSource，当然，除了掉队的IE系。对于不支持的浏览器，其PolyFill方案请参考<a href="https://github.com/Modernizr/Modernizr/wiki/HTML5-Cross-Browser-Polyfills#eventsource" target="_blank" rel="external">HTML5 Cross Browser Polyfills</a>。</p>
+<h4 id="CORS"><a href="#CORS" class="headerlink" title="CORS"></a><strong>CORS</strong></h4><p>另外，如果需要支持跨域调用，请设置响应头<code>Access-Control-Allow-Origin&#39;: &#39;*&#39;</code>。</p>
+<p>如需支持发送cookie，请设置响应头<code>Access-Control-Allow-Origin&#39;: req.headers.origin</code> 和 <code>Access-Control-Allow-Credentials:true</code>，并且创建es对象时，需要明确指定是否发送凭证。如下：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> es = <span class="keyword">new</span> EventSource(<span class="string">'/message'</span>, &#123;</div><div class="line">  <span class="attr">withCredentials</span>: <span class="literal">true</span></div><div class="line">&#125;); <span class="comment">// 创建时指定配置才是有效的</span></div><div class="line">es.withCredentials = <span class="literal">true</span>; <span class="comment">// 与ajax不同，这样设置是无效的</span></div></pre></td></tr></table></figure>
+<p>以下是主流浏览器对EventSource的CORS的支持：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">Firefox</th>
+<th style="text-align:center">Opera</th>
+<th style="text-align:center">Chrome</th>
+<th style="text-align:center">Safari</th>
+<th style="text-align:center">iOS</th>
+<th style="text-align:center">Android</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">10+</td>
+<td style="text-align:center">12+</td>
+<td style="text-align:center">26+</td>
+<td style="text-align:center">7.0+</td>
+<td style="text-align:center">7.0+</td>
+<td style="text-align:center">4.4+</td>
+</tr>
+</tbody>
+</table>
+<h4 id="nginx配置"><a href="#nginx配置" class="headerlink" title="nginx配置"></a><strong>nginx配置</strong></h4><p>既然说到了EventSource，便有必要谈谈遇到的坑，接下来，就说说我遇到的webpack热更新延迟问题。</p>
+<p>如我们所知，webpack借助webpack-hot-middleware插件，实现了网页热更新机制，正常情况下，浏览器打开 <a href="http://localhost:8080" target="_blank" rel="external">http://localhost:8080</a> 这样的网页即可开始调试。然而实际开发中，由于远程服务器需要种cookie登录态到特定的域名上等原因，因此本地往往会用nginx做一层反向代理。即把 <a href="http://www.test.com" target="_blank" rel="external">http://www.test.com</a> 的请求转发到 <a href="http://localhost:8080" target="_blank" rel="external">http://localhost:8080</a> 上(配置过程这里不详述，具体请参考<a href="http://louiszhai.github.io/2016/11/02/ajax/ajax调试技巧">Ajax知识体系大梳理-ajax调试技巧</a>)。转发过后，发现热更新便延迟了。</p>
+<p>原因是nginx默认开启的buffer机制缓存了服务器推送的片段信息，缓存达到一定的量才会返回响应内容。只要关闭proxy_buffering即可。配置如下所示：</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="section">server</span> &#123;</div><div class="line">    <span class="attribute">listen</span>       <span class="number">80</span>;</div><div class="line">    <span class="attribute">server_name</span>  www.test.company.com;</div><div class="line">    <span class="attribute">location</span> / &#123;</div><div class="line">        <span class="attribute">proxy_pass</span> http://localhost:8080;</div><div class="line">        <span class="attribute">proxy_buffering</span> <span class="literal">off</span>;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>至此，EventSource部分便告一段落。学习讲究由浅入深，循序渐进。后面我将重点讲解的<code>browser-sync</code>热更新机制，请耐心细读。</p>
+<h3 id="browser-sync"><a href="#browser-sync" class="headerlink" title="browser-sync"></a><strong>browser-sync</strong></h3><p>开发中使用<code>browser-sync</code>插件调试，一个网页里的所有交互动作（包括滚动，输入，点击等等），可以实时地同步到其他所有打开该网页的设备，能够节省大量的手工操作时间，从而带来流畅的开发调试体验。目前<code>browser-sync</code>可以结合<code>Gulp</code>或<code>Grunt</code>一起使用，其API请参考：<a href="http://www.browsersync.cn/docs/api/" target="_blank" rel="external">Browsersync API</a>。</p>
+<p>通过上面的了解，我们知道<code>EventSouce</code>的使用是比较便捷的，那为什么<code>browser-sync</code>不使用EventSource技术进行代码推送呢？这是因为<code>browser-sync</code>插件共做了两件事：</p>
+<ul>
+<li>开发更新了一段新的逻辑，服务器实时推送代码改动信息。数据流：服务器 —&gt; 浏览器，使用EventSource技术同样能够实现。</li>
+<li>用户操作网页，滚动、输入或点击等，操作信息实时发送给服务器，然后再由服务器将操作同步给其他已打开的网页。数据流：浏览器 —&gt; 服务器 —&gt; 浏览器，该部分功能EventSource技术已无能为力。</li>
+</ul>
+<p>以上，<code>browser-sync</code>使用WebSocket技术达到实时推送代码改动和用户操作两个目的。至于它是如何计算推送内容，根据不同推送内容采取何种响应策略，不在本次讨论范围之内。下面我们将讲解其核心的WebSocket技术。</p>
+<h3 id="WebSocket"><a href="#WebSocket" class="headerlink" title="WebSocket"></a><strong>WebSocket</strong></h3><p>WebSocket是基于TCP的全双工通讯的协议，它与EventSource有着本质上的不同.(前者基于TCP，后者依然基于HTTP) 该协议于2011年被IETF定为标准RFC6455，后被RFC7936补充. WebSocket api也被W3C定为标准。</p>
+<p>WebSocket使用和HTTP相同的TCP端口，默认为80， 统一资源标志符为ws，运行在TLS之上时，默认使用443，统一资源标志符为wss。它通过<code>101 switch protocol</code>进行一次TCP握手，即从HTTP协议切换成WebSocket通信协议。</p>
+<p>相对于HTTP协议，WebSocket拥有如下优点：</p>
+<ul>
+<li>全双工，实时性更强。</li>
+<li>相对于http携带完整的头部，WebSocket请求头部明显减少。</li>
+<li>保持连接状态，不用再验权了。</li>
+<li>二进制支持更强，Websocket定义了二进制帧，处理更轻松。</li>
+<li>Websocket协议支持扩展，可以自定义的子协议，如 <code>permessage-deflate</code> 扩展。</li>
+</ul>
+<h4 id="支持性"><a href="#支持性" class="headerlink" title="支持性"></a><strong>支持性</strong></h4><p>优秀技术的落地，调研兼容性是必不可少的环节。所幸的是，现代浏览器对WebSocket的支持比较友好，如下是PC端兼容性：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">IE/Edge</th>
+<th style="text-align:center">Firefox</th>
+<th style="text-align:center">Chrome</th>
+<th style="text-align:center">Safari</th>
+<th style="text-align:center">Opera</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">10+</td>
+<td style="text-align:center">11+</td>
+<td style="text-align:center">16+</td>
+<td style="text-align:center">7+</td>
+<td style="text-align:center">12.1+</td>
+</tr>
+</tbody>
+</table>
+<p>如下是mobile端兼容性：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">iOS Safari</th>
+<th style="text-align:center">Android</th>
+<th style="text-align:center">Android Chrome</th>
+<th style="text-align:center">Android UC</th>
+<th style="text-align:center">QQ Browser</th>
+<th style="text-align:center">Opera Mini</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">7.1+</td>
+<td style="text-align:center">4.4+</td>
+<td style="text-align:center">57+</td>
+<td style="text-align:center">11.4+</td>
+<td style="text-align:center">1.2+</td>
+<td style="text-align:center">-</td>
+</tr>
+</tbody>
+</table>
+<h4 id="Frame"><a href="#Frame" class="headerlink" title="Frame"></a><strong>Frame</strong></h4><p>根据RFC6455文档，WebSocket协议基于Frame而非Stream（EventSource是基于Stream的）。因此其传输的数据都是Frame（帧）。想要了解数据的往返，弄懂协议处理过程，Frame的解读是必不可少。如下便是Frame的结构：</p>
+<figure class="highlight gherkin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"> 0                   1                   2                   3</div><div class="line"> 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1</div><div class="line">+-+-+-+-+-------+-+-------------+-------------------------------+</div><div class="line">|<span class="string">F</span>|<span class="string">R</span>|<span class="string">R</span>|<span class="string">R</span>|<span class="string"> opcode</span>|<span class="string">M</span>|<span class="string"> Payload len </span>|<span class="string">    Extended payload length    </span>|</div><div class="line">|<span class="string">I</span>|<span class="string">S</span>|<span class="string">S</span>|<span class="string">S</span>|<span class="string">  (4)  </span>|<span class="string">A</span>|<span class="string">     (7)     </span>|<span class="string">             (16/64)           </span>|</div><div class="line">|<span class="string">N</span>|<span class="string">V</span>|<span class="string">V</span>|<span class="string">V</span>|<span class="string">       </span>|<span class="string">S</span>|<span class="string">             </span>|<span class="string">   (if payload len==126/127)   </span>|</div><div class="line">|<span class="string"> </span>|<span class="string">1</span>|<span class="string">2</span>|<span class="string">3</span>|<span class="string">       </span>|<span class="string">K</span>|<span class="string">             </span>|<span class="string">                               </span>|</div><div class="line">+-+-+-+-+-------+-+-------------+ - - - - - - - - - - - - - - - +</div><div class="line">|<span class="string">     Extended payload length continued，if payload len == 127  </span>|</div><div class="line">+ - - - - - - - - - - - - - - - +-------------------------------+</div><div class="line">|<span class="string">                               </span>|<span class="string">Masking-key，if MASK set to 1  </span>|</div><div class="line">+-------------------------------+-------------------------------+</div><div class="line">|<span class="string"> Masking-key (continued)       </span>|<span class="string">          Payload Data         </span>|</div><div class="line">+-------------------------------- - - - - - - - - - - - - - - - +</div><div class="line">:                     Payload Data continued ...                :</div><div class="line">+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - +</div><div class="line">|<span class="string">                     Payload Data continued ...                </span>|</div><div class="line">+---------------------------------------------------------------+</div></pre></td></tr></table></figure>
+<p>第一个字节包含FIN、RSV、Opcode。</p>
+<ul>
+<li><p>FIN：size为1bit，标示是否最后一帧。<code>%x0</code>表示还有后续帧，<code>%x1</code>表示这是最后一帧。</p>
+</li>
+<li><p>RSV1、2、3，每个size都是1bit，默认值都是0，如果没有定义非零值的含义，却出现了非零值，则WebSocket链接将失败。</p>
+</li>
+<li><p>Opcode，size为4bits，表示『payload data』的类型。如果收到未知的opcode，连接将会断开。已定义的opcode值如下：</p>
+<figure class="highlight haml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="tag">%<span class="selector-tag">x0</span></span>:	代表连续的帧</div><div class="line"><span class="tag">%<span class="selector-tag">x1</span></span>:	文本帧</div><div class="line"><span class="tag">%<span class="selector-tag">x2</span></span>:	二进制帧</div><div class="line"><span class="tag">%<span class="selector-tag">x3</span></span>~7:	预留的非控制帧</div><div class="line"><span class="tag">%<span class="selector-tag">x8</span></span>:	关闭握手帧</div><div class="line"><span class="tag">%<span class="selector-tag">x9</span></span>:	ping帧，后续心跳连接会讲到</div><div class="line"><span class="tag">%<span class="selector-tag">xA</span></span>:	pong帧，后续心跳连接会讲到</div><div class="line"><span class="tag">%<span class="selector-tag">xB</span></span>~F:	预留的非控制帧</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>第二个字节包含Mask、Payload len。</p>
+<ul>
+<li><p>Mask：size为1bit，标示『payload data』是否添加掩码。所有从客户端发送到服务端的帧都会被置为1，如果置1，<code>Masking-key</code>便会赋值。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//若server是一个WebSocket服务端实例</span></div><div class="line"><span class="comment">//监听客户端消息</span></div><div class="line">server.on(<span class="string">'message'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">msg, flags</span>) </span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">'client say: %s'</span>, msg);</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">'mask value:'</span>, flags.masked);<span class="comment">// true，进一步佐证了客户端发送到服务端的Mask帧都会被置为1</span></div><div class="line">&#125;);</div><div class="line"><span class="comment">//监听客户端pong帧响应</span></div><div class="line">server.on(<span class="string">'pong'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">msg, flags</span>) </span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">'pong data: %s'</span>, msg);</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">'mask value:'</span>, flags.masked);<span class="comment">// true，进一步佐证了客户端发送到服务端的Mask帧都会被置为1</span></div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+</li>
+<li><p>Payload len：size为7bits，即使是当做无符号整型也只能表示0~127的值，所以它不能表示更大的值，因此规定”Payload data”长度小于或等于125的时候才用来描述数据长度。如果<code>Payload len==126</code>，则使用随后的2bytes（16bits）来存储数据长度。如果<code>Payload len==127</code>，则使用随后的8bytes（64bits）来存储数据长度。</p>
+</li>
+</ul>
+<p>以上，扩展的Payload len可能占据第三至第四个或第三至第十个字节。紧随其后的是”Mask-key”。</p>
+<ul>
+<li>Mask-key：size为0或4bytes（32bits），默认为0，与前面Mask呼应，从客户端发送到服务端的帧都包含4bytes（32bits）的掩码，一旦掩码被设置，所有接收到的”payload data”都必须与该值以一种算法做异或运算来获取真实值。</li>
+<li>Payload data：size为”Extension data” 和 “Application data” 的总和，一般”Extension data”数据为空。</li>
+<li>Extension data：默认为0，如果扩展被定义，扩展必须指定”Extension data”的长度。</li>
+<li>Application data：占据”Extension data”之后剩余帧的空间。</li>
+</ul>
+<p>关于Frame的更多理论介绍不妨读读 <a href="https://github.com/abbshr/abbshr.github.io/issues/22" target="_blank" rel="external">学习WebSocket协议—从顶层到底层的实现原理（修订版）</a>。</p>
+<p>关于Frame的数据帧解析不妨读读 <a href="https://www.web-tinker.com/article/20306.html" target="_blank" rel="external">WebSocket(贰) 解析数据帧</a> 及其后续文章。</p>
+<h4 id="建立连接"><a href="#建立连接" class="headerlink" title="建立连接"></a><strong>建立连接</strong></h4><p>了解了Frame的数据结构后，我们来实际练习下。浏览器上，新建一个ws对象十分简单。如下：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> ws = <span class="keyword">new</span> WebSocket(<span class="string">'ws://127.0.0.1:10103/'</span>);<span class="comment">// 本地使用10103端口进行测试</span></div></pre></td></tr></table></figure>
+<p>新建的WebSocket对象如下所示：</p>
+<p><img src="http://louiszhai.github.io/docImages/hot-replace09.png" alt="Websocket对象"></p>
+<p>这中间包含了一次Websocket握手的过程，我们分两步来理解。</p>
+<p>第一步，客户端请求。</p>
+<p><img src="http://louiszhai.github.io/docImages/hot-replace05.png" alt="Websocket Request"></p>
+<p>这是一个GET请求，主要字段如下：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">Connection: Upgrade</div><div class="line">Upgrade: websocket</div><div class="line">Sec-WebSocket-Key:61x6lFN92sJHgzXzCHfBJQ==</div><div class="line">Sec-WebSocket-Version:13</div></pre></td></tr></table></figure>
+<p>Connection字段指定为Upgrade，表示客户端希望连接升级。</p>
+<p>Upgrade字段设置为websocket，表示希望升级至Websocket协议。</p>
+<p>Sec-WebSocket-Key字段是随机字符串，服务器根据它来构造一个SHA-1的信息摘要。</p>
+<p>Sec-WebSocket-Version表示支持的Websocket版本。RFC6455要求使用的版本是13。</p>
+<p>甚至我们可以从请求截图里看出，Origin是<code>file://</code>，而Host是<code>127.0.0.1:10103</code>，明显不是同一个域下，但依然可以请求成功，说明Websocket协议是不受同源策略限制的(同源策略限制的是http协议)。</p>
+<p>第二步，服务端响应。</p>
+<p><img src="http://louiszhai.github.io/docImages/hot-replace07.png" alt="Websocket Response"></p>
+<p>Status Code: 101 Switching Protocols 表示Websocket协议通过101状态码进行握手。</p>
+<p>Sec-WebSocket-Accept字段是由Sec-WebSocket-Key字段加上特定字符串”258EAFA5-E914-47DA-95CA-C5AB0DC85B11”，计算SHA-1摘要，然后再base64编码之后生成的. 该操作可避免普通http请求，被误认为Websocket协议。</p>
+<p>Sec-WebSocket-Extensions字段表示服务端对Websocket协议的扩展。</p>
+<p>以上，WebSocket构造器不止可以传入url，还能传入一个可选的协议名称字符串或数组。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ws = <span class="keyword">new</span> WebSocket(<span class="string">'ws://127.0.0.1:10103/'</span>, [<span class="string">'abc'</span>,<span class="string">'son_protocols'</span>]);</div></pre></td></tr></table></figure>
+<h4 id="服务端实现"><a href="#服务端实现" class="headerlink" title="服务端实现"></a><strong>服务端实现</strong></h4><p>等等，我们慢一点，上面好像漏掉了一步，似乎没有提到服务端是怎么实现的。请继续往下看：</p>
+<p>先做一些准备。ws是一个nodejs版的WebSocketServer实现。使用 <code>npm install ws</code> 即可安装。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> WebSocketServer = <span class="built_in">require</span>(<span class="string">'ws'</span>).Server，</div><div class="line">    server = <span class="keyword">new</span> WebSocketServer(&#123;<span class="attr">port</span>: <span class="number">10103</span>&#125;);</div><div class="line">server.on(<span class="string">'connection'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">s</span>) </span>&#123;</div><div class="line">  s.on(<span class="string">'message'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">msg</span>) </span>&#123; <span class="comment">//监听客户端消息</span></div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'client say: %s'</span>, msg);</div><div class="line">  &#125;);</div><div class="line">  s.send(<span class="string">'server ready!'</span>);<span class="comment">// 连接建立好后，向客户端发送一条消息</span></div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>以上，<code>new WebSocketServer()</code>创建服务器时如需权限验证，请指定<code>verifyClient</code>为验权的函数。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">server = <span class="keyword">new</span> WebSocketServer(&#123;</div><div class="line">  <span class="attr">port</span>: <span class="number">10103</span>,</div><div class="line">  <span class="attr">verifyClient</span>: verify</div><div class="line">&#125;);</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">verify</span>(<span class="params">info</span>)</span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(<span class="built_in">Object</span>.keys(info));<span class="comment">// [ 'origin', 'secure', 'req' ]</span></div><div class="line">  <span class="built_in">console</span>.log(info.orgin);<span class="comment">// "file://"</span></div><div class="line">  <span class="keyword">return</span> <span class="literal">true</span>;<span class="comment">// 返回true时表示验权通过，否则客户端将抛出"HTTP Authentication failed"错误</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>以上，<code>verifyClient</code>指定的函数只有一个形参，若为它显式指定两个形参，那么第一个参数同上info，第二个参数将是一个<code>cb</code>回调函数。该函数用于显式指定拒绝时的HTTP状态码等，它默认拥有3个形参，依次为：</p>
+<ul>
+<li>result，布尔值类型，表示是否通过权限验证。</li>
+<li>code，数值类型，若result值为false时，表示HTTP的错误状态码。</li>
+<li>name，字符串类型，若result值为false时，表示HTTP状态码的错误信息。</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 若verify定义如下</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">verify</span>(<span class="params">info, cb</span>)</span>&#123;</div><div class="line">  <span class="comment">//一旦拥有第二个形参，如果不调用，默认将通过验权</span></div><div class="line">  cb(<span class="literal">false</span>, <span class="number">401</span>, <span class="string">'权限不够'</span>);<span class="comment">// 此时表示验权失败，HTTP状态码为401，错误信息为"权限不够"</span></div><div class="line">  <span class="keyword">return</span> <span class="literal">true</span>;<span class="comment">// 一旦拥有第二个形参，响应就被cb接管了，返回什么值都不会影响前面的处理结果</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>除了<code>port</code> 和 <code>verifyClient</code>设置外，其它设置项及更多API，请参考文档 <a href="https://github.com/websockets/ws/blob/master/doc/ws.md" target="_blank" rel="external">ws-doc</a>。</p>
+<h4 id="发送和监听消息"><a href="#发送和监听消息" class="headerlink" title="发送和监听消息"></a><strong>发送和监听消息</strong></h4><p>接下来，我们来实现消息收发。如下是客户端发送消息。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">ws.onopen = function(e)&#123;</div><div class="line">  // 可发送字符串，ArrayBuffer 或者 Blob数据</div><div class="line">  ws.send('client ready!);</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>客户端监听信息。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">ws.onmessage = <span class="function"><span class="keyword">function</span>(<span class="params">e</span>)</span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">'server say:'</span>, e.data);</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>如下是浏览器的运行截图。</p>
+<p><img src="http://louiszhai.github.io/docImages/hot-replace06.png" alt="message"></p>
+<p>消息的内容都在Frames栏，第一条彩色背景的信息是客户端发送的，第二条是服务端发送的。两条消息的长度都是13。</p>
+<p>如下是Timing栏，不止是WebSocket，包括EventSource，都有这样的黄色高亮警告。</p>
+<p><img src="http://louiszhai.github.io/docImages/hot-replace08.png" alt="Websocket Request"></p>
+<p>该警告说明：请求还没完成。实际上，直到一方连接close掉，请求才会完成。</p>
+<h4 id="关闭连接"><a href="#关闭连接" class="headerlink" title="关闭连接"></a><strong>关闭连接</strong></h4><p>说到close，ws的close方法比es的略复杂。</p>
+<p>语法：<em>close(short code，string reason);</em></p>
+<p>close默认可传入两个参数。code是数字，表示关闭连接的状态号，默认是1000，即正常关闭。（code取值范围从0到4999，其中有些是保留状态号，正常关闭时只能指定为1000或者3000~4999之间的值，具体请参考<a href="https://developer.mozilla.org/en-US/docs/Web/API/CloseEvent#Status_codes" target="_blank" rel="external">CloseEvent - Web APIs</a>）。reason是UTF-8文本，表示关闭的原因（文本长度需小于或等于123字节）。</p>
+<p>由于code 和 reason都有限制，因此该方法可能抛出异常，建议catch下.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">try</span>&#123;</div><div class="line">  ws.close(<span class="number">1001</span>, <span class="string">'CLOSE_GOING_AWAY'</span>);</div><div class="line">&#125;<span class="keyword">catch</span>(e)&#123;</div><div class="line">  <span class="built_in">console</span>.log(e);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>ws对象还拥有onclose和onerror监听器，分别监听关闭和错误事件。（注：EventSource没有onclose监听）</p>
+<h4 id="拥有的属性"><a href="#拥有的属性" class="headerlink" title="拥有的属性"></a><strong>拥有的属性</strong></h4><p>ws的readyState属性拥有4个值，比es的readyState的多一个CLOSING的状态。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">常量</th>
+<th style="text-align:center">描述</th>
+<th style="text-align:center">EventSource(值)</th>
+<th style="text-align:center">WebSocket(值)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">CONNECTING</td>
+<td style="text-align:center">连接未初始化</td>
+<td style="text-align:center">0</td>
+<td style="text-align:center">0</td>
+</tr>
+<tr>
+<td style="text-align:center">OPEN</td>
+<td style="text-align:center">连接已就绪</td>
+<td style="text-align:center">1</td>
+<td style="text-align:center">1</td>
+</tr>
+<tr>
+<td style="text-align:center">CLOSING</td>
+<td style="text-align:center">连接正在关闭</td>
+<td style="text-align:center">-</td>
+<td style="text-align:center">2</td>
+</tr>
+<tr>
+<td style="text-align:center">CLOSED</td>
+<td style="text-align:center">连接已关闭</td>
+<td style="text-align:center">2</td>
+<td style="text-align:center">3</td>
+</tr>
+</tbody>
+</table>
+<p>另外，除了两种都有的url属性外，WebSocket对象还拥有更多的属性。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">属性</th>
+<th style="text-align:center">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">binaryType</td>
+<td style="text-align:center">被传输二进制内容的类型，有blob，arraybuffer两种</td>
+</tr>
+<tr>
+<td style="text-align:center">bufferedAmount</td>
+<td style="text-align:center">待传输的数据的长度</td>
+</tr>
+<tr>
+<td style="text-align:center">extensions</td>
+<td style="text-align:center">表示服务器选用的扩展</td>
+</tr>
+<tr>
+<td style="text-align:center">protocol</td>
+<td style="text-align:center">指的是构造器第二个参数传入的子协议名称</td>
+</tr>
+</tbody>
+</table>
+<h4 id="文件上传"><a href="#文件上传" class="headerlink" title="文件上传"></a><strong>文件上传</strong></h4><p>以前一直是使用ajax做文件上传，实际上，Websocket上传文件也是一把好刀. 其send方法可以发送String，ArrayBuffer，Blob共三种数据类型，发送二进制文件完全不在话下。</p>
+<p>由于各个浏览器对Websocket单次发送的数据有限制，所以我们需要将待上传文件切成片段去发送。如下是实现。</p>
+<p>1) html。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"file"</span> <span class="attr">id</span>=<span class="string">"file"</span>/&gt;</span></div></pre></td></tr></table></figure>
+<p>2) js。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> ws = <span class="keyword">new</span> WebSocket(<span class="string">'ws://127.0.0.1:10103/'</span>);<span class="comment">// 连接服务器</span></div><div class="line"><span class="keyword">const</span> fileSelect = <span class="built_in">document</span>.getElementById(<span class="string">'file'</span>);</div><div class="line"><span class="keyword">const</span> size = <span class="number">1024</span> * <span class="number">128</span>;<span class="comment">// 分段发送的文件大小(字节)</span></div><div class="line"><span class="keyword">let</span> curSize, total, file, fileReader;</div><div class="line"></div><div class="line">fileSelect.onchange = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  file = <span class="keyword">this</span>.files[<span class="number">0</span>];<span class="comment">// 选中的待上传文件</span></div><div class="line">  curSize = <span class="number">0</span>;<span class="comment">// 当前已发送的文件大小</span></div><div class="line">  total = file.size;<span class="comment">// 文件大小</span></div><div class="line">  ws.send(file.name);<span class="comment">// 先发送待上传文件的名称</span></div><div class="line">  fileReader = <span class="keyword">new</span> FileReader();<span class="comment">// 准备读取文件</span></div><div class="line">  fileReader.onload = loadAndSend;</div><div class="line">  readFragment();<span class="comment">// 读取文件片段</span></div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">loadAndSend</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  <span class="keyword">if</span>(ws.bufferedAmount &gt; size * <span class="number">5</span>)&#123;<span class="comment">// 若发送队列中的数据太多,先等一等</span></div><div class="line">    setTimeout(loadAndSend，<span class="number">4</span>);</div><div class="line">    <span class="keyword">return</span>;</div><div class="line">  &#125;</div><div class="line">  ws.send(fileReader.result);<span class="comment">// 发送本次读取的片段内容</span></div><div class="line">  curSize += size;<span class="comment">// 更新已发送文件大小</span></div><div class="line">  curSize &lt; total ? readFragment() : <span class="built_in">console</span>.log(<span class="string">'upload successed!'</span>);<span class="comment">// 下一步操作</span></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">readFragment</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  <span class="keyword">const</span> blob = file.slice(curSize, curSize + size);<span class="comment">// 获取文件指定片段</span></div><div class="line">  fileReader.readAsArrayBuffer(blob);<span class="comment">// 读取文件为ArrayBuffer对象</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>3) server(node)。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> WebSocketServer = <span class="built_in">require</span>(<span class="string">'ws'</span>).Server,</div><div class="line">    server = <span class="keyword">new</span> WebSocketServer(&#123;<span class="attr">port</span>: <span class="number">10103</span>&#125;),<span class="comment">// 启动服务器</span></div><div class="line">    fs = <span class="built_in">require</span>(<span class="string">'fs'</span>);</div><div class="line">server.on(<span class="string">'connection'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">wsServer</span>)</span>&#123;</div><div class="line">  <span class="keyword">var</span> fileName, i = <span class="number">0</span>;<span class="comment">// 变量定义不可放在全局,因每个连接都不一样,这里才是私有作用域</span></div><div class="line">  server.on(<span class="string">'message'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">data, flags</span>)</span>&#123;<span class="comment">// 监听客户端消息</span></div><div class="line">    <span class="keyword">if</span>(flags.binary)&#123;<span class="comment">// 判断是否二进制数据</span></div><div class="line">      <span class="keyword">var</span> method = i++ ? <span class="string">'appendFileSync'</span> : <span class="string">'writeFileSync'</span>;</div><div class="line">      <span class="comment">// 当前目录下写入或者追加写入文件(建议加上try语句捕获可能的错误)</span></div><div class="line">      fs[method](<span class="string">'./'</span> + fileName, data，<span class="string">'utf-8'</span>);</div><div class="line">    &#125;<span class="keyword">else</span>&#123;<span class="comment">// 非二进制数据则认为是文件名称</span></div><div class="line">      fileName = data;</div><div class="line">    &#125;</div><div class="line">  &#125;);</div><div class="line">  wsServer.send(<span class="string">'server ready!'</span>);<span class="comment">// 告知客户端服务器已就绪</span></div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>运行效果如下：</p>
+<p><img src="http://louiszhai.github.io/docImages/hot-replace10.png" alt="Websocket upload"></p>
+<p>上述测试代码中没有过多涉及服务器的存储过程。通常，服务器也会有缓存区上限，如果客户端单次发送的数据量超过服务端缓存区上限，那么服务端也需要多次读取。</p>
+<h4 id="心跳连接"><a href="#心跳连接" class="headerlink" title="心跳连接"></a><strong>心跳连接</strong></h4><p>生产环境下上传一个文件远比本地测试来得复杂。实际上，从客户端到服务端，中间存在着大量的网络链路，如路由器，防火墙等等。一份文件的上传要经过中间的层层路由转发，过滤。这些中间链路可能会认为一段时间没有数据发送，就自发切断两端的连接。这个时候，由于TCP并不定时检测连接是否中断，而通信的双方又相互没有数据发送，客户端和服务端依然会一厢情愿的信任之前的连接，长此以往，将使得大量的服务端资源被WebSocket连接占用。</p>
+<p>正常情况下，TCP的四次挥手完全可以通知两端去释放连接。但是上述这种普遍存在的异常场景，将使得连接的释放成为梦幻。</p>
+<p>为此，早在websocket协议实现时，设计者们便提供了一种 Ping/Pong Frame的心跳机制。一端发送Ping Frame，另一端以 Pong Frame响应。这种Frame是一种特殊的数据包，它只包含一些元数据，能够在不影响原通信的情况下维持住连接。</p>
+<p>根据规范<a href="https://tools.ietf.org/html/rfc6455#section-5.5.2" target="_blank" rel="external">RFC 6455</a>，Ping Frame包含一个值为9的opcode，它可能携带数据。收到Ping Frame后，Pong Frame必须被作为响应发出。Pong Frame包含一个值为10的opcode，它将包含与Ping Frame中相同的数据。</p>
+<p>借助ws包，服务端可以这么来发送Ping Frame。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">wsServer.ping();</div></pre></td></tr></table></figure>
+<p>同时，需要监听客户端响应的pong Frame.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">wsServer.on(<span class="string">'pong'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">data, flags</span>) </span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(data);<span class="comment">// ""</span></div><div class="line">  <span class="built_in">console</span>.log(flags);<span class="comment">// &#123; masked: true，binary: true &#125;</span></div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>以上，由于Ping Frame 不带数据，因此作为响应的Pong Frame的data值为空串。遗憾的是，目前浏览器只能被动发送Pong Frame作为响应（<a href="http://stackoverflow.com/questions/10585355/sending-websocket-ping-pong-frame-from-browser" target="_blank" rel="external">Sending websocket ping/pong frame from browser</a>），无法通过JS API主动向服务端发送Ping Frame。因此对于web服务，可以采取服务端主动ping的方式，来保持住链接。实际应用中，服务端还需要设置心跳的周期，以保证心跳连接可以一直持续。同时，还应该有重发机制，若连续几次没有收到心跳连接的回复，则认为连接已经断开，此时便可以关闭Websocket连接了。</p>
+<h4 id="Socket-IO"><a href="#Socket-IO" class="headerlink" title="Socket.IO"></a><strong>Socket.IO</strong></h4><p>WebSocket出世已久，很多优秀的大神基于此开发出了各式各样的库。其中<a href="http://Socket.IO" target="_blank" rel="external">Socket.IO</a>是一个非常不错的开源WebSocke库，旨在抹平浏览器之间的兼容性问题。它基于Node.js，支持以下方式优雅降级：</p>
+<ul>
+<li>Websocket</li>
+<li>Adobe® Flash® Socket</li>
+<li>AJAX long polling</li>
+<li>AJAX multipart streaming</li>
+<li>Forever Iframe</li>
+<li>JSONP Polling</li>
+</ul>
+<p>如何在项目中使用Socket.IO，请参考<a href="https://github.com/nswbmw/N-chat/wiki/%E7%AC%AC%E4%B8%80%E7%AB%A0-socket.io-%E7%AE%80%E4%BB%8B%E5%8F%8A%E4%BD%BF%E7%94%A8" target="_blank" rel="external">第一章 socket.io 简介及使用</a>。</p>
+<h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a><strong>小结</strong></h3><p>EventSource，本质依然是HTTP，它仅提供服务端到客户端的单向文本数据传输，不需要心跳连接，连接断开会持续触发重连。</p>
+<p>WebSocket协议，基于TCP协议，它提供双向数据传输，支持二进制，需要心跳连接，连接断开不会重连。</p>
+<p>EventSource更轻量和简单，WebSocket支持性更好（因其支持IE10+）。通常来说，使用EventSource能够完成的功能，使用WebSocket一样能够做到，反之却不行，使用时若遇到连接断开或抛错，请及时调用各自的<code>close</code>方法主动释放资源。</p>
+<hr>
+<p>本问就讨论这么多内容,大家有什么问题或好的想法欢迎在下方参与<a href="#respond">留言和评论</a>。</p>
+<p>本文作者： <a href="https://github.com/Louiszhai" target="_blank" rel="external">louis</a></p>
+<p>本文链接： <a href="http://louiszhai.github.io/2017/04/19/hmr/">http://louiszhai.github.io/2017/04/19/hmr/</a></p>
+<p>参考文章</p>
+<ul>
+<li><a href="https://tools.ietf.org/html/rfc6455#section-5.5.2" target="_blank" rel="external">RFC 6455 - The WebSocket Protocol</a></li>
+<li><a href="https://cnodejs.org/topic/5463840472f405c829029f62" target="_blank" rel="external">用node.js实现HTML5原生的comet(长连接) </a></li>
+<li><a href="https://developer.mozilla.org/zh-CN/docs/Server-sent_events/Using_server-sent_events" target="_blank" rel="external">使用服务器发送事件 - Server-sent events</a></li>
+<li><a href="http://www.cnblogs.com/tianma3798/p/5852475.html" target="_blank" rel="external">HTML5 文件域+FileReader 分段读取文件并上传(七)-WebSocket</a></li>
+<li><a href="http://www.cnblogs.com/axes/p/4514199.html?utm_source=tuicool&amp;utm_medium=referral" target="_blank" rel="external">nodejs实现Websocket的数据接收发送</a></li>
+</ul>
+]]></content>
+    
+    <summary type="html">
+    
+      EventSource 热更新 webpack热更新延迟 websocket 心跳连接 Frame Socket.IO browser-sync webpack-hot-middleware
+    
+    </summary>
+    
+    
+      <category term="Web" scheme="http://louiszhai.github.io/tags/Web/"/>
+    
+  </entry>
+  
+  <entry>
     <title>浏览器缓存机制剖析</title>
     <link href="http://louiszhai.github.io/2017/04/07/http-cache/"/>
     <id>http://louiszhai.github.io/2017/04/07/http-cache/</id>
     <published>2017-04-07T00:00:00.000Z</published>
-    <updated>2017-04-11T11:58:28.000Z</updated>
+    <updated>2017-04-19T10:54:14.000Z</updated>
     
     <content type="html"><![CDATA[<p>缓存一直是前端优化的主战场, 利用好缓存就成功了一半. 本篇从http请求和响应的头域入手, 让你对浏览器缓存有个整体的概念. 最终你会发现强缓存, 协商缓存 和 启发式缓存是如此的简单.</p>
 <h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a><strong>导读</strong></h3><p>我不知道拖延症是有多严重, 反正去年3月开的题, 直到今年4月才开始写.(请尽情吐槽吧)</p>
@@ -364,7 +721,7 @@
 <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control" target="_blank" rel="external">Cache-Control - HTTP | MDN</a></li>
 <li><a href="https://mp.weixin.qq.com/s?__biz=MzA3NTYzODYzMg==&amp;mid=2653578381&amp;idx=1&amp;sn=3f676e2b2e08bcff831c69d31cf51c51&amp;key=dde62796d24517c892043e67f2520e046c13fc0558822ef7ba7fbe8003ddde05e22230fb4ccb2c31133df2a507940c5d4561c7b4f4570969a47cf1388ff57e4bfea70a3810f3fc805e2a5d9aa3192439&amp;ascene=0&amp;uin=MTM4MjU5NzA0MA%3D%3D&amp;devicetype=iMac+MacBookPro12%2C1+OSX+OSX+10.11.6+build(15G1212)&amp;version=12010110&amp;nettype=WIFI&amp;fontScale=100&amp;pass_ticket=n3plsW%2FV7Vb6O9hKzPNig5MYpXUoJo3tNUNxhJ5Jh6e9AS%2BRXmvJPbIzUeUmL3S2" target="_blank" rel="external">彻底弄懂 Http 缓存机制 - 基于缓存策略三要素分解法</a></li>
 </ul>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.2.7/raphael.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/flowchart/1.6.5/flowchart.min.js"></script><textarea id="flowchart-0-code" style="display: none">st=>start: 发起请求|pa
+<script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.2.7/raphael.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/flowchart/1.6.5/flowchart.min.js"></script><textarea id="flowchart-0-code" style="display: none">st=>start: 发起请求
 e=>end: 载入资源
 c1=>condition: 是否已缓存?
 c2=>condition: [过期策略]-
@@ -403,11 +760,11 @@ c3(no)->op2->io1->e</textarea><textarea id="flowchart-0-options" style="display:
     <link href="http://louiszhai.github.io/2017/03/12/promise/"/>
     <id>http://louiszhai.github.io/2017/03/12/promise/</id>
     <published>2017-03-12T13:28:23.000Z</published>
-    <updated>2017-03-13T09:53:13.000Z</updated>
+    <updated>2017-04-17T02:55:12.000Z</updated>
     
-    <content type="html"><![CDATA[<h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h3><p>Promise问世已久, 其科普类文章亦不计其数. 遂本篇初衷不为科普, 只为能够温故而知新.</p>
+    <content type="html"><![CDATA[<p>开始写本篇文字时, 我一直不是很明白任务队列的机制, 故想写篇文章弄懂它. 于是我尝试以Promise为核心, 逐步展开, 最终分析process.nextTick , promise.then , setTimeout , setImmediate 它们的异步机制.</p>
+<h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h3><p>Promise问世已久, 其科普类文章亦不计其数. 遂本篇初衷不为科普, 只为能够温故而知新.</p>
 <p>比如说, catch能捕获所有的错误吗? 为什么有些时候会抛出”Uncaught (in promise) …”? <code>Promise.resolve</code> 和 <code>Promise.reject</code> 处理Promise对象时又有什么不一样的地方?</p>
-<p>开始写本篇文字时, 我一直不是很明白任务队列的机制, 故想写篇文章弄懂它. 于是我尝试以Promise为核心, 逐步展开, 最终分析process.nextTick , promise.then , setTimeout , setImmediate 它们的异步机制.</p>
 <a id="more"></a>
 <h3 id="Promise"><a href="#Promise" class="headerlink" title="Promise"></a>Promise</h3><h4 id="引子"><a href="#引子" class="headerlink" title="引子"></a>引子</h4><p>阅读此篇之前, 我们先体验一下如下代码:</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">setTimeout(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(<span class="number">4</span>)</div><div class="line">&#125;, <span class="number">0</span>);</div><div class="line"><span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="keyword">function</span>(<span class="params">resolve</span>) </span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(<span class="number">1</span>);</div><div class="line">  <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; <span class="number">10000</span>; i++) &#123;</div><div class="line">    i == <span class="number">9999</span> &amp;&amp; resolve()</div><div class="line">  &#125;</div><div class="line">  <span class="built_in">console</span>.log(<span class="number">2</span>);</div><div class="line">&#125;).then(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(<span class="number">5</span>)</div><div class="line">&#125;);</div><div class="line"><span class="built_in">console</span>.log(<span class="number">3</span>);</div></pre></td></tr></table></figure>
@@ -568,7 +925,7 @@ c3(no)->op2->io1->e</textarea><textarea id="flowchart-0-options" style="display:
     <link href="http://louiszhai.github.io/2017/02/24/back/"/>
     <id>http://louiszhai.github.io/2017/02/24/back/</id>
     <published>2017-02-24T07:59:01.000Z</published>
-    <updated>2017-03-13T09:53:13.000Z</updated>
+    <updated>2017-04-17T02:54:08.000Z</updated>
     
     <content type="html"><![CDATA[<h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h3><p>最近我在梳理公司web app新产品线的返回逻辑, 推演了N种方案, 竟然没有一种完全通用的. 这让我迷惑不已. 仔细体验了公司的各种H5页面, 发现返回逻辑还真是五花八门. 那么, 问题来了, 为什么Web App的返回逻辑如此难以设计?</p>
 <a id="more"></a>
@@ -700,7 +1057,7 @@ c3(no)->op2->io1->e</textarea><textarea id="flowchart-0-options" style="display:
     <link href="http://louiszhai.github.io/2017/02/19/box-shadow/"/>
     <id>http://louiszhai.github.io/2017/02/19/box-shadow/</id>
     <published>2017-02-19T08:23:34.000Z</published>
-    <updated>2017-03-13T09:53:13.000Z</updated>
+    <updated>2017-04-17T02:54:08.000Z</updated>
     
     <content type="html"><![CDATA[<h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h3><p>我总是记不住css3的box-shadow属性拥有几个值, 它们的顺序究竟如何? 对我来说, 这是一个大难题. 我们都知道, 使用一个属性, 总是可以不停地在开发者工具上测试UI表现, 直到表现令人满意. 好吧, 有些时候它是奏效的; 而其它时候呢, 我们会消耗时间, 积攒疲劳值, 以及成就感下降等. 一旦短时记忆失效, 我们完全有可能重复一遍之前不愉快地尝试. 因此我选择多花些时间, 用力一次记住它. 如果你恰好也有同样的疑惑, 请读下去.</p>
 <a id="more"></a>
@@ -858,9 +1215,9 @@ c3(no)->op2->io1->e</textarea><textarea id="flowchart-0-options" style="display:
     <link href="http://louiszhai.github.io/2017/01/13/flex/"/>
     <id>http://louiszhai.github.io/2017/01/13/flex/</id>
     <published>2017-01-13T00:42:01.000Z</published>
-    <updated>2017-03-13T09:53:13.000Z</updated>
+    <updated>2017-04-17T02:55:12.000Z</updated>
     
-    <content type="html"><![CDATA[<h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h3><p>Web layout 是Web UI中的基础架构, 重要性不言而喻. 传统的盒模型, 借助display, position, float 属性应对普通布局游刃有余, 但针对复杂的或自适应布局, 常常捉襟见肘. 比如垂直居中, 就是一个老大难的问题, 借助flex弹性盒模型, 两行代码就可以优雅的实现之. (该方法曾在 <a href="http://louiszhai.github.io/2016/03/12/css-center/">16种方法实现水平居中垂直居中</a> 一文中提到). 当然, 本次我们不会只讨论垂直居中的问题, 我将努力尽可能的还原flex的应用生态.</p>
+    <content type="html"><![CDATA[<h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h3><p>Web layout 是Web UI中的基础架构, 重要性不言而喻. 传统的盒模型, 借助display, position, float 属性应对普通布局游刃有余, 但针对复杂的或自适应布局, 常常捉襟见肘. 比如垂直居中, 就是一个老大难的问题, 借助flex弹性盒模型, 两行代码就可以优雅的实现之. (该方法曾在 <a href="http://louiszhai.github.io/2016/03/12/css-center/">16种方法实现水平居中垂直居中</a> 一文中提到). 当然, 本次我们不会只讨论垂直居中的问题, 我将努力尽可能的还原flex的应用场景.</p>
 <a id="more"></a>
 <h3 id="Flex"><a href="#Flex" class="headerlink" title="Flex"></a>Flex</h3><p>Flex即弹性盒模型, 该布局方案由W3C于2009年提出. 此后, Flex方案便历经v2009, v2011, v2012, v2014, v2015, v2016等版本, 最近方案是2016年5月26日起草的 <a href="http://www.w3.org/TR/2016/CR-css-flexbox-1-20160526/" target="_blank" rel="external">CSS Flexible Box Layout Module Level 1</a>.</p>
 <h3 id="兼容性"><a href="#兼容性" class="headerlink" title="兼容性"></a>兼容性</h3><p>首先, 我们来回顾下如今PC端的兼容性(以下为完全兼容版本).</p>
@@ -1170,7 +1527,7 @@ c3(no)->op2->io1->e</textarea><textarea id="flowchart-0-options" style="display:
     <link href="http://louiszhai.github.io/2016/12/23/sort/"/>
     <id>http://louiszhai.github.io/2016/12/23/sort/</id>
     <published>2016-12-23T03:55:14.000Z</published>
-    <updated>2017-03-16T00:48:14.000Z</updated>
+    <updated>2017-04-17T02:54:08.000Z</updated>
     
     <content type="html"><![CDATA[<h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h3><p>排序算法可以称得上是我的盲点, 曾几何时当我知道Chrome的Array.prototype.sort使用了快速排序时, 我的内心是奔溃的(啥是快排, 我只知道冒泡啊?!), 要知道学习一门技术最好的时间是三年前, 但愿我现在补习还来得及(捂脸).</p>
 <p>因此本篇重拾了出镜概率比较高的十来种排序算法, 逐一分析其排序思想, 并批注注意事项. 欢迎对算法提出改进和<a href="#respond">讨论</a>.</p>
@@ -1587,9 +1944,9 @@ c3(no)->op2->io1->e</textarea><textarea id="flowchart-0-options" style="display:
     <link href="http://louiszhai.github.io/2016/11/25/manifest/"/>
     <id>http://louiszhai.github.io/2016/11/25/manifest/</id>
     <published>2016-11-25T00:08:21.000Z</published>
-    <updated>2017-03-13T09:53:13.000Z</updated>
+    <updated>2017-04-17T02:55:12.000Z</updated>
     
-    <content type="html"><![CDATA[<h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h3><p>Manifest 是 H5提供的一种应用缓存机制, 基于它web应用可以实现离线访问(offline cache). 为此, 浏览器还提供了应用缓存的api–applicationCache. 虽然manifest的技术已被web标准废弃, 但这不影响我们尝试去了解它. 也正是因为manifest的应用缓存机制如此诱人, 饿了么 和 office 365邮箱都还在使用着它!</p>
+    <content type="html"><![CDATA[<h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h3><p>Manifest 是 H5提供的一种应用缓存机制, 基于它web应用可以实现离线访问(offline cache). 为此, 浏览器还提供了应用缓存的api–applicationCache. 虽然manifest的技术已被web标准废弃, 但这不影响我们尝试去了解它. 也正是因为manifest的应用缓存机制如此诱人, 饿了么 和 office 365邮箱等都还在使用着它!</p>
 <a id="more"></a>
 <h3 id="描述"><a href="#描述" class="headerlink" title="描述"></a>描述</h3><p>对manifest熟悉的同学可以跳过此节.</p>
 <p>鉴于manifest应用缓存的技术, 我们可以做到:</p>
@@ -1736,7 +2093,7 @@ c3(no)->op2->io1->e</textarea><textarea id="flowchart-0-options" style="display:
     <link href="http://louiszhai.github.io/2016/11/02/ajax/"/>
     <id>http://louiszhai.github.io/2016/11/02/ajax/</id>
     <published>2016-11-02T04:48:27.000Z</published>
-    <updated>2017-03-16T02:00:48.000Z</updated>
+    <updated>2017-04-17T02:54:08.000Z</updated>
     
     <content type="html"><![CDATA[<h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h3><p>Ajax 全称 Asynchronous JavaScript and XML, 即异步JS与XML. 它最早在IE5中被使用, 然后由Mozilla, Apple, Google推广开来. 典型的代表应用有 Outlook Web Access, 以及 GMail. 现代网页中几乎无ajax不欢. 前后端分离也正是建立在ajax异步通信的基础之上.</p>
 <a id="more"></a>
@@ -2685,7 +3042,7 @@ c3(no)->op2->io1->e</textarea><textarea id="flowchart-0-options" style="display:
     <link href="http://louiszhai.github.io/2016/11/02/fetch/"/>
     <id>http://louiszhai.github.io/2016/11/02/fetch/</id>
     <published>2016-11-02T04:48:08.000Z</published>
-    <updated>2017-03-13T09:53:13.000Z</updated>
+    <updated>2017-04-17T02:54:08.000Z</updated>
     
     <content type="html"><![CDATA[<h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h3><p>Fetch 是 web异步通信的未来. 从chrome42, Firefox39, Opera29, EdgeHTML14(并非Edge版本)起, fetch就已经被支持了. 其中chrome42~45版本, fetch对中文支持有问题, 建议从chrome46起使用fetch. 传送门: <a href="https://bugs.chromium.org/p/chromium/issues/detail?id=511289" target="_blank" rel="external">fetch中文乱码</a> .</p>
 <a id="more"></a>
@@ -2875,7 +3232,7 @@ c3(no)->op2->io1->e</textarea><textarea id="flowchart-0-options" style="display:
     <link href="http://louiszhai.github.io/2016/07/01/Math/"/>
     <id>http://louiszhai.github.io/2016/07/01/Math/</id>
     <published>2016-06-30T23:57:48.000Z</published>
-    <updated>2017-04-11T11:54:59.000Z</updated>
+    <updated>2017-04-17T02:54:08.000Z</updated>
     
     <content type="html"><![CDATA[<p>Math方法和位运算几乎是被忽略得最严重的知识点, 和正则一样, 不用不知道, 一用到处查. 为了告别这种低效的编程模式, 我特地总结此篇, 系统梳理了这两个知识点. 以此为册, 助你攻破它们.</p>
 <h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h3><p>截至ES6, JavaScript 中内置(build-in)构造器/对象共有19个, 其中14个是构造器(Number,Boolean, String, Object, Function, Array, RegExp, Error, Date, Set, WeakSet, Map, Proxy, Promise), Global 不能直接访问, Arguments仅在函数调用时由JS引擎创建, 而 Math, JSON, Reflect 是以对象形式存在的, 本篇将带你走进 JS 内置对象-Math以及与之息息相关的位运算, 一探究竟.</p>
@@ -3435,7 +3792,7 @@ c3(no)->op2->io1->e</textarea><textarea id="flowchart-0-options" style="display:
     <link href="http://louiszhai.github.io/2016/06/13/regexp/"/>
     <id>http://louiszhai.github.io/2016/06/13/regexp/</id>
     <published>2016-06-13T00:24:55.000Z</published>
-    <updated>2017-03-27T01:25:04.000Z</updated>
+    <updated>2017-04-17T02:54:08.000Z</updated>
     
     <content type="html"><![CDATA[<h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h3><p>你有没有在搜索文本的时候绞尽脑汁, 试了一个又一个表达式, 还是不行.</p>
 <p>你有没有在表单验证的时候, 只是做做样子(只要不为空就好), 然后烧香拜佛, 虔诚祈祷, 千万不要出错.</p>
@@ -4420,7 +4777,7 @@ c3(no)->op2->io1->e</textarea><textarea id="flowchart-0-options" style="display:
     <link href="http://louiszhai.github.io/2016/03/31/css-hasLayout/"/>
     <id>http://louiszhai.github.io/2016/03/31/css-hasLayout/</id>
     <published>2016-03-31T05:57:56.000Z</published>
-    <updated>2017-03-13T09:53:13.000Z</updated>
+    <updated>2017-04-17T02:54:08.000Z</updated>
     
     <content type="html"><![CDATA[<h3 id="什么是hasLayout"><a href="#什么是hasLayout" class="headerlink" title="什么是hasLayout"></a>什么是hasLayout</h3><blockquote>
 <p>hasLayout property: Gets a value that indicates whether the object has layout.</p>
@@ -4518,7 +4875,7 @@ c3(no)->op2->io1->e</textarea><textarea id="flowchart-0-options" style="display:
     <link href="http://louiszhai.github.io/2016/03/23/css-margin/"/>
     <id>http://louiszhai.github.io/2016/03/23/css-margin/</id>
     <published>2016-03-23T12:47:36.000Z</published>
-    <updated>2017-03-13T09:53:13.000Z</updated>
+    <updated>2017-04-17T02:54:08.000Z</updated>
     
     <content type="html"><![CDATA[<h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h3><p>margin属性处于盒子模型的最外层, 用以隔开其他元素, 它可以依次设置4个长度值, 分别表示 “上 右 下 左” 的间距, 其中第1个和第3个值相对应, 第2个与第4个相对应, 如果省略前者, 后者将取与前者相同的数值. margin属性共存在以下 4 种表示方式:</p>
 <ul>
@@ -4577,7 +4934,7 @@ c3(no)->op2->io1->e</textarea><textarea id="flowchart-0-options" style="display:
     <link href="http://louiszhai.github.io/2016/03/12/css-center/"/>
     <id>http://louiszhai.github.io/2016/03/12/css-center/</id>
     <published>2016-03-12T11:03:04.000Z</published>
-    <updated>2017-03-13T09:53:13.000Z</updated>
+    <updated>2017-04-17T02:54:08.000Z</updated>
     
     <content type="html"><![CDATA[<h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h3><p>熟悉水平居中和垂直居中的方法, 不为别的, 就为用的时候能够信手拈来. 下面直接步入正题.</p>
 <a id="more"></a>
@@ -4697,7 +5054,7 @@ c3(no)->op2->io1->e</textarea><textarea id="flowchart-0-options" style="display:
     <link href="http://louiszhai.github.io/2016/03/12/css-float/"/>
     <id>http://louiszhai.github.io/2016/03/12/css-float/</id>
     <published>2016-03-12T09:55:04.000Z</published>
-    <updated>2017-03-13T09:53:13.000Z</updated>
+    <updated>2017-04-17T02:54:08.000Z</updated>
     
     <content type="html"><![CDATA[<h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h3><p>float即浮动, 使用float, 该浮动元素便会脱离正常的文档流, 使其浮动到父元素的行的一端(元素向左或向右移动, 直到碰到浮动元素, 或者达到父元素内容的边界, 不包括padding), 并且其他元素将忽略该浮动元素并填补其原先的空间.</p>
 <p>这里需要捋清一个概念, 所谓文档流是什么?</p>
@@ -4757,7 +5114,7 @@ c3(no)->op2->io1->e</textarea><textarea id="flowchart-0-options" style="display:
     <link href="http://louiszhai.github.io/2016/03/05/xss/"/>
     <id>http://louiszhai.github.io/2016/03/05/xss/</id>
     <published>2016-03-05T01:48:09.000Z</published>
-    <updated>2017-03-13T09:53:13.000Z</updated>
+    <updated>2017-04-17T02:54:08.000Z</updated>
     
     <content type="html"><![CDATA[<h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h3><p><strong>XSS</strong> (Cross-Site Script) 攻击又叫跨站脚本攻击, 本质是一种注入攻击. 其原理, 简单的说就是利用各种手段把恶意代码添加到网页中, 并让受害者执行这段脚本. XSS能做用户使用浏览器能做的一切事情. 伟大的同源策略也无法保证不受XSS攻击，因为此时攻击者就在同源之内.</p>
 <a id="more"></a>
@@ -4945,7 +5302,7 @@ c3(no)->op2->io1->e</textarea><textarea id="flowchart-0-options" style="display:
     <link href="http://louiszhai.github.io/2016/01/12/js.String/"/>
     <id>http://louiszhai.github.io/2016/01/12/js.String/</id>
     <published>2016-01-12T12:27:09.000Z</published>
-    <updated>2017-03-13T09:53:13.000Z</updated>
+    <updated>2017-04-17T02:54:08.000Z</updated>
     
     <content type="html"><![CDATA[<h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h3><p>javaScript 中, 字符串无处不在, 并且所有的字符串方法均来自 String.prototype, 这一节, 我们走进看一看String内部, 探讨那些常用或不常用的字符串操作方法.</p>
 <a id="more"></a>
@@ -5135,58 +5492,11 @@ c3(no)->op2->io1->e</textarea><textarea id="flowchart-0-options" style="display:
   </entry>
   
   <entry>
-    <title>Function.prototype.bind方法指南</title>
-    <link href="http://louiszhai.github.io/2016/01/11/bind/"/>
-    <id>http://louiszhai.github.io/2016/01/11/bind/</id>
-    <published>2016-01-11T00:01:33.000Z</published>
-    <updated>2017-03-13T09:53:13.000Z</updated>
-    
-    <content type="html"><![CDATA[<h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h3><p>ES5新增了 Function.prototype.bind 方法, 该方法不同于jquery的bind 方法, 它主要用于固定 this 作用域, 避免各种由于上下文切换造成的语义问题. 常用在 setTimeout, for循环等内部.</p>
-<a id="more"></a>
-<h3 id="bind"><a href="#bind" class="headerlink" title="bind"></a>bind</h3><p>语法: func.bind(thisArg, arg1, arg2, ….)</p>
-<p>bind() 方法会返回一个新函数, 又叫绑定函数, 当调用这个绑定函数时, 绑定函数会以创建它时传入 bind() 方法的第一个参数作为当前的上下文, 即this, 传入 bind() 方法的第二个及之后的参数加上绑定函数运行时自身的参数按照顺序作为原函数的参数来调用原函数.</p>
-<p>绑定函数也能使用new操作符创建对象; 这就好比把原函数当做构造器. 此时提供的this将被忽略, this之后的参数将依然前置到运行时的参数列表中.</p>
-<h4 id="基本用法"><a href="#基本用法" class="headerlink" title="基本用法"></a>基本用法</h4><p>下面我们来看看bind 的基本用法.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> x = <span class="number">8</span>;</div><div class="line"><span class="keyword">var</span> o = &#123;</div><div class="line">  <span class="attr">x</span>: <span class="number">10</span>,</div><div class="line">  <span class="attr">getX</span>: <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  	<span class="built_in">console</span>.log(<span class="keyword">this</span>.x);</div><div class="line">  &#125;</div><div class="line">&#125;;</div><div class="line"><span class="keyword">var</span> f = o.getX;</div><div class="line">f();<span class="comment">//8, 由于没有绑定执行时的上下文, this默认指向window, 打印了全局变量x的值</span></div><div class="line"><span class="keyword">var</span> g = f.bind(o);</div><div class="line">g();<span class="comment">//10, 绑定this后, 成功的打印了o对象的x属性的值.</span></div></pre></td></tr></table></figure>
-<h4 id="分离参数"><a href="#分离参数" class="headerlink" title="分离参数"></a>分离参数</h4><p>bind() 方法还可以设置函数拥有的初始参数. 这些参数作为bind() 的第2,3…个参数跟在this(或其他对象的后面), 调用绑定函数时, 这些参数将插入到参数列表的最开始位置, 而传递给绑定函数的参数将跟在他们后面.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//打印十个斐波那契数</span></div><div class="line"><span class="keyword">var</span> f = <span class="function"><span class="keyword">function</span>(<span class="params">n1, n2, length</span>)</span>&#123;</div><div class="line">  <span class="keyword">if</span>(<span class="built_in">arguments</span>.length&lt;<span class="number">3</span>) <span class="built_in">console</span>.log(<span class="string">'参数不够...'</span>);</div><div class="line">  <span class="keyword">var</span> array = [n1, n2];</div><div class="line">  <span class="keyword">for</span>(<span class="keyword">var</span> i=<span class="number">2</span>;i&lt;length;i++)&#123;</div><div class="line">  	array[i] = array[i<span class="number">-2</span>] + array[i<span class="number">-1</span>];</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">return</span> array;</div><div class="line">&#125;</div><div class="line"><span class="keyword">var</span> g = f.bind(<span class="literal">null</span>, <span class="number">1</span>, <span class="number">1</span>);</div><div class="line"><span class="built_in">console</span>.log(g(<span class="number">10</span>));<span class="comment">//[1, 1, 2, 3, 5, 8, 13, 21, 34, 55]</span></div></pre></td></tr></table></figure>
-<h4 id="绑定参数"><a href="#绑定参数" class="headerlink" title="绑定参数"></a>绑定参数</h4><p>如果使用new 操作符去构造绑定函数的实例时, 原来提供的this 将被忽略, this之后的参数将依然前置到构造函数的参数列表中. 此时 bind() 方法便具备了保留参数的能力, 我们可以此达到类似柯里化的效果.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> f = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  <span class="keyword">if</span>(<span class="built_in">arguments</span>.length!=<span class="number">0</span>)</div><div class="line">  	<span class="keyword">this</span>.sum = <span class="built_in">Array</span>.prototype.reduce.call(<span class="built_in">arguments</span>,<span class="function"><span class="keyword">function</span>(<span class="params">prev,item</span>)</span>&#123;<span class="comment">//对传入参数求和</span></div><div class="line"> 		<span class="keyword">return</span> prev + item;</div><div class="line">	&#125;);</div><div class="line">  <span class="keyword">return</span> <span class="built_in">Array</span>.prototype.join.call(<span class="built_in">arguments</span>);<span class="comment">// 返回传入参数的字符串形式</span></div><div class="line">&#125;</div><div class="line">f.prototype.toString = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  <span class="keyword">return</span> <span class="keyword">this</span>.sum;</div><div class="line">&#125;</div><div class="line"><span class="keyword">var</span> g = f.bind(<span class="literal">null</span>,<span class="number">2</span>);</div><div class="line"><span class="keyword">var</span> x = <span class="keyword">new</span> g(<span class="number">8</span>);</div><div class="line"><span class="built_in">console</span>.log(x.toString());<span class="comment">//10, 可见x被绑定了2+8=10</span></div><div class="line"><span class="built_in">console</span>.log(g(<span class="number">8</span>));<span class="comment">//2,8 这告诉我们绑定的两个参数正是2和8</span></div><div class="line"></div><div class="line"><span class="built_in">console</span>.log(x <span class="keyword">instanceof</span> g);<span class="comment">//true, 可见通过new创建的x继承了g</span></div><div class="line"><span class="built_in">console</span>.log(x <span class="keyword">instanceof</span> f);<span class="comment">//true, 可见x也继承了f</span></div><div class="line"><span class="built_in">console</span>.log(g <span class="keyword">instanceof</span> <span class="built_in">Function</span>);<span class="comment">//true, 可见bind f()方法之后, 返回了一个新的函数g</span></div><div class="line"><span class="comment">//函数g可用于求和,如下:</span></div><div class="line"><span class="built_in">console</span>.log(g(<span class="number">1</span>,<span class="number">3</span>,<span class="number">5</span>,<span class="number">7</span>,<span class="number">9</span>));<span class="comment">//27 2+1+3+5+7+9=27</span></div></pre></td></tr></table></figure>
-<h4 id="快捷调用"><a href="#快捷调用" class="headerlink" title="快捷调用"></a>快捷调用</h4><p>使用Array.prototype的方法处理类数组对象时(鸭式辨型), 不可避免的需要借用call 或者 apply 方法, 使用 bind() 方法, 我们可以简化这个过程. 如下:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> _slice = <span class="built_in">Array</span>.prototype.slice;</div><div class="line"><span class="keyword">var</span> slice = <span class="built_in">Function</span>.prototype.call.bind(_slice);</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  <span class="keyword">return</span> slice(<span class="built_in">arguments</span>,<span class="number">1</span>);</div><div class="line">&#125;</div><div class="line">f(<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>);<span class="comment">//[2, 3, 4, 5]</span></div></pre></td></tr></table></figure>
-<p>下面的实例将解释 bind() 方法做了一件什么事情:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> _slice = <span class="built_in">Array</span>.prototype.slice;</div><div class="line"><span class="keyword">var</span> slice = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  <span class="keyword">return</span> _slice.apply(<span class="built_in">arguments</span>[<span class="number">0</span>],_slice.call(<span class="built_in">arguments</span>,<span class="number">1</span>));</div><div class="line">&#125;;</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  <span class="keyword">return</span> slice(<span class="built_in">arguments</span>,<span class="number">1</span>);</div><div class="line">&#125;</div><div class="line">f(<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>);<span class="comment">//[2, 3, 4, 5]</span></div></pre></td></tr></table></figure>
-<p>如下, 是bind() 方法的简单实现.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">Function</span>.prototype.bind = <span class="function"><span class="keyword">function</span>(<span class="params">thisArg,argN</span>)</span>&#123;</div><div class="line">  <span class="keyword">var</span> _this = <span class="keyword">this</span>;</div><div class="line">  <span class="keyword">var</span> _arg = _slice.call(<span class="built_in">arguments</span>,<span class="number">1</span>);</div><div class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">   	<span class="keyword">var</span> arg = _slice.call(<span class="built_in">arguments</span>);</div><div class="line">    arg = _arg.concat(arg);</div><div class="line">  	<span class="keyword">return</span> _this.apply(thisArg,arg);</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>可以看出来, 使用 bind() 方法后, 代码优雅得多.</p>
-<p>注: 作为ES5标准加入的bind方法显然不支持 IE9之前的低版本IE, 如需使用, 请参考<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Function/bind#Compatibility" target="_blank" rel="external">Polyfill</a>.</p>
-<hr>
-<p>本文就讨论这么多内容,大家有什么问题或好的想法欢迎在下方参与<a href="#respond">留言和评论</a>.</p>
-<p>本文作者: <a href="https://github.com/Louiszhai" target="_blank" rel="external">louis</a></p>
-<p>本文链接: <a href="http://louiszhai.github.io/2016/01/11/bind/">http://louiszhai.github.io/2016/01/11/bind/</a></p>
-<p>参考文章</p>
-<ul>
-<li><a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Function/bind" target="_blank" rel="external">Function.prototype.bind() - JavaScript | MDN</a></li>
-</ul>
-]]></content>
-    
-    <summary type="html">
-    
-      JavaScript bind Function.prototype.bind call apply
-    
-    </summary>
-    
-    
-      <category term="JavaScript" scheme="http://louiszhai.github.io/tags/JavaScript/"/>
-    
-  </entry>
-  
-  <entry>
     <title>由同源策略到前端跨域</title>
     <link href="http://louiszhai.github.io/2016/01/11/cross-domain/"/>
     <id>http://louiszhai.github.io/2016/01/11/cross-domain/</id>
     <published>2016-01-11T00:01:33.000Z</published>
-    <updated>2017-03-13T09:53:13.000Z</updated>
+    <updated>2017-04-17T02:54:08.000Z</updated>
     
     <content type="html"><![CDATA[<h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h3><p>同源策略 (Same-Origin Policy) 最早由 Netscape 公司提出, 所谓同源就是要求, 域名, 协议, 端口相同. 非同源的脚本不能访问或者操作其他域的页面对象(如DOM等). 作为著名的安全策略, 虽然它只是一个规范, 并不强制要求,  但现在所有支持 javaScript 的浏览器都会使用这个策略. 以至于该策略成为浏览器最核心最基本的安全功能, 如果缺少了同源策略, web的安全将无从谈起.</p>
 <a id="more"></a>
@@ -5323,66 +5633,44 @@ c3(no)->op2->io1->e</textarea><textarea id="flowchart-0-options" style="display:
   </entry>
   
   <entry>
-    <title>web定时器之setTimeout &amp; setInterval</title>
-    <link href="http://louiszhai.github.io/2016/01/10/js.timer/"/>
-    <id>http://louiszhai.github.io/2016/01/10/js.timer/</id>
-    <published>2016-01-10T05:52:11.000Z</published>
-    <updated>2017-03-13T09:53:13.000Z</updated>
+    <title>Function.prototype.bind方法指南</title>
+    <link href="http://louiszhai.github.io/2016/01/11/bind/"/>
+    <id>http://louiszhai.github.io/2016/01/11/bind/</id>
+    <published>2016-01-11T00:01:33.000Z</published>
+    <updated>2017-04-17T02:54:08.000Z</updated>
     
-    <content type="html"><![CDATA[<h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h3><p>设置web定时器应当是一个相当常见的需求, 实际上, 我们也有两大工具函数可以任意调用: setTimeout, setInterval. 然而 js 里却没有java的那种wait(), 定时又未必准时, 要想写个定时器还须得深入理解 setTimeout 和 setInterval 的运行原理才行.</p>
+    <content type="html"><![CDATA[<h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h3><p>ES5新增了 Function.prototype.bind 方法, 该方法不同于jquery的bind 方法, 它主要用于固定 this 作用域, 避免各种由于上下文切换造成的语义问题. 常用在 setTimeout, for循环等内部.</p>
 <a id="more"></a>
-<h3 id="运行原理"><a href="#运行原理" class="headerlink" title="运行原理"></a>运行原理</h3><p>setTimeout 和 setInterval 并非异步调用, 所谓的”异步调用”, 只是因它们都往 js 引擎的 <code>待处理任务队列</code> 末尾插入代码, 看起来像”异步调用”而已.</p>
-<p>那么如何计算插入的时间点呢? 自然要用到我们通常所说的 timer (也叫计时器), 当执行 setTimeout 和 setInterval 函数的时候, timer会根据设定好的时间点找到代码的插入点, 返回timer callback, 也就是我们设定的回调函数.</p>
-<h3 id="setTimeout"><a href="#setTimeout" class="headerlink" title="setTimeout"></a>setTimeout</h3><p>语法1: setTimeout(func, millisec, [param1, param2, …])</p>
-<p>语法2: setTimeout(code, millisec)</p>
-<p>setTimeout() 方法在指定的时间后, 执行一次传入的函数. 可通过 window.clearTimeout 函数取消 setTimeout 操作.</p>
-<h4 id="基本用法"><a href="#基本用法" class="headerlink" title="基本用法"></a>基本用法</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">fn</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(+<span class="keyword">new</span> <span class="built_in">Date</span>());</div><div class="line">&#125;</div><div class="line">setTimeout(fn, <span class="number">1000</span>);<span class="comment">//1452405077119, 延迟1s后打印了当前的时间戳</span></div><div class="line">setTimeout(<span class="string">"console.log(+new Date())"</span>, <span class="number">1000</span>);<span class="comment">//1452405077120, 延迟1s后执行了字符串中的语句</span></div></pre></td></tr></table></figure>
-<h4 id="js引擎的排队机制"><a href="#js引擎的排队机制" class="headerlink" title="js引擎的排队机制"></a>js引擎的排队机制</h4><p>javaScript的世界里只有一个线程, 从来就没有同时做两件事的能力, 因此setTimeout只是一种委托机制. 它告诉js 引擎, 帮它在指定的时间点将一段代码插入到 js 引擎的 <code>待处理任务队列</code>  末尾, 插入的代码并不能立即执行, 至少也要等到队列前面的代码全部执行完毕(如果队列刚好为空, 则是指定时间立即执行, 否则要等待队列前面的代码顺序执行完毕).</p>
-<p>下面我们来通过栗子感受一下setTimeout是怎么排队的.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//假如我们要在输入框失去焦点时, 做一些事情, 然后重新获取焦点</span></div><div class="line">$(<span class="string">'input'</span>).blur(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  <span class="comment">//To do something...</span></div><div class="line">  $(<span class="keyword">this</span>).focus();</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
-<p>像上面这种写法在IE下是没有什么问题, 输入框失去焦点后马上就能获取焦点, 然而Firefox就没那么幸运了, 因为Firefox的focus只能出现在blur之后. 利用 setTimeout 的排队特点, 我们可以像下面这样实现:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">$(<span class="string">'input'</span>).blur(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  <span class="comment">//To do something...</span></div><div class="line">  setTimeout(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">    $(<span class="keyword">this</span>).focus();</div><div class="line">  &#125;,<span class="number">0</span>);</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
-<p>虽然 setTimeout 延时为0, 但获取焦点的语句并不会立即执行, 原因就在于 setTimeout 只是将获取焦点的语句插入到 js 引擎的 <code>待处理任务队列</code>  末尾, 它需要等待整个 blur 完全执行完才能发挥作用, 这样就保证了 focus 事件在 blur 事件之后发生了.</p>
-<h4 id="充当定时器"><a href="#充当定时器" class="headerlink" title="充当定时器"></a>充当定时器</h4><p>setTimeout 原本只能延迟一段时间执行一段代码, 如果我们将 setTimeout 写在函数内部, 并在 setTimeout 里调用函数本身, 这样就完成了简单的定时器. 如下:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">fn</span>(<span class="params">i</span>)</span>&#123;</div><div class="line">  <span class="keyword">if</span>(!i) i = <span class="number">0</span>;</div><div class="line">  ++i;</div><div class="line">  <span class="keyword">if</span>(i&lt;<span class="number">10</span>) setTimeout(fn,<span class="number">100</span>,i);</div><div class="line">  <span class="keyword">else</span> <span class="built_in">console</span>.log(i);</div><div class="line">&#125;</div><div class="line">fn();<span class="comment">//10, fn每隔100ms执行一次, 直到第10次, 因不符合条件(i=10), 退出定时器, 从而输出10</span></div></pre></td></tr></table></figure>
-<h4 id="this带来的问题"><a href="#this带来的问题" class="headerlink" title="this带来的问题"></a>this带来的问题</h4><p>由setTimeout()调用的代码运行在与所在函数完全分离的执行环境上. 这会导致,这些代码中包含的 <code>this</code> 关键字会指向 <code>window</code> (或<code>全局</code>)对象. </p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> o = &#123;<span class="attr">fruit</span>: <span class="string">"apple"</span>&#125;;</div><div class="line">o.shareFruit = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(<span class="keyword">this</span>.fruit);</div><div class="line">&#125;</div><div class="line">o.shareFruit();<span class="comment">//apple</span></div><div class="line">setTimeout(o.shareFruit,<span class="number">1000</span>);<span class="comment">//undefined</span></div><div class="line">setTimeout.call(o,o.shareFruit,<span class="number">1000</span>);<span class="comment">//Illegal operation on WrappedNative prototype object</span></div></pre></td></tr></table></figure>
-<p>甚至连 call 方法都没有办法改变当前作用域, 使用中要特别注意避免这个问题. 可参考如下方案: </p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">setTimeout(o.shareFruit.bind(o), <span class="number">1000</span>);<span class="comment">//apple</span></div></pre></td></tr></table></figure>
-<h4 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h4><p>下面我们来使用两个非原生的 setTimeout 和 setInterval 全局函数代替原生的, 使得它们能够借用 call 方法激活正确的作用域.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// Enable the passage of the 'this' object through the JavaScript timers</span></div><div class="line"></div><div class="line"><span class="keyword">var</span> __nativeST__ = <span class="built_in">window</span>.setTimeout, __nativeSI__ = <span class="built_in">window</span>.setInterval;</div><div class="line"></div><div class="line"><span class="built_in">window</span>.setTimeout = <span class="function"><span class="keyword">function</span> (<span class="params">vCallback, nDelay</span>) </span>&#123;</div><div class="line">  <span class="keyword">var</span> oThis = <span class="keyword">this</span>, aArgs = <span class="built_in">Array</span>.prototype.slice.call(<span class="built_in">arguments</span>, <span class="number">2</span>);</div><div class="line">  <span class="keyword">return</span> __nativeST__(vCallback <span class="keyword">instanceof</span> <span class="built_in">Function</span> ? <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">    vCallback.apply(oThis, aArgs);</div><div class="line">  &#125; : vCallback, nDelay);</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="built_in">window</span>.setInterval = <span class="function"><span class="keyword">function</span> (<span class="params">vCallback, nDelay</span>) </span>&#123;</div><div class="line">  <span class="keyword">var</span> oThis = <span class="keyword">this</span>, aArgs = <span class="built_in">Array</span>.prototype.slice.call(<span class="built_in">arguments</span>, <span class="number">2</span>);</div><div class="line">  <span class="keyword">return</span> __nativeSI__(vCallback <span class="keyword">instanceof</span> <span class="built_in">Function</span> ? <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">    vCallback.apply(oThis, aArgs);</div><div class="line">  &#125; : vCallback, nDelay);</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="comment">//再运行以下代码将能正确执行</span></div><div class="line">setTimeout.call(o,o.shareFruit,<span class="number">1000</span>);<span class="comment">//apple</span></div></pre></td></tr></table></figure>
-<h3 id="setInterval"><a href="#setInterval" class="headerlink" title="setInterval"></a>setInterval</h3><p>语法1: setInterval(func, millisec, [param1, param2, …])</p>
-<p>语法2: setInterval(code, millisec)</p>
-<p>setInterval() 方法按照指定的周期(以毫秒为单位)来调用函数或表达式. 可通过 window.clearInterval 函数取消 setInterval 操作.</p>
-<h4 id="基本用法-1"><a href="#基本用法-1" class="headerlink" title="基本用法"></a>基本用法</h4><p>setInterval 与 setTimeout 不同, 它会周期性的去调用函数或者表达式, 直到它本身被取消. 如下:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> i = <span class="number">0</span>;</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">fn</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  ++i;</div><div class="line">&#125;</div><div class="line"><span class="keyword">var</span> timer = setInterval(fn,<span class="number">100</span>);<span class="comment">//设置了一个定时器, 每100ms执行一次fn函数</span></div><div class="line">setTimeout(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  <span class="built_in">window</span>.clearInterval(timer);</div><div class="line">  <span class="built_in">console</span>.log(i);</div><div class="line">&#125;,<span class="number">2000</span>);<span class="comment">//两秒后清除定时器, 并打印i的值</span></div><div class="line"><span class="comment">//20, 可见2s后fn刚好被执行了20次</span></div></pre></td></tr></table></figure>
-<h4 id="它真的可以作为定时器吗"><a href="#它真的可以作为定时器吗" class="headerlink" title="它真的可以作为定时器吗"></a>它真的可以作为定时器吗</h4><p>实际上 setInterval 真的能作为定时器, 准确无误的在指定间隔时间内执行函数 fn 吗?</p>
-<p>答案是 no. 请看下面栗子:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> i = <span class="number">0</span>;</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">fn</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  ++i;</div><div class="line">&#125;</div><div class="line"><span class="keyword">var</span> timer = setInterval(fn,<span class="number">2</span>);<span class="comment">//设置了一个定时器, 将时间间隔减少至2ms</span></div><div class="line">setTimeout(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  <span class="built_in">window</span>.clearInterval(timer);</div><div class="line">  <span class="built_in">console</span>.log(i);</div><div class="line">&#125;,<span class="number">2000</span>);<span class="comment">//两秒后清除定时器, 并打印i的值</span></div><div class="line"><span class="comment">//501, 可见2s后fn只是被执行了501次(为什么不是1000次?)</span></div></pre></td></tr></table></figure>
-<p>以上 fn 应该被执行 2000 次, 实际上才执行501次, 这是为什么呢?</p>
-<p>原来, js 引擎在指定时间点往 <code>待处理消息队列</code> 插入代码片段这种机制有个特点, js引擎只允许有一份未执行的process代码(相当于fn), 对上述代码为而言, 每当1ms来临时, js引擎先判断队列中有没有process代码, 如果 fn 函数执行时间大于1ms, 这就意味着fn尚未被执行完, 定时就来了, 然后定时候着, 静静地等待 fn的执行, 这种情况下引擎队列中就可能存在尚未执行的process代码, 如果有则本次插入的时间点就被无情的跳过. </p>
-<p>由此可见, 上述代码中, fn 函数被无情的跳过了499次. 我们也可以据此计算出运行一次 fn 函数大致需要2000/501~ = 4ms. 而当我们将上述 timer 的时间间隔设置为4ms时, fn 刚好被执行了 500 次.</p>
-<p>因此上面的这段代码并不可靠, 下面我们来看一个更为可靠的版本:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> i = <span class="number">0</span>,timer;</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">fn</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  <span class="keyword">if</span>(++i &gt;= <span class="number">1000</span>)&#123;<span class="comment">//fn调用1000次后自动退出</span></div><div class="line">    <span class="built_in">console</span>.log(i);</div><div class="line">    <span class="keyword">return</span>;</div><div class="line">  &#125;</div><div class="line">  timer = setTimeout(<span class="built_in">arguments</span>.callee, <span class="number">4</span>);<span class="comment">//设置延时2ms后执行自身</span></div><div class="line">&#125;</div><div class="line">fn();</div><div class="line">setTimeout(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(i)</div><div class="line">  <span class="built_in">window</span>.clearTimeout(timer);</div><div class="line">&#125;,<span class="number">2000</span>);<span class="comment">//384</span></div></pre></td></tr></table></figure>
-<p>可见, 2s之后取消定时器时, fn被执行了384次,如果仅仅希望fn被执行1000次后退出, 删除最后一个setTimeout即可. 此时, 本次fn调用 与 下次调用, 间隔时间将大于或者等于2ms. 这样既保证了调用次数, 又基本保证了调用间隔.</p>
-<p>实际上, 上述测试中有个很大的问题. <strong>HTML5标准规定了setTimeout 最短运行间隔是4ms</strong>, 如果低于这个值, 则会自动按4ms间隔运行. <strong>老版本浏览器一般将这个最短间隔设置为10ms</strong>. 将上述 setTimeout 方法第二个参数设置为4, 测试发现, 刚好运行384次. 在老版IE浏览器中测试, 发现运行198次, 接近200次, 也验证了老版浏览器10ms的时间间隔.</p>
-<p>注: IE9 及更早版本的IE 浏览器不支持它们第一个语法中的向回调函数中传参数的功能. 如需支持, 请参考<a href="https://developer.mozilla.org/zh-CN/docs/Web/API/Window/setTimeout#回调参数" target="_blank" rel="external">兼容写法</a>, 或者借用 Function.prototype.bind 函数, 如下:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">setTimeout(<span class="function"><span class="keyword">function</span>(<span class="params">arg1</span>)</span>&#123;&#125;.bind(<span class="literal">undefined</span>, <span class="number">10</span>), <span class="number">1000</span>);</div></pre></td></tr></table></figure>
+<h3 id="bind"><a href="#bind" class="headerlink" title="bind"></a>bind</h3><p>语法: func.bind(thisArg, arg1, arg2, ….)</p>
+<p>bind() 方法会返回一个新函数, 又叫绑定函数, 当调用这个绑定函数时, 绑定函数会以创建它时传入 bind() 方法的第一个参数作为当前的上下文, 即this, 传入 bind() 方法的第二个及之后的参数加上绑定函数运行时自身的参数按照顺序作为原函数的参数来调用原函数.</p>
+<p>绑定函数也能使用new操作符创建对象; 这就好比把原函数当做构造器. 此时提供的this将被忽略, this之后的参数将依然前置到运行时的参数列表中.</p>
+<h4 id="基本用法"><a href="#基本用法" class="headerlink" title="基本用法"></a>基本用法</h4><p>下面我们来看看bind 的基本用法.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> x = <span class="number">8</span>;</div><div class="line"><span class="keyword">var</span> o = &#123;</div><div class="line">  <span class="attr">x</span>: <span class="number">10</span>,</div><div class="line">  <span class="attr">getX</span>: <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  	<span class="built_in">console</span>.log(<span class="keyword">this</span>.x);</div><div class="line">  &#125;</div><div class="line">&#125;;</div><div class="line"><span class="keyword">var</span> f = o.getX;</div><div class="line">f();<span class="comment">//8, 由于没有绑定执行时的上下文, this默认指向window, 打印了全局变量x的值</span></div><div class="line"><span class="keyword">var</span> g = f.bind(o);</div><div class="line">g();<span class="comment">//10, 绑定this后, 成功的打印了o对象的x属性的值.</span></div></pre></td></tr></table></figure>
+<h4 id="分离参数"><a href="#分离参数" class="headerlink" title="分离参数"></a>分离参数</h4><p>bind() 方法还可以设置函数拥有的初始参数. 这些参数作为bind() 的第2,3…个参数跟在this(或其他对象的后面), 调用绑定函数时, 这些参数将插入到参数列表的最开始位置, 而传递给绑定函数的参数将跟在他们后面.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//打印十个斐波那契数</span></div><div class="line"><span class="keyword">var</span> f = <span class="function"><span class="keyword">function</span>(<span class="params">n1, n2, length</span>)</span>&#123;</div><div class="line">  <span class="keyword">if</span>(<span class="built_in">arguments</span>.length&lt;<span class="number">3</span>) <span class="built_in">console</span>.log(<span class="string">'参数不够...'</span>);</div><div class="line">  <span class="keyword">var</span> array = [n1, n2];</div><div class="line">  <span class="keyword">for</span>(<span class="keyword">var</span> i=<span class="number">2</span>;i&lt;length;i++)&#123;</div><div class="line">  	array[i] = array[i<span class="number">-2</span>] + array[i<span class="number">-1</span>];</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">return</span> array;</div><div class="line">&#125;</div><div class="line"><span class="keyword">var</span> g = f.bind(<span class="literal">null</span>, <span class="number">1</span>, <span class="number">1</span>);</div><div class="line"><span class="built_in">console</span>.log(g(<span class="number">10</span>));<span class="comment">//[1, 1, 2, 3, 5, 8, 13, 21, 34, 55]</span></div></pre></td></tr></table></figure>
+<h4 id="绑定参数"><a href="#绑定参数" class="headerlink" title="绑定参数"></a>绑定参数</h4><p>如果使用new 操作符去构造绑定函数的实例时, 原来提供的this 将被忽略, this之后的参数将依然前置到构造函数的参数列表中. 此时 bind() 方法便具备了保留参数的能力, 我们可以此达到类似柯里化的效果.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> f = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  <span class="keyword">if</span>(<span class="built_in">arguments</span>.length!=<span class="number">0</span>)</div><div class="line">  	<span class="keyword">this</span>.sum = <span class="built_in">Array</span>.prototype.reduce.call(<span class="built_in">arguments</span>,<span class="function"><span class="keyword">function</span>(<span class="params">prev,item</span>)</span>&#123;<span class="comment">//对传入参数求和</span></div><div class="line"> 		<span class="keyword">return</span> prev + item;</div><div class="line">	&#125;);</div><div class="line">  <span class="keyword">return</span> <span class="built_in">Array</span>.prototype.join.call(<span class="built_in">arguments</span>);<span class="comment">// 返回传入参数的字符串形式</span></div><div class="line">&#125;</div><div class="line">f.prototype.toString = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  <span class="keyword">return</span> <span class="keyword">this</span>.sum;</div><div class="line">&#125;</div><div class="line"><span class="keyword">var</span> g = f.bind(<span class="literal">null</span>,<span class="number">2</span>);</div><div class="line"><span class="keyword">var</span> x = <span class="keyword">new</span> g(<span class="number">8</span>);</div><div class="line"><span class="built_in">console</span>.log(x.toString());<span class="comment">//10, 可见x被绑定了2+8=10</span></div><div class="line"><span class="built_in">console</span>.log(g(<span class="number">8</span>));<span class="comment">//2,8 这告诉我们绑定的两个参数正是2和8</span></div><div class="line"></div><div class="line"><span class="built_in">console</span>.log(x <span class="keyword">instanceof</span> g);<span class="comment">//true, 可见通过new创建的x继承了g</span></div><div class="line"><span class="built_in">console</span>.log(x <span class="keyword">instanceof</span> f);<span class="comment">//true, 可见x也继承了f</span></div><div class="line"><span class="built_in">console</span>.log(g <span class="keyword">instanceof</span> <span class="built_in">Function</span>);<span class="comment">//true, 可见bind f()方法之后, 返回了一个新的函数g</span></div><div class="line"><span class="comment">//函数g可用于求和,如下:</span></div><div class="line"><span class="built_in">console</span>.log(g(<span class="number">1</span>,<span class="number">3</span>,<span class="number">5</span>,<span class="number">7</span>,<span class="number">9</span>));<span class="comment">//27 2+1+3+5+7+9=27</span></div></pre></td></tr></table></figure>
+<h4 id="快捷调用"><a href="#快捷调用" class="headerlink" title="快捷调用"></a>快捷调用</h4><p>使用Array.prototype的方法处理类数组对象时(鸭式辨型), 不可避免的需要借用call 或者 apply 方法, 使用 bind() 方法, 我们可以简化这个过程. 如下:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> _slice = <span class="built_in">Array</span>.prototype.slice;</div><div class="line"><span class="keyword">var</span> slice = <span class="built_in">Function</span>.prototype.call.bind(_slice);</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  <span class="keyword">return</span> slice(<span class="built_in">arguments</span>,<span class="number">1</span>);</div><div class="line">&#125;</div><div class="line">f(<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>);<span class="comment">//[2, 3, 4, 5]</span></div></pre></td></tr></table></figure>
+<p>下面的实例将解释 bind() 方法做了一件什么事情:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> _slice = <span class="built_in">Array</span>.prototype.slice;</div><div class="line"><span class="keyword">var</span> slice = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  <span class="keyword">return</span> _slice.apply(<span class="built_in">arguments</span>[<span class="number">0</span>],_slice.call(<span class="built_in">arguments</span>,<span class="number">1</span>));</div><div class="line">&#125;;</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  <span class="keyword">return</span> slice(<span class="built_in">arguments</span>,<span class="number">1</span>);</div><div class="line">&#125;</div><div class="line">f(<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>);<span class="comment">//[2, 3, 4, 5]</span></div></pre></td></tr></table></figure>
+<p>如下, 是bind() 方法的简单实现.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">Function</span>.prototype.bind = <span class="function"><span class="keyword">function</span>(<span class="params">thisArg,argN</span>)</span>&#123;</div><div class="line">  <span class="keyword">var</span> _this = <span class="keyword">this</span>;</div><div class="line">  <span class="keyword">var</span> _arg = _slice.call(<span class="built_in">arguments</span>,<span class="number">1</span>);</div><div class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">   	<span class="keyword">var</span> arg = _slice.call(<span class="built_in">arguments</span>);</div><div class="line">    arg = _arg.concat(arg);</div><div class="line">  	<span class="keyword">return</span> _this.apply(thisArg,arg);</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>可以看出来, 使用 bind() 方法后, 代码优雅得多.</p>
+<p>注: 作为ES5标准加入的bind方法显然不支持 IE9之前的低版本IE, 如需使用, 请参考<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Function/bind#Compatibility" target="_blank" rel="external">Polyfill</a>.</p>
 <hr>
 <p>本文就讨论这么多内容,大家有什么问题或好的想法欢迎在下方参与<a href="#respond">留言和评论</a>.</p>
 <p>本文作者: <a href="https://github.com/Louiszhai" target="_blank" rel="external">louis</a></p>
-<p>本文链接: <a href="http://louiszhai.github.io/2016/01/10/js.timer/">http://louiszhai.github.io/2016/01/10/js.timer/</a></p>
+<p>本文链接: <a href="http://louiszhai.github.io/2016/01/11/bind/">http://louiszhai.github.io/2016/01/11/bind/</a></p>
 <p>参考文章</p>
 <ul>
-<li><a href="http://www.jb51.net/article/26679.htm" target="_blank" rel="external">setTimeout和setInterval的区别你真的了解吗?_javascript技巧_脚本之家</a></li>
-<li><a href="http://www.jb51.net/article/42971.htm" target="_blank" rel="external">setTimeout和setInterval的深入理解_基础知识_脚本之家</a></li>
-<li><a href="https://developer.mozilla.org/zh-CN/docs/Web/API/Window/setTimeout" target="_blank" rel="external">window.setTimeout - Web API 接口 | MDN</a></li>
+<li><a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Function/bind" target="_blank" rel="external">Function.prototype.bind() - JavaScript | MDN</a></li>
 </ul>
 ]]></content>
     
     <summary type="html">
     
-      JavaScript setTimeout setInterval 轮询 clearTimeout clearInterval web定时器
+      JavaScript bind Function.prototype.bind call apply
     
     </summary>
     

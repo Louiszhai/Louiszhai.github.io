@@ -13,7 +13,7 @@
 <meta property="og:site_name" content="louis blog">
 <meta property="og:description" content="manifest offline cache applicationCache">
 <meta property="og:image" content="http://ww2.sinaimg.cn/large/006y8lVagw1fa479nwxhmj30pm08hdgj.jpg">
-<meta property="og:updated_time" content="2017-03-13T09:53:13.000Z">
+<meta property="og:updated_time" content="2017-04-17T02:55:12.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="聊一聊H5应用缓存-Manifest">
 <meta name="twitter:description" content="manifest offline cache applicationCache">
@@ -103,7 +103,7 @@
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud" id="js-tagcloud">
-						<a href="/tags/CSS/" style="font-size: 17.5px;">CSS</a> <a href="/tags/JavaScript/" style="font-size: 20px;">JavaScript</a> <a href="/tags/Web/" style="font-size: 15px;">Web</a> <a href="/tags/XSS/" style="font-size: 10px;">XSS</a> <a href="/tags/css/" style="font-size: 12.5px;">css</a> <a href="/tags/javascript/" style="font-size: 10px;">javascript</a>
+						<a href="/tags/CSS/" style="font-size: 16.67px;">CSS</a> <a href="/tags/JavaScript/" style="font-size: 20px;">JavaScript</a> <a href="/tags/Web/" style="font-size: 16.67px;">Web</a> <a href="/tags/XSS/" style="font-size: 10px;">XSS</a> <a href="/tags/css/" style="font-size: 13.33px;">css</a> <a href="/tags/javascript/" style="font-size: 10px;">javascript</a>
 					</div>
 				</section>
 				
@@ -202,7 +202,7 @@
     <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#导读"><span class="toc-text">导读</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#描述"><span class="toc-text">描述</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#支持性"><span class="toc-text">支持性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#如何开启应用缓存"><span class="toc-text">如何开启应用缓存</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#manifest缓存清单"><span class="toc-text">manifest缓存清单</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#manifest缓存状态"><span class="toc-text">manifest缓存状态</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#applicationCache"><span class="toc-text">applicationCache</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#manifest缓存独立性"><span class="toc-text">manifest缓存独立性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#manifest缓存规则"><span class="toc-text">manifest缓存规则</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#webview的缓存现象"><span class="toc-text">webview的缓存现象</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#最佳实践"><span class="toc-text">最佳实践</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#具体落地步骤"><span class="toc-text">具体落地步骤</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#如何更新缓存"><span class="toc-text">如何更新缓存</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#其他"><span class="toc-text">其他</span></a></li></ol>
 </div>
       
-        <h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h3><p>Manifest 是 H5提供的一种应用缓存机制, 基于它web应用可以实现离线访问(offline cache). 为此, 浏览器还提供了应用缓存的api–applicationCache. 虽然manifest的技术已被web标准废弃, 但这不影响我们尝试去了解它. 也正是因为manifest的应用缓存机制如此诱人, 饿了么 和 office 365邮箱都还在使用着它!</p>
+        <h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h3><p>Manifest 是 H5提供的一种应用缓存机制, 基于它web应用可以实现离线访问(offline cache). 为此, 浏览器还提供了应用缓存的api–applicationCache. 虽然manifest的技术已被web标准废弃, 但这不影响我们尝试去了解它. 也正是因为manifest的应用缓存机制如此诱人, 饿了么 和 office 365邮箱等都还在使用着它!</p>
 <a id="more"></a>
 <h3 id="描述"><a href="#描述" class="headerlink" title="描述"></a>描述</h3><p>对manifest熟悉的同学可以跳过此节.</p>
 <p>鉴于manifest应用缓存的技术, 我们可以做到:</p>

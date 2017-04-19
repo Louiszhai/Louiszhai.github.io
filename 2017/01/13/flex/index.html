@@ -15,7 +15,7 @@
 <meta property="og:image" content="http://louiszhai.github.io/docImages/flex01.jpeg">
 <meta property="og:image" content="http://louiszhai.github.io/docImages/flex03.png">
 <meta property="og:image" content="http://louiszhai.github.io/docImages/flex02.png">
-<meta property="og:updated_time" content="2017-03-13T09:53:13.000Z">
+<meta property="og:updated_time" content="2017-04-17T02:55:12.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="弹性盒模型Flex指南">
 <meta name="twitter:description" content="弹性盒模型 flex flex-grow flex-shrink flex-basis align-items align-content order flex-flow flex-direction flex-wrap align-self">
@@ -105,7 +105,7 @@
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud" id="js-tagcloud">
-						<a href="/tags/CSS/" style="font-size: 17.5px;">CSS</a> <a href="/tags/JavaScript/" style="font-size: 20px;">JavaScript</a> <a href="/tags/Web/" style="font-size: 15px;">Web</a> <a href="/tags/XSS/" style="font-size: 10px;">XSS</a> <a href="/tags/css/" style="font-size: 12.5px;">css</a> <a href="/tags/javascript/" style="font-size: 10px;">javascript</a>
+						<a href="/tags/CSS/" style="font-size: 16.67px;">CSS</a> <a href="/tags/JavaScript/" style="font-size: 20px;">JavaScript</a> <a href="/tags/Web/" style="font-size: 16.67px;">Web</a> <a href="/tags/XSS/" style="font-size: 10px;">XSS</a> <a href="/tags/css/" style="font-size: 13.33px;">css</a> <a href="/tags/javascript/" style="font-size: 10px;">javascript</a>
 					</div>
 				</section>
 				
@@ -204,7 +204,7 @@
     <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#导读"><span class="toc-text">导读</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Flex"><span class="toc-text">Flex</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#兼容性"><span class="toc-text">兼容性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Autoprefixer"><span class="toc-text">Autoprefixer</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#优势"><span class="toc-text">优势</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#概念铺垫"><span class="toc-text">概念铺垫</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#属性"><span class="toc-text">属性</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#容器属性"><span class="toc-text">容器属性</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#子项目属性"><span class="toc-text">子项目属性</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#flex属性的优先级"><span class="toc-text">flex属性的优先级</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#场景回顾"><span class="toc-text">场景回顾</span></a></li></ol>
 </div>
       
-        <h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h3><p>Web layout 是Web UI中的基础架构, 重要性不言而喻. 传统的盒模型, 借助display, position, float 属性应对普通布局游刃有余, 但针对复杂的或自适应布局, 常常捉襟见肘. 比如垂直居中, 就是一个老大难的问题, 借助flex弹性盒模型, 两行代码就可以优雅的实现之. (该方法曾在 <a href="http://louiszhai.github.io/2016/03/12/css-center/">16种方法实现水平居中垂直居中</a> 一文中提到). 当然, 本次我们不会只讨论垂直居中的问题, 我将努力尽可能的还原flex的应用生态.</p>
+        <h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h3><p>Web layout 是Web UI中的基础架构, 重要性不言而喻. 传统的盒模型, 借助display, position, float 属性应对普通布局游刃有余, 但针对复杂的或自适应布局, 常常捉襟见肘. 比如垂直居中, 就是一个老大难的问题, 借助flex弹性盒模型, 两行代码就可以优雅的实现之. (该方法曾在 <a href="http://louiszhai.github.io/2016/03/12/css-center/">16种方法实现水平居中垂直居中</a> 一文中提到). 当然, 本次我们不会只讨论垂直居中的问题, 我将努力尽可能的还原flex的应用场景.</p>
 <a id="more"></a>
 <h3 id="Flex"><a href="#Flex" class="headerlink" title="Flex"></a>Flex</h3><p>Flex即弹性盒模型, 该布局方案由W3C于2009年提出. 此后, Flex方案便历经v2009, v2011, v2012, v2014, v2015, v2016等版本, 最近方案是2016年5月26日起草的 <a href="http://www.w3.org/TR/2016/CR-css-flexbox-1-20160526/" target="_blank" rel="external">CSS Flexible Box Layout Module Level 1</a>.</p>
 <h3 id="兼容性"><a href="#兼容性" class="headerlink" title="兼容性"></a>兼容性</h3><p>首先, 我们来回顾下如今PC端的兼容性(以下为完全兼容版本).</p>
