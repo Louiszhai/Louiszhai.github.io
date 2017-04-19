@@ -24,7 +24,7 @@
 <meta property="og:image" content="http://louiszhai.github.io/docImages/hot-replace06.png">
 <meta property="og:image" content="http://louiszhai.github.io/docImages/hot-replace08.png">
 <meta property="og:image" content="http://louiszhai.github.io/docImages/hot-replace10.png">
-<meta property="og:updated_time" content="2017-04-19T11:02:31.000Z">
+<meta property="og:updated_time" content="2017-04-19T11:14:17.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="webpack与browser-sync热更新原理深度讲解">
 <meta name="twitter:description" content="EventSource 热更新 webpack热更新延迟 websocket 心跳连接 Frame Socket.IO browser-sync webpack-hot-middleware">
@@ -213,7 +213,8 @@
     <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#webpack-hot-middleware"><span class="toc-text">webpack-hot-middleware</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#EventSource"><span class="toc-text">EventSource</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#CORS"><span class="toc-text">CORS</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#nginx配置"><span class="toc-text">nginx配置</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#browser-sync"><span class="toc-text">browser-sync</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#WebSocket"><span class="toc-text">WebSocket</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#支持性"><span class="toc-text">支持性</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Frame"><span class="toc-text">Frame</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#建立连接"><span class="toc-text">建立连接</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#服务端实现"><span class="toc-text">服务端实现</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#发送和监听消息"><span class="toc-text">发送和监听消息</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#关闭连接"><span class="toc-text">关闭连接</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#拥有的属性"><span class="toc-text">拥有的属性</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#文件上传"><span class="toc-text">文件上传</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#心跳连接"><span class="toc-text">心跳连接</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Socket-IO"><span class="toc-text">Socket.IO</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#小结"><span class="toc-text">小结</span></a></li></ol>
 </div>
       
-        <p>开发环境页面热更新早已是主流，我们不光要吃着火锅唱着歌，享受热更新高效率的快感，更要深入下去探求其原理。</p>
+        <p><strong>本文首发于CSDN网站，下面的版本又经过进一步的修订。</strong></p>
+<p>开发环境页面热更新早已是主流，我们不光要吃着火锅唱着歌，享受热更新高效率的快感，更要深入下去探求其原理。</p>
 <p>要知道，触类则旁通，常见的需求如赛事网页推送比赛结果、网页实时展示投票或点赞数据、在线评论或弹幕、在线聊天室等，都需要借助热更新功能，才能达到实时的端对端的极致体验。</p>
 <p>刚好，最近解决<code>webpack-hot-middleware</code>热更新延迟问题的过程中，我深入接触了EventSource技术。遂本文由此开篇，进一步讲解<code>webpack-hot-middleware</code>，<code>browser-sync</code>背后的技术。</p>
 <a id="more"></a>
