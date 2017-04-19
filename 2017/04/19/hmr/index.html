@@ -24,7 +24,7 @@
 <meta property="og:image" content="http://louiszhai.github.io/docImages/hot-replace06.png">
 <meta property="og:image" content="http://louiszhai.github.io/docImages/hot-replace08.png">
 <meta property="og:image" content="http://louiszhai.github.io/docImages/hot-replace10.png">
-<meta property="og:updated_time" content="2017-04-19T10:52:07.000Z">
+<meta property="og:updated_time" content="2017-04-19T11:02:31.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="webpack与browser-sync热更新原理深度讲解">
 <meta name="twitter:description" content="EventSource 热更新 webpack热更新延迟 websocket 心跳连接 Frame Socket.IO browser-sync webpack-hot-middleware">
@@ -216,6 +216,7 @@
         <p>开发环境页面热更新早已是主流，我们不光要吃着火锅唱着歌，享受热更新高效率的快感，更要深入下去探求其原理。</p>
 <p>要知道，触类则旁通，常见的需求如赛事网页推送比赛结果、网页实时展示投票或点赞数据、在线评论或弹幕、在线聊天室等，都需要借助热更新功能，才能达到实时的端对端的极致体验。</p>
 <p>刚好，最近解决<code>webpack-hot-middleware</code>热更新延迟问题的过程中，我深入接触了EventSource技术。遂本文由此开篇，进一步讲解<code>webpack-hot-middleware</code>，<code>browser-sync</code>背后的技术。</p>
+<a id="more"></a>
 <h3 id="webpack-hot-middleware"><a href="#webpack-hot-middleware" class="headerlink" title="webpack-hot-middleware"></a><strong>webpack-hot-middleware</strong></h3><p><code>webpack-hot-middleware</code>中间件是webpack的一个plugin，通常结合<code>webpack-dev-middleware</code>一起使用。借助它可以实现浏览器的无刷新更新（热更新），即webpack里的HMR（Hot Module Replacement）。如何配置请参考 <a href="https://github.com/glenjamin/webpack-hot-middleware" target="_blank" rel="external">webpack-hot-middleware</a>，如何理解其相关插件请参考 <a href="https://segmentfault.com/a/1190000005614604?utm_source=tuicool&amp;utm_medium=referral" target="_blank" rel="external">手把手深入理解 webpack dev middleware 原理與相關 plugins</a>。</p>
 <p>webpack加入<code>webpack-hot-middleware</code>后，内存中的页面将包含HMR相关js，加载页面后，Network栏可以看到如下请求：</p>
 <p><img src="http://louiszhai.github.io/docImages/hmr11.png" alt="__webpack_hmr"></p>
