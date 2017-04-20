@@ -379,7 +379,7 @@
     <link href="http://louiszhai.github.io/2017/04/07/http-cache/"/>
     <id>http://louiszhai.github.io/2017/04/07/http-cache/</id>
     <published>2017-04-07T00:00:00.000Z</published>
-    <updated>2017-04-19T11:15:28.000Z</updated>
+    <updated>2017-04-20T02:44:00.000Z</updated>
     
     <content type="html"><![CDATA[<p>缓存一直是前端优化的主战场, 利用好缓存就成功了一半. 本篇从http请求和响应的头域入手, 让你对浏览器缓存有个整体的概念. 最终你会发现强缓存, 协商缓存 和 启发式缓存是如此的简单.</p>
 <h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a><strong>导读</strong></h3><p>我不知道拖延症是有多严重, 反正去年3月开的题, 直到今年4月才开始写.(请尽情吐槽吧)</p>
@@ -4936,7 +4936,7 @@ c3(no)->op2->io1->e</textarea><textarea id="flowchart-0-options" style="display:
     <link href="http://louiszhai.github.io/2016/03/12/css-center/"/>
     <id>http://louiszhai.github.io/2016/03/12/css-center/</id>
     <published>2016-03-12T11:03:04.000Z</published>
-    <updated>2017-04-17T02:54:08.000Z</updated>
+    <updated>2017-04-20T02:41:44.000Z</updated>
     
     <content type="html"><![CDATA[<h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h3><p>熟悉水平居中和垂直居中的方法, 不为别的, 就为用的时候能够信手拈来. 下面直接步入正题.</p>
 <a id="more"></a>
@@ -4945,9 +4945,9 @@ c3(no)->op2->io1->e</textarea><textarea id="flowchart-0-options" style="display:
 <p>3) 若子元素包含 float:left 属性, 为了让子元素水平居中, 则可让父元素宽度设置为fit-content,并且配合margin, 作如下设置:</p>
 <figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="selector-class">.parent</span>&#123;</div><div class="line">  	<span class="attribute">width</span>: -moz-fit-content;</div><div class="line">	<span class="attribute">width</span>: -webkit-fit-content;</div><div class="line">	<span class="attribute">width</span>:fit-content;</div><div class="line">	<span class="attribute">margin</span>:<span class="number">0</span> auto;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>fit-content是CSS3中给width属性新加的一个属性值,它配合margin可以轻松实现水平居中, 目前只支持Chrome 和 Firefox浏览器.</p>
-<p>4) 使用flex布局, 可以轻松的实现水平居中, 子元素设置如下:</p>
+<p>4) 使用flex 2012年版本布局, 可以轻松的实现水平居中, 子元素设置如下:</p>
 <figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="selector-class">.son</span>&#123;</div><div class="line">	<span class="attribute">display</span>: flex;</div><div class="line">	<span class="attribute">justify-content</span>: center;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>5) 使用css3 盒模型, 父元素display: box;box-pack: center;如下设置:</p>
+<p>5) 使用flex 2009年版本, 父元素display: box;box-pack: center;如下设置:</p>
 <figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="selector-class">.parent</span> &#123;</div><div class="line">	<span class="attribute">display</span>: -webkit-box;</div><div class="line">	<span class="attribute">-webkit-box-orient</span>: horizontal;</div><div class="line">	<span class="attribute">-webkit-box-pack</span>: center;</div><div class="line">	<span class="attribute">display</span>: -moz-box;</div><div class="line">	<span class="attribute">-moz-box-orient</span>: horizontal;</div><div class="line">	<span class="attribute">-moz-box-pack</span>: center;</div><div class="line">	<span class="attribute">display</span>: -o-box;</div><div class="line">  	<span class="attribute">-o-box-orient</span>: horizontal;</div><div class="line">  	<span class="attribute">-o-box-pack</span>: center;</div><div class="line">  	<span class="attribute">display</span>: -ms-box;</div><div class="line">  	<span class="attribute">-ms-box-orient</span>: horizontal;</div><div class="line">  	<span class="attribute">-ms-box-pack</span>: center;</div><div class="line">  	<span class="attribute">display</span>: box;</div><div class="line">  	<span class="attribute">box-orient</span>: horizontal;</div><div class="line">  	<span class="attribute">box-pack</span>: center;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>6) 使用CSS3中新增的transform属性, 子元素设置如下:</p>
 <figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="selector-class">.son</span>&#123;</div><div class="line">	<span class="attribute">position</span>:absolute;</div><div class="line">  	<span class="attribute">left</span>:<span class="number">50%</span>;</div><div class="line">  	<span class="attribute">transform</span>:<span class="built_in">translate</span>(-50%,0);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
@@ -4964,7 +4964,7 @@ c3(no)->op2->io1->e</textarea><textarea id="flowchart-0-options" style="display:
 <p>元素高度可以动态改变, 不需再CSS中定义, 如果父元素没有足够空间时, 该元素内容也不会被截断.</p>
 <p><strong>缺点</strong></p>
 <p>IE6~7, 甚至IE8 beta中无效.</p>
-<p>4) 可用 <strong>Flex</strong>, 这是CSS布局未来的趋势. Flexbox是CSS3新增属性, 设计初衷是为了解决像垂直居中这样的常见布局问题. 相关的文章如《<a href="http://coding.smashingmagazine.com/2013/05/22/centering-elements-with-flexbox/" target="_blank" rel="external">Centering Elements with Flexbox</a>》</p>
+<p>4) 可用 <strong>Flex 2012版</strong>, 这是CSS布局未来的趋势. Flexbox是CSS3新增属性, 设计初衷是为了解决像垂直居中这样的常见布局问题. 相关的文章如《<a href="http://louiszhai.github.io/2017/01/13/flex/">弹性盒模型Flex指南</a>》</p>
 <p>父元素做如下设置即可保证子元素垂直居中:</p>
 <figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="selector-class">.parent</span> &#123;</div><div class="line">  <span class="attribute">display</span>: flex;</div><div class="line">  <span class="attribute">align-items</span>: center;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p><strong>优点</strong></p>
@@ -4980,7 +4980,7 @@ c3(no)->op2->io1->e</textarea><textarea id="flowchart-0-options" style="display:
 <li>需要浏览器厂商前缀</li>
 <li>渲染上可能会有一些问题</li>
 </ul>
-<p>5) 使用CSS3盒模型</p>
+<p>5) 使用flex 2009版.</p>
 <figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="selector-class">.parent</span> &#123;</div><div class="line">  	<span class="attribute">display</span>: box;</div><div class="line">  	<span class="attribute">box-orient</span>: vertical;</div><div class="line">  	<span class="attribute">box-pack</span>: center;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p><strong>优点</strong></p>
 <p>实现简单, 扩展性强</p>
@@ -5036,7 +5036,7 @@ c3(no)->op2->io1->e</textarea><textarea id="flowchart-0-options" style="display:
 <ul>
 <li><a href="http://blog.csdn.net/freshlover/article/details/11579669" target="_blank" rel="external">盘点8种CSS实现垂直居中水平居中的绝对定位居中技术 - freshlover的专栏 - 博客频道 - CSDN.NET</a></li>
 <li><a href="https://www.smashingmagazine.com/2013/05/centering-elements-with-flexbox/" target="_blank" rel="external">Designing CSS Layouts With Flexbox Is As Easy As Pie – Smashing Magazine</a></li>
-<li><a href="http://www.w3cplus.com/css/elements-horizontally-center-with-css.html" target="_blank" rel="external">六种实现元素水平居中<em>水平居中, 垂直居中 教程\</em>大漠</a></li>
+<li><a href="http://www.w3cplus.com/css/elements-horizontally-center-with-css.html" target="_blank" rel="external">六种实现元素水平居中_水平居中, 垂直居中 教程_大漠</a></li>
 </ul>
 ]]></content>
     
@@ -5498,7 +5498,7 @@ c3(no)->op2->io1->e</textarea><textarea id="flowchart-0-options" style="display:
     <link href="http://louiszhai.github.io/2016/01/11/cross-domain/"/>
     <id>http://louiszhai.github.io/2016/01/11/cross-domain/</id>
     <published>2016-01-11T00:01:33.000Z</published>
-    <updated>2017-04-17T02:54:08.000Z</updated>
+    <updated>2017-04-20T02:12:14.000Z</updated>
     
     <content type="html"><![CDATA[<h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h3><p>同源策略 (Same-Origin Policy) 最早由 Netscape 公司提出, 所谓同源就是要求, 域名, 协议, 端口相同. 非同源的脚本不能访问或者操作其他域的页面对象(如DOM等). 作为著名的安全策略, 虽然它只是一个规范, 并不强制要求,  但现在所有支持 javaScript 的浏览器都会使用这个策略. 以至于该策略成为浏览器最核心最基本的安全功能, 如果缺少了同源策略, web的安全将无从谈起.</p>
 <a id="more"></a>
@@ -5604,8 +5604,8 @@ c3(no)->op2->io1->e</textarea><textarea id="flowchart-0-options" style="display:
 <h4 id="WebSocket"><a href="#WebSocket" class="headerlink" title="WebSocket"></a>WebSocket</h4><p>在WebSocket出现之前, 很多网站为了实现实时推送技术, 通常采用的方案是轮询(Polling)和Comet技术, Comet又可细分为两种实现方式, 一种是长轮询机制, 一种称为流技术, 这两种方式实际上是对轮询技术的改进, 这些方案带来很明显的缺点, 需要由浏览器对服务器发出HTTP request, 大量消耗服务器带宽和资源. 面对这种状况, HTML5定义了WebSocket协议, 能更好的节省服务器资源和带宽并实现真正意义上的实时推送.</p>
 <p>WebSocket 本质上是一个基于TCP的协议, 它的目标是在一个单独的持久链接上提供全双工(full-duplex), 双向通信, 以基于事件的方式, 赋予浏览器实时通信能力. 既然是双向通信, 就意味着服务器端和客户端可以同时发送并响应请求, 而不再像HTTP的请求和响应. (同源策略对 web sockets 不适用)</p>
 <p>原理: 为了建立一个WebSocket连接，客户端浏览器首先要向服务器发起一个HTTP请求, 这个请求和通常的HTTP请求不同, 包含了一些附加头信息, 其中附加头信息”Upgrade: WebSocket”表明这是一个申请协议升级的HTTP请求, 服务器端解析这些附加的头信息然后产生应答信息返回给客户端, 客户端和服务器端的WebSocket连接就建立起来了, 双方就可以通过这个连接通道自由的传递信息, 并且这个连接会持续存在直到客户端或者服务器端的某一方主动的关闭连接.</p>
-<p><em>一个典型WebSocket客户端请求头：</em></p>
-<p><img src="/docImages/cross-domain03.jpg" alt=""></p>
+<p>一个典型WebSocket客户端请求头：</p>
+<p><img src="http://louiszhai.github.io/docImages/cross-domain03.jpg" alt="WebSocket客户端请求头"></p>
 <hr>
 <p>本问就讨论这么多内容,大家有什么问题或好的想法欢迎在下方参与<a href="#respond">留言和评论</a>.</p>
 <p>本文作者: <a href="https://github.com/Louiszhai" target="_blank" rel="external">louis</a></p>

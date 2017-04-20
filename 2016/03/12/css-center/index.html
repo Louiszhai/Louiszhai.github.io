@@ -12,7 +12,7 @@
 <meta property="og:url" content="http://louiszhai.github.io/2016/03/12/css-center/index.html">
 <meta property="og:site_name" content="louis blog">
 <meta property="og:description" content="css 水平居中 垂直居中 fit-content flex translate line-height vertical-align">
-<meta property="og:updated_time" content="2017-04-17T02:54:08.000Z">
+<meta property="og:updated_time" content="2017-04-20T02:41:44.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="16种方法实现水平居中垂直居中">
 <meta name="twitter:description" content="css 水平居中 垂直居中 fit-content flex translate line-height vertical-align">
@@ -207,9 +207,9 @@
 <p>3) 若子元素包含 float:left 属性, 为了让子元素水平居中, 则可让父元素宽度设置为fit-content,并且配合margin, 作如下设置:</p>
 <figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="selector-class">.parent</span>&#123;</div><div class="line">  	<span class="attribute">width</span>: -moz-fit-content;</div><div class="line">	<span class="attribute">width</span>: -webkit-fit-content;</div><div class="line">	<span class="attribute">width</span>:fit-content;</div><div class="line">	<span class="attribute">margin</span>:<span class="number">0</span> auto;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>fit-content是CSS3中给width属性新加的一个属性值,它配合margin可以轻松实现水平居中, 目前只支持Chrome 和 Firefox浏览器.</p>
-<p>4) 使用flex布局, 可以轻松的实现水平居中, 子元素设置如下:</p>
+<p>4) 使用flex 2012年版本布局, 可以轻松的实现水平居中, 子元素设置如下:</p>
 <figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="selector-class">.son</span>&#123;</div><div class="line">	<span class="attribute">display</span>: flex;</div><div class="line">	<span class="attribute">justify-content</span>: center;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>5) 使用css3 盒模型, 父元素display: box;box-pack: center;如下设置:</p>
+<p>5) 使用flex 2009年版本, 父元素display: box;box-pack: center;如下设置:</p>
 <figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="selector-class">.parent</span> &#123;</div><div class="line">	<span class="attribute">display</span>: -webkit-box;</div><div class="line">	<span class="attribute">-webkit-box-orient</span>: horizontal;</div><div class="line">	<span class="attribute">-webkit-box-pack</span>: center;</div><div class="line">	<span class="attribute">display</span>: -moz-box;</div><div class="line">	<span class="attribute">-moz-box-orient</span>: horizontal;</div><div class="line">	<span class="attribute">-moz-box-pack</span>: center;</div><div class="line">	<span class="attribute">display</span>: -o-box;</div><div class="line">  	<span class="attribute">-o-box-orient</span>: horizontal;</div><div class="line">  	<span class="attribute">-o-box-pack</span>: center;</div><div class="line">  	<span class="attribute">display</span>: -ms-box;</div><div class="line">  	<span class="attribute">-ms-box-orient</span>: horizontal;</div><div class="line">  	<span class="attribute">-ms-box-pack</span>: center;</div><div class="line">  	<span class="attribute">display</span>: box;</div><div class="line">  	<span class="attribute">box-orient</span>: horizontal;</div><div class="line">  	<span class="attribute">box-pack</span>: center;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>6) 使用CSS3中新增的transform属性, 子元素设置如下:</p>
 <figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="selector-class">.son</span>&#123;</div><div class="line">	<span class="attribute">position</span>:absolute;</div><div class="line">  	<span class="attribute">left</span>:<span class="number">50%</span>;</div><div class="line">  	<span class="attribute">transform</span>:<span class="built_in">translate</span>(-50%,0);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
@@ -226,7 +226,7 @@
 <p>元素高度可以动态改变, 不需再CSS中定义, 如果父元素没有足够空间时, 该元素内容也不会被截断.</p>
 <p><strong>缺点</strong></p>
 <p>IE6~7, 甚至IE8 beta中无效.</p>
-<p>4) 可用 <strong>Flex</strong>, 这是CSS布局未来的趋势. Flexbox是CSS3新增属性, 设计初衷是为了解决像垂直居中这样的常见布局问题. 相关的文章如《<a href="http://coding.smashingmagazine.com/2013/05/22/centering-elements-with-flexbox/" target="_blank" rel="external">Centering Elements with Flexbox</a>》</p>
+<p>4) 可用 <strong>Flex 2012版</strong>, 这是CSS布局未来的趋势. Flexbox是CSS3新增属性, 设计初衷是为了解决像垂直居中这样的常见布局问题. 相关的文章如《<a href="http://louiszhai.github.io/2017/01/13/flex/">弹性盒模型Flex指南</a>》</p>
 <p>父元素做如下设置即可保证子元素垂直居中:</p>
 <figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="selector-class">.parent</span> &#123;</div><div class="line">  <span class="attribute">display</span>: flex;</div><div class="line">  <span class="attribute">align-items</span>: center;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p><strong>优点</strong></p>
@@ -242,7 +242,7 @@
 <li>需要浏览器厂商前缀</li>
 <li>渲染上可能会有一些问题</li>
 </ul>
-<p>5) 使用CSS3盒模型</p>
+<p>5) 使用flex 2009版.</p>
 <figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="selector-class">.parent</span> &#123;</div><div class="line">  	<span class="attribute">display</span>: box;</div><div class="line">  	<span class="attribute">box-orient</span>: vertical;</div><div class="line">  	<span class="attribute">box-pack</span>: center;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p><strong>优点</strong></p>
 <p>实现简单, 扩展性强</p>
@@ -298,7 +298,7 @@
 <ul>
 <li><a href="http://blog.csdn.net/freshlover/article/details/11579669" target="_blank" rel="external">盘点8种CSS实现垂直居中水平居中的绝对定位居中技术 - freshlover的专栏 - 博客频道 - CSDN.NET</a></li>
 <li><a href="https://www.smashingmagazine.com/2013/05/centering-elements-with-flexbox/" target="_blank" rel="external">Designing CSS Layouts With Flexbox Is As Easy As Pie – Smashing Magazine</a></li>
-<li><a href="http://www.w3cplus.com/css/elements-horizontally-center-with-css.html" target="_blank" rel="external">六种实现元素水平居中<em>水平居中, 垂直居中 教程\</em>大漠</a></li>
+<li><a href="http://www.w3cplus.com/css/elements-horizontally-center-with-css.html" target="_blank" rel="external">六种实现元素水平居中_水平居中, 垂直居中 教程_大漠</a></li>
 </ul>
 
       
