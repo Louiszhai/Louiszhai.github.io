@@ -20,7 +20,7 @@
 <meta property="og:image" content="http://louiszhai.github.io/docImages/http-cache02.png">
 <meta property="og:image" content="http://louiszhai.github.io/docImages/http-cache04.png">
 <meta property="og:image" content="http://louiszhai.github.io/docImages/http-cache05.png">
-<meta property="og:updated_time" content="2017-04-20T08:18:12.000Z">
+<meta property="og:updated_time" content="2017-04-20T08:30:36.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="浏览器缓存机制剖析">
 <meta name="twitter:description" content="http-cache 浏览器缓存策略 浏览器缓存机制 304协商缓存 强缓存 Age Date Vary Cache-Control Expires ETag Last-Modified Pragma If-Modified-Since If-Unmodified-Since If-Match If-None-Match no-cache max-age max-stale min-fresh m">
@@ -551,7 +551,7 @@
 <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control" target="_blank" rel="external">Cache-Control - HTTP | MDN</a></li>
 <li><a href="https://mp.weixin.qq.com/s?__biz=MzA3NTYzODYzMg==&amp;mid=2653578381&amp;idx=1&amp;sn=3f676e2b2e08bcff831c69d31cf51c51&amp;key=dde62796d24517c892043e67f2520e046c13fc0558822ef7ba7fbe8003ddde05e22230fb4ccb2c31133df2a507940c5d4561c7b4f4570969a47cf1388ff57e4bfea70a3810f3fc805e2a5d9aa3192439&amp;ascene=0&amp;uin=MTM4MjU5NzA0MA%3D%3D&amp;devicetype=iMac+MacBookPro12%2C1+OSX+OSX+10.11.6+build(15G1212)&amp;version=12010110&amp;nettype=WIFI&amp;fontScale=100&amp;pass_ticket=n3plsW%2FV7Vb6O9hKzPNig5MYpXUoJo3tNUNxhJ5Jh6e9AS%2BRXmvJPbIzUeUmL3S2" target="_blank" rel="external">彻底弄懂 Http 缓存机制 - 基于缓存策略三要素分解法</a></li>
 </ul>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.2.7/raphael.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/flowchart/1.6.5/flowchart.min.js"></script><textarea id="flowchart-0-code" style="display: none">st=>start: 发起请求
+<script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.2.7/raphael.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/flowchart/1.6.5/flowchart.min.js"></script><textarea id="flowchart-0-code" style="display: none">st=>start: 发起请求|pass
 e=>end: 载入资源
 c1=>condition: 是否已缓存?
 c2=>condition: [过期策略]-
