@@ -379,7 +379,7 @@
     <link href="http://louiszhai.github.io/2017/04/07/http-cache/"/>
     <id>http://louiszhai.github.io/2017/04/07/http-cache/</id>
     <published>2017-04-07T00:00:00.000Z</published>
-    <updated>2017-04-20T02:44:00.000Z</updated>
+    <updated>2017-04-20T08:18:12.000Z</updated>
     
     <content type="html"><![CDATA[<p>缓存一直是前端优化的主战场, 利用好缓存就成功了一半. 本篇从http请求和响应的头域入手, 让你对浏览器缓存有个整体的概念. 最终你会发现强缓存, 协商缓存 和 启发式缓存是如此的简单.</p>
 <h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a><strong>导读</strong></h3><p>我不知道拖延症是有多严重, 反正去年3月开的题, 直到今年4月才开始写.(请尽情吐槽吧)</p>
@@ -723,7 +723,7 @@
 <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control" target="_blank" rel="external">Cache-Control - HTTP | MDN</a></li>
 <li><a href="https://mp.weixin.qq.com/s?__biz=MzA3NTYzODYzMg==&amp;mid=2653578381&amp;idx=1&amp;sn=3f676e2b2e08bcff831c69d31cf51c51&amp;key=dde62796d24517c892043e67f2520e046c13fc0558822ef7ba7fbe8003ddde05e22230fb4ccb2c31133df2a507940c5d4561c7b4f4570969a47cf1388ff57e4bfea70a3810f3fc805e2a5d9aa3192439&amp;ascene=0&amp;uin=MTM4MjU5NzA0MA%3D%3D&amp;devicetype=iMac+MacBookPro12%2C1+OSX+OSX+10.11.6+build(15G1212)&amp;version=12010110&amp;nettype=WIFI&amp;fontScale=100&amp;pass_ticket=n3plsW%2FV7Vb6O9hKzPNig5MYpXUoJo3tNUNxhJ5Jh6e9AS%2BRXmvJPbIzUeUmL3S2" target="_blank" rel="external">彻底弄懂 Http 缓存机制 - 基于缓存策略三要素分解法</a></li>
 </ul>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.2.7/raphael.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/flowchart/1.6.5/flowchart.min.js"></script><textarea id="flowchart-0-code" style="display: none">st=>start: 发起请求|pass
+<script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.2.7/raphael.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/flowchart/1.6.5/flowchart.min.js"></script><textarea id="flowchart-0-code" style="display: none">st=>start: 发起请求
 e=>end: 载入资源
 c1=>condition: 是否已缓存?
 c2=>condition: [过期策略]-
