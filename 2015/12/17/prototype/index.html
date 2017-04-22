@@ -37,7 +37,7 @@
 	<header id="header" class="inner">
 		<a href="/" class="profilepic">
 			
-			<img src="https://avatars2.githubusercontent.com/u/8412301?v=3&amp;s=320" class="js-avatar" style="width: 100%;height: 100%;opacity: 1;">
+			<img lazy-src="https://avatars2.githubusercontent.com/u/8412301?v=3&amp;s=320" class="js-avatar">
 			
 		</a>
 
@@ -127,7 +127,7 @@
 		<header id="header" class="inner">
 			<div class="profilepic">
 			
-				<img src="https://avatars2.githubusercontent.com/u/8412301?v=3&amp;s=320" class="js-avatar" style="width: 100%;height: 100%;opacity: 1;">
+				<img lazy-src="https://avatars2.githubusercontent.com/u/8412301?v=3&amp;s=320" class="js-avatar">
 			
 			</div>
 			<hgroup>
@@ -279,7 +279,28 @@
 <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/prototype" target="_blank" rel="external">Object.prototype - JavaScript | MDN</a></li>
 <li><a href="http://www.cnblogs.com/snandy/archive/2012/09/01/2664134.html" target="_blank" rel="external">JavaScript中__proto__与prototype的关系 - snandy - 博客园</a></li>
 </ul>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.2.7/raphael.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/flowchart/1.6.5/flowchart.min.js"></script><textarea id="flowchart-0-code" style="display: none">st=>start: 发起请求|pass
+e=>end: 载入资源
+c1=>condition: 是否已缓存?
+c2=>condition: [过期策略]-
+缓存是否过期?
+c3=>condition: 验证是否通过?
+op1=>operation: [协商策略]-
+重新向服务器发起验证
+op2=>operation: 向服务器请求资源
+op3=>operation: 304响应
+io1=>inputoutput: [存储策略]-
+响应内容存入缓存
+io2=>inputoutput: [存储策略]-
+根据响应头更新缓存
 
+st->c1
+c1(yes,right)->c2
+c1(no)->op2
+c2(yes, right)->op1(right)->c3
+c2(no)->e
+c3(yes, right)->op3->io2->e
+c3(no)->op2->io1->e</textarea><textarea id="flowchart-0-options" style="display: none">{"scale":1,"line-width":1,"line-length":50,"text-margin":10,"font-size":12,"maxWidth":3,"symbols":{"start":{"fill":"#B5CA92","element-color":"green"},"condition":{"fill":"#58C4A3","yes-text":"是","no-text":"否"},"operation":{"fill":"#F1D5A6"},"inputoutput":{"fill":"#C59E63"},"end":{"fill":"#92A8CD"}}}</textarea><script>  var code = document.getElementById("flowchart-0-code").value;  var options = JSON.parse(document.getElementById("flowchart-0-options").value);  var diagram = flowchart.parse(code);  diagram.drawSVG("flowchart-0", options);</script>
       
     </div>
     
@@ -292,7 +313,7 @@
         <a id="btn_donate" class="btn_donate" href="javascript:;" title="打赏"></a>
         <span class="donate_txt">
            &uarr;<br>
-       年底买车全靠它了！
+       如果你觉得有用，就支持一下吧！
         </span>
       </div>  
   <div id="donate_guide" class="donate_bar center hidden" >
@@ -464,7 +485,7 @@
 	var yiliaConfig = {
 		fancybox: true,
 		mathjax: false,
-		animate: false,
+		animate: true,
 		isHome: false,
 		isPost: true,
 		isArchive: false,
