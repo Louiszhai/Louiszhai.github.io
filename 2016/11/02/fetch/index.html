@@ -23,7 +23,7 @@
 <meta property="og:image" content="http://louiszhai.github.io/docImages/ajax22.png">
 <meta property="og:image" content="http://louiszhai.github.io/docImages/ajax15.png">
 <meta property="og:image" content="http://louiszhai.github.io/docImages/ajax16.png">
-<meta property="og:updated_time" content="2017-04-17T02:54:08.000Z">
+<meta property="og:updated_time" content="2017-04-25T10:25:09.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Fetch进阶指南">
 <meta name="twitter:description" content="fetch async await mode promise progress abort">
@@ -303,7 +303,11 @@
 <p>由于await采用的是同步的写法, 看起来它就和alert函数一样, 可以自动阻塞上下文. 因此它可以重复执行多次, 就像上述代码②一样.</p>
 <p>可以看到, await/async 同步阻塞式的写法解决了完全使用 Promise 的一大痛点——不同Promise之间共享数据问题. Promise 需要设置上层变量从而实现数据共享, 而 await/async 就不存在这样的问题, 只需要像写alert一样书写就可以了.</p>
 <p>值得注意的是, <strong>await 只能用于 async 声明的函数上下文中</strong>. 如下 forEach 中, 是不能直接使用await的.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> array = [<span class="number">0</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>];</div><div class="line"><span class="function">(<span class="params"><span class="keyword">async</span> (</span>)=&gt;</span>&#123;</div><div class="line">  array.forEach(<span class="function"><span class="keyword">function</span>(<span class="params">item</span>)</span>&#123;</div><div class="line">    <span class="built_in">console</span>.log(item);</div><div class="line">    <span class="keyword">await</span> wait(<span class="number">1000</span>);<span class="comment">//这是错误的写法</span></div><div class="line">  &#125;);</div><div class="line">&#125;)();</div><div class="line"><span class="comment">//因await只能用于 async 声明的函数上下文中, 故不能写在forEach内.下面我们来看正确的写法</span></div><div class="line">(<span class="keyword">async</span> ()=&gt;&#123;</div><div class="line">  <span class="keyword">for</span>(<span class="keyword">let</span> i=<span class="number">0</span>,len=array.length;i&lt;len;i++)&#123;</div><div class="line">    <span class="built_in">console</span>.log(array[i]);</div><div class="line">    <span class="keyword">await</span> wait(<span class="number">1000</span>);</div><div class="line">  &#125;</div><div class="line">&#125;)();</div></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> array = [<span class="number">0</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>];</div><div class="line"><span class="function">(<span class="params"><span class="keyword">async</span> (</span>)=&gt;</span>&#123;</div><div class="line">  array.forEach(<span class="function"><span class="keyword">function</span>(<span class="params">item</span>)</span>&#123;</div><div class="line">    <span class="keyword">await</span> wait(<span class="number">1000</span>);<span class="comment">//这是错误的写法, 因await不在async声明的函数上下文中</span></div><div class="line">    <span class="built_in">console</span>.log(item);</div><div class="line">  &#125;);</div><div class="line">&#125;)();</div></pre></td></tr></table></figure>
+<p>如果是试图将async声明的函数作为回调传给forEach，该回调将同时触发多次，回调内部await依然有效，只是多次的await随着回调一起同步执行了，这便不符合我们阻塞循环的初衷。如下：</p>
+<figure class="highlight gauss"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">const <span class="function"><span class="keyword">fn</span> = <span class="title">async</span> <span class="params">(item)</span>=&gt;&#123;</span></div><div class="line">  await <span class="built_in">wait</span><span class="params">(<span class="number">1000</span>)</span>; <span class="comment">// 循环中的多个await同时执行，因此等待1s后将同时输出数组各个元素</span></div><div class="line">  console.<span class="built_in">log</span>(item);</div><div class="line">&#125;;</div><div class="line">array.forEach(<span class="function"><span class="keyword">fn</span>)</span>;</div></pre></td></tr></table></figure>
+<p>正确的写法如下：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">(<span class="keyword">async</span> ()=&gt;&#123;</div><div class="line">  <span class="keyword">for</span>(<span class="keyword">let</span> i=<span class="number">0</span>,len=array.length;i&lt;len;i++)&#123;</div><div class="line">    <span class="keyword">await</span> wait(<span class="number">1000</span>);</div><div class="line">    <span class="built_in">console</span>.log(array[i]);</div><div class="line">  &#125;</div><div class="line">&#125;)();</div></pre></td></tr></table></figure>
 <h5 id="如何试运行async-await"><a href="#如何试运行async-await" class="headerlink" title="如何试运行async/await"></a>如何试运行async/await</h5><p>鉴于目前只有Edge支持 async/await, 我们可以使用以下方法之一运行我们的代码.</p>
 <ol>
 <li><p>随着node7.0的发布, node中可以使用如下方式直接运行:</p>
@@ -376,34 +380,13 @@
 <p>参考文章</p>
 <ul>
 <li><a href="https://fetch.spec.whatwg.org/#forbidden-header-name" target="_blank" rel="external">Fetch Standard</a></li>
-<li><a href="https://segmentfault.com/a/1190000003810652" target="_blank" rel="external">传统 Ajax 已死，Fetch 永生 - 会影 - SegmentFault</a></li>
-<li><a href="https://cnodejs.org/topic/5640b80d3a6aa72c5e0030b6" target="_blank" rel="external">体验异步的终极解决方案-ES7的Async/Await - CNode技术社区</a></li>
+<li><a href="https://segmentfault.com/a/1190000003810652" target="_blank" rel="external">传统 Ajax 已死，Fetch 永生</a></li>
+<li><a href="https://cnodejs.org/topic/5640b80d3a6aa72c5e0030b6" target="_blank" rel="external">体验异步的终极解决方案-ES7的Async/Await</a></li>
 <li><a href="https://tc39.github.io/ecma262/#sec-promise-constructor" target="_blank" rel="external">ES6-Promise</a></li>
-<li><a href="http://www.tuicool.com/articles/QZBJ7zJ" target="_blank" rel="external">译-JavaScript Fetch API - 推酷</a></li>
-<li><a href="http://imweb.io/topic/57c6ea35808fd2fb204eef63" target="_blank" rel="external">让fetch也可以timeout - 腾讯Web前端 IMWeb 团队社区 | blog | 团队博客</a></li>
+<li><a href="http://www.tuicool.com/articles/QZBJ7zJ" target="_blank" rel="external">译-JavaScript Fetch API</a></li>
+<li><a href="http://imweb.io/topic/57c6ea35808fd2fb204eef63" target="_blank" rel="external">让fetch也可以timeout</a></li>
 </ul>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.2.7/raphael.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/flowchart/1.6.5/flowchart.min.js"></script><textarea id="flowchart-0-code" style="display: none">st=>start: 发起请求|pass
-e=>end: 载入资源
-c1=>condition: 是否已缓存?
-c2=>condition: [过期策略]-
-缓存是否过期?
-c3=>condition: 验证是否通过?
-op1=>operation: [协商策略]-
-重新向服务器发起验证
-op2=>operation: 向服务器请求资源
-op3=>operation: 304响应
-io1=>inputoutput: [存储策略]-
-响应内容存入缓存
-io2=>inputoutput: [存储策略]-
-根据响应头更新缓存
 
-st->c1
-c1(yes,right)->c2
-c1(no)->op2
-c2(yes, right)->op1(right)->c3
-c2(no)->e
-c3(yes, right)->op3->io2->e
-c3(no)->op2->io1->e</textarea><textarea id="flowchart-0-options" style="display: none">{"scale":1,"line-width":1,"line-length":50,"text-margin":10,"font-size":12,"maxWidth":3,"symbols":{"start":{"fill":"#B5CA92","element-color":"green"},"condition":{"fill":"#58C4A3","yes-text":"是","no-text":"否"},"operation":{"fill":"#F1D5A6"},"inputoutput":{"fill":"#C59E63"},"end":{"fill":"#92A8CD"}}}</textarea><script>  var code = document.getElementById("flowchart-0-code").value;  var options = JSON.parse(document.getElementById("flowchart-0-options").value);  var diagram = flowchart.parse(code);  diagram.drawSVG("flowchart-0", options);</script>
       
     </div>
     

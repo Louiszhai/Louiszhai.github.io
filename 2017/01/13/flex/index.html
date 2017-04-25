@@ -15,7 +15,7 @@
 <meta property="og:image" content="http://louiszhai.github.io/docImages/flex01.jpeg">
 <meta property="og:image" content="http://louiszhai.github.io/docImages/flex03.png">
 <meta property="og:image" content="http://louiszhai.github.io/docImages/flex02.png">
-<meta property="og:updated_time" content="2017-04-17T02:55:12.000Z">
+<meta property="og:updated_time" content="2017-04-25T05:46:11.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="弹性盒模型Flex指南">
 <meta name="twitter:description" content="弹性盒模型 flex flex-grow flex-shrink flex-basis align-items align-content order flex-flow flex-direction flex-wrap align-self">
@@ -480,6 +480,8 @@
 <li>最终, 我们发现, 还是flex弹性盒模型来得方便快捷, 它只需要父级元素样式设置为<code>display:flex</code>.</li>
 </ul>
 </li>
+<li><p>iphone低版本下，flex与inline-block有兼容性问题，这将导致inline-block的元素脱离flex布局（就好像其父元素没有设置为flex布局一样）。目前没有什么比较好的解决方案，建议在flex布局下慎用inline-block元素。</p>
+</li>
 </ol>
 <p>有关flex的旧语法, 请戳这篇回顾  <a href="https://segmentfault.com/a/1190000003978624" target="_blank" rel="external">Flex布局新旧混合写法详解（兼容微信）</a> .</p>
 <p>有关移动端的最佳实践, 请戳这篇围观 <a href="https://isux.tencent.com/flexbox.html" target="_blank" rel="external">移动端全兼容的flexbox速成班</a> .</p>
@@ -496,28 +498,7 @@
 <li><a href="http://www.ruanyifeng.com/blog/2015/07/flex-grammar.html" target="_blank" rel="external">Flex 布局教程：语法篇 - 阮一峰的网络日志</a></li>
 <li><a href="https://zm10.sm-tc.cn/?src=l4uLj8XQ0IiIiNGIzJyPk4qM0ZyQktCcjIzM0J7SmIqWm5rSi5DSmZOah52Qh9GXi5KT&amp;from=derive&amp;depth=2&amp;v=1&amp;link_type=12&amp;uid=5f61658d8b9f95c8d0141e9c09fa6e85&amp;hid=f2ad43235a237619a455bdb39512d4c1&amp;restype=1&amp;uc_param_str=dnntnwvepffrgibijbprsvdsei&amp;query=%E5%A4%A7%E6%BC%A0+flex" target="_blank" rel="external">一个完整的Flexbox指南–大漠</a></li>
 </ul>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.2.7/raphael.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/flowchart/1.6.5/flowchart.min.js"></script><textarea id="flowchart-0-code" style="display: none">st=>start: 发起请求|pass
-e=>end: 载入资源
-c1=>condition: 是否已缓存?
-c2=>condition: [过期策略]-
-缓存是否过期?
-c3=>condition: 验证是否通过?
-op1=>operation: [协商策略]-
-重新向服务器发起验证
-op2=>operation: 向服务器请求资源
-op3=>operation: 304响应
-io1=>inputoutput: [存储策略]-
-响应内容存入缓存
-io2=>inputoutput: [存储策略]-
-根据响应头更新缓存
 
-st->c1
-c1(yes,right)->c2
-c1(no)->op2
-c2(yes, right)->op1(right)->c3
-c2(no)->e
-c3(yes, right)->op3->io2->e
-c3(no)->op2->io1->e</textarea><textarea id="flowchart-0-options" style="display: none">{"scale":1,"line-width":1,"line-length":50,"text-margin":10,"font-size":12,"maxWidth":3,"symbols":{"start":{"fill":"#B5CA92","element-color":"green"},"condition":{"fill":"#58C4A3","yes-text":"是","no-text":"否"},"operation":{"fill":"#F1D5A6"},"inputoutput":{"fill":"#C59E63"},"end":{"fill":"#92A8CD"}}}</textarea><script>  var code = document.getElementById("flowchart-0-code").value;  var options = JSON.parse(document.getElementById("flowchart-0-options").value);  var diagram = flowchart.parse(code);  diagram.drawSVG("flowchart-0", options);</script>
       
     </div>
     
