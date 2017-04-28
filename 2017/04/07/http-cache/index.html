@@ -551,7 +551,28 @@
 <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control" target="_blank" rel="external">Cache-Control - HTTP | MDN</a></li>
 <li><a href="https://mp.weixin.qq.com/s?__biz=MzA3NTYzODYzMg==&amp;mid=2653578381&amp;idx=1&amp;sn=3f676e2b2e08bcff831c69d31cf51c51&amp;key=dde62796d24517c892043e67f2520e046c13fc0558822ef7ba7fbe8003ddde05e22230fb4ccb2c31133df2a507940c5d4561c7b4f4570969a47cf1388ff57e4bfea70a3810f3fc805e2a5d9aa3192439&amp;ascene=0&amp;uin=MTM4MjU5NzA0MA%3D%3D&amp;devicetype=iMac+MacBookPro12%2C1+OSX+OSX+10.11.6+build(15G1212)&amp;version=12010110&amp;nettype=WIFI&amp;fontScale=100&amp;pass_ticket=n3plsW%2FV7Vb6O9hKzPNig5MYpXUoJo3tNUNxhJ5Jh6e9AS%2BRXmvJPbIzUeUmL3S2" target="_blank" rel="external">彻底弄懂 Http 缓存机制 - 基于缓存策略三要素分解法</a></li>
 </ul>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.2.7/raphael.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/flowchart/1.6.5/flowchart.min.js"></script><textarea id="flowchart-0-code" style="display: none">st=>start: 发起请求|pass
+e=>end: 载入资源
+c1=>condition: 是否已缓存?
+c2=>condition: [过期策略]-
+缓存是否过期?
+c3=>condition: 验证是否通过?
+op1=>operation: [协商策略]-
+重新向服务器发起验证
+op2=>operation: 向服务器请求资源
+op3=>operation: 304响应
+io1=>inputoutput: [存储策略]-
+响应内容存入缓存
+io2=>inputoutput: [存储策略]-
+根据响应头更新缓存
 
+st->c1
+c1(yes,right)->c2
+c1(no)->op2
+c2(yes, right)->op1(right)->c3
+c2(no)->e
+c3(yes, right)->op3->io2->e
+c3(no)->op2->io1->e</textarea><textarea id="flowchart-0-options" style="display: none">{"scale":1,"line-width":1,"line-length":50,"text-margin":10,"font-size":12,"maxWidth":3,"symbols":{"start":{"fill":"#B5CA92","element-color":"green"},"condition":{"fill":"#58C4A3","yes-text":"是","no-text":"否"},"operation":{"fill":"#F1D5A6"},"inputoutput":{"fill":"#C59E63"},"end":{"fill":"#92A8CD"}}}</textarea><script>  var code = document.getElementById("flowchart-0-code").value;  var options = JSON.parse(document.getElementById("flowchart-0-options").value);  var diagram = flowchart.parse(code);  diagram.drawSVG("flowchart-0", options);</script>
       
     </div>
     
