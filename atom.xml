@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://louiszhai.github.io/"/>
-  <updated>2017-04-28T10:55:55.000Z</updated>
+  <updated>2017-04-28T22:28:26.000Z</updated>
   <id>http://louiszhai.github.io/</id>
   
   <author>
@@ -16,11 +16,11 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>【深度长文】JavaScript数组全解密</title>
+    <title>【深度长文】JavaScript数组所有API全解密</title>
     <link href="http://louiszhai.github.io/2017/04/28/array/"/>
     <id>http://louiszhai.github.io/2017/04/28/array/</id>
     <published>2017-04-28T05:43:36.000Z</published>
-    <updated>2017-04-28T10:55:55.000Z</updated>
+    <updated>2017-04-28T22:28:26.000Z</updated>
     
     <content type="html"><![CDATA[<p><strong>本文首发于CSDN网站，下面的版本又经过进一步的修订。</strong></p>
 <p>全文共13k+字，系统讲解了JavaScript数组的各种特性和API。</p>
