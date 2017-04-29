@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://louiszhai.github.io/"/>
-  <updated>2017-04-29T05:37:59.000Z</updated>
+  <updated>2017-04-29T07:50:47.000Z</updated>
   <id>http://louiszhai.github.io/</id>
   
   <author>
@@ -20,7 +20,7 @@
     <link href="http://louiszhai.github.io/2017/04/28/array/"/>
     <id>http://louiszhai.github.io/2017/04/28/array/</id>
     <published>2017-04-28T05:43:36.000Z</published>
-    <updated>2017-04-29T05:37:59.000Z</updated>
+    <updated>2017-04-29T07:50:47.000Z</updated>
     
     <content type="html"><![CDATA[<p><strong>本文首发于CSDN网站，下面的版本又经过进一步的修订。</strong></p>
 <p>全文共13k+字，系统讲解了JavaScript数组的各种特性和API。</p>
@@ -623,7 +623,7 @@
 <p>语法：<em>arr.keys()</em></p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> array = [<span class="string">"abc"</span>, <span class="string">"xyz"</span>];</div><div class="line"><span class="keyword">var</span> iterator = array.keys();</div><div class="line"><span class="built_in">console</span>.log(iterator.next()); <span class="comment">// Object &#123;value: 0, done: false&#125;</span></div><div class="line"><span class="built_in">console</span>.log(iterator.next()); <span class="comment">// Object &#123;value: 1, done: false&#125;</span></div><div class="line"><span class="built_in">console</span>.log(iterator.next()); <span class="comment">// Object &#123;value: undefined, done: false&#125;</span></div></pre></td></tr></table></figure>
 <p>索引迭代器会包含那些没有对应元素的索引，如下：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> array = [<span class="string">"abc"</span>, , <span class="string">"xyz"</span>];</div><div class="line"><span class="keyword">var</span> sparseKeys = <span class="built_in">Object</span>.keys(arr);</div><div class="line"><span class="keyword">var</span> denseKeys = [...arr.keys()];</div><div class="line"><span class="built_in">console</span>.log(sparseKeys); <span class="comment">// ["0", "2"]</span></div><div class="line"><span class="built_in">console</span>.log(denseKeys);  <span class="comment">// [0, 1, 2]</span></div></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> array = [<span class="string">"abc"</span>, , <span class="string">"xyz"</span>];</div><div class="line"><span class="keyword">var</span> sparseKeys = <span class="built_in">Object</span>.keys(array);</div><div class="line"><span class="keyword">var</span> denseKeys = [...array.keys()];</div><div class="line"><span class="built_in">console</span>.log(sparseKeys); <span class="comment">// ["0", "2"]</span></div><div class="line"><span class="built_in">console</span>.log(denseKeys);  <span class="comment">// [0, 1, 2]</span></div></pre></td></tr></table></figure>
 <p>其鸭式辨型写法请参考上述 entries 方法。</p>
 <p>前面我们用Array.from生成一个从0到指定数字的新数组，利用keys也很容易实现。</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[...Array(<span class="number">10</span>).keys()]; <span class="comment">// [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]</span></div><div class="line">[...new <span class="built_in">Array</span>(<span class="number">10</span>).keys()]; <span class="comment">// [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]</span></div></pre></td></tr></table></figure>
@@ -6179,138 +6179,44 @@
   </entry>
   
   <entry>
-    <title>由同源策略到前端跨域</title>
-    <link href="http://louiszhai.github.io/2016/01/11/cross-domain/"/>
-    <id>http://louiszhai.github.io/2016/01/11/cross-domain/</id>
+    <title>Function.prototype.bind方法指南</title>
+    <link href="http://louiszhai.github.io/2016/01/11/bind/"/>
+    <id>http://louiszhai.github.io/2016/01/11/bind/</id>
     <published>2016-01-11T00:01:33.000Z</published>
-    <updated>2017-04-20T02:12:14.000Z</updated>
+    <updated>2017-04-17T02:54:08.000Z</updated>
     
-    <content type="html"><![CDATA[<h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h3><p>同源策略 (Same-Origin Policy) 最早由 Netscape 公司提出, 所谓同源就是要求, 域名, 协议, 端口相同. 非同源的脚本不能访问或者操作其他域的页面对象(如DOM等). 作为著名的安全策略, 虽然它只是一个规范, 并不强制要求,  但现在所有支持 javaScript 的浏览器都会使用这个策略. 以至于该策略成为浏览器最核心最基本的安全功能, 如果缺少了同源策略, web的安全将无从谈起.</p>
+    <content type="html"><![CDATA[<h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h3><p>ES5新增了 Function.prototype.bind 方法, 该方法不同于jquery的bind 方法, 它主要用于固定 this 作用域, 避免各种由于上下文切换造成的语义问题. 常用在 setTimeout, for循环等内部.</p>
 <a id="more"></a>
-<h3 id="同源策略的限制"><a href="#同源策略的限制" class="headerlink" title="同源策略的限制"></a>同源策略的限制</h3><p>同源策略下的web世界, 域的壁垒高筑, 从而保证各个网页相互独立, 互相之间不能直接访问, iframe, ajax 均受其限制, 而script标签不受此限制.</p>
-<p>注: 以下如非特别说明, 均指非CORS的, 普通跨域请求.</p>
-<h4 id="iframe限制"><a href="#iframe限制" class="headerlink" title="iframe限制"></a>iframe限制</h4><ul>
-<li>可以访问同域资源, 可读写;</li>
-<li>访问跨域页面时, 只读.</li>
-</ul>
-<h4 id="Ajax限制"><a href="#Ajax限制" class="headerlink" title="Ajax限制"></a>Ajax限制</h4><p>Ajax 的限制比 iframe 限制更严.</p>
-<ul>
-<li>同域资源可读写;</li>
-<li>跨域请求会直接被浏览器拦截.(chrome下跨域请求不会发起, 其他浏览器一般是可发送跨域请求, 但响应被浏览器拦截)</li>
-</ul>
-<h4 id="Script限制"><a href="#Script限制" class="headerlink" title="Script限制"></a>Script限制</h4><p>script并无跨域限制, 这是因为script标签引入的文件不能够被客户端的 js 获取到, 不会影响到原页面的安全, 因此script标签引入的文件没必要遵循浏览器的同源策略. 相反, ajax 加载的文件内容可被客户端 js 获取到, 引入的文件内容可能会泄漏或者影响原页面安全, 故, ajax必须遵循同源策略.</p>
-<h4 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h4><p>同源策略要求三同, 即: <strong>同域</strong>, <strong>同协议</strong>, <strong>同端口</strong>.</p>
-<ul>
-<li>同域即host相同, 顶级域名, 一级域名, 二级域名, 三级域名等必须相同, 且域名不能与 ip 对应;</li>
-<li>同协议要求, http与https协议必须保持一致;</li>
-<li>同端口要求, 端口号必须相同.</li>
-</ul>
-<p>IE有些例外, 它仅仅只是验证主机名以及访问协议，而忽略了端口号.</p>
-<p>这里需要澄清一个概念, 所谓的域, 跟 js 等资源的存放服务器没有关系, 比如你到 baidu.com 使用 script 标签请求了 google.com 下的js, 那么该 js 所在域是 baidu.com, 而不是 google.com. 换言之, 它能操作baidu.com的页面对象, 却不能操作google.com的页面对象.</p>
-<h3 id="跨域访问"><a href="#跨域访问" class="headerlink" title="跨域访问"></a>跨域访问</h3><p>实际上, 我们又不可避免地需要做一些跨域的请求, 下面提供几种方案去绕过同源策略:</p>
-<h4 id="使用代理"><a href="#使用代理" class="headerlink" title="使用代理"></a>使用代理</h4><p>虽然ajax和iframe受同源策略限制, 但服务器端代码请求, 却不受此限制, 我们可以基于此去伪造一个同源请求, 实现跨域的访问. 如下便是实现思路:</p>
-<ol>
-<li>请求同域下的web服务器;</li>
-<li>web服务器像代理一样去请求真正的第三方服务器;</li>
-<li>代理拿到数据过后, 直接返回给客户端ajax.</li>
-</ol>
-<p>这样, 我们便拿到了跨域数据.</p>
-<h4 id="JSONP"><a href="#JSONP" class="headerlink" title="JSONP"></a>JSONP</h4><p>由上, script标签并不受同源策略约束, 基于script 标签可做 jsonp 形式的访问, 可以通过第三方服务器生成动态的js代码来回调本地的js方法，而方法中的参数则由第三方服务器在后台获取，并以JSON的形式填充到JS方法当中. 即 JSON with Padding. 具体如下:</p>
-<p>1) 可用js生成以下html 代码, 去做jsonp的请求.</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">"text/javascript"</span> <span class="attr">src</span>=<span class="string">"https://www.targetDomain.com/jsonp?callback=callbackName"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div></pre></td></tr></table></figure>
-<p>使用 jquery, 即</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">jQuery.getJSON(</div><div class="line">  <span class="string">"https://www.yourdomain.com/jsonp?callback=?"</span>,</div><div class="line">  <span class="function"><span class="keyword">function</span>(<span class="params">data</span>) </span>&#123;</div><div class="line">      <span class="built_in">console</span>.log(<span class="string">"name: "</span> + data.name);</div><div class="line">  &#125;</div><div class="line">);</div></pre></td></tr></table></figure>
-<p>其中回调函数名 “callback” 为 “?”, 即不需要用户指定，而是由jquery生成.</p>
-<p>2) 服务器端,以 java 为例, 参考如下: </p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException &#123;</div><div class="line">  //获取JSON数据</div><div class="line">  String jsonData = "&#123;\"name\":\"jsonp\""&#125;";</div><div class="line">  //获取回调函数名</div><div class="line">  String callback = req.getParameter("callback");  </div><div class="line">  //拼接动态JS代码</div><div class="line">  String output = callback + "(" + jsonData + ");</div><div class="line">    resp.setContentType("text/javascript");</div><div class="line">  PrintWriter out = resp.getWriter();</div><div class="line">  out.println(output);</div><div class="line">  // 响应为 callbackName(&#123;\"name\":\"jsonp\""&#125;);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h4 id="postMessage"><a href="#postMessage" class="headerlink" title="postMessage"></a>postMessage</h4><p>ES5新增的 postMessage() 方法允许来自不同源的脚本采用异步方式进行有限的通信，可以实现跨文本档、多窗口、跨域消息传递.</p>
-<p>语法: postMessage(data,origin)</p>
-<p><strong>data</strong>: 要传递的数据，html5规范中提到该参数可以是JavaScript的任意基本类型或可复制的对象，然而并不是所有浏览器都做到了这点儿，部分浏览器只能处理字符串参数，所以我们在传递参数的时候建议使用JSON.stringify()方法对对象参数序列化，在低版本IE中引用json2.js可以实现类似效果.</p>
-<p><strong>origin</strong>：字符串参数，指明目标窗口的源，协议+主机+端口号[+URL]，URL会被忽略，所以可以不写，这个参数是为了安全考虑，postMessage()方法只会将message传递给指定窗口，当然如果愿意也可以建参数设置为”*”，这样可以传递给任意窗口，如果要指定和当前窗口同源的话设置为”/“。</p>
-<p>父页面发送消息: </p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">window</span>.frames[<span class="number">0</span>].postMessage(<span class="string">'message'</span>, origin)</div></pre></td></tr></table></figure>
-<p>iframe接受消息: </p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">window</span>.addEventListener(<span class="string">'message'</span>,<span class="function"><span class="keyword">function</span>(<span class="params">e</span>)</span>&#123;</div><div class="line">	<span class="keyword">if</span>(e.source!=<span class="built_in">window</span>.parent) <span class="keyword">return</span>;<span class="comment">//若消息源不是父页面则退出</span></div><div class="line">  	<span class="comment">//TODO ...</span></div><div class="line">&#125;);</div></pre></td></tr></table></figure>
-<p>其中 e 对象有三个重要的属性    </p>
-<ul>
-<li>data, 表示父页面传递过来的message</li>
-<li>source, 表示发送消息的窗口对象</li>
-<li>origin, 表示发送消息窗口的源(协议+主机+端口号)</li>
-</ul>
-<h4 id="CORS-跨域访问"><a href="#CORS-跨域访问" class="headerlink" title="CORS 跨域访问"></a>CORS 跨域访问</h4><p>HTML5带来了一种新的跨域请求的方式 — CORS, 即 <a href="https://www.w3.org/TR/cors/" target="_blank" rel="external">Cross-origin resource sharing</a>. 它更加安全, 上述的 JSONP, postMessage 等, 资源本身没有能力保证自己不被滥用. CORS的目标是保护资源只被可信的访问源以正确的方式访问.</p>
-<p>目前, 主流的浏览器都支持此协议, 可以在caniuse.com 中查到<a href="http://caniuse.com/#search=cors" target="_blank" rel="external">http://caniuse.com/#search=cors</a>.</p>
-<p>简而言之, 浏览器不再一味禁止跨域访问, 而是检查目的站点的响应头域, 进而判断是否允许当前站点访问. 通常, 服务器使用以下的这些响应头域用来通知浏览器:</p>
-<figure class="highlight fortran"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">Response headers[edit]</div><div class="line"><span class="keyword">Access</span>-Control-Allow-Origin</div><div class="line"><span class="keyword">Access</span>-Control-Allow-Credentials</div><div class="line"><span class="keyword">Access</span>-Control-Allow-Methods</div><div class="line"><span class="keyword">Access</span>-Control-Allow-Headers</div><div class="line"><span class="keyword">Access</span>-Control-Expose-Headers</div><div class="line"><span class="keyword">Access</span>-Control-<span class="built_in">Max</span>-Age</div></pre></td></tr></table></figure>
-<p>CORS的解决办法是在服务端Response的HTTP头域加入资源的访问权限信息. 如: A站只需要在response头中加一个字段就能让B站跨站访问.</p>
-<figure class="highlight ada"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">access</span>-control-allow-origin:*</div></pre></td></tr></table></figure>
-<p>其中<code>*</code> 表示通配, 所有的域都能访问此资源, 如果严谨一些只允许B站访问:</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">access-control-allow-origin:<span class="xml"><span class="tag">&lt;<span class="name">B-DOMAIN</span>&gt;</span></span></div></pre></td></tr></table></figure>
-<p>这样B站就可以直接访问此资源, 不需要JSONP 也不需要iframe了.</p>
-<p>CORS需要指定METHOD访问, 对于GET和POST请求, 至少要指定以下三种methods, 如下:</p>
-<figure class="highlight ada"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">Access</span>-Control-Allow-Methods: POST, GET, OPTIONS</div></pre></td></tr></table></figure>
-<p>如果是POST请求, 且提交的数据类型是json, 那么, CORS需要指定headers.</p>
-<figure class="highlight ada"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">Access</span>-Control-Allow-Headers: Content-<span class="keyword">Type</span></div></pre></td></tr></table></figure>
-<p>CORS默认是不带cookie的, 设置以下字段将允许浏览器发送cookie.</p>
-<figure class="highlight ada"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">Access</span>-Control-Allow-Credentials: <span class="literal">true</span></div></pre></td></tr></table></figure>
-<p>除此之外, 为了跨站发送cookie等验证信息, <code>access-control-allow-origin</code> 字段将不允许设置为<code>*</code>, 它需要明确指定与请求网页一致的域名.</p>
-<p>同时, 请求网页中需要做如下显式设置才能真正发送cookie.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">xhr.withCredentials = <span class="literal">true</span>;</div></pre></td></tr></table></figure>
-<h4 id="document-domain"><a href="#document-domain" class="headerlink" title="document.domain"></a>document.domain</h4><p>通过修改document的domain属性，我们可以在域和子域或者不同的子域之间通信(即它们必须在同一个一级域名下). 同域策略认为域和子域隶属于不同的域，比如a.com和 script.a.com是不同的域，这时，我们无法在a.com下的页面中调用script.a.com中定义的JavaScript方法。但是当我们把它们document的domain属性都修改为a.com，浏览器就会认为它们处于同一个域下，那么我们就可以互相获取对方数据或者操作对方DOM了。</p>
-<p>比如, 我们在 www.a.com/a.html 下, 现在想获取 www.script.a.com/b.html, 即主域名相同, 二级域名不同. 那么可以这么做:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">document</span>.domain = <span class="string">'a.com'</span>;</div><div class="line"><span class="keyword">var</span> iframe = <span class="built_in">document</span>.createElement(<span class="string">'iframe'</span>);</div><div class="line">iframe.src = <span class="string">'http://www.script.a.com/b.html'</span>;</div><div class="line">iframe.style.display = <span class="string">'none'</span>;</div><div class="line"><span class="built_in">document</span>.body.appendChild(iframe);</div><div class="line">iframe.addEventListener(<span class="string">'load'</span>,<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">	<span class="comment">//TODO 载入完成时做的事情</span></div><div class="line">	<span class="comment">//var _document = iframe.contentWindow.document;</span></div><div class="line"> 	<span class="comment">//...</span></div><div class="line">&#125;,<span class="literal">false</span>);</div></pre></td></tr></table></figure>
-<p>注意: </p>
-<ul>
-<li>2个页面都要设置, 哪怕 a.html 页已处于 <em>a.com</em> 域名下, 也必须显式设置.</li>
-<li>document.domain只能设置为一级域名，比如这里a页不能设置为<em>www.a.com</em> (二级域名).</li>
-</ul>
-<p>利用domain属性跨域具有以下局限性:</p>
-<ul>
-<li>两个页面要在同一个一级域名下, 且必须同协议, 同端口, 即子域互跨;</li>
-<li>只适用于iframe.</li>
-</ul>
-<h5 id="Internet-Explorer同源策略绕过"><a href="#Internet-Explorer同源策略绕过" class="headerlink" title="Internet Explorer同源策略绕过"></a>Internet Explorer同源策略绕过</h5><p>Internet Explorer8以及前面的版本很容易通过document.domain实现同源策略绕过, 通过重写文档对象, 域属性这个问题可以十分轻松的被利用.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> <span class="built_in">document</span>;</div><div class="line"><span class="built_in">document</span> = &#123;&#125;;</div><div class="line"><span class="built_in">document</span>.domain = <span class="string">'http://www.a.com'</span>;</div><div class="line"><span class="built_in">console</span>.log(<span class="built_in">document</span>.domain);</div></pre></td></tr></table></figure>
-<p>如果你在最新的浏览器中运行这段代码, 可能在JavaScript控制台会显示一个同源策略绕过错误.</p>
-<h4 id="window-name"><a href="#window-name" class="headerlink" title="window.name"></a>window.name</h4><p>window 对象的name属性是一个很特别的属性, 当该window的location变化, 然后重新加载, 它的name属性可以依然保持不变. 那么我们可以在页面 A中用iframe加载其他域的页面B, 而页面B中用JavaScript把需要传递的数据赋值给window.name, iframe加载完成之后（iframe.onload）, 页面A修改iframe的地址, 将其变成同域的一个地址, 然后就可以读出iframe的window.name的值了(因为A中的window.name和iframe中的window.name互相独立的, 所以不能直接在A中获取window.name, 而要通过iframe获取其window.name). 这个方式非常适合单向的数据请求，而且协议简单、安全. 不会像JSONP那样不做限制地执行外部脚本.</p>
-<h4 id="location-hash"><a href="#location-hash" class="headerlink" title="location.hash"></a>location.hash</h4><p><strong>location.hash(两个iframe之间), 又称FIM, Fragment Identitier Messaging的简写</strong>.</p>
-<p>因为父窗口可以对iframe进行URL读写, iframe也可以读写父窗口的URL, URL有一部分被称为hash, 就是#号及其后面的字符, 它一般用于浏览器锚点定位, Server端并不关心这部分, 所以这部分的修改不会产生HTTP请求, 但是会产生浏览器历史记录. 此方法的原理就是改变URL的hash部分来进行双向通信. 每个window通过改变其他 window的location来发送消息（由于两个页面不在同一个域下IE、Chrome不允许修改parent.location.hash的值，所以要借助于父窗口域名下的一个代理iframe）, 并通过监听自己的URL的变化来接收消息. 这个方式的通信会造成一些不必要的浏览器历史记录, 而且有些浏览器不支持onhashchange事件, 需要轮询来获知URL的改变, 最后, 这样做也存在缺点, 比如数据直接暴露在了url中, 数据容量和类型都有限等.</p>
-<h4 id="Access-Control"><a href="#Access-Control" class="headerlink" title="Access Control"></a>Access Control</h4><p>此跨域方法目前只在很少的浏览器中得以支持, 这些浏览器可以发送一个跨域的HTTP请求（Firefox, Google Chrome等通过XMLHTTPRequest实现, IE8下通过XDomainRequest实现）, 请求的响应必须包含一个Access- Control-Allow-Origin的HTTP响应头, 该响应头声明了请求域的可访问权限. 例如baidu.com对google.com下的getUsers.php发送了一个跨域的HTTP请求（通过ajax）, 那么getUsers.php必须加入如下的响应头:</p>
-<figure class="highlight jsp"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">header(<span class="string">"Access-Control-Allow-Origin: http://www.baidu.com"</span>);<span class="comment">//表示允许baidu.com跨域请求本文件</span></div></pre></td></tr></table></figure>
-<h4 id="flash-URLLoder"><a href="#flash-URLLoder" class="headerlink" title="flash URLLoder"></a>flash URLLoder</h4><p>flash有自己的一套安全策略, 服务器可以通过crossdomain.xml文件来声明能被哪些域的SWF文件访问, SWF也可以通过API来确定自身能被哪些域的SWF加载. 当跨域访问资源时, 例如从域 a.com 请求域 b.com上的数据, 我们可以借助flash来发送HTTP请求. </p>
-<ul>
-<li>首先, 修改域 b.com上的 crossdomain.xml(一般存放在根目录, 如果没有需要手动创建) , 把 a.com 加入到白名单;</li>
-</ul>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="php"><span class="meta">&lt;?</span>xml version=<span class="string">"1.0"</span><span class="meta">?&gt;</span></span></div><div class="line"><span class="tag">&lt;<span class="name">cross-domain-policy</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">site-control</span> <span class="attr">permitted-cross-domain-policies</span>=<span class="string">"by-content-type"</span>/&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">allow-access-from</span> <span class="attr">domain</span>=<span class="string">"a.com"</span> /&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">cross-domain-policy</span>&gt;</span></div></pre></td></tr></table></figure>
-<ul>
-<li>其次, 通过Flash URLLoader发送HTTP请求, 拿到请求后并返回;</li>
-<li>最后, 通过Flash API把响应结果传递给JavaScript.</li>
-</ul>
-<p>Flash URLLoader是一种很普遍的跨域解决方案，不过需要支持iOS的话，这个方案就不可行了.</p>
-<h4 id="WebSocket"><a href="#WebSocket" class="headerlink" title="WebSocket"></a>WebSocket</h4><p>在WebSocket出现之前, 很多网站为了实现实时推送技术, 通常采用的方案是轮询(Polling)和Comet技术, Comet又可细分为两种实现方式, 一种是长轮询机制, 一种称为流技术, 这两种方式实际上是对轮询技术的改进, 这些方案带来很明显的缺点, 需要由浏览器对服务器发出HTTP request, 大量消耗服务器带宽和资源. 面对这种状况, HTML5定义了WebSocket协议, 能更好的节省服务器资源和带宽并实现真正意义上的实时推送.</p>
-<p>WebSocket 本质上是一个基于TCP的协议, 它的目标是在一个单独的持久链接上提供全双工(full-duplex), 双向通信, 以基于事件的方式, 赋予浏览器实时通信能力. 既然是双向通信, 就意味着服务器端和客户端可以同时发送并响应请求, 而不再像HTTP的请求和响应. (同源策略对 web sockets 不适用)</p>
-<p>原理: 为了建立一个WebSocket连接，客户端浏览器首先要向服务器发起一个HTTP请求, 这个请求和通常的HTTP请求不同, 包含了一些附加头信息, 其中附加头信息”Upgrade: WebSocket”表明这是一个申请协议升级的HTTP请求, 服务器端解析这些附加的头信息然后产生应答信息返回给客户端, 客户端和服务器端的WebSocket连接就建立起来了, 双方就可以通过这个连接通道自由的传递信息, 并且这个连接会持续存在直到客户端或者服务器端的某一方主动的关闭连接.</p>
-<p>一个典型WebSocket客户端请求头：</p>
-<p><img src="http://louiszhai.github.io/docImages/cross-domain03.jpg" alt="WebSocket客户端请求头"></p>
+<h3 id="bind"><a href="#bind" class="headerlink" title="bind"></a>bind</h3><p>语法: func.bind(thisArg, arg1, arg2, ….)</p>
+<p>bind() 方法会返回一个新函数, 又叫绑定函数, 当调用这个绑定函数时, 绑定函数会以创建它时传入 bind() 方法的第一个参数作为当前的上下文, 即this, 传入 bind() 方法的第二个及之后的参数加上绑定函数运行时自身的参数按照顺序作为原函数的参数来调用原函数.</p>
+<p>绑定函数也能使用new操作符创建对象; 这就好比把原函数当做构造器. 此时提供的this将被忽略, this之后的参数将依然前置到运行时的参数列表中.</p>
+<h4 id="基本用法"><a href="#基本用法" class="headerlink" title="基本用法"></a>基本用法</h4><p>下面我们来看看bind 的基本用法.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> x = <span class="number">8</span>;</div><div class="line"><span class="keyword">var</span> o = &#123;</div><div class="line">  <span class="attr">x</span>: <span class="number">10</span>,</div><div class="line">  <span class="attr">getX</span>: <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  	<span class="built_in">console</span>.log(<span class="keyword">this</span>.x);</div><div class="line">  &#125;</div><div class="line">&#125;;</div><div class="line"><span class="keyword">var</span> f = o.getX;</div><div class="line">f();<span class="comment">//8, 由于没有绑定执行时的上下文, this默认指向window, 打印了全局变量x的值</span></div><div class="line"><span class="keyword">var</span> g = f.bind(o);</div><div class="line">g();<span class="comment">//10, 绑定this后, 成功的打印了o对象的x属性的值.</span></div></pre></td></tr></table></figure>
+<h4 id="分离参数"><a href="#分离参数" class="headerlink" title="分离参数"></a>分离参数</h4><p>bind() 方法还可以设置函数拥有的初始参数. 这些参数作为bind() 的第2,3…个参数跟在this(或其他对象的后面), 调用绑定函数时, 这些参数将插入到参数列表的最开始位置, 而传递给绑定函数的参数将跟在他们后面.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//打印十个斐波那契数</span></div><div class="line"><span class="keyword">var</span> f = <span class="function"><span class="keyword">function</span>(<span class="params">n1, n2, length</span>)</span>&#123;</div><div class="line">  <span class="keyword">if</span>(<span class="built_in">arguments</span>.length&lt;<span class="number">3</span>) <span class="built_in">console</span>.log(<span class="string">'参数不够...'</span>);</div><div class="line">  <span class="keyword">var</span> array = [n1, n2];</div><div class="line">  <span class="keyword">for</span>(<span class="keyword">var</span> i=<span class="number">2</span>;i&lt;length;i++)&#123;</div><div class="line">  	array[i] = array[i<span class="number">-2</span>] + array[i<span class="number">-1</span>];</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">return</span> array;</div><div class="line">&#125;</div><div class="line"><span class="keyword">var</span> g = f.bind(<span class="literal">null</span>, <span class="number">1</span>, <span class="number">1</span>);</div><div class="line"><span class="built_in">console</span>.log(g(<span class="number">10</span>));<span class="comment">//[1, 1, 2, 3, 5, 8, 13, 21, 34, 55]</span></div></pre></td></tr></table></figure>
+<h4 id="绑定参数"><a href="#绑定参数" class="headerlink" title="绑定参数"></a>绑定参数</h4><p>如果使用new 操作符去构造绑定函数的实例时, 原来提供的this 将被忽略, this之后的参数将依然前置到构造函数的参数列表中. 此时 bind() 方法便具备了保留参数的能力, 我们可以此达到类似柯里化的效果.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> f = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  <span class="keyword">if</span>(<span class="built_in">arguments</span>.length!=<span class="number">0</span>)</div><div class="line">  	<span class="keyword">this</span>.sum = <span class="built_in">Array</span>.prototype.reduce.call(<span class="built_in">arguments</span>,<span class="function"><span class="keyword">function</span>(<span class="params">prev,item</span>)</span>&#123;<span class="comment">//对传入参数求和</span></div><div class="line"> 		<span class="keyword">return</span> prev + item;</div><div class="line">	&#125;);</div><div class="line">  <span class="keyword">return</span> <span class="built_in">Array</span>.prototype.join.call(<span class="built_in">arguments</span>);<span class="comment">// 返回传入参数的字符串形式</span></div><div class="line">&#125;</div><div class="line">f.prototype.toString = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  <span class="keyword">return</span> <span class="keyword">this</span>.sum;</div><div class="line">&#125;</div><div class="line"><span class="keyword">var</span> g = f.bind(<span class="literal">null</span>,<span class="number">2</span>);</div><div class="line"><span class="keyword">var</span> x = <span class="keyword">new</span> g(<span class="number">8</span>);</div><div class="line"><span class="built_in">console</span>.log(x.toString());<span class="comment">//10, 可见x被绑定了2+8=10</span></div><div class="line"><span class="built_in">console</span>.log(g(<span class="number">8</span>));<span class="comment">//2,8 这告诉我们绑定的两个参数正是2和8</span></div><div class="line"></div><div class="line"><span class="built_in">console</span>.log(x <span class="keyword">instanceof</span> g);<span class="comment">//true, 可见通过new创建的x继承了g</span></div><div class="line"><span class="built_in">console</span>.log(x <span class="keyword">instanceof</span> f);<span class="comment">//true, 可见x也继承了f</span></div><div class="line"><span class="built_in">console</span>.log(g <span class="keyword">instanceof</span> <span class="built_in">Function</span>);<span class="comment">//true, 可见bind f()方法之后, 返回了一个新的函数g</span></div><div class="line"><span class="comment">//函数g可用于求和,如下:</span></div><div class="line"><span class="built_in">console</span>.log(g(<span class="number">1</span>,<span class="number">3</span>,<span class="number">5</span>,<span class="number">7</span>,<span class="number">9</span>));<span class="comment">//27 2+1+3+5+7+9=27</span></div></pre></td></tr></table></figure>
+<h4 id="快捷调用"><a href="#快捷调用" class="headerlink" title="快捷调用"></a>快捷调用</h4><p>使用Array.prototype的方法处理类数组对象时(鸭式辨型), 不可避免的需要借用call 或者 apply 方法, 使用 bind() 方法, 我们可以简化这个过程. 如下:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> _slice = <span class="built_in">Array</span>.prototype.slice;</div><div class="line"><span class="keyword">var</span> slice = <span class="built_in">Function</span>.prototype.call.bind(_slice);</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  <span class="keyword">return</span> slice(<span class="built_in">arguments</span>,<span class="number">1</span>);</div><div class="line">&#125;</div><div class="line">f(<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>);<span class="comment">//[2, 3, 4, 5]</span></div></pre></td></tr></table></figure>
+<p>下面的实例将解释 bind() 方法做了一件什么事情:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> _slice = <span class="built_in">Array</span>.prototype.slice;</div><div class="line"><span class="keyword">var</span> slice = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  <span class="keyword">return</span> _slice.apply(<span class="built_in">arguments</span>[<span class="number">0</span>],_slice.call(<span class="built_in">arguments</span>,<span class="number">1</span>));</div><div class="line">&#125;;</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  <span class="keyword">return</span> slice(<span class="built_in">arguments</span>,<span class="number">1</span>);</div><div class="line">&#125;</div><div class="line">f(<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>);<span class="comment">//[2, 3, 4, 5]</span></div></pre></td></tr></table></figure>
+<p>如下, 是bind() 方法的简单实现.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">Function</span>.prototype.bind = <span class="function"><span class="keyword">function</span>(<span class="params">thisArg,argN</span>)</span>&#123;</div><div class="line">  <span class="keyword">var</span> _this = <span class="keyword">this</span>;</div><div class="line">  <span class="keyword">var</span> _arg = _slice.call(<span class="built_in">arguments</span>,<span class="number">1</span>);</div><div class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">   	<span class="keyword">var</span> arg = _slice.call(<span class="built_in">arguments</span>);</div><div class="line">    arg = _arg.concat(arg);</div><div class="line">  	<span class="keyword">return</span> _this.apply(thisArg,arg);</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>可以看出来, 使用 bind() 方法后, 代码优雅得多.</p>
+<p>注: 作为ES5标准加入的bind方法显然不支持 IE9之前的低版本IE, 如需使用, 请参考<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Function/bind#Compatibility" target="_blank" rel="external">Polyfill</a>.</p>
 <hr>
-<p>本问就讨论这么多内容,大家有什么问题或好的想法欢迎在下方参与<a href="#respond">留言和评论</a>.</p>
+<p>本文就讨论这么多内容,大家有什么问题或好的想法欢迎在下方参与<a href="#respond">留言和评论</a>.</p>
 <p>本文作者: <a href="https://github.com/Louiszhai" target="_blank" rel="external">louis</a></p>
-<p>本文链接: <a href="http://louiszhai.github.io/2016/03/02/cross-domain/">http://louiszhai.github.io/2016/03/02/cross-domain/</a></p>
+<p>本文链接: <a href="http://louiszhai.github.io/2016/01/11/bind/">http://louiszhai.github.io/2016/01/11/bind/</a></p>
 <p>参考文章</p>
 <ul>
-<li><a href="http://lc87624.iteye.com/blog/1123148" target="_blank" rel="external">学习总结 前端跨域请求的解决办法——JSONP-哥墨迹的iteye-ITeye技术网站</a></li>
-<li><a href="http://www.cnblogs.com/dolphinX/p/3464056.html" target="_blank" rel="external">html5 postMessage解决跨域、跨窗口消息传递-Samaritans-博客园</a></li>
-<li><a href="http://blog.csdn.net/kongjiea/article/details/44201021" target="_blank" rel="external">深入理解前端跨域方法和原理-kongjiea笔记-博客频道-CSDN.NET</a></li>
-<li><a href="http://web.jobbole.com/83864/" target="_blank" rel="external">跨域访问和防盗链基本原理-WEB前端-伯乐在线</a></li>
-<li><a href="http://unicorn-kid.com/fe-node/2014/08/07/JavaScript%20%E8%B7%A8%E5%9F%9F%20%E4%B9%8B%E4%B8%80%20%E5%90%8C%E6%BA%90%E7%AD%96%E7%95%A5.html" target="_blank" rel="external">Javascript 跨域 之一 同源策略 - KID</a></li>
-<li><a href="http://www.freebuf.com/articles/web/65468.html" target="_blank" rel="external">同源策略详解及绕过（Part1） - FreeBuf.COM | 关注黑客与极客</a></li>
-<li><a href="http://www.plhwin.com/2014/05/28/nodejs-socketio/" target="_blank" rel="external">使用Node.js+Socket.IO搭建WebSocket实时应用 | 潘良虎的随想录</a></li>
-<li><a href="http://blog.jackxy.com/cross-origin-123/" target="_blank" rel="external">跨域资源访问的几种方式</a></li>
+<li><a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Function/bind" target="_blank" rel="external">Function.prototype.bind() - JavaScript | MDN</a></li>
 </ul>
 ]]></content>
     
     <summary type="html">
     
-      JavaScript Same-Origin 同源策略 跨域 jsonp postMessage CORS domain
+      JavaScript bind Function.prototype.bind call apply
     
     </summary>
     
