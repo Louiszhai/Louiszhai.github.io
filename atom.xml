@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://louiszhai.github.io/"/>
-  <updated>2017-04-29T07:50:47.000Z</updated>
+  <updated>2017-04-29T11:19:19.000Z</updated>
   <id>http://louiszhai.github.io/</id>
   
   <author>
@@ -16,11 +16,40 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>UI自动化测试新篇章-chrome Headless</title>
+    <link href="http://louiszhai.github.io/2017/04/29/chrome-headless/"/>
+    <id>http://louiszhai.github.io/2017/04/29/chrome-headless/</id>
+    <published>2017-04-29T05:05:32.000Z</published>
+    <updated>2017-04-29T11:19:19.000Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h3><a id="more"></a>
+<hr>
+<p>本问就讨论这么多内容,大家有什么问题或好的想法欢迎在下方参与<a href="#respond">留言和评论</a>.</p>
+<p>本文作者: <a href="https://github.com/Louiszhai" target="_blank" rel="external">louis</a></p>
+<p>本文链接: <a href="http://louiszhai.github.io/2017/04/29/chrome-headless/">http://louiszhai.github.io/2017/04/29/chrome-headless/</a></p>
+<p>参考文章</p>
+<ul>
+<li>​</li>
+</ul>
+]]></content>
+    
+    <summary type="html">
+    
+      chrome-headless
+    
+    </summary>
+    
+    
+      <category term="Chrome" scheme="http://louiszhai.github.io/tags/Chrome/"/>
+    
+  </entry>
+  
+  <entry>
     <title>【深度长文】JavaScript数组所有API全解密</title>
     <link href="http://louiszhai.github.io/2017/04/28/array/"/>
     <id>http://louiszhai.github.io/2017/04/28/array/</id>
     <published>2017-04-28T05:43:36.000Z</published>
-    <updated>2017-04-29T07:50:47.000Z</updated>
+    <updated>2017-04-30T14:16:33.000Z</updated>
     
     <content type="html"><![CDATA[<p><strong>本文首发于CSDN网站，下面的版本又经过进一步的修订。</strong></p>
 <p>全文共13k+字，系统讲解了JavaScript数组的各种特性和API。</p>
@@ -143,7 +172,7 @@
 </table>
 <p>实际上，通过<code>Object.prototype.toString</code>去判断一个值的类型，也是各大主流库的标准。因此Array.isArray的polyfill通常长这样：</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span> (!<span class="built_in">Array</span>.isArray)&#123;</div><div class="line">  <span class="built_in">Array</span>.isArray = <span class="function"><span class="keyword">function</span>(<span class="params">arg</span>)</span>&#123;</div><div class="line">    <span class="keyword">return</span> <span class="built_in">Object</span>.prototype.toString.call(arg) === <span class="string">'[object Array]'</span>;</div><div class="line">  &#125;;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h3 id="数组推导"><a href="#数组推导" class="headerlink" title="数组推导"></a><strong>数组推导</strong></h3><p>ES6对数组的增强不止是体现在api上，还包括语法糖。比如说<code>for of</code>，它就是借鉴其它语言而成的语法糖，这种基于原数组使用<code>for of</code>生成新数组的语法糖，叫做<strong>数组推导</strong>。<strong>数组推导最初起早在ES6的草案中，但在第27版（2014年8月）中被移除，目前只有Firefox v30+支持，使用需谨慎。</strong>如今这些语言都支持推导：CoffeeScript、Python、Haskell、Clojure。这里我们以python的<code>for in</code>推导打个比方：</p>
+<h3 id="数组推导"><a href="#数组推导" class="headerlink" title="数组推导"></a><strong>数组推导</strong></h3><p>ES6对数组的增强不止是体现在api上，还包括语法糖。比如说<code>for of</code>，它就是借鉴其它语言而成的语法糖，这种基于原数组使用<code>for of</code>生成新数组的语法糖，叫做<strong>数组推导</strong>。<strong>数组推导最初起早在ES6的草案中，但在第27版（2014年8月）中被移除，目前只有Firefox v30+支持，推导有风险，使用需谨慎。</strong>所幸如今这些语言都还支持推导：CoffeeScript、Python、Haskell、Clojure，我们可以从中一窥端倪。这里我们以python的<code>for in</code>推导打个比方：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># python for in 推导</span></div><div class="line">a = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]</div><div class="line"><span class="keyword">print</span> [i * i <span class="keyword">for</span> i <span class="keyword">in</span> a <span class="keyword">if</span> i == <span class="number">3</span>] <span class="comment"># [9]</span></div></pre></td></tr></table></figure>
 <p>如下是SpiderMonkey引擎（Firefox）之前基于ES4规范实现的数组推导(与python的推导十分相似)：</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[i * i <span class="keyword">for</span> (i <span class="keyword">of</span> a)] <span class="comment">// [1, 4, 9, 16]</span></div></pre></td></tr></table></figure>
@@ -159,7 +188,7 @@
 <p>除了多个数组推导嵌套外，ES6的数组推导还会为每次迭代分配一个新的作用域（目前Firefox也没有为每次迭代创建新的作用域）：</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// ES6规范</span></div><div class="line">[<span class="keyword">for</span> (x <span class="keyword">of</span> [<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>]) () =&gt; x][<span class="number">0</span>]() <span class="comment">// 0</span></div><div class="line"><span class="comment">// Firefox运行</span></div><div class="line">[<span class="keyword">for</span> (x <span class="keyword">of</span> [<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>]) () =&gt; x][<span class="number">0</span>]() <span class="comment">// 2</span></div></pre></td></tr></table></figure>
 <p>通过上面的实例，我们看到使用数组推导来创建新数组比<code>forEach</code>，<code>map</code>，<code>filter</code>等遍历方法更加简洁，只是非常可惜，它不是标准规范。</p>
-<p>ES6不仅新增了对Array构造器相关API，还新增了6个原型的方法。接下来我会在原型方法的介绍中穿插着ES6相关方法的讲解，请耐心往下读。</p>
+<p>ES6不仅新增了对Array构造器相关API，还新增了8个原型的方法。接下来我会在原型方法的介绍中穿插着ES6相关方法的讲解，请耐心往下读。</p>
 <h3 id="原型"><a href="#原型" class="headerlink" title="原型"></a><strong>原型</strong></h3><p>继承的常识告诉我们，js中所有的数组方法均来自于Array.prototype，和其他构造函数一样，你可以通过扩展 <code>Array</code> 的 <code>prototype</code> 属性上的方法来给所有数组实例增加方法。</p>
 <p>值得一说的是，Array.prototype本身就是一个数组。</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">Array</span>.isArray(<span class="built_in">Array</span>.prototype); <span class="comment">// true</span></div><div class="line"><span class="built_in">console</span>.log(<span class="built_in">Array</span>.prototype.length);<span class="comment">// 0</span></div></pre></td></tr></table></figure>
@@ -171,7 +200,7 @@
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">Object</span>.getOwnPropertyNames(<span class="built_in">Array</span>.prototype); <span class="comment">// ["length", "constructor", "toString", "toLocaleString", "join", "pop", "push", "reverse", "shift", "unshift", "slice", "splice", "sort", "filter", "forEach", "some", "every", "map", "indexOf", "lastIndexOf", "reduce", "reduceRight", "copyWithin", "find", "findIndex", "fill", "includes", "entries", "keys", "concat"]</span></div></pre></td></tr></table></figure>
 <h4 id="改变自身值的方法-9个"><a href="#改变自身值的方法-9个" class="headerlink" title="改变自身值的方法(9个)"></a><strong>改变自身值的方法(9个)</strong></h4><p>基于ES6，改变自身值的方法一共有9个，分别为pop、push、reverse、shift、sort、splice、unshift，以及两个ES6新增的方法copyWithin 和 fill。</p>
 <p>对于能改变自身值的数组方法，日常开发中需要特别注意，尽量避免在循环遍历中去改变原数组的项。接下来，我们一起来深入地了解这些方法。</p>
-<h5 id="pop"><a href="#pop" class="headerlink" title="pop"></a><strong>pop</strong></h5><p><em>**</em>pop() 方法删除一个数组中的最后的一个元素，并且返回这个元素。如果是栈的话，这个过程就是栈顶弹出。</p>
+<h5 id="pop"><a href="#pop" class="headerlink" title="pop"></a><strong>pop</strong></h5><p>pop() 方法删除一个数组中的最后的一个元素，并且返回这个元素。如果是栈的话，这个过程就是栈顶弹出。</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> array = [<span class="string">"cat"</span>, <span class="string">"dog"</span>, <span class="string">"cow"</span>, <span class="string">"chicken"</span>, <span class="string">"mouse"</span>];</div><div class="line"><span class="keyword">var</span> item = array.pop();</div><div class="line"><span class="built_in">console</span>.log(array); <span class="comment">// ["cat", "dog", "cow", "chicken"]</span></div><div class="line"><span class="built_in">console</span>.log(item); <span class="comment">// mouse</span></div></pre></td></tr></table></figure>
 <p>由于设计上的巧妙，pop方法可以应用在类数组对象上，即 <code>鸭式辨型</code>. 如下：</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> o = &#123;<span class="number">0</span>:<span class="string">"cat"</span>, <span class="number">1</span>:<span class="string">"dog"</span>, <span class="number">2</span>:<span class="string">"cow"</span>, <span class="number">3</span>:<span class="string">"chicken"</span>, <span class="number">4</span>:<span class="string">"mouse"</span>, <span class="attr">length</span>:<span class="number">5</span>&#125;</div><div class="line"><span class="keyword">var</span> item = <span class="built_in">Array</span>.prototype.pop.call(o);</div><div class="line"><span class="built_in">console</span>.log(array); <span class="comment">// Object &#123;0: "cat", 1: "dog", 2: "cow", 3: "chicken", length: 4&#125;</span></div><div class="line"><span class="built_in">console</span>.log(item); <span class="comment">// mouse</span></div></pre></td></tr></table></figure>
@@ -193,7 +222,7 @@
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> o = &#123;<span class="number">0</span>:<span class="string">"a"</span>, <span class="number">1</span>:<span class="string">"b"</span>, <span class="number">2</span>:<span class="string">"c"</span>, <span class="attr">length</span>:<span class="number">2</span>&#125;;</div><div class="line"><span class="keyword">var</span> o2 = <span class="built_in">Array</span>.prototype.reverse.call(o);</div><div class="line"><span class="built_in">console</span>.log(o); <span class="comment">// Object &#123;0: "b", 1: "a", 2: "c", length: 2&#125;</span></div><div class="line"><span class="built_in">console</span>.log(o === o2); <span class="comment">// true</span></div></pre></td></tr></table></figure>
 <p>如果 length 属性小于2 或者 length 属性不为数值，那么原类数组对象将没有变化。即使 length 属性不存在，该对象也不会去创建 length 属性。特别的是，当 length 属性较大时，类数组对象的『索引』会尽可能的向 length 看齐。如下: </p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> o = &#123;<span class="number">0</span>:<span class="string">"a"</span>, <span class="number">1</span>:<span class="string">"b"</span>, <span class="number">2</span>:<span class="string">"c"</span>,<span class="attr">length</span>:<span class="number">100</span>&#125;;</div><div class="line"><span class="keyword">var</span> o2 = <span class="built_in">Array</span>.prototype.reverse.call(o);</div><div class="line"><span class="built_in">console</span>.log(o); <span class="comment">// Object &#123;97: "c", 98: "b", 99: "a", length: 100&#125;</span></div><div class="line"><span class="built_in">console</span>.log(o === o2); <span class="comment">// true</span></div></pre></td></tr></table></figure>
-<h5 id="shift"><a href="#shift" class="headerlink" title="shift"></a><strong>shift</strong></h5><p>shift()方法删除数组的第一个元素，并返回这个元素。</p>
+<h5 id="shift"><a href="#shift" class="headerlink" title="shift"></a><strong>shift</strong></h5><p>shift()方法删除数组的第一个元素，并返回这个元素。如果是栈的话，这个过程就是栈底弹出。</p>
 <p>语法：<em>arr.shift()</em></p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> array = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>];</div><div class="line"><span class="keyword">var</span> item = array.shift();</div><div class="line"><span class="built_in">console</span>.log(array); <span class="comment">// [2,3,4,5]</span></div><div class="line"><span class="built_in">console</span>.log(item); <span class="comment">// 1</span></div></pre></td></tr></table></figure>
 <p>同样受益于鸭式辨型，对于类数组对象，shift仍然能够处理。如下：</p>
@@ -358,7 +387,7 @@
 <li>SpiderMonkey 返回了预期的正确结果</li>
 <li>V8 <strong>排序结果由正确转为不正确</strong></li>
 </ul>
-<h5 id="splice"><a href="#splice" class="headerlink" title="splice"></a><strong>splice</strong></h5><p>splice()方法用新元素替换旧元素的方式来修改数组。splice是一个常用的方法，复杂的数组操作的场景通常都会有它的身影特别是需要维持原数组引用时，就地删除或者新增元素，splice是最适合的。</p>
+<h5 id="splice"><a href="#splice" class="headerlink" title="splice"></a><strong>splice</strong></h5><p>splice()方法用新元素替换旧元素的方式来修改数组。它是一个常用的方法，复杂的数组操作场景通常都会有它的身影，特别是需要维持原数组引用时，就地删除或者新增元素，splice是最适合的。</p>
 <p>语法：<em>arr.splice(start,deleteCount[, item1[, item2[, …]]])</em></p>
 <p>start 指定从哪一位开始修改内容。如果超过了数组长度，则从数组末尾开始添加内容；如果是负值，则其指定的索引位置等同于 length+start (length为数组的长度)，表示从数组末尾开始的第 -start 位。</p>
 <p>deleteCount 指定要删除的元素个数，若等于0，则不删除。这种情况下，至少应该添加一位新元素，若大于start之后的元素总和，则start及之后的元素都将被删除。</p>
@@ -379,7 +408,7 @@
 <p>同上，unshift也受益于鸭式辨型，呈上栗子：</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> o = &#123;<span class="number">0</span>:<span class="string">"red"</span>, <span class="number">1</span>:<span class="string">"green"</span>, <span class="number">2</span>:<span class="string">"blue"</span>,<span class="attr">length</span>:<span class="number">3</span>&#125;;</div><div class="line"><span class="keyword">var</span> length = <span class="built_in">Array</span>.prototype.unshift.call(o,<span class="string">"gray"</span>);</div><div class="line"><span class="built_in">console</span>.log(o); <span class="comment">// Object &#123;0: "gray", 1: "red", 2: "green", 3: "blue", length: 4&#125;</span></div><div class="line"><span class="built_in">console</span>.log(length); <span class="comment">// 4</span></div></pre></td></tr></table></figure>
 <p>注意：如果类数组对象不指定length属性，则返回结果是这样的 <code>Object {0: &quot;gray&quot;, 1: &quot;green&quot;, 2: &quot;blue&quot;, length: 1}</code>，shift会认为数组长度为0，此时将从对象下标为0的位置开始插入，相应位置属性将被替换，此时初始化类数组对象的length属性为插入元素个数。</p>
-<h5 id="copyWithin"><a href="#copyWithin" class="headerlink" title="copyWithin"></a><strong>copyWithin</strong></h5><p>copyWithin() 方法用于数组内的元素替换，即替换元素和被替换元素均是数组内的元素。</p>
+<h5 id="copyWithin-ES6"><a href="#copyWithin-ES6" class="headerlink" title="copyWithin(ES6)"></a><strong>copyWithin(ES6)</strong></h5><p>copyWithin() 方法基于<strong>ECMAScript 2015（ES6）规范</strong>，用于数组内元素之间的替换，即替换元素和被替换元素均是数组内的元素。</p>
 <p>语法：<em>arr.copyWithin(target, start[, end = this.length])</em></p>
 <p>taget 指定被替换元素的索引，start 指定替换元素起始的索引，end 可选，指的是替换元素结束位置的索引。</p>
 <p>如果start为负，则其指定的索引位置等同于length+start，length为数组的长度。end也是如此。</p>
@@ -388,7 +417,7 @@
 <p>同上，copyWithin一样受益于鸭式辨型，例如：</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> o = &#123;<span class="number">0</span>:<span class="number">1</span>, <span class="number">1</span>:<span class="number">2</span>, <span class="number">2</span>:<span class="number">3</span>, <span class="number">3</span>:<span class="number">4</span>, <span class="number">4</span>:<span class="number">5</span>,<span class="attr">length</span>:<span class="number">5</span>&#125;</div><div class="line"><span class="keyword">var</span> o2 = <span class="built_in">Array</span>.prototype.copyWithin.call(o,<span class="number">0</span>,<span class="number">3</span>);</div><div class="line"><span class="built_in">console</span>.log(o===o2,o2); <span class="comment">// true Object &#123; 0=4,  1=5,  2=3,  更多...&#125;</span></div></pre></td></tr></table></figure>
 <p>如需在Firefox之外的浏览器使用copyWithin方法，请参考 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array/copyWithin#Polyfill" target="_blank" rel="external">Polyfill</a>。</p>
-<h5 id="fill"><a href="#fill" class="headerlink" title="fill"></a><strong>fill</strong></h5><p>fill() 方法同样用于数组元素替换，它可将数组指定区间内的元素替换为某个值。</p>
+<h5 id="fill-ES6"><a href="#fill-ES6" class="headerlink" title="fill(ES6)"></a><strong>fill(ES6)</strong></h5><p>fill() 方法基于<strong>ECMAScript 2015（ES6）规范</strong>，它同样用于数组元素替换，但与copyWithin略有不同，它主要用于将数组指定区间内的元素替换为某个值。</p>
 <p>语法：<em>arr.fill(value, start[, end = this.length])</em></p>
 <p>value 指定被替换的值，start 指定替换元素起始的索引，end 可选，指的是替换元素结束位置的索引。</p>
 <p>如果start为负，则其指定的索引位置等同于length+start，length为数组的长度。end也是如此。</p>
@@ -467,7 +496,7 @@
 <p>该方法同样受益于鸭式辨型。如下：</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> o = &#123;<span class="number">0</span>:<span class="string">'a'</span>, <span class="number">1</span>:<span class="string">'b'</span>, <span class="number">2</span>:<span class="string">'c'</span>, <span class="attr">length</span>:<span class="number">3</span>&#125;;</div><div class="line"><span class="keyword">var</span> bool = <span class="built_in">Array</span>.prototype.includes.call(o, <span class="string">'a'</span>);</div><div class="line"><span class="built_in">console</span>.log(bool); <span class="comment">// true</span></div></pre></td></tr></table></figure>
 <p>该方法只有在Chrome 47、opera 34、Safari 9版本及其更高版本中才被实现。如需支持其他浏览器，请参考 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array/includes#Polyfill" target="_blank" rel="external">Polyfill</a>。</p>
-<h5 id="toSource"><a href="#toSource" class="headerlink" title="toSource"></a><strong>toSource</strong></h5><p>toSource() 方法是<strong>非标准的</strong>，该方法返回数组的源代码，目前只有 Firefox 实现了它。</p>
+<h5 id="toSource-非标准"><a href="#toSource-非标准" class="headerlink" title="toSource(非标准)"></a><strong>toSource(非标准)</strong></h5><p>toSource() 方法是<strong>非标准的</strong>，该方法返回数组的源代码，目前只有 Firefox 实现了它。</p>
 <p>语法：<em>arr.toSource()</em></p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> array = [<span class="string">'a'</span>, <span class="string">'b'</span>, <span class="string">'c'</span>];</div><div class="line"><span class="built_in">console</span>.log(array.toSource()); <span class="comment">// ["a", "b", "c"]</span></div><div class="line"><span class="comment">// 测试鸭式辨型</span></div><div class="line"><span class="keyword">var</span> o = &#123;<span class="number">0</span>:<span class="string">'a'</span>, <span class="number">1</span>:<span class="string">'b'</span>, <span class="number">2</span>:<span class="string">'c'</span>, <span class="attr">length</span>:<span class="number">3</span>&#125;;</div><div class="line"><span class="built_in">console</span>.log(<span class="built_in">Array</span>.prototype.toSource.call(o)); <span class="comment">// ["a","b","c"]</span></div></pre></td></tr></table></figure>
 <h4 id="遍历方法-12个"><a href="#遍历方法-12个" class="headerlink" title="遍历方法(12个)"></a><strong>遍历方法(12个)</strong></h4><p>基于ES6，不会改变自身的方法一共有12个，分别为forEach、every、some、filter、map、reduce、reduceRight 以及ES6新增的方法entries、find、findIndex、keys、values。</p>
@@ -613,7 +642,7 @@
 </tbody>
 </table>
 <h5 id="find-amp-findIndex-ES6"><a href="#find-amp-findIndex-ES6" class="headerlink" title="find&amp;findIndex(ES6)"></a><strong>find&amp;findIndex(ES6)</strong></h5><p>find() 方法基于<strong>ECMAScript 2015（ES6）规范</strong>，返回数组中第一个满足条件的元素（如果有的话）， 如果没有，则返回undefined。</p>
-<p>findIndex() 方法则返回数组中第一个满足条件的元素的索引（如果有的话）否则返回-1。</p>
+<p>findIndex() 方法也基于<strong>ECMAScript 2015（ES6）规范</strong>，它返回数组中第一个满足条件的元素的索引（如果有的话）否则返回-1。</p>
 <p>语法：<em>arr.find(fn, thisArg)</em>，<em>arr.findIndex(fn, thisArg)</em></p>
 <p>我们发现它们的语法与forEach等十分相似，其实不光语法，find（或findIndex）在参数及其使用注意事项上，均与forEach一致。因此此处将略去 find（或findIndex）的参数介绍。下面我们来看个例子🌰 ：</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> array = [<span class="number">1</span>, <span class="number">3</span>, <span class="number">5</span>, <span class="number">7</span>, <span class="number">8</span>, <span class="number">9</span>, <span class="number">10</span>];</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params">value, index, array</span>)</span>&#123;</div><div class="line">  <span class="keyword">return</span> value%<span class="number">2</span>==<span class="number">0</span>; <span class="comment">// 返回偶数</span></div><div class="line">&#125;</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">f2</span>(<span class="params">value, index, array</span>)</span>&#123;</div><div class="line">  <span class="keyword">return</span> value &gt; <span class="number">20</span>; <span class="comment">// 返回大于20的数</span></div><div class="line">&#125;</div><div class="line"><span class="built_in">console</span>.log(array.find(f)); <span class="comment">// 8</span></div><div class="line"><span class="built_in">console</span>.log(array.find(f2)); <span class="comment">// undefined</span></div><div class="line"><span class="built_in">console</span>.log(array.findIndex(f)); <span class="comment">// 4</span></div><div class="line"><span class="built_in">console</span>.log(array.findIndex(f2)); <span class="comment">// -1</span></div></pre></td></tr></table></figure>
@@ -5985,15 +6014,15 @@
   </entry>
   
   <entry>
-    <title>JS字符串常用方法</title>
+    <title>Javascript字符串所有API全解密</title>
     <link href="http://louiszhai.github.io/2016/01/12/js.String/"/>
     <id>http://louiszhai.github.io/2016/01/12/js.String/</id>
     <published>2016-01-12T12:27:09.000Z</published>
-    <updated>2017-04-17T02:54:08.000Z</updated>
+    <updated>2017-04-30T00:08:59.000Z</updated>
     
-    <content type="html"><![CDATA[<h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h3><p>javaScript 中, 字符串无处不在, 并且所有的字符串方法均来自 String.prototype, 这一节, 我们走进看一看String内部, 探讨那些常用或不常用的字符串操作方法.</p>
+    <content type="html"><![CDATA[<h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a><strong>导读</strong></h3><p>javaScript 中, 字符串无处不在, 并且所有的字符串方法均来自 String.prototype, 这一节, 我们走进看一看String内部, 探讨那些常用或不常用的字符串操作方法.</p>
 <a id="more"></a>
-<h3 id="String-prototype"><a href="#String-prototype" class="headerlink" title="String.prototype"></a>String.prototype</h3><p>String.prototype 属性指向 String 的原型对象. 以下是它的属性特性:</p>
+<h3 id="String构造器方法"><a href="#String构造器方法" class="headerlink" title="String构造器方法"></a><strong>String构造器方法</strong></h3><h4 id="fromCharCode"><a href="#fromCharCode" class="headerlink" title="fromCharCode"></a><strong>fromCharCode</strong></h4><h4 id="fromCodePoint"><a href="#fromCodePoint" class="headerlink" title="fromCodePoint"></a><strong>fromCodePoint</strong></h4><h3 id="String-prototype"><a href="#String-prototype" class="headerlink" title="String.prototype"></a><strong>String.prototype</strong></h3><p>String.prototype 属性指向 String 的原型对象. 以下是它的属性特性:</p>
 <table>
 <thead>
 <tr>
@@ -6013,37 +6042,37 @@
 </tbody>
 </table>
 <p>所有的字符串实例都继承自 String.prototype. 因此任何 String.prototype 上的改变都会在字符串上体现出来.</p>
-<h4 id="属性"><a href="#属性" class="headerlink" title="属性"></a>属性</h4><ul>
+<h4 id="属性"><a href="#属性" class="headerlink" title="属性"></a><strong>属性</strong></h4><ul>
 <li>String.prototype.constructor 指向构造器(String())</li>
 <li>String.prototype.length 表示字符串长度</li>
 </ul>
-<h4 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h4><p>字符串方法分为两种, 一种是html无关的方法, 一种是html有关的方法. 我们先看第一种. 但是无论字符串方法如何厉害, 都不至于强大到可以改变原字符串.</p>
-<h5 id="HTML无关的方法"><a href="#HTML无关的方法" class="headerlink" title="HTML无关的方法"></a>HTML无关的方法</h5><p>常用的方法有, charAt, charCodeAt, concat, indexOf, lastIndexOf, localeCompare, match, replace, search, slice, split, substr, substring, toLocaleLowerCase, toLocaleUpperCase, toLowerCase, toString, toUpperCase, trim, valueof 等ES5支持的, 以及 codePointAt, contains, endsWith, normalize, repeat, startsWith 等ES6支持的, 还包括 quote, toSource, trimLeft, trimRight 等非标准的.</p>
+<h4 id="方法"><a href="#方法" class="headerlink" title="方法"></a><strong>方法</strong></h4><p>字符串方法分为两种, 一种是html无关的方法, 一种是html有关的方法. 我们先看第一种. 但是无论字符串方法如何厉害, 都不至于强大到可以改变原字符串.</p>
+<h5 id="HTML无关的方法"><a href="#HTML无关的方法" class="headerlink" title="HTML无关的方法"></a><strong>HTML无关的方法</strong></h5><p>常用的方法有, charAt, charCodeAt, concat, indexOf, lastIndexOf, localeCompare, match, replace, search, slice, split, substr, substring, toLocaleLowerCase, toLocaleUpperCase, toLowerCase, toString, toUpperCase, trim, valueof 等ES5支持的, 以及 codePointAt, contains, endsWith, normalize, repeat, startsWith 等ES6支持的, 还包括 quote, toSource, trimLeft, trimRight 等非标准的.</p>
 <p>接下来我们将对各个方法分别举例阐述其用法. 若没有特别说明, 该方法将兼容所有目前主流浏览器.</p>
-<h6 id="charAt"><a href="#charAt" class="headerlink" title="charAt"></a>charAt</h6><p>charAt() 方法返回字符串中指定位置的字符。</p>
-<p>语法: <em>str</em>.charAt(index)</p>
+<h6 id="charAt"><a href="#charAt" class="headerlink" title="charAt"></a><strong>charAt</strong></h6><p>charAt() 方法返回字符串中指定位置的字符。</p>
+<p>语法: <em>str.charAt(index)</em></p>
 <p>index 为字符串索引(取值从0至length-1), 如果超出该范围, 则返回空串.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(<span class="string">"Hello, World"</span>.charAt(<span class="number">8</span>));<span class="comment">//o, 返回下标为8的字符串o</span></div></pre></td></tr></table></figure>
-<h6 id="charCodeAt"><a href="#charCodeAt" class="headerlink" title="charCodeAt"></a>charCodeAt</h6><p>charCodeAt() 返回指定索引处字符的 Unicode 数值.</p>
-<p>语法: str.charCodeAt(index)</p>
+<h6 id="charCodeAt"><a href="#charCodeAt" class="headerlink" title="charCodeAt"></a><strong>charCodeAt</strong></h6><p>charCodeAt() 返回指定索引处字符的 Unicode 数值.</p>
+<p>语法: <em>str.charCodeAt(index)</em></p>
 <p>index 为一个从0至length-1的整数. 如果不是一个数值，则默认为 0, 如果小于0或者大于字符串长度, 则返回 NaN.</p>
 <p>Unicode 编码单元（code points）的范围从 0 到 1,114,111。开头的 128 个 Unicode 编码单元和 ASCII 字符编码一样. </p>
 <p>charCodeAt() 总是返回一个小于 65,536 的值. 因为高位编码单元需要由一对字符来表示, 为了查看其编码的完成字符, 需要查看 charCodeAt(i) 以及 charCodeAt(i+1) 的值. 如需更多了解请参考 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/String/prototype" target="_blank" rel="external">fixedCharCodeAt</a>.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(<span class="string">"Hello, World"</span>.charCodeAt(<span class="number">8</span>));<span class="comment">//111</span></div><div class="line"><span class="built_in">console</span>.log(<span class="string">"前端工程师"</span>.charCodeAt(<span class="number">2</span>));<span class="comment">//24037, 可见也可以查看中文Unicode编码</span></div></pre></td></tr></table></figure>
-<h6 id="concat"><a href="#concat" class="headerlink" title="concat"></a>concat</h6><p>concat() 方法将一个或多个字符串拼接在一起, 组成新的字符串并返回.</p>
-<p>语法: <em>str</em>.concat(string2, string3, …)</p>
+<h6 id="concat"><a href="#concat" class="headerlink" title="concat"></a><strong>concat</strong></h6><p>concat() 方法将一个或多个字符串拼接在一起, 组成新的字符串并返回.</p>
+<p>语法: <em>str.concat(string2, string3, …)</em></p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(<span class="string">"早"</span>.concat(<span class="string">"上"</span>,<span class="string">"好"</span>));<span class="comment">//早上好</span></div></pre></td></tr></table></figure>
 <p>但是 concat 的性能表现不佳, 强烈推荐使用赋值操作符(+, +=) 代替 concat. “+” 操作符大概快了 concat 几十倍.(数据参考 <a href="http://jsperf.com/concat-vs-plus-vs-join" target="_blank" rel="external">性能测试</a>).</p>
-<h6 id="indexOf"><a href="#indexOf" class="headerlink" title="indexOf"></a>indexOf</h6><h6 id="lastIndexOf"><a href="#lastIndexOf" class="headerlink" title="lastIndexOf"></a>lastIndexOf</h6><p>indexOf() 方法用于查找子字符串在字符串中首次出现的位置. 没有则返回 -1. 该方法严格区分大小写, 并且从左往右查找. 而 lastIndexOf 则从右往左查找, 其它与前者一致.</p>
-<p>语法: str.indexOf(searchValue [, fromIndex=0])</p>
+<h6 id="indexOf"><a href="#indexOf" class="headerlink" title="indexOf"></a><strong>indexOf</strong></h6><h6 id="lastIndexOf"><a href="#lastIndexOf" class="headerlink" title="lastIndexOf"></a><strong>lastIndexOf</strong></h6><p>indexOf() 方法用于查找子字符串在字符串中首次出现的位置. 没有则返回 -1. 该方法严格区分大小写, 并且从左往右查找. 而 lastIndexOf 则从右往左查找, 其它与前者一致.</p>
+<p>语法: <em>str.indexOf(searchValue [, fromIndex=0])</em>，<em>str.lastIndexOf(searchValue [, fromIndex=0])</em></p>
 <p>searchValue 表示被查找的字符串, fromIndex 表示开始查找的位置, 默认为0, 如果小于0, 则查找整个字符串, 若超过字符串长度, 则该方法返回-1, 除非被查找的是空字符串, 此时返回字符串长度.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(<span class="string">""</span>.indexOf(<span class="string">""</span>,<span class="number">100</span>));<span class="comment">//0</span></div><div class="line"><span class="built_in">console</span>.log(<span class="string">"IT改变世界"</span>.indexOf(<span class="string">"世界"</span>));<span class="comment">//4</span></div><div class="line"><span class="built_in">console</span>.log(<span class="string">"IT改变世界"</span>.lastIndexOf(<span class="string">"世界"</span>));<span class="comment">//4</span></div></pre></td></tr></table></figure>
-<h6 id="locateCompare"><a href="#locateCompare" class="headerlink" title="locateCompare"></a>locateCompare</h6><p>locateCompare() 方法用来比较字符串, 如果指定字符串在原字符串的前面则返回负数, 否则返回正数或0, 其中0 表示两个字符串相同. 该方法实现依赖具体的本地实现, 不同的语言下可能有不同的返回.</p>
-<p>语法: <em>str</em>.localeCompare(str2 [, locales [, options]])</p>
+<h6 id="locateCompare"><a href="#locateCompare" class="headerlink" title="locateCompare"></a><strong>locateCompare</strong></h6><p>locateCompare() 方法用来比较字符串, 如果指定字符串在原字符串的前面则返回负数, 否则返回正数或0, 其中0 表示两个字符串相同. 该方法实现依赖具体的本地实现, 不同的语言下可能有不同的返回.</p>
+<p>语法: <em>str.localeCompare(str2 [, locales [, options]])</em></p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> str = <span class="string">"apple"</span>;</div><div class="line"><span class="keyword">var</span> str2 = <span class="string">"orange"</span>;</div><div class="line"><span class="built_in">console</span>.log(str.localeCompare(str2));<span class="comment">//-1</span></div><div class="line"><span class="built_in">console</span>.log(str.localeCompare(<span class="string">"123"</span>));<span class="comment">//1</span></div></pre></td></tr></table></figure>
 <p>目前 Safari 浏览器暂不支持该方法. Chrome 24, Firefox 29, IE11, Opera 15 已实现了它.</p>
-<h6 id="match"><a href="#match" class="headerlink" title="match"></a>match</h6><p>match() 方法用于测试字符串是否支持指定正则表达式的规则, 即使传入的是非正则表达式对象, 它也会隐式地使用 new RegExp(obj) 将其转换为正则表达式对象.</p>
-<p>语法: <em>str</em>.match(regexp)</p>
+<h6 id="match"><a href="#match" class="headerlink" title="match"></a><strong>match</strong></h6><p>match() 方法用于测试字符串是否支持指定正则表达式的规则, 即使传入的是非正则表达式对象, 它也会隐式地使用 new RegExp(obj) 将其转换为正则表达式对象.</p>
+<p>语法: <em>str.match(regexp)</em></p>
 <p>该方法返回包含匹配结果的数组, 如果没有匹配项, 则返回 null.</p>
 <p><strong>描述</strong></p>
 <ul>
@@ -6058,20 +6087,20 @@
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> str = <span class="string">"World Internet Conference"</span>;</div><div class="line"><span class="built_in">console</span>.log(str.match(<span class="regexp">/[a-d]/i</span>));<span class="comment">//["d", index: 4, input: "World Internet Conference"]</span></div><div class="line"><span class="built_in">console</span>.log(str.match(<span class="regexp">/[a-d]/gi</span>));<span class="comment">//["d", "C", "c"]</span></div><div class="line"><span class="comment">//RegExp 方法如下</span></div><div class="line"><span class="built_in">console</span>.log(<span class="regexp">/[a-d]/gi</span>.test(str));<span class="comment">//true</span></div><div class="line"><span class="built_in">console</span>.log(<span class="regexp">/[a-d]/gi</span>.exec(str));<span class="comment">//["d", index: 4, input: "World Internet Conference"]</span></div></pre></td></tr></table></figure>
 <p>由上可知, RegExp.test(str) 方法只要匹配到了一个字符也返回true. 而</p>
 <p>RegExp.exec(str) 方法无论正则中有没有包含 g 标志, RegExp.exec将直接返回第一个匹配结果, 且该结果同 str.match(regexp) 方法不包含 g 标志时的返回一致.</p>
-<h6 id="replace"><a href="#replace" class="headerlink" title="replace"></a>replace</h6><p>该方法在之前已经讲过, 详细请参考 <a href="http://louiszhai.github.io/2015/12/11/js.replace/"><code>String.prototype.replace高阶技能</code></a> .</p>
-<h6 id="search"><a href="#search" class="headerlink" title="search"></a>search</h6><p>search() 方法用于测试字符串对象是否包含某个正则匹配. 相当于正则表达式的 test 方法. 且该方法比 match() 方法更快. 如果匹配成功, search() 返回正则表达式在字符串中首次匹配项的索引, 否则返回-1.</p>
-<p>语法: <em>str</em>.search(regexp)</p>
+<h6 id="replace"><a href="#replace" class="headerlink" title="replace"></a><strong>replace</strong></h6><p>该方法在之前已经讲过, 详细请参考 <a href="http://louiszhai.github.io/2015/12/11/js.replace/"><code>String.prototype.replace高阶技能</code></a> .</p>
+<h6 id="search"><a href="#search" class="headerlink" title="search"></a><strong>search</strong></h6><p>search() 方法用于测试字符串对象是否包含某个正则匹配. 相当于正则表达式的 test 方法. 且该方法比 match() 方法更快. 如果匹配成功, search() 返回正则表达式在字符串中首次匹配项的索引, 否则返回-1.</p>
+<p>语法: <em>str.search(regexp)</em></p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> str = <span class="string">"abcdefg"</span>;</div><div class="line"><span class="built_in">console</span>.log(str.search(<span class="regexp">/[d-g]/</span>));<span class="comment">//3, 匹配到子串"defg",而d在原字符串中的索引为3</span></div></pre></td></tr></table></figure>
 <p>search() 方法不支持全局匹配(正则中包含g参数), 如下:</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(str.search(<span class="regexp">/[d-g]/g</span>));<span class="comment">//3, 与无g参数时,返回相同</span></div></pre></td></tr></table></figure>
-<h6 id="slice"><a href="#slice" class="headerlink" title="slice"></a>slice</h6><p>slice() 方法提取字符串的一部分, 并返回新的字符串. 该方法有些类似Array.prototype.slice 方法.</p>
-<p>语法: <em>str</em>.slice(start, end)</p>
+<h6 id="slice"><a href="#slice" class="headerlink" title="slice"></a><strong>slice</strong></h6><p>slice() 方法提取字符串的一部分, 并返回新的字符串. 该方法有些类似Array.prototype.slice 方法.</p>
+<p>语法: <em>str.slice(start, end)</em></p>
 <p>首先 end 参数可选, start可取正值, 也可取负值. </p>
 <p>取正值时表示从索引为start的位置截取到end的位置(不包括end所在位置的字符, 如果end省略则截取到字符串末尾).</p>
 <p>取负值时表示从索引为 length+start 位置截取到end所在位置的字符.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> str = <span class="string">"It is our choices that show what we truly are, far more than our abilities."</span>;</div><div class="line"><span class="built_in">console</span>.log(str.slice(<span class="number">0</span>,<span class="number">-30</span>));<span class="comment">//It is our choices that show what we truly are</span></div><div class="line"><span class="built_in">console</span>.log(str.slice(<span class="number">-30</span>));<span class="comment">//, far more than our abilities.</span></div></pre></td></tr></table></figure>
-<h6 id="split"><a href="#split" class="headerlink" title="split"></a>split</h6><p>split() 方法把原字符串分割成子字符串组成数组, 并返回该数组.</p>
-<p>语法: <em>str</em>.split(separator, limit)</p>
+<h6 id="split"><a href="#split" class="headerlink" title="split"></a><strong>split</strong></h6><p>split() 方法把原字符串分割成子字符串组成数组, 并返回该数组.</p>
+<p>语法: <em>str.split(separator, limit)</em></p>
 <p>两个参数均是可选的, 其中 separator 表示分隔符, 它可以是字符串也可以是正则表达式. 如果忽略 separator, 则返回的数组包含一个由原字符串组成的元素. 如果 separator 是一个空串, 则 str 将会被分割成一个由原字符串中字符组成的数组. limit 表示从返回的数组中截取前 limit 个元素, 从而限定返回的数组长度.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> str = <span class="string">"today is a sunny day"</span>;</div><div class="line"><span class="built_in">console</span>.log(str.split());<span class="comment">//["today is a sunny day"]</span></div><div class="line"><span class="built_in">console</span>.log(str.split(<span class="string">""</span>));<span class="comment">//["t", "o", "d", "a", "y", " ", "i", "s", " ", "a", " ", "s", "u", "n", "n", "y", " ", "d", "a", "y"]</span></div><div class="line"><span class="built_in">console</span>.log(str.split(<span class="string">" "</span>));<span class="comment">//["today", "is", "a", "sunny", "day"]</span></div></pre></td></tr></table></figure>
 <p>使用limit限定返回的数组大小. 如下:</p>
@@ -6080,14 +6109,14 @@
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(str.split(<span class="regexp">/\s*is\s*/</span>));<span class="comment">//["today", "a sunny day"]</span></div></pre></td></tr></table></figure>
 <p>若正则分隔符里包含捕获括号, 则括号匹配的结果将会包含在返回的数组中.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(str.split(<span class="regexp">/(\s*is\s*)/</span>));<span class="comment">//["today", " is ", "a sunny day"]</span></div></pre></td></tr></table></figure>
-<h6 id="substr"><a href="#substr" class="headerlink" title="substr"></a>substr</h6><p>substr() 方法返回字符串指定位置开始的指定数量的字符.</p>
-<p>语法: <em>str</em>.substr(start[, length])</p>
+<h6 id="substr"><a href="#substr" class="headerlink" title="substr"></a><strong>substr</strong></h6><p>substr() 方法返回字符串指定位置开始的指定数量的字符.</p>
+<p>语法: <em>str.substr(start[, length])</em></p>
 <p>start 表示开始截取字符的位置, 可取正值或负值. 取正值时表示start位置的索引, 取负值时表示 length+start位置的索引.</p>
 <p>length 表示截取的字符长度.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> str = <span class="string">"Yesterday is history. Tomorrow is mystery. But today is a gift."</span>;</div><div class="line"><span class="built_in">console</span>.log(str.substr(<span class="number">47</span>));<span class="comment">//today is a gift.</span></div><div class="line"><span class="built_in">console</span>.log(str.substr(<span class="number">-16</span>));<span class="comment">//today is a gift.</span></div></pre></td></tr></table></figure>
 <p>目前 Microsoft’s JScript 不支持 start 参数取负的索引, 如需在 IE 下支持, 请参考 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/String/substr#Description" target="_blank" rel="external">Polyfill</a>.</p>
-<h6 id="substring"><a href="#substring" class="headerlink" title="substring"></a>substring</h6><p>substring() 方法返回字符串两个索引之间的子串.</p>
-<p>语法: <em>str</em>.substring(indexA[, indexB])</p>
+<h6 id="substring"><a href="#substring" class="headerlink" title="substring"></a><strong>substring</strong></h6><p>substring() 方法返回字符串两个索引之间的子串.</p>
+<p>语法: <em>str.substring(indexA[, indexB])</em></p>
 <p>indexA, indexB 表示字符串索引, 其中 indexB 可选, 如果省略, 则表示返回从 indexA 到字符串末尾的子串.</p>
 <p><strong>描述</strong></p>
 <p>substring 要截取的是从 indexA 到 indexB(不包含)之间的字符, 符合以下规律:</p>
@@ -6099,59 +6128,59 @@
 </ul>
 <p>而 如果 indexA &gt; indexB, 则 substring 的执行效果就像是两个参数调换一般. 比如: str.substring(0,1) == str.substring(1,0)</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> str = <span class="string">"Get outside every day. Miracles are waiting everywhere."</span>;</div><div class="line"><span class="built_in">console</span>.log(str.substring(<span class="number">1</span>,<span class="number">1</span>));<span class="comment">//""</span></div><div class="line"><span class="built_in">console</span>.log(str.substring(<span class="number">0</span>));<span class="comment">//Get outside every day. Miracles are waiting everywhere.</span></div><div class="line"><span class="built_in">console</span>.log(str.substring(<span class="number">-1</span>));<span class="comment">//Get outside every day. Miracles are waiting everywhere.</span></div><div class="line"><span class="built_in">console</span>.log(str.substring(<span class="number">0</span>,<span class="number">100</span>));<span class="comment">//Get outside every day. Miracles are waiting everywhere.</span></div><div class="line"><span class="built_in">console</span>.log(str.substring(<span class="number">22</span>,<span class="literal">NaN</span>));<span class="comment">//Get outside every day.</span></div></pre></td></tr></table></figure>
-<h6 id="toLocaleLowerCase"><a href="#toLocaleLowerCase" class="headerlink" title="toLocaleLowerCase"></a>toLocaleLowerCase</h6><h6 id="toLocaleUpperCase"><a href="#toLocaleUpperCase" class="headerlink" title="toLocaleUpperCase"></a>toLocaleUpperCase</h6><p>toLocaleLowerCase() 方法返回调用该方法的字符串被转换成小写的值, 转换规则根据本地化的大小写映射. 而 toLocaleUpperCase() 方法则是转换成大写的值.</p>
-<p>语法: <em>str</em>.toLocaleLowerCase(), <em>str</em>.toLocaleUpperCase()</p>
+<h6 id="toLocaleLowerCase"><a href="#toLocaleLowerCase" class="headerlink" title="toLocaleLowerCase"></a><strong>toLocaleLowerCase</strong></h6><h6 id="toLocaleUpperCase"><a href="#toLocaleUpperCase" class="headerlink" title="toLocaleUpperCase"></a><strong>toLocaleUpperCase</strong></h6><p>toLocaleLowerCase() 方法返回调用该方法的字符串被转换成小写的值, 转换规则根据本地化的大小写映射. 而 toLocaleUpperCase() 方法则是转换成大写的值.</p>
+<p>语法: <em>str.toLocaleLowerCase()</em>, <em>str.toLocaleUpperCase()</em></p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(<span class="string">'ABCDEFG'</span>.toLocaleLowerCase());<span class="comment">//abcdefg</span></div><div class="line"><span class="built_in">console</span>.log(<span class="string">'abcdefg'</span>.toLocaleUpperCase());<span class="comment">//ABCDEFG</span></div></pre></td></tr></table></figure>
-<h6 id="toLowerCase"><a href="#toLowerCase" class="headerlink" title="toLowerCase"></a>toLowerCase</h6><h6 id="toUpperCase"><a href="#toUpperCase" class="headerlink" title="toUpperCase"></a>toUpperCase</h6><p>这两个方法分别表示将字符串转换为相应的小写,大写形式, 并返回. 如下:</p>
+<h6 id="toLowerCase"><a href="#toLowerCase" class="headerlink" title="toLowerCase"></a><strong>toLowerCase</strong></h6><h6 id="toUpperCase"><a href="#toUpperCase" class="headerlink" title="toUpperCase"></a><strong>toUpperCase</strong></h6><p>这两个方法分别表示将字符串转换为相应的小写,大写形式, 并返回. 如下:</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(<span class="string">'ABCDEFG'</span>.toLowerCase());<span class="comment">//abcdefg</span></div><div class="line"><span class="built_in">console</span>.log(<span class="string">'abcdefg'</span>.toUpperCase());<span class="comment">//ABCDEFG</span></div></pre></td></tr></table></figure>
-<h6 id="toString-NaN"><a href="#toString-NaN" class="headerlink" title="toString"></a>toString</h6><h6 id="valueOf-NaN"><a href="#valueOf-NaN" class="headerlink" title="valueOf"></a>valueOf</h6><p>这两个方法都是返回指定对象的字符串形式.</p>
-<p>语法: <em>str</em>.toString(), <em>str</em>.valueOf()</p>
+<h6 id="toString-NaN"><a href="#toString-NaN" class="headerlink" title="toString"></a><strong>toString</strong></h6><h6 id="valueOf-NaN"><a href="#valueOf-NaN" class="headerlink" title="valueOf"></a><strong>valueOf</strong></h6><p>这两个方法都是返回指定对象的字符串形式.</p>
+<p>语法: <em>str.toString()</em>, <em>str.valueOf()</em></p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> str = <span class="string">"abc"</span>;</div><div class="line"><span class="built_in">console</span>.log(str.toString());<span class="comment">//abc</span></div><div class="line"><span class="built_in">console</span>.log(str.toString()==str.valueOf());<span class="comment">//true</span></div></pre></td></tr></table></figure>
 <p>尽管他们是如此的相似, 但仍能抓住他们之间细微的差别, 请尝试运行以下一段代码:</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> x = &#123;</div><div class="line">    <span class="attr">toString</span>: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123; <span class="keyword">return</span> <span class="string">"test"</span>; &#125;,</div><div class="line">    <span class="attr">valueOf</span>: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123; <span class="keyword">return</span> <span class="number">123</span>; &#125;</div><div class="line">&#125;;</div><div class="line"></div><div class="line">alert(x); <span class="comment">// test</span></div><div class="line"><span class="built_in">console</span>.log(<span class="string">"x="</span> + x); <span class="comment">// "x=123"</span></div><div class="line"><span class="built_in">console</span>.log(x + <span class="string">"=x"</span>); <span class="comment">// "123=x"</span></div><div class="line"><span class="built_in">console</span>.log(x + <span class="string">"1"</span>); <span class="comment">// 1231</span></div><div class="line"><span class="built_in">console</span>.log(x + <span class="number">1</span>); <span class="comment">// 124</span></div><div class="line"><span class="built_in">console</span>.log([<span class="string">"x="</span>, x].join(<span class="string">""</span>)); <span class="comment">// "x=test"</span></div></pre></td></tr></table></figure>
 <p>我们发现当 “+” 操作符存在时, x趋向于转换为数字, 表达式会优先调用 valueOf 方法, 如果调用数组的 join 方法, x趋向于转换为字符串, 表达式会优先调用 toString 方法.</p>
-<h6 id="trim"><a href="#trim" class="headerlink" title="trim"></a>trim</h6><p>trim() 方法清除字符串首尾的空白并返回.</p>
-<p>语法: <em>str</em>.trim()</p>
+<h6 id="trim"><a href="#trim" class="headerlink" title="trim"></a><strong>trim</strong></h6><p>trim() 方法清除字符串首尾的空白并返回.</p>
+<p>语法: <em>str.trim()</em></p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(<span class="string">"    abc    "</span>.trim());<span class="comment">//abc</span></div></pre></td></tr></table></figure>
 <p>trim() 方法是 ECMAScript 5.1 标准加入的, 它并不支持IE9以下的低版本IE浏览器, 如需支持, 请参考以下兼容写法:</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span>(!<span class="built_in">String</span>.prototype.trim) &#123;</div><div class="line">  <span class="built_in">String</span>.prototype.trim = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.replace(<span class="regexp">/^\s+|\s+$/g</span>,<span class="string">''</span>);</div><div class="line">  &#125;;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h6 id="codePointAt"><a href="#codePointAt" class="headerlink" title="codePointAt"></a>codePointAt</h6><p>codePointAt() 方法返回使用UTF-16编码的给定位置的值的非负整数. 该方法遵循 ES6标准, 并非所有浏览器都支持.</p>
-<p>语法: <em>str</em>.codePointAt(position)</p>
+<h6 id="codePointAt"><a href="#codePointAt" class="headerlink" title="codePointAt"></a><strong>codePointAt</strong></h6><p>codePointAt() 方法返回使用UTF-16编码的给定位置的值的非负整数. 该方法遵循 <strong>ES6</strong>标准, 并非所有浏览器都支持.</p>
+<p>语法: <em>str.codePointAt(position)</em></p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(<span class="string">"a"</span>.codePointAt(<span class="number">0</span>));<span class="comment">//97</span></div><div class="line"><span class="built_in">console</span>.log(<span class="string">"\u4f60\u597d"</span>.codePointAt(<span class="number">0</span>));<span class="comment">//20320</span></div></pre></td></tr></table></figure>
 <p>codePointAt 符合 ES6 标准, 如需支持, 请参考 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/String/codePointAt#Polyfill" target="_blank" rel="external">Polyfill</a> .</p>
-<h6 id="contains"><a href="#contains" class="headerlink" title="contains"></a>contains</h6><p>contains() 方法尚处于 ES6 规范的草案中, 它用来判断一个字符串是否属于另一个字符, 如果是, 则返回true, 如果不是, 则返回false.</p>
-<p>语法: <em>str</em>.contains(subString [, position])</p>
+<h6 id="contains"><a href="#contains" class="headerlink" title="contains"></a>contains</h6><p>contains() 方法尚处于 <strong>ES6</strong> 规范的草案中, 它用来判断一个字符串是否属于另一个字符, 如果是, 则返回true, 如果不是, 则返回false.</p>
+<p>语法: <em>str.contains(subString [, position])</em></p>
 <p>subString 表示要搜索的字符串, position 表示从当前字符串的哪个位置开始搜索字符串, 默认值为0.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> str = <span class="string">"Practice makes perfect."</span>;</div><div class="line"><span class="built_in">console</span>.log(str.contains(<span class="string">"perfect"</span>));<span class="comment">//true</span></div><div class="line"><span class="built_in">console</span>.log(str.contains(<span class="string">"perfect"</span>,<span class="number">100</span>));<span class="comment">//false</span></div></pre></td></tr></table></figure>
 <p>实际上, 目前只有 Firefox 17及之后的版本实现了该方法.</p>
-<h6 id="endsWith"><a href="#endsWith" class="headerlink" title="endsWith"></a>endsWith</h6><p>endsWith() 方法基本与 contains() 功能相同, 不同的是, 它用来判断一个字符串是否是原字符串的结尾. 若是则返回true, 否则返回false.</p>
-<p>语法: <em>str</em>.endsWith(substring [, position])</p>
+<h6 id="endsWith"><a href="#endsWith" class="headerlink" title="endsWith"></a><strong>endsWith</strong></h6><p>endsWith() 方法基本与 contains() 功能相同, 不同的是, 它用来判断一个字符串是否是原字符串的结尾. 若是则返回true, 否则返回false.</p>
+<p>语法: <em>str.endsWith(substring [, position])</em></p>
 <p>与contains 方法不同, position 参数的默认值为字符串长度.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> str = <span class="string">"Learn and live."</span>;</div><div class="line"><span class="built_in">console</span>.log(str.endsWith(<span class="string">"live."</span>));<span class="comment">//true</span></div><div class="line"><span class="built_in">console</span>.log(str.endsWith(<span class="string">"Learn"</span>,<span class="number">5</span>));<span class="comment">//true</span></div></pre></td></tr></table></figure>
 <p>同样目前只有 Firefox 17版本及之后的版本实现了该方法. 其他浏览器请参考 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/String/endsWith#Polyfill" target="_blank" rel="external">Polyfill</a>.</p>
-<h6 id="normalize"><a href="#normalize" class="headerlink" title="normalize"></a>normalize</h6><p>normalize() 方法尚处于 ES6 规范的草案中, 它会按照指定的 Unicode 正规形式将原字符串正规化.</p>
-<p>语法: <em>str</em>.normalize([form])</p>
+<h6 id="normalize"><a href="#normalize" class="headerlink" title="normalize"></a><strong>normalize</strong></h6><p>normalize() 方法尚处于 <strong>ES6</strong> 规范的草案中, 它会按照指定的 Unicode 正规形式将原字符串正规化.</p>
+<p>语法: <em>str.normalize([form])</em></p>
 <p>form 参数可省略, 目前有四种 Unicode 正规形式, 即 “NFC”, “NFD”, “NFKC” 以及 “NFKD”, form的默认值为 “NFC”. 如果form 传入了非法的参数值, 则会抛出 RangeError 异常.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> str = <span class="string">"\u4f60\u597d"</span>;</div><div class="line"><span class="built_in">console</span>.log(str.normalize());<span class="comment">//你好</span></div><div class="line"><span class="built_in">console</span>.log(str.normalize(<span class="string">"NFC"</span>));<span class="comment">//你好</span></div><div class="line"><span class="built_in">console</span>.log(str.normalize(<span class="string">"NFD"</span>));<span class="comment">//你好</span></div><div class="line"><span class="built_in">console</span>.log(str.normalize(<span class="string">"NFKC"</span>));<span class="comment">//你好</span></div><div class="line"><span class="built_in">console</span>.log(str.normalize(<span class="string">"NFKD"</span>));<span class="comment">//你好</span></div></pre></td></tr></table></figure>
 <p>目前只有 Chrome, Firefox 浏览器实现了该方法.</p>
-<h6 id="repeat"><a href="#repeat" class="headerlink" title="repeat"></a>repeat</h6><p>repeat() 方法尚处于 ES6 规范的草案中, 它返回重复原字符串多次的新字符串.</p>
-<p>语法: <em>str</em>.repeat(count)</p>
+<h6 id="repeat"><a href="#repeat" class="headerlink" title="repeat"></a><strong>repeat</strong></h6><p>repeat() 方法尚处于 <strong>ES6</strong> 规范的草案中, 它返回重复原字符串多次的新字符串.</p>
+<p>语法: <em>str.repeat(count)</em></p>
 <p>count 参数只能取大于等于0 的数字, 若该数字不为整数, 将自动转换为整数形式. 如果取负数或者其他值将报错</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> str = <span class="string">"A still tongue makes a wise head."</span>;</div><div class="line"><span class="built_in">console</span>.log(str.repeat(<span class="number">0</span>));<span class="comment">//""</span></div><div class="line"><span class="built_in">console</span>.log(str.repeat(<span class="number">1</span>));<span class="comment">//A still tongue makes a wise head.</span></div><div class="line"><span class="built_in">console</span>.log(str.repeat(<span class="number">1.5</span>));<span class="comment">//A still tongue makes a wise head.</span></div><div class="line"><span class="built_in">console</span>.log(str.repeat(<span class="number">-1</span>));<span class="comment">//RangeError:Invalid count value</span></div></pre></td></tr></table></figure>
 <p>目前只有 Chrome 41, Firefox 24版本浏览器实现了该方法. 其他浏览器请参考 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/String/repeat#Polyfill" target="_blank" rel="external">Polyfill</a>.</p>
-<h6 id="startsWith"><a href="#startsWith" class="headerlink" title="startsWith"></a>startsWith</h6><p>startsWith() 方法用来判断当前字符串是否是以给定字符串开始的, 若是则返回true, 否则返回false.</p>
-<p>语法: <em>str</em>.startsWith(subString [, position])</p>
+<h6 id="startsWith"><a href="#startsWith" class="headerlink" title="startsWith"></a><strong>startsWith</strong></h6><p>startsWith() 方法用来判断当前字符串是否是以给定字符串开始的, 若是则返回true, 否则返回false.</p>
+<p>语法: <em>str.startsWith(subString [, position])</em></p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> str = <span class="string">"Where there is a will, there is a way."</span>;</div><div class="line"><span class="built_in">console</span>.log(str.startsWith(<span class="string">"Where"</span>));<span class="comment">//true</span></div><div class="line"><span class="built_in">console</span>.log(str.startsWith(<span class="string">"there"</span>,<span class="number">6</span>));<span class="comment">//true</span></div></pre></td></tr></table></figure>
 <p>目前只有 Firefox 17 版本实现了该方法, 其他浏览器请参考 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/String/startsWith#Polyfill" target="_blank" rel="external">Polyfill</a>.</p>
-<p>其它非标准的方法暂时不作介绍. 如需了解请参考 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/String/prototype" target="_blank" rel="external">String.prototype - JavaScript | MDN</a> 中标注为感叹号的方法.</p>
+<p>其它<strong>非标准</strong>的方法暂时不作介绍. 如需了解请参考 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/String/prototype" target="_blank" rel="external">String.prototype - JavaScript | MDN</a> 中标注为感叹号的方法.</p>
 <h5 id="HTML有关的方法"><a href="#HTML有关的方法" class="headerlink" title="HTML有关的方法"></a>HTML有关的方法</h5><p>常用的方法有 anchor, link 其它方法如 big, blink, bold, fixed, fontcolor, fontsize, italics, small, strike, sub, sup均已废除.</p>
 <p>接下来我们将介绍 anchor和link 两个方法, 其他废除方法不作介绍.</p>
-<h6 id="anchor"><a href="#anchor" class="headerlink" title="anchor"></a>anchor</h6><p>anchor() 方法创建一个锚标签.</p>
-<p>语法: <em>str</em>.anchor(name)</p>
+<h6 id="anchor"><a href="#anchor" class="headerlink" title="anchor"></a><strong>anchor</strong></h6><p>anchor() 方法创建一个锚标签.</p>
+<p>语法: <em>str.anchor(name)</em></p>
 <p>name 指定被创建的a标签的name属性, 使用该方法创建的锚点, 将会成为 document.anchors 数组的元素.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> str = <span class="string">"this is a anchor tag"</span>;</div><div class="line"><span class="built_in">document</span>.body.innerHTML = <span class="built_in">document</span>.body.innerHTML + str.anchor(<span class="string">"anchor1"</span>);<span class="comment">//body末尾将会追加这些内容 &lt;a name="anchor1"&gt;this is a anchor tag&lt;/a&gt;</span></div></pre></td></tr></table></figure>
-<h6 id="link"><a href="#link" class="headerlink" title="link"></a>link</h6><p>link() 方法同样创建一个a标签.</p>
-<p>语法: <em>str</em>.link(url)</p>
+<h6 id="link"><a href="#link" class="headerlink" title="link"></a><strong>link</strong></h6><p>link() 方法同样创建一个a标签.</p>
+<p>语法: <em>str.link(url)</em></p>
 <p>url 指定被创建的a标签的href属性, 如果url中包含特殊字符, 将自动进行编码. 例如 &amp;会被转义为 &amp;, “ 会被转义为 “ &amp;\quot; 使用该方法创建的a标签, 将会成为 document.links 数组中的元素.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> str = <span class="string">"百度"</span>;</div><div class="line"><span class="built_in">document</span>.write(str.link(<span class="string">"https://www.baidu.com"</span>));<span class="comment">//&lt;a href="https://www.baidu.com"&gt;百度&lt;/a&gt;</span></div></pre></td></tr></table></figure>
 <hr>
@@ -6170,53 +6199,6 @@
     <summary type="html">
     
       JavaScript String String.prototype indexOf charAt match search split valueOf trim substr substring
-    
-    </summary>
-    
-    
-      <category term="JavaScript" scheme="http://louiszhai.github.io/tags/JavaScript/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Function.prototype.bind方法指南</title>
-    <link href="http://louiszhai.github.io/2016/01/11/bind/"/>
-    <id>http://louiszhai.github.io/2016/01/11/bind/</id>
-    <published>2016-01-11T00:01:33.000Z</published>
-    <updated>2017-04-17T02:54:08.000Z</updated>
-    
-    <content type="html"><![CDATA[<h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h3><p>ES5新增了 Function.prototype.bind 方法, 该方法不同于jquery的bind 方法, 它主要用于固定 this 作用域, 避免各种由于上下文切换造成的语义问题. 常用在 setTimeout, for循环等内部.</p>
-<a id="more"></a>
-<h3 id="bind"><a href="#bind" class="headerlink" title="bind"></a>bind</h3><p>语法: func.bind(thisArg, arg1, arg2, ….)</p>
-<p>bind() 方法会返回一个新函数, 又叫绑定函数, 当调用这个绑定函数时, 绑定函数会以创建它时传入 bind() 方法的第一个参数作为当前的上下文, 即this, 传入 bind() 方法的第二个及之后的参数加上绑定函数运行时自身的参数按照顺序作为原函数的参数来调用原函数.</p>
-<p>绑定函数也能使用new操作符创建对象; 这就好比把原函数当做构造器. 此时提供的this将被忽略, this之后的参数将依然前置到运行时的参数列表中.</p>
-<h4 id="基本用法"><a href="#基本用法" class="headerlink" title="基本用法"></a>基本用法</h4><p>下面我们来看看bind 的基本用法.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> x = <span class="number">8</span>;</div><div class="line"><span class="keyword">var</span> o = &#123;</div><div class="line">  <span class="attr">x</span>: <span class="number">10</span>,</div><div class="line">  <span class="attr">getX</span>: <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  	<span class="built_in">console</span>.log(<span class="keyword">this</span>.x);</div><div class="line">  &#125;</div><div class="line">&#125;;</div><div class="line"><span class="keyword">var</span> f = o.getX;</div><div class="line">f();<span class="comment">//8, 由于没有绑定执行时的上下文, this默认指向window, 打印了全局变量x的值</span></div><div class="line"><span class="keyword">var</span> g = f.bind(o);</div><div class="line">g();<span class="comment">//10, 绑定this后, 成功的打印了o对象的x属性的值.</span></div></pre></td></tr></table></figure>
-<h4 id="分离参数"><a href="#分离参数" class="headerlink" title="分离参数"></a>分离参数</h4><p>bind() 方法还可以设置函数拥有的初始参数. 这些参数作为bind() 的第2,3…个参数跟在this(或其他对象的后面), 调用绑定函数时, 这些参数将插入到参数列表的最开始位置, 而传递给绑定函数的参数将跟在他们后面.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//打印十个斐波那契数</span></div><div class="line"><span class="keyword">var</span> f = <span class="function"><span class="keyword">function</span>(<span class="params">n1, n2, length</span>)</span>&#123;</div><div class="line">  <span class="keyword">if</span>(<span class="built_in">arguments</span>.length&lt;<span class="number">3</span>) <span class="built_in">console</span>.log(<span class="string">'参数不够...'</span>);</div><div class="line">  <span class="keyword">var</span> array = [n1, n2];</div><div class="line">  <span class="keyword">for</span>(<span class="keyword">var</span> i=<span class="number">2</span>;i&lt;length;i++)&#123;</div><div class="line">  	array[i] = array[i<span class="number">-2</span>] + array[i<span class="number">-1</span>];</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">return</span> array;</div><div class="line">&#125;</div><div class="line"><span class="keyword">var</span> g = f.bind(<span class="literal">null</span>, <span class="number">1</span>, <span class="number">1</span>);</div><div class="line"><span class="built_in">console</span>.log(g(<span class="number">10</span>));<span class="comment">//[1, 1, 2, 3, 5, 8, 13, 21, 34, 55]</span></div></pre></td></tr></table></figure>
-<h4 id="绑定参数"><a href="#绑定参数" class="headerlink" title="绑定参数"></a>绑定参数</h4><p>如果使用new 操作符去构造绑定函数的实例时, 原来提供的this 将被忽略, this之后的参数将依然前置到构造函数的参数列表中. 此时 bind() 方法便具备了保留参数的能力, 我们可以此达到类似柯里化的效果.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> f = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  <span class="keyword">if</span>(<span class="built_in">arguments</span>.length!=<span class="number">0</span>)</div><div class="line">  	<span class="keyword">this</span>.sum = <span class="built_in">Array</span>.prototype.reduce.call(<span class="built_in">arguments</span>,<span class="function"><span class="keyword">function</span>(<span class="params">prev,item</span>)</span>&#123;<span class="comment">//对传入参数求和</span></div><div class="line"> 		<span class="keyword">return</span> prev + item;</div><div class="line">	&#125;);</div><div class="line">  <span class="keyword">return</span> <span class="built_in">Array</span>.prototype.join.call(<span class="built_in">arguments</span>);<span class="comment">// 返回传入参数的字符串形式</span></div><div class="line">&#125;</div><div class="line">f.prototype.toString = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  <span class="keyword">return</span> <span class="keyword">this</span>.sum;</div><div class="line">&#125;</div><div class="line"><span class="keyword">var</span> g = f.bind(<span class="literal">null</span>,<span class="number">2</span>);</div><div class="line"><span class="keyword">var</span> x = <span class="keyword">new</span> g(<span class="number">8</span>);</div><div class="line"><span class="built_in">console</span>.log(x.toString());<span class="comment">//10, 可见x被绑定了2+8=10</span></div><div class="line"><span class="built_in">console</span>.log(g(<span class="number">8</span>));<span class="comment">//2,8 这告诉我们绑定的两个参数正是2和8</span></div><div class="line"></div><div class="line"><span class="built_in">console</span>.log(x <span class="keyword">instanceof</span> g);<span class="comment">//true, 可见通过new创建的x继承了g</span></div><div class="line"><span class="built_in">console</span>.log(x <span class="keyword">instanceof</span> f);<span class="comment">//true, 可见x也继承了f</span></div><div class="line"><span class="built_in">console</span>.log(g <span class="keyword">instanceof</span> <span class="built_in">Function</span>);<span class="comment">//true, 可见bind f()方法之后, 返回了一个新的函数g</span></div><div class="line"><span class="comment">//函数g可用于求和,如下:</span></div><div class="line"><span class="built_in">console</span>.log(g(<span class="number">1</span>,<span class="number">3</span>,<span class="number">5</span>,<span class="number">7</span>,<span class="number">9</span>));<span class="comment">//27 2+1+3+5+7+9=27</span></div></pre></td></tr></table></figure>
-<h4 id="快捷调用"><a href="#快捷调用" class="headerlink" title="快捷调用"></a>快捷调用</h4><p>使用Array.prototype的方法处理类数组对象时(鸭式辨型), 不可避免的需要借用call 或者 apply 方法, 使用 bind() 方法, 我们可以简化这个过程. 如下:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> _slice = <span class="built_in">Array</span>.prototype.slice;</div><div class="line"><span class="keyword">var</span> slice = <span class="built_in">Function</span>.prototype.call.bind(_slice);</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  <span class="keyword">return</span> slice(<span class="built_in">arguments</span>,<span class="number">1</span>);</div><div class="line">&#125;</div><div class="line">f(<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>);<span class="comment">//[2, 3, 4, 5]</span></div></pre></td></tr></table></figure>
-<p>下面的实例将解释 bind() 方法做了一件什么事情:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> _slice = <span class="built_in">Array</span>.prototype.slice;</div><div class="line"><span class="keyword">var</span> slice = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  <span class="keyword">return</span> _slice.apply(<span class="built_in">arguments</span>[<span class="number">0</span>],_slice.call(<span class="built_in">arguments</span>,<span class="number">1</span>));</div><div class="line">&#125;;</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  <span class="keyword">return</span> slice(<span class="built_in">arguments</span>,<span class="number">1</span>);</div><div class="line">&#125;</div><div class="line">f(<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>);<span class="comment">//[2, 3, 4, 5]</span></div></pre></td></tr></table></figure>
-<p>如下, 是bind() 方法的简单实现.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">Function</span>.prototype.bind = <span class="function"><span class="keyword">function</span>(<span class="params">thisArg,argN</span>)</span>&#123;</div><div class="line">  <span class="keyword">var</span> _this = <span class="keyword">this</span>;</div><div class="line">  <span class="keyword">var</span> _arg = _slice.call(<span class="built_in">arguments</span>,<span class="number">1</span>);</div><div class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">   	<span class="keyword">var</span> arg = _slice.call(<span class="built_in">arguments</span>);</div><div class="line">    arg = _arg.concat(arg);</div><div class="line">  	<span class="keyword">return</span> _this.apply(thisArg,arg);</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>可以看出来, 使用 bind() 方法后, 代码优雅得多.</p>
-<p>注: 作为ES5标准加入的bind方法显然不支持 IE9之前的低版本IE, 如需使用, 请参考<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Function/bind#Compatibility" target="_blank" rel="external">Polyfill</a>.</p>
-<hr>
-<p>本文就讨论这么多内容,大家有什么问题或好的想法欢迎在下方参与<a href="#respond">留言和评论</a>.</p>
-<p>本文作者: <a href="https://github.com/Louiszhai" target="_blank" rel="external">louis</a></p>
-<p>本文链接: <a href="http://louiszhai.github.io/2016/01/11/bind/">http://louiszhai.github.io/2016/01/11/bind/</a></p>
-<p>参考文章</p>
-<ul>
-<li><a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Function/bind" target="_blank" rel="external">Function.prototype.bind() - JavaScript | MDN</a></li>
-</ul>
-]]></content>
-    
-    <summary type="html">
-    
-      JavaScript bind Function.prototype.bind call apply
     
     </summary>
     

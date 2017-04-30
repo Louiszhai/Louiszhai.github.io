@@ -4,18 +4,18 @@
   <meta charset="utf-8">
   
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
-  <title>float深入分析 | louis blog</title>
+  <title>UI自动化测试新篇章-chrome Headless | louis blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="css float clear:both overflow:auto 文档流">
+  <meta name="description" content="chrome-headless">
 <meta property="og:type" content="article">
-<meta property="og:title" content="float深入分析">
-<meta property="og:url" content="http://louiszhai.github.io/2016/03/12/css-float/index.html">
+<meta property="og:title" content="UI自动化测试新篇章-chrome Headless">
+<meta property="og:url" content="http://louiszhai.github.io/2017/04/29/chrome-headless/index.html">
 <meta property="og:site_name" content="louis blog">
-<meta property="og:description" content="css float clear:both overflow:auto 文档流">
-<meta property="og:updated_time" content="2017-04-17T02:54:08.000Z">
+<meta property="og:description" content="chrome-headless">
+<meta property="og:updated_time" content="2017-04-29T11:19:19.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="float深入分析">
-<meta name="twitter:description" content="css float clear:both overflow:auto 文档流">
+<meta name="twitter:title" content="UI自动化测试新篇章-chrome Headless">
+<meta name="twitter:description" content="chrome-headless">
   
     <link rel="alternative" href="/atom.xml" title="louis blog" type="application/atom+xml">
   
@@ -157,11 +157,11 @@
 	</div>
 </nav>
 
-        <div class="body-wrap"><article id="post-css-float" class="article article-type-post" itemscope itemprop="blogPost">
+        <div class="body-wrap"><article id="post-chrome-headless" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2016/03/12/css-float/" class="article-date">
-  	<time datetime="2016-03-12T09:55:04.000Z" itemprop="datePublished">2016-03-12</time>
+      <a href="/2017/04/29/chrome-headless/" class="article-date">
+  	<time datetime="2017-04-29T05:05:32.000Z" itemprop="datePublished">2017-04-29</time>
 </a>
     </div>
   
@@ -174,7 +174,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      float深入分析
+      UI自动化测试新篇章-chrome Headless
     </h1>
   
 
@@ -183,7 +183,7 @@
       <div class="article-info article-info-post">
         
 	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CSS/">CSS</a></li></ul>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Chrome/">Chrome</a></li></ul>
 	</div>
 
         
@@ -197,48 +197,17 @@
           <span class="toc-arrow"></span>
 <div id="toc" class="toc-article">
     <div class="toc-title">目录</div>
-    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#导读"><span class="toc-text">导读</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#float对布局的影响"><span class="toc-text">float对布局的影响</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#对行框的影响"><span class="toc-text">对行框的影响</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#对父元素的影响"><span class="toc-text">对父元素的影响</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#对兄弟元素的影响"><span class="toc-text">对兄弟元素的影响</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#对兄弟元素-浮动-的影响"><span class="toc-text">对兄弟元素(浮动)的影响</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#对自身元素的影响"><span class="toc-text">对自身元素的影响</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#对子元素的影响"><span class="toc-text">对子元素的影响</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#对父元素非浮动兄弟元素的影响"><span class="toc-text">对父元素非浮动兄弟元素的影响</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#对父元素浮动兄弟元素的影响"><span class="toc-text">对父元素浮动兄弟元素的影响</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#清除浮动的2种方法"><span class="toc-text">清除浮动的2种方法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#overflow"><span class="toc-text">overflow</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#after伪类"><span class="toc-text">after伪类</span></a></li></ol></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#导读"><span class="toc-text">导读</span></a></li></ol>
 </div>
       
-        <h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h3><p>float即浮动, 使用float, 该浮动元素便会脱离正常的文档流, 使其浮动到父元素的行的一端(元素向左或向右移动, 直到碰到浮动元素, 或者达到父元素内容的边界, 不包括padding), 并且其他元素将忽略该浮动元素并填补其原先的空间.</p>
-<p>这里需要捋清一个概念, 所谓文档流是什么?</p>
-<p><strong>文档流</strong>: 元素按照自上到下, 自左到右的顺序依次排放, 即文档流.</p>
-<p>float特别适合这种图文混排, 文字环绕图片的效果, 布局上灵活多变. 但不太适合动画, 因其可能造成reflow性能问题, 此时宜用绝对定位(position:absolute)或者固定定位(position:fixed).</p>
-<a id="more"></a>
-<h3 id="float对布局的影响"><a href="#float对布局的影响" class="headerlink" title="float对布局的影响"></a>float对布局的影响</h3><h4 id="对行框的影响"><a href="#对行框的影响" class="headerlink" title="对行框的影响"></a>对行框的影响</h4><p>浮动元素旁边的行框被缩短, 从而给浮动框留出空间, 行框围绕浮动框.</p>
-<p>因此, 创建浮动框可以使文本围绕图像, 如下:</p>
-<p>float01.gif</p>
-<p>float02.gif</p>
-<h4 id="对父元素的影响"><a href="#对父元素的影响" class="headerlink" title="对父元素的影响"></a>对父元素的影响</h4><p>元素浮动后, 会脱离正常文档流, 原文档中, 该浮动元素似乎消失了, 因此它不能撑开父元素, 容易造成父元素的塌陷.</p>
-<h4 id="对兄弟元素的影响"><a href="#对兄弟元素的影响" class="headerlink" title="对兄弟元素的影响"></a>对兄弟元素的影响</h4><p>若兄弟元素是 <strong>块级元素</strong>.</p>
-<p>现代浏览器及IE8+下, 该兄弟元素会忽视浮动元素而占据它的位置, 并且该兄弟元素会处于浮动元素的下层(并且无法通过z-index属性改变他们的层叠关系), 然而它的内容文字和其他行内元将会环绕浮动元素.</p>
-<p>对此, IE6,7分别有不同的表现. IE6,7中, 该兄弟元素会紧跟在浮动元素的右侧, 并且IE6中会保留3px的空隙; IE7中则没有空隙.</p>
-<p>若兄弟元素是 <strong>内联元素</strong></p>
-<p>则内联元素将环绕浮动元素排列.</p>
-<h4 id="对兄弟元素-浮动-的影响"><a href="#对兄弟元素-浮动-的影响" class="headerlink" title="对兄弟元素(浮动)的影响"></a>对兄弟元素(浮动)的影响</h4><p>若兄弟元素是 <strong>同一方向浮动</strong>.</p>
-<p>则兄弟元素相对该浮动元素按照从左到右(float:left)或者从右到左(float:right)的顺序依次排列.</p>
-<p>若兄弟元素是 <strong>反方向浮动</strong>.</p>
-<p>则兄弟元素和浮动元素将组成两个向左或向右的浮动队列, 分别相对浮动方向同时向行中间浮动. 他们尽可能处于同一行, 如果行的宽度不足以容纳这两个队列, 两个队列将错开成两行, DOM结构中处于之前的浮动队列将优先排在上面一行, 另一个浮动队列将排在下一行或者部分排在下一行.</p>
-<h4 id="对自身元素的影响"><a href="#对自身元素的影响" class="headerlink" title="对自身元素的影响"></a>对自身元素的影响</h4><p>浮动元素默认被视作<strong>块级对象</strong>(block-level).</p>
-<h4 id="对子元素的影响"><a href="#对子元素的影响" class="headerlink" title="对子元素的影响"></a>对子元素的影响</h4><p>浮动元素, 其高度或宽度取浮动子元素和非浮动子元素高度或宽度的最大值.</p>
-<h4 id="对父元素非浮动兄弟元素的影响"><a href="#对父元素非浮动兄弟元素的影响" class="headerlink" title="对父元素非浮动兄弟元素的影响"></a>对父元素非浮动兄弟元素的影响</h4><p>父元素之外的非浮动元素将会无视该浮动元素, 他们只会相对父元素按照正常文档流去排列.</p>
-<h4 id="对父元素浮动兄弟元素的影响"><a href="#对父元素浮动兄弟元素的影响" class="headerlink" title="对父元素浮动兄弟元素的影响"></a>对父元素浮动兄弟元素的影响</h4><p>父元素之外的浮动兄弟元素, 会本能的找到该浮动元素, 现象参照 “对兄弟元素(浮动)的影响”.</p>
-<h3 id="清除浮动的2种方法"><a href="#清除浮动的2种方法" class="headerlink" title="清除浮动的2种方法"></a>清除浮动的2种方法</h3><p>如上, float会带来父元素的塌陷, 下面提供两种解决方案, 以弥补float的缺陷.</p>
-<p>如下DOM, 由于子元素设置为float:left, 此时父元素并不会被撑大, 高度为0, 背景将无法展示.</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">style</span>&gt;</span><span class="css"></span></div><div class="line">	<span class="selector-class">.outer</span>&#123;</div><div class="line">		<span class="attribute">background</span>:<span class="number">#ccc</span>;</div><div class="line">	&#125;</div><div class="line">	<span class="selector-class">.inner</span>&#123;</div><div class="line">		<span class="attribute">float</span>:left;</div><div class="line">		<span class="attribute">width</span>:<span class="number">150px</span>;</div><div class="line">		<span class="attribute">height</span>:<span class="number">100px</span>;</div><div class="line">		<span class="attribute">margin</span>:<span class="number">10px</span>;</div><div class="line">		<span class="attribute">border</span>:<span class="number">1px</span> solid red;</div><div class="line">	&#125;</div><div class="line"><span class="tag">&lt;/<span class="name">style</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"outer"</span>&gt;</span></div><div class="line">	<span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"inner"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line">	<span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"inner"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line">	<span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"inner"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div></pre></td></tr></table></figure>
-<p>IE6~7下可通过设置父元素的样式为zoom:1来清除浮动, 其他浏览器请参考如下两种方法清除浮动.</p>
-<h4 id="overflow"><a href="#overflow" class="headerlink" title="overflow"></a>overflow</h4><p>父元素使用overflow:auto|hidden, 切记不可使用overflow:visible.</p>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="selector-class">.outer</span>&#123;</div><div class="line">	<span class="attribute">overflow</span>:auto|hidden;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h4 id="after伪类"><a href="#after伪类" class="headerlink" title="after伪类"></a>after伪类</h4><p>利用clear:both属性, 同时为避免加入dom元素, 使用after伪元素设置如下属性即可:</p>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="selector-class">.outer</span><span class="selector-pseudo">::after</span>&#123;</div><div class="line">	<span class="attribute">content</span>:<span class="string">''</span>;</div><div class="line">	<span class="attribute">display</span>:block;</div><div class="line">	<span class="attribute">clear</span>:both;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+        <h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h3><a id="more"></a>
 <hr>
-<p>本文就讨论这么多内容,大家有什么问题或好的想法欢迎在下方参与<a href="#respond">留言和评论</a>.</p>
+<p>本问就讨论这么多内容,大家有什么问题或好的想法欢迎在下方参与<a href="#respond">留言和评论</a>.</p>
 <p>本文作者: <a href="https://github.com/Louiszhai" target="_blank" rel="external">louis</a></p>
-<p>本文链接: <a href="http://louiszhai.github.io/2016/03/12/css-float/">http://louiszhai.github.io/2016/03/12/css-float/</a></p>
+<p>本文链接: <a href="http://louiszhai.github.io/2017/04/29/chrome-headless/">http://louiszhai.github.io/2017/04/29/chrome-headless/</a></p>
 <p>参考文章</p>
 <ul>
-<li><a href="http://www.w3cplus.com/css/float.html" target="_blank" rel="external">float深入剖析_float 教程_w3cplus</a></li>
-<li><a href="http://www.wuwenyuan.com/1079.html" target="_blank" rel="external">网站CSS布局：float布局与position优势对比 | 网络营销技巧</a></li>
+<li>​</li>
 </ul>
 
       
@@ -276,18 +245,9 @@
     
 <nav id="article-nav">
   
-    <a href="/2016/03/12/css-center/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption"><</strong>
-      <div class="article-nav-title">
-        
-          16种方法实现水平居中垂直居中
-        
-      </div>
-    </a>
   
-  
-    <a href="/2016/03/05/xss/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">xss攻防浅谈</div>
+    <a href="/2017/04/28/array/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">【深度长文】JavaScript数组所有API全解密</div>
       <strong class="article-nav-caption">></strong>
     </a>
   
@@ -321,7 +281,7 @@
 
 
 <div class="duoshuo">
-	<div class="ds-thread" data-thread-key="css-float" data-title="float深入分析" data-url="http://louiszhai.github.io/2016/03/12/css-float/"></div>
+	<div class="ds-thread" data-thread-key="chrome-headless" data-title="UI自动化测试新篇章-chrome Headless" data-url="http://louiszhai.github.io/2017/04/29/chrome-headless/"></div>
 	<style>
 		#ds-reset .ds-avatar img{width:54px;height:54px;border-radius:27px;-webkit-border-radius:27px;-moz-border-radius:27px;box-shadow:inset 0 -1px 0 #3333sf;-webkit-box-shadow:inset 0 -1px 0 #3333sf;-webkit-transition:0.4s;-webkit-transition:-webkit-transform 0.4s ease-out;transition:transform 0.4s ease-out;-moz-transition:-moz-transform 0.4s ease-out;}
 		#ds-reset .ds-avatar img:hover{box-shadow:0 0 10px #fff;rgba(255,255,255,.6),inset 0 0 20px rgba(255,255,255,1);-webkit-box-shadow:0 0 10px #fff;rgba(255,255,255,.6),inset 0 0 20px rgba(255,255,255,1);transform:rotateZ(360deg);-webkit-transform:rotateZ(360deg);-moz-transform:rotateZ(360deg);}
