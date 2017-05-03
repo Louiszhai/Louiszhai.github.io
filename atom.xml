@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://louiszhai.github.io/"/>
-  <updated>2017-05-02T02:17:27.000Z</updated>
+  <updated>2017-05-03T10:10:30.000Z</updated>
   <id>http://louiszhai.github.io/</id>
   
   <author>
@@ -20,11 +20,11 @@
     <link href="http://louiszhai.github.io/2017/04/28/array/"/>
     <id>http://louiszhai.github.io/2017/04/28/array/</id>
     <published>2017-04-28T05:43:36.000Z</published>
-    <updated>2017-05-02T02:17:27.000Z</updated>
+    <updated>2017-05-03T10:10:30.000Z</updated>
     
     <content type="html"><![CDATA[<p><strong>本文首发于CSDN网站，下面的版本又经过进一步的修订。</strong></p>
 <p>全文共13k+字，系统讲解了JavaScript数组的各种特性和API。</p>
-<p>数组是一种非常重要的数据类型，它语法简单、灵活、高效。 在多数编程语言中，数组都充当着至关重要的角色，以至于很难想象没有数组的编程语言会是什么模样。特别是JavaScript，它天生的灵活性，又进一步发挥了数组的特长，丰富了数组的使用场景。可以豪不夸张地说，不深入地了解数组，不足以写JavaScript。</p>
+<p>数组是一种非常重要的数据类型，它语法简单、灵活、高效。 在多数编程语言中，数组都充当着至关重要的角色，以至于很难想象没有数组的编程语言会是什么模样。特别是JavaScript，它天生的灵活性，又进一步发挥了数组的特长，丰富了数组的使用场景。可以毫不夸张地说，不深入地了解数组，不足以写JavaScript。</p>
 <p>截止ES7规范，数组共包含33个标准的API方法和一个非标准的API方法，使用场景和使用方案纷繁复杂，其中有不少浅坑、深坑、甚至神坑。下面将从Array构造器及ES6新特性开始，逐步帮助你掌握数组。</p>
 <a id="more"></a>
 <p>声明：以下未特别标明的方法均为ES5已实现的方法。</p>
@@ -5985,191 +5985,250 @@
   </entry>
   
   <entry>
-    <title>Javascript字符串所有API全解密</title>
+    <title>JavaScript字符串所有API全解密</title>
     <link href="http://louiszhai.github.io/2016/01/12/js.String/"/>
     <id>http://louiszhai.github.io/2016/01/12/js.String/</id>
     <published>2016-01-12T12:27:09.000Z</published>
-    <updated>2017-05-02T02:18:56.000Z</updated>
+    <updated>2017-05-03T10:12:05.000Z</updated>
     
-    <content type="html"><![CDATA[<h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a><strong>导读</strong></h3><p>javaScript 中, 字符串无处不在, 并且所有的字符串方法均来自 String.prototype, 这一节, 我们走进看一看String内部, 探讨那些常用或不常用的字符串操作方法.</p>
+    <content type="html"><![CDATA[<p>本文近 6k 字，读完需 10 分钟。</p>
+<p>字符串作为基本的信息交流的桥梁，几乎被所有的编程语言所实现（然而c、c++没有提供）。多数开发者几乎每天都在和字符串打交道，语言内置的String模块，极大地提升了开发者的效率。JavaScript通过自动装箱字符串字面量为String对象，自然地继承了String.prototype的所有方法，更加简化了字符串的使用。</p>
+<p>截止ES6，字符串共包含31个标准的API方法，其中有些方法出镜率较高，需要摸透原理；有些方法之间相似度较高，需要仔细分辨；甚至有些方法执行效率较低，应当尽量少的使用。下面将从String构造器方法说起，逐步帮助你掌握字符串。</p>
 <a id="more"></a>
-<h3 id="String-prototype"><a href="#String-prototype" class="headerlink" title="String.prototype"></a><strong>String.prototype</strong></h3><p>String.prototype 属性指向 String 的原型对象. 以下是它的属性特性:</p>
+<h3 id="String构造器方法"><a href="#String构造器方法" class="headerlink" title="String构造器方法"></a><strong>String构造器方法</strong></h3><h4 id="fromCharCode"><a href="#fromCharCode" class="headerlink" title="fromCharCode"></a><strong>fromCharCode</strong></h4><p>fromCharCode() 方法返回使用指定的Unicode序列创建的字符串，也就是说传入Unicode序列，返回基于此创建的字符串。</p>
+<p>语法：<em>fromCharCode(num1, num2,…)</em>，传入的参数均为数字。</p>
+<p>如下这是一个简单的例子，将返回 ABC、abc、*、+、- 和 /：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">String</span>.fromCharCode(<span class="number">65</span>, <span class="number">66</span>, <span class="number">67</span>); <span class="comment">// "ABC"</span></div><div class="line"><span class="built_in">String</span>.fromCharCode(<span class="number">97</span>, <span class="number">98</span>, <span class="number">99</span>); <span class="comment">// "abc"</span></div><div class="line"><span class="built_in">String</span>.fromCharCode(<span class="number">42</span>); <span class="comment">// "*"</span></div><div class="line"><span class="built_in">String</span>.fromCharCode(<span class="number">43</span>); <span class="comment">// "+"</span></div><div class="line"><span class="built_in">String</span>.fromCharCode(<span class="number">45</span>); <span class="comment">// "-"</span></div><div class="line"><span class="built_in">String</span>.fromCharCode(<span class="number">47</span>); <span class="comment">// "/"</span></div></pre></td></tr></table></figure>
+<p>看起来fromCharCode像是满足了需求，但实际上由于js语言设计时的先天不足（只能处理UCS-2编码，即所有字符都是2个字节，无法处理4字节字符），通过该方法并不能返回一个4字节的字符，为了弥补这个缺陷，ES6新增了fromCodePoint方法，请往下看。</p>
+<h4 id="fromCodePoint-ES6"><a href="#fromCodePoint-ES6" class="headerlink" title="fromCodePoint(ES6)"></a><strong>fromCodePoint(ES6)</strong></h4><p>fromCodePoint() 方法基于<strong>ECMAScript 2015（ES6）规范</strong>，作用和语法同fromCharCode方法，该方法主要扩展了对4字节字符的支持。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// "𝌆" 是一个4字节字符，我们先看下它的数字形式</span></div><div class="line"><span class="string">"𝌆"</span>.codePointAt(); <span class="comment">// 119558</span></div><div class="line"><span class="comment">//调用fromCharCode解析之，返回乱码</span></div><div class="line"><span class="built_in">String</span>.fromCharCode(<span class="number">119558</span>); <span class="comment">// "팆"</span></div><div class="line"><span class="comment">//调用fromCodePoint解析之，正常解析</span></div><div class="line"><span class="built_in">String</span>.fromCodePoint(<span class="number">119558</span>); <span class="comment">// "𝌆"</span></div></pre></td></tr></table></figure>
+<p>除了扩展对4字节的支持外，fromCodePoint还规范了错误处理，只要是无效的Unicode编码，就会抛出错误<code>RangeError: Invalid code point...</code>，这就意味着，只要不是符合Unicode字符范围的正整数（Unicode最多可容纳1114112个码位），均会抛出错误。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">String</span>.fromCodePoint(<span class="string">'abc'</span>); <span class="comment">// RangeError: Invalid code point NaN</span></div><div class="line"><span class="built_in">String</span>.fromCodePoint(<span class="literal">Infinity</span>); <span class="comment">// RangeError: Invalid code point Infinity</span></div><div class="line"><span class="built_in">String</span>.fromCodePoint(<span class="number">-1.23</span>); <span class="comment">// RangeError: Invalid code point -1.23</span></div></pre></td></tr></table></figure>
+<p>注：进一步了解Unicode编码，推荐这篇文章：<a href="http://www.fmddlmyy.cn/mytext.html" target="_blank" rel="external">浅谈文字编码和Unicode（下）</a>。如需在老的浏览器中使用该方法，请参考<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/String/fromCodePoint#Polyfill-浏览器补丁" target="_blank" rel="external">Polyfill</a>。</p>
+<h4 id="raw-ES6"><a href="#raw-ES6" class="headerlink" title="raw(ES6)"></a>raw(ES6)</h4><p>raw() 方法基于<strong>ECMAScript 2015（ES6）规范</strong>，它是一个模板字符串的标签函数，作用类似于Python的r和C#的@字符串前缀，都是用来获取一个模板字符串的原始字面量。</p>
+<p>语法： <em>String.raw(callSite, …substitutions)</em>，callSite即模板字符串的『调用点对象』，…substitutions表示任意个内插表达式对应的值，这里理解起来相当拗口，下面我将通俗的讲解它。</p>
+<p>如下是python的字符串前缀r：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 防止特殊字符串被转义</span></div><div class="line"><span class="keyword">print</span> <span class="string">r'a\nb\tc'</span> <span class="comment"># 打印出来依然是 "a\nb\tc"</span></div><div class="line"><span class="comment"># python中常用于正则表达式</span></div><div class="line">regExp = <span class="string">r'(?&lt;=123)[a-z]+'</span></div></pre></td></tr></table></figure>
+<p>如下是String.raw作为前缀的用法：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 防止特殊字符串被转义</span></div><div class="line"><span class="built_in">String</span>.raw<span class="string">`a\nb\tc`</span>; <span class="comment">// 输出为 "a\nb\tc"</span></div><div class="line"><span class="comment">// 支持内插表达式</span></div><div class="line"><span class="keyword">let</span> name = <span class="string">"louis"</span>;</div><div class="line"><span class="built_in">String</span>.raw<span class="string">`Hello \n <span class="subst">$&#123;name&#125;</span>`</span>;  <span class="comment">// "Hello \n louis"</span></div><div class="line"><span class="comment">// 内插表达式还可以运算</span></div><div class="line"><span class="built_in">String</span>.raw<span class="string">`1+2=<span class="subst">$&#123;<span class="number">1</span>+<span class="number">2</span>&#125;</span>,2*3=<span class="subst">$&#123;<span class="number">2</span>*<span class="number">3</span>&#125;</span>`</span>; <span class="comment">// "1+2=3,2*3=6"</span></div></pre></td></tr></table></figure>
+<p>String.raw作为函数来调用的场景不太多，如下是用法：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 对象的raw属性值为字符串时，从第二个参数起，它们分别被插入到下标为0，1，2，...n的元素后面</span></div><div class="line"><span class="built_in">String</span>.raw(&#123;<span class="attr">raw</span>: <span class="string">'abcd'</span>&#125;, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>); <span class="comment">// "a1b2c3d"</span></div><div class="line"><span class="comment">// 对象的raw属性值为数组时，从第二个参数起，它们分别被插入到数组下标为0，1，2，...n的元素后面</span></div><div class="line"><span class="built_in">String</span>.raw(&#123;<span class="attr">raw</span>: [<span class="string">'a'</span>, <span class="string">'b'</span>, <span class="string">'c'</span>, <span class="string">'d'</span>]&#125;, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>); <span class="comment">// "a1b2c3d"</span></div></pre></td></tr></table></figure>
+<p>那么怎么解释String.raw函数按照下标挨个去插入的特性呢？MDN上有段描述如下：</p>
+<blockquote>
+<p>In most cases, <code>String.raw()</code> is used with template strings. The first syntax mentioned above is only rarely used, because <strong>the JavaScript engine will call this with proper arguments for you</strong>, just like with other tag functions.</p>
+</blockquote>
+<p>这意味着，String.raw作为函数调用时，基本与ES6的tag标签模板一样。如下：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 如下是tag函数的实现</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">tag</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  <span class="keyword">const</span> array = <span class="built_in">arguments</span>[<span class="number">0</span>];</div><div class="line">  <span class="keyword">return</span> array.reduce(<span class="function">(<span class="params">p, v, i</span>) =&gt;</span> p + (<span class="built_in">arguments</span>[i] || <span class="string">''</span>) + v);</div><div class="line">&#125;</div><div class="line"><span class="comment">// 回顾一个simple的tag标签模板</span></div><div class="line">tag<span class="string">`Hello <span class="subst">$&#123; <span class="number">2</span> + <span class="number">3</span> &#125;</span> world <span class="subst">$&#123; <span class="number">2</span> * <span class="number">3</span> &#125;</span>`</span>; <span class="comment">// "Hello 5 world 6"</span></div><div class="line"><span class="comment">// 其实就想当于如下调用</span></div><div class="line">tag([<span class="string">'Hello '</span>, <span class="string">' world '</span>, <span class="string">''</span>], <span class="number">5</span>, <span class="number">6</span>); <span class="comment">// "Hello 5 world 6"</span></div></pre></td></tr></table></figure>
+<p>因此String.raw作为函数调用时，不论对象的raw属性值是字符串还是数组，插槽都是天生的，下标为0，1，2，…n的元素后面都是插槽（不包括最后一个元素）。实际上，它相当于是这样的tag函数：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">tag</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  <span class="keyword">const</span> array = <span class="built_in">arguments</span>[<span class="number">0</span>].raw;</div><div class="line">  <span class="keyword">if</span>(array === <span class="literal">undefined</span> || array === <span class="literal">null</span>)&#123; <span class="comment">// 这里可简写成 array == undefined</span></div><div class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">TypeError</span>(<span class="string">'Cannot convert undefined or null to object'</span>);</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">return</span> array.reduce(<span class="function">(<span class="params">p, v, i</span>) =&gt;</span> p + (<span class="built_in">arguments</span>[i] || <span class="string">''</span>) + v);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>实际上，String.raw作为函数调用时，若第一个参数不是一个符合标准格式的对象，执行将抛出TypeError错误。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">String</span>.raw(&#123;<span class="number">123</span>: <span class="string">'abcd'</span>&#125;, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>); <span class="comment">// TypeError: Cannot convert undefined or null to object</span></div></pre></td></tr></table></figure>
+<p>目前只有Chrome v41+和Firefox v34+版本浏览器实现了该方法。</p>
+<h3 id="String-prototype"><a href="#String-prototype" class="headerlink" title="String.prototype"></a><strong>String.prototype</strong></h3><p>和其他所有对象一样，字符串实例的所有方法均来自String.prototype。以下是它的属性特性：</p>
 <table>
 <thead>
 <tr>
-<th>writable</th>
+<th style="text-align:left">writable</th>
 <th>false</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>enumerable</td>
+<td style="text-align:left">enumerable</td>
 <td>false</td>
 </tr>
 <tr>
-<td>configurable</td>
+<td style="text-align:left">configurable</td>
 <td>false</td>
 </tr>
 </tbody>
 </table>
-<p>所有的字符串实例都继承自 String.prototype. 因此任何 String.prototype 上的改变都会在字符串上体现出来.</p>
-<h4 id="属性"><a href="#属性" class="headerlink" title="属性"></a><strong>属性</strong></h4><ul>
+<p>可见，字符串属性不可编辑，任何试图改变它属性的行为都将抛出错误。</p>
+<h4 id="属性"><a href="#属性" class="headerlink" title="属性"></a><strong>属性</strong></h4><p>String.prototype共有两个属性，如下：</p>
+<ul>
 <li>String.prototype.constructor 指向构造器(String())</li>
 <li>String.prototype.length 表示字符串长度</li>
 </ul>
-<h4 id="方法"><a href="#方法" class="headerlink" title="方法"></a><strong>方法</strong></h4><p>字符串方法分为两种, 一种是html无关的方法, 一种是html有关的方法. 我们先看第一种. 但是无论字符串方法如何厉害, 都不至于强大到可以改变原字符串.</p>
-<h5 id="HTML无关的方法"><a href="#HTML无关的方法" class="headerlink" title="HTML无关的方法"></a><strong>HTML无关的方法</strong></h5><p>常用的方法有, charAt, charCodeAt, concat, indexOf, lastIndexOf, localeCompare, match, replace, search, slice, split, substr, substring, toLocaleLowerCase, toLocaleUpperCase, toLowerCase, toString, toUpperCase, trim, valueof 等ES5支持的, 以及 codePointAt, contains, endsWith, normalize, repeat, startsWith 等ES6支持的, 还包括 quote, toSource, trimLeft, trimRight 等非标准的.</p>
-<p>接下来我们将对各个方法分别举例阐述其用法. 若没有特别说明, 该方法将兼容所有目前主流浏览器.</p>
+<h4 id="方法"><a href="#方法" class="headerlink" title="方法"></a><strong>方法</strong></h4><p>字符串原型方法分为两种，一种是html无关的方法，一种是html有关的方法。我们先看第一种。但是无论字符串方法如何厉害，都不至于强大到可以改变原字符串。</p>
+<h5 id="HTML无关的方法"><a href="#HTML无关的方法" class="headerlink" title="HTML无关的方法"></a><strong>HTML无关的方法</strong></h5><p>常用的方法有，charAt、charCodeAt、concat、indexOf、lastIndexOf、localeCompare、match、replace、search、slice、split、substr、substring、toLocaleLowerCase、toLocaleUpperCase、toLowerCase、toString、toUpperCase、trim、valueof 等ES5支持的，以及 codePointAt、contains、endsWith、normalize、repeat、startsWith 等ES6支持的，还包括 quote、toSource、trimLeft、trimRight 等非标准的。</p>
+<p>接下来我们将对各个方法分别举例阐述其用法。若没有特别说明，默认该方法兼容所有目前主流浏览器。</p>
 <h6 id="charAt"><a href="#charAt" class="headerlink" title="charAt"></a><strong>charAt</strong></h6><p>charAt() 方法返回字符串中指定位置的字符。</p>
-<p>语法: <em>str.charAt(index)</em></p>
-<p>index 为字符串索引(取值从0至length-1), 如果超出该范围, 则返回空串.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(<span class="string">"Hello, World"</span>.charAt(<span class="number">8</span>));<span class="comment">//o, 返回下标为8的字符串o</span></div></pre></td></tr></table></figure>
-<h6 id="charCodeAt"><a href="#charCodeAt" class="headerlink" title="charCodeAt"></a><strong>charCodeAt</strong></h6><p>charCodeAt() 返回指定索引处字符的 Unicode 数值.</p>
-<p>语法: <em>str.charCodeAt(index)</em></p>
-<p>index 为一个从0至length-1的整数. 如果不是一个数值，则默认为 0, 如果小于0或者大于字符串长度, 则返回 NaN.</p>
+<p>语法：<em>str.charAt(index)</em></p>
+<p>index 为字符串索引（取值从0至length-1），如果超出该范围，则返回空串。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(<span class="string">"Hello, World"</span>.charAt(<span class="number">8</span>)); <span class="comment">// o, 返回下标为8的字符串o</span></div></pre></td></tr></table></figure>
+<h6 id="charCodeAt"><a href="#charCodeAt" class="headerlink" title="charCodeAt"></a><strong>charCodeAt</strong></h6><p>charCodeAt() 返回指定索引处字符的 Unicode 数值。</p>
+<p>语法：<em>str.charCodeAt(index)</em></p>
+<p>index 为一个从0至length-1的整数。如果不是一个数值，则默认为 0，如果小于0或者大于字符串长度，则返回 NaN。</p>
 <p>Unicode 编码单元（code points）的范围从 0 到 1,114,111。开头的 128 个 Unicode 编码单元和 ASCII 字符编码一样. </p>
-<p>charCodeAt() 总是返回一个小于 65,536 的值. 因为高位编码单元需要由一对字符来表示, 为了查看其编码的完成字符, 需要查看 charCodeAt(i) 以及 charCodeAt(i+1) 的值. 如需更多了解请参考 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/String/prototype" target="_blank" rel="external">fixedCharCodeAt</a>.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(<span class="string">"Hello, World"</span>.charCodeAt(<span class="number">8</span>));<span class="comment">//111</span></div><div class="line"><span class="built_in">console</span>.log(<span class="string">"前端工程师"</span>.charCodeAt(<span class="number">2</span>));<span class="comment">//24037, 可见也可以查看中文Unicode编码</span></div></pre></td></tr></table></figure>
-<h6 id="concat"><a href="#concat" class="headerlink" title="concat"></a><strong>concat</strong></h6><p>concat() 方法将一个或多个字符串拼接在一起, 组成新的字符串并返回.</p>
-<p>语法: <em>str.concat(string2, string3, …)</em></p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(<span class="string">"早"</span>.concat(<span class="string">"上"</span>,<span class="string">"好"</span>));<span class="comment">//早上好</span></div></pre></td></tr></table></figure>
-<p>但是 concat 的性能表现不佳, 强烈推荐使用赋值操作符(+, +=) 代替 concat. “+” 操作符大概快了 concat 几十倍.(数据参考 <a href="http://jsperf.com/concat-vs-plus-vs-join" target="_blank" rel="external">性能测试</a>).</p>
-<h6 id="indexOf"><a href="#indexOf" class="headerlink" title="indexOf"></a><strong>indexOf</strong></h6><h6 id="lastIndexOf"><a href="#lastIndexOf" class="headerlink" title="lastIndexOf"></a><strong>lastIndexOf</strong></h6><p>indexOf() 方法用于查找子字符串在字符串中首次出现的位置. 没有则返回 -1. 该方法严格区分大小写, 并且从左往右查找. 而 lastIndexOf 则从右往左查找, 其它与前者一致.</p>
-<p>语法: <em>str.indexOf(searchValue [, fromIndex=0])</em>，<em>str.lastIndexOf(searchValue [, fromIndex=0])</em></p>
-<p>searchValue 表示被查找的字符串, fromIndex 表示开始查找的位置, 默认为0, 如果小于0, 则查找整个字符串, 若超过字符串长度, 则该方法返回-1, 除非被查找的是空字符串, 此时返回字符串长度.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(<span class="string">""</span>.indexOf(<span class="string">""</span>,<span class="number">100</span>));<span class="comment">//0</span></div><div class="line"><span class="built_in">console</span>.log(<span class="string">"IT改变世界"</span>.indexOf(<span class="string">"世界"</span>));<span class="comment">//4</span></div><div class="line"><span class="built_in">console</span>.log(<span class="string">"IT改变世界"</span>.lastIndexOf(<span class="string">"世界"</span>));<span class="comment">//4</span></div></pre></td></tr></table></figure>
-<h6 id="locateCompare"><a href="#locateCompare" class="headerlink" title="locateCompare"></a><strong>locateCompare</strong></h6><p>locateCompare() 方法用来比较字符串, 如果指定字符串在原字符串的前面则返回负数, 否则返回正数或0, 其中0 表示两个字符串相同. 该方法实现依赖具体的本地实现, 不同的语言下可能有不同的返回.</p>
-<p>语法: <em>str.localeCompare(str2 [, locales [, options]])</em></p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> str = <span class="string">"apple"</span>;</div><div class="line"><span class="keyword">var</span> str2 = <span class="string">"orange"</span>;</div><div class="line"><span class="built_in">console</span>.log(str.localeCompare(str2));<span class="comment">//-1</span></div><div class="line"><span class="built_in">console</span>.log(str.localeCompare(<span class="string">"123"</span>));<span class="comment">//1</span></div></pre></td></tr></table></figure>
-<p>目前 Safari 浏览器暂不支持该方法. Chrome 24, Firefox 29, IE11, Opera 15 已实现了它.</p>
-<h6 id="match"><a href="#match" class="headerlink" title="match"></a><strong>match</strong></h6><p>match() 方法用于测试字符串是否支持指定正则表达式的规则, 即使传入的是非正则表达式对象, 它也会隐式地使用 new RegExp(obj) 将其转换为正则表达式对象.</p>
-<p>语法: <em>str.match(regexp)</em></p>
-<p>该方法返回包含匹配结果的数组, 如果没有匹配项, 则返回 null.</p>
+<p>charCodeAt() 总是返回一个小于 65,536 的值。因为高位编码单元需要由一对字符来表示，为了查看其编码的完成字符，需要查看 charCodeAt(i) 以及 charCodeAt(i+1) 的值。如需更多了解请参考 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/String/prototype" target="_blank" rel="external">fixedCharCodeAt</a>。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(<span class="string">"Hello, World"</span>.charCodeAt(<span class="number">8</span>)); <span class="comment">// 111</span></div><div class="line"><span class="built_in">console</span>.log(<span class="string">"前端工程师"</span>.charCodeAt(<span class="number">2</span>)); <span class="comment">// 24037, 可见也可以查看中文Unicode编码</span></div></pre></td></tr></table></figure>
+<h6 id="concat"><a href="#concat" class="headerlink" title="concat"></a><strong>concat</strong></h6><p>concat() 方法将一个或多个字符串拼接在一起，组成新的字符串并返回。</p>
+<p>语法：<em>str.concat(string2, string3, …)</em></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(<span class="string">"早"</span>.concat(<span class="string">"上"</span>,<span class="string">"好"</span>)); <span class="comment">// 早上好</span></div></pre></td></tr></table></figure>
+<p>但是 concat 的性能表现不佳，强烈推荐使用赋值操作符（+或+=）代替 concat。”+” 操作符大概快了 concat 几十倍。（数据参考 <a href="http://jsperf.com/concat-vs-plus-vs-join" target="_blank" rel="external">性能测试</a>）。</p>
+<h6 id="indexOf"><a href="#indexOf" class="headerlink" title="indexOf"></a><strong>indexOf</strong></h6><h6 id="lastIndexOf"><a href="#lastIndexOf" class="headerlink" title="lastIndexOf"></a><strong>lastIndexOf</strong></h6><p>indexOf() 方法用于查找子字符串在字符串中首次出现的位置，没有则返回 -1。该方法严格区分大小写，并且从左往右查找。而 lastIndexOf 则从右往左查找，其它与前者一致。</p>
+<p>语法：<em>str.indexOf(searchValue [, fromIndex=0])</em>，<em>str.lastIndexOf(searchValue [, fromIndex=0])</em></p>
+<p>searchValue 表示被查找的字符串，fromIndex 表示开始查找的位置，默认为0，如果小于0，则查找整个字符串，若超过字符串长度，则该方法返回-1，除非被查找的是空字符串，此时返回字符串长度。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(<span class="string">""</span>.indexOf(<span class="string">""</span>,<span class="number">100</span>)); <span class="comment">// 0</span></div><div class="line"><span class="built_in">console</span>.log(<span class="string">"IT改变世界"</span>.indexOf(<span class="string">"世界"</span>)); <span class="comment">// 4</span></div><div class="line"><span class="built_in">console</span>.log(<span class="string">"IT改变世界"</span>.lastIndexOf(<span class="string">"世界"</span>)); <span class="comment">// 4</span></div></pre></td></tr></table></figure>
+<h6 id="locateCompare"><a href="#locateCompare" class="headerlink" title="locateCompare"></a><strong>locateCompare</strong></h6><p>locateCompare() 方法用来比较字符串，如果指定字符串在原字符串的前面则返回负数，否则返回正数或0，其中0 表示两个字符串相同。该方法实现依赖具体的本地实现，不同的语言下可能有不同的返回。</p>
+<p>语法：<em>str.localeCompare(str2 [, locales [, options]])</em></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> str = <span class="string">"apple"</span>;</div><div class="line"><span class="keyword">var</span> str2 = <span class="string">"orange"</span>;</div><div class="line"><span class="built_in">console</span>.log(str.localeCompare(str2)); <span class="comment">// -1</span></div><div class="line"><span class="built_in">console</span>.log(str.localeCompare(<span class="string">"123"</span>)); <span class="comment">// 1</span></div></pre></td></tr></table></figure>
+<p>目前 Safari 浏览器暂不支持该方法，但Chrome v24+、Firefox v29+，IE11+ 和 Opera v15+ 都已实现了它。</p>
+<h6 id="match"><a href="#match" class="headerlink" title="match"></a><strong>match</strong></h6><p>match() 方法用于测试字符串是否支持指定正则表达式的规则，即使传入的是非正则表达式对象，它也会隐式地使用<code>new RegExp(obj)</code>将其转换为正则表达式对象。</p>
+<p>语法：<em>str.match(regexp)</em></p>
+<p>该方法返回包含匹配结果的数组，如果没有匹配项，则返回 null。</p>
 <p><strong>描述</strong></p>
 <ul>
-<li>若正则表达式没有 g 标志, 则返回同 RegExp.exec(str) 相同的结果. 而且返回的数组拥有一个额外的 input 属性, 该属性包含原始字符串, 另外该数组还拥有一个 index 属性, 该属性表示匹配字符串在原字符串中索引(从0开始).</li>
-<li>若正则表达式包含 g 标志, 则该方法返回一个包含所有匹配结果的数组, 没有匹配到则返回 null.</li>
+<li>若正则表达式没有 g 标志，则返回同 RegExp.exec(str) 相同的结果。而且返回的数组拥有一个额外的 input 属性，该属性包含原始字符串，另外该数组还拥有一个 index 属性，该属性表示匹配字符串在原字符串中索引（从0开始）。</li>
+<li>若正则表达式包含 g 标志，则该方法返回一个包含所有匹配结果的数组，没有匹配到则返回 null。</li>
 </ul>
 <p><strong>相关 RegExp 方法</strong></p>
 <ul>
-<li>若需测试字符串是否匹配正则, 请参考 RegExp.test(str).</li>
-<li>若只需第一个匹配结果, 请参考 RegExp.exec(str).</li>
+<li>若需测试字符串是否匹配正则，请参考 RegExp.test(str)。</li>
+<li>若只需第一个匹配结果，请参考 RegExp.exec(str)。</li>
 </ul>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> str = <span class="string">"World Internet Conference"</span>;</div><div class="line"><span class="built_in">console</span>.log(str.match(<span class="regexp">/[a-d]/i</span>));<span class="comment">//["d", index: 4, input: "World Internet Conference"]</span></div><div class="line"><span class="built_in">console</span>.log(str.match(<span class="regexp">/[a-d]/gi</span>));<span class="comment">//["d", "C", "c"]</span></div><div class="line"><span class="comment">//RegExp 方法如下</span></div><div class="line"><span class="built_in">console</span>.log(<span class="regexp">/[a-d]/gi</span>.test(str));<span class="comment">//true</span></div><div class="line"><span class="built_in">console</span>.log(<span class="regexp">/[a-d]/gi</span>.exec(str));<span class="comment">//["d", index: 4, input: "World Internet Conference"]</span></div></pre></td></tr></table></figure>
-<p>由上可知, RegExp.test(str) 方法只要匹配到了一个字符也返回true. 而</p>
-<p>RegExp.exec(str) 方法无论正则中有没有包含 g 标志, RegExp.exec将直接返回第一个匹配结果, 且该结果同 str.match(regexp) 方法不包含 g 标志时的返回一致.</p>
-<h6 id="replace"><a href="#replace" class="headerlink" title="replace"></a><strong>replace</strong></h6><p>该方法在之前已经讲过, 详细请参考 <a href="http://louiszhai.github.io/2015/12/11/js.replace/"><code>String.prototype.replace高阶技能</code></a> .</p>
-<h6 id="search"><a href="#search" class="headerlink" title="search"></a><strong>search</strong></h6><p>search() 方法用于测试字符串对象是否包含某个正则匹配. 相当于正则表达式的 test 方法. 且该方法比 match() 方法更快. 如果匹配成功, search() 返回正则表达式在字符串中首次匹配项的索引, 否则返回-1.</p>
-<p>语法: <em>str.search(regexp)</em></p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> str = <span class="string">"abcdefg"</span>;</div><div class="line"><span class="built_in">console</span>.log(str.search(<span class="regexp">/[d-g]/</span>));<span class="comment">//3, 匹配到子串"defg",而d在原字符串中的索引为3</span></div></pre></td></tr></table></figure>
-<p>search() 方法不支持全局匹配(正则中包含g参数), 如下:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(str.search(<span class="regexp">/[d-g]/g</span>));<span class="comment">//3, 与无g参数时,返回相同</span></div></pre></td></tr></table></figure>
-<h6 id="slice"><a href="#slice" class="headerlink" title="slice"></a><strong>slice</strong></h6><p>slice() 方法提取字符串的一部分, 并返回新的字符串. 该方法有些类似Array.prototype.slice 方法.</p>
-<p>语法: <em>str.slice(start, end)</em></p>
-<p>首先 end 参数可选, start可取正值, 也可取负值. </p>
-<p>取正值时表示从索引为start的位置截取到end的位置(不包括end所在位置的字符, 如果end省略则截取到字符串末尾).</p>
-<p>取负值时表示从索引为 length+start 位置截取到end所在位置的字符.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> str = <span class="string">"It is our choices that show what we truly are, far more than our abilities."</span>;</div><div class="line"><span class="built_in">console</span>.log(str.slice(<span class="number">0</span>,<span class="number">-30</span>));<span class="comment">//It is our choices that show what we truly are</span></div><div class="line"><span class="built_in">console</span>.log(str.slice(<span class="number">-30</span>));<span class="comment">//, far more than our abilities.</span></div></pre></td></tr></table></figure>
-<h6 id="split"><a href="#split" class="headerlink" title="split"></a><strong>split</strong></h6><p>split() 方法把原字符串分割成子字符串组成数组, 并返回该数组.</p>
-<p>语法: <em>str.split(separator, limit)</em></p>
-<p>两个参数均是可选的, 其中 separator 表示分隔符, 它可以是字符串也可以是正则表达式. 如果忽略 separator, 则返回的数组包含一个由原字符串组成的元素. 如果 separator 是一个空串, 则 str 将会被分割成一个由原字符串中字符组成的数组. limit 表示从返回的数组中截取前 limit 个元素, 从而限定返回的数组长度.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> str = <span class="string">"today is a sunny day"</span>;</div><div class="line"><span class="built_in">console</span>.log(str.split());<span class="comment">//["today is a sunny day"]</span></div><div class="line"><span class="built_in">console</span>.log(str.split(<span class="string">""</span>));<span class="comment">//["t", "o", "d", "a", "y", " ", "i", "s", " ", "a", " ", "s", "u", "n", "n", "y", " ", "d", "a", "y"]</span></div><div class="line"><span class="built_in">console</span>.log(str.split(<span class="string">" "</span>));<span class="comment">//["today", "is", "a", "sunny", "day"]</span></div></pre></td></tr></table></figure>
-<p>使用limit限定返回的数组大小. 如下:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(str.split(<span class="string">" "</span>));<span class="comment">//["today"]</span></div></pre></td></tr></table></figure>
-<p>使用正则分隔符(RegExp separator). 如下:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(str.split(<span class="regexp">/\s*is\s*/</span>));<span class="comment">//["today", "a sunny day"]</span></div></pre></td></tr></table></figure>
-<p>若正则分隔符里包含捕获括号, 则括号匹配的结果将会包含在返回的数组中.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(str.split(<span class="regexp">/(\s*is\s*)/</span>));<span class="comment">//["today", " is ", "a sunny day"]</span></div></pre></td></tr></table></figure>
-<h6 id="substr"><a href="#substr" class="headerlink" title="substr"></a><strong>substr</strong></h6><p>substr() 方法返回字符串指定位置开始的指定数量的字符.</p>
-<p>语法: <em>str.substr(start[, length])</em></p>
-<p>start 表示开始截取字符的位置, 可取正值或负值. 取正值时表示start位置的索引, 取负值时表示 length+start位置的索引.</p>
-<p>length 表示截取的字符长度.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> str = <span class="string">"Yesterday is history. Tomorrow is mystery. But today is a gift."</span>;</div><div class="line"><span class="built_in">console</span>.log(str.substr(<span class="number">47</span>));<span class="comment">//today is a gift.</span></div><div class="line"><span class="built_in">console</span>.log(str.substr(<span class="number">-16</span>));<span class="comment">//today is a gift.</span></div></pre></td></tr></table></figure>
-<p>目前 Microsoft’s JScript 不支持 start 参数取负的索引, 如需在 IE 下支持, 请参考 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/String/substr#Description" target="_blank" rel="external">Polyfill</a>.</p>
-<h6 id="substring"><a href="#substring" class="headerlink" title="substring"></a><strong>substring</strong></h6><p>substring() 方法返回字符串两个索引之间的子串.</p>
-<p>语法: <em>str.substring(indexA[, indexB])</em></p>
-<p>indexA, indexB 表示字符串索引, 其中 indexB 可选, 如果省略, 则表示返回从 indexA 到字符串末尾的子串.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> str = <span class="string">"World Internet Conference"</span>;</div><div class="line"><span class="built_in">console</span>.log(str.match(<span class="regexp">/[a-d]/i</span>)); <span class="comment">// ["d", index: 4, input: "World Internet Conference"]</span></div><div class="line"><span class="built_in">console</span>.log(str.match(<span class="regexp">/[a-d]/gi</span>)); <span class="comment">// ["d", "C", "c"]</span></div><div class="line"><span class="comment">// RegExp 方法如下</span></div><div class="line"><span class="built_in">console</span>.log(<span class="regexp">/[a-d]/gi</span>.test(str)); <span class="comment">// true</span></div><div class="line"><span class="built_in">console</span>.log(<span class="regexp">/[a-d]/gi</span>.exec(str)); <span class="comment">// ["d", index: 4, input: "World Internet Conference"]</span></div></pre></td></tr></table></figure>
+<p>由上可知，RegExp.test(str) 方法只要匹配到了一个字符也返回true。而RegExp.exec(str) 方法无论正则中有没有包含 g 标志，RegExp.exec将直接返回第一个匹配结果，且该结果同 str.match(regexp) 方法不包含 g 标志时的返回一致。</p>
+<h6 id="replace"><a href="#replace" class="headerlink" title="replace"></a><strong>replace</strong></h6><p>该方法在之前已经讲过，详细请参考 <a href="http://louiszhai.github.io/2015/12/11/js.replace/"><code>String.prototype.replace高阶技能</code></a> 。</p>
+<h6 id="search"><a href="#search" class="headerlink" title="search"></a><strong>search</strong></h6><p>search() 方法用于测试字符串对象是否包含某个正则匹配，相当于正则表达式的 test 方法，且该方法比 match() 方法更快。如果匹配成功，search() 返回正则表达式在字符串中首次匹配项的索引，否则返回-1。</p>
+<p>注意：<strong>search方法与indexOf方法作用基本一致，都是查询到了就返回子串第一次出现的下标，否则返回-1，唯一的区别就在于search默认会将子串转化为正则表达式形式，而indexOf不做此处理，也不能处理正则。</strong></p>
+<p>语法：<em>str.search(regexp)</em></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> str = <span class="string">"abcdefg"</span>;</div><div class="line"><span class="built_in">console</span>.log(str.search(<span class="regexp">/[d-g]/</span>)); <span class="comment">// 3, 匹配到子串"defg",而d在原字符串中的索引为3</span></div></pre></td></tr></table></figure>
+<p>search() 方法不支持全局匹配（正则中包含g参数），如下：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(str.search(<span class="regexp">/[d-g]/g</span>)); <span class="comment">// 3, 与无g参数时,返回相同</span></div></pre></td></tr></table></figure>
+<h6 id="slice"><a href="#slice" class="headerlink" title="slice"></a><strong>slice</strong></h6><p>slice() 方法提取字符串的一部分，并返回新的字符串。该方法有些类似 Array.prototype.slice 方法。</p>
+<p>语法：<em>str.slice(start, end)</em></p>
+<p>首先 end 参数可选，start可取正值，也可取负值。</p>
+<p>取正值时表示从索引为start的位置截取到end的位置（不包括end所在位置的字符，如果end省略则截取到字符串末尾）。</p>
+<p>取负值时表示从索引为 length+start 位置截取到end所在位置的字符。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> str = <span class="string">"It is our choices that show what we truly are, far more than our abilities."</span>;</div><div class="line"><span class="built_in">console</span>.log(str.slice(<span class="number">0</span>,<span class="number">-30</span>)); <span class="comment">// It is our choices that show what we truly are</span></div><div class="line"><span class="built_in">console</span>.log(str.slice(<span class="number">-30</span>)); <span class="comment">// , far more than our abilities.</span></div></pre></td></tr></table></figure>
+<h6 id="split"><a href="#split" class="headerlink" title="split"></a><strong>split</strong></h6><p>split() 方法把原字符串分割成子字符串组成数组，并返回该数组。</p>
+<p>语法：<em>str.split(separator, limit)</em></p>
+<p>两个参数均是可选的，其中 separator 表示分隔符，它可以是字符串也可以是正则表达式。如果忽略 separator，则返回的数组包含一个由原字符串组成的元素。如果 separator 是一个空串，则 str 将会被分割成一个由原字符串中字符组成的数组。limit 表示从返回的数组中截取前 limit 个元素，从而限定返回的数组长度。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> str = <span class="string">"today is a sunny day"</span>;</div><div class="line"><span class="built_in">console</span>.log(str.split()); <span class="comment">// ["today is a sunny day"]</span></div><div class="line"><span class="built_in">console</span>.log(str.split(<span class="string">""</span>)); <span class="comment">// ["t", "o", "d", "a", "y", " ", "i", "s", " ", "a", " ", "s", "u", "n", "n", "y", " ", "d", "a", "y"]</span></div><div class="line"><span class="built_in">console</span>.log(str.split(<span class="string">" "</span>)); <span class="comment">// ["today", "is", "a", "sunny", "day"]</span></div></pre></td></tr></table></figure>
+<p>使用limit限定返回的数组大小，如下：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(str.split(<span class="string">" "</span>)); <span class="comment">// ["today"]</span></div></pre></td></tr></table></figure>
+<p>使用正则分隔符（RegExp separator）， 如下：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(str.split(<span class="regexp">/\s*is\s*/</span>)); <span class="comment">// ["today", "a sunny day"]</span></div></pre></td></tr></table></figure>
+<p>若正则分隔符里包含捕获括号，则括号匹配的结果将会包含在返回的数组中。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(str.split(<span class="regexp">/(\s*is\s*)/</span>)); <span class="comment">// ["today", " is ", "a sunny day"]</span></div></pre></td></tr></table></figure>
+<h6 id="substr"><a href="#substr" class="headerlink" title="substr"></a><strong>substr</strong></h6><p>substr() 方法返回字符串指定位置开始的指定数量的字符。</p>
+<p>语法：<em>str.substr(start[, length])</em></p>
+<p>start 表示开始截取字符的位置，可取正值或负值。取正值时表示start位置的索引，取负值时表示 length+start位置的索引。</p>
+<p>length 表示截取的字符长度。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> str = <span class="string">"Yesterday is history. Tomorrow is mystery. But today is a gift."</span>;</div><div class="line"><span class="built_in">console</span>.log(str.substr(<span class="number">47</span>)); <span class="comment">// today is a gift.</span></div><div class="line"><span class="built_in">console</span>.log(str.substr(<span class="number">-16</span>)); <span class="comment">// today is a gift.</span></div></pre></td></tr></table></figure>
+<p>目前 Microsoft’s JScript 不支持 start 参数取负的索引，如需在 IE 下支持，请参考 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/String/substr#Description" target="_blank" rel="external">Polyfill</a>。</p>
+<h6 id="substring"><a href="#substring" class="headerlink" title="substring"></a><strong>substring</strong></h6><p>substring() 方法返回字符串两个索引之间的子串。</p>
+<p>语法：<em>str.substring(indexA[, indexB])</em></p>
+<p>indexA、indexB 表示字符串索引，其中 indexB 可选，如果省略，则表示返回从 indexA 到字符串末尾的子串。</p>
 <p><strong>描述</strong></p>
-<p>substring 要截取的是从 indexA 到 indexB(不包含)之间的字符, 符合以下规律:</p>
+<p>substring 要截取的是从 indexA 到 indexB（不包含）之间的字符，符合以下规律：</p>
 <ul>
-<li>若 indexA == indexB, 则返回一个空字符串;</li>
-<li>若 省略 indexB, 则提取字符一直到字符串末尾;</li>
-<li>若 任一参数小于 0 或 NaN, 则被当作 0;</li>
-<li>若 任一参数大于 length, 则被当作 length.</li>
+<li>若 indexA == indexB，则返回一个空字符串；</li>
+<li>若 省略 indexB，则提取字符一直到字符串末尾；</li>
+<li>若 任一参数小于 0 或 NaN，则被当作 0；</li>
+<li>若 任一参数大于 length，则被当作 length。</li>
 </ul>
-<p>而 如果 indexA &gt; indexB, 则 substring 的执行效果就像是两个参数调换一般. 比如: str.substring(0,1) == str.substring(1,0)</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> str = <span class="string">"Get outside every day. Miracles are waiting everywhere."</span>;</div><div class="line"><span class="built_in">console</span>.log(str.substring(<span class="number">1</span>,<span class="number">1</span>));<span class="comment">//""</span></div><div class="line"><span class="built_in">console</span>.log(str.substring(<span class="number">0</span>));<span class="comment">//Get outside every day. Miracles are waiting everywhere.</span></div><div class="line"><span class="built_in">console</span>.log(str.substring(<span class="number">-1</span>));<span class="comment">//Get outside every day. Miracles are waiting everywhere.</span></div><div class="line"><span class="built_in">console</span>.log(str.substring(<span class="number">0</span>,<span class="number">100</span>));<span class="comment">//Get outside every day. Miracles are waiting everywhere.</span></div><div class="line"><span class="built_in">console</span>.log(str.substring(<span class="number">22</span>,<span class="literal">NaN</span>));<span class="comment">//Get outside every day.</span></div></pre></td></tr></table></figure>
-<h6 id="toLocaleLowerCase"><a href="#toLocaleLowerCase" class="headerlink" title="toLocaleLowerCase"></a><strong>toLocaleLowerCase</strong></h6><h6 id="toLocaleUpperCase"><a href="#toLocaleUpperCase" class="headerlink" title="toLocaleUpperCase"></a><strong>toLocaleUpperCase</strong></h6><p>toLocaleLowerCase() 方法返回调用该方法的字符串被转换成小写的值, 转换规则根据本地化的大小写映射. 而 toLocaleUpperCase() 方法则是转换成大写的值.</p>
-<p>语法: <em>str.toLocaleLowerCase()</em>, <em>str.toLocaleUpperCase()</em></p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(<span class="string">'ABCDEFG'</span>.toLocaleLowerCase());<span class="comment">//abcdefg</span></div><div class="line"><span class="built_in">console</span>.log(<span class="string">'abcdefg'</span>.toLocaleUpperCase());<span class="comment">//ABCDEFG</span></div></pre></td></tr></table></figure>
-<h6 id="toLowerCase"><a href="#toLowerCase" class="headerlink" title="toLowerCase"></a><strong>toLowerCase</strong></h6><h6 id="toUpperCase"><a href="#toUpperCase" class="headerlink" title="toUpperCase"></a><strong>toUpperCase</strong></h6><p>这两个方法分别表示将字符串转换为相应的小写,大写形式, 并返回. 如下:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(<span class="string">'ABCDEFG'</span>.toLowerCase());<span class="comment">//abcdefg</span></div><div class="line"><span class="built_in">console</span>.log(<span class="string">'abcdefg'</span>.toUpperCase());<span class="comment">//ABCDEFG</span></div></pre></td></tr></table></figure>
-<h6 id="toString-NaN"><a href="#toString-NaN" class="headerlink" title="toString"></a><strong>toString</strong></h6><h6 id="valueOf-NaN"><a href="#valueOf-NaN" class="headerlink" title="valueOf"></a><strong>valueOf</strong></h6><p>这两个方法都是返回指定对象的字符串形式.</p>
-<p>语法: <em>str.toString()</em>, <em>str.valueOf()</em></p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> str = <span class="string">"abc"</span>;</div><div class="line"><span class="built_in">console</span>.log(str.toString());<span class="comment">//abc</span></div><div class="line"><span class="built_in">console</span>.log(str.toString()==str.valueOf());<span class="comment">//true</span></div></pre></td></tr></table></figure>
-<p>尽管他们是如此的相似, 但仍能抓住他们之间细微的差别, 请尝试运行以下一段代码:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> x = &#123;</div><div class="line">    <span class="attr">toString</span>: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123; <span class="keyword">return</span> <span class="string">"test"</span>; &#125;,</div><div class="line">    <span class="attr">valueOf</span>: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123; <span class="keyword">return</span> <span class="number">123</span>; &#125;</div><div class="line">&#125;;</div><div class="line"></div><div class="line">alert(x); <span class="comment">// test</span></div><div class="line"><span class="built_in">console</span>.log(<span class="string">"x="</span> + x); <span class="comment">// "x=123"</span></div><div class="line"><span class="built_in">console</span>.log(x + <span class="string">"=x"</span>); <span class="comment">// "123=x"</span></div><div class="line"><span class="built_in">console</span>.log(x + <span class="string">"1"</span>); <span class="comment">// 1231</span></div><div class="line"><span class="built_in">console</span>.log(x + <span class="number">1</span>); <span class="comment">// 124</span></div><div class="line"><span class="built_in">console</span>.log([<span class="string">"x="</span>, x].join(<span class="string">""</span>)); <span class="comment">// "x=test"</span></div></pre></td></tr></table></figure>
-<p>我们发现当 “+” 操作符存在时, x趋向于转换为数字, 表达式会优先调用 valueOf 方法, 如果调用数组的 join 方法, x趋向于转换为字符串, 表达式会优先调用 toString 方法.</p>
-<h6 id="trim"><a href="#trim" class="headerlink" title="trim"></a><strong>trim</strong></h6><p>trim() 方法清除字符串首尾的空白并返回.</p>
-<p>语法: <em>str.trim()</em></p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(<span class="string">"    abc    "</span>.trim());<span class="comment">//abc</span></div></pre></td></tr></table></figure>
-<p>trim() 方法是 ECMAScript 5.1 标准加入的, 它并不支持IE9以下的低版本IE浏览器, 如需支持, 请参考以下兼容写法:</p>
+<p>而 如果 indexA &gt; indexB，则 substring 的执行效果就像是两个参数调换一般。比如：str.substring(0, 1) == str.substring(1, 0)</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> str = <span class="string">"Get outside every day. Miracles are waiting everywhere."</span>;</div><div class="line"><span class="built_in">console</span>.log(str.substring(<span class="number">1</span>,<span class="number">1</span>)); <span class="comment">// ""</span></div><div class="line"><span class="built_in">console</span>.log(str.substring(<span class="number">0</span>)); <span class="comment">// Get outside every day. Miracles are waiting everywhere.</span></div><div class="line"><span class="built_in">console</span>.log(str.substring(<span class="number">-1</span>)); <span class="comment">// Get outside every day. Miracles are waiting everywhere.</span></div><div class="line"><span class="built_in">console</span>.log(str.substring(<span class="number">0</span>,<span class="number">100</span>)); <span class="comment">// Get outside every day. Miracles are waiting everywhere.</span></div><div class="line"><span class="built_in">console</span>.log(str.substring(<span class="number">22</span>,<span class="literal">NaN</span>)); <span class="comment">// Get outside every day.</span></div></pre></td></tr></table></figure>
+<h6 id="toLocaleLowerCase"><a href="#toLocaleLowerCase" class="headerlink" title="toLocaleLowerCase"></a><strong>toLocaleLowerCase</strong></h6><h6 id="toLocaleUpperCase"><a href="#toLocaleUpperCase" class="headerlink" title="toLocaleUpperCase"></a><strong>toLocaleUpperCase</strong></h6><p>toLocaleLowerCase() 方法返回调用该方法的字符串被转换成小写的值，转换规则根据本地化的大小写映射。而toLocaleUpperCase() 方法则是转换成大写的值。</p>
+<p>语法：<em>str.toLocaleLowerCase()</em>, <em>str.toLocaleUpperCase()</em></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(<span class="string">'ABCDEFG'</span>.toLocaleLowerCase()); <span class="comment">// abcdefg</span></div><div class="line"><span class="built_in">console</span>.log(<span class="string">'abcdefg'</span>.toLocaleUpperCase()); <span class="comment">// ABCDEFG</span></div></pre></td></tr></table></figure>
+<h6 id="toLowerCase"><a href="#toLowerCase" class="headerlink" title="toLowerCase"></a><strong>toLowerCase</strong></h6><h6 id="toUpperCase"><a href="#toUpperCase" class="headerlink" title="toUpperCase"></a><strong>toUpperCase</strong></h6><p>这两个方法分别表示将字符串转换为相应的小写，大写形式，并返回。如下：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(<span class="string">'ABCDEFG'</span>.toLowerCase()); <span class="comment">// abcdefg</span></div><div class="line"><span class="built_in">console</span>.log(<span class="string">'abcdefg'</span>.toUpperCase()); <span class="comment">// ABCDEFG</span></div></pre></td></tr></table></figure>
+<h6 id="toString-NaN"><a href="#toString-NaN" class="headerlink" title="toString"></a><strong>toString</strong></h6><h6 id="valueOf-NaN"><a href="#valueOf-NaN" class="headerlink" title="valueOf"></a><strong>valueOf</strong></h6><p>这两个方法都是返回字符串本身。</p>
+<p>语法：<em>str.toString()</em>, <em>str.valueOf()</em></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> str = <span class="string">"abc"</span>;</div><div class="line"><span class="built_in">console</span>.log(str.toString()); <span class="comment">// abc</span></div><div class="line"><span class="built_in">console</span>.log(str.toString()==str.valueOf()); <span class="comment">// true</span></div></pre></td></tr></table></figure>
+<p>对于对象而言，toString和valueOf也是非常的相似，它们之间有着细微的差别，请尝试运行以下一段代码：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> x = &#123;</div><div class="line">    <span class="attr">toString</span>: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123; <span class="keyword">return</span> <span class="string">"test"</span>; &#125;,</div><div class="line">    <span class="attr">valueOf</span>: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123; <span class="keyword">return</span> <span class="number">123</span>; &#125;</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="built_in">console</span>.log(x); <span class="comment">// test</span></div><div class="line"><span class="built_in">console</span>.log(<span class="string">"x="</span> + x); <span class="comment">// "x=123"</span></div><div class="line"><span class="built_in">console</span>.log(x + <span class="string">"=x"</span>); <span class="comment">// "123=x"</span></div><div class="line"><span class="built_in">console</span>.log(x + <span class="string">"1"</span>); <span class="comment">// 1231</span></div><div class="line"><span class="built_in">console</span>.log(x + <span class="number">1</span>); <span class="comment">// 124</span></div><div class="line"><span class="built_in">console</span>.log([<span class="string">"x="</span>, x].join(<span class="string">""</span>)); <span class="comment">// "x=test"</span></div></pre></td></tr></table></figure>
+<p>当 “+” 操作符一边为数字时，对象x趋向于转换为数字，表达式会优先调用 valueOf 方法，如果调用数组的 join 方法，对象x趋向于转换为字符串，表达式会优先调用 toString 方法。</p>
+<h6 id="trim"><a href="#trim" class="headerlink" title="trim"></a><strong>trim</strong></h6><p>trim() 方法清除字符串首尾的空白并返回。</p>
+<p>语法：<em>str.trim()</em></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(<span class="string">" a b c "</span>.trim()); <span class="comment">// "a b c"</span></div></pre></td></tr></table></figure>
+<p>trim() 方法是 ECMAScript 5.1 标准加入的，它并不支持IE9以下的低版本IE浏览器，如需支持，请参考以下兼容写法：</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span>(!<span class="built_in">String</span>.prototype.trim) &#123;</div><div class="line">  <span class="built_in">String</span>.prototype.trim = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.replace(<span class="regexp">/^\s+|\s+$/g</span>,<span class="string">''</span>);</div><div class="line">  &#125;;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h6 id="codePointAt"><a href="#codePointAt" class="headerlink" title="codePointAt"></a><strong>codePointAt</strong></h6><p>codePointAt() 方法返回使用UTF-16编码的给定位置的值的非负整数. 该方法遵循 <strong>ES6</strong>标准, 并非所有浏览器都支持.</p>
-<p>语法: <em>str.codePointAt(position)</em></p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(<span class="string">"a"</span>.codePointAt(<span class="number">0</span>));<span class="comment">//97</span></div><div class="line"><span class="built_in">console</span>.log(<span class="string">"\u4f60\u597d"</span>.codePointAt(<span class="number">0</span>));<span class="comment">//20320</span></div></pre></td></tr></table></figure>
-<p>codePointAt 符合 ES6 标准, 如需支持, 请参考 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/String/codePointAt#Polyfill" target="_blank" rel="external">Polyfill</a> .</p>
-<h6 id="contains"><a href="#contains" class="headerlink" title="contains"></a>contains</h6><p>contains() 方法尚处于 <strong>ES6</strong> 规范的草案中, 它用来判断一个字符串是否属于另一个字符, 如果是, 则返回true, 如果不是, 则返回false.</p>
-<p>语法: <em>str.contains(subString [, position])</em></p>
-<p>subString 表示要搜索的字符串, position 表示从当前字符串的哪个位置开始搜索字符串, 默认值为0.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> str = <span class="string">"Practice makes perfect."</span>;</div><div class="line"><span class="built_in">console</span>.log(str.contains(<span class="string">"perfect"</span>));<span class="comment">//true</span></div><div class="line"><span class="built_in">console</span>.log(str.contains(<span class="string">"perfect"</span>,<span class="number">100</span>));<span class="comment">//false</span></div></pre></td></tr></table></figure>
-<p>实际上, 目前只有 Firefox 17及之后的版本实现了该方法.</p>
-<h6 id="endsWith"><a href="#endsWith" class="headerlink" title="endsWith"></a><strong>endsWith</strong></h6><p>endsWith() 方法基本与 contains() 功能相同, 不同的是, 它用来判断一个字符串是否是原字符串的结尾. 若是则返回true, 否则返回false.</p>
-<p>语法: <em>str.endsWith(substring [, position])</em></p>
-<p>与contains 方法不同, position 参数的默认值为字符串长度.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> str = <span class="string">"Learn and live."</span>;</div><div class="line"><span class="built_in">console</span>.log(str.endsWith(<span class="string">"live."</span>));<span class="comment">//true</span></div><div class="line"><span class="built_in">console</span>.log(str.endsWith(<span class="string">"Learn"</span>,<span class="number">5</span>));<span class="comment">//true</span></div></pre></td></tr></table></figure>
-<p>同样目前只有 Firefox 17版本及之后的版本实现了该方法. 其他浏览器请参考 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/String/endsWith#Polyfill" target="_blank" rel="external">Polyfill</a>.</p>
-<h6 id="normalize"><a href="#normalize" class="headerlink" title="normalize"></a><strong>normalize</strong></h6><p>normalize() 方法尚处于 <strong>ES6</strong> 规范的草案中, 它会按照指定的 Unicode 正规形式将原字符串正规化.</p>
-<p>语法: <em>str.normalize([form])</em></p>
-<p>form 参数可省略, 目前有四种 Unicode 正规形式, 即 “NFC”, “NFD”, “NFKC” 以及 “NFKD”, form的默认值为 “NFC”. 如果form 传入了非法的参数值, 则会抛出 RangeError 异常.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> str = <span class="string">"\u4f60\u597d"</span>;</div><div class="line"><span class="built_in">console</span>.log(str.normalize());<span class="comment">//你好</span></div><div class="line"><span class="built_in">console</span>.log(str.normalize(<span class="string">"NFC"</span>));<span class="comment">//你好</span></div><div class="line"><span class="built_in">console</span>.log(str.normalize(<span class="string">"NFD"</span>));<span class="comment">//你好</span></div><div class="line"><span class="built_in">console</span>.log(str.normalize(<span class="string">"NFKC"</span>));<span class="comment">//你好</span></div><div class="line"><span class="built_in">console</span>.log(str.normalize(<span class="string">"NFKD"</span>));<span class="comment">//你好</span></div></pre></td></tr></table></figure>
-<p>目前只有 Chrome, Firefox 浏览器实现了该方法.</p>
-<h6 id="repeat"><a href="#repeat" class="headerlink" title="repeat"></a><strong>repeat</strong></h6><p>repeat() 方法尚处于 <strong>ES6</strong> 规范的草案中, 它返回重复原字符串多次的新字符串.</p>
-<p>语法: <em>str.repeat(count)</em></p>
-<p>count 参数只能取大于等于0 的数字, 若该数字不为整数, 将自动转换为整数形式. 如果取负数或者其他值将报错</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> str = <span class="string">"A still tongue makes a wise head."</span>;</div><div class="line"><span class="built_in">console</span>.log(str.repeat(<span class="number">0</span>));<span class="comment">//""</span></div><div class="line"><span class="built_in">console</span>.log(str.repeat(<span class="number">1</span>));<span class="comment">//A still tongue makes a wise head.</span></div><div class="line"><span class="built_in">console</span>.log(str.repeat(<span class="number">1.5</span>));<span class="comment">//A still tongue makes a wise head.</span></div><div class="line"><span class="built_in">console</span>.log(str.repeat(<span class="number">-1</span>));<span class="comment">//RangeError:Invalid count value</span></div></pre></td></tr></table></figure>
-<p>目前只有 Chrome 41, Firefox 24版本浏览器实现了该方法. 其他浏览器请参考 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/String/repeat#Polyfill" target="_blank" rel="external">Polyfill</a>.</p>
-<h6 id="startsWith"><a href="#startsWith" class="headerlink" title="startsWith"></a><strong>startsWith</strong></h6><p>startsWith() 方法用来判断当前字符串是否是以给定字符串开始的, 若是则返回true, 否则返回false.</p>
-<p>语法: <em>str.startsWith(subString [, position])</em></p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> str = <span class="string">"Where there is a will, there is a way."</span>;</div><div class="line"><span class="built_in">console</span>.log(str.startsWith(<span class="string">"Where"</span>));<span class="comment">//true</span></div><div class="line"><span class="built_in">console</span>.log(str.startsWith(<span class="string">"there"</span>,<span class="number">6</span>));<span class="comment">//true</span></div></pre></td></tr></table></figure>
-<p>目前只有 Firefox 17 版本实现了该方法, 其他浏览器请参考 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/String/startsWith#Polyfill" target="_blank" rel="external">Polyfill</a>.</p>
-<p>其它<strong>非标准</strong>的方法暂时不作介绍. 如需了解请参考 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/String/prototype" target="_blank" rel="external">String.prototype - JavaScript | MDN</a> 中标注为感叹号的方法.</p>
-<h5 id="HTML有关的方法"><a href="#HTML有关的方法" class="headerlink" title="HTML有关的方法"></a>HTML有关的方法</h5><p>常用的方法有 anchor, link 其它方法如 big, blink, bold, fixed, fontcolor, fontsize, italics, small, strike, sub, sup均已废除.</p>
-<p>接下来我们将介绍 anchor和link 两个方法, 其他废除方法不作介绍.</p>
-<h6 id="anchor"><a href="#anchor" class="headerlink" title="anchor"></a><strong>anchor</strong></h6><p>anchor() 方法创建一个锚标签.</p>
-<p>语法: <em>str.anchor(name)</em></p>
-<p>name 指定被创建的a标签的name属性, 使用该方法创建的锚点, 将会成为 document.anchors 数组的元素.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> str = <span class="string">"this is a anchor tag"</span>;</div><div class="line"><span class="built_in">document</span>.body.innerHTML = <span class="built_in">document</span>.body.innerHTML + str.anchor(<span class="string">"anchor1"</span>);<span class="comment">//body末尾将会追加这些内容 &lt;a name="anchor1"&gt;this is a anchor tag&lt;/a&gt;</span></div></pre></td></tr></table></figure>
-<h6 id="link"><a href="#link" class="headerlink" title="link"></a><strong>link</strong></h6><p>link() 方法同样创建一个a标签.</p>
-<p>语法: <em>str.link(url)</em></p>
-<p>url 指定被创建的a标签的href属性, 如果url中包含特殊字符, 将自动进行编码. 例如 &amp;会被转义为 &amp;, “ 会被转义为 “ &amp;\quot; 使用该方法创建的a标签, 将会成为 document.links 数组中的元素.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> str = <span class="string">"百度"</span>;</div><div class="line"><span class="built_in">document</span>.write(str.link(<span class="string">"https://www.baidu.com"</span>));<span class="comment">//&lt;a href="https://www.baidu.com"&gt;百度&lt;/a&gt;</span></div></pre></td></tr></table></figure>
+<h6 id="codePointAt-ES6"><a href="#codePointAt-ES6" class="headerlink" title="codePointAt(ES6)"></a><strong>codePointAt(ES6)</strong></h6><p>codePointAt() 方法基于<strong>ECMAScript 2015（ES6）规范</strong>，返回使用UTF-16编码的给定位置的值的非负整数。</p>
+<p>语法：<em>str.codePointAt(position)</em></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(<span class="string">"a"</span>.codePointAt(<span class="number">0</span>)); <span class="comment">// 97</span></div><div class="line"><span class="built_in">console</span>.log(<span class="string">"\u4f60\u597d"</span>.codePointAt(<span class="number">0</span>)); <span class="comment">// 20320</span></div></pre></td></tr></table></figure>
+<p>如需在老的浏览器中使用该方法，请参考 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/String/codePointAt#Polyfill" target="_blank" rel="external">Polyfill</a>。</p>
+<h6 id="includes-ES6"><a href="#includes-ES6" class="headerlink" title="includes(ES6)"></a><strong>includes(ES6)</strong></h6><p>includes() 方法基于<strong>ECMAScript 2015（ES6）规范</strong>，它用来判断一个字符串是否属于另一个字符。如果是，则返回true，否则返回false。</p>
+<p>语法：<em>str.includes(subString [, position])</em></p>
+<p>subString 表示要搜索的字符串，position 表示从当前字符串的哪个位置开始搜索字符串，默认值为0。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> str = <span class="string">"Practice makes perfect."</span>;</div><div class="line"><span class="built_in">console</span>.log(str.includes(<span class="string">"perfect"</span>)); <span class="comment">// true</span></div><div class="line"><span class="built_in">console</span>.log(str.includes(<span class="string">"perfect"</span>,<span class="number">100</span>)); <span class="comment">// false</span></div></pre></td></tr></table></figure>
+<p>实际上，Firefox 18~39中该方法的名称为contains，由于<a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1102219" target="_blank" rel="external">bug 1102219</a>的存在，它被重命名为<code>includes()</code> 。目前只有Chrome v41+和Firefox v40+版本浏览器实现了它，如需在其它版本浏览器中使用该方法，请参考 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/String/includes#填充" target="_blank" rel="external">Polyfill</a>。</p>
+<h6 id="endsWith-ES6"><a href="#endsWith-ES6" class="headerlink" title="endsWith(ES6)"></a><strong>endsWith(ES6)</strong></h6><p>endsWith() 方法基于<strong>ECMAScript 2015（ES6）规范</strong>，它基本与 contains() 功能相同，不同的是，它用来判断一个字符串是否是原字符串的结尾。若是则返回true，否则返回false。</p>
+<p>语法：<em>str.endsWith(substring [, position])</em></p>
+<p>与contains 方法不同，position 参数的默认值为字符串长度。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> str = <span class="string">"Learn and live."</span>;</div><div class="line"><span class="built_in">console</span>.log(str.endsWith(<span class="string">"live."</span>)); <span class="comment">// true</span></div><div class="line"><span class="built_in">console</span>.log(str.endsWith(<span class="string">"Learn"</span>,<span class="number">5</span>)); <span class="comment">// true</span></div></pre></td></tr></table></figure>
+<p>同样目前只有 Firefox v17+版本实现了该方法。其它浏览器请参考 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/String/endsWith#Polyfill" target="_blank" rel="external">Polyfill</a>。</p>
+<h6 id="normalize-ES6"><a href="#normalize-ES6" class="headerlink" title="normalize(ES6)"></a><strong>normalize(ES6)</strong></h6><p>normalize() 方法基于<strong>ECMAScript 2015（ES6）规范</strong>，它会按照指定的 Unicode 正规形式将原字符串正规化。</p>
+<p>语法：<em>str.normalize([form])</em></p>
+<p>form 参数可省略，目前有四种 Unicode 正规形式，即 “NFC”、”NFD”、”NFKC” 以及 “NFKD”，form的默认值为 “NFC”。如果form 传入了非法的参数值，则会抛出 RangeError 错误。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> str = <span class="string">"\u4f60\u597d"</span>;</div><div class="line"><span class="built_in">console</span>.log(str.normalize()); <span class="comment">// 你好</span></div><div class="line"><span class="built_in">console</span>.log(str.normalize(<span class="string">"NFC"</span>)); <span class="comment">// 你好</span></div><div class="line"><span class="built_in">console</span>.log(str.normalize(<span class="string">"NFD"</span>)); <span class="comment">// 你好</span></div><div class="line"><span class="built_in">console</span>.log(str.normalize(<span class="string">"NFKC"</span>)); <span class="comment">// 你好</span></div><div class="line"><span class="built_in">console</span>.log(str.normalize(<span class="string">"NFKD"</span>)); <span class="comment">// 你好</span></div></pre></td></tr></table></figure>
+<p>目前只有Chrome v34+和Firefox v31+实现了它。</p>
+<h6 id="repeat-ES6"><a href="#repeat-ES6" class="headerlink" title="repeat(ES6)"></a><strong>repeat(ES6)</strong></h6><p>repeat() 方法基于<strong>ECMAScript 2015（ES6）规范</strong>，它返回重复原字符串多次的新字符串。</p>
+<p>语法：<em>str.repeat(count)</em></p>
+<p>count 参数只能取大于等于0 的数字。若该数字不为整数，将自动转换为整数形式，若为负数或者其他值将报错。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> str = <span class="string">"A still tongue makes a wise head."</span>;</div><div class="line"><span class="built_in">console</span>.log(str.repeat(<span class="number">0</span>)); <span class="comment">// ""</span></div><div class="line"><span class="built_in">console</span>.log(str.repeat(<span class="number">1</span>)); <span class="comment">// A still tongue makes a wise head.</span></div><div class="line"><span class="built_in">console</span>.log(str.repeat(<span class="number">1.5</span>)); <span class="comment">// A still tongue makes a wise head.</span></div><div class="line"><span class="built_in">console</span>.log(str.repeat(<span class="number">-1</span>)); <span class="comment">// RangeError:Invalid count value</span></div></pre></td></tr></table></figure>
+<p>目前只有 Chrome v41+、Firefox v24+和Safari v9+版本浏览器实现了该方法。其他浏览器请参考 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/String/repeat#填充" target="_blank" rel="external">Polyfill</a>。</p>
+<h6 id="startsWith-ES6"><a href="#startsWith-ES6" class="headerlink" title="startsWith(ES6)"></a><strong>startsWith(ES6)</strong></h6><p>startsWith() 方法基于<strong>ECMAScript 2015（ES6）规范</strong>，它用来判断当前字符串是否是以给定字符串开始的，若是则返回true，否则返回false。</p>
+<p>语法：<em>str.startsWith(subString [, position])</em></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> str = <span class="string">"Where there is a will, there is a way."</span>;</div><div class="line"><span class="built_in">console</span>.log(str.startsWith(<span class="string">"Where"</span>)); <span class="comment">// true</span></div><div class="line"><span class="built_in">console</span>.log(str.startsWith(<span class="string">"there"</span>,<span class="number">6</span>)); <span class="comment">// true</span></div></pre></td></tr></table></figure>
+<p>目前以下版本浏览器实现了该方法，其他浏览器请参考 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/String/startsWith#Polyfill" target="_blank" rel="external">Polyfill</a>。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">Chrome</th>
+<th style="text-align:center">Firefox</th>
+<th style="text-align:center">Edge</th>
+<th style="text-align:center">Opera</th>
+<th style="text-align:center">Safari</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">41+</td>
+<td style="text-align:center">17+</td>
+<td style="text-align:center">✔️</td>
+<td style="text-align:center">28+</td>
+<td style="text-align:center">9+</td>
+</tr>
+</tbody>
+</table>
+<p>其它<strong>非标准</strong>的方法暂时不作介绍，如需了解请参考 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/String/prototype" target="_blank" rel="external">String.prototype</a> 中标注为感叹号的方法。</p>
+<h5 id="HTML有关的方法"><a href="#HTML有关的方法" class="headerlink" title="HTML有关的方法"></a>HTML有关的方法</h5><p>常用的方法有 anchor，link 其它方法如 big、blink、bold、fixed、fontcolor、fontsize、italics、small、strike、sub、sup均已废除。</p>
+<p>接下来我们将介绍 anchor 和 link 两个方法，其他废除方法不作介绍。</p>
+<h6 id="anchor"><a href="#anchor" class="headerlink" title="anchor"></a><strong>anchor</strong></h6><p>anchor() 方法创建一个锚标签。</p>
+<p>语法：<em>str.anchor(name)</em></p>
+<p>name 指定被创建的a标签的name属性，使用该方法创建的锚点，将会成为 document.anchors 数组的元素。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> str = <span class="string">"this is a anchor tag"</span>;</div><div class="line"><span class="built_in">document</span>.body.innerHTML = <span class="built_in">document</span>.body.innerHTML + str.anchor(<span class="string">"anchor1"</span>); <span class="comment">// body末尾将会追加这些内容 &lt;a name="anchor1"&gt;this is a anchor tag&lt;/a&gt;</span></div></pre></td></tr></table></figure>
+<h6 id="link"><a href="#link" class="headerlink" title="link"></a><strong>link</strong></h6><p>link() 方法同样创建一个a标签。</p>
+<p>语法：<em>str.link(url)</em></p>
+<p>url 指定被创建的a标签的href属性，如果url中包含特殊字符，将自动进行编码。例如 <code>&quot;</code> 会被转义为 <code>&amp;\quot</code>。 使用该方法创建的a标签，将会成为 document.links 数组中的元素。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> str = <span class="string">"百度"</span>;</div><div class="line"><span class="built_in">document</span>.write(str.link(<span class="string">"https://www.baidu.com"</span>)); <span class="comment">// &lt;a href="https://www.baidu.com"&gt;百度&lt;/a&gt;</span></div></pre></td></tr></table></figure>
 <hr>
-<p>实际上 String.prototype 中, 常用的方法就charAt, indexOf, lastIndexOf, match, replace, search, slice, split, substr, substring, toLowerCase, toUpperCase, trim, valueof 等这些. 熟悉它们的语法规则就能熟练地驾驭字符串.</p>
+<h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a><strong>小结</strong></h3><p>部分字符串方法之间存在很大的相似性，要注意区分他们的功能和使用场景。如：</p>
+<ul>
+<li>substr 和 substring，都是两个参数，作用基本相同，两者第一个参数含义相同，但用法不同，前者可为负数，后者值为负数或者非整数时将隐式转换为0。前者第二个参数表示截取字符串的长度，后者第二个参数表示截取字符串的下标；同时substring第一个参数大于第二个参数时，执行结果同位置调换后的结果。</li>
+<li>search方法与indexOf方法作用基本一致，都是查询到了就返回子串第一次出现的下标，否则返回-1，唯一的区别就在于search默认会将子串转化为正则表达式形式，而indexOf不做此处理，也不能处理正则。</li>
+</ul>
+<p>另外，还记得吗？concat方法由于效率问题，不推荐使用。</p>
+<p>通常，字符串中，常用的方法就charAt、indexOf、lastIndexOf、match、replace、search、slice、split、substr、substring、toLowerCase、toUpperCase、trim、valueof 等这些。熟悉它们的语法规则就能熟练地驾驭字符串。</p>
 <hr>
-<p>本文就讨论这么多内容,大家有什么问题或好的想法欢迎在下方参与<a href="#respond">留言和评论</a>.</p>
-<p>本文作者: <a href="https://github.com/Louiszhai" target="_blank" rel="external">louis</a></p>
-<p>本文链接: <a href="http://louiszhai.github.io/2016/01/12/js.String/">http://louiszhai.github.io/2016/01/12/js.String/</a></p>
+<p>本文就讨论这么多内容，大家有什么问题或好的想法欢迎在下方参与<a href="#respond">留言和评论</a>。</p>
+<p>本文作者：<a href="https://github.com/Louiszhai" target="_blank" rel="external">louis</a></p>
+<p>本文链接：<a href="http://louiszhai.github.io/2016/01/12/js.String/">http://louiszhai.github.io/2016/01/12/js.String/</a></p>
 <p>参考文章</p>
 <ul>
-<li><a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/String/prototype" target="_blank" rel="external">String.prototype - JavaScript | MDN</a></li>
-<li><a href="http://stackoverflow.com/questions/2485632/valueof-vs-tostring-in-javascript" target="_blank" rel="external">valueOf() vs. toString() in Javascript - Stack Overflow</a></li>
+<li><a href="http://www.ecma-international.org/ecma-262/6.0/" target="_blank" rel="external">ECMAScript® 2015 Language Specification</a></li>
+<li><a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/String/prototype" target="_blank" rel="external">String.prototype</a></li>
+<li><a href="http://stackoverflow.com/questions/2485632/valueof-vs-tostring-in-javascript" target="_blank" rel="external">valueOf() vs. toString() in Javascript</a></li>
 </ul>
 ]]></content>
     
     <summary type="html">
     
-      JavaScript String String.prototype indexOf charAt match search split valueOf trim substr substring
+      JavaScript String String.prototype charAt charCodeAt concat indexOf lastIndexOf localeCompare match replace search slice split substr substring toLocaleLowerCase toLocaleUpperCase toLowerCase toString toUpperCase trim valueof codePointAt contains endsWith normalize repeat startsWith
     
     </summary>
     
@@ -6179,138 +6238,44 @@
   </entry>
   
   <entry>
-    <title>由同源策略到前端跨域</title>
-    <link href="http://louiszhai.github.io/2016/01/11/cross-domain/"/>
-    <id>http://louiszhai.github.io/2016/01/11/cross-domain/</id>
+    <title>Function.prototype.bind方法指南</title>
+    <link href="http://louiszhai.github.io/2016/01/11/bind/"/>
+    <id>http://louiszhai.github.io/2016/01/11/bind/</id>
     <published>2016-01-11T00:01:33.000Z</published>
-    <updated>2017-04-20T02:12:14.000Z</updated>
+    <updated>2017-04-17T02:54:08.000Z</updated>
     
-    <content type="html"><![CDATA[<h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h3><p>同源策略 (Same-Origin Policy) 最早由 Netscape 公司提出, 所谓同源就是要求, 域名, 协议, 端口相同. 非同源的脚本不能访问或者操作其他域的页面对象(如DOM等). 作为著名的安全策略, 虽然它只是一个规范, 并不强制要求,  但现在所有支持 javaScript 的浏览器都会使用这个策略. 以至于该策略成为浏览器最核心最基本的安全功能, 如果缺少了同源策略, web的安全将无从谈起.</p>
+    <content type="html"><![CDATA[<h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h3><p>ES5新增了 Function.prototype.bind 方法, 该方法不同于jquery的bind 方法, 它主要用于固定 this 作用域, 避免各种由于上下文切换造成的语义问题. 常用在 setTimeout, for循环等内部.</p>
 <a id="more"></a>
-<h3 id="同源策略的限制"><a href="#同源策略的限制" class="headerlink" title="同源策略的限制"></a>同源策略的限制</h3><p>同源策略下的web世界, 域的壁垒高筑, 从而保证各个网页相互独立, 互相之间不能直接访问, iframe, ajax 均受其限制, 而script标签不受此限制.</p>
-<p>注: 以下如非特别说明, 均指非CORS的, 普通跨域请求.</p>
-<h4 id="iframe限制"><a href="#iframe限制" class="headerlink" title="iframe限制"></a>iframe限制</h4><ul>
-<li>可以访问同域资源, 可读写;</li>
-<li>访问跨域页面时, 只读.</li>
-</ul>
-<h4 id="Ajax限制"><a href="#Ajax限制" class="headerlink" title="Ajax限制"></a>Ajax限制</h4><p>Ajax 的限制比 iframe 限制更严.</p>
-<ul>
-<li>同域资源可读写;</li>
-<li>跨域请求会直接被浏览器拦截.(chrome下跨域请求不会发起, 其他浏览器一般是可发送跨域请求, 但响应被浏览器拦截)</li>
-</ul>
-<h4 id="Script限制"><a href="#Script限制" class="headerlink" title="Script限制"></a>Script限制</h4><p>script并无跨域限制, 这是因为script标签引入的文件不能够被客户端的 js 获取到, 不会影响到原页面的安全, 因此script标签引入的文件没必要遵循浏览器的同源策略. 相反, ajax 加载的文件内容可被客户端 js 获取到, 引入的文件内容可能会泄漏或者影响原页面安全, 故, ajax必须遵循同源策略.</p>
-<h4 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h4><p>同源策略要求三同, 即: <strong>同域</strong>, <strong>同协议</strong>, <strong>同端口</strong>.</p>
-<ul>
-<li>同域即host相同, 顶级域名, 一级域名, 二级域名, 三级域名等必须相同, 且域名不能与 ip 对应;</li>
-<li>同协议要求, http与https协议必须保持一致;</li>
-<li>同端口要求, 端口号必须相同.</li>
-</ul>
-<p>IE有些例外, 它仅仅只是验证主机名以及访问协议，而忽略了端口号.</p>
-<p>这里需要澄清一个概念, 所谓的域, 跟 js 等资源的存放服务器没有关系, 比如你到 baidu.com 使用 script 标签请求了 google.com 下的js, 那么该 js 所在域是 baidu.com, 而不是 google.com. 换言之, 它能操作baidu.com的页面对象, 却不能操作google.com的页面对象.</p>
-<h3 id="跨域访问"><a href="#跨域访问" class="headerlink" title="跨域访问"></a>跨域访问</h3><p>实际上, 我们又不可避免地需要做一些跨域的请求, 下面提供几种方案去绕过同源策略:</p>
-<h4 id="使用代理"><a href="#使用代理" class="headerlink" title="使用代理"></a>使用代理</h4><p>虽然ajax和iframe受同源策略限制, 但服务器端代码请求, 却不受此限制, 我们可以基于此去伪造一个同源请求, 实现跨域的访问. 如下便是实现思路:</p>
-<ol>
-<li>请求同域下的web服务器;</li>
-<li>web服务器像代理一样去请求真正的第三方服务器;</li>
-<li>代理拿到数据过后, 直接返回给客户端ajax.</li>
-</ol>
-<p>这样, 我们便拿到了跨域数据.</p>
-<h4 id="JSONP"><a href="#JSONP" class="headerlink" title="JSONP"></a>JSONP</h4><p>由上, script标签并不受同源策略约束, 基于script 标签可做 jsonp 形式的访问, 可以通过第三方服务器生成动态的js代码来回调本地的js方法，而方法中的参数则由第三方服务器在后台获取，并以JSON的形式填充到JS方法当中. 即 JSON with Padding. 具体如下:</p>
-<p>1) 可用js生成以下html 代码, 去做jsonp的请求.</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">"text/javascript"</span> <span class="attr">src</span>=<span class="string">"https://www.targetDomain.com/jsonp?callback=callbackName"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div></pre></td></tr></table></figure>
-<p>使用 jquery, 即</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">jQuery.getJSON(</div><div class="line">  <span class="string">"https://www.yourdomain.com/jsonp?callback=?"</span>,</div><div class="line">  <span class="function"><span class="keyword">function</span>(<span class="params">data</span>) </span>&#123;</div><div class="line">      <span class="built_in">console</span>.log(<span class="string">"name: "</span> + data.name);</div><div class="line">  &#125;</div><div class="line">);</div></pre></td></tr></table></figure>
-<p>其中回调函数名 “callback” 为 “?”, 即不需要用户指定，而是由jquery生成.</p>
-<p>2) 服务器端,以 java 为例, 参考如下: </p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException &#123;</div><div class="line">  //获取JSON数据</div><div class="line">  String jsonData = "&#123;\"name\":\"jsonp\""&#125;";</div><div class="line">  //获取回调函数名</div><div class="line">  String callback = req.getParameter("callback");  </div><div class="line">  //拼接动态JS代码</div><div class="line">  String output = callback + "(" + jsonData + ");</div><div class="line">    resp.setContentType("text/javascript");</div><div class="line">  PrintWriter out = resp.getWriter();</div><div class="line">  out.println(output);</div><div class="line">  // 响应为 callbackName(&#123;\"name\":\"jsonp\""&#125;);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h4 id="postMessage"><a href="#postMessage" class="headerlink" title="postMessage"></a>postMessage</h4><p>ES5新增的 postMessage() 方法允许来自不同源的脚本采用异步方式进行有限的通信，可以实现跨文本档、多窗口、跨域消息传递.</p>
-<p>语法: postMessage(data,origin)</p>
-<p><strong>data</strong>: 要传递的数据，html5规范中提到该参数可以是JavaScript的任意基本类型或可复制的对象，然而并不是所有浏览器都做到了这点儿，部分浏览器只能处理字符串参数，所以我们在传递参数的时候建议使用JSON.stringify()方法对对象参数序列化，在低版本IE中引用json2.js可以实现类似效果.</p>
-<p><strong>origin</strong>：字符串参数，指明目标窗口的源，协议+主机+端口号[+URL]，URL会被忽略，所以可以不写，这个参数是为了安全考虑，postMessage()方法只会将message传递给指定窗口，当然如果愿意也可以建参数设置为”*”，这样可以传递给任意窗口，如果要指定和当前窗口同源的话设置为”/“。</p>
-<p>父页面发送消息: </p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">window</span>.frames[<span class="number">0</span>].postMessage(<span class="string">'message'</span>, origin)</div></pre></td></tr></table></figure>
-<p>iframe接受消息: </p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">window</span>.addEventListener(<span class="string">'message'</span>,<span class="function"><span class="keyword">function</span>(<span class="params">e</span>)</span>&#123;</div><div class="line">	<span class="keyword">if</span>(e.source!=<span class="built_in">window</span>.parent) <span class="keyword">return</span>;<span class="comment">//若消息源不是父页面则退出</span></div><div class="line">  	<span class="comment">//TODO ...</span></div><div class="line">&#125;);</div></pre></td></tr></table></figure>
-<p>其中 e 对象有三个重要的属性    </p>
-<ul>
-<li>data, 表示父页面传递过来的message</li>
-<li>source, 表示发送消息的窗口对象</li>
-<li>origin, 表示发送消息窗口的源(协议+主机+端口号)</li>
-</ul>
-<h4 id="CORS-跨域访问"><a href="#CORS-跨域访问" class="headerlink" title="CORS 跨域访问"></a>CORS 跨域访问</h4><p>HTML5带来了一种新的跨域请求的方式 — CORS, 即 <a href="https://www.w3.org/TR/cors/" target="_blank" rel="external">Cross-origin resource sharing</a>. 它更加安全, 上述的 JSONP, postMessage 等, 资源本身没有能力保证自己不被滥用. CORS的目标是保护资源只被可信的访问源以正确的方式访问.</p>
-<p>目前, 主流的浏览器都支持此协议, 可以在caniuse.com 中查到<a href="http://caniuse.com/#search=cors" target="_blank" rel="external">http://caniuse.com/#search=cors</a>.</p>
-<p>简而言之, 浏览器不再一味禁止跨域访问, 而是检查目的站点的响应头域, 进而判断是否允许当前站点访问. 通常, 服务器使用以下的这些响应头域用来通知浏览器:</p>
-<figure class="highlight fortran"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">Response headers[edit]</div><div class="line"><span class="keyword">Access</span>-Control-Allow-Origin</div><div class="line"><span class="keyword">Access</span>-Control-Allow-Credentials</div><div class="line"><span class="keyword">Access</span>-Control-Allow-Methods</div><div class="line"><span class="keyword">Access</span>-Control-Allow-Headers</div><div class="line"><span class="keyword">Access</span>-Control-Expose-Headers</div><div class="line"><span class="keyword">Access</span>-Control-<span class="built_in">Max</span>-Age</div></pre></td></tr></table></figure>
-<p>CORS的解决办法是在服务端Response的HTTP头域加入资源的访问权限信息. 如: A站只需要在response头中加一个字段就能让B站跨站访问.</p>
-<figure class="highlight ada"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">access</span>-control-allow-origin:*</div></pre></td></tr></table></figure>
-<p>其中<code>*</code> 表示通配, 所有的域都能访问此资源, 如果严谨一些只允许B站访问:</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">access-control-allow-origin:<span class="xml"><span class="tag">&lt;<span class="name">B-DOMAIN</span>&gt;</span></span></div></pre></td></tr></table></figure>
-<p>这样B站就可以直接访问此资源, 不需要JSONP 也不需要iframe了.</p>
-<p>CORS需要指定METHOD访问, 对于GET和POST请求, 至少要指定以下三种methods, 如下:</p>
-<figure class="highlight ada"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">Access</span>-Control-Allow-Methods: POST, GET, OPTIONS</div></pre></td></tr></table></figure>
-<p>如果是POST请求, 且提交的数据类型是json, 那么, CORS需要指定headers.</p>
-<figure class="highlight ada"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">Access</span>-Control-Allow-Headers: Content-<span class="keyword">Type</span></div></pre></td></tr></table></figure>
-<p>CORS默认是不带cookie的, 设置以下字段将允许浏览器发送cookie.</p>
-<figure class="highlight ada"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">Access</span>-Control-Allow-Credentials: <span class="literal">true</span></div></pre></td></tr></table></figure>
-<p>除此之外, 为了跨站发送cookie等验证信息, <code>access-control-allow-origin</code> 字段将不允许设置为<code>*</code>, 它需要明确指定与请求网页一致的域名.</p>
-<p>同时, 请求网页中需要做如下显式设置才能真正发送cookie.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">xhr.withCredentials = <span class="literal">true</span>;</div></pre></td></tr></table></figure>
-<h4 id="document-domain"><a href="#document-domain" class="headerlink" title="document.domain"></a>document.domain</h4><p>通过修改document的domain属性，我们可以在域和子域或者不同的子域之间通信(即它们必须在同一个一级域名下). 同域策略认为域和子域隶属于不同的域，比如a.com和 script.a.com是不同的域，这时，我们无法在a.com下的页面中调用script.a.com中定义的JavaScript方法。但是当我们把它们document的domain属性都修改为a.com，浏览器就会认为它们处于同一个域下，那么我们就可以互相获取对方数据或者操作对方DOM了。</p>
-<p>比如, 我们在 www.a.com/a.html 下, 现在想获取 www.script.a.com/b.html, 即主域名相同, 二级域名不同. 那么可以这么做:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">document</span>.domain = <span class="string">'a.com'</span>;</div><div class="line"><span class="keyword">var</span> iframe = <span class="built_in">document</span>.createElement(<span class="string">'iframe'</span>);</div><div class="line">iframe.src = <span class="string">'http://www.script.a.com/b.html'</span>;</div><div class="line">iframe.style.display = <span class="string">'none'</span>;</div><div class="line"><span class="built_in">document</span>.body.appendChild(iframe);</div><div class="line">iframe.addEventListener(<span class="string">'load'</span>,<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">	<span class="comment">//TODO 载入完成时做的事情</span></div><div class="line">	<span class="comment">//var _document = iframe.contentWindow.document;</span></div><div class="line"> 	<span class="comment">//...</span></div><div class="line">&#125;,<span class="literal">false</span>);</div></pre></td></tr></table></figure>
-<p>注意: </p>
-<ul>
-<li>2个页面都要设置, 哪怕 a.html 页已处于 <em>a.com</em> 域名下, 也必须显式设置.</li>
-<li>document.domain只能设置为一级域名，比如这里a页不能设置为<em>www.a.com</em> (二级域名).</li>
-</ul>
-<p>利用domain属性跨域具有以下局限性:</p>
-<ul>
-<li>两个页面要在同一个一级域名下, 且必须同协议, 同端口, 即子域互跨;</li>
-<li>只适用于iframe.</li>
-</ul>
-<h5 id="Internet-Explorer同源策略绕过"><a href="#Internet-Explorer同源策略绕过" class="headerlink" title="Internet Explorer同源策略绕过"></a>Internet Explorer同源策略绕过</h5><p>Internet Explorer8以及前面的版本很容易通过document.domain实现同源策略绕过, 通过重写文档对象, 域属性这个问题可以十分轻松的被利用.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> <span class="built_in">document</span>;</div><div class="line"><span class="built_in">document</span> = &#123;&#125;;</div><div class="line"><span class="built_in">document</span>.domain = <span class="string">'http://www.a.com'</span>;</div><div class="line"><span class="built_in">console</span>.log(<span class="built_in">document</span>.domain);</div></pre></td></tr></table></figure>
-<p>如果你在最新的浏览器中运行这段代码, 可能在JavaScript控制台会显示一个同源策略绕过错误.</p>
-<h4 id="window-name"><a href="#window-name" class="headerlink" title="window.name"></a>window.name</h4><p>window 对象的name属性是一个很特别的属性, 当该window的location变化, 然后重新加载, 它的name属性可以依然保持不变. 那么我们可以在页面 A中用iframe加载其他域的页面B, 而页面B中用JavaScript把需要传递的数据赋值给window.name, iframe加载完成之后（iframe.onload）, 页面A修改iframe的地址, 将其变成同域的一个地址, 然后就可以读出iframe的window.name的值了(因为A中的window.name和iframe中的window.name互相独立的, 所以不能直接在A中获取window.name, 而要通过iframe获取其window.name). 这个方式非常适合单向的数据请求，而且协议简单、安全. 不会像JSONP那样不做限制地执行外部脚本.</p>
-<h4 id="location-hash"><a href="#location-hash" class="headerlink" title="location.hash"></a>location.hash</h4><p><strong>location.hash(两个iframe之间), 又称FIM, Fragment Identitier Messaging的简写</strong>.</p>
-<p>因为父窗口可以对iframe进行URL读写, iframe也可以读写父窗口的URL, URL有一部分被称为hash, 就是#号及其后面的字符, 它一般用于浏览器锚点定位, Server端并不关心这部分, 所以这部分的修改不会产生HTTP请求, 但是会产生浏览器历史记录. 此方法的原理就是改变URL的hash部分来进行双向通信. 每个window通过改变其他 window的location来发送消息（由于两个页面不在同一个域下IE、Chrome不允许修改parent.location.hash的值，所以要借助于父窗口域名下的一个代理iframe）, 并通过监听自己的URL的变化来接收消息. 这个方式的通信会造成一些不必要的浏览器历史记录, 而且有些浏览器不支持onhashchange事件, 需要轮询来获知URL的改变, 最后, 这样做也存在缺点, 比如数据直接暴露在了url中, 数据容量和类型都有限等.</p>
-<h4 id="Access-Control"><a href="#Access-Control" class="headerlink" title="Access Control"></a>Access Control</h4><p>此跨域方法目前只在很少的浏览器中得以支持, 这些浏览器可以发送一个跨域的HTTP请求（Firefox, Google Chrome等通过XMLHTTPRequest实现, IE8下通过XDomainRequest实现）, 请求的响应必须包含一个Access- Control-Allow-Origin的HTTP响应头, 该响应头声明了请求域的可访问权限. 例如baidu.com对google.com下的getUsers.php发送了一个跨域的HTTP请求（通过ajax）, 那么getUsers.php必须加入如下的响应头:</p>
-<figure class="highlight jsp"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">header(<span class="string">"Access-Control-Allow-Origin: http://www.baidu.com"</span>);<span class="comment">//表示允许baidu.com跨域请求本文件</span></div></pre></td></tr></table></figure>
-<h4 id="flash-URLLoder"><a href="#flash-URLLoder" class="headerlink" title="flash URLLoder"></a>flash URLLoder</h4><p>flash有自己的一套安全策略, 服务器可以通过crossdomain.xml文件来声明能被哪些域的SWF文件访问, SWF也可以通过API来确定自身能被哪些域的SWF加载. 当跨域访问资源时, 例如从域 a.com 请求域 b.com上的数据, 我们可以借助flash来发送HTTP请求. </p>
-<ul>
-<li>首先, 修改域 b.com上的 crossdomain.xml(一般存放在根目录, 如果没有需要手动创建) , 把 a.com 加入到白名单;</li>
-</ul>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="php"><span class="meta">&lt;?</span>xml version=<span class="string">"1.0"</span><span class="meta">?&gt;</span></span></div><div class="line"><span class="tag">&lt;<span class="name">cross-domain-policy</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">site-control</span> <span class="attr">permitted-cross-domain-policies</span>=<span class="string">"by-content-type"</span>/&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">allow-access-from</span> <span class="attr">domain</span>=<span class="string">"a.com"</span> /&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">cross-domain-policy</span>&gt;</span></div></pre></td></tr></table></figure>
-<ul>
-<li>其次, 通过Flash URLLoader发送HTTP请求, 拿到请求后并返回;</li>
-<li>最后, 通过Flash API把响应结果传递给JavaScript.</li>
-</ul>
-<p>Flash URLLoader是一种很普遍的跨域解决方案，不过需要支持iOS的话，这个方案就不可行了.</p>
-<h4 id="WebSocket"><a href="#WebSocket" class="headerlink" title="WebSocket"></a>WebSocket</h4><p>在WebSocket出现之前, 很多网站为了实现实时推送技术, 通常采用的方案是轮询(Polling)和Comet技术, Comet又可细分为两种实现方式, 一种是长轮询机制, 一种称为流技术, 这两种方式实际上是对轮询技术的改进, 这些方案带来很明显的缺点, 需要由浏览器对服务器发出HTTP request, 大量消耗服务器带宽和资源. 面对这种状况, HTML5定义了WebSocket协议, 能更好的节省服务器资源和带宽并实现真正意义上的实时推送.</p>
-<p>WebSocket 本质上是一个基于TCP的协议, 它的目标是在一个单独的持久链接上提供全双工(full-duplex), 双向通信, 以基于事件的方式, 赋予浏览器实时通信能力. 既然是双向通信, 就意味着服务器端和客户端可以同时发送并响应请求, 而不再像HTTP的请求和响应. (同源策略对 web sockets 不适用)</p>
-<p>原理: 为了建立一个WebSocket连接，客户端浏览器首先要向服务器发起一个HTTP请求, 这个请求和通常的HTTP请求不同, 包含了一些附加头信息, 其中附加头信息”Upgrade: WebSocket”表明这是一个申请协议升级的HTTP请求, 服务器端解析这些附加的头信息然后产生应答信息返回给客户端, 客户端和服务器端的WebSocket连接就建立起来了, 双方就可以通过这个连接通道自由的传递信息, 并且这个连接会持续存在直到客户端或者服务器端的某一方主动的关闭连接.</p>
-<p>一个典型WebSocket客户端请求头：</p>
-<p><img src="http://louiszhai.github.io/docImages/cross-domain03.jpg" alt="WebSocket客户端请求头"></p>
+<h3 id="bind"><a href="#bind" class="headerlink" title="bind"></a>bind</h3><p>语法: func.bind(thisArg, arg1, arg2, ….)</p>
+<p>bind() 方法会返回一个新函数, 又叫绑定函数, 当调用这个绑定函数时, 绑定函数会以创建它时传入 bind() 方法的第一个参数作为当前的上下文, 即this, 传入 bind() 方法的第二个及之后的参数加上绑定函数运行时自身的参数按照顺序作为原函数的参数来调用原函数.</p>
+<p>绑定函数也能使用new操作符创建对象; 这就好比把原函数当做构造器. 此时提供的this将被忽略, this之后的参数将依然前置到运行时的参数列表中.</p>
+<h4 id="基本用法"><a href="#基本用法" class="headerlink" title="基本用法"></a>基本用法</h4><p>下面我们来看看bind 的基本用法.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> x = <span class="number">8</span>;</div><div class="line"><span class="keyword">var</span> o = &#123;</div><div class="line">  <span class="attr">x</span>: <span class="number">10</span>,</div><div class="line">  <span class="attr">getX</span>: <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  	<span class="built_in">console</span>.log(<span class="keyword">this</span>.x);</div><div class="line">  &#125;</div><div class="line">&#125;;</div><div class="line"><span class="keyword">var</span> f = o.getX;</div><div class="line">f();<span class="comment">//8, 由于没有绑定执行时的上下文, this默认指向window, 打印了全局变量x的值</span></div><div class="line"><span class="keyword">var</span> g = f.bind(o);</div><div class="line">g();<span class="comment">//10, 绑定this后, 成功的打印了o对象的x属性的值.</span></div></pre></td></tr></table></figure>
+<h4 id="分离参数"><a href="#分离参数" class="headerlink" title="分离参数"></a>分离参数</h4><p>bind() 方法还可以设置函数拥有的初始参数. 这些参数作为bind() 的第2,3…个参数跟在this(或其他对象的后面), 调用绑定函数时, 这些参数将插入到参数列表的最开始位置, 而传递给绑定函数的参数将跟在他们后面.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//打印十个斐波那契数</span></div><div class="line"><span class="keyword">var</span> f = <span class="function"><span class="keyword">function</span>(<span class="params">n1, n2, length</span>)</span>&#123;</div><div class="line">  <span class="keyword">if</span>(<span class="built_in">arguments</span>.length&lt;<span class="number">3</span>) <span class="built_in">console</span>.log(<span class="string">'参数不够...'</span>);</div><div class="line">  <span class="keyword">var</span> array = [n1, n2];</div><div class="line">  <span class="keyword">for</span>(<span class="keyword">var</span> i=<span class="number">2</span>;i&lt;length;i++)&#123;</div><div class="line">  	array[i] = array[i<span class="number">-2</span>] + array[i<span class="number">-1</span>];</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">return</span> array;</div><div class="line">&#125;</div><div class="line"><span class="keyword">var</span> g = f.bind(<span class="literal">null</span>, <span class="number">1</span>, <span class="number">1</span>);</div><div class="line"><span class="built_in">console</span>.log(g(<span class="number">10</span>));<span class="comment">//[1, 1, 2, 3, 5, 8, 13, 21, 34, 55]</span></div></pre></td></tr></table></figure>
+<h4 id="绑定参数"><a href="#绑定参数" class="headerlink" title="绑定参数"></a>绑定参数</h4><p>如果使用new 操作符去构造绑定函数的实例时, 原来提供的this 将被忽略, this之后的参数将依然前置到构造函数的参数列表中. 此时 bind() 方法便具备了保留参数的能力, 我们可以此达到类似柯里化的效果.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> f = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  <span class="keyword">if</span>(<span class="built_in">arguments</span>.length!=<span class="number">0</span>)</div><div class="line">  	<span class="keyword">this</span>.sum = <span class="built_in">Array</span>.prototype.reduce.call(<span class="built_in">arguments</span>,<span class="function"><span class="keyword">function</span>(<span class="params">prev,item</span>)</span>&#123;<span class="comment">//对传入参数求和</span></div><div class="line"> 		<span class="keyword">return</span> prev + item;</div><div class="line">	&#125;);</div><div class="line">  <span class="keyword">return</span> <span class="built_in">Array</span>.prototype.join.call(<span class="built_in">arguments</span>);<span class="comment">// 返回传入参数的字符串形式</span></div><div class="line">&#125;</div><div class="line">f.prototype.toString = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  <span class="keyword">return</span> <span class="keyword">this</span>.sum;</div><div class="line">&#125;</div><div class="line"><span class="keyword">var</span> g = f.bind(<span class="literal">null</span>,<span class="number">2</span>);</div><div class="line"><span class="keyword">var</span> x = <span class="keyword">new</span> g(<span class="number">8</span>);</div><div class="line"><span class="built_in">console</span>.log(x.toString());<span class="comment">//10, 可见x被绑定了2+8=10</span></div><div class="line"><span class="built_in">console</span>.log(g(<span class="number">8</span>));<span class="comment">//2,8 这告诉我们绑定的两个参数正是2和8</span></div><div class="line"></div><div class="line"><span class="built_in">console</span>.log(x <span class="keyword">instanceof</span> g);<span class="comment">//true, 可见通过new创建的x继承了g</span></div><div class="line"><span class="built_in">console</span>.log(x <span class="keyword">instanceof</span> f);<span class="comment">//true, 可见x也继承了f</span></div><div class="line"><span class="built_in">console</span>.log(g <span class="keyword">instanceof</span> <span class="built_in">Function</span>);<span class="comment">//true, 可见bind f()方法之后, 返回了一个新的函数g</span></div><div class="line"><span class="comment">//函数g可用于求和,如下:</span></div><div class="line"><span class="built_in">console</span>.log(g(<span class="number">1</span>,<span class="number">3</span>,<span class="number">5</span>,<span class="number">7</span>,<span class="number">9</span>));<span class="comment">//27 2+1+3+5+7+9=27</span></div></pre></td></tr></table></figure>
+<h4 id="快捷调用"><a href="#快捷调用" class="headerlink" title="快捷调用"></a>快捷调用</h4><p>使用Array.prototype的方法处理类数组对象时(鸭式辨型), 不可避免的需要借用call 或者 apply 方法, 使用 bind() 方法, 我们可以简化这个过程. 如下:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> _slice = <span class="built_in">Array</span>.prototype.slice;</div><div class="line"><span class="keyword">var</span> slice = <span class="built_in">Function</span>.prototype.call.bind(_slice);</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  <span class="keyword">return</span> slice(<span class="built_in">arguments</span>,<span class="number">1</span>);</div><div class="line">&#125;</div><div class="line">f(<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>);<span class="comment">//[2, 3, 4, 5]</span></div></pre></td></tr></table></figure>
+<p>下面的实例将解释 bind() 方法做了一件什么事情:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> _slice = <span class="built_in">Array</span>.prototype.slice;</div><div class="line"><span class="keyword">var</span> slice = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  <span class="keyword">return</span> _slice.apply(<span class="built_in">arguments</span>[<span class="number">0</span>],_slice.call(<span class="built_in">arguments</span>,<span class="number">1</span>));</div><div class="line">&#125;;</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  <span class="keyword">return</span> slice(<span class="built_in">arguments</span>,<span class="number">1</span>);</div><div class="line">&#125;</div><div class="line">f(<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>);<span class="comment">//[2, 3, 4, 5]</span></div></pre></td></tr></table></figure>
+<p>如下, 是bind() 方法的简单实现.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">Function</span>.prototype.bind = <span class="function"><span class="keyword">function</span>(<span class="params">thisArg,argN</span>)</span>&#123;</div><div class="line">  <span class="keyword">var</span> _this = <span class="keyword">this</span>;</div><div class="line">  <span class="keyword">var</span> _arg = _slice.call(<span class="built_in">arguments</span>,<span class="number">1</span>);</div><div class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">   	<span class="keyword">var</span> arg = _slice.call(<span class="built_in">arguments</span>);</div><div class="line">    arg = _arg.concat(arg);</div><div class="line">  	<span class="keyword">return</span> _this.apply(thisArg,arg);</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>可以看出来, 使用 bind() 方法后, 代码优雅得多.</p>
+<p>注: 作为ES5标准加入的bind方法显然不支持 IE9之前的低版本IE, 如需使用, 请参考<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Function/bind#Compatibility" target="_blank" rel="external">Polyfill</a>.</p>
 <hr>
-<p>本问就讨论这么多内容,大家有什么问题或好的想法欢迎在下方参与<a href="#respond">留言和评论</a>.</p>
+<p>本文就讨论这么多内容,大家有什么问题或好的想法欢迎在下方参与<a href="#respond">留言和评论</a>.</p>
 <p>本文作者: <a href="https://github.com/Louiszhai" target="_blank" rel="external">louis</a></p>
-<p>本文链接: <a href="http://louiszhai.github.io/2016/03/02/cross-domain/">http://louiszhai.github.io/2016/03/02/cross-domain/</a></p>
+<p>本文链接: <a href="http://louiszhai.github.io/2016/01/11/bind/">http://louiszhai.github.io/2016/01/11/bind/</a></p>
 <p>参考文章</p>
 <ul>
-<li><a href="http://lc87624.iteye.com/blog/1123148" target="_blank" rel="external">学习总结 前端跨域请求的解决办法——JSONP-哥墨迹的iteye-ITeye技术网站</a></li>
-<li><a href="http://www.cnblogs.com/dolphinX/p/3464056.html" target="_blank" rel="external">html5 postMessage解决跨域、跨窗口消息传递-Samaritans-博客园</a></li>
-<li><a href="http://blog.csdn.net/kongjiea/article/details/44201021" target="_blank" rel="external">深入理解前端跨域方法和原理-kongjiea笔记-博客频道-CSDN.NET</a></li>
-<li><a href="http://web.jobbole.com/83864/" target="_blank" rel="external">跨域访问和防盗链基本原理-WEB前端-伯乐在线</a></li>
-<li><a href="http://unicorn-kid.com/fe-node/2014/08/07/JavaScript%20%E8%B7%A8%E5%9F%9F%20%E4%B9%8B%E4%B8%80%20%E5%90%8C%E6%BA%90%E7%AD%96%E7%95%A5.html" target="_blank" rel="external">Javascript 跨域 之一 同源策略 - KID</a></li>
-<li><a href="http://www.freebuf.com/articles/web/65468.html" target="_blank" rel="external">同源策略详解及绕过（Part1） - FreeBuf.COM | 关注黑客与极客</a></li>
-<li><a href="http://www.plhwin.com/2014/05/28/nodejs-socketio/" target="_blank" rel="external">使用Node.js+Socket.IO搭建WebSocket实时应用 | 潘良虎的随想录</a></li>
-<li><a href="http://blog.jackxy.com/cross-origin-123/" target="_blank" rel="external">跨域资源访问的几种方式</a></li>
+<li><a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Function/bind" target="_blank" rel="external">Function.prototype.bind() - JavaScript | MDN</a></li>
 </ul>
 ]]></content>
     
     <summary type="html">
     
-      JavaScript Same-Origin 同源策略 跨域 jsonp postMessage CORS domain
+      JavaScript bind Function.prototype.bind call apply
     
     </summary>
     
