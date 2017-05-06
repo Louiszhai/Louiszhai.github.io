@@ -13,7 +13,7 @@
 <meta property="og:site_name" content="louis blog">
 <meta property="og:description" content="JavaScript Array Array.of Array.from Array.isArray length constructor toString toLocaleString join pop push reverse shift unshift slice splice sort filter forEach some every map indexOf lastIndexOf re">
 <meta property="og:image" content="http://louiszhai.github.io/docImages/array01.png">
-<meta property="og:updated_time" content="2017-05-03T10:10:30.000Z">
+<meta property="og:updated_time" content="2017-05-05T11:43:20.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="【深度长文】JavaScript数组所有API全解密">
 <meta name="twitter:description" content="JavaScript Array Array.of Array.from Array.isArray length constructor toString toLocaleString join pop push reverse shift unshift slice splice sort filter forEach some every map indexOf lastIndexOf re">
@@ -290,7 +290,7 @@
 </tr>
 </tbody>
 </table>
-<h3 id="Array-isArray"><a href="#Array-isArray" class="headerlink" title="Array.isArray"></a><strong>Array.isArray</strong></h3><p>顾名思义，Array.isArray用来判断一个变量是否数组类型。JS的弱类型机制导致判断变量类型是初级前端开发者面试时的必考题，一般我都会将其作为考察候选人第一题，然后基于此展开。在ES6提供该方法之前，ES5至少有如下5种方式判断一个值是否数组：</p>
+<h3 id="Array-isArray"><a href="#Array-isArray" class="headerlink" title="Array.isArray"></a><strong>Array.isArray</strong></h3><p>顾名思义，Array.isArray用来判断一个变量是否数组类型。JS的弱类型机制导致判断变量类型是初级前端开发者面试时的必考题，一般我都会将其作为考察候选人第一题，然后基于此展开。在ES5提供该方法之前，我们至少有如下5种方式去判断一个值是否数组：</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> a = [];</div><div class="line"><span class="comment">// 1.基于instanceof</span></div><div class="line">a <span class="keyword">instanceof</span> <span class="built_in">Array</span>;</div><div class="line"><span class="comment">// 2.基于constructor</span></div><div class="line">a.constructor === <span class="built_in">Array</span>;</div><div class="line"><span class="comment">// 3.基于Object.prototype.isPrototypeOf</span></div><div class="line"><span class="built_in">Array</span>.prototype.isPrototypeOf(a);</div><div class="line"><span class="comment">// 4.基于getPrototypeOf</span></div><div class="line"><span class="built_in">Object</span>.getPrototypeOf(a) === <span class="built_in">Array</span>.prototype;</div><div class="line"><span class="comment">// 5.基于Object.prototype.toString</span></div><div class="line"><span class="built_in">Object</span>.prototype.toString.apply(a) === <span class="string">'[object Array]'</span>;</div></pre></td></tr></table></figure>
 <p>以上，除了<code>Object.prototype.toString</code>外，其它方法都不能正确判断变量的类型。</p>
 <p>要知道，代码的运行环境十分复杂，一个变量可能使用浑身解数去迷惑它的创造者。且看：</p>
@@ -298,7 +298,7 @@
 <p>以上，4种方法将全部返回<code>true</code>，为什么呢？我们只是手动指定了某个对象的<code>__proto__</code>属性为<code>Array.prototype</code>，便导致了该对象继承了Array对象，这种毫不负责任的继承方式，使得基于继承的判断方案瞬间土崩瓦解。</p>
 <p>不仅如此，我们还知道，Array是堆数据，变量指向的只是它的引用地址，因此每个页面的Array对象引用的地址都是不一样的。iframe中声明的数组，它的构造函数是iframe中的Array对象。如果在iframe声明了一个数组<code>x</code>，将其赋值给父页面的变量<code>y</code>，那么在父页面使用<code>y instanceof Array</code> ，结果一定是<code>false</code>的。而最后一种返回的是字符串，不会存在引用问题。实际上，多页面或系统之间的交互只有字符串能够畅行无阻。</p>
 <p>鉴于上述的两点原因，故笔者推荐使用最后一种方法去撩面试官（别提是我说的），如果你还不信，这里恰好有篇文章跟我持有相同的观点：<a href="http://web.mit.edu/jwalden/www/isArray.html" target="_blank" rel="external">Determining with absolute accuracy whether or not a JavaScript object is an array</a>。</p>
-<p>回到ES6，使用Array.isArray则非常简单，如下：</p>
+<p>相反，使用Array.isArray则非常简单，如下：</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">Array</span>.isArray([]); <span class="comment">// true</span></div><div class="line"><span class="built_in">Array</span>.isArray(&#123;<span class="number">0</span>: <span class="string">'a'</span>, <span class="attr">length</span>: <span class="number">1</span>&#125;); <span class="comment">// false</span></div></pre></td></tr></table></figure>
 <p>目前，以下版本浏览器提供了对Array.isArray的支持。</p>
 <table>

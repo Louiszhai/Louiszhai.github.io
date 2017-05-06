@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://louiszhai.github.io/"/>
-  <updated>2017-05-03T10:10:30.000Z</updated>
+  <updated>2017-05-05T11:43:20.000Z</updated>
   <id>http://louiszhai.github.io/</id>
   
   <author>
@@ -20,7 +20,7 @@
     <link href="http://louiszhai.github.io/2017/04/28/array/"/>
     <id>http://louiszhai.github.io/2017/04/28/array/</id>
     <published>2017-04-28T05:43:36.000Z</published>
-    <updated>2017-05-03T10:10:30.000Z</updated>
+    <updated>2017-05-05T11:43:20.000Z</updated>
     
     <content type="html"><![CDATA[<p><strong>本文首发于CSDN网站，下面的版本又经过进一步的修订。</strong></p>
 <p>全文共13k+字，系统讲解了JavaScript数组的各种特性和API。</p>
@@ -110,7 +110,7 @@
 </tr>
 </tbody>
 </table>
-<h3 id="Array-isArray"><a href="#Array-isArray" class="headerlink" title="Array.isArray"></a><strong>Array.isArray</strong></h3><p>顾名思义，Array.isArray用来判断一个变量是否数组类型。JS的弱类型机制导致判断变量类型是初级前端开发者面试时的必考题，一般我都会将其作为考察候选人第一题，然后基于此展开。在ES6提供该方法之前，ES5至少有如下5种方式判断一个值是否数组：</p>
+<h3 id="Array-isArray"><a href="#Array-isArray" class="headerlink" title="Array.isArray"></a><strong>Array.isArray</strong></h3><p>顾名思义，Array.isArray用来判断一个变量是否数组类型。JS的弱类型机制导致判断变量类型是初级前端开发者面试时的必考题，一般我都会将其作为考察候选人第一题，然后基于此展开。在ES5提供该方法之前，我们至少有如下5种方式去判断一个值是否数组：</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> a = [];</div><div class="line"><span class="comment">// 1.基于instanceof</span></div><div class="line">a <span class="keyword">instanceof</span> <span class="built_in">Array</span>;</div><div class="line"><span class="comment">// 2.基于constructor</span></div><div class="line">a.constructor === <span class="built_in">Array</span>;</div><div class="line"><span class="comment">// 3.基于Object.prototype.isPrototypeOf</span></div><div class="line"><span class="built_in">Array</span>.prototype.isPrototypeOf(a);</div><div class="line"><span class="comment">// 4.基于getPrototypeOf</span></div><div class="line"><span class="built_in">Object</span>.getPrototypeOf(a) === <span class="built_in">Array</span>.prototype;</div><div class="line"><span class="comment">// 5.基于Object.prototype.toString</span></div><div class="line"><span class="built_in">Object</span>.prototype.toString.apply(a) === <span class="string">'[object Array]'</span>;</div></pre></td></tr></table></figure>
 <p>以上，除了<code>Object.prototype.toString</code>外，其它方法都不能正确判断变量的类型。</p>
 <p>要知道，代码的运行环境十分复杂，一个变量可能使用浑身解数去迷惑它的创造者。且看：</p>
@@ -118,7 +118,7 @@
 <p>以上，4种方法将全部返回<code>true</code>，为什么呢？我们只是手动指定了某个对象的<code>__proto__</code>属性为<code>Array.prototype</code>，便导致了该对象继承了Array对象，这种毫不负责任的继承方式，使得基于继承的判断方案瞬间土崩瓦解。</p>
 <p>不仅如此，我们还知道，Array是堆数据，变量指向的只是它的引用地址，因此每个页面的Array对象引用的地址都是不一样的。iframe中声明的数组，它的构造函数是iframe中的Array对象。如果在iframe声明了一个数组<code>x</code>，将其赋值给父页面的变量<code>y</code>，那么在父页面使用<code>y instanceof Array</code> ，结果一定是<code>false</code>的。而最后一种返回的是字符串，不会存在引用问题。实际上，多页面或系统之间的交互只有字符串能够畅行无阻。</p>
 <p>鉴于上述的两点原因，故笔者推荐使用最后一种方法去撩面试官（别提是我说的），如果你还不信，这里恰好有篇文章跟我持有相同的观点：<a href="http://web.mit.edu/jwalden/www/isArray.html" target="_blank" rel="external">Determining with absolute accuracy whether or not a JavaScript object is an array</a>。</p>
-<p>回到ES6，使用Array.isArray则非常简单，如下：</p>
+<p>相反，使用Array.isArray则非常简单，如下：</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">Array</span>.isArray([]); <span class="comment">// true</span></div><div class="line"><span class="built_in">Array</span>.isArray(&#123;<span class="number">0</span>: <span class="string">'a'</span>, <span class="attr">length</span>: <span class="number">1</span>&#125;); <span class="comment">// false</span></div></pre></td></tr></table></figure>
 <p>目前，以下版本浏览器提供了对Array.isArray的支持。</p>
 <table>
@@ -5989,7 +5989,7 @@
     <link href="http://louiszhai.github.io/2016/01/12/js.String/"/>
     <id>http://louiszhai.github.io/2016/01/12/js.String/</id>
     <published>2016-01-12T12:27:09.000Z</published>
-    <updated>2017-05-03T10:12:05.000Z</updated>
+    <updated>2017-05-06T12:38:01.000Z</updated>
     
     <content type="html"><![CDATA[<p>本文近 6k 字，读完需 10 分钟。</p>
 <p>字符串作为基本的信息交流的桥梁，几乎被所有的编程语言所实现（然而c、c++没有提供）。多数开发者几乎每天都在和字符串打交道，语言内置的String模块，极大地提升了开发者的效率。JavaScript通过自动装箱字符串字面量为String对象，自然地继承了String.prototype的所有方法，更加简化了字符串的使用。</p>
@@ -6070,7 +6070,7 @@
 <p>语法：<em>str.indexOf(searchValue [, fromIndex=0])</em>，<em>str.lastIndexOf(searchValue [, fromIndex=0])</em></p>
 <p>searchValue 表示被查找的字符串，fromIndex 表示开始查找的位置，默认为0，如果小于0，则查找整个字符串，若超过字符串长度，则该方法返回-1，除非被查找的是空字符串，此时返回字符串长度。</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(<span class="string">""</span>.indexOf(<span class="string">""</span>,<span class="number">100</span>)); <span class="comment">// 0</span></div><div class="line"><span class="built_in">console</span>.log(<span class="string">"IT改变世界"</span>.indexOf(<span class="string">"世界"</span>)); <span class="comment">// 4</span></div><div class="line"><span class="built_in">console</span>.log(<span class="string">"IT改变世界"</span>.lastIndexOf(<span class="string">"世界"</span>)); <span class="comment">// 4</span></div></pre></td></tr></table></figure>
-<h6 id="locateCompare"><a href="#locateCompare" class="headerlink" title="locateCompare"></a><strong>locateCompare</strong></h6><p>locateCompare() 方法用来比较字符串，如果指定字符串在原字符串的前面则返回负数，否则返回正数或0，其中0 表示两个字符串相同。该方法实现依赖具体的本地实现，不同的语言下可能有不同的返回。</p>
+<h6 id="localeCompare"><a href="#localeCompare" class="headerlink" title="localeCompare"></a><strong>localeCompare</strong></h6><p>localeCompare() 方法用来比较字符串，如果指定字符串在原字符串的前面则返回负数，否则返回正数或0，其中0 表示两个字符串相同。该方法实现依赖具体的本地实现，不同的语言下可能有不同的返回。</p>
 <p>语法：<em>str.localeCompare(str2 [, locales [, options]])</em></p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> str = <span class="string">"apple"</span>;</div><div class="line"><span class="keyword">var</span> str2 = <span class="string">"orange"</span>;</div><div class="line"><span class="built_in">console</span>.log(str.localeCompare(str2)); <span class="comment">// -1</span></div><div class="line"><span class="built_in">console</span>.log(str.localeCompare(<span class="string">"123"</span>)); <span class="comment">// 1</span></div></pre></td></tr></table></figure>
 <p>目前 Safari 浏览器暂不支持该方法，但Chrome v24+、Firefox v29+，IE11+ 和 Opera v15+ 都已实现了它。</p>
