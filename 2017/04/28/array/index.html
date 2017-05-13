@@ -13,7 +13,7 @@
 <meta property="og:site_name" content="louis blog">
 <meta property="og:description" content="JavaScript Array Array.of Array.from Array.isArray length constructor toString toLocaleString join pop push reverse shift unshift slice splice sort filter forEach some every map indexOf lastIndexOf re">
 <meta property="og:image" content="http://louiszhai.github.io/docImages/array01.png">
-<meta property="og:updated_time" content="2017-05-13T14:31:05.000Z">
+<meta property="og:updated_time" content="2017-05-13T14:38:59.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="【深度长文】JavaScript数组所有API全解密">
 <meta name="twitter:description" content="JavaScript Array Array.of Array.from Array.isArray length constructor toString toLocaleString join pop push reverse shift unshift slice splice sort filter forEach some every map indexOf lastIndexOf re">
@@ -592,7 +592,7 @@
 <p>同上，join 一样受益于鸭式辨型，如下：</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> o = &#123;<span class="number">0</span>:<span class="string">"We"</span>, <span class="number">1</span>:<span class="string">"are"</span>, <span class="number">2</span>:<span class="string">"Chinese"</span>, <span class="attr">length</span>:<span class="number">3</span>&#125;;</div><div class="line"><span class="built_in">console</span>.log(<span class="built_in">Array</span>.prototype.join.call(o,<span class="string">'+'</span>)); <span class="comment">// "We+are+Chinese"</span></div><div class="line"><span class="built_in">console</span>.log(<span class="built_in">Array</span>.prototype.join.call(<span class="string">'abc'</span>)); <span class="comment">// "a,b,c"</span></div></pre></td></tr></table></figure>
 <h5 id="slice"><a href="#slice" class="headerlink" title="slice"></a><strong>slice</strong></h5><p>slice() 方法将数组中一部分元素浅复制存入新的数组对象，并且返回这个数组对象。</p>
-<p>语法：<em>arr.slice([start, end])</em></p>
+<p>语法：<em>arr.slice([start[, end]])</em></p>
 <p>参数 start 指定复制开始位置的索引，end如果有值则表示复制结束位置的索引（不包括此位置）。</p>
 <p>如果 start 的值为负数，假如数组长度为 length，则表示从 length+start 的位置开始复制，此时参数 end 如果有值，只能是比 start 大的负数，否则将返回空数组。</p>
 <p>slice方法参数为空时，同concat方法一样，都是浅复制生成一个新数组。</p>
