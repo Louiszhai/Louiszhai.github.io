@@ -7,6 +7,7 @@
   <title>Fetch进阶指南 | louis blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="fetch async await mode promise progress abort">
+<meta name="keywords" content="javascript">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Fetch进阶指南">
 <meta property="og:url" content="http://louiszhai.github.io/2016/11/02/fetch/index.html">
@@ -328,7 +329,7 @@
 <p>5) 实时编译</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">babel es6.js -w -o es5.js <span class="comment"># 实时watch es6.js的变化,一旦改变就重新编译</span></div><div class="line">babel es6.js -watch -o es5.js <span class="comment"># -w也可写全为--watch</span></div></pre></td></tr></table></figure>
 <p>6) 编译目录输出到其他目录</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">babel src <span class="_">-d</span> build <span class="comment"># 编译src目录下所有js,并输出到build目录</span></div><div class="line">babel src --out-dir build <span class="comment"># -d也可写全为--out-dir</span></div></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">babel src -d build <span class="comment"># 编译src目录下所有js,并输出到build目录</span></div><div class="line">babel src --out-dir build <span class="comment"># -d也可写全为--out-dir</span></div></pre></td></tr></table></figure>
 <p>7) 编译目录输出到单个文件</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">babel src -o es5.js <span class="comment"># 编译src目录所有js,合并输出为es5.js</span></div></pre></td></tr></table></figure>
 <p>8) 想要直接运行es6.js, 可使用babel-node.</p>

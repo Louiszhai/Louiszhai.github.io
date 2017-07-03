@@ -7,6 +7,7 @@
   <title>由同源策略到前端跨域 | louis blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="JavaScript Same-Origin 同源策略 跨域 jsonp postMessage CORS domain">
+<meta name="keywords" content="JavaScript">
 <meta property="og:type" content="article">
 <meta property="og:title" content="由同源策略到前端跨域">
 <meta property="og:url" content="http://louiszhai.github.io/2016/01/11/cross-domain/index.html">
@@ -268,7 +269,7 @@
 <p>如果是POST请求, 且提交的数据类型是json, 那么, CORS需要指定headers.</p>
 <figure class="highlight ada"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">Access</span>-Control-Allow-Headers: Content-<span class="keyword">Type</span></div></pre></td></tr></table></figure>
 <p>CORS默认是不带cookie的, 设置以下字段将允许浏览器发送cookie.</p>
-<figure class="highlight ada"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">Access</span>-Control-Allow-Credentials: <span class="literal">true</span></div></pre></td></tr></table></figure>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="attr">Access-Control-Allow-Credentials:</span> <span class="literal">true</span></div></pre></td></tr></table></figure>
 <p>除此之外, 为了跨站发送cookie等验证信息, <code>access-control-allow-origin</code> 字段将不允许设置为<code>*</code>, 它需要明确指定与请求网页一致的域名.</p>
 <p>同时, 请求网页中需要做如下显式设置才能真正发送cookie.</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">xhr.withCredentials = <span class="literal">true</span>;</div></pre></td></tr></table></figure>
@@ -359,18 +360,18 @@
     
 <nav id="article-nav">
   
-    <a href="/2016/01/11/bind/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2016/01/12/js.String/" id="article-nav-newer" class="article-nav-link-wrap">
       <strong class="article-nav-caption"><</strong>
       <div class="article-nav-title">
         
-          Function.prototype.bind方法指南
+          JavaScript字符串所有API全解密
         
       </div>
     </a>
   
   
-    <a href="/2016/01/10/js.timer/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">web定时器之setTimeout &amp; setInterval</div>
+    <a href="/2016/01/11/bind/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Function.prototype.bind方法指南</div>
       <strong class="article-nav-caption">></strong>
     </a>
   

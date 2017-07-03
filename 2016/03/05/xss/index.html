@@ -7,6 +7,7 @@
   <title>xss攻防浅谈 | louis blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="xss xss漏洞 xss攻击 xss浅谈 前端xss">
+<meta name="keywords" content="XSS">
 <meta property="og:type" content="article">
 <meta property="og:title" content="xss攻防浅谈">
 <meta property="og:url" content="http://louiszhai.github.io/2016/03/05/xss/index.html">
@@ -245,7 +246,7 @@
 <p>可以通过http头控制是否打开 xss-filter, 默认为开启.</p>
 </blockquote>
 <p>通常情况下, 在http header中加入以下字段表示启用xss-filter.</p>
-<figure class="highlight yaml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="attr">X-XSS-Protection:</span><span class="number">1</span> (默认)</div><div class="line"><span class="attr">X-XSS-Protection:</span><span class="number">1</span>;mode=block (强制不渲染, chrome跳空白页,IE展示一个<span class="comment">#号)</span></div></pre></td></tr></table></figure>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="section">X-XSS-Protection:1 (默认)</span></div><div class="line"><span class="section">X-XSS-Protection:1;mode=block (强制不渲染, chrome跳空白页,IE展示一个#号)</span></div></pre></td></tr></table></figure>
 <p>如需禁用xss-filter, 将 <code>X-XSS-Protection</code> 设置为0即可.</p>
 <p>如上, 现代浏览器都对反射型xss有一定的防御力, 其原理是检查url和dom中元素的相关性. 但这并不能完全防止反射型xss. 这里有个可供测试的链接, 传送门: <a href="http://www.enhanceie.com/test/xss/" target="_blank" rel="external">XSS Test Page</a>.</p>
 <p>另外, 浏览器对于存储型xss并没有抵抗力, 原因很简单, 用户的需求是多种多样的. 所以, 抵御xss这件事情不能指望浏览器.</p>
