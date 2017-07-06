@@ -1,1 +1,12 @@
-<!DOCTYPE html><html><head><meta charset=utf-8><title>canvas-draw</title><link href=./static/css/app.c5f1e6aaf567317208e6f8ba9810e1c3.css rel=stylesheet></head><body><div id=app></div><script type=text/javascript src=./static/js/manifest.fb238d60ce3b6bad1be9.js></script><script type=text/javascript src=./static/js/vendor.c4973cfd93602f266fb2.js></script><script type=text/javascript src=./static/js/app.c28ec9180d6c3ebe9816.js></script></body></html>
+<!DOCTYPE html><html><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no"><title>canvas-draw</title><link href=./static/css/app.810dd953621560e35033b947421c2fdd.css rel=stylesheet></head><body><div id=app></div><script type=text/javascript src=./static/js/manifest.7d46ed4b28d83f7705a7.js></script><script type=text/javascript src=./static/js/vendor.c4973cfd93602f266fb2.js></script><script type=text/javascript src=./static/js/app.5b3b5fee30eb07cc028e.js></script></body><script>(function(defaultFontSize, defaultScreenWidth) {
+      var htmlNode = document.getElementsByTagName('html')[0];
+      function resize() {
+        var screenWidth = document.body.offsetWidth;
+        var fontSize = (screenWidth / defaultScreenWidth) * defaultFontSize;
+        htmlNode.style.fontSize = fontSize + 'px';
+      }
+      document.addEventListener('DOMContentLoaded', function() {
+        resize();
+      });
+      window.addEventListener('resize', resize);
+    })(10, 375);</script></html>
