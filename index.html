@@ -206,8 +206,6 @@
         <p><strong>本文首发于CSDN网站，下面的版本又经过进一步的修订。</strong></p>
 <h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a><strong>导读</strong></h3><p>6月又是项目吃紧的时候，一大波需求袭来，猝不及防。</p>
 <p>度过了漫长而煎熬的6月，是时候总结一波。最近移动端的一款产品原计划是引入第三方的签名插件，该插件依赖复杂，若干个js使用<code>document.write</code>顺序加载，插件源码是ES5的，甚至说是ES3都不为过。为了能够顺利嵌入我们的VUE项目，我阅读了两天插件的源码（demo及文档不全，囧），然后花了一天多点的时间使用ES6引用它。鉴于单页应用中，任何非全局资源都不该提前加载的指导性原则，为了做到动态加载，我甚至还专门写了一个simple的vue组件<a href="https://github.com/Louiszhai/canvas-draw/blob/master/src/utils/iload.js" target="_blank" rel="external">iload.js</a>去顺序加载这些资源并执行回调。一切看似很完美，结果发现demo引用的一个压缩的js中居然写死了插件相关DOM节点的id和style，此刻我的内心几乎是崩溃的。这样的一个插件我怕是无力引入了吧。</p>
-<p><img src="http://louiszhai.github.io/docImages/canvas-draw01.gif" alt=""></p>
-<p>虽然嘴上这么说，身体还是很诚实的，费尽千辛万苦我还是把这个插件用在了项目中。随着项目推进，业务上经过多次沟通，我们砍掉了该签名插件的数字证书验证部分。也就是说，这么大的一个插件，只剩下用户签名的功能，我完全可以自己做啊。于是我悄悄移除了这个插件，为这几天的调研和码字过程划上了一个完美的句号（深藏功与名）。</p>
       
     </div>
     
