@@ -2234,11 +2234,13 @@ c3(no)->op2->io1->e</textarea><textarea id="flowchart-0-options" style="display:
 </ul>
 <h3 id="flex属性的优先级"><a href="#flex属性的优先级" class="headerlink" title="flex属性的优先级"></a>flex属性的优先级</h3><p>我们可以给input设置<code>flex:1</code>, 使其充满一行, 并且随着父元素大小变化而变化. 也可以给div设置<code>flex:1</code>使其充满剩余高度.</p>
 <p>使用flex布局这些都不是难事, 需要注意的是, 这其中有坑. 为了避免踩坑, 我们先来看下flex属性的优先级:</p>
+<blockquote>
 <p><strong>width|height &gt; 自适应文本内容的宽度或高度 &gt; flex:数值</strong></p>
+</blockquote>
 <p>这意味着, 首先是元素宽高的值优先, 其次是内容的宽高, 再次是flex数值. 现在我们来看看坑是什么.</p>
 <ol>
 <li>给input元素设置<code>flex:1</code>时需要注意, 通常input拥有一个默认宽度(用于展示默认数量的字符), 在chrome v55下, 这个宽度默认为126px(同时还包含2px的border). 因此想要实现input宽度自适应, 可以设置其width为0.</li>
-<li>给div元素设置<code>flex:1</code>时, 因div的高度会受子级元素影响, 为了使得该div占满其父元素剩余的高度, 且不超出, 建议将该div的<code>height</code>属性设置为0.</li>
+<li>给div元素设置<code>flex:1</code>时, 因div的高度会受子级元素影响, 为了使得该div占满其父元素剩余的高度, 且不超出, 建议将该div的<code>height</code>属性设置为0. 此时PC端表现非常优秀，美中不足的是，对于移动端而言，div的子元素设置为<code>height:100%</code>并没有什么卵用，此时子元素高度依然为0。目前我能想到的比较好的解决方案就是：给div也设置<code>display:flex;align-item:stretch</code>，使得div本身也获得flex布局能力，同时div子元素高度充满div本身。</li>
 </ol>
 <h3 id="场景回顾"><a href="#场景回顾" class="headerlink" title="场景回顾"></a>场景回顾</h3><ol>
 <li><p>想要实现垂直居中的效果, 只需要设置父元素为<code>display:flex;justify-content:center</code> 即可. (当然, 父元素样式采用:<code>display:table;</code>, 子元素样式采用:<code>display:table-cell;vertical-align:middle</code> 也是可以实现的), 如下图.</p>
@@ -2251,12 +2253,12 @@ c3(no)->op2->io1->e</textarea><textarea id="flowchart-0-options" style="display:
 <li>最终, 我们发现, 还是flex弹性盒模型来得方便快捷, 它只需要父级元素样式设置为<code>display:flex</code>.</li>
 </ul>
 </li>
-<li><p>iphone低版本下，flex与inline-block有兼容性问题，这将导致inline-block的元素脱离flex布局（就好像其父元素没有设置为flex布局一样）。目前没有什么比较好的解决方案，建议在flex布局下慎用inline-block元素。</p>
+<li><p>iphone低版本下，flex与inline-block有兼容性问题，这将导致inline-block的元素脱离flex布局（就好像其父元素没有设置为flex布局一样）。目前没有什么比较好的解决方案，建议在flex布局下慎用inline-block元素或者将其指定为block元素。</p>
 </li>
 </ol>
 <p>有关flex的旧语法, 请戳这篇回顾  <a href="https://segmentfault.com/a/1190000003978624" target="_blank" rel="external">Flex布局新旧混合写法详解（兼容微信）</a> .</p>
 <p>有关移动端的最佳实践, 请戳这篇围观 <a href="https://isux.tencent.com/flexbox.html" target="_blank" rel="external">移动端全兼容的flexbox速成班</a> .</p>
-<p>当然, 这里还有一个 <a href="https://github.com/philipwalton/flexbugs" target="_blank" rel="external">Flexbugs</a> 列表, github上已有近6k的star, 感兴趣可以前去看看.</p>
+<p>当然, 这里还有一个 <a href="https://github.com/philipwalton/flexbugs" target="_blank" rel="external">Flexbugs</a> 列表, github上已有7k+的star, 感兴趣可以前去看看.</p>
 <hr>
 <p>本问就讨论这么多内容,大家有什么问题或好的想法欢迎在下方参与<a href="#respond">留言和评论</a>.</p>
 <p>本文作者: <a href="https://github.com/Louiszhai" target="_blank" rel="external">louis</a></p>
