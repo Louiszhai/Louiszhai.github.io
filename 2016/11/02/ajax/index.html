@@ -30,7 +30,7 @@
 <meta property="og:image" content="http://louiszhai.github.io/docImages/ajax20.png">
 <meta property="og:image" content="http://louiszhai.github.io/docImages/ajax21.png">
 <meta property="og:image" content="http://louiszhai.github.io/docImages/ajax26.png">
-<meta property="og:updated_time" content="2017-04-17T02:54:08.000Z">
+<meta property="og:updated_time" content="2017-07-17T08:51:51.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Ajax知识体系大梳理">
 <meta name="twitter:description" content="ajax XMLHttpRequest xhr fetch XDomainRequest jquery.ajax overrideMimeType CORS FileReader postman angular withCredentials setRequestHeader getAllResponseHeaders upload ajax与history的兼容 ajax跨域请求 ajax文件上">
@@ -358,6 +358,28 @@
 <h4 id="responseType"><a href="#responseType" class="headerlink" title="responseType"></a>responseType</h4><p>responseType表示响应的类型, 缺省为空字符串, 可取 <code>&quot;arraybuffer&quot;</code> , <code>&quot;blob&quot;</code> , <code>&quot;document&quot;</code> , <code>&quot;json&quot;</code> , and <code>&quot;text&quot;</code> 共五种类型.</p>
 <h4 id="responseURL"><a href="#responseURL" class="headerlink" title="responseURL"></a>responseURL</h4><p>responseURL返回ajax请求最终的URL, 如果请求中存在重定向, 那么responseURL表示重定向之后的URL.</p>
 <h4 id="withCredentials"><a href="#withCredentials" class="headerlink" title="withCredentials"></a>withCredentials</h4><p>withCredentials是一个布尔值, 默认为false, 表示跨域请求中不发送cookies等信息. 当它设置为true时, <code>cookies</code> , <code>authorization headers</code> 或者<code>TLS客户端证书</code> 都可以正常发送和接收. 显然它的值对同域请求没有影响.</p>
+<p>但是务必要注意，withCredentials属性什么时机设置，<a href="https://xhr.spec.whatwg.org/#the-withcredentials-attribute" target="_blank" rel="external">XMLHttpRequest Living Standard（2017）</a>中有明确的规定。</p>
+<blockquote>
+<p>Setting the <code>withCredentials</code> attribute must run these steps:</p>
+<ol>
+<li>If <a href="https://xhr.spec.whatwg.org/#concept-xmlhttprequest-state" target="_blank" rel="external">state</a> is not <em>unsent</em> or <em>opened</em>, <a href="https://heycam.github.io/webidl/#dfn-throw" target="_blank" rel="external">throw</a> an <code>InvalidStateError</code> exception.</li>
+<li>If the <a href="https://xhr.spec.whatwg.org/#send-flag" target="_blank" rel="external"><code>send()</code> flag</a> is set, <a href="https://heycam.github.io/webidl/#dfn-throw" target="_blank" rel="external">throw</a> an <code>InvalidStateError</code> exception.</li>
+<li>Set the <code>withCredentials</code> attribute’s value to the given value.</li>
+</ol>
+</blockquote>
+<p>这意味着，readyState为<code>unset</code>或者<code>opened</code>之前，是不能为xhr对象设置withCredentials属性的，实际上，新建的xhr对象，默认就是<code>unset</code>状态，因此这里没有问题。问题出在w3c <a href="https://www.w3.org/TR/2011/WD-XMLHttpRequest2-20110816/#the-withcredentials-attribute" target="_blank" rel="external">2011</a>年的规范，当时是这么描述的：</p>
+<blockquote>
+<p>On setting the <code>withCredentials</code> attribute these steps must be run:</p>
+<ol>
+<li>If the state is not <a href="https://www.w3.org/TR/2011/WD-XMLHttpRequest2-20110816/#dom-xmlhttprequest-opened" target="_blank" rel="external">OPENED</a> raise an <code>INVALID_STATE_ERR</code> exception and terminate these steps.</li>
+<li>If the <a href="https://www.w3.org/TR/2011/WD-XMLHttpRequest2-20110816/#send-flag" target="_blank" rel="external"><code>send()</code> flag</a> is true raise an <code>INVALID_STATE_ERR</code> exception and terminate these steps.</li>
+<li>If the <a href="https://www.w3.org/TR/2011/WD-XMLHttpRequest2-20110816/#anonymous-flag" target="_blank" rel="external">anonymous flag</a> is true raise an <code>INVALID_ACCESS_ERR</code> exception and terminate these steps.</li>
+<li>Set the <code>withCredentials</code> attribute’s value to the given value.</li>
+</ol>
+</blockquote>
+<p>注意第一条，readyState为<code>unset</code>之前，为xhr对象设置withCredentials属性就会抛出<code>INVALID_STATE_ERR</code>错误。</p>
+<p>目前，一些老的浏览器或webview仍然是参考w3c <a href="https://www.w3.org/TR/2011/WD-XMLHttpRequest2-20110816/#the-withcredentials-attribute" target="_blank" rel="external">2011</a>年的规范，因此为了兼容，<strong>建议在readyState为<code>opened</code>状态之后才去设置withCredentials属性</strong>。</p>
+<p>之前zepto.js就踩过这个坑，感兴趣不妨阅读<a href="https://aotu.io/notes/2015/10/26/zepto-cors/" target="_blank" rel="external">前方有坑，请绕道——Zepto 中使用 CORS</a>。</p>
 <p>注意: 该属性适用于 IE10+, opera12+及其他现代浏览器.</p>
 <h4 id="abort"><a href="#abort" class="headerlink" title="abort"></a>abort</h4><p>abort方法用于取消ajax请求, 取消后, readyState 状态将被设置为 <code>0</code> (<code>UNSENT</code>). 如下, 调用abort 方法后, 请求将被取消.</p>
 <p><img src="http://louiszhai.github.io/docImages/ajax04.png" alt="Event"></p>
