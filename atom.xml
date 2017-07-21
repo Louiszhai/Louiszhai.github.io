@@ -4643,7 +4643,7 @@ c3(no)->op2->io1->e</textarea><textarea id="flowchart-0-options" style="display:
     <link href="http://louiszhai.github.io/2016/06/13/regexp/"/>
     <id>http://louiszhai.github.io/2016/06/13/regexp/</id>
     <published>2016-06-13T00:24:55.000Z</published>
-    <updated>2017-07-21T04:04:32.000Z</updated>
+    <updated>2017-07-21T11:19:15.000Z</updated>
     
     <content type="html"><![CDATA[<h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h3><p>你有没有在搜索文本的时候绞尽脑汁, 试了一个又一个表达式, 还是不行.</p>
 <p>你有没有在表单验证的时候, 只是做做样子(只要不为空就好), 然后烧香拜佛, 虔诚祈祷, 千万不要出错.</p>
@@ -4683,7 +4683,7 @@ c3(no)->op2->io1->e</textarea><textarea id="flowchart-0-options" style="display:
 </tr>
 <tr>
 <td style="text-align:center">\w</td>
-<td style="text-align:center">匹配字母, 数字, 下划线或汉字</td>
+<td style="text-align:center">匹配字母, 数字, 下划线</td>
 </tr>
 <tr>
 <td style="text-align:center">\s</td>
@@ -4717,7 +4717,7 @@ c3(no)->op2->io1->e</textarea><textarea id="flowchart-0-options" style="display:
 </tr>
 <tr>
 <td style="text-align:center">\W</td>
-<td style="text-align:center">匹配除字母,数字,下划线或汉字之外的任意字符</td>
+<td style="text-align:center">匹配除字母,数字,下划线之外的任意字符</td>
 </tr>
 <tr>
 <td style="text-align:center">\S</td>

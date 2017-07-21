@@ -4588,7 +4588,7 @@ c3(no)->op2->io1->e</textarea><textarea id="flowchart-0-options" style="display:
 </tr>
 <tr>
 <td style="text-align:center">\w</td>
-<td style="text-align:center">匹配字母, 数字, 下划线或汉字</td>
+<td style="text-align:center">匹配字母, 数字, 下划线</td>
 </tr>
 <tr>
 <td style="text-align:center">\s</td>
@@ -4622,7 +4622,7 @@ c3(no)->op2->io1->e</textarea><textarea id="flowchart-0-options" style="display:
 </tr>
 <tr>
 <td style="text-align:center">\W</td>
-<td style="text-align:center">匹配除字母,数字,下划线或汉字之外的任意字符</td>
+<td style="text-align:center">匹配除字母,数字,下划线之外的任意字符</td>
 </tr>
 <tr>
 <td style="text-align:center">\S</td>
