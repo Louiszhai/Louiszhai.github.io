@@ -3,13 +3,13 @@
 <html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     
     <title>玩转正则表达式 - By 路易斯</title>
-    <link rel="stylesheet" media="all" href="./regexp_files/nodeppt.css">
-    <link rel="stylesheet" media="only screen and (max-device-width: 480px)" href="./regexp_files/phone.css">
+    <link rel="stylesheet" media="all" href="./regexp/nodeppt.css">
+    <link rel="stylesheet" media="only screen and (max-device-width: 480px)" href="./regexp/phone.css">
     
-    <link rel="stylesheet" href="./regexp_files/monokai_sublime.css">
-    <link rel="stylesheet" href="./regexp_files/font-awesome.css">
+    <link rel="stylesheet" href="./regexp/monokai_sublime.css">
+    <link rel="stylesheet" href="./regexp/font-awesome.css">
     
-<link rel="stylesheet" href="./regexp_files/theme.kontext.css">
+<link rel="stylesheet" href="./regexp/theme.kontext.css">
 </head>
 <body style="opacity: 1;">
 <div class="slides">
@@ -32,17 +32,17 @@
 </article></section></slide>
 <slide class="slide" data-transition="slide2"><section class="slide-wrapper"><article class="flexbox vcenter">
 <h1>处方 &amp; 鬼符 &amp; 正则</h1>
-<img src="./regexp_files/shenqi.png" alt="">
+<img src="./regexp/shenqi.png" alt="">
 
 </article></section></slide>
-<slide class="slide fill" style="background-image:url(&#39;/img/bg1.png&#39;)" data-transition="horizontal3d"><section class="slide-wrapper"><article>
+<slide class="slide fill" style="background-image:url(./regexp/bg1.png)" data-transition="horizontal3d"><section class="slide-wrapper"><article>
 <p class="flexbox vleft"><span>如果罗列计算机软件领域的伟大发明，我相信绝对不会超过二十项，在这个名单当中，当然应该包括分组交换网络、Web、Lisp、哈希算法、UNIX、编译技术、关系模型、面向对象、XML这些大名鼎鼎的家伙，而正则表达式也绝对不应该被漏掉。<span></span></span></p>
 <p class="flexbox vright"><span>—Jeffrey E.F.Friedl 之《精通正则表达式》序言 <span></span></span></p>
 
 </article></section></slide>
 <slide class="slide" data-transition="cards"><section class="slide-wrapper"><article class="flexbox vcenter">
 <h1>《精通正则表达式》（第三版）</h1>
-<img src="./regexp_files/book.png" alt="">
+<img src="./regexp/book.png" alt="">
 
 </article></section></slide>
 <slide class="slide" data-transition="cards"><section class="slide-wrapper"><article class="flexbox vcenter">
@@ -84,7 +84,7 @@
 </article></section></slide>
 <slide class="slide" data-transition="cards"><section class="slide-wrapper"><article class="flexbox vcenter">
 <h1>正则表达式语法</h1>
-<img src="./regexp_files/tree.png" alt="">
+<img src="./regexp/tree.png" alt="">
 
 </article></section></slide>
 <slide class="slide" data-transition="cards"><section class="slide-wrapper"><article class="flexbox vcenter">
@@ -129,17 +129,17 @@
 <slide class="slide" data-transition="cards"><section class="slide-wrapper"><article class="flexbox vcenter">
 <h1>零宽断言</h1>
 <p>顾名思义匹配的是零宽度，即位置</p>
-<img src="./regexp_files/huanshi03.png" alt="">
+<img src="./regexp/huanshi03.png" alt="">
 
 </article></section></slide>
 <slide class="slide" data-transition="cards"><section class="slide-wrapper"><article class="flexbox vcenter">
 <h1>环视（正序/逆序）</h1>
-<img src="./regexp_files/huanshi.jpg" alt="">
+<img src="./regexp/huanshi.jpg" alt="">
 
 </article></section></slide>
 <slide class="slide" data-transition="cards"><section class="slide-wrapper"><article class="flexbox vcenter">
 <h1>如何正确的理解顺序环视？</h1>
-<img src="./regexp_files/huanshi02.png" alt="">
+<img src="./regexp/huanshi02.png" alt="">
 
 </article></section></slide>
 <slide class="slide" data-transition="cards"><section class="slide-wrapper"><article class="flexbox vleft">
@@ -185,7 +185,7 @@
 </ul>
 
 </article></section></slide>
-<slide class="slide fill" style="background-image:url(&#39;/img/bg1.png&#39;)" data-transition="cards"><section class="slide-wrapper"><article class="flexbox vleft">
+<slide class="slide fill" style="background-image:url(./regexp/bg1.png)" data-transition="cards"><section class="slide-wrapper"><article class="flexbox vleft">
 <h1>如何快速的入门并熟练运用正则</h1>
 <ul>
 <li><h2>坚持使用正则处理文本</h2>
@@ -199,7 +199,7 @@
 </ul>
 
 </article></section></slide>
-<slide class="slide fill" style="background-image:url(&#39;/img/bg1.png&#39;)" data-transition="cards"><section class="slide-wrapper"><article class="flexbox vleft">
+<slide class="slide fill" style="background-image:url(./regexp/bg1.png)" data-transition="cards"><section class="slide-wrapper"><article class="flexbox vleft">
 <h1>你可能需要的资料</h1>
 <ul>
 <li>Jeffrey Friedl 的 &lt;精通正则表达式&gt;[第三版]</li>
@@ -269,17 +269,17 @@
     </div>
     <button class="fa fa-bars" id="_btn-bar" data-toggle="fa fa-close"></button>
 </div>
-<script src="./regexp_files/mix.0.3.0.min.js"></script>
+<script src="./regexp/mix.0.3.0.min.js"></script>
 <script>
 var base = location.protocol + '//' + location.host;
 
 MixJS.config({
-    baseURL: [ base, 'js'].join('/')+'/'
+    baseURL: [ base, 'res', 'regexp'].join('/')+'/'
 });
 
 </script>
-<script src="./regexp_files/broadcast.js"></script>
-<script src="./regexp_files/nodeppt.js"></script>
+<script src="./regexp/broadcast.js"></script>
+<script src="./regexp/nodeppt.js"></script>
 <script>
 Slide.init({
     containerID: 'container',
@@ -302,7 +302,7 @@ Slide.init({
     
     tipID: 'tip'
 });
-MixJS.loadJS('highlight/highlight.pack.js',function(){
+MixJS.loadJS('highlight.pack.min.js',function(){
     hljs.tabReplace = '  ';
     hljs.initHighlightingOnLoad();
 });
