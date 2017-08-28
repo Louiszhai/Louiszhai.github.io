@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <link rel="shortcut icon" href="search.png"/>
+  <title>Search</title>
+  <style>
+    html,body{
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+    }
+    table{
+      width: 100%;
+      height: 100%;
+      border-spacing: 0px;
+    }
+    td:nth-child(odd){
+      border-right: 1px dashed lightgray;
+    }
+    tr:nth-child(-n+1){
+      border-bottom: 1px dashed lightgray;
+    }
+    tr:nth-child(n+1) iframe{
+      width: 100%;
+      height: 99%;
+    }
+    td iframe{
+      width: 100%;
+      height: 100%;
+    }
+  </style>
+</head>
+<body>
+  <table>
+    <tr>
+      <td><iframe frameborder="0"></iframe></td>
+      <td><iframe frameborder="0"></iframe></td>
+    </tr>
+    <tr>
+      <td><iframe frameborder="0"></iframe></td>
+      <td><iframe frameborder="0"></iframe></td>
+    </tr>
+  </table>
+</body>
+<script>
+  const word = location.search.replace('?q=','');
+  const link = [
+    'https://www.baidu.com/s?wd=',
+    'http://www.google.com/search?safe=off&q=',
+    'https://zh.wikipedia.org/w/index.php?search=',
+    'http://cn.bing.com/search?q='
+  ];
+
+  [].map.call(document.getElementsByTagName('iframe'), function(iframe, i){
+    iframe.src = link[i] + word;
+  });
+
+  // const width = ~~(window.screen.availWidth/2),
+  //  height = ~~(window.screen.availHeight/2),
+  //  left = window.screen.width - width;
+
+  // const options = [
+  //  `width=${width}, height=${height-50}, left=${left}`,
+  //  `width=${width}, height=${height-50}, left=${left}, top=${height+40}`,
+  // ];
+
+  // options.map(function(item, i){
+  //  window.open(link[i+2] + word,"_blank",`toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, ${item}`);
+  // });
+</script>
+</html>
