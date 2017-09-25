@@ -2874,10 +2874,10 @@ c3(no)->op2->io1->e</textarea><textarea id="flowchart-0-options" style="display:
 <p>在 <code>onreadystatechange</code> 事件内部, 有可能对dom进行操作. 此时浏览器便会挂起js引擎线程, 转而执行GUI渲染线程, 进行UI重绘(repaint)或者回流(reflow). 当js引擎重新执行时, GUI渲染线程又会被挂起, GUI更新将被保存起来, 等到js引擎空闲时立即被执行.</p>
 <p>以上整个ajax请求过程中, 有涉及到浏览器的4种线程. 其中除了 <code>GUI渲染线程</code> 和 <code>js引擎线程</code> 是互斥的. 其他线程相互之间, 都是可以并行执行的. 通过这样的一种方式, ajax并没有破坏js的单线程机制.</p>
 <h3 id="ajax与setTimeout排队问题"><a href="#ajax与setTimeout排队问题" class="headerlink" title="ajax与setTimeout排队问题"></a>ajax与setTimeout排队问题</h3><p>通常, ajax 和 setTimeout 的事件回调都被同等的对待, 按照顺序自动的被添加到 <code>任务队列</code> 的末尾, 等待js引擎空闲时执行. 但请注意, 并非xhr的所有回调执行都滞后于setTImeout的回调. 请看如下代码:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">ajax</span>(<span class="params">url, method</span>)</span>&#123;</div><div class="line">  <span class="keyword">var</span> xhr = getXHR();</div><div class="line">  xhr.onreadystatechange = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  	<span class="built_in">console</span>.log(<span class="string">'xhr.readyState:'</span> + <span class="keyword">this</span>.readyState);</div><div class="line">  &#125;</div><div class="line">  xhr.onloadstart = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  	<span class="built_in">console</span>.log(<span class="string">'onloadStart'</span>);</div><div class="line">  &#125;</div><div class="line">  xhr.onload = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  	<span class="built_in">console</span>.log(<span class="string">'onload'</span>);</div><div class="line">  &#125;</div><div class="line">  xhr.open(method, url, <span class="literal">true</span>);</div><div class="line">  xhr.setRequestHeader(<span class="string">'Cache-Control'</span>,<span class="number">3600</span>);</div><div class="line">  xhr.send();</div><div class="line">&#125;</div><div class="line"><span class="keyword">var</span> timer = setTimeout(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">'setTimeout'</span>);</div><div class="line">&#125;,<span class="number">0</span>);</div><div class="line">ajax(<span class="string">'http://louiszhai.github.io/docImages/ajax01.png'</span>,<span class="string">'GET'</span>);</div><div class="line"><span class="built_in">console</span>.warn(<span class="string">'这里的log并不是最先打印出来的.'</span>);</div></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line">setTimeout(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">'setTimeout'</span>);</div><div class="line">&#125;,<span class="number">0</span>);</div><div class="line"><span class="keyword">var</span> resolve;</div><div class="line"><span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="keyword">function</span>(<span class="params">r</span>)</span>&#123;</div><div class="line">  resolve = r;</div><div class="line">&#125;).then(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">'promise nextTick'</span>);</div><div class="line">&#125;);</div><div class="line">resolve();</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">ajax</span>(<span class="params">url, method</span>)</span>&#123;</div><div class="line">  <span class="keyword">var</span> xhr = getXHR();</div><div class="line">  xhr.onreadystatechange = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  	<span class="built_in">console</span>.log(<span class="string">'xhr.readyState:'</span> + <span class="keyword">this</span>.readyState);</div><div class="line">  &#125;</div><div class="line">  xhr.onloadstart = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  	<span class="built_in">console</span>.log(<span class="string">'onloadStart'</span>);</div><div class="line">  &#125;</div><div class="line">  xhr.onload = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  	<span class="built_in">console</span>.log(<span class="string">'onload'</span>);</div><div class="line">  &#125;</div><div class="line">  xhr.open(method, url, <span class="literal">true</span>);</div><div class="line">  xhr.setRequestHeader(<span class="string">'Cache-Control'</span>,<span class="number">3600</span>);</div><div class="line">  xhr.send();</div><div class="line">&#125;</div><div class="line">ajax(<span class="string">'http://louiszhai.github.io/docImages/ajax01.png'</span>,<span class="string">'GET'</span>);</div><div class="line"><span class="built_in">console</span>.warn(<span class="string">'这里的log并不是最先打印出来的.'</span>);</div></pre></td></tr></table></figure>
 <p>上述代码执行结果如下图:</p>
 <p><img src="http://louiszhai.github.io/docImages/ajax27.png" alt="setTimeout &amp; ajax &amp; 同步"></p>
-<p>由于ajax异步, setTimeout回调本应该最先被执行, 然而实际上, 一次ajax请求, 并非所有的部分都是异步的, 至少”readyState==1”的 <code>onreadystatechange</code> 回调以及 <code>onloadstart</code> 回调就是同步执行的. 因此它们的输出排在最前面.</p>
+<p>由于ajax异步, setTimeout及Promise本应该最先被执行, 然而实际上, 一次ajax请求, 并非所有的部分都是异步的, 至少”readyState==1”的 <code>onreadystatechange</code> 回调以及 <code>onloadstart</code> 回调就是同步执行的. 因此它们的输出排在最前面.</p>
 <h3 id="XMLHttpRequest-属性解读"><a href="#XMLHttpRequest-属性解读" class="headerlink" title="XMLHttpRequest 属性解读"></a>XMLHttpRequest 属性解读</h3><p>首先在Chrome console下创建一个 XMLHttpRequest 实例对象xhr. 如下所示:</p>
 <p><img src="http://louiszhai.github.io/docImages/ajax01.png" alt="XMLHttpRequest"></p>
 <h4 id="inherit"><a href="#inherit" class="headerlink" title="inherit"></a>inherit</h4><p>试运行以下代码.</p>
@@ -2985,7 +2985,7 @@ c3(no)->op2->io1->e</textarea><textarea id="flowchart-0-options" style="display:
 <p>注意第一条，readyState为<code>unset</code>之前，为xhr对象设置withCredentials属性就会抛出<code>INVALID_STATE_ERR</code>错误。</p>
 <p>目前，一些老的浏览器或webview仍然是参考w3c <a href="https://www.w3.org/TR/2011/WD-XMLHttpRequest2-20110816/#the-withcredentials-attribute" target="_blank" rel="external">2011</a>年的规范，因此为了兼容，<strong>建议在readyState为<code>opened</code>状态之后才去设置withCredentials属性</strong>。</p>
 <p>之前zepto.js就踩过这个坑，感兴趣不妨阅读<a href="https://aotu.io/notes/2015/10/26/zepto-cors/" target="_blank" rel="external">前方有坑，请绕道——Zepto 中使用 CORS</a>。</p>
-<p>注意: 该属性适用于 IE10+, opera12+及其他现代浏览器.</p>
+<p>注意: 该属性适用于 IE10+, opera12+及其他现代浏览器。Android 4.3及以下版本的webview，采用的是w3c 2011的规范，请务必在open方法调用之后再设置<code>withCredentials</code>的值。</p>
 <h4 id="abort"><a href="#abort" class="headerlink" title="abort"></a>abort</h4><p>abort方法用于取消ajax请求, 取消后, readyState 状态将被设置为 <code>0</code> (<code>UNSENT</code>). 如下, 调用abort 方法后, 请求将被取消.</p>
 <p><img src="http://louiszhai.github.io/docImages/ajax04.png" alt="Event"></p>
 <h4 id="getResponseHeader"><a href="#getResponseHeader" class="headerlink" title="getResponseHeader"></a>getResponseHeader</h4><p>getResponseHeader方法用于获取ajax响应头中指定name的值. 如果response headers中存在相同的name, 那么它们的值将自动以字符串的形式连接在一起.</p>
@@ -3749,7 +3749,7 @@ c3(no)->op2->io1->e</textarea><textarea id="flowchart-0-options" style="display:
 <p><img src="http://louiszhai.github.io/docImages/ajax26.png" alt=""></p>
 <p>postman支持所有类型的http请求, 由于其向chrome申请了cookie访问权限及所有http(s)网站的访问权限. 因此可以放心使用它进行各种网站api的测试.</p>
 <p>同时, 强烈建议阅读本文的你升级postman的使用技巧, 这里有篇: <a href="https://segmentfault.com/a/1190000005055899" target="_blank" rel="external">基于Postman的API自动化测试</a> , 拿走不谢.</p>
-<h3 id="ajax移动端兼容性"><a href="#ajax移动端兼容性" class="headerlink" title="ajax移动端兼容性"></a>ajax移动端兼容性</h3><p>移动端的支持性比较弱, 使用需谨慎. 看表.</p>
+<h3 id="ajax移动端兼容性"><a href="#ajax移动端兼容性" class="headerlink" title="ajax移动端兼容性"></a>ajax移动端兼容性</h3><p>移动端的支持性，请看表.</p>
 <table>
 <thead>
 <tr>
@@ -3764,9 +3764,9 @@ c3(no)->op2->io1->e</textarea><textarea id="flowchart-0-options" style="display:
 <tbody>
 <tr>
 <td style="text-align:center">XMLHttpRequest</td>
-<td style="text-align:center">8.4</td>
+<td style="text-align:center">7.1</td>
 <td style="text-align:center">-</td>
-<td style="text-align:center">4.4.4</td>
+<td style="text-align:center">4.1</td>
 <td style="text-align:center">53</td>
 <td style="text-align:center">11(part)</td>
 </tr>
@@ -3780,7 +3780,44 @@ c3(no)->op2->io1->e</textarea><textarea id="flowchart-0-options" style="display:
 </tr>
 </tbody>
 </table>
-<p>本篇为ajax而生, 通篇介绍 XMLHTTPRequest 相关的知识, 力求简明, 本欲为梳理知识, 为读者答疑解惑, 但因本人理解所限, 难免有所局限, 希望正在阅读的你取其精华去其糟粕. 谢谢.</p>
+<p>其中，IOS Safari 7.1、Android Browser 4.1 4.3 4.4 的webview均是部分支持，存在的缺陷如下：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center"></th>
+<th style="text-align:center">responseType支持json格式</th>
+<th style="text-align:center">responseType支持blob格式</th>
+<th style="text-align:center">支持timeout及ontimeout</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">IOS Safari 7.1</td>
+<td style="text-align:center">X</td>
+<td style="text-align:center">✔</td>
+<td style="text-align:center">✔</td>
+</tr>
+<tr>
+<td style="text-align:center">Android 4.1</td>
+<td style="text-align:center">X</td>
+<td style="text-align:center">X</td>
+<td style="text-align:center">X</td>
+</tr>
+<tr>
+<td style="text-align:center">Android 4.3</td>
+<td style="text-align:center">X</td>
+<td style="text-align:center">X</td>
+<td style="text-align:center">X</td>
+</tr>
+<tr>
+<td style="text-align:center">Android 4.4</td>
+<td style="text-align:center">X</td>
+<td style="text-align:center">X</td>
+<td style="text-align:center">✔</td>
+</tr>
+</tbody>
+</table>
+<p>本篇为ajax而生，通篇介绍 XMLHTTPRequest 相关的知识，力求简明，本欲为梳理知识，为读者答疑解惑，但因本人理解所限，难免有所局限，希望正在阅读的你取其精华去其糟粕，谢谢。</p>
 <hr>
 <p>本文就讨论这么多内容,大家有什么问题或好的想法欢迎在下方参与<a href="#respond">留言和评论</a>.</p>
 <p>本文作者: <a href="https://github.com/Louiszhai" target="_blank" rel="external">louis</a></p>

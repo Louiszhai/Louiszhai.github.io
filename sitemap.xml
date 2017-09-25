@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://louiszhai.github.io/2016/11/02/ajax/</loc>
+    
+    <lastmod>2017-09-25T06:48:29.000Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://louiszhai.github.io/2017/04/28/array/</loc>
     
     <lastmod>2017-08-31T06:33:57.000Z</lastmod>
@@ -19,13 +26,6 @@
     <loc>http://louiszhai.github.io/2017/07/07/canvas-draw/</loc>
     
     <lastmod>2017-07-19T12:33:07.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://louiszhai.github.io/2016/11/02/ajax/</loc>
-    
-    <lastmod>2017-07-17T08:51:51.000Z</lastmod>
     
   </url>
   
@@ -93,13 +93,6 @@
   </url>
   
   <url>
-    <loc>http://louiszhai.github.io/2017/03/12/promise/</loc>
-    
-    <lastmod>2017-04-17T02:55:12.000Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://louiszhai.github.io/2016/11/25/manifest/</loc>
     
     <lastmod>2017-04-17T02:55:12.000Z</lastmod>
@@ -107,14 +100,28 @@
   </url>
   
   <url>
-    <loc>http://louiszhai.github.io/2015/12/15/arguments/</loc>
+    <loc>http://louiszhai.github.io/2017/03/12/promise/</loc>
+    
+    <lastmod>2017-04-17T02:55:12.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://louiszhai.github.io/2016/01/10/js.timer/</loc>
     
     <lastmod>2017-04-17T02:54:08.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://louiszhai.github.io/2017/02/24/back/</loc>
+    <loc>http://louiszhai.github.io/2015/12/16/currying/</loc>
+    
+    <lastmod>2017-04-17T02:54:08.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://louiszhai.github.io/2016/03/31/css-hasLayout/</loc>
     
     <lastmod>2017-04-17T02:54:08.000Z</lastmod>
     
@@ -135,6 +142,13 @@
   </url>
   
   <url>
+    <loc>http://louiszhai.github.io/2016/03/12/css-float/</loc>
+    
+    <lastmod>2017-04-17T02:54:08.000Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://louiszhai.github.io/2015/12/11/js.replace/</loc>
     
     <lastmod>2017-04-17T02:54:08.000Z</lastmod>
@@ -142,7 +156,7 @@
   </url>
   
   <url>
-    <loc>http://louiszhai.github.io/2015/12/16/currying/</loc>
+    <loc>http://louiszhai.github.io/2016/03/23/css-margin/</loc>
     
     <lastmod>2017-04-17T02:54:08.000Z</lastmod>
     
@@ -156,21 +170,14 @@
   </url>
   
   <url>
-    <loc>http://louiszhai.github.io/2016/03/12/css-float/</loc>
+    <loc>http://louiszhai.github.io/2015/12/15/arguments/</loc>
     
     <lastmod>2017-04-17T02:54:08.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://louiszhai.github.io/2016/03/31/css-hasLayout/</loc>
-    
-    <lastmod>2017-04-17T02:54:08.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://louiszhai.github.io/2016/03/05/xss/</loc>
+    <loc>http://louiszhai.github.io/2015/12/22/scopeChain/</loc>
     
     <lastmod>2017-04-17T02:54:08.000Z</lastmod>
     
@@ -184,7 +191,14 @@
   </url>
   
   <url>
-    <loc>http://louiszhai.github.io/2015/12/22/scopeChain/</loc>
+    <loc>http://louiszhai.github.io/2017/02/24/back/</loc>
+    
+    <lastmod>2017-04-17T02:54:08.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://louiszhai.github.io/2016/03/05/xss/</loc>
     
     <lastmod>2017-04-17T02:54:08.000Z</lastmod>
     
@@ -199,20 +213,6 @@
   
   <url>
     <loc>http://louiszhai.github.io/2015/12/18/traverse/</loc>
-    
-    <lastmod>2017-04-17T02:54:08.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://louiszhai.github.io/2016/03/23/css-margin/</loc>
-    
-    <lastmod>2017-04-17T02:54:08.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://louiszhai.github.io/2016/01/10/js.timer/</loc>
     
     <lastmod>2017-04-17T02:54:08.000Z</lastmod>
     
