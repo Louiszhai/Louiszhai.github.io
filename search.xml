@@ -469,7 +469,7 @@
 <p>使用new-session（简写new）创建会话时，使用的是默认的socket位置，默认socket无法操作，所以我们需要创建一个指定socket文件的会话。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">tmux -S /var/tmux/sharefile</div></pre></td></tr></table></figure>
 <p>另一个用户进入时，需要指定socket文件加入会话。</p>
-<figure class="highlight actionscript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">tmux -S /<span class="keyword">var</span>/tmux/sharefile attach</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">tmux -S /<span class="keyword">var</span>/tmux/sharefile attach</div></pre></td></tr></table></figure>
 <p>这样，两个不同的用户就可以共享同一个会话了。</p>
 <p>通常情况下，不同的用户使用不同的配置文件来创建会话，但是，使用指定socket文件创建的tmux会话，会话加载的是第一个创建会话的用户的<code>~/.tmux.conf</code>配置文件，随后加入会话的其他用户，依然使用同一份配置文件。</p>
 <h3 id="Tmux优化"><a href="#Tmux优化" class="headerlink" title="Tmux优化"></a>Tmux优化</h3><p>要想tmux更加人性化、性能更佳，不妨参考下如下配置。</p>
