@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://louiszhai.github.io/"/>
-  <updated>2017-07-19T12:33:07.000Z</updated>
+  <updated>2017-09-30T08:59:41.000Z</updated>
   <id>http://louiszhai.github.io/</id>
   
   <author>
@@ -14,6 +14,529 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Tmux使用手册</title>
+    <link href="http://louiszhai.github.io/2017/09/30/tmux/"/>
+    <id>http://louiszhai.github.io/2017/09/30/tmux/</id>
+    <published>2017-09-30T08:59:36.000Z</published>
+    <updated>2017-09-30T08:59:41.000Z</updated>
+    
+    <content type="html"><![CDATA[<p><strong>本文首发于CSDN网站，下面的版本又经过进一步的修订。</strong></p>
+<h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h3><p>我一直信奉简洁至上的原则，桌面窗口的数量越少，我的心情就越愉悦，开发的效率也就越高。反之，杂乱的桌面，暴涨的Chrome tab数量，或是无数的终端窗口，它们会逐步侵占我的注意力，分散我的思维，最终令我难以专注。因此桌面上我很少放文件，使用Chrome时常点 <a href="https://chrome.google.com/webstore/detail/onetab/chphlpgkkbolifaimnlloiipkdnihall" target="_blank" rel="external">OneTab</a> 回收标签页，切进终端时使用tmux管理窗口。</p>
+<p>我很懒，懒到期望开机后不需要任何操作，本地的十几种web开发服务器就自动运行，当然我不希望连续弹出十几个窗口或是tab，我需要的是静默无感知的启用服务，然后还能快速地进入到现场进行操作，web服务器运行时不占据终端窗口，关闭iTem2后操作现场不会被销毁。实际上，除了这些，tmux还能给予更多。</p>
+<p>我使用tmux两年有余，它带给我许多惊喜。独乐不如众乐，愿你也能一同享受tmux带来的快乐。</p>
+<a id="more"></a>
+<h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p>tmux是一款优秀的终端复用软件，它比Screen更加强大，至于如何强大，网上有大量的文章讨论了这点，本文不再重复。tmux之所以受人们喜爱，主要得益于以下三处功能：</p>
+<ul>
+<li>丝滑分屏（split），虽然iTem2也提供了横向和竖向分屏功能，但这种分屏功能非常拙劣，完全等同于屏幕新开一个窗口，新开的pane不会自动进入到当前目录，也没有记住当前登录状态。这意味着如果我ssh进入到远程服务器时，iTem2新开的pane中，我依然要重新走一遍ssh登录的老路（omg）。tmux就不会这样，tmux窗口中，新开的pane，默认进入到之前的路径，如果是ssh连接，登录状态也依旧保持着，如此一来，我就可以随意的增删pane，这种灵活性，好处不言而喻。</li>
+<li>保护现场（attach），即使命令行的工作只进行到一半，关闭终端后还可以重新进入到操作现场，继续工作。对于ssh远程连接而言，即使网络不稳定也没有关系，掉线后重新连接，可以直奔现场，之前运行中的任务，依旧在跑，就好像从来没有离开过一样；特别是在远程服务器上运行耗时的任务，tmux可以帮你一直保持住会话。如此一来，你就可以随时随地放心地进行移动办公，只要你附近的计算机装有tmux（没有你也可以花几分钟装一个），你就能继续刚才的工作。</li>
+<li>会话共享（适用于结对编程或远程教学），将 tmux 会话的地址分享给他人，这样他们就可以通过 SSH 接入该会话。如果你要给同事演示远程服务器的操作，他不必直勾勾地盯着你的屏幕，借助tmux，他完全可以进入到你的会话，然后静静地看着他桌面上你风骚的键盘走位，只要他愿意，甚至还可以录个屏。</li>
+</ul>
+<p>以上，只是主要功能，更多功能还在后头，接下来我将详细地介绍tmux的使用技巧。</p>
+<h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><p>首先安装之。</p>
+<p>在Mac中安装：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 先安装Homebrew，有则跳过</span></div><div class="line">ruby -e <span class="string">"<span class="variable">$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)</span>"</span></div><div class="line"><span class="comment"># 安装tmux</span></div><div class="line">brew install tmux</div></pre></td></tr></table></figure>
+<p>在Linux中安装：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo apt-get install tmux</div></pre></td></tr></table></figure>
+<h3 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h3><p>开始之前，我们先了解下基本概念：</p>
+<p>tmux采用C/S模型构建，输入tmux命令就相当于开启了一个服务器，此时默认将新建一个会话，然后会话中默认新建一个窗口，窗口中默认新建一个面板。会话、窗口、面板之间的联系如下：</p>
+<p>一个tmux <code>session</code>（会话）可以包含多个<code>window</code>（窗口），窗口默认充满会话界面，因此这些窗口中可以运行相关性不大的任务。</p>
+<p>一个<code>window</code>又可以包含多个<code>pane</code>（面板），窗口下的面板，都处于同一界面下，这些面板适合运行相关性高的任务，以便同时观察到它们的运行情况。</p>
+<p><img src="http://louiszhai.github.io/docImages/tmux01.png" alt="demo"></p>
+<h3 id="会话"><a href="#会话" class="headerlink" title="会话"></a>会话</h3><h4 id="新建会话"><a href="#新建会话" class="headerlink" title="新建会话"></a>新建会话</h4><p>新建一个tmux session非常简单，语法为<code>tmux new -s session-name</code>，也可以简写为<code>tmux</code>，为了方便管理，建议指定会话名称，如下。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">tmux <span class="comment"># 新建一个无名称的会话</span></div><div class="line">tmux new -s demo <span class="comment"># 新建一个名称为demo的会话</span></div></pre></td></tr></table></figure>
+<h4 id="断开当前会话"><a href="#断开当前会话" class="headerlink" title="断开当前会话"></a>断开当前会话</h4><p>会话中操作了一段时间，我希望断开会话同时下次还能接着用，怎么做？此时可以使用detach命令。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">tmux detach <span class="comment"># 断开当前会话，会话在后台运行</span></div></pre></td></tr></table></figure>
+<p>也许你觉得这个太麻烦了，是的，tmux的会话中，我们已经可以使用tmux快捷键了。使用快捷键组合<code>Ctrl+b</code> + <code>d</code>，三次按键就可以断开当前会话。</p>
+<h4 id="进入之前的会话"><a href="#进入之前的会话" class="headerlink" title="进入之前的会话"></a>进入之前的会话</h4><p>断开会话后，想要接着上次留下的现场继续工作，就要使用到tmux的attach命令了，语法为<code>tmux attach-session -t session-name</code>，可简写为<code>tmux a -t session-name</code> 或 <code>tmux a</code>。通常我们使用如下两种方式之一即可：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">tmux a <span class="comment"># 默认进入第一个会话</span></div><div class="line">tmux a -t demo <span class="comment"># 进入到名称为demo的会话</span></div></pre></td></tr></table></figure>
+<h4 id="关闭会话"><a href="#关闭会话" class="headerlink" title="关闭会话"></a>关闭会话</h4><p>会话的使命完成后，一定是要关闭的。我们可以使用tmux的kill命令，kill命令有<code>kill-pane</code>、<code>kill-server</code>、<code>kill-session</code> 和 <code>kill-window</code>共四种，其中<code>kill-session</code>的语法为<code>tmux kill-session -t session-name</code>。如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">tmux <span class="built_in">kill</span>-session -t demo <span class="comment"># 关闭demo会话</span></div><div class="line">tmux <span class="built_in">kill</span>-server <span class="comment"># 关闭服务器，所有的会话都将关闭</span></div></pre></td></tr></table></figure>
+<h4 id="查看所有的会话"><a href="#查看所有的会话" class="headerlink" title="查看所有的会话"></a>查看所有的会话</h4><p>管理会话的第一步就是要查看所有的会话，我们可以使用如下命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">tmux list-session <span class="comment"># 查看所有会话</span></div><div class="line">tmux ls <span class="comment"># 查看所有会话，提倡使用简写形式</span></div></pre></td></tr></table></figure>
+<p>如果刚好处于会话中怎么办？别担心，我们可以使用对应的tmux快捷键<code>Ctrl+b</code> + <code>s</code>，此时tmux将打开一个会话列表，按上下键(⬆︎⬇︎)或者鼠标滚轮，可选中目标会话，按左右键（⬅︎➜）可收起或展开会话的窗口，选中目标会话或窗口后，按回车键即可完成切换。</p>
+<p><img src="http://louiszhai.github.io/docImages/tmux02.png" alt="demo"></p>
+<h3 id="Tmux快捷指令"><a href="#Tmux快捷指令" class="headerlink" title="Tmux快捷指令"></a>Tmux快捷指令</h3><p>关于快捷指令，首先要认识到的是：tmux的所有指令，都包含同一个前缀，默认为<code>Ctrl+b</code>，输入完前缀过后，控制台激活，命令按键才能生效。前面tmux会话相关的操作中，我们共用到了两个快捷键<code>Ctrl+b</code> + <code>d</code>、<code>Ctrl+b</code> + <code>s</code>，但这仅仅是冰山一角，欲窥tmux庞大的快捷键体系，请看下表。</p>
+<p>表一：系统指令。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">前缀</th>
+<th style="text-align:center">指令</th>
+<th style="text-align:center">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><code>Ctrl+b</code></td>
+<td style="text-align:center"><code>?</code></td>
+<td style="text-align:center">显示快捷键帮助文档</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>Ctrl+b</code></td>
+<td style="text-align:center"><code>d</code></td>
+<td style="text-align:center">断开当前会话</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>Ctrl+b</code></td>
+<td style="text-align:center"><code>D</code></td>
+<td style="text-align:center">选择要断开的会话</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>Ctrl+b</code></td>
+<td style="text-align:center"><code>Ctrl+z</code></td>
+<td style="text-align:center">挂起当前会话</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>Ctrl+b</code></td>
+<td style="text-align:center"><code>r</code></td>
+<td style="text-align:center">强制重载当前会话</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>Ctrl+b</code></td>
+<td style="text-align:center"><code>s</code></td>
+<td style="text-align:center">显示会话列表用于选择并切换</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>Ctrl+b</code></td>
+<td style="text-align:center"><code>:</code></td>
+<td style="text-align:center">进入命令行模式，此时可直接输入<code>ls</code>等命令</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>Ctrl+b</code></td>
+<td style="text-align:center"><code>[</code></td>
+<td style="text-align:center">进入复制模式，按<code>q</code>退出</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>Ctrl+b</code></td>
+<td style="text-align:center"><code>]</code></td>
+<td style="text-align:center">粘贴复制模式中复制的文本</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>Ctrl+b</code></td>
+<td style="text-align:center"><code>~</code></td>
+<td style="text-align:center">列出提示信息缓存</td>
+</tr>
+</tbody>
+</table>
+<p>表二：窗口（window）指令。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">前缀</th>
+<th style="text-align:center">指令</th>
+<th style="text-align:center">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><code>Ctrl+b</code></td>
+<td style="text-align:center"><code>c</code></td>
+<td style="text-align:center">新建窗口</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>Ctrl+b</code></td>
+<td style="text-align:center"><code>&amp;</code></td>
+<td style="text-align:center">关闭当前窗口（关闭前需输入<code>y</code> or <code>n</code>确认）</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>Ctrl+b</code></td>
+<td style="text-align:center"><code>0~9</code></td>
+<td style="text-align:center">切换到指定窗口</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>Ctrl+b</code></td>
+<td style="text-align:center"><code>p</code></td>
+<td style="text-align:center">切换到上一窗口</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>Ctrl+b</code></td>
+<td style="text-align:center"><code>n</code></td>
+<td style="text-align:center">切换到下一窗口</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>Ctrl+b</code></td>
+<td style="text-align:center"><code>w</code></td>
+<td style="text-align:center">打开窗口列表，用于且切换窗口</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>Ctrl+b</code></td>
+<td style="text-align:center"><code>,</code></td>
+<td style="text-align:center">重命名当前窗口</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>Ctrl+b</code></td>
+<td style="text-align:center"><code>.</code></td>
+<td style="text-align:center">修改当前窗口编号（适用于窗口重新排序）</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>Ctrl+b</code></td>
+<td style="text-align:center"><code>f</code></td>
+<td style="text-align:center">快速定位到窗口（输入关键字匹配窗口名称）</td>
+</tr>
+</tbody>
+</table>
+<p>表三：面板（pane）指令。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">前缀</th>
+<th style="text-align:center">指令</th>
+<th style="text-align:center">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><code>Ctrl+b</code></td>
+<td style="text-align:center"><code>&quot;</code></td>
+<td style="text-align:center">当前面板上下一分为二，下侧新建面板</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>Ctrl+b</code></td>
+<td style="text-align:center"><code>%</code></td>
+<td style="text-align:center">当前面板左右一分为二，右侧新建面板</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>Ctrl+b</code></td>
+<td style="text-align:center"><code>x</code></td>
+<td style="text-align:center">关闭当前面板（关闭前需输入<code>y</code> or <code>n</code>确认）</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>Ctrl+b</code></td>
+<td style="text-align:center"><code>z</code></td>
+<td style="text-align:center">最大化当前面板，再重复一次按键后恢复正常（v1.8版本新增）</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>Ctrl+b</code></td>
+<td style="text-align:center"><code>!</code></td>
+<td style="text-align:center">将当前面板移动到新的窗口打开（原窗口中存在两个及以上面板有效）</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>Ctrl+b</code></td>
+<td style="text-align:center"><code>;</code></td>
+<td style="text-align:center">切换到最后一次使用的面板</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>Ctrl+b</code></td>
+<td style="text-align:center"><code>q</code></td>
+<td style="text-align:center">显示面板编号，在编号消失前输入对应的数字可切换到相应的面板</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>Ctrl+b</code></td>
+<td style="text-align:center"><code>{</code></td>
+<td style="text-align:center">向前置换当前面板</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>Ctrl+b</code></td>
+<td style="text-align:center"><code>}</code></td>
+<td style="text-align:center">向后置换当前面板</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>Ctrl+b</code></td>
+<td style="text-align:center"><code>Ctrl+o</code></td>
+<td style="text-align:center">顺时针旋转当前窗口中的所有面板</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>Ctrl+b</code></td>
+<td style="text-align:center"><code>方向键</code></td>
+<td style="text-align:center">移动光标切换面板</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>Ctrl+b</code></td>
+<td style="text-align:center"><code>o</code></td>
+<td style="text-align:center">选择下一面板</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>Ctrl+b</code></td>
+<td style="text-align:center"><code>空格键</code></td>
+<td style="text-align:center">在自带的面板布局中循环切换</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>Ctrl+b</code></td>
+<td style="text-align:center"><code>Alt+方向键</code></td>
+<td style="text-align:center">以5个单元格为单位调整当前面板边缘</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>Ctrl+b</code></td>
+<td style="text-align:center"><code>Ctrl+方向键</code></td>
+<td style="text-align:center">以1个单元格为单位调整当前面板边缘（Mac下被系统快捷键覆盖）</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>Ctrl+b</code></td>
+<td style="text-align:center"><code>t</code></td>
+<td style="text-align:center">显示时钟</td>
+</tr>
+</tbody>
+</table>
+<p>tmux的丝滑分屏功能正是得益于以上系统、窗口、面板的快捷指令，只要你愿意，你就可以解除任意的快捷指令，然后绑上你喜欢的指令，当然这就涉及到它的可配置性了，请继续往下读。</p>
+<h3 id="灵活的配置性"><a href="#灵活的配置性" class="headerlink" title="灵活的配置性"></a>灵活的配置性</h3><p>除了快捷指令外，tmux还提供了类似vim的配置性功能。可配置性是软件的一项进阶级功能，只有具备了可配置性，软件才有了鲜活的个性，用户才能体会到操作的快感。</p>
+<h4 id="修改指令前缀"><a href="#修改指令前缀" class="headerlink" title="修改指令前缀"></a>修改指令前缀</h4><p>相信只要你用过几次tmux，就会发现<code>Ctrl+b</code>指令前缀，着实不太方便。这两个键相距太远，按键成本太高了。因此我们首先需要将它更换为距离更近的<code>Ctrl+a</code>组合键，或者不常用的<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">tmux的用户级配置文件为`~/.tmux.conf`（没有的话就创建一个），修改快捷指令，只需要增加如下三行即可。</div></pre></td></tr></table></figure></p>
+<p>set -g prefix C-a #<br>unbind C-b # C-b即Ctrl+b键，unbind意味着解除绑定<br>bind C-a send-prefix # 绑定Ctrl+a为新的指令前缀</p>
+<h1 id="从tmux-v1-6版起，支持设置第二个指令前缀"><a href="#从tmux-v1-6版起，支持设置第二个指令前缀" class="headerlink" title="从tmux v1.6版起，支持设置第二个指令前缀"></a>从tmux v1.6版起，支持设置第二个指令前缀</h1><p>set-option -g prefix2 <code># 设置一个不常用的</code>键作为指令前缀，按键更快些<br><figure class="highlight clean"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">修改的`~/.tmux.conf`配置文件有如下两种方式可以令其生效：</div><div class="line"></div><div class="line">- restart tmux。</div><div class="line">- 在tmux窗口中，先按下`Ctrl+b`指令前缀，然后按下系统指令`:`，进入到命令模式后输入`source-file ~/.tmux.conf`，回车后生效。</div><div class="line"></div><div class="line">既然快捷指令如此方便，更为优雅的做法是新增一个加载配置文件的快捷指令 ，这样就可以随时随地load新的配置了，如下所示。</div></pre></td></tr></table></figure></p>
+<h1 id="绑定快捷键为r"><a href="#绑定快捷键为r" class="headerlink" title="绑定快捷键为r"></a>绑定快捷键为r</h1><p>bind r source-file ~/.tmux.conf \; display-message “Config reloaded..”<br><figure class="highlight autohotkey"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">请特别注意，在已经创建的窗口中，即使加载了新的配置，旧的配置依然有效（只要你新加的功能没有覆盖旧的配置，因此如果你第一次绑定快捷指令为`x`键，然后又改为绑定`y`键，那么`x`和`y`都将有效），新建会话不受此影响，将直接采用新的配置。</div><div class="line"></div><div class="line">既然我们已经迈出配置化的第一步，那么接下来我们可以做得更多。</div><div class="line"></div><div class="line">#### 新增面板</div><div class="line"></div><div class="line">tmux中，使用最多的功能之一就是新增一个面板。水平方向新增面板的指令是 `prefix`  + `"` ，垂直方向是 `prefix` + `%`，`"` 和 `%`需要两个键同时按下才能完成，加上指令前缀至少需要<span class="number">3</span>~<span class="number">4</span>次按键才能组成一个完整的指令，同时这个两个键也不够醒目和方便，因此我们可以绑定两个更常用的指令 `-`、`|`，如下所示：</div></pre></td></tr></table></figure></p>
+<p>unbind ‘“‘<br>bind - splitw -v -c ‘#{pane_current_path}’ # 垂直方向新增面板，默认进入当前目录<br>unbind %<br>bind | splitw -h -c ‘#{pane_current_path}’ # 水平方向新增面板，默认进入当前目录<br><figure class="highlight clean"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">#### 开启鼠标支持</div><div class="line"></div><div class="line">默认情况下，tmux的多窗口之间的切换以及面板大小调整，需要输入指令才能完成，这一过程，涉及到的指令较多，而且操作麻烦，特别是面板大小调整，指令难以一步到位，这个时候开启鼠标支持就完美了。</div><div class="line"></div><div class="line">对于tmux v2<span class="number">.1</span>(<span class="number">2015.10</span><span class="number">.28</span>)之前的版本，需加入如下配置：</div></pre></td></tr></table></figure></p>
+<p>setw -g mode-mouse on # 支持鼠标选取文本等<br>setw -g mouse-resize-pane on # 支持鼠标拖动调整面板的大小(通过拖动面板间的分割线)<br>setw -g mouse-select-pane on # 支持鼠标选中并切换面板<br>setw -g mouse-select-window on # 支持鼠标选中并切换窗口(通过点击状态栏窗口名称)<br><figure class="highlight dsconfig"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">有的地方可能会出现`<span class="built_in">set-window-option`的写法，`setw`就是它的别名。</span></div><div class="line"></div><div class="line">对于<span class="string">tmux </span><span class="string">v2.</span>1及以上的版本，仅需加入如下配置：</div></pre></td></tr></table></figure></p>
+<p>set-option -g mouse on # 等同于以上4个指令的效果<br><figure class="highlight clean"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">需要注意的是，开启鼠标支持后，iTem2默认的鼠标选中即复制功能需要同时按下 `Alt` 键，才会生效。</div><div class="line"></div><div class="line">#### 快速面板切换</div><div class="line"></div><div class="line">鼠标支持确实能带来很大的便捷性，特别是对于习惯了鼠标操作的tmux新手，但对于键盘爱好者而言，这不是什么好消息，对他们而言，双手不离键盘是基本素质。</div><div class="line"></div><div class="line">虽然指令前缀加`方向键`可以切换面板，但`方向键`太远，不够快，不够Geek。没关系，我们可以将面板切换升级为熟悉的`h`、`j`、`k`、`l`键位。</div></pre></td></tr></table></figure></p>
+<h1 id="绑定hjkl键为面板切换的上下左右键"><a href="#绑定hjkl键为面板切换的上下左右键" class="headerlink" title="绑定hjkl键为面板切换的上下左右键"></a>绑定hjkl键为面板切换的上下左右键</h1><p>bind -r k select-pane -U # 绑定k为↑<br>bind -r j select-pane -D # 绑定j为↓<br>bind -r h select-pane -L # 绑定h为←<br>bind -r l select-pane -R # 绑定l为→<br><figure class="highlight autohotkey"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">`-r`表示可重复按键，大概<span class="number">500</span>ms之内，重复的`h`、`j`、`k`、`l`按键都将有效，完美支持了快速切换的Geek需求。</div><div class="line"></div><div class="line">除了上下左右外， 还有几个快捷指令可以设置。</div></pre></td></tr></table></figure></p>
+<p>bind -r e lastp # 选择最后一个面板<br>bind -r ^e last # 选择最后一个窗口</p>
+<p>bind -r ^u swapp -U # 与前一个面板交换位置<br>bind -r ^d swapp -D # 与后一个面板交换位置<br><figure class="highlight clean"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">#### 面板大小调整</div><div class="line"></div><div class="line">习惯了全键盘操作后，命令的便捷性不言而喻。既然面板切换的指令都可以升级，面板大小调整的指令自然也不能落后。如下配置就可以升级你的操作：</div></pre></td></tr></table></figure></p>
+<h1 id="绑定Ctrl-hjkl键为面板上下左右调整边缘的快捷指令"><a href="#绑定Ctrl-hjkl键为面板上下左右调整边缘的快捷指令" class="headerlink" title="绑定Ctrl+hjkl键为面板上下左右调整边缘的快捷指令"></a>绑定Ctrl+hjkl键为面板上下左右调整边缘的快捷指令</h1><p>bind -r ^k resizep -U 10 # 绑定Ctrl+k为往↑调整面板边缘10个单元格<br>bind -r ^j resizep -D 10 # 绑定Ctrl+j为往↓调整面板边缘10个单元格<br>bind -r ^h resizep -L 10 # 绑定Ctrl+h为往←调整面板边缘10个单元格<br>bind -r ^l resizep -R 10 # 绑定Ctrl+l为往→调整面板边缘10个单元格<br><figure class="highlight dsconfig"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">以上，`<span class="string">resizep`</span>即`<span class="string">resize-pane`</span>的别名。</div><div class="line"></div><div class="line"><span class="comment">#### 面板最大化</span></div><div class="line"></div><div class="line">当窗口中面板的数量逐渐增多时，每个面板的空间就会逐渐减少。为了保证有足够的空间显示内容，<span class="string">tmux从</span><span class="string">v1.</span>8版本起，提供了面板的最大化功能，输入`<span class="string">tmux-prefix+</span>z`，就可以最大化当前面板至窗口大小，只要再重复输入一次，便恢复正常。那么<span class="string">tmux </span><span class="string">v1.</span>8以下的版本，怎么办呢？别急，有大神提供了如下的解决方案。</div><div class="line"></div><div class="line">首先编写一个<span class="string">zoom脚</span>本，该脚本通过新建一个窗口，交换当前面板与新的窗口默认面板位置，来模拟最大的功能；通过重复一次按键，还原面板位置，并关闭新建的窗口，来模拟还原功能，如下所示：</div><div class="line"></div><div class="line">```<span class="string">bash</span></div><div class="line"><span class="comment">#!/bin/bash -f</span></div><div class="line"><span class="string">currentwindow=</span>`<span class="string">tmux </span><span class="built_in">list-window</span> | <span class="string">tr </span><span class="string">'\t'</span> <span class="string">' '</span> | <span class="string">sed </span>-n -e <span class="string">'/(active)/s/^[^:]*: *\([^ ]*\) .*/\1/gp'</span>`;</div><div class="line"><span class="string">currentpane=</span>`<span class="string">tmux </span><span class="built_in">list-panes</span> | <span class="string">sed </span>-n -e <span class="string">'/(active)/s/^\([^:]*\):.*/\1/gp'</span>`;</div><div class="line"><span class="string">panecount=</span>`<span class="string">tmux </span><span class="built_in">list-panes</span> | <span class="string">wc </span>| <span class="string">sed </span>-e <span class="string">'s/^ *//g'</span> -e <span class="string">'s/ .*$//g'</span>`;</div><div class="line"><span class="string">inzoom=</span>`<span class="string">echo </span>$<span class="string">currentwindow </span>| <span class="string">sed </span>-n -e <span class="string">'/^zoom/p'</span>`;</div><div class="line"><span class="string">if </span>[ $<span class="string">panecount </span>-<span class="string">ne </span>1 ]; <span class="string">then</span></div><div class="line">    <span class="string">inzoom=</span><span class="string">""</span>;</div><div class="line"><span class="string">fi</span></div><div class="line"><span class="string">if </span>[ $<span class="string">inzoom </span>]; <span class="string">then</span></div><div class="line">    <span class="string">lastpane=</span>`<span class="string">echo </span>$<span class="string">currentwindow </span>| <span class="string">rev </span>| <span class="string">cut </span>-f 1 -d <span class="string">'@'</span> | <span class="string">rev`</span>;</div><div class="line">    <span class="string">lastwindow=</span>`<span class="string">echo </span>$<span class="string">currentwindow </span>| <span class="string">cut </span>-f 2- -d <span class="string">'@'</span> | <span class="string">rev </span>| <span class="string">cut </span>-f 2- -d <span class="string">'@'</span> | <span class="string">rev`</span>;</div><div class="line">    <span class="string">tmux </span><span class="string">select-window </span>-t $<span class="string">lastwindow;</span></div><div class="line">    <span class="string">tmux </span><span class="string">select-pane </span>-t $<span class="string">lastpane;</span></div><div class="line">    <span class="string">tmux </span><span class="string">swap-pane </span>-s $<span class="string">currentwindow;</span></div><div class="line">    <span class="string">tmux </span><span class="string">kill-window </span>-t $<span class="string">currentwindow;</span></div><div class="line"><span class="string">else</span></div><div class="line">    <span class="string">newwindowname=</span><span class="string">zoom@</span>$<span class="string">currentwindow@</span>$<span class="string">currentpane;</span></div><div class="line">    <span class="string">tmux </span><span class="string">new-window </span>-d -n $<span class="string">newwindowname;</span></div><div class="line">    <span class="string">tmux </span><span class="string">swap-pane </span>-s $<span class="string">newwindowname;</span></div><div class="line">    <span class="string">tmux </span><span class="string">select-window </span>-t $<span class="string">newwindowname;</span></div><div class="line"><span class="string">fi</span></div></pre></td></tr></table></figure></p>
+<p>不妨将该脚本存放在<code>~/.tmux</code>目录中（没有则新建目录），接下来只需要绑定一个快捷指令就行，如下。</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">unbind z</div><div class="line">bind z <span class="keyword">run</span><span class="bash"> <span class="string">". ~/.tmux/zoom"</span></span></div></pre></td></tr></table></figure>
+<h4 id="窗口变为面板"><a href="#窗口变为面板" class="headerlink" title="窗口变为面板"></a>窗口变为面板</h4><p>通过上面的zoom脚本，面板可以轻松地最大化为一个新的窗口。那么反过来，窗口是不是可以最小化为一个面板呢？</p>
+<blockquote>
+<p>试想这样一个场景：当你打开多个窗口后，然后想将其中几个窗口合并到当前窗口中，以便对比观察输出。</p>
+</blockquote>
+<p>实际上，你的要求就是将其它窗口变成面板，然后合并到当前窗口中。对于这种操作，我们可以在当前窗口，按下<code>prefix</code> + <code>:</code>，打开命令行，然后输入如下命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">join-pane -s window01 <span class="comment"># 合并名称为window01的窗口的默认（第一个）面板到当前窗口中</span></div><div class="line">join-pane -s window01.1 <span class="comment"># .1显式指定了第一个面板，.2就是第二个面板(我本地将面板编号起始值设置为1，默认是0)</span></div></pre></td></tr></table></figure>
+<p>每次执行<code>join-pane</code>命令都会合并一个面板，并且指定的窗口会减少一个面板，直到面板数量为0，窗口关闭。</p>
+<p>除了在当前会话中操作外，<code>join-pane</code>命令甚至可以从其它指定会话中合并面板，格式为<code>join-pane -s [session_name]:[window].[pane]</code>，如<code>join-pane -s 2:1.1</code> 即合并第二个会话的第一个窗口的第一个面板到当前窗口，当目标会话的窗口和面板数量为0时，会话便会关闭。</p>
+<p>注：上一节中的<code>swap-pane</code>命令与<code>join-pane</code>语法基本一致。</p>
+<h4 id="其他配置"><a href="#其他配置" class="headerlink" title="其他配置"></a>其他配置</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">bind</span> m <span class="built_in">command</span>-prompt <span class="string">"splitw -h 'exec man %%'"</span>   <span class="comment"># 绑定m键为在新的panel打开man</span></div><div class="line"><span class="comment"># 绑定P键为开启日志功能，如下，面板的输出日志将存储到桌面</span></div><div class="line"><span class="built_in">bind</span> P pipe-pane -o <span class="string">"cat &gt;&gt;~/Desktop/#W.log"</span> \; display <span class="string">"Toggled logging to ~/Desktop/#W.log"</span></div></pre></td></tr></table></figure>
+<h4 id="恢复用户空间"><a href="#恢复用户空间" class="headerlink" title="恢复用户空间"></a><strong>恢复用户空间</strong></h4><p>tmux会话中，Mac的部分命令如 <code>osascript</code>、<code>open</code>、<code>pbcopy</code> 或 <code>pbpaste</code>等可能会失效（失效命令未列全）。</p>
+<p>部分bug列表如下：</p>
+<ul>
+<li><a href="https://apple.stackexchange.com/questions/174779/unable-to-run-display-notification-using-osascript-in-a-tmux-session" target="_blank" rel="external">applescript - Unable to run ‘display notification’ using osascript in a tmux session</a></li>
+<li><a href="https://stackoverflow.com/questions/30404944/open-command-doesnt-work-properly-inside-tmux/30412054#30412054" target="_blank" rel="external">osx - “open” command doesn’t work properly inside tmux</a></li>
+<li><a href="https://stackoverflow.com/questions/16618992/cant-paste-into-macvim/16661806#16661806" target="_blank" rel="external">clipboard - Can’t paste into MacVim</a></li>
+</ul>
+<p>对此，我们可以通过安装<code>reattach-to-user-namespace</code>包装程序来解决这个问题。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">brew install reattach-to-user-namespace</div></pre></td></tr></table></figure>
+<p>在<code>~/.tmux.conf</code>中添加配置：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">set</span> -g <span class="keyword">default</span>-command <span class="string">"reattach-to-user-namespace -l <span class="variable">$SHELL</span>"</span></div></pre></td></tr></table></figure>
+<p>这样你的交互式shell最终能够重新连接到用户级的命名空间。由于连接状态能够被子进程继承，故以上配置保证了所有从 shell 启动的命令能够被正确地连接。</p>
+<p>有些时候，我们可能会在不同的操作系统中共享配置文件，如果你的tmux版本大于1.9，我们还可以使用<code>if-shell</code>来判断是否Mac系统，然后再指定<code>default-command</code>。</p>
+<figure class="highlight julia"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span>-shell 'test <span class="string">"<span class="subst">$(uname -s)</span>"</span> = Darwin<span class="string">' '</span>set-option -g default-command <span class="string">"exec reattach-to-user-namespace -l <span class="variable">$SHELL</span>"</span>'</div></pre></td></tr></table></figure>
+<p>对于tmux v1.8及更早的版本，可以使用如下包装后的配置：</p>
+<figure class="highlight dsconfig"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">set-option</span> -g <span class="string">default-command </span><span class="string">'command -v reattach-to-user-namespace &gt;/dev/null &amp;&amp; exec reattach-to-user-namespace -l "$SHELL" || exec "$SHELL"'</span></div></pre></td></tr></table></figure>
+<p>以上，<code>$SHELL</code>对应于你的默认Shell，通常是<code>/usr/bin/bash</code> 或 <code>/usr/local/bin/zsh</code>。</p>
+<h3 id="复制模式"><a href="#复制模式" class="headerlink" title="复制模式"></a>复制模式</h3><p>tmux中操作文本，自然离不开复制模式，通常使用复制模式的步骤如下：</p>
+<ol>
+<li>输入 <code>`+[</code> 进入复制模式</li>
+<li>按下 <code>空格键</code> 开始复制，移动光标选择复制区域</li>
+<li>按下 <code>回车键</code> 复制选中文本并退出复制模式</li>
+<li>按下 <code>`+]</code> 粘贴文本</li>
+</ol>
+<p>查看复制模式默认的快捷键风格：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">tmux show-window-options -g mode-keys <span class="comment"># mode-keys emacs</span></div></pre></td></tr></table></figure>
+<p>默认情况下，快捷键为<code>emacs</code>风格。</p>
+<p>为了让复制模式更加方便，我们可以将快捷键设置为熟悉的<code>vi</code>风格，如下：</p>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">setw -g <span class="keyword">mode</span>-<span class="built_in">keys</span> <span class="keyword">vi</span> # 开启<span class="keyword">vi</span>风格后，支持<span class="keyword">vi</span>的C-d、C-<span class="keyword">u</span>、hjkl等快捷键</div></pre></td></tr></table></figure>
+<h4 id="自定义复制和选择快捷键"><a href="#自定义复制和选择快捷键" class="headerlink" title="自定义复制和选择快捷键"></a><strong>自定义复制和选择快捷键</strong></h4><p>除了快捷键外，复制模式的启用、选择、复制、粘贴等按键也可以向<code>vi</code>风格靠拢。</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">bind Escape <span class="keyword">copy</span><span class="bash">-mode <span class="comment"># 绑定esc键为进入复制模式</span></span></div><div class="line">bind -t vi-<span class="keyword">copy</span><span class="bash"> v begin-selection <span class="comment"># 绑定v键为开始选择文本</span></span></div><div class="line">bind -t vi-<span class="keyword">copy</span><span class="bash"> y copy-selection <span class="comment"># 绑定y键为复制选中文本</span></span></div><div class="line">bind p pasteb <span class="comment"># 绑定p键为粘贴文本（p键默认用于进入上一个窗口，不建议覆盖）</span></div></pre></td></tr></table></figure>
+<p>以上，绑定 <code>v</code>、<code>y</code>两键的设置只在tmux v2.4版本以下才有效，对于v2.4及以上的版本，绑定快捷键需要使用 <code>-T</code> 选项，发送指令需要使用 <code>-X</code> 选项，请参考如下设置：</p>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">bind -T <span class="keyword">copy</span>-<span class="keyword">mode</span>-<span class="keyword">vi</span> v send-<span class="built_in">keys</span> -<span class="keyword">X</span> begin-selection</div><div class="line">bind -T <span class="keyword">copy</span>-<span class="keyword">mode</span>-<span class="keyword">vi</span> <span class="keyword">y</span> send-<span class="built_in">keys</span> -<span class="keyword">X</span> <span class="keyword">copy</span>-selection-<span class="built_in">and</span>-cancel</div></pre></td></tr></table></figure>
+<h4 id="Buffer缓存"><a href="#Buffer缓存" class="headerlink" title="Buffer缓存"></a><strong>Buffer缓存</strong></h4><p>tmux复制操作的内容默认会存进<code>buffer</code>里，<code>buffer</code>是一个粘贴缓存区，新的缓存总是位于栈顶，它的操作命令如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">tmux list-buffers <span class="comment"># 展示所有的 buffers</span></div><div class="line">tmux show-buffer [-b buffer-name] <span class="comment"># 显示指定的 buffer 内容</span></div><div class="line">tmux choose-buffer <span class="comment"># 进入 buffer 选择页面(支持jk上下移动选择，回车选中并粘贴 buffer 内容到面板上)</span></div><div class="line">tmux <span class="built_in">set</span>-buffer <span class="comment"># 设置buffer内容</span></div><div class="line">tmux load-buffer [-b buffer-name] file-path <span class="comment"># 从文件中加载文本到buffer缓存</span></div><div class="line">tmux save-buffer [-a] [-b buffer-name] path <span class="comment"># 保存tmux的buffer缓存到本地</span></div><div class="line">tmux paste-buffer <span class="comment"># 粘贴buffer内容到会话中</span></div><div class="line">tmux delete-buffer [-b buffer-name] <span class="comment"># 删除指定名称的buffer</span></div></pre></td></tr></table></figure>
+<p>以上buffer操作在不指定buffer-name时，默认处理是栈顶的buffer缓存。</p>
+<p>在tmux会话的命令行输入时，可以省略上述tmux前缀，其中show-buffer的操作如下所示：</p>
+<p><img src="http://louiszhai.github.io/docImages/tmux06.png" alt="list-buffers"></p>
+<p>choose-buffer的操作如下所示：</p>
+<p><img src="http://louiszhai.github.io/docImages/tmux05.png" alt="choose-buffer"></p>
+<p>默认情况下，buffers内容是独立于系统粘贴板的，它存在于tmux进程中，且可以在会话间共享。</p>
+<h4 id="使用系统粘贴板"><a href="#使用系统粘贴板" class="headerlink" title="使用系统粘贴板"></a><strong>使用系统粘贴板</strong></h4><p>存在于tmux进程中的buffer缓存，虽然可以在会话间共享，但不能直接与系统粘贴板共享，不免有些遗憾。幸运的是，现在我们有成熟的方案来实现这个功能。</p>
+<p><strong>在Linux上使用粘贴板</strong></p>
+<p>通常，Linux中可以使用<code>xclip</code>工具来接入系统粘贴板。</p>
+<p>首先，需要安装<code>xclip</code>。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo apt-get install xclip</div></pre></td></tr></table></figure>
+<p>然后，<code>.tmux.conf</code>的配置如下。</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># buffer缓存复制到Linux系统粘贴板</span></div><div class="line">bind C-c <span class="keyword">run</span><span class="bash"> <span class="string">" tmux save-buffer - | xclip -i -sel clipboard"</span></span></div><div class="line"><span class="comment"># Linux系统粘贴板内容复制到会话</span></div><div class="line">bind C-v <span class="keyword">run</span><span class="bash"> <span class="string">" tmux set-buffer \"<span class="variable">$(xclip -o -sel clipboard)</span>\"; tmux paste-buffer"</span></span></div></pre></td></tr></table></figure>
+<p>按下<code>prefix</code> + <code>Ctrl</code> + <code>c</code> 键，buffer缓存的内容将通过<code>xlip</code>程序复制到粘贴板，按下<code>prefix</code> + <code>Ctrl</code> + <code>v</code>键，tmux将通过<code>xclip</code>访问粘贴板，然后由set-buffer命令设置给buffer缓存，最后由paste-buffer粘贴到tmux会话中。</p>
+<p><strong>在Mac上使用粘贴板</strong></p>
+<p>我们都知道，Mac自带 <code>pbcopy</code> 和 <code>pbpaste</code>命令，分别用于复制和粘贴，但在tmux命令中它们却不能正常运行。这里我将详细介绍下原因：</p>
+<blockquote>
+<p>Mac的粘贴板服务是在引导命名空间注册的。命名空间存在层次之分，更高级别的命名空间拥有访问低级别命名空间（如root引导命名空间）的权限，反之却不行。流程创建的属于Mac登录会话的一部分，它会被自动包含在用户级的引导命名空间中，因此只有用户级的命名空间才能访问粘贴板服务。tmux使用守护进程(3)库函数创建其服务器进程，在Mac OS X 10.5中，苹果改变了守护进程(3)的策略，将生成的过程从最初的引导命名空间移到了根引导命名空间。而根引导命名空间访问权限较低，这意味着tmux服务器，和它的子进程，一同失去了原引导命名空间的访问权限（即无权限访问粘贴板服务）。</p>
+</blockquote>
+<p>如此，我们可以使用一个小小的包装程序来重新连接到合适的命名空间，然后执行访问用户级命名空间的粘贴板服务，这个包装程序就是<code>reattach-to-user-namespace</code>。</p>
+<p>那么，Mac下<code>.tmux.conf</code>的配置如下：</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># buffer缓存复制到Mac系统粘贴板</span></div><div class="line">bind C-c <span class="keyword">run</span><span class="bash"> <span class="string">"tmux save-buffer - | reattach-to-user-namespace pbcopy"</span></span></div><div class="line"><span class="comment"># Mac系统粘贴板内容复制到会话</span></div><div class="line">bind C-v <span class="keyword">run</span><span class="bash"> <span class="string">"reattach-to-user-namespace pbpaste | tmux load-buffer - \; paste-buffer -d"</span></span></div></pre></td></tr></table></figure>
+<p><code>reattach-to-user-namespace</code> 作为包装程序来访问Mac粘贴板，按下<code>prefix</code> + <code>Ctrl</code> + <code>c</code> 键，buffer缓存的内容将复制到粘贴板，按下<code>prefix</code> + <code>Ctrl</code> + <code>v</code>键，粘贴板的内容将通过 load-buffer 加载，然后由 paste-buffer 粘贴到tmux会话中。</p>
+<p>为了在复制模式中使用Mac系统的粘贴板，可做如下配置：</p>
+<figure class="highlight perl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 绑定y键为复制选中文本到Mac系统粘贴板</span></div><div class="line"><span class="keyword">bind</span>-key -T copy-mode-vi <span class="string">'y'</span> <span class="keyword">send</span>-<span class="keyword">keys</span> -X copy-<span class="keyword">pipe</span>-<span class="keyword">and</span>-cancel <span class="string">'reattach-to-user-namespace pbcopy'</span></div><div class="line"><span class="comment"># 鼠标拖动选中文本，并复制到Mac系统粘贴板</span></div><div class="line"><span class="keyword">bind</span>-key -T copy-mode-vi MouseDragEnd1Pane <span class="keyword">send</span> -X copy-<span class="keyword">pipe</span>-<span class="keyword">and</span>-cancel <span class="string">"pbcopy"</span></div></pre></td></tr></table></figure>
+<p>完成以上配置后记得重启tmux服务器。至此，复制模式中，按<code>y</code>键将保存选中的文本到Mac系统粘贴板，随后按<code>Command</code> + <code>v</code>键便可粘贴。</p>
+<h3 id="保存Tmux会话"><a href="#保存Tmux会话" class="headerlink" title="保存Tmux会话"></a>保存Tmux会话</h3><p>信息时代，数据尤为重要。tmux保护现场的能力依赖于tmux进程，如果进程退出，则意味着会话数据的丢失，因此关机重启后，tmux中的会话将被清空，这不是我们想要见到的。幸运的是，目前有这样两款插件：<code>Tmux Resurrect</code> 和 <code>Tmux Continuum</code>，可以永久保存tmux会话（它们均适用于tmux v1.9及以上版本）。</p>
+<p>####Tmux Resurrect</p>
+<p>Tmux Resurrect无须任何配置，就能够备份tmux会话中的各种细节，包括窗口、面板的顺序、布局、工作目录，运行程序等等数据。因此它能在系统重启后完全地恢复会话。由于其幂等的恢复机制，它不会试图去恢复一个已经存在的窗口或者面板，所以，即使你不小心多恢复了几次会话，它也不会出现问题，这样主动恢复时我们就不必担心手抖多按了一次。另外，如果你是<a href="https://github.com/tmuxinator/tmuxinator" target="_blank" rel="external">tmuxinator</a>用户，我也建议你迁移到 tmux-resurrect插件上来，具体请参考<a href="https://github.com/tmux-plugins/tmux-resurrect/blob/master/docs/migrating_from_tmuxinator.md#migrating-from-tmuxinator" target="_blank" rel="external">Migrating from <code>tmuxinator</code></a>。</p>
+<p>Tmux Resurrec安装过程如下所示：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">cd</span> ~/.tmux</div><div class="line">mkdir plugins</div><div class="line">git <span class="built_in">clone</span> https://github.com/tmux-plugins/tmux-resurrect.git</div></pre></td></tr></table></figure>
+<p>安装后需在<code>~/.tmux.conf</code>中增加一行配置：</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">run-shell ~<span class="regexp">/.tmux/</span>plugins<span class="regexp">/tmux-resurrect/</span>resurrect.tmux</div></pre></td></tr></table></figure>
+<p>至此安装成功，按下<code>prefix + r</code>重载tmux配置。</p>
+<p>Tmux Resurrec提供如下两个操作：</p>
+<ul>
+<li><strong>保存</strong>，快捷指令是<code>prefix</code> + <code>Ctrl + s</code>，tmux状态栏在保存开始，保存后分别提示”Saving…”，”Tmux environment saved !”。</li>
+<li><strong>恢复</strong>，快捷指令是<code>prefix</code> + <code>Ctrl + r</code>，tmux状态栏在恢复开始，恢复后分别提示”Restoring…”，”Tmux restore complete !”。</li>
+</ul>
+<p>保存时，tmux会话的详细信息会以文本文件的格式保存到<code>~/.tmux/resurrect</code>目录，恢复时则从此处读取，由于数据文件是明文的，因此你完全可以自由管理或者编辑这些会话状态文件（如果备份频繁，记得定期清除历史备份）。</p>
+<p><strong>可选的配置</strong></p>
+<p>Tmux Resurrec本身是免配置开箱即用的，但同时也提供了如下选项以便修改其默认设置。</p>
+<figure class="highlight stata"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">set</span> -<span class="keyword">g</span> @resurrect-<span class="keyword">save</span> 'S' # 修改保存指令为<span class="built_in">S</span></div><div class="line"><span class="keyword">set</span> -<span class="keyword">g</span> @resurrect-<span class="keyword">restore</span> 'R' 修改恢复指令为<span class="built_in">R</span></div><div class="line"># 修改会话数据的保持路径，此处不能使用除了<span class="variable">$HOME</span>, <span class="variable">$HOSTNAME</span>, ~之外的环境变量</div><div class="line"><span class="keyword">set</span> -<span class="keyword">g</span> @resurrect-<span class="keyword">dir</span> '/some/path'</div></pre></td></tr></table></figure>
+<p>默认情况下只有一个保守的列表项（即<code>vi vim nvim emacs man less more tail top htop irssi mutt</code>）可以恢复，对此 <a href="https://github.com/tmux-plugins/tmux-resurrect/blob/master/docs/restoring_programs.md" target="_blank" rel="external">Restoring programs doc</a> 解释了怎么去恢复额外的项目。</p>
+<p><strong>进阶的备份</strong></p>
+<p>除了基础备份外，Tmux Resurrec还提供<strong>进阶的备份功能</strong>，如下所示：</p>
+<ul>
+<li>恢复vim 和 neovim 会话</li>
+<li>恢复面板内容</li>
+<li>恢复shell的历史记录（实验性功能）</li>
+</ul>
+<p>进阶的备份功能默认不开启，需要特别配置。</p>
+<p>1）恢复vim 和 neovim 会话，需要完成如下两步：</p>
+<ul>
+<li><p>通过vim的vim-obsession插件保存vim/neovim会话。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">cd</span> ~/.vim/bundle</div><div class="line">git <span class="built_in">clone</span> git://github.com/tpope/vim-obsession.git</div><div class="line">vim -u NONE -c <span class="string">"helptags vim-obsession/doc"</span> -c q</div></pre></td></tr></table></figure>
+</li>
+<li><p>在<code>~/.tmux.conf</code>中增加两行配置：</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">set</span> -g <span class="meta">@resurrect</span>-strategy-vim <span class="string">'session'</span> # <span class="keyword">for</span> vim</div><div class="line"><span class="keyword">set</span> -g <span class="meta">@resurrect</span>-strategy-nvim <span class="string">'session'</span> # <span class="keyword">for</span> neovim</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>2）恢复面板内容，需在<code>~/.tmux.conf</code>中增加一行配置：</p>
+<figure class="highlight applescript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">set</span> -g @resurrect-capture-pane-<span class="built_in">contents</span> '<span class="keyword">on</span>' <span class="comment"># 开启恢复面板内容功能</span></div></pre></td></tr></table></figure>
+<p>目前使用该功能时，请确保tmux的<code>default-command</code>没有包含<code>&amp;&amp;</code> 或者<code>||</code>操作符，否则将导致<a href="https://github.com/tmux-plugins/tmux-resurrect/issues/98" target="_blank" rel="external">bug</a>。（查看<code>default-command</code>的值，请使用命令<code>tmux show -g default-command</code>。）</p>
+<p>3）恢复shell的历史记录，需在<code>~/.tmux.conf</code>中增加一行配置：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">set</span> <span class="selector-tag">-g</span> @<span class="keyword">resurrect</span>-<span class="keyword">save</span>-<span class="keyword">shell</span>-<span class="keyword">history</span> <span class="string">'on'</span></div></pre></td></tr></table></figure>
+<p>由于技术的限制，保存时，只有无前台任务运行的面板，它的shell历史记录才能被保存。</p>
+<h4 id="Tmux-Continuum"><a href="#Tmux-Continuum" class="headerlink" title="Tmux Continuum"></a>Tmux Continuum</h4><p>可能你嫌手动保存和恢复太过麻烦，别担心，这不是问题。Tmux Continuum 在 Tmux Resurrec的基础上更进一步，现在保存和恢复全部自动化了，如你所愿，可以无感使用tmux，不用再担心备份问题。</p>
+<p>Tmux Continuum安装过程如下所示（它依赖Tmux Resurrect，请保证已安装Tmux Resurrect插件）：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">cd</span> ~/.tmux/plugins</div><div class="line">git <span class="built_in">clone</span> https://github.com/tmux-plugins/tmux-continuum.git</div></pre></td></tr></table></figure>
+<p>安装后需在<code>~/.tmux.conf</code>中增加一行配置：</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">run-shell ~<span class="regexp">/.tmux/</span>plugins<span class="regexp">/tmux-continuum/</span>continuum.tmux</div></pre></td></tr></table></figure>
+<p>Tmux Continuum默认每隔15mins备份一次，我设置的是一天一次：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">set</span> <span class="selector-tag">-g</span> @<span class="keyword">continuum</span>-<span class="keyword">save</span>-<span class="keyword">interval</span> <span class="string">'1440'</span></div></pre></td></tr></table></figure>
+<p><strong>关闭自动备份</strong>，只需设置时间间隔为 <code>0</code> 即可：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">set</span> <span class="selector-tag">-g</span> @<span class="keyword">continuum</span>-<span class="keyword">save</span>-<span class="keyword">interval</span> <span class="string">'0'</span></div></pre></td></tr></table></figure>
+<p>想要在<strong>tmux启动时就恢复最后一次保存的会话环境</strong>，需增加如下配置：</p>
+<figure class="highlight applescript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">set</span> -g @continuum-restore '<span class="keyword">on</span>' <span class="comment"># 启用自动恢复</span></div></pre></td></tr></table></figure>
+<p>如果不想要启动时自动恢复的功能了，直接移除上面这行就行。想要绝对确定自动恢复不会发生，就在用户根目录下创建一个<code>tmux_no_auto_restore</code>空文件（创建命令：<code>touch ~/tmux_no_auto_restore</code>），该文件存在时，自动恢复将不触发。</p>
+<p>对于tmux高级用户（可能就是你）而言，同时运行多个tmux服务器也是有可能的。你可能并不希望后面启用的几个tmux服务器自动恢复或者自动保存会话。因此Tmux Continuum会优先在第一个启用的tmux服务器中生效，随后启用的tmux服务器不再享受自动恢复或自动保存会话的待遇。</p>
+<p>实际上，不管Tmux Continuum功能有没有启用，或者多久保存一次，我们都有办法从状态栏知晓。Tmux Continuum提供了一个查看运行状态的插值<code>#{continuum_status}</code>，它支持<code>status-right</code> 和 <code>status-left</code>两种状态栏设置，如下所示：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">set</span> -g <span class="keyword">status</span>-<span class="keyword">right</span> <span class="string">'Continuum status: #&#123;continuum_status&#125;'</span></div></pre></td></tr></table></figure>
+<p>tmux运行时，<code>#{continuum_status}</code> 将显示保存的时间间隔（单位为分钟），此时状态栏会显示：</p>
+<figure class="highlight fortran"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Continuum <span class="keyword">status</span>: <span class="number">1440</span></div></pre></td></tr></table></figure>
+<p>如果其自动保存功能关闭了，那么状态栏会显示：</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="attribute">Continuum</span> status: <span class="literal">off</span></div></pre></td></tr></table></figure>
+<p>借助Tmux Continuum插件，Mac重启时，我们甚至可以选择在<code>Terminal</code> 或者 <code>iTerm2</code> 中自动全屏启用tmux。</p>
+<p>为此，需在<code>~/.tmux.conf</code>中增加一行配置：</p>
+<figure class="highlight applescript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">set</span> -g @continuum-boot '<span class="keyword">on</span>'</div></pre></td></tr></table></figure>
+<p>Mac下，自动启用tmux还支持如下选项：</p>
+<ul>
+<li><code>set -g @continuum-boot-options &#39;fullscreen&#39;</code> ，<code>Terminal</code>自动全屏，tmux命令在<code>Terminal</code>中执行。</li>
+<li><code>set -g @continuum-boot-options &#39;iterm&#39;</code> ， <code>iTerm2</code> 替换 <code>Terminal</code> 应用，tmux命令在<code>iTerm2</code>中执行。</li>
+<li><code>set -g @continuum-boot-options &#39;iterm,fullscreen&#39;</code>，<code>iTerm2</code>自动全屏，tmux命令在<code>iTerm2</code>中执行。</li>
+</ul>
+<p>Linux中则没有这些选项，它只能设置为自动启用tmux服务器。</p>
+<h4 id="Tpm"><a href="#Tpm" class="headerlink" title="Tpm"></a>Tpm</h4><p>以上，我们直接安装了tmux插件。这没有问题，可当插件越来越多时，我们就会需要统一的插件管理器。因此官方提供了tpm（支持tmux v1.9及以上版本）。</p>
+<p>tpm安装过程如下所示：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">cd</span> ~/.tmux/plugins</div><div class="line">git <span class="built_in">clone</span> https://github.com/tmux-plugins/tpm</div></pre></td></tr></table></figure>
+<p>安装后需在<code>~/.tmux.conf</code>中增加如下配置：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#</span><span class="bash"> 默认需要引入的插件</span></div><div class="line">set -g @plugin 'tmux-plugins/tpm'</div><div class="line">set -g @plugin 'tmux-plugins/tmux-sensible'</div><div class="line"><span class="meta"></span></div><div class="line">#<span class="bash"> 引入其他插件的示例</span></div><div class="line"><span class="meta">#</span><span class="bash"> <span class="built_in">set</span> -g @plugin <span class="string">'github_username/plugin_name'</span> <span class="comment"># 格式：github用户名/插件名</span></span></div><div class="line"><span class="meta">#</span><span class="bash"> <span class="built_in">set</span> -g @plugin <span class="string">'git@github.com/user/plugin'</span> <span class="comment"># 格式：git@github插件地址</span></span></div><div class="line"><span class="meta"></span></div><div class="line">#<span class="bash"> 初始化tmux插件管理器(保证这行在~/.tmux.conf的非常靠后的位置)</span></div><div class="line">run '~/.tmux/plugins/tpm/tpm'</div></pre></td></tr></table></figure>
+<p>然后按下<code>prefix + r</code>重载tmux配置，使得tpm生效。</p>
+<p>基于tpm插件管理器，<strong>安装插件</strong>仅需如下两步：</p>
+<ol>
+<li>在<code>~/.tmux.conf</code>中增加新的插件，如<code>set -g @plugin &#39;...&#39;</code>。</li>
+<li>按下<code>prefix</code> + <code>I</code>键下载插件，并刷新tmux环境。</li>
+</ol>
+<p><strong>更新插件</strong>，请按下<code>prefix</code> + <code>U</code> 键，选择待更新的插件后，回车确认并更新。</p>
+<p><strong>卸载插件</strong>，需如下两步：</p>
+<ol>
+<li>在<code>~/.tmux.conf</code>中移除插件所在行。</li>
+<li>按下<code>prefix</code> + <code>alt</code> + <code>u</code> 移除插件。</li>
+</ol>
+<h3 id="会话共享"><a href="#会话共享" class="headerlink" title="会话共享"></a>会话共享</h3><h4 id="结对编程"><a href="#结对编程" class="headerlink" title="结对编程"></a>结对编程</h4><p>tmux多会话连接实时同步的功能，使得结对编程成为了可能，这也是开发者最喜欢的功能之一。现在就差一步了，就是借助tmate把tmux会话分享出去。</p>
+<p>tmate是tmux的管理工具，它可以轻松的创建tmux会话，并且自动生成ssh链接。</p>
+<p>安装tmate</p>
+<figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">brew </span><span class="keyword">install </span>tmate</div></pre></td></tr></table></figure>
+<p>使用tmate新建一个tmux会话</p>
+<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="attribute">tmate</span></div></pre></td></tr></table></figure>
+<p>此时屏幕下方会显示ssh url，如下所示：</p>
+<p><img src="http://louiszhai.github.io/docImages/tmux07.png" alt="ssh url"></p>
+<p>查看tmate生成的ssh链接</p>
+<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="attribute">tmate show-messages</span></div></pre></td></tr></table></figure>
+<p>生成的ssh url如下所示，其中一个为只读，另一个可编辑。</p>
+<p><img src="http://louiszhai.github.io/docImages/tmux08.png" alt="ssh url"></p>
+<h4 id="共享账号-amp-组会话"><a href="#共享账号-amp-组会话" class="headerlink" title="共享账号&amp;组会话"></a>共享账号&amp;组会话</h4><p>使用tmate远程共享tmux会话，受制于多方的网络质量，必然会存在些许延迟。如果共享会话的多方拥有同一个远程服务器的账号，那么我们可以使用<code>组会话</code>解决这个问题。</p>
+<p>先在远程服务器上新建一个公共会话，命名为<code>groupSession</code>。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">tmux new -s groupSession</div></pre></td></tr></table></figure>
+<p>其他用户不去直接连接这个会话，而是通过创建一个新的会话来加入上面的公共会话<code>groupSession</code>。</p>
+<figure class="highlight haxe"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">tmux <span class="keyword">new</span> <span class="type"></span>-t groupSession -s otherSession</div></pre></td></tr></table></figure>
+<p>此时两个用户都可以在同一个会话里操作，就会好像第二个用户连接到了<code>groupSession</code>的会话一样。此时两个用户都可以创建新建的窗口，新窗口的内容依然会实时同步，但是其中一个用户切换到其它窗口，对另外一个用户没有任何影响，因此在这个共享的组会话中，用户各自的操作可以通过新建窗口来执行。即使第二个用户关闭<code>otherSession</code>会话，共享会话<code>groupSession</code>依然存在。</p>
+<p>组会话在共享的同时，又保留了相对的独立，非常适合结对编程场景，它是结对编程最简单的方式，如果账号不能共享，我们就要使用下面的方案了。</p>
+<h4 id="独立账号-amp-Socket共享会话"><a href="#独立账号-amp-Socket共享会话" class="headerlink" title="独立账号&amp;Socket共享会话"></a>独立账号&amp;Socket共享会话</h4><p>开始之前我们需要确保用户对远程服务器上同一个目录拥有相同的读写权限，假设这个目录为<code>/var/tmux/</code>。</p>
+<p>使用new-session（简写new）创建会话时，使用的是默认的socket位置，默认socket无法操作，所以我们需要创建一个指定socket文件的会话。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">tmux -S /var/tmux/sharefile</div></pre></td></tr></table></figure>
+<p>另一个用户进入时，需要指定socket文件加入会话。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">tmux -S /<span class="keyword">var</span>/tmux/sharefile attach</div></pre></td></tr></table></figure>
+<p>这样，两个不同的用户就可以共享同一个会话了。</p>
+<p>通常情况下，不同的用户使用不同的配置文件来创建会话，但是，使用指定socket文件创建的tmux会话，会话加载的是第一个创建会话的用户的<code>~/.tmux.conf</code>配置文件，随后加入会话的其他用户，依然使用同一份配置文件。</p>
+<h3 id="Tmux优化"><a href="#Tmux优化" class="headerlink" title="Tmux优化"></a>Tmux优化</h3><p>要想tmux更加人性化、性能更佳，不妨参考下如下配置。</p>
+<h4 id="设置窗口面板起始序号"><a href="#设置窗口面板起始序号" class="headerlink" title="设置窗口面板起始序号"></a>设置窗口面板起始序号</h4><figure class="highlight cs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">set</span> -g <span class="keyword">base</span>-index <span class="number">1</span> <span class="meta"># 设置窗口的起始下标为1</span></div><div class="line"><span class="keyword">set</span> -g pane-<span class="keyword">base</span>-index <span class="number">1</span> <span class="meta"># 设置面板的起始下标为1</span></div></pre></td></tr></table></figure>
+<h4 id="自定义状态栏"><a href="#自定义状态栏" class="headerlink" title="自定义状态栏"></a>自定义状态栏</h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">set</span> -g <span class="keyword">status</span>-utf8 <span class="keyword">on</span> # 状态栏支持utf8</div><div class="line"><span class="keyword">set</span> -g <span class="keyword">status</span>-<span class="built_in">interval</span> <span class="number">1</span> # 状态栏刷新时间</div><div class="line"><span class="keyword">set</span> -g <span class="keyword">status</span>-justify <span class="keyword">left</span> # 状态栏列表左对齐</div><div class="line">setw -g monitor-activity <span class="keyword">on</span> # 非当前窗口有内容更新时在状态栏通知</div><div class="line"></div><div class="line"><span class="keyword">set</span> -g <span class="keyword">status</span>-bg black # 设置状态栏背景黑色</div><div class="line"><span class="keyword">set</span> -g <span class="keyword">status</span>-fg yellow # 设置状态栏前景黄色</div><div class="line"><span class="keyword">set</span> -g <span class="keyword">status</span>-<span class="keyword">style</span> <span class="string">"bg=black, fg=yellow"</span> # 状态栏前景背景色</div><div class="line"></div><div class="line"><span class="keyword">set</span> -g <span class="keyword">status</span>-<span class="keyword">left</span> <span class="string">"#[bg=#FF661D] ❐ #S "</span> # 状态栏左侧内容</div><div class="line"><span class="keyword">set</span> -g <span class="keyword">status</span>-<span class="keyword">right</span> <span class="string">'Continuum status: #&#123;continuum_status&#125;'</span> # 状态栏右侧内容</div><div class="line"><span class="keyword">set</span> -g <span class="keyword">status</span>-<span class="keyword">left</span>-<span class="keyword">length</span> <span class="number">300</span> # 状态栏左边长度<span class="number">300</span></div><div class="line"><span class="keyword">set</span> -g <span class="keyword">status</span>-<span class="keyword">right</span>-<span class="keyword">length</span> <span class="number">500</span> # 状态栏左边长度<span class="number">500</span></div><div class="line"></div><div class="line"><span class="keyword">set</span> -wg window-<span class="keyword">status</span>-<span class="keyword">format</span> <span class="string">" #I #W "</span> # 状态栏窗口名称格式</div><div class="line"><span class="keyword">set</span> -wg window-<span class="keyword">status</span>-<span class="keyword">current</span>-<span class="keyword">format</span> <span class="string">" #I:#W#F "</span> # 状态栏当前窗口名称格式(#I：序号，#w：窗口名称，#F：间隔符)</div><div class="line"><span class="keyword">set</span> -wg window-<span class="keyword">status</span>-separator <span class="string">""</span> # 状态栏窗口名称之间的间隔</div><div class="line"><span class="keyword">set</span> -wg window-<span class="keyword">status</span>-<span class="keyword">current</span>-<span class="keyword">style</span> <span class="string">"bg=red"</span> # 状态栏当前窗口名称的样式</div><div class="line"><span class="keyword">set</span> -wg window-<span class="keyword">status</span>-<span class="keyword">last</span>-<span class="keyword">style</span> <span class="string">"fg=red"</span> # 状态栏最后一个窗口名称的样式</div><div class="line"></div><div class="line"><span class="keyword">set</span> -g message-<span class="keyword">style</span> <span class="string">"bg=#202529, fg=#91A8BA"</span> # 指定消息通知的前景、后景色</div></pre></td></tr></table></figure>
+<h4 id="开启256-colors支持"><a href="#开启256-colors支持" class="headerlink" title="开启256 colors支持"></a>开启256 colors支持</h4><p>默认情况下，tmux中使用vim编辑器，文本内容的配色和直接使用vim时有些差距，此时需要开启256 colors的支持，配置如下。</p>
+<figure class="highlight actionscript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">set</span> -g <span class="keyword">default</span>-terminal <span class="string">"screen-256color"</span></div></pre></td></tr></table></figure>
+<p>或者：</p>
+<figure class="highlight actionscript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">set</span> -g <span class="keyword">default</span>-terminal <span class="string">"tmux-256color"</span></div></pre></td></tr></table></figure>
+<p>或者启动tmux时增加参数<code>-2</code>：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">alias</span> tmux=<span class="string">'tmux -2'</span> <span class="comment"># Force tmux to assume the terminal supports 256 colours</span></div></pre></td></tr></table></figure>
+<h4 id="关闭默认的rename机制"><a href="#关闭默认的rename机制" class="headerlink" title="关闭默认的rename机制"></a>关闭默认的rename机制</h4><p>tmux默认会自动重命名窗口，频繁的命令行操作，将频繁触发重命名，比较浪费CPU性能，性能差的计算机上，问题可能更为明显。建议添加如下配置关闭rename机制。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">setw -g automatic-<span class="keyword">rename</span> <span class="keyword">off</span></div><div class="line">setw -g <span class="keyword">allow</span>-<span class="keyword">rename</span> <span class="keyword">off</span></div></pre></td></tr></table></figure>
+<h4 id="去掉小圆点"><a href="#去掉小圆点" class="headerlink" title="去掉小圆点"></a>去掉小圆点</h4><p>tmux默认会同步同一个会话的操作到所有会话连接的终端窗口中，这种同步机制，限制了窗口的大小为最小的会话连接。因此当你开一个大窗口去连接会话时，实际的窗口将自动调整为最小的那个会话连接的窗口，终端剩余的空间将填充排列整齐的小圆点，如下所示。</p>
+<p><img src="http://louiszhai.github.io/docImages/tmux03.png" alt="dot"></p>
+<p>为了避免这种问题，我们可以在连接会话的时候，断开其他的会话连接。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">tmux a -d</div></pre></td></tr></table></figure>
+<p>如果已经进入了tmux会话中，才发现这种问题，这个时候可以输入命令达到同样的效果。</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">`: <span class="selector-tag">a</span> -d</div></pre></td></tr></table></figure>
+<p><img src="http://louiszhai.github.io/docImages/tmux04.gif" alt="remove dot"></p>
+<h3 id="脚本化的Tmux"><a href="#脚本化的Tmux" class="headerlink" title="脚本化的Tmux"></a>脚本化的Tmux</h3><p>tmux作为终端复用软件，支持纯命令行操作也是其一大亮点。你既可以启用可视化界面创建会话，也可以运行脚本生成会话，对于tmux依赖者而言，编写几个tmux脚本批量维护会话列表，快速重启、切换、甚至分享部分会话都是非常方便的。可能会有人说为什么不用Tmux Resurrect呢？是的，Tmux Resurrect很好，一键恢复也很诱人，但是对于一个维护大量tmux会话的用户而言，一键恢复可能不见得好，分批次恢复可能是他（她）更想要的，脚本化的tmux就很好地满足了这点。</p>
+<p>脚本中创建tmux会话时，由于不需要开启可视化界面，需要输入<code>-d</code>参数指定会话后台运行，如下。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">tmux new -s init -d <span class="comment"># 后台创建一个名称为init的会话</span></div></pre></td></tr></table></figure>
+<p>新建的会话，建议<strong>重命令会话的窗口名称</strong>，以便后续维护。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 重命名init会话的第一个窗口名称为service</span></div><div class="line">tmux rename-window -t <span class="string">"init:1"</span> service</div></pre></td></tr></table></figure>
+<p>现在，可以在刚才的窗口中<strong>输入指令</strong>了。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 切换到指定目录并运行python服务</span></div><div class="line">tmux send -t <span class="string">"init:service"</span> <span class="string">"cd ~/workspace/language/python/;python2.7 server.py"</span> Enter</div></pre></td></tr></table></figure>
+<p>一个面板占用一个窗口可能太浪费了，我们来<strong>分个屏</strong>吧。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 默认上下分屏</span></div><div class="line">tmux split-window -t <span class="string">"init:service"</span></div><div class="line"><span class="comment"># 切换到指定目录并运行node服务</span></div><div class="line">tmux send -t <span class="string">"init:service"</span> <span class="string">'cd ~/data/louiszhai/node-webserver/;npm start'</span> Enter</div></pre></td></tr></table></figure>
+<p>现在一个窗口拥有上下两个面板，是时候<strong>创建一个新的窗口</strong>来运行更多的程序了。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 新建一个名称为tool的窗口</span></div><div class="line">tmux neww -a -n tool -t init <span class="comment"># neww等同于new window</span></div><div class="line"><span class="comment"># 运行weinre调试工具</span></div><div class="line">tmux send -t <span class="string">"init:tool"</span> <span class="string">"weinre --httpPort 8881 --boundHost -all-"</span> Enter</div></pre></td></tr></table></figure>
+<p>另外新建窗口运行程序，有更方便的方式，比如使用 <code>processes</code> 选项。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">tmux neww-n processes ls <span class="comment"># 新建窗口并执行命令，命令执行结束后窗口将关闭</span></div><div class="line">tmux neww-n processes top <span class="comment"># 由于top命令持续在前台运行，因此窗口将保留，直到top命令退出</span></div></pre></td></tr></table></figure>
+<p>新的窗口，我们尝试下水平分屏。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 水平分屏</span></div><div class="line">tmux split-window -h -t <span class="string">"init:tool"</span></div><div class="line"><span class="comment"># 切换到指定目录并启用aria2 web管理后台</span></div><div class="line">tmux send -t <span class="string">"init:tool"</span> <span class="string">"cd ~/data/tools/AriaNg/dist/;python -m SimpleHTTPServer 10108"</span> Enter</div></pre></td></tr></table></figure>
+<p>类似的脚本，我们可以编写一打，这样快速重启、切换、甚至分享会话都将更加便捷。</p>
+<h3 id="开机自动启用Web服务器"><a href="#开机自动启用Web服务器" class="headerlink" title="开机自动启用Web服务器"></a>开机自动启用Web服务器</h3><p>开机自动准备工作环境是一个很好的idea，但却不好实现。对于程序员而言，一个开机即用的计算机会节省大量的初始化操作，特别是前端工程师，本地常常会启用多个服务器，每次开机挨个启动将耗时耗力。为此，在遇到tmux之前，我常常拖延重启计算机的时机，一度连续运行Mac一月之久，直到它不堪重负。</p>
+<p>有了tmux脚本化的基础，开机自动启用web服务器就不在话下了，接杯水的时间，计算机就重启恢复了满血。如下是操作步骤：</p>
+<p>首先，上面的tmux脚本，可以合并到同一个文件中，指定文件权限为可执行，并命名为<code>init.sh</code>（名称可自取）。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">chmod u+x ./init.sh</div></pre></td></tr></table></figure>
+<p>然后，打开 <code>系统偏好设置</code> - <code>用户与群组</code> - <code>登录项</code>，点击添加按钮<code>+</code>，选择刚刚保存的<code>init.sh</code>脚本，最终效果如下：</p>
+<p><img src="http://louiszhai.github.io/docImages/tmux09.png" alt=""></p>
+<p>至此，Mac开机将自动运行 <code>init.sh</code> 脚本，自动启用web服务器。</p>
+<p>完成了上面这些配置，就真正实现了一键开机。</p>
+<p>最后，附上我本地的配置文件 <a href="https://github.com/Louiszhai/tmux/blob/master/.tmux.conf" target="_blank" rel="external">.tmux.conf</a>，以及启动脚本 <a href="https://github.com/Louiszhai/tmux/blob/master/init.sh" target="_blank" rel="external">init.sh</a>。明天就是国庆了，祝大家国庆快乐！</p>
+<hr>
+<p>版权声明：转载需注明作者和出处。</p>
+<p>本文作者: <a href="https://github.com/Louiszhai" target="_blank" rel="external">louis</a></p>
+<p>本文链接: <a href="http://louiszhai.github.io/2017/09/30/tmux/">http://louiszhai.github.io/2017/09/30/tmux/</a></p>
+<p>相关文章</p>
+<ul>
+<li><a href="https://github.com/tmux/tmux/wiki/FAQ#i-found-a-bug-in-tmux-what-do-i-do" target="_blank" rel="external">FAQ · tmux/tmux Wiki</a></li>
+<li><a href="https://superuser.com/questions/238702/maximizing-a-pane-in-tmux/357799#433702" target="_blank" rel="external">“Maximizing” a pane in tmux</a></li>
+<li><a href="https://superuser.com/questions/196060/selecting-text-tmux-copy-mode#1204738" target="_blank" rel="external">vim - selecting text tmux copy-mode</a></li>
+<li><a href="https://unix.stackexchange.com/questions/1045/getting-256-colors-to-work-in-tmux" target="_blank" rel="external">Getting 256 colors to work in tmux</a></li>
+<li><a href="https://www.kancloud.cn/kancloud/tmux/62462" target="_blank" rel="external">tmux: Productive Mouse-Free Development 中文版</a></li>
+<li><a href="https://github.com/ChrisJohnsen/tmux-MacOSX-pasteboard" target="_blank" rel="external">Notes and workarounds for accessing the Mac OS X pasteboard in tmux sessions</a></li>
+<li><a href="https://github.com/tmux/tmux/issues/909" target="_blank" rel="external">Unable to copy from tmux to the OS X clipboard · Issue #909 · tmux/tmux</a></li>
+</ul>
+]]></content>
+    
+    <summary type="html">
+    
+      tmux 终端复用 会话 tmux配置 快捷键 快捷指令 鼠标支持 面板切换 复制模式 使用Mac系统粘贴板 保存tmux会话 tmux resurrect tmux continuum tpm 会话分享 结对编程 tmux脚本化 开机自动启用web服务器
+    
+    </summary>
+    
+    
+      <category term="Tool" scheme="http://louiszhai.github.io/tags/Tool/"/>
+    
+  </entry>
   
   <entry>
     <title>匠心打造canvas签名组件</title>
@@ -6203,259 +6726,6 @@ c3(no)->op2->io1->e</textarea><textarea id="flowchart-0-options" style="display:
     
     
       <category term="XSS" scheme="http://louiszhai.github.io/tags/XSS/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>JavaScript字符串所有API全解密</title>
-    <link href="http://louiszhai.github.io/2016/01/12/js.String/"/>
-    <id>http://louiszhai.github.io/2016/01/12/js.String/</id>
-    <published>2016-01-12T12:27:09.000Z</published>
-    <updated>2017-05-06T12:38:01.000Z</updated>
-    
-    <content type="html"><![CDATA[<p>本文近 6k 字，读完需 10 分钟。</p>
-<p>字符串作为基本的信息交流的桥梁，几乎被所有的编程语言所实现（然而c、c++没有提供）。多数开发者几乎每天都在和字符串打交道，语言内置的String模块，极大地提升了开发者的效率。JavaScript通过自动装箱字符串字面量为String对象，自然地继承了String.prototype的所有方法，更加简化了字符串的使用。</p>
-<p>截止ES6，字符串共包含31个标准的API方法，其中有些方法出镜率较高，需要摸透原理；有些方法之间相似度较高，需要仔细分辨；甚至有些方法执行效率较低，应当尽量少的使用。下面将从String构造器方法说起，逐步帮助你掌握字符串。</p>
-<a id="more"></a>
-<h3 id="String构造器方法"><a href="#String构造器方法" class="headerlink" title="String构造器方法"></a><strong>String构造器方法</strong></h3><h4 id="fromCharCode"><a href="#fromCharCode" class="headerlink" title="fromCharCode"></a><strong>fromCharCode</strong></h4><p>fromCharCode() 方法返回使用指定的Unicode序列创建的字符串，也就是说传入Unicode序列，返回基于此创建的字符串。</p>
-<p>语法：<em>fromCharCode(num1, num2,…)</em>，传入的参数均为数字。</p>
-<p>如下这是一个简单的例子，将返回 ABC、abc、*、+、- 和 /：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">String</span>.fromCharCode(<span class="number">65</span>, <span class="number">66</span>, <span class="number">67</span>); <span class="comment">// "ABC"</span></div><div class="line"><span class="built_in">String</span>.fromCharCode(<span class="number">97</span>, <span class="number">98</span>, <span class="number">99</span>); <span class="comment">// "abc"</span></div><div class="line"><span class="built_in">String</span>.fromCharCode(<span class="number">42</span>); <span class="comment">// "*"</span></div><div class="line"><span class="built_in">String</span>.fromCharCode(<span class="number">43</span>); <span class="comment">// "+"</span></div><div class="line"><span class="built_in">String</span>.fromCharCode(<span class="number">45</span>); <span class="comment">// "-"</span></div><div class="line"><span class="built_in">String</span>.fromCharCode(<span class="number">47</span>); <span class="comment">// "/"</span></div></pre></td></tr></table></figure>
-<p>看起来fromCharCode像是满足了需求，但实际上由于js语言设计时的先天不足（只能处理UCS-2编码，即所有字符都是2个字节，无法处理4字节字符），通过该方法并不能返回一个4字节的字符，为了弥补这个缺陷，ES6新增了fromCodePoint方法，请往下看。</p>
-<h4 id="fromCodePoint-ES6"><a href="#fromCodePoint-ES6" class="headerlink" title="fromCodePoint(ES6)"></a><strong>fromCodePoint(ES6)</strong></h4><p>fromCodePoint() 方法基于<strong>ECMAScript 2015（ES6）规范</strong>，作用和语法同fromCharCode方法，该方法主要扩展了对4字节字符的支持。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// "𝌆" 是一个4字节字符，我们先看下它的数字形式</span></div><div class="line"><span class="string">"𝌆"</span>.codePointAt(); <span class="comment">// 119558</span></div><div class="line"><span class="comment">//调用fromCharCode解析之，返回乱码</span></div><div class="line"><span class="built_in">String</span>.fromCharCode(<span class="number">119558</span>); <span class="comment">// "팆"</span></div><div class="line"><span class="comment">//调用fromCodePoint解析之，正常解析</span></div><div class="line"><span class="built_in">String</span>.fromCodePoint(<span class="number">119558</span>); <span class="comment">// "𝌆"</span></div></pre></td></tr></table></figure>
-<p>除了扩展对4字节的支持外，fromCodePoint还规范了错误处理，只要是无效的Unicode编码，就会抛出错误<code>RangeError: Invalid code point...</code>，这就意味着，只要不是符合Unicode字符范围的正整数（Unicode最多可容纳1114112个码位），均会抛出错误。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">String</span>.fromCodePoint(<span class="string">'abc'</span>); <span class="comment">// RangeError: Invalid code point NaN</span></div><div class="line"><span class="built_in">String</span>.fromCodePoint(<span class="literal">Infinity</span>); <span class="comment">// RangeError: Invalid code point Infinity</span></div><div class="line"><span class="built_in">String</span>.fromCodePoint(<span class="number">-1.23</span>); <span class="comment">// RangeError: Invalid code point -1.23</span></div></pre></td></tr></table></figure>
-<p>注：进一步了解Unicode编码，推荐这篇文章：<a href="http://www.fmddlmyy.cn/mytext.html" target="_blank" rel="external">浅谈文字编码和Unicode（下）</a>。如需在老的浏览器中使用该方法，请参考<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/String/fromCodePoint#Polyfill-浏览器补丁" target="_blank" rel="external">Polyfill</a>。</p>
-<h4 id="raw-ES6"><a href="#raw-ES6" class="headerlink" title="raw(ES6)"></a>raw(ES6)</h4><p>raw() 方法基于<strong>ECMAScript 2015（ES6）规范</strong>，它是一个模板字符串的标签函数，作用类似于Python的r和C#的@字符串前缀，都是用来获取一个模板字符串的原始字面量。</p>
-<p>语法： <em>String.raw(callSite, …substitutions)</em>，callSite即模板字符串的『调用点对象』，…substitutions表示任意个内插表达式对应的值，这里理解起来相当拗口，下面我将通俗的讲解它。</p>
-<p>如下是python的字符串前缀r：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 防止特殊字符串被转义</span></div><div class="line"><span class="keyword">print</span> <span class="string">r'a\nb\tc'</span> <span class="comment"># 打印出来依然是 "a\nb\tc"</span></div><div class="line"><span class="comment"># python中常用于正则表达式</span></div><div class="line">regExp = <span class="string">r'(?&lt;=123)[a-z]+'</span></div></pre></td></tr></table></figure>
-<p>如下是String.raw作为前缀的用法：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 防止特殊字符串被转义</span></div><div class="line"><span class="built_in">String</span>.raw<span class="string">`a\nb\tc`</span>; <span class="comment">// 输出为 "a\nb\tc"</span></div><div class="line"><span class="comment">// 支持内插表达式</span></div><div class="line"><span class="keyword">let</span> name = <span class="string">"louis"</span>;</div><div class="line"><span class="built_in">String</span>.raw<span class="string">`Hello \n <span class="subst">$&#123;name&#125;</span>`</span>;  <span class="comment">// "Hello \n louis"</span></div><div class="line"><span class="comment">// 内插表达式还可以运算</span></div><div class="line"><span class="built_in">String</span>.raw<span class="string">`1+2=<span class="subst">$&#123;<span class="number">1</span>+<span class="number">2</span>&#125;</span>,2*3=<span class="subst">$&#123;<span class="number">2</span>*<span class="number">3</span>&#125;</span>`</span>; <span class="comment">// "1+2=3,2*3=6"</span></div></pre></td></tr></table></figure>
-<p>String.raw作为函数来调用的场景不太多，如下是用法：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 对象的raw属性值为字符串时，从第二个参数起，它们分别被插入到下标为0，1，2，...n的元素后面</span></div><div class="line"><span class="built_in">String</span>.raw(&#123;<span class="attr">raw</span>: <span class="string">'abcd'</span>&#125;, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>); <span class="comment">// "a1b2c3d"</span></div><div class="line"><span class="comment">// 对象的raw属性值为数组时，从第二个参数起，它们分别被插入到数组下标为0，1，2，...n的元素后面</span></div><div class="line"><span class="built_in">String</span>.raw(&#123;<span class="attr">raw</span>: [<span class="string">'a'</span>, <span class="string">'b'</span>, <span class="string">'c'</span>, <span class="string">'d'</span>]&#125;, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>); <span class="comment">// "a1b2c3d"</span></div></pre></td></tr></table></figure>
-<p>那么怎么解释String.raw函数按照下标挨个去插入的特性呢？MDN上有段描述如下：</p>
-<blockquote>
-<p>In most cases, <code>String.raw()</code> is used with template strings. The first syntax mentioned above is only rarely used, because <strong>the JavaScript engine will call this with proper arguments for you</strong>, just like with other tag functions.</p>
-</blockquote>
-<p>这意味着，String.raw作为函数调用时，基本与ES6的tag标签模板一样。如下：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 如下是tag函数的实现</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">tag</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  <span class="keyword">const</span> array = <span class="built_in">arguments</span>[<span class="number">0</span>];</div><div class="line">  <span class="keyword">return</span> array.reduce(<span class="function">(<span class="params">p, v, i</span>) =&gt;</span> p + (<span class="built_in">arguments</span>[i] || <span class="string">''</span>) + v);</div><div class="line">&#125;</div><div class="line"><span class="comment">// 回顾一个simple的tag标签模板</span></div><div class="line">tag<span class="string">`Hello <span class="subst">$&#123; <span class="number">2</span> + <span class="number">3</span> &#125;</span> world <span class="subst">$&#123; <span class="number">2</span> * <span class="number">3</span> &#125;</span>`</span>; <span class="comment">// "Hello 5 world 6"</span></div><div class="line"><span class="comment">// 其实就想当于如下调用</span></div><div class="line">tag([<span class="string">'Hello '</span>, <span class="string">' world '</span>, <span class="string">''</span>], <span class="number">5</span>, <span class="number">6</span>); <span class="comment">// "Hello 5 world 6"</span></div></pre></td></tr></table></figure>
-<p>因此String.raw作为函数调用时，不论对象的raw属性值是字符串还是数组，插槽都是天生的，下标为0，1，2，…n的元素后面都是插槽（不包括最后一个元素）。实际上，它相当于是这样的tag函数：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">tag</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  <span class="keyword">const</span> array = <span class="built_in">arguments</span>[<span class="number">0</span>].raw;</div><div class="line">  <span class="keyword">if</span>(array === <span class="literal">undefined</span> || array === <span class="literal">null</span>)&#123; <span class="comment">// 这里可简写成 array == undefined</span></div><div class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">TypeError</span>(<span class="string">'Cannot convert undefined or null to object'</span>);</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">return</span> array.reduce(<span class="function">(<span class="params">p, v, i</span>) =&gt;</span> p + (<span class="built_in">arguments</span>[i] || <span class="string">''</span>) + v);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>实际上，String.raw作为函数调用时，若第一个参数不是一个符合标准格式的对象，执行将抛出TypeError错误。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">String</span>.raw(&#123;<span class="number">123</span>: <span class="string">'abcd'</span>&#125;, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>); <span class="comment">// TypeError: Cannot convert undefined or null to object</span></div></pre></td></tr></table></figure>
-<p>目前只有Chrome v41+和Firefox v34+版本浏览器实现了该方法。</p>
-<h3 id="String-prototype"><a href="#String-prototype" class="headerlink" title="String.prototype"></a><strong>String.prototype</strong></h3><p>和其他所有对象一样，字符串实例的所有方法均来自String.prototype。以下是它的属性特性：</p>
-<table>
-<thead>
-<tr>
-<th style="text-align:left">writable</th>
-<th>false</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left">enumerable</td>
-<td>false</td>
-</tr>
-<tr>
-<td style="text-align:left">configurable</td>
-<td>false</td>
-</tr>
-</tbody>
-</table>
-<p>可见，字符串属性不可编辑，任何试图改变它属性的行为都将抛出错误。</p>
-<h4 id="属性"><a href="#属性" class="headerlink" title="属性"></a><strong>属性</strong></h4><p>String.prototype共有两个属性，如下：</p>
-<ul>
-<li>String.prototype.constructor 指向构造器(String())</li>
-<li>String.prototype.length 表示字符串长度</li>
-</ul>
-<h4 id="方法"><a href="#方法" class="headerlink" title="方法"></a><strong>方法</strong></h4><p>字符串原型方法分为两种，一种是html无关的方法，一种是html有关的方法。我们先看第一种。但是无论字符串方法如何厉害，都不至于强大到可以改变原字符串。</p>
-<h5 id="HTML无关的方法"><a href="#HTML无关的方法" class="headerlink" title="HTML无关的方法"></a><strong>HTML无关的方法</strong></h5><p>常用的方法有，charAt、charCodeAt、concat、indexOf、lastIndexOf、localeCompare、match、replace、search、slice、split、substr、substring、toLocaleLowerCase、toLocaleUpperCase、toLowerCase、toString、toUpperCase、trim、valueof 等ES5支持的，以及 codePointAt、contains、endsWith、normalize、repeat、startsWith 等ES6支持的，还包括 quote、toSource、trimLeft、trimRight 等非标准的。</p>
-<p>接下来我们将对各个方法分别举例阐述其用法。若没有特别说明，默认该方法兼容所有目前主流浏览器。</p>
-<h6 id="charAt"><a href="#charAt" class="headerlink" title="charAt"></a><strong>charAt</strong></h6><p>charAt() 方法返回字符串中指定位置的字符。</p>
-<p>语法：<em>str.charAt(index)</em></p>
-<p>index 为字符串索引（取值从0至length-1），如果超出该范围，则返回空串。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(<span class="string">"Hello, World"</span>.charAt(<span class="number">8</span>)); <span class="comment">// o, 返回下标为8的字符串o</span></div></pre></td></tr></table></figure>
-<h6 id="charCodeAt"><a href="#charCodeAt" class="headerlink" title="charCodeAt"></a><strong>charCodeAt</strong></h6><p>charCodeAt() 返回指定索引处字符的 Unicode 数值。</p>
-<p>语法：<em>str.charCodeAt(index)</em></p>
-<p>index 为一个从0至length-1的整数。如果不是一个数值，则默认为 0，如果小于0或者大于字符串长度，则返回 NaN。</p>
-<p>Unicode 编码单元（code points）的范围从 0 到 1,114,111。开头的 128 个 Unicode 编码单元和 ASCII 字符编码一样. </p>
-<p>charCodeAt() 总是返回一个小于 65,536 的值。因为高位编码单元需要由一对字符来表示，为了查看其编码的完成字符，需要查看 charCodeAt(i) 以及 charCodeAt(i+1) 的值。如需更多了解请参考 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/String/prototype" target="_blank" rel="external">fixedCharCodeAt</a>。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(<span class="string">"Hello, World"</span>.charCodeAt(<span class="number">8</span>)); <span class="comment">// 111</span></div><div class="line"><span class="built_in">console</span>.log(<span class="string">"前端工程师"</span>.charCodeAt(<span class="number">2</span>)); <span class="comment">// 24037, 可见也可以查看中文Unicode编码</span></div></pre></td></tr></table></figure>
-<h6 id="concat"><a href="#concat" class="headerlink" title="concat"></a><strong>concat</strong></h6><p>concat() 方法将一个或多个字符串拼接在一起，组成新的字符串并返回。</p>
-<p>语法：<em>str.concat(string2, string3, …)</em></p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(<span class="string">"早"</span>.concat(<span class="string">"上"</span>,<span class="string">"好"</span>)); <span class="comment">// 早上好</span></div></pre></td></tr></table></figure>
-<p>但是 concat 的性能表现不佳，强烈推荐使用赋值操作符（+或+=）代替 concat。”+” 操作符大概快了 concat 几十倍。（数据参考 <a href="http://jsperf.com/concat-vs-plus-vs-join" target="_blank" rel="external">性能测试</a>）。</p>
-<h6 id="indexOf"><a href="#indexOf" class="headerlink" title="indexOf"></a><strong>indexOf</strong></h6><h6 id="lastIndexOf"><a href="#lastIndexOf" class="headerlink" title="lastIndexOf"></a><strong>lastIndexOf</strong></h6><p>indexOf() 方法用于查找子字符串在字符串中首次出现的位置，没有则返回 -1。该方法严格区分大小写，并且从左往右查找。而 lastIndexOf 则从右往左查找，其它与前者一致。</p>
-<p>语法：<em>str.indexOf(searchValue [, fromIndex=0])</em>，<em>str.lastIndexOf(searchValue [, fromIndex=0])</em></p>
-<p>searchValue 表示被查找的字符串，fromIndex 表示开始查找的位置，默认为0，如果小于0，则查找整个字符串，若超过字符串长度，则该方法返回-1，除非被查找的是空字符串，此时返回字符串长度。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(<span class="string">""</span>.indexOf(<span class="string">""</span>,<span class="number">100</span>)); <span class="comment">// 0</span></div><div class="line"><span class="built_in">console</span>.log(<span class="string">"IT改变世界"</span>.indexOf(<span class="string">"世界"</span>)); <span class="comment">// 4</span></div><div class="line"><span class="built_in">console</span>.log(<span class="string">"IT改变世界"</span>.lastIndexOf(<span class="string">"世界"</span>)); <span class="comment">// 4</span></div></pre></td></tr></table></figure>
-<h6 id="localeCompare"><a href="#localeCompare" class="headerlink" title="localeCompare"></a><strong>localeCompare</strong></h6><p>localeCompare() 方法用来比较字符串，如果指定字符串在原字符串的前面则返回负数，否则返回正数或0，其中0 表示两个字符串相同。该方法实现依赖具体的本地实现，不同的语言下可能有不同的返回。</p>
-<p>语法：<em>str.localeCompare(str2 [, locales [, options]])</em></p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> str = <span class="string">"apple"</span>;</div><div class="line"><span class="keyword">var</span> str2 = <span class="string">"orange"</span>;</div><div class="line"><span class="built_in">console</span>.log(str.localeCompare(str2)); <span class="comment">// -1</span></div><div class="line"><span class="built_in">console</span>.log(str.localeCompare(<span class="string">"123"</span>)); <span class="comment">// 1</span></div></pre></td></tr></table></figure>
-<p>目前 Safari 浏览器暂不支持该方法，但Chrome v24+、Firefox v29+，IE11+ 和 Opera v15+ 都已实现了它。</p>
-<h6 id="match"><a href="#match" class="headerlink" title="match"></a><strong>match</strong></h6><p>match() 方法用于测试字符串是否支持指定正则表达式的规则，即使传入的是非正则表达式对象，它也会隐式地使用<code>new RegExp(obj)</code>将其转换为正则表达式对象。</p>
-<p>语法：<em>str.match(regexp)</em></p>
-<p>该方法返回包含匹配结果的数组，如果没有匹配项，则返回 null。</p>
-<p><strong>描述</strong></p>
-<ul>
-<li>若正则表达式没有 g 标志，则返回同 RegExp.exec(str) 相同的结果。而且返回的数组拥有一个额外的 input 属性，该属性包含原始字符串，另外该数组还拥有一个 index 属性，该属性表示匹配字符串在原字符串中索引（从0开始）。</li>
-<li>若正则表达式包含 g 标志，则该方法返回一个包含所有匹配结果的数组，没有匹配到则返回 null。</li>
-</ul>
-<p><strong>相关 RegExp 方法</strong></p>
-<ul>
-<li>若需测试字符串是否匹配正则，请参考 RegExp.test(str)。</li>
-<li>若只需第一个匹配结果，请参考 RegExp.exec(str)。</li>
-</ul>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> str = <span class="string">"World Internet Conference"</span>;</div><div class="line"><span class="built_in">console</span>.log(str.match(<span class="regexp">/[a-d]/i</span>)); <span class="comment">// ["d", index: 4, input: "World Internet Conference"]</span></div><div class="line"><span class="built_in">console</span>.log(str.match(<span class="regexp">/[a-d]/gi</span>)); <span class="comment">// ["d", "C", "c"]</span></div><div class="line"><span class="comment">// RegExp 方法如下</span></div><div class="line"><span class="built_in">console</span>.log(<span class="regexp">/[a-d]/gi</span>.test(str)); <span class="comment">// true</span></div><div class="line"><span class="built_in">console</span>.log(<span class="regexp">/[a-d]/gi</span>.exec(str)); <span class="comment">// ["d", index: 4, input: "World Internet Conference"]</span></div></pre></td></tr></table></figure>
-<p>由上可知，RegExp.test(str) 方法只要匹配到了一个字符也返回true。而RegExp.exec(str) 方法无论正则中有没有包含 g 标志，RegExp.exec将直接返回第一个匹配结果，且该结果同 str.match(regexp) 方法不包含 g 标志时的返回一致。</p>
-<h6 id="replace"><a href="#replace" class="headerlink" title="replace"></a><strong>replace</strong></h6><p>该方法在之前已经讲过，详细请参考 <a href="http://louiszhai.github.io/2015/12/11/js.replace/"><code>String.prototype.replace高阶技能</code></a> 。</p>
-<h6 id="search"><a href="#search" class="headerlink" title="search"></a><strong>search</strong></h6><p>search() 方法用于测试字符串对象是否包含某个正则匹配，相当于正则表达式的 test 方法，且该方法比 match() 方法更快。如果匹配成功，search() 返回正则表达式在字符串中首次匹配项的索引，否则返回-1。</p>
-<p>注意：<strong>search方法与indexOf方法作用基本一致，都是查询到了就返回子串第一次出现的下标，否则返回-1，唯一的区别就在于search默认会将子串转化为正则表达式形式，而indexOf不做此处理，也不能处理正则。</strong></p>
-<p>语法：<em>str.search(regexp)</em></p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> str = <span class="string">"abcdefg"</span>;</div><div class="line"><span class="built_in">console</span>.log(str.search(<span class="regexp">/[d-g]/</span>)); <span class="comment">// 3, 匹配到子串"defg",而d在原字符串中的索引为3</span></div></pre></td></tr></table></figure>
-<p>search() 方法不支持全局匹配（正则中包含g参数），如下：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(str.search(<span class="regexp">/[d-g]/g</span>)); <span class="comment">// 3, 与无g参数时,返回相同</span></div></pre></td></tr></table></figure>
-<h6 id="slice"><a href="#slice" class="headerlink" title="slice"></a><strong>slice</strong></h6><p>slice() 方法提取字符串的一部分，并返回新的字符串。该方法有些类似 Array.prototype.slice 方法。</p>
-<p>语法：<em>str.slice(start, end)</em></p>
-<p>首先 end 参数可选，start可取正值，也可取负值。</p>
-<p>取正值时表示从索引为start的位置截取到end的位置（不包括end所在位置的字符，如果end省略则截取到字符串末尾）。</p>
-<p>取负值时表示从索引为 length+start 位置截取到end所在位置的字符。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> str = <span class="string">"It is our choices that show what we truly are, far more than our abilities."</span>;</div><div class="line"><span class="built_in">console</span>.log(str.slice(<span class="number">0</span>,<span class="number">-30</span>)); <span class="comment">// It is our choices that show what we truly are</span></div><div class="line"><span class="built_in">console</span>.log(str.slice(<span class="number">-30</span>)); <span class="comment">// , far more than our abilities.</span></div></pre></td></tr></table></figure>
-<h6 id="split"><a href="#split" class="headerlink" title="split"></a><strong>split</strong></h6><p>split() 方法把原字符串分割成子字符串组成数组，并返回该数组。</p>
-<p>语法：<em>str.split(separator, limit)</em></p>
-<p>两个参数均是可选的，其中 separator 表示分隔符，它可以是字符串也可以是正则表达式。如果忽略 separator，则返回的数组包含一个由原字符串组成的元素。如果 separator 是一个空串，则 str 将会被分割成一个由原字符串中字符组成的数组。limit 表示从返回的数组中截取前 limit 个元素，从而限定返回的数组长度。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> str = <span class="string">"today is a sunny day"</span>;</div><div class="line"><span class="built_in">console</span>.log(str.split()); <span class="comment">// ["today is a sunny day"]</span></div><div class="line"><span class="built_in">console</span>.log(str.split(<span class="string">""</span>)); <span class="comment">// ["t", "o", "d", "a", "y", " ", "i", "s", " ", "a", " ", "s", "u", "n", "n", "y", " ", "d", "a", "y"]</span></div><div class="line"><span class="built_in">console</span>.log(str.split(<span class="string">" "</span>)); <span class="comment">// ["today", "is", "a", "sunny", "day"]</span></div></pre></td></tr></table></figure>
-<p>使用limit限定返回的数组大小，如下：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(str.split(<span class="string">" "</span>)); <span class="comment">// ["today"]</span></div></pre></td></tr></table></figure>
-<p>使用正则分隔符（RegExp separator）， 如下：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(str.split(<span class="regexp">/\s*is\s*/</span>)); <span class="comment">// ["today", "a sunny day"]</span></div></pre></td></tr></table></figure>
-<p>若正则分隔符里包含捕获括号，则括号匹配的结果将会包含在返回的数组中。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(str.split(<span class="regexp">/(\s*is\s*)/</span>)); <span class="comment">// ["today", " is ", "a sunny day"]</span></div></pre></td></tr></table></figure>
-<h6 id="substr"><a href="#substr" class="headerlink" title="substr"></a><strong>substr</strong></h6><p>substr() 方法返回字符串指定位置开始的指定数量的字符。</p>
-<p>语法：<em>str.substr(start[, length])</em></p>
-<p>start 表示开始截取字符的位置，可取正值或负值。取正值时表示start位置的索引，取负值时表示 length+start位置的索引。</p>
-<p>length 表示截取的字符长度。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> str = <span class="string">"Yesterday is history. Tomorrow is mystery. But today is a gift."</span>;</div><div class="line"><span class="built_in">console</span>.log(str.substr(<span class="number">47</span>)); <span class="comment">// today is a gift.</span></div><div class="line"><span class="built_in">console</span>.log(str.substr(<span class="number">-16</span>)); <span class="comment">// today is a gift.</span></div></pre></td></tr></table></figure>
-<p>目前 Microsoft’s JScript 不支持 start 参数取负的索引，如需在 IE 下支持，请参考 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/String/substr#Description" target="_blank" rel="external">Polyfill</a>。</p>
-<h6 id="substring"><a href="#substring" class="headerlink" title="substring"></a><strong>substring</strong></h6><p>substring() 方法返回字符串两个索引之间的子串。</p>
-<p>语法：<em>str.substring(indexA[, indexB])</em></p>
-<p>indexA、indexB 表示字符串索引，其中 indexB 可选，如果省略，则表示返回从 indexA 到字符串末尾的子串。</p>
-<p><strong>描述</strong></p>
-<p>substring 要截取的是从 indexA 到 indexB（不包含）之间的字符，符合以下规律：</p>
-<ul>
-<li>若 indexA == indexB，则返回一个空字符串；</li>
-<li>若 省略 indexB，则提取字符一直到字符串末尾；</li>
-<li>若 任一参数小于 0 或 NaN，则被当作 0；</li>
-<li>若 任一参数大于 length，则被当作 length。</li>
-</ul>
-<p>而 如果 indexA &gt; indexB，则 substring 的执行效果就像是两个参数调换一般。比如：str.substring(0, 1) == str.substring(1, 0)</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> str = <span class="string">"Get outside every day. Miracles are waiting everywhere."</span>;</div><div class="line"><span class="built_in">console</span>.log(str.substring(<span class="number">1</span>,<span class="number">1</span>)); <span class="comment">// ""</span></div><div class="line"><span class="built_in">console</span>.log(str.substring(<span class="number">0</span>)); <span class="comment">// Get outside every day. Miracles are waiting everywhere.</span></div><div class="line"><span class="built_in">console</span>.log(str.substring(<span class="number">-1</span>)); <span class="comment">// Get outside every day. Miracles are waiting everywhere.</span></div><div class="line"><span class="built_in">console</span>.log(str.substring(<span class="number">0</span>,<span class="number">100</span>)); <span class="comment">// Get outside every day. Miracles are waiting everywhere.</span></div><div class="line"><span class="built_in">console</span>.log(str.substring(<span class="number">22</span>,<span class="literal">NaN</span>)); <span class="comment">// Get outside every day.</span></div></pre></td></tr></table></figure>
-<h6 id="toLocaleLowerCase"><a href="#toLocaleLowerCase" class="headerlink" title="toLocaleLowerCase"></a><strong>toLocaleLowerCase</strong></h6><h6 id="toLocaleUpperCase"><a href="#toLocaleUpperCase" class="headerlink" title="toLocaleUpperCase"></a><strong>toLocaleUpperCase</strong></h6><p>toLocaleLowerCase() 方法返回调用该方法的字符串被转换成小写的值，转换规则根据本地化的大小写映射。而toLocaleUpperCase() 方法则是转换成大写的值。</p>
-<p>语法：<em>str.toLocaleLowerCase()</em>, <em>str.toLocaleUpperCase()</em></p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(<span class="string">'ABCDEFG'</span>.toLocaleLowerCase()); <span class="comment">// abcdefg</span></div><div class="line"><span class="built_in">console</span>.log(<span class="string">'abcdefg'</span>.toLocaleUpperCase()); <span class="comment">// ABCDEFG</span></div></pre></td></tr></table></figure>
-<h6 id="toLowerCase"><a href="#toLowerCase" class="headerlink" title="toLowerCase"></a><strong>toLowerCase</strong></h6><h6 id="toUpperCase"><a href="#toUpperCase" class="headerlink" title="toUpperCase"></a><strong>toUpperCase</strong></h6><p>这两个方法分别表示将字符串转换为相应的小写，大写形式，并返回。如下：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(<span class="string">'ABCDEFG'</span>.toLowerCase()); <span class="comment">// abcdefg</span></div><div class="line"><span class="built_in">console</span>.log(<span class="string">'abcdefg'</span>.toUpperCase()); <span class="comment">// ABCDEFG</span></div></pre></td></tr></table></figure>
-<h6 id="toString-NaN"><a href="#toString-NaN" class="headerlink" title="toString"></a><strong>toString</strong></h6><h6 id="valueOf-NaN"><a href="#valueOf-NaN" class="headerlink" title="valueOf"></a><strong>valueOf</strong></h6><p>这两个方法都是返回字符串本身。</p>
-<p>语法：<em>str.toString()</em>, <em>str.valueOf()</em></p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> str = <span class="string">"abc"</span>;</div><div class="line"><span class="built_in">console</span>.log(str.toString()); <span class="comment">// abc</span></div><div class="line"><span class="built_in">console</span>.log(str.toString()==str.valueOf()); <span class="comment">// true</span></div></pre></td></tr></table></figure>
-<p>对于对象而言，toString和valueOf也是非常的相似，它们之间有着细微的差别，请尝试运行以下一段代码：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> x = &#123;</div><div class="line">    <span class="attr">toString</span>: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123; <span class="keyword">return</span> <span class="string">"test"</span>; &#125;,</div><div class="line">    <span class="attr">valueOf</span>: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123; <span class="keyword">return</span> <span class="number">123</span>; &#125;</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="built_in">console</span>.log(x); <span class="comment">// test</span></div><div class="line"><span class="built_in">console</span>.log(<span class="string">"x="</span> + x); <span class="comment">// "x=123"</span></div><div class="line"><span class="built_in">console</span>.log(x + <span class="string">"=x"</span>); <span class="comment">// "123=x"</span></div><div class="line"><span class="built_in">console</span>.log(x + <span class="string">"1"</span>); <span class="comment">// 1231</span></div><div class="line"><span class="built_in">console</span>.log(x + <span class="number">1</span>); <span class="comment">// 124</span></div><div class="line"><span class="built_in">console</span>.log([<span class="string">"x="</span>, x].join(<span class="string">""</span>)); <span class="comment">// "x=test"</span></div></pre></td></tr></table></figure>
-<p>当 “+” 操作符一边为数字时，对象x趋向于转换为数字，表达式会优先调用 valueOf 方法，如果调用数组的 join 方法，对象x趋向于转换为字符串，表达式会优先调用 toString 方法。</p>
-<h6 id="trim"><a href="#trim" class="headerlink" title="trim"></a><strong>trim</strong></h6><p>trim() 方法清除字符串首尾的空白并返回。</p>
-<p>语法：<em>str.trim()</em></p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(<span class="string">" a b c "</span>.trim()); <span class="comment">// "a b c"</span></div></pre></td></tr></table></figure>
-<p>trim() 方法是 ECMAScript 5.1 标准加入的，它并不支持IE9以下的低版本IE浏览器，如需支持，请参考以下兼容写法：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span>(!<span class="built_in">String</span>.prototype.trim) &#123;</div><div class="line">  <span class="built_in">String</span>.prototype.trim = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.replace(<span class="regexp">/^\s+|\s+$/g</span>,<span class="string">''</span>);</div><div class="line">  &#125;;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h6 id="codePointAt-ES6"><a href="#codePointAt-ES6" class="headerlink" title="codePointAt(ES6)"></a><strong>codePointAt(ES6)</strong></h6><p>codePointAt() 方法基于<strong>ECMAScript 2015（ES6）规范</strong>，返回使用UTF-16编码的给定位置的值的非负整数。</p>
-<p>语法：<em>str.codePointAt(position)</em></p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(<span class="string">"a"</span>.codePointAt(<span class="number">0</span>)); <span class="comment">// 97</span></div><div class="line"><span class="built_in">console</span>.log(<span class="string">"\u4f60\u597d"</span>.codePointAt(<span class="number">0</span>)); <span class="comment">// 20320</span></div></pre></td></tr></table></figure>
-<p>如需在老的浏览器中使用该方法，请参考 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/String/codePointAt#Polyfill" target="_blank" rel="external">Polyfill</a>。</p>
-<h6 id="includes-ES6"><a href="#includes-ES6" class="headerlink" title="includes(ES6)"></a><strong>includes(ES6)</strong></h6><p>includes() 方法基于<strong>ECMAScript 2015（ES6）规范</strong>，它用来判断一个字符串是否属于另一个字符。如果是，则返回true，否则返回false。</p>
-<p>语法：<em>str.includes(subString [, position])</em></p>
-<p>subString 表示要搜索的字符串，position 表示从当前字符串的哪个位置开始搜索字符串，默认值为0。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> str = <span class="string">"Practice makes perfect."</span>;</div><div class="line"><span class="built_in">console</span>.log(str.includes(<span class="string">"perfect"</span>)); <span class="comment">// true</span></div><div class="line"><span class="built_in">console</span>.log(str.includes(<span class="string">"perfect"</span>,<span class="number">100</span>)); <span class="comment">// false</span></div></pre></td></tr></table></figure>
-<p>实际上，Firefox 18~39中该方法的名称为contains，由于<a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1102219" target="_blank" rel="external">bug 1102219</a>的存在，它被重命名为<code>includes()</code> 。目前只有Chrome v41+和Firefox v40+版本浏览器实现了它，如需在其它版本浏览器中使用该方法，请参考 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/String/includes#填充" target="_blank" rel="external">Polyfill</a>。</p>
-<h6 id="endsWith-ES6"><a href="#endsWith-ES6" class="headerlink" title="endsWith(ES6)"></a><strong>endsWith(ES6)</strong></h6><p>endsWith() 方法基于<strong>ECMAScript 2015（ES6）规范</strong>，它基本与 contains() 功能相同，不同的是，它用来判断一个字符串是否是原字符串的结尾。若是则返回true，否则返回false。</p>
-<p>语法：<em>str.endsWith(substring [, position])</em></p>
-<p>与contains 方法不同，position 参数的默认值为字符串长度。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> str = <span class="string">"Learn and live."</span>;</div><div class="line"><span class="built_in">console</span>.log(str.endsWith(<span class="string">"live."</span>)); <span class="comment">// true</span></div><div class="line"><span class="built_in">console</span>.log(str.endsWith(<span class="string">"Learn"</span>,<span class="number">5</span>)); <span class="comment">// true</span></div></pre></td></tr></table></figure>
-<p>同样目前只有 Firefox v17+版本实现了该方法。其它浏览器请参考 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/String/endsWith#Polyfill" target="_blank" rel="external">Polyfill</a>。</p>
-<h6 id="normalize-ES6"><a href="#normalize-ES6" class="headerlink" title="normalize(ES6)"></a><strong>normalize(ES6)</strong></h6><p>normalize() 方法基于<strong>ECMAScript 2015（ES6）规范</strong>，它会按照指定的 Unicode 正规形式将原字符串正规化。</p>
-<p>语法：<em>str.normalize([form])</em></p>
-<p>form 参数可省略，目前有四种 Unicode 正规形式，即 “NFC”、”NFD”、”NFKC” 以及 “NFKD”，form的默认值为 “NFC”。如果form 传入了非法的参数值，则会抛出 RangeError 错误。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> str = <span class="string">"\u4f60\u597d"</span>;</div><div class="line"><span class="built_in">console</span>.log(str.normalize()); <span class="comment">// 你好</span></div><div class="line"><span class="built_in">console</span>.log(str.normalize(<span class="string">"NFC"</span>)); <span class="comment">// 你好</span></div><div class="line"><span class="built_in">console</span>.log(str.normalize(<span class="string">"NFD"</span>)); <span class="comment">// 你好</span></div><div class="line"><span class="built_in">console</span>.log(str.normalize(<span class="string">"NFKC"</span>)); <span class="comment">// 你好</span></div><div class="line"><span class="built_in">console</span>.log(str.normalize(<span class="string">"NFKD"</span>)); <span class="comment">// 你好</span></div></pre></td></tr></table></figure>
-<p>目前只有Chrome v34+和Firefox v31+实现了它。</p>
-<h6 id="repeat-ES6"><a href="#repeat-ES6" class="headerlink" title="repeat(ES6)"></a><strong>repeat(ES6)</strong></h6><p>repeat() 方法基于<strong>ECMAScript 2015（ES6）规范</strong>，它返回重复原字符串多次的新字符串。</p>
-<p>语法：<em>str.repeat(count)</em></p>
-<p>count 参数只能取大于等于0 的数字。若该数字不为整数，将自动转换为整数形式，若为负数或者其他值将报错。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> str = <span class="string">"A still tongue makes a wise head."</span>;</div><div class="line"><span class="built_in">console</span>.log(str.repeat(<span class="number">0</span>)); <span class="comment">// ""</span></div><div class="line"><span class="built_in">console</span>.log(str.repeat(<span class="number">1</span>)); <span class="comment">// A still tongue makes a wise head.</span></div><div class="line"><span class="built_in">console</span>.log(str.repeat(<span class="number">1.5</span>)); <span class="comment">// A still tongue makes a wise head.</span></div><div class="line"><span class="built_in">console</span>.log(str.repeat(<span class="number">-1</span>)); <span class="comment">// RangeError:Invalid count value</span></div></pre></td></tr></table></figure>
-<p>目前只有 Chrome v41+、Firefox v24+和Safari v9+版本浏览器实现了该方法。其他浏览器请参考 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/String/repeat#填充" target="_blank" rel="external">Polyfill</a>。</p>
-<h6 id="startsWith-ES6"><a href="#startsWith-ES6" class="headerlink" title="startsWith(ES6)"></a><strong>startsWith(ES6)</strong></h6><p>startsWith() 方法基于<strong>ECMAScript 2015（ES6）规范</strong>，它用来判断当前字符串是否是以给定字符串开始的，若是则返回true，否则返回false。</p>
-<p>语法：<em>str.startsWith(subString [, position])</em></p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> str = <span class="string">"Where there is a will, there is a way."</span>;</div><div class="line"><span class="built_in">console</span>.log(str.startsWith(<span class="string">"Where"</span>)); <span class="comment">// true</span></div><div class="line"><span class="built_in">console</span>.log(str.startsWith(<span class="string">"there"</span>,<span class="number">6</span>)); <span class="comment">// true</span></div></pre></td></tr></table></figure>
-<p>目前以下版本浏览器实现了该方法，其他浏览器请参考 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/String/startsWith#Polyfill" target="_blank" rel="external">Polyfill</a>。</p>
-<table>
-<thead>
-<tr>
-<th style="text-align:center">Chrome</th>
-<th style="text-align:center">Firefox</th>
-<th style="text-align:center">Edge</th>
-<th style="text-align:center">Opera</th>
-<th style="text-align:center">Safari</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">41+</td>
-<td style="text-align:center">17+</td>
-<td style="text-align:center">✔️</td>
-<td style="text-align:center">28+</td>
-<td style="text-align:center">9+</td>
-</tr>
-</tbody>
-</table>
-<p>其它<strong>非标准</strong>的方法暂时不作介绍，如需了解请参考 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/String/prototype" target="_blank" rel="external">String.prototype</a> 中标注为感叹号的方法。</p>
-<h5 id="HTML有关的方法"><a href="#HTML有关的方法" class="headerlink" title="HTML有关的方法"></a>HTML有关的方法</h5><p>常用的方法有 anchor，link 其它方法如 big、blink、bold、fixed、fontcolor、fontsize、italics、small、strike、sub、sup均已废除。</p>
-<p>接下来我们将介绍 anchor 和 link 两个方法，其他废除方法不作介绍。</p>
-<h6 id="anchor"><a href="#anchor" class="headerlink" title="anchor"></a><strong>anchor</strong></h6><p>anchor() 方法创建一个锚标签。</p>
-<p>语法：<em>str.anchor(name)</em></p>
-<p>name 指定被创建的a标签的name属性，使用该方法创建的锚点，将会成为 document.anchors 数组的元素。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> str = <span class="string">"this is a anchor tag"</span>;</div><div class="line"><span class="built_in">document</span>.body.innerHTML = <span class="built_in">document</span>.body.innerHTML + str.anchor(<span class="string">"anchor1"</span>); <span class="comment">// body末尾将会追加这些内容 &lt;a name="anchor1"&gt;this is a anchor tag&lt;/a&gt;</span></div></pre></td></tr></table></figure>
-<h6 id="link"><a href="#link" class="headerlink" title="link"></a><strong>link</strong></h6><p>link() 方法同样创建一个a标签。</p>
-<p>语法：<em>str.link(url)</em></p>
-<p>url 指定被创建的a标签的href属性，如果url中包含特殊字符，将自动进行编码。例如 <code>&quot;</code> 会被转义为 <code>&amp;\quot</code>。 使用该方法创建的a标签，将会成为 document.links 数组中的元素。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> str = <span class="string">"百度"</span>;</div><div class="line"><span class="built_in">document</span>.write(str.link(<span class="string">"https://www.baidu.com"</span>)); <span class="comment">// &lt;a href="https://www.baidu.com"&gt;百度&lt;/a&gt;</span></div></pre></td></tr></table></figure>
-<hr>
-<h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a><strong>小结</strong></h3><p>部分字符串方法之间存在很大的相似性，要注意区分他们的功能和使用场景。如：</p>
-<ul>
-<li>substr 和 substring，都是两个参数，作用基本相同，两者第一个参数含义相同，但用法不同，前者可为负数，后者值为负数或者非整数时将隐式转换为0。前者第二个参数表示截取字符串的长度，后者第二个参数表示截取字符串的下标；同时substring第一个参数大于第二个参数时，执行结果同位置调换后的结果。</li>
-<li>search方法与indexOf方法作用基本一致，都是查询到了就返回子串第一次出现的下标，否则返回-1，唯一的区别就在于search默认会将子串转化为正则表达式形式，而indexOf不做此处理，也不能处理正则。</li>
-</ul>
-<p>另外，还记得吗？concat方法由于效率问题，不推荐使用。</p>
-<p>通常，字符串中，常用的方法就charAt、indexOf、lastIndexOf、match、replace、search、slice、split、substr、substring、toLowerCase、toUpperCase、trim、valueof 等这些。熟悉它们的语法规则就能熟练地驾驭字符串。</p>
-<hr>
-<p>本文就讨论这么多内容，大家有什么问题或好的想法欢迎在下方参与<a href="#respond">留言和评论</a>。</p>
-<p>本文作者：<a href="https://github.com/Louiszhai" target="_blank" rel="external">louis</a></p>
-<p>本文链接：<a href="http://louiszhai.github.io/2016/01/12/js.String/">http://louiszhai.github.io/2016/01/12/js.String/</a></p>
-<p>参考文章</p>
-<ul>
-<li><a href="http://www.ecma-international.org/ecma-262/6.0/" target="_blank" rel="external">ECMAScript® 2015 Language Specification</a></li>
-<li><a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/String/prototype" target="_blank" rel="external">String.prototype</a></li>
-<li><a href="http://stackoverflow.com/questions/2485632/valueof-vs-tostring-in-javascript" target="_blank" rel="external">valueOf() vs. toString() in Javascript</a></li>
-</ul>
-]]></content>
-    
-    <summary type="html">
-    
-      JavaScript String String.prototype charAt charCodeAt concat indexOf lastIndexOf localeCompare match replace search slice split substr substring toLocaleLowerCase toLocaleUpperCase toLowerCase toString toUpperCase trim valueof codePointAt contains endsWith normalize repeat startsWith
-    
-    </summary>
-    
-    
-      <category term="JavaScript" scheme="http://louiszhai.github.io/tags/JavaScript/"/>
     
   </entry>
   
