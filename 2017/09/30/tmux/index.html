@@ -22,7 +22,7 @@
 <meta property="og:image" content="http://louiszhai.github.io/docImages/tmux03.png">
 <meta property="og:image" content="http://louiszhai.github.io/docImages/tmux04.gif">
 <meta property="og:image" content="http://louiszhai.github.io/docImages/tmux09.png">
-<meta property="og:updated_time" content="2017-09-30T09:18:35.000Z">
+<meta property="og:updated_time" content="2017-10-05T09:44:41.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Tmux使用手册">
 <meta name="twitter:description" content="tmux 终端复用 会话 tmux配置 快捷键 快捷指令 鼠标支持 面板切换 复制模式 使用Mac系统粘贴板 保存tmux会话 tmux resurrect tmux continuum tpm 会话分享 结对编程 tmux脚本化 开机自动启用web服务器">
@@ -232,8 +232,8 @@
       
         <p><strong>本文首发于CSDN网站，下面的版本又经过进一步的修订。</strong></p>
 <h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h3><p>我一直信奉简洁至上的原则，桌面窗口的数量越少，我的心情就越愉悦，开发的效率也就越高。反之，杂乱的桌面，暴涨的Chrome tab数量，或是无数的终端窗口，它们会逐步侵占我的注意力，分散我的思维，最终令我难以专注。因此桌面上我很少放文件，使用Chrome时常点 <a href="https://chrome.google.com/webstore/detail/onetab/chphlpgkkbolifaimnlloiipkdnihall" target="_blank" rel="external">OneTab</a> 回收标签页，切进终端时使用tmux管理窗口。</p>
-<p>我很懒，懒到期望开机后不需要任何操作，本地的十几种web开发服务器就自动运行，当然我不希望连续弹出十几个窗口或是tab，我需要的是静默无感知的启用服务，然后还能快速地进入到现场进行操作，web服务器运行时不占据终端窗口，关闭iTem2后操作现场不会被销毁。实际上，除了这些，tmux还能给予更多。</p>
-<p>tmux帮助我两年有余，它带给我许多惊喜。独乐不如众乐，愿你也能一同享受tmux带来的快乐。</p>
+<p>我很懒，懒到期望开机后不需要任何操作，本地的十几种web开发服务器就自动运行，当然我不希望连续弹出十几个窗口或是tab，我需要的是静默无感知的启用服务，然后还能快速地进入到现场进行操作，web服务器运行时不占据终端窗口，关闭iTem2后操作现场不会被销毁。我的这些期望，tmux都能帮我实现，实际上，除了这些，tmux还能做得更多更好。</p>
+<p>到目前为止，tmux帮助我两年有余，它带给我许多惊喜。独乐不如众乐，愿你也能一同享受tmux带来的快乐。</p>
 <a id="more"></a>
 <h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p>tmux是一款优秀的终端复用软件，它比Screen更加强大，至于如何强大，网上有大量的文章讨论了这点，本文不再重复。tmux之所以受人们喜爱，主要得益于以下三处功能：</p>
 <ul>
