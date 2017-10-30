@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://louiszhai.github.io/"/>
-  <updated>2017-10-11T08:32:28.589Z</updated>
+  <updated>2017-10-11T08:32:28.588Z</updated>
   <id>http://louiszhai.github.io/</id>
   
   <author>
@@ -20,7 +20,7 @@
     <link href="http://louiszhai.github.io/2017/09/30/tmux/"/>
     <id>http://louiszhai.github.io/2017/09/30/tmux/</id>
     <published>2017-09-30T08:59:36.000Z</published>
-    <updated>2017-10-11T08:32:28.589Z</updated>
+    <updated>2017-10-11T08:32:28.588Z</updated>
     
     <content type="html"><![CDATA[<p><strong>本文首发于CSDN网站，下面的版本又经过进一步的修订。</strong></p>
 <h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h3><p>我一直信奉简洁至上的原则，桌面窗口的数量越少，我的心情就越愉悦，开发的效率也就越高。反之，杂乱的桌面，暴涨的Chrome tab数量，或是无数的终端窗口，它们会逐步侵占我的注意力，分散我的思维，最终令我难以专注。因此桌面上我很少放文件，使用Chrome时常点 <a href="https://chrome.google.com/webstore/detail/onetab/chphlpgkkbolifaimnlloiipkdnihall" target="_blank" rel="external">OneTab</a> 回收标签页，切进终端时使用tmux管理窗口。</p>
@@ -564,7 +564,7 @@
     <link href="http://louiszhai.github.io/2017/07/07/canvas-draw/"/>
     <id>http://louiszhai.github.io/2017/07/07/canvas-draw/</id>
     <published>2017-07-07T07:36:22.000Z</published>
-    <updated>2017-10-11T08:32:28.560Z</updated>
+    <updated>2017-10-11T08:32:28.559Z</updated>
     
     <content type="html"><![CDATA[<p><strong>本文首发于CSDN网站，下面的版本又经过进一步的修订。</strong></p>
 <h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a><strong>导读</strong></h3><p>6月又是项目吃紧的时候，一大波需求袭来，猝不及防。</p>
@@ -675,7 +675,7 @@
     <link href="http://louiszhai.github.io/2017/04/28/array/"/>
     <id>http://louiszhai.github.io/2017/04/28/array/</id>
     <published>2017-04-28T05:43:36.000Z</published>
-    <updated>2017-10-11T08:32:28.556Z</updated>
+    <updated>2017-10-11T08:32:28.555Z</updated>
     
     <content type="html"><![CDATA[<p><strong>本文首发于CSDN网站，下面的版本又经过进一步的修订。</strong></p>
 <p>全文共13k+字，系统讲解了JavaScript数组的各种特性和API。</p>
@@ -1378,7 +1378,7 @@
     <link href="http://louiszhai.github.io/2017/04/19/hmr/"/>
     <id>http://louiszhai.github.io/2017/04/19/hmr/</id>
     <published>2017-04-19T02:10:00.000Z</published>
-    <updated>2017-10-11T08:32:28.573Z</updated>
+    <updated>2017-10-11T08:32:28.572Z</updated>
     
     <content type="html"><![CDATA[<p><strong>本文首发于CSDN网站，下面的版本又经过进一步的修订。</strong></p>
 <p>开发环境页面热更新早已是主流，我们不光要吃着火锅唱着歌，享受热更新高效率的快感，更要深入下去探求其原理。</p>
@@ -1737,7 +1737,7 @@
     <link href="http://louiszhai.github.io/2017/04/07/http-cache/"/>
     <id>http://louiszhai.github.io/2017/04/07/http-cache/</id>
     <published>2017-04-07T00:00:00.000Z</published>
-    <updated>2017-10-11T08:32:28.574Z</updated>
+    <updated>2017-10-11T08:32:28.573Z</updated>
     
     <content type="html"><![CDATA[<p>缓存一直是前端优化的主战场, 利用好缓存就成功了一半. 本篇从http请求和响应的头域入手, 让你对浏览器缓存有个整体的概念. 最终你会发现强缓存, 协商缓存 和 启发式缓存是如此的简单.</p>
 <h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a><strong>导读</strong></h3><p>我不知道拖延症是有多严重, 反正去年3月开的题, 直到今年4月才开始写.(请尽情吐槽吧)</p>
@@ -2121,7 +2121,7 @@ c3(no)->op2->io1->e</textarea><textarea id="flowchart-0-options" style="display:
     <link href="http://louiszhai.github.io/2017/03/12/promise/"/>
     <id>http://louiszhai.github.io/2017/03/12/promise/</id>
     <published>2017-03-12T13:28:23.000Z</published>
-    <updated>2017-10-11T08:32:28.580Z</updated>
+    <updated>2017-10-11T08:32:28.579Z</updated>
     
     <content type="html"><![CDATA[<p>开始写本篇文字时, 我一直不是很明白任务队列的机制, 故想写篇文章弄懂它. 于是我尝试以Promise为核心, 逐步展开, 最终分析process.nextTick , promise.then , setTimeout , setImmediate 它们的异步机制.</p>
 <h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h3><p>Promise问世已久, 其科普类文章亦不计其数. 遂本篇初衷不为科普, 只为能够温故而知新.</p>
@@ -3462,7 +3462,7 @@ c3(no)->op2->io1->e</textarea><textarea id="flowchart-0-options" style="display:
     <link href="http://louiszhai.github.io/2016/11/02/ajax/"/>
     <id>http://louiszhai.github.io/2016/11/02/ajax/</id>
     <published>2016-11-02T04:48:27.000Z</published>
-    <updated>2017-10-11T08:32:28.549Z</updated>
+    <updated>2017-10-11T08:32:28.548Z</updated>
     
     <content type="html"><![CDATA[<h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h3><p>Ajax 全称 Asynchronous JavaScript and XML, 即异步JS与XML. 它最早在IE5中被使用, 然后由Mozilla, Apple, Google推广开来. 典型的代表应用有 Outlook Web Access, 以及 GMail. 现代网页中几乎无ajax不欢. 前后端分离也正是建立在ajax异步通信的基础之上.</p>
 <a id="more"></a>
@@ -5224,7 +5224,7 @@ c3(no)->op2->io1->e</textarea><textarea id="flowchart-0-options" style="display:
     <link href="http://louiszhai.github.io/2016/06/13/regexp/"/>
     <id>http://louiszhai.github.io/2016/06/13/regexp/</id>
     <published>2016-06-13T00:24:55.000Z</published>
-    <updated>2017-10-11T08:32:28.584Z</updated>
+    <updated>2017-10-11T08:32:28.583Z</updated>
     
     <content type="html"><![CDATA[<h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h3><p>你有没有在搜索文本的时候绞尽脑汁, 试了一个又一个表达式, 还是不行.</p>
 <p>你有没有在表单验证的时候, 只是做做样子(只要不为空就好), 然后烧香拜佛, 虔诚祈祷, 千万不要出错.</p>
@@ -6230,7 +6230,7 @@ c3(no)->op2->io1->e</textarea><textarea id="flowchart-0-options" style="display:
     <link href="http://louiszhai.github.io/2016/03/31/css-hasLayout/"/>
     <id>http://louiszhai.github.io/2016/03/31/css-hasLayout/</id>
     <published>2016-03-31T05:57:56.000Z</published>
-    <updated>2017-10-11T08:32:28.569Z</updated>
+    <updated>2017-10-11T08:32:28.568Z</updated>
     
     <content type="html"><![CDATA[<h3 id="什么是hasLayout"><a href="#什么是hasLayout" class="headerlink" title="什么是hasLayout"></a>什么是hasLayout</h3><blockquote>
 <p>hasLayout property: Gets a value that indicates whether the object has layout.</p>
@@ -6328,7 +6328,7 @@ c3(no)->op2->io1->e</textarea><textarea id="flowchart-0-options" style="display:
     <link href="http://louiszhai.github.io/2016/03/23/css-margin/"/>
     <id>http://louiszhai.github.io/2016/03/23/css-margin/</id>
     <published>2016-03-23T12:47:36.000Z</published>
-    <updated>2017-10-11T08:32:28.570Z</updated>
+    <updated>2017-10-11T08:32:28.569Z</updated>
     
     <content type="html"><![CDATA[<h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h3><p>margin属性处于盒子模型的最外层, 用以隔开其他元素, 它可以依次设置4个长度值, 分别表示 “上 右 下 左” 的间距, 其中第1个和第3个值相对应, 第2个与第4个相对应, 如果省略前者, 后者将取与前者相同的数值. margin属性共存在以下 4 种表示方式:</p>
 <ul>
@@ -6387,7 +6387,7 @@ c3(no)->op2->io1->e</textarea><textarea id="flowchart-0-options" style="display:
     <link href="http://louiszhai.github.io/2016/03/12/css-center/"/>
     <id>http://louiszhai.github.io/2016/03/12/css-center/</id>
     <published>2016-03-12T11:03:04.000Z</published>
-    <updated>2017-10-11T08:32:28.567Z</updated>
+    <updated>2017-10-11T08:32:28.566Z</updated>
     
     <content type="html"><![CDATA[<h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h3><p>熟悉水平居中和垂直居中的方法, 不为别的, 就为用的时候能够信手拈来. 下面直接步入正题.</p>
 <a id="more"></a>
@@ -6567,7 +6567,7 @@ c3(no)->op2->io1->e</textarea><textarea id="flowchart-0-options" style="display:
     <link href="http://louiszhai.github.io/2016/03/05/xss/"/>
     <id>http://louiszhai.github.io/2016/03/05/xss/</id>
     <published>2016-03-05T01:48:09.000Z</published>
-    <updated>2017-10-11T08:32:28.591Z</updated>
+    <updated>2017-10-11T08:32:28.590Z</updated>
     
     <content type="html"><![CDATA[<h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h3><p><strong>XSS</strong> (Cross-Site Script) 攻击又叫跨站脚本攻击, 本质是一种注入攻击. 其原理, 简单的说就是利用各种手段把恶意代码添加到网页中, 并让受害者执行这段脚本. XSS能做用户使用浏览器能做的一切事情. 伟大的同源策略也无法保证不受XSS攻击，因为此时攻击者就在同源之内.</p>
 <a id="more"></a>
