@@ -14,7 +14,7 @@
 <meta property="og:site_name" content="louis blog">
 <meta property="og:description" content="manifest offline cache applicationCache">
 <meta property="og:image" content="http://ww2.sinaimg.cn/large/006y8lVagw1fa479nwxhmj30pm08hdgj.jpg">
-<meta property="og:updated_time" content="2017-04-17T02:55:12.000Z">
+<meta property="og:updated_time" content="2017-10-24T12:13:32.193Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="聊一聊H5应用缓存-Manifest">
 <meta name="twitter:description" content="manifest offline cache applicationCache">
@@ -310,7 +310,7 @@
 <h3 id="manifest缓存规则"><a href="#manifest缓存规则" class="headerlink" title="manifest缓存规则"></a>manifest缓存规则</h3><ol>
 <li>遵循全量缓存的规律. 即: manifest文件改动后, 将重新缓存一遍所有的文件(包括html本身和动态添加的需要缓存的文件,即使缓存列表中没有该html). 第一次缓存过程中如果出现缓存失败的文件, 那么, 第二访问, 又将重新缓存一遍所有的文件. 以此类推.</li>
 <li>manifest文件本身不能写进缓存清单, 否则连同html和资源在其缓存失效之前, 将永远不能获得更新.</li>
-<li>即使manifest文件丢失, 缓存依然有效. 不过从此以后, 引入该manifest的html, 将永远不能获得更新.</li>
+<li>即使manifest文件丢失, 原缓存依然有效. 如果不删除html节点的manifest属性, 引入该manifest的html, 将永远不能获得更新. 因此正确的清除缓存姿势为：删除manifest文件，并且删除html节点的manifest属性，从而彻底解除绑定（此后页面在第二次加载时就会获取最新内容）.</li>
 </ol>
 <h3 id="webview的缓存现象"><a href="#webview的缓存现象" class="headerlink" title="webview的缓存现象"></a>webview的缓存现象</h3><p>通常, webview的缓存有如下三种现象:</p>
 <ol>
