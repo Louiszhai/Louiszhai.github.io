@@ -230,12 +230,29 @@
 <p>比如说, catch能捕获所有的错误吗? 为什么有些时候会抛出”Uncaught (in promise) …”? <code>Promise.resolve</code> 和 <code>Promise.reject</code> 处理Promise对象时又有什么不一样的地方?</p>
 <a id="more"></a>
 <h3 id="Promise"><a href="#Promise" class="headerlink" title="Promise"></a>Promise</h3><h4 id="引子"><a href="#引子" class="headerlink" title="引子"></a>引子</h4><p>阅读此篇之前, 我们先体验一下如下代码:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">setTimeout(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(<span class="number">4</span>)</div><div class="line">&#125;, <span class="number">0</span>);</div><div class="line"><span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="keyword">function</span>(<span class="params">resolve</span>) </span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(<span class="number">1</span>);</div><div class="line">  <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; <span class="number">10000</span>; i++) &#123;</div><div class="line">    i == <span class="number">9999</span> &amp;&amp; resolve()</div><div class="line">  &#125;</div><div class="line">  <span class="built_in">console</span>.log(<span class="number">2</span>);</div><div class="line">&#125;).then(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(<span class="number">5</span>)</div><div class="line">&#125;);</div><div class="line"><span class="built_in">console</span>.log(<span class="number">3</span>);</div></pre></td></tr></table></figure>
+<pre><code class="js">setTimeout(function() {
+  console.log(4)
+}, 0);
+new Promise(function(resolve) {
+  console.log(1);
+  for (var i = 0; i &lt; 10000; i++) {
+    i == 9999 &amp;&amp; resolve()
+  }
+  console.log(2);
+}).then(function() {
+  console.log(5)
+});
+console.log(3);
+</code></pre>
 <p>这里先卖个关子, 后续将给出答案并提供详细分析.</p>
 <p>和往常文章一样, 我喜欢从api入手, 先具象地了解一个概念, 然后再抽象或扩展这个概念, 接着再谈谈概念的具体应用场景, 通常末尾还会有一个简短的小结. 这样, 查询api的读者可以选择性地阅读上文, 希望深入的读者可以继续剖析概念, 当然我更希望你能耐心地读到应用场景处, 这样便能升华对这个概念或技术的运用, 也能避免踩坑.</p>
 <h4 id="new-Promise"><a href="#new-Promise" class="headerlink" title="new Promise"></a>new Promise</h4><p>Promise的设计初衷是避免异步回调地狱. 它提供更简洁的api, 同时展平回调为链式调用, 使得代码更加清爽, 易读.</p>
 <p>如下, 即创建一个Promise对象:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> p = <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="keyword">function</span>(<span class="params">resolve, reject</span>) </span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">'Create a new Promise.'</span>);</div><div class="line">&#125;);</div><div class="line"><span class="built_in">console</span>.log(p);</div></pre></td></tr></table></figure>
+<pre><code class="js">const p = new Promise(function(resolve, reject) {
+  console.log(&#39;Create a new Promise.&#39;);
+});
+console.log(p);
+</code></pre>
 <p><img src="http://louiszhai.github.io/docImages/promise01.png" alt="new Promise"></p>
 <p>创建Promise时, 浏览器同步执行传入的第一个方法, 从而输出log. 新创建的promise实例对象, 初始状态为等待(pending), 除此之外, Promise还有另外两个状态:</p>
 <ul>
@@ -253,43 +270,174 @@
 <p>Promise的原型仅有两个自身方法, 分别为 <code>Promise.prototype.then</code> , <code>Promise.prototype.catch</code> . 而它自身仅有四个方法, 分别为  <code>Promise.reject</code> , <code>Promise.resolve</code> , <code>Promise.all</code> , <code>Promise.race</code> .</p>
 <h4 id="then"><a href="#then" class="headerlink" title="then"></a>then</h4><p>语法: <em>Promise.prototype.then(onFulfilled, onRejected)</em></p>
 <p>用于绑定后续操作. 使用十分简单:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">p.then(<span class="function"><span class="keyword">function</span>(<span class="params">res</span>) </span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">'此处执行后续操作'</span>);</div><div class="line">&#125;);</div><div class="line"><span class="comment">// 当然, then的最大便利之处便是可以链式调用</span></div><div class="line">p.then(<span class="function"><span class="keyword">function</span>(<span class="params">res</span>) </span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">'先做一件事'</span>);</div><div class="line">&#125;).then(<span class="function"><span class="keyword">function</span>(<span class="params">res</span>) </span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">'再做一件事'</span>);</div><div class="line">&#125;);</div><div class="line"><span class="comment">// then还可以同时接两个回调,分别处理成功和失败状态</span></div><div class="line">p.then(<span class="function"><span class="keyword">function</span>(<span class="params">SuccessRes</span>) </span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">'处理成功的操作'</span>);</div><div class="line">&#125;, <span class="function"><span class="keyword">function</span>(<span class="params">failRes</span>) </span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">'处理失败的操作'</span>);</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<pre><code class="js">p.then(function(res) {
+  console.log(&#39;此处执行后续操作&#39;);
+});
+// 当然, then的最大便利之处便是可以链式调用
+p.then(function(res) {
+  console.log(&#39;先做一件事&#39;);
+}).then(function(res) {
+  console.log(&#39;再做一件事&#39;);
+});
+// then还可以同时接两个回调,分别处理成功和失败状态
+p.then(function(SuccessRes) {
+  console.log(&#39;处理成功的操作&#39;);
+}, function(failRes) {
+  console.log(&#39;处理失败的操作&#39;);
+});
+</code></pre>
 <p>不仅如此, Promise的then中还可返回一个新的Promise对象, 后续的then将接着继续处理这个新的Promise对象.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">p.then(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="keyword">function</span>(<span class="params">resolve, reject</span>) </span>&#123;</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'这里是一个新的Promise对象'</span>);</div><div class="line">    resolve(<span class="string">'New Promise resolve.'</span>);</div><div class="line">  &#125;);</div><div class="line">&#125;).then(<span class="function"><span class="keyword">function</span>(<span class="params">res</span>) </span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(res);</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<pre><code class="js">p.then(function(){
+  return new Promise(function(resolve, reject) {
+    console.log(&#39;这里是一个新的Promise对象&#39;);
+    resolve(&#39;New Promise resolve.&#39;);
+  });
+}).then(function(res) {
+  console.log(res);
+});
+</code></pre>
 <p>那么, 如果没有指定返回值, 会怎么样?</p>
 <p>根据Promise规范, <strong>then或catch即使未显式指定返回值, 它们也总是默认返回一个新的fulfilled状态的promise对象</strong>.</p>
 <h4 id="catch"><a href="#catch" class="headerlink" title="catch"></a>catch</h4><p>语法: <em>Promise.prototype.catch(onRejected)</em></p>
 <p>用于捕获并处理异常. 无论是程序抛出的异常, 还是主动reject掉Promise自身, 都会被catch捕获到.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="keyword">function</span>(<span class="params">resolve, reject</span>) </span>&#123;</div><div class="line">  reject(<span class="string">'该prormise已被拒绝'</span>);</div><div class="line">&#125;).catch(<span class="function"><span class="keyword">function</span>(<span class="params">reason</span>) </span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">'catch:'</span>, reason);</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<pre><code class="js">new Promise(function(resolve, reject) {
+  reject(&#39;该prormise已被拒绝&#39;);
+}).catch(function(reason) {
+  console.log(&#39;catch:&#39;, reason);
+});
+</code></pre>
 <p>同then语句一样, catch也是可以链式调用的.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="keyword">function</span>(<span class="params">resolve, reject</span>)</span>&#123;</div><div class="line">  reject(<span class="string">'该prormise已被拒绝'</span>);</div><div class="line">&#125;).catch(<span class="function"><span class="keyword">function</span>(<span class="params">reason</span>)</span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">'catch:'</span>, reason);</div><div class="line">  <span class="built_in">console</span>.log(a);</div><div class="line">&#125;).catch(<span class="function"><span class="keyword">function</span>(<span class="params">reason</span>)</span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(reason);</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<pre><code class="js">new Promise(function(resolve, reject){
+  reject(&#39;该prormise已被拒绝&#39;);
+}).catch(function(reason){
+  console.log(&#39;catch:&#39;, reason);
+  console.log(a);
+}).catch(function(reason){
+  console.log(reason);
+});
+</code></pre>
 <p>以上, 将依次输出两次log, 第一次输出promise被拒绝, 第二次输出”ReferenceError a is not defined”的堆栈信息.</p>
 <h5 id="catch能捕获哪些错误"><a href="#catch能捕获哪些错误" class="headerlink" title="catch能捕获哪些错误"></a>catch能捕获哪些错误</h5><p>那是不是catch可以捕获所有错误呢? 可以, 怎么不可以, 我以前也这么天真的认为. 直到有一天我执行了如下的语句, 我就学乖了.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="keyword">function</span>(<span class="params">resolve, reject</span>)</span>&#123;</div><div class="line">  <span class="built_in">Promise</span>.reject(<span class="string">'返回一个拒绝状态的Promise'</span>);</div><div class="line">&#125;).catch(<span class="function"><span class="keyword">function</span>(<span class="params">reason</span>)</span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">'catch:'</span>, reason);</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<pre><code class="js">new Promise(function(resolve, reject){
+  Promise.reject(&#39;返回一个拒绝状态的Promise&#39;);
+}).catch(function(reason){
+  console.log(&#39;catch:&#39;, reason);
+});
+</code></pre>
 <p>执行结果如下:</p>
 <p><img src="http://louiszhai.github.io/docImages/promise02.png" alt=""></p>
 <p>为什么catch没有捕获到该错误呢? 这个问题, 待下一节我们了解了Promise.reject语法后再做分析.</p>
 <h4 id="Promise-reject"><a href="#Promise-reject" class="headerlink" title="Promise.reject"></a>Promise.reject</h4><p>语法: <em>Promise.reject(value)</em></p>
 <p>该方法返回一个拒绝状态的Promise对象, 同时传入的参数作为PromiseValue.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//params: String</span></div><div class="line"><span class="built_in">Promise</span>.reject(<span class="string">'该prormise已被拒绝'</span>);</div><div class="line">.catch(<span class="function"><span class="keyword">function</span>(<span class="params">reason</span>)</span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">'catch:'</span>, reason);</div><div class="line">&#125;);</div><div class="line"><span class="comment">//params: Error</span></div><div class="line"><span class="built_in">Promise</span>.reject(<span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">'这是一个error'</span>)).then(<span class="function"><span class="keyword">function</span>(<span class="params">res</span>) </span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">'fulfilled:'</span>, res);</div><div class="line">&#125;, <span class="function"><span class="keyword">function</span>(<span class="params">reason</span>) </span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">'rejected:'</span>, reason); <span class="comment">// rejected: Error: 这是一个error...</span></div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<pre><code class="js">//params: String
+Promise.reject(&#39;该prormise已被拒绝&#39;);
+.catch(function(reason){
+  console.log(&#39;catch:&#39;, reason);
+});
+//params: Error
+Promise.reject(new Error(&#39;这是一个error&#39;)).then(function(res) {
+  console.log(&#39;fulfilled:&#39;, res);
+}, function(reason) {
+  console.log(&#39;rejected:&#39;, reason); // rejected: Error: 这是一个error...
+});
+</code></pre>
 <p>即使参数为Promise对象, 它也一样会把Promise当作拒绝的理由, 在外部再包装一个拒绝状态的Promise对象予以返回.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//params: Promise</span></div><div class="line"><span class="keyword">const</span> p = <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="keyword">function</span>(<span class="params">resolve</span>) </span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">'This is a promise'</span>);</div><div class="line">&#125;);</div><div class="line"><span class="built_in">Promise</span>.reject(p).catch(<span class="function"><span class="keyword">function</span>(<span class="params">reason</span>) </span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">'rejected:'</span>, reason);</div><div class="line">  <span class="built_in">console</span>.log(p == reason);</div><div class="line">&#125;);</div><div class="line"><span class="comment">// "This is a promise"</span></div><div class="line"><span class="comment">// rejected: Promise &#123;[[PromiseStatus]]: "pending", [[PromiseValue]]: undefined&#125;</span></div><div class="line"><span class="comment">// true</span></div></pre></td></tr></table></figure>
+<pre><code class="js">//params: Promise
+const p = new Promise(function(resolve) {
+  console.log(&#39;This is a promise&#39;);
+});
+Promise.reject(p).catch(function(reason) {
+  console.log(&#39;rejected:&#39;, reason);
+  console.log(p == reason);
+});
+// &quot;This is a promise&quot;
+// rejected: Promise {[[PromiseStatus]]: &quot;pending&quot;, [[PromiseValue]]: undefined}
+// true
+</code></pre>
 <p>以上代码片段, <code>Promise.reject(p)</code> 进入到了catch语句中, 说明其返回了一个拒绝状态的Promise, 同时拒绝的理由就是传入的参数p.</p>
 <h4 id="错误处理"><a href="#错误处理" class="headerlink" title="错误处理"></a>错误处理</h4><p>我们都知道, Promise.reject返回了一个拒绝状态的Promise对象. 对于这样的Promise对象, 如果其后续then | catch中都没有声明onRejected回调, 它将会抛出一个 “Uncaught (in promise) …”的错误. 如上图所示, 原语句是 “Promise.reject(‘返回一个拒绝状态的Promise’);” 其后续并没有跟随任何then | catch语句, 因此它将抛出错误, 且该错外部的Promise无法捕获.</p>
 <p>不仅如此, Promise之间泾渭分明, 内部Promise抛出的任何错误, 外部Promise对象都无法感知并捕获. 同时, 由于promise是异步的, try catch语句也无法捕获其错误.</p>
 <p>因此养成良好习惯, promise记得写上catch.</p>
 <p>除了catch, nodejs下Promise抛出的错误, 还会被进程的<code>unhandledRejection</code> 和 <code>rejectionHandled</code>事件捕获.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> p = <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="keyword">function</span>(<span class="params">resolve, reject</span>)</span>&#123;</div><div class="line">  <span class="comment">//console.log(a);</span></div><div class="line">  reject(<span class="string">'rejected'</span>);</div><div class="line">&#125;);</div><div class="line">setTimeout(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  p.catch(<span class="function"><span class="keyword">function</span>(<span class="params">reason</span>)</span>&#123;</div><div class="line">    <span class="built_in">console</span>.info(<span class="string">'promise catch:'</span>, reason);</div><div class="line">  &#125;);</div><div class="line">&#125;);</div><div class="line">process.on(<span class="string">'uncaughtException'</span>, (e) =&gt; &#123;</div><div class="line">  <span class="built_in">console</span>.error(<span class="string">'uncaughtException'</span>, e);</div><div class="line">&#125;);</div><div class="line">process.on(<span class="string">'unhandledRejection'</span>, (e) =&gt; &#123;</div><div class="line">  <span class="built_in">console</span>.info(<span class="string">'unhandledRejection:'</span>, e);</div><div class="line">&#125;);</div><div class="line">process.on(<span class="string">'rejectionHandled'</span>, (e) =&gt; &#123;</div><div class="line">  <span class="built_in">console</span>.info(<span class="string">'rejectionHandled'</span>, e);</div><div class="line">&#125;);</div><div class="line"><span class="comment">//unhandledRejection: rejected</span></div><div class="line"><span class="comment">//rejectionHandled Promise &#123; &lt;rejected&gt; 'rejected' &#125;</span></div><div class="line"><span class="comment">//promise catch: rejected</span></div></pre></td></tr></table></figure>
+<pre><code class="js">var p = new Promise(function(resolve, reject){
+  //console.log(a);
+  reject(&#39;rejected&#39;);
+});
+setTimeout(function(){
+  p.catch(function(reason){
+    console.info(&#39;promise catch:&#39;, reason);
+  });
+});
+process.on(&#39;uncaughtException&#39;, (e) =&gt; {
+  console.error(&#39;uncaughtException&#39;, e);
+});
+process.on(&#39;unhandledRejection&#39;, (e) =&gt; {
+  console.info(&#39;unhandledRejection:&#39;, e);
+});
+process.on(&#39;rejectionHandled&#39;, (e) =&gt; {
+  console.info(&#39;rejectionHandled&#39;, e);
+});
+//unhandledRejection: rejected
+//rejectionHandled Promise { &lt;rejected&gt; &#39;rejected&#39; }
+//promise catch: rejected
+</code></pre>
 <p>即使去掉以上代码中的注释, 输出依然一致. 可见, Promise内部抛出的错误, 都不会被<code>uncaughtException</code>事件捕获.</p>
 <h5 id="链式写法的好处"><a href="#链式写法的好处" class="headerlink" title="链式写法的好处"></a>链式写法的好处</h5><p>请看如下代码:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="keyword">function</span>(<span class="params">resolve, reject</span>) </span>&#123;</div><div class="line">  resolve(<span class="string">'New Promise resolve.'</span>);</div><div class="line">&#125;).then(<span class="function"><span class="keyword">function</span>(<span class="params">str</span>) </span>&#123;</div><div class="line">  <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">"oops..."</span>);</div><div class="line">&#125;,<span class="function"><span class="keyword">function</span>(<span class="params">error</span>) </span>&#123;</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'then catch:'</span>, error);</div><div class="line">&#125;).catch(<span class="function"><span class="keyword">function</span>(<span class="params">reason</span>) </span>&#123;</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'catch:'</span>, reason);</div><div class="line">&#125;);</div><div class="line"><span class="comment">//catch: Error: oops...</span></div></pre></td></tr></table></figure>
+<pre><code class="js">new Promise(function(resolve, reject) {
+  resolve(&#39;New Promise resolve.&#39;);
+}).then(function(str) {
+  throw new Error(&quot;oops...&quot;);
+},function(error) {
+    console.log(&#39;then catch:&#39;, error);
+}).catch(function(reason) {
+    console.log(&#39;catch:&#39;, reason);
+});
+//catch: Error: oops...
+</code></pre>
 <p>可见, then语句的onRejected回调并不能捕获onFulfilled回调内抛出的错误, 尾随其后的catch语句却可以, 因此推荐链式写法.</p>
 <h4 id="Promise-resolve"><a href="#Promise-resolve" class="headerlink" title="Promise.resolve"></a>Promise.resolve</h4><p>语法: <em>Promise.resolve(value | promise | thenable)</em></p>
 <p>thenable 表示一个定义了 <code>then</code> 方法的对象或函数.</p>
 <p>参数为promise时, 返回promise本身.</p>
 <p>参数为thenable的对象或函数时, 将其then属性作为new promise时的回调, 返回一个包装的promise对象.(注意: 这里与Promise.reject直接包装一个拒绝状态的Promise不同)</p>
 <p>其他情况下, 返回一个实现状态的Promise对象, 同时传入的参数作为PromiseValue.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//params: String</span></div><div class="line"><span class="comment">//return: fulfilled Promise</span></div><div class="line"><span class="built_in">Promise</span>.resolve(<span class="string">'返回一个fulfilled状态的promise'</span>).then(<span class="function"><span class="keyword">function</span>(<span class="params">res</span>) </span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(res); <span class="comment">// "返回一个fulfilled状态的promise"</span></div><div class="line">&#125;);</div><div class="line"></div><div class="line"><span class="comment">//params: Array</span></div><div class="line"><span class="comment">//return: fulfilled Promise</span></div><div class="line"><span class="built_in">Promise</span>.resolve([<span class="string">'a'</span>, <span class="string">'b'</span>, <span class="string">'c'</span>]).then(<span class="function"><span class="keyword">function</span>(<span class="params">res</span>) </span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(res); <span class="comment">// ["a", "b", "c"]</span></div><div class="line">&#125;);</div><div class="line"></div><div class="line"><span class="comment">//params: Promise</span></div><div class="line"><span class="comment">//return: Promise self</span></div><div class="line"><span class="keyword">let</span> resolveFn;</div><div class="line"><span class="keyword">const</span> p2 = <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="keyword">function</span>(<span class="params">resolve</span>) </span>&#123;</div><div class="line">  resolveFn = resolve;</div><div class="line">&#125;);</div><div class="line"><span class="keyword">const</span> r2 = <span class="built_in">Promise</span>.resolve(p2);</div><div class="line">r2.then(<span class="function"><span class="keyword">function</span>(<span class="params">res</span>) </span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(res);</div><div class="line">&#125;);</div><div class="line">resolveFn(<span class="string">'xyz'</span>); <span class="comment">// "xyz"</span></div><div class="line"><span class="built_in">console</span>.log(r2 === p2); <span class="comment">// true</span></div><div class="line"></div><div class="line"><span class="comment">//params: thenable Object</span></div><div class="line"><span class="comment">//return: 根据thenable的最终状态返回不同的promise</span></div><div class="line"><span class="keyword">const</span> thenable = &#123;</div><div class="line">  <span class="attr">then</span>: <span class="function"><span class="keyword">function</span>(<span class="params">resolve, reject</span>) </span>&#123; <span class="comment">//作为new promise时的回调函数</span></div><div class="line">    reject(<span class="string">'promise rejected!'</span>);</div><div class="line">  &#125;</div><div class="line">&#125;;</div><div class="line"><span class="built_in">Promise</span>.resolve(thenable).then(<span class="function"><span class="keyword">function</span>(<span class="params">res</span>) </span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">'res:'</span>, res);</div><div class="line">&#125;, <span class="function"><span class="keyword">function</span>(<span class="params">reason</span>) </span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">'reason:'</span>, reason);</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<pre><code class="js">//params: String
+//return: fulfilled Promise
+Promise.resolve(&#39;返回一个fulfilled状态的promise&#39;).then(function(res) {
+  console.log(res); // &quot;返回一个fulfilled状态的promise&quot;
+});
+
+//params: Array
+//return: fulfilled Promise
+Promise.resolve([&#39;a&#39;, &#39;b&#39;, &#39;c&#39;]).then(function(res) {
+  console.log(res); // [&quot;a&quot;, &quot;b&quot;, &quot;c&quot;]
+});
+
+//params: Promise
+//return: Promise self
+let resolveFn;
+const p2 = new Promise(function(resolve) {
+  resolveFn = resolve;
+});
+const r2 = Promise.resolve(p2);
+r2.then(function(res) {
+  console.log(res);
+});
+resolveFn(&#39;xyz&#39;); // &quot;xyz&quot;
+console.log(r2 === p2); // true
+
+//params: thenable Object
+//return: 根据thenable的最终状态返回不同的promise
+const thenable = {
+  then: function(resolve, reject) { //作为new promise时的回调函数
+    reject(&#39;promise rejected!&#39;);
+  }
+};
+Promise.resolve(thenable).then(function(res) {
+  console.log(&#39;res:&#39;, res);
+}, function(reason) {
+  console.log(&#39;reason:&#39;, reason);
+});
+</code></pre>
 <p>可见, Promise.resolve并非返回实现状态的Promise这么简单, 我们还需基于传入的参数动态判断.</p>
 <p>至此, 我们基本上不用期望使用Promise全局方法中去改变其某个实例的状态.</p>
 <ul>
@@ -298,17 +446,52 @@
 </ul>
 <h4 id="Promise-all"><a href="#Promise-all" class="headerlink" title="Promise.all"></a>Promise.all</h4><p>语法: <em>Promise.all(iterable)</em></p>
 <p>该方法接一个迭代器(如数组等), 返回一个新的Promise对象. 如果迭代器中所有的Promise对象都被实现, 那么, 返回的Promise对象状态为”fulfilled”, 反之则为”rejected”. 概念上类似Array.prototype.every.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//params: all fulfilled promise</span></div><div class="line"><span class="comment">//return: fulfilled promise</span></div><div class="line"><span class="built_in">Promise</span>.all([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]).then(<span class="function"><span class="keyword">function</span>(<span class="params">res</span>)</span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">'promise fulfilled:'</span>, res); <span class="comment">// promise fulfilled: [1, 2, 3]</span></div><div class="line">&#125;);</div><div class="line"></div><div class="line"><span class="comment">//params: has rejected promise</span></div><div class="line"><span class="comment">//return: rejected promise</span></div><div class="line"><span class="keyword">const</span> p = <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="keyword">function</span>(<span class="params">resolve, reject</span>)</span>&#123;</div><div class="line">  reject(<span class="string">'rejected'</span>);</div><div class="line">&#125;);</div><div class="line"><span class="built_in">Promise</span>.all([<span class="number">1</span>, <span class="number">2</span>, p]).then(<span class="function"><span class="keyword">function</span>(<span class="params">res</span>)</span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">'promise fulfilled:'</span>, res);</div><div class="line">&#125;).catch(<span class="function"><span class="keyword">function</span>(<span class="params">reason</span>)</span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">'promise reject:'</span>, reason); <span class="comment">// promise reject: rejected</span></div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<pre><code class="js">//params: all fulfilled promise
+//return: fulfilled promise
+Promise.all([1, 2, 3]).then(function(res){
+  console.log(&#39;promise fulfilled:&#39;, res); // promise fulfilled: [1, 2, 3]
+});
+
+//params: has rejected promise
+//return: rejected promise
+const p = new Promise(function(resolve, reject){
+  reject(&#39;rejected&#39;);
+});
+Promise.all([1, 2, p]).then(function(res){
+  console.log(&#39;promise fulfilled:&#39;, res);
+}).catch(function(reason){
+  console.log(&#39;promise reject:&#39;, reason); // promise reject: rejected
+});
+</code></pre>
 <p>Promise.all特别适用于处理依赖多个异步请求的结果的场景.</p>
 <h4 id="Promise-race"><a href="#Promise-race" class="headerlink" title="Promise.race"></a>Promise.race</h4><p>该方法接一个迭代器(如数组等), 返回一个新的Promise对象. 只要迭代器中有一个Promise对象状态改变(被实现或被拒绝), 那么返回的Promise将以相同的值被实现或拒绝, 然后它将忽略迭代器中其他Promise的状态变化.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">Promise</span>.race([<span class="number">1</span>, <span class="built_in">Promise</span>.reject(<span class="number">2</span>)]).then(<span class="function"><span class="keyword">function</span>(<span class="params">res</span>)</span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">'promise fulfilled:'</span>, res);</div><div class="line">&#125;).catch(<span class="function"><span class="keyword">function</span>(<span class="params">reason</span>)</span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">'promise reject:'</span>, reason);</div><div class="line">&#125;);</div><div class="line"><span class="comment">// promise fulfilled: 1</span></div></pre></td></tr></table></figure>
+<pre><code class="js">Promise.race([1, Promise.reject(2)]).then(function(res){
+  console.log(&#39;promise fulfilled:&#39;, res);
+}).catch(function(reason){
+  console.log(&#39;promise reject:&#39;, reason);
+});
+// promise fulfilled: 1
+</code></pre>
 <p>如果调换以上参数的顺序, 结果将输出 “promise reject: 2”. 可见对于状态稳定的Promise(fulfilled 或 rejected状态), 哪个排第一, 将返回哪个.</p>
 <p>Promise.race适用于多者中取其一的场景, 比如同时发送多个请求, 只要有一个请求成功, 那么就以该Promise的状态作为最终的状态, 该Promise的值作为最终的值, 包装成一个新的Promise对象予以返回.</p>
 <p>在 <a href="http://louiszhai.github.io/2016/11/02/fetch/#abort">Fetch进阶指南</a> 一文中, 我曾利用Promise.race模拟了Promise的abort和timeout机制.</p>
 <h3 id="Promises-A-规范的要点"><a href="#Promises-A-规范的要点" class="headerlink" title="Promises/A+规范的要点"></a>Promises/A+规范的要点</h3><p>promise.then(onFulfilled, onRejected)中, 参数都是可选的, 如果onFulfilled或onRejected不是函数, 那么将忽略它们.</p>
 <p>catch只是then的语法糖, 相当于promise.then(null, onRejected).</p>
 <h3 id="任务队列之谜"><a href="#任务队列之谜" class="headerlink" title="任务队列之谜"></a>任务队列之谜</h3><p>终于, 我们要一起来看看文章起始的一道题目.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">setTimeout(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(<span class="number">4</span>)</div><div class="line">&#125;, <span class="number">0</span>);</div><div class="line"><span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="keyword">function</span>(<span class="params">resolve</span>) </span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(<span class="number">1</span>);</div><div class="line">  <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; <span class="number">10000</span>; i++) &#123;</div><div class="line">    i == <span class="number">9999</span> &amp;&amp; resolve()</div><div class="line">  &#125;</div><div class="line">  <span class="built_in">console</span>.log(<span class="number">2</span>);</div><div class="line">&#125;).then(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(<span class="number">5</span>)</div><div class="line">&#125;);</div><div class="line"><span class="built_in">console</span>.log(<span class="number">3</span>);</div></pre></td></tr></table></figure>
+<pre><code class="js">setTimeout(function() {
+  console.log(4)
+}, 0);
+new Promise(function(resolve) {
+  console.log(1);
+  for (var i = 0; i &lt; 10000; i++) {
+    i == 9999 &amp;&amp; resolve()
+  }
+  console.log(2);
+}).then(function() {
+  console.log(5)
+});
+console.log(3);
+</code></pre>
 <p>这道题目来自知乎(机智的你可能早已看穿, 但千万别戳破😂), 可以戳此链接 <a href="https://www.zhihu.com/question/36972010" target="_blank" rel="external">Promise的队列与setTimeout的队列有何关联</a> 围观点赞.</p>
 <p>围观完了, 别忘了继续读下去, 这里请允许我站在诸位知乎大神的肩膀上, 继续深入分析.</p>
 <p>以上代码, 最终运行结果是1,2,3,5,4. 并不是1,2,3,4,5.</p>
@@ -344,15 +527,21 @@
 <li>切换回js引擎, 继续从macrotask queue取出下一个macrotask, 执行之, 然后再取出microtask queue, 执行之, 后续所有的macrotask均如此重复. 自然, 也包括刚刚加入到队列末尾的setTimeout回调, 故输出4.</li>
 </ol>
 <p>这里直接给出事件回调优先级:</p>
-<figure class="highlight arduino"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">process</span>.nextTick &gt; promise.then &gt; <span class="built_in">setTimeout</span> ? setImmediate</div></pre></td></tr></table></figure>
-<p>nodejs中每一次event loop称作tick. _tickCallback在macrotask queue中每个task执行完成后触发. 实际上, _tickCallback内部共干了两件事:</p>
+<pre><code>process.nextTick &gt; promise.then &gt; setTimeout ? setImmediate
+</code></pre><p>nodejs中每一次event loop称作tick. _tickCallback在macrotask queue中每个task执行完成后触发. 实际上, _tickCallback内部共干了两件事:</p>
 <ol>
 <li>执行nextTick queue中的所有任务, 包括process.nextTick注册的回调.</li>
 <li>第一步完成后执行 _runMicrotasks函数, 即执行microtask queue中的所有任务, 包括promise.then注册的回调.</li>
 </ol>
 <p>因此, process.nextTick优先级比promise.then高.</p>
 <p>那么setTimeout与setImmediate到底哪个更快呢? 回答是并不确定. 请看如下代码:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">setImmediate(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">	<span class="built_in">console</span>.log(<span class="number">1</span>);</div><div class="line">&#125;);</div><div class="line">setTimeout(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">	<span class="built_in">console</span>.log(<span class="number">0</span>);</div><div class="line">&#125;, <span class="number">0</span>);</div></pre></td></tr></table></figure>
+<pre><code class="js">setImmediate(function(){
+    console.log(1);
+});
+setTimeout(function(){
+    console.log(0);
+}, 0);
+</code></pre>
 <p>前后两次的执行结果如下:</p>
 <p><img src="http://louiszhai.github.io/docImages/promise04.png" alt=""></p>
 <p>测试时, 我本地node版本是v5.7.0.</p>
@@ -383,7 +572,7 @@
         <a id="btn_donate" class="btn_donate" href="javascript:;" title="打赏"></a>
         <span class="donate_txt">
            &uarr;<br>
-       如果你觉得有用，就支持一下吧！
+       支持一杯咖啡吧！
         </span>
       </div>  
   <div id="donate_guide" class="donate_bar center hidden" >
@@ -450,69 +639,103 @@
 
 
 
-<div class="duoshuo">
-	<div class="ds-thread" data-thread-key="promise" data-title="Promise使用手册" data-url="http://louiszhai.github.io/2017/03/12/promise/"></div>
-	<style>
-		#ds-reset .ds-avatar img{width:54px;height:54px;border-radius:27px;-webkit-border-radius:27px;-moz-border-radius:27px;box-shadow:inset 0 -1px 0 #3333sf;-webkit-box-shadow:inset 0 -1px 0 #3333sf;-webkit-transition:0.4s;-webkit-transition:-webkit-transform 0.4s ease-out;transition:transform 0.4s ease-out;-moz-transition:-moz-transform 0.4s ease-out;}
-		#ds-reset .ds-avatar img:hover{box-shadow:0 0 10px #fff;rgba(255,255,255,.6),inset 0 0 20px rgba(255,255,255,1);-webkit-box-shadow:0 0 10px #fff;rgba(255,255,255,.6),inset 0 0 20px rgba(255,255,255,1);transform:rotateZ(360deg);-webkit-transform:rotateZ(360deg);-moz-transform:rotateZ(360deg);}
-		p.ds-powered-by,#ds-sync-checkbox,.ds-sync label{display:none!important;}
-		#ds-reset .ds-rounded-top{-webkit-border-top-right-radius:0px;-webkit-border-top-left-radius:0px;border-top-right-radius:0px;border-top-left-radius:0px;}
-		#ds-thread #ds-reset .ds-textarea-wrapper{background:#fff;border:0;margin-bottom:20px;padding-right:0px;}
-		#ds-thread #ds-reset .ds-textarea-wrapper textarea{min-height:80px;border:1px solid #ccc;padding:10px;-webkit-appearance:none;border-radius:0;background-color:#FFFFFF;border-color:#cccccc;box-shadow:inset 0 1px 2px rgba(0,0,0,0.1);color:rgba(0,0,0,0.75);-webkit-box-sizing:border-box;box-sizing:border-box;-webkit-transition:border-color 0.15s linear,background 0.15s linear;-moz-transition:border-color 0.15s linear,background 0.15s linear;-ms-transition:border-color 0.15s linear,background 0.15s linear;-o-transition:border-color 0.15s linear,background 0.15s linear;transition:border-color 0.15s linear,background 0.15s linear;}
-		/*#ds-thread #ds-reset .ds-textarea-wrapper textarea:focus{border-color:#999999;background:#fafafa;outline:none;}*/
-		#ds-thread #ds-reset .ds-post-options{border-bottom-left-radius:0px;-webkit-border-bottom-left-radius:0px;border:none;background:none!important;}
-		#ds-reset .ds-textarea-wrapper textarea:focus{border-color:#66afe9;outline:0;-webkit-box-shadow:inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);box-shadow:inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);}
-		#ds-thread #ds-reset .ds-post-button:hover,#ds-thread #ds-reset .ds-post-button:focus{
-		    background-color: #51a351;
-		    background-position: 0 -32px;
-		    color:white;
-		}
-		#ds-thread #ds-reset .ds-post-toolbar,#ds-reset .ds-avatar{box-shadow:none;}
-		#ds-thread #ds-reset .ds-textarea-wrapper textarea:focus{
-	    	/*background: none repeat scroll 0 0 #F4FAFF;*/
-	    	border-color:#9DD4FD;
-	    	border-width:1px;
-	    	box-shadow:0 1px 1px rgba(0,0,0,0.075) inset, 0 0 8px rgba(82, 168, 236, 0.6);
-	    	outline:0 none;
-    	}
-		#ds-thread #ds-reset .ds-textarea-wrapper textarea:active{
-	    	/*background: none repeat scroll 0 0 #F4FAFF;*/
-	    	border-width:1px;
-	    	border-color:#9DD4FD;
-	    	box-shadow:0 1px 1px rgba(0,0,0,0.075) inset, 0 0 8px rgba(82, 168, 236, 0.6);
-	    	outline:0 none;
-    	}
-    	#ds-thread #ds-reset .ds-post-button{
-    		box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset, 0 1px 2px rgba(0, 0, 0, 0.05);
-		    border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
-		    border-width: 1px;
-		    border-style: solid;
-		    border-radius: 3px;
-		    background: #5bb75b;
-		    color:white;
-		    text-shadow:none;
-		    transition:background-color 300ms ease-out;
-    	}
-    	#ds-reset .ds-avatar{
-    		background-color:initial;
-    	}
-
-	</style>
-	<script type="text/javascript">
-	var duoshuoQuery = {short_name:"true"};
-	(function() {
-		var ds = document.createElement('script');
-		ds.type = 'text/javascript';ds.async = true;
-		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-		ds.charset = 'UTF-8';
-		(document.getElementsByTagName('head')[0] 
-		 || document.getElementsByTagName('body')[0]).appendChild(ds);
-	})();
-	</script>
-</div>
 
 
 
+
+  <style>
+/*
+    Name:     Kimbie (light)
+    Author:   Jan T. Sott
+    License:  Creative Commons Attribution-ShareAlike 4.0 Unported License
+    URL:      https://github.com/idleberg/Kimbie-highlight.js
+*/
+
+/* Kimbie Comment */
+.hljs-comment,
+.hljs-quote {
+  color: #a57a4c;
+}
+
+/* Kimbie Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-meta {
+  color: #dc3958;
+}
+
+/* Kimbie Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-deletion,
+.hljs-link {
+  color: #f79a32;
+}
+
+/* Kimbie Yellow */
+.hljs-title,
+.hljs-section,
+.hljs-attribute {
+  color: #f06431;
+}
+
+/* Kimbie Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+  color: #889b4a;
+}
+
+/* Kimbie Purple */
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-function {
+  color: #98676a;
+}
+
+.hljs {
+  display: block;
+  overflow-x: auto;
+  /*background: #fbebd4;*/
+  color: #84613d;
+  padding: 0.5em;
+}
+
+.hljs-emphasis {
+  font-style: italic;
+}
+
+.hljs-strong {
+  font-weight: bold;
+}
+</style>
+  <script src="//cdn.bootcss.com/highlight.js/9.2.0/highlight.min.js"></script>
+  <script>
+    // hljs.initHighlightingOnLoad();
+    [].slice.call(document.querySelectorAll('pre code')).forEach(function(block, i) {
+      hljs.highlightBlock(block);
+      var lines = block.innerText.split('\n').length - 1;
+      var ul = document.createElement('ul');
+      ul.className = 'pre-numbering';
+      block.className += ' has-numbering';
+      block.parentNode.appendChild(ul);
+      for(i=1;i<=lines;i++){
+        var li = document.createElement('li');
+        li.innerText = i;
+        ul.appendChild(li);
+      }
+    });
+  </script>
 </div>
         <link rel="stylesheet" href="/css/content.css" type="text/css">
 <footer id="footer">

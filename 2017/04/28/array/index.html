@@ -229,14 +229,25 @@
 <a id="more"></a>
 <p>声明：以下未特别标明的方法均为ES5已实现的方法。</p>
 <h3 id="Array构造器"><a href="#Array构造器" class="headerlink" title="Array构造器"></a><strong>Array构造器</strong></h3><p>Array构造器用于创建一个新的数组。通常，我们推荐使用对象字面量创建数组，这是一个好习惯，但是总有对象字面量乏力的时候，比如说，我想创建一个长度为8的空数组。请比较如下两种方式：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 使用Array构造器</span></div><div class="line"><span class="keyword">var</span> a = <span class="built_in">Array</span>(<span class="number">8</span>); <span class="comment">// [undefined × 8]</span></div><div class="line"><span class="comment">// 使用对象字面量</span></div><div class="line"><span class="keyword">var</span> b = [];</div><div class="line">b.length = <span class="number">8</span>; <span class="comment">// [undefined × 8]</span></div></pre></td></tr></table></figure>
+<pre><code class="js">// 使用Array构造器
+var a = Array(8); // [undefined × 8]
+// 使用对象字面量
+var b = [];
+b.length = 8; // [undefined × 8]
+</code></pre>
 <p>Array构造器明显要简洁一些，当然你也许会说，对象字面量也不错啊，那么我保持沉默。</p>
 <p>如上，我使用了<code>Array(8)</code>而不是<code>new Array(8)</code>，这会有影响吗？实际上，并没有影响，这得益于Array构造器内部对this指针的判断，<a href="http://ecma262-5.com/ELS5_HTML.htm#Section_15.4.1" target="_blank" rel="external">ELS5_HTML规范</a>是这么说的：</p>
 <blockquote>
 <p>When <code>Array</code> is called as a function rather than as a constructor, it creates and initialises a new Array object. Thus the function call <code>Array(…)</code> is equivalent to the object creation expression <code>new Array(…)</code> with the same arguments.</p>
 </blockquote>
 <p>从规范来看，浏览器内部大致做了如下类似的实现：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">Array</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  <span class="comment">// 如果this不是Array的实例，那就重新new一个实例</span></div><div class="line">  <span class="keyword">if</span>(!(<span class="keyword">this</span> <span class="keyword">instanceof</span> <span class="built_in">arguments</span>.callee))&#123;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">arguments</span>.callee();</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<pre><code class="js">function Array(){
+  // 如果this不是Array的实例，那就重新new一个实例
+  if(!(this instanceof arguments.callee)){
+    return new arguments.callee();
+  }
+}
+</code></pre>
 <p>上面，我似乎跳过了对Array构造器语法的介绍，没事，接下来我补上。</p>
 <p>Array构造器根据参数长度的不同，有如下两种不同的处理：</p>
 <ul>
@@ -249,9 +260,16 @@
 <p>以上，请注意Array构造器对于单个数值参数的特殊处理，如果仅仅需要使用数组包裹📦 若干参数，不妨使用Array.of，具体请移步下一节。</p>
 <h3 id="ES6新增的构造函数方法"><a href="#ES6新增的构造函数方法" class="headerlink" title="ES6新增的构造函数方法"></a><strong>ES6新增的构造函数方法</strong></h3><p>鉴于数组的常用性，ES6专门扩展了数组构造器<code>Array</code> ，新增2个方法：<code>Array.of</code>、<code>Array.from</code>。下面展开来聊。</p>
 <h4 id="Array-of"><a href="#Array-of" class="headerlink" title="Array.of"></a><strong>Array.of</strong></h4><p>Array.of用于将参数依次转化为数组中的一项，然后返回这个新数组，而不管这个参数是数字还是其它。它基本上与Array构造器功能一致，唯一的区别就在单个数字参数的处理上。如下：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">Array</span>.of(<span class="number">8.0</span>); <span class="comment">// [8]</span></div><div class="line"><span class="built_in">Array</span>(<span class="number">8.0</span>); <span class="comment">// [undefined × 8]</span></div></pre></td></tr></table></figure>
+<pre><code class="js">Array.of(8.0); // [8]
+Array(8.0); // [undefined × 8]
+</code></pre>
 <p>参数为多个，或单个参数不是数字时，Array.of 与 Array构造器等同。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">Array</span>.of(<span class="number">8.0</span>, <span class="number">5</span>); <span class="comment">// [8, 5]</span></div><div class="line"><span class="built_in">Array</span>(<span class="number">8.0</span>, <span class="number">5</span>); <span class="comment">// [8, 5]</span></div><div class="line"></div><div class="line"><span class="built_in">Array</span>.of(<span class="string">'8'</span>); <span class="comment">// ["8"]</span></div><div class="line"><span class="built_in">Array</span>(<span class="string">'8'</span>); <span class="comment">// ["8"]</span></div></pre></td></tr></table></figure>
+<pre><code class="js">Array.of(8.0, 5); // [8, 5]
+Array(8.0, 5); // [8, 5]
+
+Array.of(&#39;8&#39;); // [&quot;8&quot;]
+Array(&#39;8&#39;); // [&quot;8&quot;]
+</code></pre>
 <p>因此，若是需要使用数组包裹元素，推荐优先使用Array.of方法。</p>
 <p>目前，以下版本浏览器提供了对Array.of的支持。</p>
 <table>
@@ -273,21 +291,45 @@
 </tbody>
 </table>
 <p>即使其他版本浏览器不支持也不必担心，由于Array.of与Array构造器的这种高度相似性，实现一个polyfill十分简单。如下：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span> (!<span class="built_in">Array</span>.of)&#123;</div><div class="line">  <span class="built_in">Array</span>.of = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">    <span class="keyword">return</span> <span class="built_in">Array</span>.prototype.slice.call(<span class="built_in">arguments</span>);</div><div class="line">  &#125;;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<pre><code class="js">if (!Array.of){
+  Array.of = function(){
+    return Array.prototype.slice.call(arguments);
+  };
+}
+</code></pre>
 <h4 id="Array-from"><a href="#Array-from" class="headerlink" title="Array.from"></a><strong>Array.from</strong></h4><p>语法：<em>Array.from(arrayLike[, processingFn[, thisArg]])</em></p>
 <p>Array.from的设计初衷是快速便捷的基于其他对象创建新数组，准确来说就是从一个类似数组的可迭代对象创建一个新的数组实例，说人话就是，只要一个对象有迭代器，Array.from就能把它变成一个数组（当然，是返回新的数组，不改变原对象）。</p>
 <p>从语法上看，Array.from拥有3个形参，第一个为类似数组的对象，必选。第二个为加工函数，新生成的数组会经过该函数的加工再返回。第三个为this作用域，表示加工函数执行时this的值。后两个参数都是可选的。我们来看看用法。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> obj = &#123;<span class="number">0</span>: <span class="string">'a'</span>, <span class="number">1</span>: <span class="string">'b'</span>, <span class="number">2</span>:<span class="string">'c'</span>, <span class="attr">length</span>: <span class="number">3</span>&#125;;</div><div class="line"><span class="built_in">Array</span>.from(obj, <span class="function"><span class="keyword">function</span>(<span class="params">value, index</span>)</span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(value, index, <span class="keyword">this</span>, <span class="built_in">arguments</span>.length);</div><div class="line">  <span class="keyword">return</span> value.repeat(<span class="number">3</span>); <span class="comment">//必须指定返回值，否则返回undefined</span></div><div class="line">&#125;, obj);</div></pre></td></tr></table></figure>
+<pre><code class="js">var obj = {0: &#39;a&#39;, 1: &#39;b&#39;, 2:&#39;c&#39;, length: 3};
+Array.from(obj, function(value, index){
+  console.log(value, index, this, arguments.length);
+  return value.repeat(3); //必须指定返回值，否则返回undefined
+}, obj);
+</code></pre>
 <p>执行结果如下：</p>
 <p><img src="http://louiszhai.github.io/docImages/array01.png" alt="Array.from执行结果"></p>
 <p>可以看到加工函数的this作用域被obj对象取代，也可以看到加工函数默认拥有两个形参，分别为迭代器当前元素的值和其索引。</p>
 <p>注意，一旦使用加工函数，必须明确指定返回值，否则将隐式返回undefined，最终生成的数组也会变成一个只包含若干个undefined元素的空数组。</p>
 <p>实际上，如果不需要指定this，加工函数完全可以是一个箭头函数。上述代码可以简化如下：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">Array</span>.from(obj, (value) =&gt; value.repeat(<span class="number">3</span>));</div></pre></td></tr></table></figure>
+<pre><code class="js">Array.from(obj, (value) =&gt; value.repeat(3));
+</code></pre>
 <p>除了上述obj对象以外，拥有迭代器的对象还包括这些：<code>String</code>，<code>Set</code>，<code>Map</code>，<code>arguments</code> 等，Array.from统统可以处理。如下所示：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// String</span></div><div class="line"><span class="built_in">Array</span>.from(<span class="string">'abc'</span>); <span class="comment">// ["a", "b", "c"]</span></div><div class="line"><span class="comment">// Set</span></div><div class="line"><span class="built_in">Array</span>.from(<span class="keyword">new</span> <span class="built_in">Set</span>([<span class="string">'abc'</span>, <span class="string">'def'</span>])); <span class="comment">// ["abc", "def"]</span></div><div class="line"><span class="comment">// Map</span></div><div class="line"><span class="built_in">Array</span>.from(<span class="keyword">new</span> <span class="built_in">Map</span>([[<span class="number">1</span>, <span class="string">'abc'</span>], [<span class="number">2</span>, <span class="string">'def'</span>]])); <span class="comment">// [[1</span></div><div class="line">, <span class="string">'abc'</span>], [<span class="number">2</span>, <span class="string">'def'</span>]]</div><div class="line"><span class="comment">// 天生的类数组对象arguments</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">fn</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  <span class="keyword">return</span> <span class="built_in">Array</span>.from(<span class="built_in">arguments</span>);</div><div class="line">&#125;</div><div class="line">fn(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>); <span class="comment">// [1, 2, 3]</span></div></pre></td></tr></table></figure>
+<pre><code class="js">// String
+Array.from(&#39;abc&#39;); // [&quot;a&quot;, &quot;b&quot;, &quot;c&quot;]
+// Set
+Array.from(new Set([&#39;abc&#39;, &#39;def&#39;])); // [&quot;abc&quot;, &quot;def&quot;]
+// Map
+Array.from(new Map([[1, &#39;abc&#39;], [2, &#39;def&#39;]])); // [[1
+, &#39;abc&#39;], [2, &#39;def&#39;]]
+// 天生的类数组对象arguments
+function fn(){
+  return Array.from(arguments);
+}
+fn(1, 2, 3); // [1, 2, 3]
+</code></pre>
 <p>到这你可能以为Array.from就讲完了，实际上还有一个重要的扩展场景必须提下。比如说生成一个从0到指定数字的新数组，Array.from就可以轻易的做到。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">Array</span>.from(&#123;<span class="attr">length</span>: <span class="number">10</span>&#125;, (v, i) =&gt; i); <span class="comment">// [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]</span></div></pre></td></tr></table></figure>
+<pre><code class="js">Array.from({length: 10}, (v, i) =&gt; i); // [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+</code></pre>
 <p>后面我们将会看到，利用数组的keys方法实现上述功能，可能还要简单一些。</p>
 <p>目前，以下版本浏览器提供了对Array.from的支持。</p>
 <table>
@@ -311,15 +353,40 @@
 </tbody>
 </table>
 <h3 id="Array-isArray"><a href="#Array-isArray" class="headerlink" title="Array.isArray"></a><strong>Array.isArray</strong></h3><p>顾名思义，Array.isArray用来判断一个变量是否数组类型。JS的弱类型机制导致判断变量类型是初级前端开发者面试时的必考题，一般我都会将其作为考察候选人第一题，然后基于此展开。在ES5提供该方法之前，我们至少有如下5种方式去判断一个值是否数组：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> a = [];</div><div class="line"><span class="comment">// 1.基于instanceof</span></div><div class="line">a <span class="keyword">instanceof</span> <span class="built_in">Array</span>;</div><div class="line"><span class="comment">// 2.基于constructor</span></div><div class="line">a.constructor === <span class="built_in">Array</span>;</div><div class="line"><span class="comment">// 3.基于Object.prototype.isPrototypeOf</span></div><div class="line"><span class="built_in">Array</span>.prototype.isPrototypeOf(a);</div><div class="line"><span class="comment">// 4.基于getPrototypeOf</span></div><div class="line"><span class="built_in">Object</span>.getPrototypeOf(a) === <span class="built_in">Array</span>.prototype;</div><div class="line"><span class="comment">// 5.基于Object.prototype.toString</span></div><div class="line"><span class="built_in">Object</span>.prototype.toString.apply(a) === <span class="string">'[object Array]'</span>;</div></pre></td></tr></table></figure>
+<pre><code class="js">var a = [];
+// 1.基于instanceof
+a instanceof Array;
+// 2.基于constructor
+a.constructor === Array;
+// 3.基于Object.prototype.isPrototypeOf
+Array.prototype.isPrototypeOf(a);
+// 4.基于getPrototypeOf
+Object.getPrototypeOf(a) === Array.prototype;
+// 5.基于Object.prototype.toString
+Object.prototype.toString.apply(a) === &#39;[object Array]&#39;;
+</code></pre>
 <p>以上，除了<code>Object.prototype.toString</code>外，其它方法都不能正确判断变量的类型。</p>
 <p>要知道，代码的运行环境十分复杂，一个变量可能使用浑身解数去迷惑它的创造者。且看：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> a = &#123;</div><div class="line">  <span class="attr">__proto__</span>: <span class="built_in">Array</span>.prototype</div><div class="line">&#125;;</div><div class="line"><span class="comment">// 分别在控制台试运行以下代码</span></div><div class="line"><span class="comment">// 1.基于instanceof</span></div><div class="line">a <span class="keyword">instanceof</span> <span class="built_in">Array</span>; <span class="comment">// true</span></div><div class="line"><span class="comment">// 2.基于constructor</span></div><div class="line">a.constructor === <span class="built_in">Array</span>; <span class="comment">// true</span></div><div class="line"><span class="comment">// 3.基于Object.prototype.isPrototypeOf</span></div><div class="line"><span class="built_in">Array</span>.prototype.isPrototypeOf(a); <span class="comment">// true</span></div><div class="line"><span class="comment">// 4.基于getPrototypeOf</span></div><div class="line"><span class="built_in">Object</span>.getPrototypeOf(a) === <span class="built_in">Array</span>.prototype; <span class="comment">// true</span></div></pre></td></tr></table></figure>
+<pre><code class="js">var a = {
+  __proto__: Array.prototype
+};
+// 分别在控制台试运行以下代码
+// 1.基于instanceof
+a instanceof Array; // true
+// 2.基于constructor
+a.constructor === Array; // true
+// 3.基于Object.prototype.isPrototypeOf
+Array.prototype.isPrototypeOf(a); // true
+// 4.基于getPrototypeOf
+Object.getPrototypeOf(a) === Array.prototype; // true
+</code></pre>
 <p>以上，4种方法将全部返回<code>true</code>，为什么呢？我们只是手动指定了某个对象的<code>__proto__</code>属性为<code>Array.prototype</code>，便导致了该对象继承了Array对象，这种毫不负责任的继承方式，使得基于继承的判断方案瞬间土崩瓦解。</p>
 <p>不仅如此，我们还知道，Array是堆数据，变量指向的只是它的引用地址，因此每个页面的Array对象引用的地址都是不一样的。iframe中声明的数组，它的构造函数是iframe中的Array对象。如果在iframe声明了一个数组<code>x</code>，将其赋值给父页面的变量<code>y</code>，那么在父页面使用<code>y instanceof Array</code> ，结果一定是<code>false</code>的。而最后一种返回的是字符串，不会存在引用问题。实际上，多页面或系统之间的交互只有字符串能够畅行无阻。</p>
 <p>鉴于上述的两点原因，故笔者推荐使用最后一种方法去撩面试官（别提是我说的），如果你还不信，这里恰好有篇文章跟我持有相同的观点：<a href="http://web.mit.edu/jwalden/www/isArray.html" target="_blank" rel="external">Determining with absolute accuracy whether or not a JavaScript object is an array</a>。</p>
 <p>相反，使用Array.isArray则非常简单，如下：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">Array</span>.isArray([]); <span class="comment">// true</span></div><div class="line"><span class="built_in">Array</span>.isArray(&#123;<span class="number">0</span>: <span class="string">'a'</span>, <span class="attr">length</span>: <span class="number">1</span>&#125;); <span class="comment">// false</span></div></pre></td></tr></table></figure>
+<pre><code class="js">Array.isArray([]); // true
+Array.isArray({0: &#39;a&#39;, length: 1}); // false
+</code></pre>
 <p>目前，以下版本浏览器提供了对Array.isArray的支持。</p>
 <table>
 <thead>
@@ -342,68 +409,154 @@
 </tbody>
 </table>
 <p>实际上，通过<code>Object.prototype.toString</code>去判断一个值的类型，也是各大主流库的标准。因此Array.isArray的polyfill通常长这样：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span> (!<span class="built_in">Array</span>.isArray)&#123;</div><div class="line">  <span class="built_in">Array</span>.isArray = <span class="function"><span class="keyword">function</span>(<span class="params">arg</span>)</span>&#123;</div><div class="line">    <span class="keyword">return</span> <span class="built_in">Object</span>.prototype.toString.call(arg) === <span class="string">'[object Array]'</span>;</div><div class="line">  &#125;;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<pre><code class="js">if (!Array.isArray){
+  Array.isArray = function(arg){
+    return Object.prototype.toString.call(arg) === &#39;[object Array]&#39;;
+  };
+}
+</code></pre>
 <h3 id="数组推导"><a href="#数组推导" class="headerlink" title="数组推导"></a><strong>数组推导</strong></h3><p>ES6对数组的增强不止是体现在api上，还包括语法糖。比如说<code>for of</code>，它就是借鉴其它语言而成的语法糖，这种基于原数组使用<code>for of</code>生成新数组的语法糖，叫做<strong>数组推导</strong>。<strong>数组推导最初起早在ES6的草案中，但在第27版（2014年8月）中被移除，目前只有Firefox v30+支持，推导有风险，使用需谨慎。</strong>所幸如今这些语言都还支持推导：CoffeeScript、Python、Haskell、Clojure，我们可以从中一窥端倪。这里我们以python的<code>for in</code>推导打个比方：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># python for in 推导</span></div><div class="line">a = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]</div><div class="line"><span class="keyword">print</span> [i * i <span class="keyword">for</span> i <span class="keyword">in</span> a <span class="keyword">if</span> i == <span class="number">3</span>] <span class="comment"># [9]</span></div></pre></td></tr></table></figure>
+<pre><code class="python"># python for in 推导
+a = [1, 2, 3, 4]
+print [i * i for i in a if i == 3] # [9]
+</code></pre>
 <p>如下是SpiderMonkey引擎（Firefox）之前基于ES4规范实现的数组推导(与python的推导十分相似)：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[i * i <span class="keyword">for</span> (i <span class="keyword">of</span> a)] <span class="comment">// [1, 4, 9, 16]</span></div></pre></td></tr></table></figure>
+<pre><code class="js">[i * i for (i of a)] // [1, 4, 9, 16]
+</code></pre>
 <p>ES6中数组有关的<code>for of</code>在ES4的基础上进一步演化，for关键字居首，in在中间，最后才是运算表达式。如下：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[<span class="keyword">for</span> (i <span class="keyword">of</span> [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]) i * i] <span class="comment">// [1, 4, 9, 16]</span></div></pre></td></tr></table></figure>
+<pre><code class="js">[for (i of [1, 2, 3, 4]) i * i] // [1, 4, 9, 16]
+</code></pre>
 <p>同python的示例，ES6中数组有关的<code>for of</code>也可以使用if语句：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 单个if</span></div><div class="line">[<span class="keyword">for</span> (i <span class="keyword">of</span> [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]) <span class="keyword">if</span> (i == <span class="number">3</span>) i * i] <span class="comment">// [9]</span></div><div class="line"><span class="comment">// 甚至是多个if</span></div><div class="line">[<span class="keyword">for</span> (i <span class="keyword">of</span> [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]) <span class="keyword">if</span> (i &gt; <span class="number">2</span>) <span class="keyword">if</span> (i &lt; <span class="number">4</span>) i * i] <span class="comment">// [9]</span></div></pre></td></tr></table></figure>
+<pre><code class="js">// 单个if
+[for (i of [1, 2, 3, 4]) if (i == 3) i * i] // [9]
+// 甚至是多个if
+[for (i of [1, 2, 3, 4]) if (i &gt; 2) if (i &lt; 4) i * i] // [9]
+</code></pre>
 <p>更为强大的是，ES6数组推导还允许多重<code>for of</code>。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[<span class="keyword">for</span> (i <span class="keyword">of</span> [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]) <span class="keyword">for</span> (j <span class="keyword">of</span> [<span class="number">10</span>, <span class="number">100</span>]) i * j] <span class="comment">// [10, 100, 20, 200, 30, 300]</span></div></pre></td></tr></table></figure>
+<pre><code class="js">[for (i of [1, 2, 3]) for (j of [10, 100]) i * j] // [10, 100, 20, 200, 30, 300]
+</code></pre>
 <p>甚至，数组推导还能够嵌入另一个数组推导中。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[<span class="keyword">for</span> (i <span class="keyword">of</span> [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]) [<span class="keyword">for</span> (j <span class="keyword">of</span> [<span class="number">10</span>, <span class="number">100</span>]) i * j] ] <span class="comment">// [[10, 100], [20, 200], [30, 300]]</span></div></pre></td></tr></table></figure>
+<pre><code class="js">[for (i of [1, 2, 3]) [for (j of [10, 100]) i * j] ] // [[10, 100], [20, 200], [30, 300]]
+</code></pre>
 <p>对于上述两个表达式，前者和后者唯一的区别，就在于后者的第二个推导是先返回数组，然后与外部的推导再进行一次运算。</p>
 <p>除了多个数组推导嵌套外，ES6的数组推导还会为每次迭代分配一个新的作用域（目前Firefox也没有为每次迭代创建新的作用域）：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// ES6规范</span></div><div class="line">[<span class="keyword">for</span> (x <span class="keyword">of</span> [<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>]) () =&gt; x][<span class="number">0</span>]() <span class="comment">// 0</span></div><div class="line"><span class="comment">// Firefox运行</span></div><div class="line">[<span class="keyword">for</span> (x <span class="keyword">of</span> [<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>]) () =&gt; x][<span class="number">0</span>]() <span class="comment">// 2</span></div></pre></td></tr></table></figure>
+<pre><code class="js">// ES6规范
+[for (x of [0, 1, 2]) () =&gt; x][0]() // 0
+// Firefox运行
+[for (x of [0, 1, 2]) () =&gt; x][0]() // 2
+</code></pre>
 <p>通过上面的实例，我们看到使用数组推导来创建新数组比<code>forEach</code>，<code>map</code>，<code>filter</code>等遍历方法更加简洁，只是非常可惜，它不是标准规范。</p>
 <p>ES6不仅新增了对Array构造器相关API，还新增了8个原型的方法。接下来我会在原型方法的介绍中穿插着ES6相关方法的讲解，请耐心往下读。</p>
 <h3 id="原型"><a href="#原型" class="headerlink" title="原型"></a><strong>原型</strong></h3><p>继承的常识告诉我们，js中所有的数组方法均来自于Array.prototype，和其他构造函数一样，你可以通过扩展 <code>Array</code> 的 <code>prototype</code> 属性上的方法来给所有数组实例增加方法。</p>
 <p>值得一说的是，Array.prototype本身就是一个数组。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">Array</span>.isArray(<span class="built_in">Array</span>.prototype); <span class="comment">// true</span></div><div class="line"><span class="built_in">console</span>.log(<span class="built_in">Array</span>.prototype.length);<span class="comment">// 0</span></div></pre></td></tr></table></figure>
+<pre><code class="js">Array.isArray(Array.prototype); // true
+console.log(Array.prototype.length);// 0
+</code></pre>
 <p>以下方法可以进一步验证：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log([].__proto__.length);<span class="comment">// 0</span></div><div class="line"><span class="built_in">console</span>.log([].__proto__);<span class="comment">// [Symbol(Symbol.unscopables): Object]</span></div></pre></td></tr></table></figure>
+<pre><code class="js">console.log([].__proto__.length);// 0
+console.log([].__proto__);// [Symbol(Symbol.unscopables): Object]
+</code></pre>
 <p>有关Symbol(Symbol.unscopables)的知识，这里不做详述，具体请移步后续章节。</p>
 <h3 id="方法"><a href="#方法" class="headerlink" title="方法"></a><strong>方法</strong></h3><p>数组原型提供的方法非常之多，主要分为三种，一种是会改变自身值的，一种是不会改变自身值的，另外一种是遍历方法。</p>
 <p>由于 Array.prototype 的某些属性被设置为[[DontEnum]]，因此不能用一般的方法进行遍历，我们可以通过如下方式获取 Array.prototype 的所有方法：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">Object</span>.getOwnPropertyNames(<span class="built_in">Array</span>.prototype); <span class="comment">// ["length", "constructor", "toString", "toLocaleString", "join", "pop", "push", "reverse", "shift", "unshift", "slice", "splice", "sort", "filter", "forEach", "some", "every", "map", "indexOf", "lastIndexOf", "reduce", "reduceRight", "copyWithin", "find", "findIndex", "fill", "includes", "entries", "keys", "concat"]</span></div></pre></td></tr></table></figure>
+<pre><code class="js">Object.getOwnPropertyNames(Array.prototype); // [&quot;length&quot;, &quot;constructor&quot;, &quot;toString&quot;, &quot;toLocaleString&quot;, &quot;join&quot;, &quot;pop&quot;, &quot;push&quot;, &quot;reverse&quot;, &quot;shift&quot;, &quot;unshift&quot;, &quot;slice&quot;, &quot;splice&quot;, &quot;sort&quot;, &quot;filter&quot;, &quot;forEach&quot;, &quot;some&quot;, &quot;every&quot;, &quot;map&quot;, &quot;indexOf&quot;, &quot;lastIndexOf&quot;, &quot;reduce&quot;, &quot;reduceRight&quot;, &quot;copyWithin&quot;, &quot;find&quot;, &quot;findIndex&quot;, &quot;fill&quot;, &quot;includes&quot;, &quot;entries&quot;, &quot;keys&quot;, &quot;concat&quot;]
+</code></pre>
 <h4 id="改变自身值的方法-9个"><a href="#改变自身值的方法-9个" class="headerlink" title="改变自身值的方法(9个)"></a><strong>改变自身值的方法(9个)</strong></h4><p>基于ES6，改变自身值的方法一共有9个，分别为pop、push、reverse、shift、sort、splice、unshift，以及两个ES6新增的方法copyWithin 和 fill。</p>
 <p>对于能改变自身值的数组方法，日常开发中需要特别注意，尽量避免在循环遍历中去改变原数组的项。接下来，我们一起来深入地了解这些方法。</p>
 <h5 id="pop"><a href="#pop" class="headerlink" title="pop"></a><strong>pop</strong></h5><p>pop() 方法删除一个数组中的最后的一个元素，并且返回这个元素。如果是栈的话，这个过程就是栈顶弹出。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> array = [<span class="string">"cat"</span>, <span class="string">"dog"</span>, <span class="string">"cow"</span>, <span class="string">"chicken"</span>, <span class="string">"mouse"</span>];</div><div class="line"><span class="keyword">var</span> item = array.pop();</div><div class="line"><span class="built_in">console</span>.log(array); <span class="comment">// ["cat", "dog", "cow", "chicken"]</span></div><div class="line"><span class="built_in">console</span>.log(item); <span class="comment">// mouse</span></div></pre></td></tr></table></figure>
+<pre><code class="js">var array = [&quot;cat&quot;, &quot;dog&quot;, &quot;cow&quot;, &quot;chicken&quot;, &quot;mouse&quot;];
+var item = array.pop();
+console.log(array); // [&quot;cat&quot;, &quot;dog&quot;, &quot;cow&quot;, &quot;chicken&quot;]
+console.log(item); // mouse
+</code></pre>
 <p>由于设计上的巧妙，pop方法可以应用在类数组对象上，即 <code>鸭式辨型</code>. 如下：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> o = &#123;<span class="number">0</span>:<span class="string">"cat"</span>, <span class="number">1</span>:<span class="string">"dog"</span>, <span class="number">2</span>:<span class="string">"cow"</span>, <span class="number">3</span>:<span class="string">"chicken"</span>, <span class="number">4</span>:<span class="string">"mouse"</span>, <span class="attr">length</span>:<span class="number">5</span>&#125;</div><div class="line"><span class="keyword">var</span> item = <span class="built_in">Array</span>.prototype.pop.call(o);</div><div class="line"><span class="built_in">console</span>.log(o); <span class="comment">// Object &#123;0: "cat", 1: "dog", 2: "cow", 3: "chicken", length: 4&#125;</span></div><div class="line"><span class="built_in">console</span>.log(item); <span class="comment">// mouse</span></div></pre></td></tr></table></figure>
+<pre><code class="js">var o = {0:&quot;cat&quot;, 1:&quot;dog&quot;, 2:&quot;cow&quot;, 3:&quot;chicken&quot;, 4:&quot;mouse&quot;, length:5}
+var item = Array.prototype.pop.call(o);
+console.log(o); // Object {0: &quot;cat&quot;, 1: &quot;dog&quot;, 2: &quot;cow&quot;, 3: &quot;chicken&quot;, length: 4}
+console.log(item); // mouse
+</code></pre>
 <p>但如果类数组对象不具有length属性，那么该对象将被创建length属性，length值为0。如下：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> o = &#123;<span class="number">0</span>:<span class="string">"cat"</span>, <span class="number">1</span>:<span class="string">"dog"</span>, <span class="number">2</span>:<span class="string">"cow"</span>, <span class="number">3</span>:<span class="string">"chicken"</span>, <span class="number">4</span>:<span class="string">"mouse"</span>&#125;</div><div class="line"><span class="keyword">var</span> item = <span class="built_in">Array</span>.prototype.pop.call(o);</div><div class="line"><span class="built_in">console</span>.log(array); <span class="comment">// Object &#123;0: "cat", 1: "dog", 2: "cow", 3: "chicken", 4: "mouse", length: 0&#125;</span></div><div class="line"><span class="built_in">console</span>.log(item); <span class="comment">// undefined</span></div></pre></td></tr></table></figure>
+<pre><code class="js">var o = {0:&quot;cat&quot;, 1:&quot;dog&quot;, 2:&quot;cow&quot;, 3:&quot;chicken&quot;, 4:&quot;mouse&quot;}
+var item = Array.prototype.pop.call(o);
+console.log(array); // Object {0: &quot;cat&quot;, 1: &quot;dog&quot;, 2: &quot;cow&quot;, 3: &quot;chicken&quot;, 4: &quot;mouse&quot;, length: 0}
+console.log(item); // undefined
+</code></pre>
 <h5 id="push"><a href="#push" class="headerlink" title="push"></a><strong>push</strong></h5><p>push()方法添加一个或者多个元素到数组末尾，并且返回数组新的长度。如果是栈的话，这个过程就是栈顶压入。</p>
 <p>语法：<em>arr.push(element1, …, elementN)</em></p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> array = [<span class="string">"football"</span>, <span class="string">"basketball"</span>, <span class="string">"volleyball"</span>, <span class="string">"Table tennis"</span>, <span class="string">"badminton"</span>];</div><div class="line"><span class="keyword">var</span> i = array.push(<span class="string">"golfball"</span>);</div><div class="line"><span class="built_in">console</span>.log(array); <span class="comment">// ["football", "basketball", "volleyball", "Table tennis", "badminton", "golfball"]</span></div><div class="line"><span class="built_in">console</span>.log(i); <span class="comment">// 6</span></div></pre></td></tr></table></figure>
+<pre><code class="js">var array = [&quot;football&quot;, &quot;basketball&quot;, &quot;volleyball&quot;, &quot;Table tennis&quot;, &quot;badminton&quot;];
+var i = array.push(&quot;golfball&quot;);
+console.log(array); // [&quot;football&quot;, &quot;basketball&quot;, &quot;volleyball&quot;, &quot;Table tennis&quot;, &quot;badminton&quot;, &quot;golfball&quot;]
+console.log(i); // 6
+</code></pre>
 <p>同pop方法一样，push方法也可以应用到类数组对象上，如果length不能被转成一个数值或者不存在length属性时，则插入的元素索引为0，且length属性不存在时，将会创建它。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> o = &#123;<span class="number">0</span>:<span class="string">"football"</span>, <span class="number">1</span>:<span class="string">"basketball"</span>&#125;;</div><div class="line"><span class="keyword">var</span> i = <span class="built_in">Array</span>.prototype.push.call(o, <span class="string">"golfball"</span>);</div><div class="line"><span class="built_in">console</span>.log(o); <span class="comment">// Object &#123;0: "golfball", 1: "basketball", length: 1&#125;</span></div><div class="line"><span class="built_in">console</span>.log(i); <span class="comment">// 1</span></div></pre></td></tr></table></figure>
+<pre><code class="js">var o = {0:&quot;football&quot;, 1:&quot;basketball&quot;};
+var i = Array.prototype.push.call(o, &quot;golfball&quot;);
+console.log(o); // Object {0: &quot;golfball&quot;, 1: &quot;basketball&quot;, length: 1}
+console.log(i); // 1
+</code></pre>
 <p>实际上，push方法是根据length属性来决定从哪里开始插入给定的值。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> o = &#123;<span class="number">0</span>:<span class="string">"football"</span>, <span class="number">1</span>:<span class="string">"basketball"</span>,<span class="attr">length</span>:<span class="number">1</span>&#125;;</div><div class="line"><span class="keyword">var</span> i = <span class="built_in">Array</span>.prototype.push.call(o,<span class="string">"golfball"</span>);</div><div class="line"><span class="built_in">console</span>.log(o); <span class="comment">// Object &#123;0: "football", 1: "golfball", length: 2&#125;</span></div><div class="line"><span class="built_in">console</span>.log(i); <span class="comment">// 2</span></div></pre></td></tr></table></figure>
+<pre><code class="js">var o = {0:&quot;football&quot;, 1:&quot;basketball&quot;,length:1};
+var i = Array.prototype.push.call(o,&quot;golfball&quot;);
+console.log(o); // Object {0: &quot;football&quot;, 1: &quot;golfball&quot;, length: 2}
+console.log(i); // 2
+</code></pre>
 <p>利用push根据length属性插入元素这个特点，可以实现数组的合并，如下：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> array = [<span class="string">"football"</span>, <span class="string">"basketball"</span>];</div><div class="line"><span class="keyword">var</span> array2 = [<span class="string">"volleyball"</span>, <span class="string">"golfball"</span>];</div><div class="line"><span class="keyword">var</span> i = <span class="built_in">Array</span>.prototype.push.apply(array,array2);</div><div class="line"><span class="built_in">console</span>.log(array); <span class="comment">// ["football", "basketball", "volleyball", "golfball"]</span></div><div class="line"><span class="built_in">console</span>.log(i); <span class="comment">// 4</span></div></pre></td></tr></table></figure>
+<pre><code class="js">var array = [&quot;football&quot;, &quot;basketball&quot;];
+var array2 = [&quot;volleyball&quot;, &quot;golfball&quot;];
+var i = Array.prototype.push.apply(array,array2);
+console.log(array); // [&quot;football&quot;, &quot;basketball&quot;, &quot;volleyball&quot;, &quot;golfball&quot;]
+console.log(i); // 4
+</code></pre>
 <h5 id="reverse"><a href="#reverse" class="headerlink" title="reverse"></a><strong>reverse</strong></h5><p>reverse()方法颠倒数组中元素的位置，第一个会成为最后一个，最后一个会成为第一个，该方法返回对数组的引用。</p>
 <p>语法：<em>arr.reverse()</em></p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> array = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>];</div><div class="line"><span class="keyword">var</span> array2 = array.reverse();</div><div class="line"><span class="built_in">console</span>.log(array); <span class="comment">// [5,4,3,2,1]</span></div><div class="line"><span class="built_in">console</span>.log(array2===array); <span class="comment">// true</span></div></pre></td></tr></table></figure>
+<pre><code class="js">var array = [1,2,3,4,5];
+var array2 = array.reverse();
+console.log(array); // [5,4,3,2,1]
+console.log(array2===array); // true
+</code></pre>
 <p>同上，reverse 也是鸭式辨型的受益者，颠倒元素的范围受length属性制约。如下:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> o = &#123;<span class="number">0</span>:<span class="string">"a"</span>, <span class="number">1</span>:<span class="string">"b"</span>, <span class="number">2</span>:<span class="string">"c"</span>, <span class="attr">length</span>:<span class="number">2</span>&#125;;</div><div class="line"><span class="keyword">var</span> o2 = <span class="built_in">Array</span>.prototype.reverse.call(o);</div><div class="line"><span class="built_in">console</span>.log(o); <span class="comment">// Object &#123;0: "b", 1: "a", 2: "c", length: 2&#125;</span></div><div class="line"><span class="built_in">console</span>.log(o === o2); <span class="comment">// true</span></div></pre></td></tr></table></figure>
+<pre><code class="js">var o = {0:&quot;a&quot;, 1:&quot;b&quot;, 2:&quot;c&quot;, length:2};
+var o2 = Array.prototype.reverse.call(o);
+console.log(o); // Object {0: &quot;b&quot;, 1: &quot;a&quot;, 2: &quot;c&quot;, length: 2}
+console.log(o === o2); // true
+</code></pre>
 <p>如果 length 属性小于2 或者 length 属性不为数值，那么原类数组对象将没有变化。即使 length 属性不存在，该对象也不会去创建 length 属性。特别的是，当 length 属性较大时，类数组对象的『索引』会尽可能的向 length 看齐。如下: </p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> o = &#123;<span class="number">0</span>:<span class="string">"a"</span>, <span class="number">1</span>:<span class="string">"b"</span>, <span class="number">2</span>:<span class="string">"c"</span>,<span class="attr">length</span>:<span class="number">100</span>&#125;;</div><div class="line"><span class="keyword">var</span> o2 = <span class="built_in">Array</span>.prototype.reverse.call(o);</div><div class="line"><span class="built_in">console</span>.log(o); <span class="comment">// Object &#123;97: "c", 98: "b", 99: "a", length: 100&#125;</span></div><div class="line"><span class="built_in">console</span>.log(o === o2); <span class="comment">// true</span></div></pre></td></tr></table></figure>
+<pre><code class="js">var o = {0:&quot;a&quot;, 1:&quot;b&quot;, 2:&quot;c&quot;,length:100};
+var o2 = Array.prototype.reverse.call(o);
+console.log(o); // Object {97: &quot;c&quot;, 98: &quot;b&quot;, 99: &quot;a&quot;, length: 100}
+console.log(o === o2); // true
+</code></pre>
 <h5 id="shift"><a href="#shift" class="headerlink" title="shift"></a><strong>shift</strong></h5><p>shift()方法删除数组的第一个元素，并返回这个元素。如果是栈的话，这个过程就是栈底弹出。</p>
 <p>语法：<em>arr.shift()</em></p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> array = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>];</div><div class="line"><span class="keyword">var</span> item = array.shift();</div><div class="line"><span class="built_in">console</span>.log(array); <span class="comment">// [2,3,4,5]</span></div><div class="line"><span class="built_in">console</span>.log(item); <span class="comment">// 1</span></div></pre></td></tr></table></figure>
+<pre><code class="js">var array = [1,2,3,4,5];
+var item = array.shift();
+console.log(array); // [2,3,4,5]
+console.log(item); // 1
+</code></pre>
 <p>同样受益于鸭式辨型，对于类数组对象，shift仍然能够处理。如下：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> o = &#123;<span class="number">0</span>:<span class="string">"a"</span>, <span class="number">1</span>:<span class="string">"b"</span>, <span class="number">2</span>:<span class="string">"c"</span>, <span class="attr">length</span>:<span class="number">3</span>&#125;;</div><div class="line"><span class="keyword">var</span> item = <span class="built_in">Array</span>.prototype.shift.call(o);</div><div class="line"><span class="built_in">console</span>.log(o); <span class="comment">// Object &#123;0: "b", 1: "c", length: 2&#125;</span></div><div class="line"><span class="built_in">console</span>.log(item); <span class="comment">// a</span></div></pre></td></tr></table></figure>
+<pre><code class="js">var o = {0:&quot;a&quot;, 1:&quot;b&quot;, 2:&quot;c&quot;, length:3};
+var item = Array.prototype.shift.call(o);
+console.log(o); // Object {0: &quot;b&quot;, 1: &quot;c&quot;, length: 2}
+console.log(item); // a
+</code></pre>
 <p>如果类数组对象length属性不存在，将添加length属性，并初始化为0。如下：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> o = &#123;<span class="number">0</span>:<span class="string">"a"</span>, <span class="number">1</span>:<span class="string">"b"</span>, <span class="number">2</span>:<span class="string">"c"</span>&#125;;</div><div class="line"><span class="keyword">var</span> item = <span class="built_in">Array</span>.prototype.shift.call(o);</div><div class="line"><span class="built_in">console</span>.log(o); <span class="comment">// Object &#123;0: "a", 1: "b", 2:"c" length: 0&#125;</span></div><div class="line"><span class="built_in">console</span>.log(item); <span class="comment">// undefined</span></div></pre></td></tr></table></figure>
+<pre><code class="js">var o = {0:&quot;a&quot;, 1:&quot;b&quot;, 2:&quot;c&quot;};
+var item = Array.prototype.shift.call(o);
+console.log(o); // Object {0: &quot;a&quot;, 1: &quot;b&quot;, 2:&quot;c&quot; length: 0}
+console.log(item); // undefined
+</code></pre>
 <h5 id="sort"><a href="#sort" class="headerlink" title="sort"></a><strong>sort</strong></h5><p>sort()方法对数组元素进行排序，并返回这个数组。sort方法比较复杂，这里我将多花些篇幅来讲这块。</p>
 <p>语法：<em>arr.sort([comparefn])</em></p>
 <p>comparefn是可选的，如果省略，数组元素将按照各自转换为字符串的Unicode(万国码)位点顺序排序，例如”Boy”将排到”apple”之前。当对数字排序的时候，25将会排到8之前，因为转换为字符串后，”25”将比”8”靠前。例如：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> array = [<span class="string">"apple"</span>,<span class="string">"Boy"</span>,<span class="string">"Cat"</span>,<span class="string">"dog"</span>];</div><div class="line"><span class="keyword">var</span> array2 = array.sort();</div><div class="line"><span class="built_in">console</span>.log(array); <span class="comment">// ["Boy", "Cat", "apple", "dog"]</span></div><div class="line"><span class="built_in">console</span>.log(array2 == array); <span class="comment">// true</span></div><div class="line"></div><div class="line">array = [<span class="number">10</span>, <span class="number">1</span>, <span class="number">3</span>, <span class="number">20</span>];</div><div class="line"><span class="keyword">var</span> array3 = array.sort();</div><div class="line"><span class="built_in">console</span>.log(array3); <span class="comment">// [1, 10, 20, 3]</span></div></pre></td></tr></table></figure>
+<pre><code class="js">var array = [&quot;apple&quot;,&quot;Boy&quot;,&quot;Cat&quot;,&quot;dog&quot;];
+var array2 = array.sort();
+console.log(array); // [&quot;Boy&quot;, &quot;Cat&quot;, &quot;apple&quot;, &quot;dog&quot;]
+console.log(array2 == array); // true
+
+array = [10, 1, 3, 20];
+var array3 = array.sort();
+console.log(array3); // [1, 10, 20, 3]
+</code></pre>
 <p>如果指明了comparefn，数组将按照调用该函数的返回值来排序。若 a 和 b 是两个将要比较的元素：</p>
 <ul>
 <li>若 comparefn(a, b) &lt; 0，那么a 将排到 b 前面；</li>
@@ -411,25 +564,87 @@
 <li>若 comparefn(a, b) &gt; 0，那么a , b 将调换位置；</li>
 </ul>
 <p>如果数组元素为数字，则排序函数comparefn格式如下所示：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">compare</span>(<span class="params">a, b</span>)</span>&#123;</div><div class="line">  <span class="keyword">return</span> a-b;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<pre><code class="js">function compare(a, b){
+  return a-b;
+}
+</code></pre>
 <p>如果数组元素为非ASCII字符的字符串(如包含类似 e、é、è、a、ä 或中文字符等非英文字符的字符串)，则需要使用String.localeCompare。下面这个函数将排到正确的顺序。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> array = [<span class="string">'互'</span>,<span class="string">'联'</span>,<span class="string">'网'</span>,<span class="string">'改'</span>,<span class="string">'变'</span>,<span class="string">'世'</span>,<span class="string">'界'</span>];</div><div class="line"><span class="keyword">var</span> array2 = array.sort();</div><div class="line"></div><div class="line"><span class="keyword">var</span> array = [<span class="string">'互'</span>,<span class="string">'联'</span>,<span class="string">'网'</span>,<span class="string">'改'</span>,<span class="string">'变'</span>,<span class="string">'世'</span>,<span class="string">'界'</span>]; <span class="comment">// 重新赋值,避免干扰array2</span></div><div class="line"><span class="keyword">var</span> array3 = array.sort(<span class="function"><span class="keyword">function</span> (<span class="params">a, b</span>) </span>&#123;</div><div class="line">  <span class="keyword">return</span> a.localeCompare(b);</div><div class="line">&#125;);</div><div class="line"></div><div class="line"><span class="built_in">console</span>.log(array2); <span class="comment">// ["世", "互", "变", "改", "界", "网", "联"]</span></div><div class="line"><span class="built_in">console</span>.log(array3); <span class="comment">// ["变", "改", "互", "界", "联", "世", "网"]</span></div></pre></td></tr></table></figure>
+<pre><code class="js">var array = [&#39;互&#39;,&#39;联&#39;,&#39;网&#39;,&#39;改&#39;,&#39;变&#39;,&#39;世&#39;,&#39;界&#39;];
+var array2 = array.sort();
+
+var array = [&#39;互&#39;,&#39;联&#39;,&#39;网&#39;,&#39;改&#39;,&#39;变&#39;,&#39;世&#39;,&#39;界&#39;]; // 重新赋值,避免干扰array2
+var array3 = array.sort(function (a, b) {
+  return a.localeCompare(b);
+});
+
+console.log(array2); // [&quot;世&quot;, &quot;互&quot;, &quot;变&quot;, &quot;改&quot;, &quot;界&quot;, &quot;网&quot;, &quot;联&quot;]
+console.log(array3); // [&quot;变&quot;, &quot;改&quot;, &quot;互&quot;, &quot;界&quot;, &quot;联&quot;, &quot;世&quot;, &quot;网&quot;]
+</code></pre>
 <p>如上，『互联网改变世界』这个数组，sort函数默认按照数组元素unicode字符串形式进行排序，然而实际上，我们期望的是按照拼音先后顺序进行排序，显然String.localeCompare 帮助我们达到了这个目的。</p>
 <p>为什么上面测试中需要重新给array赋值呢，这是因为sort每次排序时改变的是数组本身，并且返回数组引用。如果不这么做，经过连续两次排序后，array2 和 array3 将指向同一个数组，最终影响我们测试。array重新赋值后就断开了对原数组的引用。</p>
 <p>同上，sort一样受益于鸭式辨型，比如：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> o = &#123;<span class="number">0</span>:<span class="string">'互'</span>,<span class="number">1</span>:<span class="string">'联'</span>,<span class="number">2</span>:<span class="string">'网'</span>,<span class="number">3</span>:<span class="string">'改'</span>,<span class="number">4</span>:<span class="string">'变'</span>,<span class="number">5</span>:<span class="string">'世'</span>,<span class="number">6</span>:<span class="string">'界'</span>,<span class="attr">length</span>:<span class="number">7</span>&#125;;</div><div class="line"><span class="built_in">Array</span>.prototype.sort.call(o,<span class="function"><span class="keyword">function</span>(<span class="params">a, b</span>)</span>&#123;</div><div class="line">  <span class="keyword">return</span> a.localeCompare(b);</div><div class="line">&#125;);</div><div class="line"><span class="built_in">console</span>.log(o); <span class="comment">// Object &#123;0: "变", 1: "改", 2: "互", 3: "界", 4: "联", 5: "世", 6: "网", length: 7&#125;, 可见同上述排序结果一致</span></div></pre></td></tr></table></figure>
+<pre><code class="js">var o = {0:&#39;互&#39;,1:&#39;联&#39;,2:&#39;网&#39;,3:&#39;改&#39;,4:&#39;变&#39;,5:&#39;世&#39;,6:&#39;界&#39;,length:7};
+Array.prototype.sort.call(o,function(a, b){
+  return a.localeCompare(b);
+});
+console.log(o); // Object {0: &quot;变&quot;, 1: &quot;改&quot;, 2: &quot;互&quot;, 3: &quot;界&quot;, 4: &quot;联&quot;, 5: &quot;世&quot;, 6: &quot;网&quot;, length: 7}, 可见同上述排序结果一致
+</code></pre>
 <p>注意：使用sort的鸭式辨型特性时，若类数组对象不具有length属性，它并不会进行排序，也不会为其添加length属性。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> o = &#123;<span class="number">0</span>:<span class="string">'互'</span>,<span class="number">1</span>:<span class="string">'联'</span>,<span class="number">2</span>:<span class="string">'网'</span>,<span class="number">3</span>:<span class="string">'改'</span>,<span class="number">4</span>:<span class="string">'变'</span>,<span class="number">5</span>:<span class="string">'世'</span>,<span class="number">6</span>:<span class="string">'界'</span>&#125;;</div><div class="line"><span class="built_in">Array</span>.prototype.sort.call(o,<span class="function"><span class="keyword">function</span>(<span class="params">a, b</span>)</span>&#123;</div><div class="line">  <span class="keyword">return</span> a.localeCompare(b);</div><div class="line">&#125;);</div><div class="line"><span class="built_in">console</span>.log(o); <span class="comment">// Object &#123;0: "互", 1: "联", 2: "网", 3: "改", 4: "变", 5: "世", 6: "界"&#125;, 可见并未添加length属性</span></div></pre></td></tr></table></figure>
+<pre><code class="js">var o = {0:&#39;互&#39;,1:&#39;联&#39;,2:&#39;网&#39;,3:&#39;改&#39;,4:&#39;变&#39;,5:&#39;世&#39;,6:&#39;界&#39;};
+Array.prototype.sort.call(o,function(a, b){
+  return a.localeCompare(b);
+});
+console.log(o); // Object {0: &quot;互&quot;, 1: &quot;联&quot;, 2: &quot;网&quot;, 3: &quot;改&quot;, 4: &quot;变&quot;, 5: &quot;世&quot;, 6: &quot;界&quot;}, 可见并未添加length属性
+</code></pre>
 <h6 id="使用映射改善排序"><a href="#使用映射改善排序" class="headerlink" title="使用映射改善排序"></a><strong>使用映射改善排序</strong></h6><p>comparefn 如果需要对数组元素多次转换以实现排序，那么使用map辅助排序将是个不错的选择。基本思想就是将数组中的每个元素实际比较的值取出来，排序后再将数组恢复。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 需要被排序的数组</span></div><div class="line"><span class="keyword">var</span> array = [<span class="string">'dog'</span>, <span class="string">'Cat'</span>, <span class="string">'Boy'</span>, <span class="string">'apple'</span>];</div><div class="line"><span class="comment">// 对需要排序的数字和位置的临时存储</span></div><div class="line"><span class="keyword">var</span> mapped = array.map(<span class="function"><span class="keyword">function</span>(<span class="params">el, i</span>) </span>&#123;</div><div class="line">  <span class="keyword">return</span> &#123; <span class="attr">index</span>: i, <span class="attr">value</span>: el.toLowerCase() &#125;;</div><div class="line">&#125;)</div><div class="line"><span class="comment">// 按照多个值排序数组</span></div><div class="line">mapped.sort(<span class="function"><span class="keyword">function</span>(<span class="params">a, b</span>) </span>&#123;</div><div class="line">  <span class="keyword">return</span> +(a.value &gt; b.value) || +(a.value === b.value) - <span class="number">1</span>;</div><div class="line">&#125;);</div><div class="line"><span class="comment">// 根据索引得到排序的结果</span></div><div class="line"><span class="keyword">var</span> result = mapped.map(<span class="function"><span class="keyword">function</span>(<span class="params">el</span>)</span>&#123;</div><div class="line">  <span class="keyword">return</span> array[el.index];</div><div class="line">&#125;);</div><div class="line"><span class="built_in">console</span>.log(result); <span class="comment">// ["apple", "Boy", "Cat", "dog"]</span></div></pre></td></tr></table></figure>
+<pre><code class="js">// 需要被排序的数组
+var array = [&#39;dog&#39;, &#39;Cat&#39;, &#39;Boy&#39;, &#39;apple&#39;];
+// 对需要排序的数字和位置的临时存储
+var mapped = array.map(function(el, i) {
+  return { index: i, value: el.toLowerCase() };
+})
+// 按照多个值排序数组
+mapped.sort(function(a, b) {
+  return +(a.value &gt; b.value) || +(a.value === b.value) - 1;
+});
+// 根据索引得到排序的结果
+var result = mapped.map(function(el){
+  return array[el.index];
+});
+console.log(result); // [&quot;apple&quot;, &quot;Boy&quot;, &quot;Cat&quot;, &quot;dog&quot;]
+</code></pre>
 <h6 id="奇怪的chrome"><a href="#奇怪的chrome" class="headerlink" title="奇怪的chrome"></a><strong>奇怪的chrome</strong></h6><p>实际上，ECMAscript规范中并未规定具体的sort算法，这就势必导致各个浏览器不尽相同的sort算法，请看sort方法在Chrome浏览器下表现：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> array = [&#123; <span class="attr">n</span>: <span class="string">"a"</span>, <span class="attr">v</span>: <span class="number">1</span> &#125;, &#123; <span class="attr">n</span>: <span class="string">"b"</span>, <span class="attr">v</span>: <span class="number">1</span> &#125;, &#123; <span class="attr">n</span>: <span class="string">"c"</span>, <span class="attr">v</span>: <span class="number">1</span> &#125;, &#123; <span class="attr">n</span>: <span class="string">"d"</span>, <span class="attr">v</span>: <span class="number">1</span> &#125;, &#123; <span class="attr">n</span>: <span class="string">"e"</span>, <span class="attr">v</span>: <span class="number">1</span> &#125;, &#123; <span class="attr">n</span>: <span class="string">"f"</span>, <span class="attr">v</span>: <span class="number">1</span> &#125;, &#123; <span class="attr">n</span>: <span class="string">"g"</span>, <span class="attr">v</span>: <span class="number">1</span> &#125;, &#123; <span class="attr">n</span>: <span class="string">"h"</span>, <span class="attr">v</span>: <span class="number">1</span> &#125;, &#123; <span class="attr">n</span>: <span class="string">"i"</span>, <span class="attr">v</span>: <span class="number">1</span> &#125;, &#123; <span class="attr">n</span>: <span class="string">"j"</span>, <span class="attr">v</span>: <span class="number">1</span> &#125;, &#123; <span class="attr">n</span>: <span class="string">"k"</span>, <span class="attr">v</span>: <span class="number">1</span> &#125;, ];</div><div class="line">array.sort(<span class="function"><span class="keyword">function</span> (<span class="params">a, b</span>) </span>&#123;</div><div class="line">	<span class="keyword">return</span> a.v - b.v;</div><div class="line">&#125;);</div><div class="line"><span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>,len = array.length; i &lt; len; i++) &#123;</div><div class="line">    <span class="built_in">console</span>.log(array[i].n);</div><div class="line">&#125;</div><div class="line"><span class="comment">// f a c d e b g h i j k</span></div></pre></td></tr></table></figure>
+<pre><code class="js">var array = [{ n: &quot;a&quot;, v: 1 }, { n: &quot;b&quot;, v: 1 }, { n: &quot;c&quot;, v: 1 }, { n: &quot;d&quot;, v: 1 }, { n: &quot;e&quot;, v: 1 }, { n: &quot;f&quot;, v: 1 }, { n: &quot;g&quot;, v: 1 }, { n: &quot;h&quot;, v: 1 }, { n: &quot;i&quot;, v: 1 }, { n: &quot;j&quot;, v: 1 }, { n: &quot;k&quot;, v: 1 }, ];
+array.sort(function (a, b) {
+    return a.v - b.v;
+});
+for (var i = 0,len = array.length; i &lt; len; i++) {
+    console.log(array[i].n);
+}
+// f a c d e b g h i j k
+</code></pre>
 <p>由于v值相等，array数组排序前后应该不变，然而Chrome却表现异常，而其他浏览器(如IE 或 Firefox) 表现正常。</p>
 <p>这是因为v8引擎为了高效排序(采用了不稳定排序)。即数组长度超过10条时，会调用另一种排序方法(快速排序)；而10条及以下采用的是插入排序，此时结果将是稳定的，如下：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> array = [&#123; <span class="attr">n</span>: <span class="string">"a"</span>, <span class="attr">v</span>: <span class="number">1</span> &#125;, &#123; <span class="attr">n</span>: <span class="string">"b"</span>, <span class="attr">v</span>: <span class="number">1</span> &#125;, &#123; <span class="attr">n</span>: <span class="string">"c"</span>, <span class="attr">v</span>: <span class="number">1</span> &#125;, &#123; <span class="attr">n</span>: <span class="string">"d"</span>, <span class="attr">v</span>: <span class="number">1</span> &#125;, &#123; <span class="attr">n</span>: <span class="string">"e"</span>, <span class="attr">v</span>: <span class="number">1</span> &#125;, &#123; <span class="attr">n</span>: <span class="string">"f"</span>, <span class="attr">v</span>: <span class="number">1</span> &#125;, &#123; <span class="attr">n</span>: <span class="string">"g"</span>, <span class="attr">v</span>: <span class="number">1</span> &#125;, &#123; <span class="attr">n</span>: <span class="string">"h"</span>, <span class="attr">v</span>: <span class="number">1</span> &#125;, &#123; <span class="attr">n</span>: <span class="string">"i"</span>, <span class="attr">v</span>: <span class="number">1</span> &#125;, &#123; <span class="attr">n</span>: <span class="string">"j"</span>, <span class="attr">v</span>: <span class="number">1</span> &#125;,];</div><div class="line">array.sort(<span class="function"><span class="keyword">function</span> (<span class="params">a, b</span>) </span>&#123;</div><div class="line">  <span class="keyword">return</span> a.v - b.v;</div><div class="line">&#125;);</div><div class="line"><span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>,len = array.length; i &lt; len; i++) &#123;</div><div class="line">  <span class="built_in">console</span>.log(array[i].n);</div><div class="line">&#125;</div><div class="line"><span class="comment">// a b c d e f g h i j</span></div></pre></td></tr></table></figure>
+<pre><code class="js">var array = [{ n: &quot;a&quot;, v: 1 }, { n: &quot;b&quot;, v: 1 }, { n: &quot;c&quot;, v: 1 }, { n: &quot;d&quot;, v: 1 }, { n: &quot;e&quot;, v: 1 }, { n: &quot;f&quot;, v: 1 }, { n: &quot;g&quot;, v: 1 }, { n: &quot;h&quot;, v: 1 }, { n: &quot;i&quot;, v: 1 }, { n: &quot;j&quot;, v: 1 },];
+array.sort(function (a, b) {
+  return a.v - b.v;
+});
+for (var i = 0,len = array.length; i &lt; len; i++) {
+  console.log(array[i].n);
+}
+// a b c d e f g h i j
+</code></pre>
 <p>从a 到 j 刚好10条数据。</p>
 <p>那么我们该如何规避Chrome浏览器的这种”bug”呢？其实很简单，只需略动手脚，改变排序方法的返回值即可，如下：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 由于快速排序会打乱值相同的元素的默认排序，因此我们需要先标记元素的默认位置</span></div><div class="line">array.forEach(<span class="function"><span class="keyword">function</span>(<span class="params">v, k</span>)</span>&#123;</div><div class="line">  v.__index = k;</div><div class="line">&#125;);</div><div class="line">array.sort(<span class="function"><span class="keyword">function</span> (<span class="params">a, b</span>) </span>&#123;</div><div class="line">  <span class="comment">// 由于__index标记了初始顺序，这样的返回才保证了值相同元素的顺序不变，进而使得排序稳定</span></div><div class="line">  <span class="keyword">return</span> a.v - b.v || a.__index - b.__index;</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<pre><code class="js">// 由于快速排序会打乱值相同的元素的默认排序，因此我们需要先标记元素的默认位置
+array.forEach(function(v, k){
+  v.__index = k;
+});
+array.sort(function (a, b) {
+  // 由于__index标记了初始顺序，这样的返回才保证了值相同元素的顺序不变，进而使得排序稳定
+  return a.v - b.v || a.__index - b.__index;
+});
+</code></pre>
 <p>使用数组的sort方法需要注意一点：各浏览器的针对sort方法内部算法实现不尽相同，排序函数尽量只返回-1、0、1三种不同的值，不要尝试返回true或false等其它数值，因为可能导致不可靠的排序结果。</p>
 <h6 id="问题分析"><a href="#问题分析" class="headerlink" title="问题分析"></a><strong>问题分析</strong></h6><p>sort方法传入的排序函数如果返回布尔值会导致什么样的结果呢？</p>
 <p>以下是常见的浏览器以及脚本引擎：</p>
@@ -468,7 +683,12 @@
 </tbody>
 </table>
 <p>分析以下代码，预期将数组元素进行升序排序：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> array = [<span class="number">7</span>, <span class="number">6</span>, <span class="number">5</span>, <span class="number">4</span>, <span class="number">3</span>, <span class="number">2</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">8</span>, <span class="number">9</span>];</div><div class="line"><span class="keyword">var</span> comparefn = <span class="function"><span class="keyword">function</span> (<span class="params">x, y</span>) </span>&#123;</div><div class="line">  <span class="keyword">return</span> x &gt; y;</div><div class="line">&#125;;</div><div class="line">array.sort(comparefn);</div></pre></td></tr></table></figure>
+<pre><code class="js">var array = [7, 6, 5, 4, 3, 2, 1, 0, 8, 9];
+var comparefn = function (x, y) {
+  return x &gt; y;
+};
+array.sort(comparefn);
+</code></pre>
 <p>代码中，comparefn 函数返回值为 bool 类型，并非为规范规定的 -1、0、1 值。那么执行此代码，各 JS 脚本引擎实现情况如何？</p>
 <table>
 <thead>
@@ -514,7 +734,12 @@
 <li>V8 暂时看起来排序正确</li>
 </ul>
 <p><strong>将数组元素扩大至 11 位，现象如下：</strong></p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> array = [<span class="number">7</span>, <span class="number">6</span>, <span class="number">5</span>, <span class="number">4</span>, <span class="number">3</span>, <span class="number">2</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">10</span>, <span class="number">9</span>, <span class="number">8</span>];</div><div class="line"><span class="keyword">var</span> comparefn = <span class="function"><span class="keyword">function</span> (<span class="params">x, y</span>) </span>&#123;</div><div class="line">  <span class="keyword">return</span> x &gt; y;</div><div class="line">&#125;;</div><div class="line">array.sort(comparefn);</div></pre></td></tr></table></figure>
+<pre><code class="js">var array = [7, 6, 5, 4, 3, 2, 1, 0, 10, 9, 8];
+var comparefn = function (x, y) {
+  return x &gt; y;
+};
+array.sort(comparefn);
+</code></pre>
 <table>
 <thead>
 <tr>
@@ -565,74 +790,186 @@
 <p>itemN 指定新增的元素，如果缺省，则该方法只删除数组元素。</p>
 <p>返回值 由原数组中被删除元素组成的数组，如果没有删除，则返回一个空数组。</p>
 <p>下面来举栗子说明：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> array = [<span class="string">"apple"</span>,<span class="string">"boy"</span>];</div><div class="line"><span class="keyword">var</span> splices = array.splice(<span class="number">1</span>,<span class="number">1</span>);</div><div class="line"><span class="built_in">console</span>.log(array); <span class="comment">// ["apple"]</span></div><div class="line"><span class="built_in">console</span>.log(splices); <span class="comment">// ["boy"] ,可见是从数组下标为1的元素开始删除,并且删除一个元素,由于itemN缺省,故此时该方法只删除元素</span></div><div class="line"></div><div class="line">array = [<span class="string">"apple"</span>,<span class="string">"boy"</span>];</div><div class="line">splices = array.splice(<span class="number">2</span>,<span class="number">1</span>,<span class="string">"cat"</span>);</div><div class="line"><span class="built_in">console</span>.log(array); <span class="comment">// ["apple", "boy", "cat"]</span></div><div class="line"><span class="built_in">console</span>.log(splices); <span class="comment">// [], 可见由于start超过数组长度,此时从数组末尾开始添加元素,并且原数组不会发生删除行为</span></div><div class="line"></div><div class="line">array = [<span class="string">"apple"</span>,<span class="string">"boy"</span>];</div><div class="line">splices = array.splice(<span class="number">-2</span>,<span class="number">1</span>,<span class="string">"cat"</span>);</div><div class="line"><span class="built_in">console</span>.log(array); <span class="comment">// ["cat", "boy"]</span></div><div class="line"><span class="built_in">console</span>.log(splices); <span class="comment">// ["apple"], 可见当start为负值时,是从数组末尾开始的第-start位开始删除,删除一个元素,并且从此处插入了一个元素</span></div><div class="line"></div><div class="line">array = [<span class="string">"apple"</span>,<span class="string">"boy"</span>];</div><div class="line">splices = array.splice(<span class="number">-3</span>,<span class="number">1</span>,<span class="string">"cat"</span>);</div><div class="line"><span class="built_in">console</span>.log(array); <span class="comment">// ["cat", "boy"]</span></div><div class="line"><span class="built_in">console</span>.log(splices); <span class="comment">// ["apple"], 可见即使-start超出数组长度,数组默认从首位开始删除</span></div><div class="line"></div><div class="line">array = [<span class="string">"apple"</span>,<span class="string">"boy"</span>];</div><div class="line">splices = array.splice(<span class="number">0</span>,<span class="number">3</span>,<span class="string">"cat"</span>);</div><div class="line"><span class="built_in">console</span>.log(array); <span class="comment">// ["cat"]</span></div><div class="line"><span class="built_in">console</span>.log(splices); <span class="comment">// ["apple", "boy"], 可见当deleteCount大于数组start之后的元素总和时,start及之后的元素都将被删除</span></div></pre></td></tr></table></figure>
+<pre><code class="js">var array = [&quot;apple&quot;,&quot;boy&quot;];
+var splices = array.splice(1,1);
+console.log(array); // [&quot;apple&quot;]
+console.log(splices); // [&quot;boy&quot;] ,可见是从数组下标为1的元素开始删除,并且删除一个元素,由于itemN缺省,故此时该方法只删除元素
+
+array = [&quot;apple&quot;,&quot;boy&quot;];
+splices = array.splice(2,1,&quot;cat&quot;);
+console.log(array); // [&quot;apple&quot;, &quot;boy&quot;, &quot;cat&quot;]
+console.log(splices); // [], 可见由于start超过数组长度,此时从数组末尾开始添加元素,并且原数组不会发生删除行为
+
+array = [&quot;apple&quot;,&quot;boy&quot;];
+splices = array.splice(-2,1,&quot;cat&quot;);
+console.log(array); // [&quot;cat&quot;, &quot;boy&quot;]
+console.log(splices); // [&quot;apple&quot;], 可见当start为负值时,是从数组末尾开始的第-start位开始删除,删除一个元素,并且从此处插入了一个元素
+
+array = [&quot;apple&quot;,&quot;boy&quot;];
+splices = array.splice(-3,1,&quot;cat&quot;);
+console.log(array); // [&quot;cat&quot;, &quot;boy&quot;]
+console.log(splices); // [&quot;apple&quot;], 可见即使-start超出数组长度,数组默认从首位开始删除
+
+array = [&quot;apple&quot;,&quot;boy&quot;];
+splices = array.splice(0,3,&quot;cat&quot;);
+console.log(array); // [&quot;cat&quot;]
+console.log(splices); // [&quot;apple&quot;, &quot;boy&quot;], 可见当deleteCount大于数组start之后的元素总和时,start及之后的元素都将被删除
+</code></pre>
 <p>同上, splice一样受益于鸭式辨型, 比如:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> o = &#123;<span class="number">0</span>:<span class="string">"apple"</span>,<span class="number">1</span>:<span class="string">"boy"</span>,<span class="attr">length</span>:<span class="number">2</span>&#125;;</div><div class="line"><span class="keyword">var</span> splices = <span class="built_in">Array</span>.prototype.splice.call(o,<span class="number">1</span>,<span class="number">1</span>);</div><div class="line"><span class="built_in">console</span>.log(o); <span class="comment">// Object &#123;0: "apple", length: 1&#125;, 可见对象o删除了一个属性,并且length-1</span></div><div class="line"><span class="built_in">console</span>.log(splices); <span class="comment">// ["boy"]</span></div></pre></td></tr></table></figure>
+<pre><code class="js">var o = {0:&quot;apple&quot;,1:&quot;boy&quot;,length:2};
+var splices = Array.prototype.splice.call(o,1,1);
+console.log(o); // Object {0: &quot;apple&quot;, length: 1}, 可见对象o删除了一个属性,并且length-1
+console.log(splices); // [&quot;boy&quot;]
+</code></pre>
 <p>注意：如果类数组对象没有length属性，splice将为该类数组对象添加length属性，并初始化为0。（此处忽略举例，如果需要请在评论里反馈）</p>
 <p>如果需要删除数组中一个已存在的元素，可参考如下：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> array = [<span class="string">'a'</span>,<span class="string">'b'</span>,<span class="string">'c'</span>];</div><div class="line">array.splice(array.indexOf(<span class="string">'b'</span>),<span class="number">1</span>);</div></pre></td></tr></table></figure>
+<pre><code class="js">var array = [&#39;a&#39;,&#39;b&#39;,&#39;c&#39;];
+array.splice(array.indexOf(&#39;b&#39;),1);
+</code></pre>
 <h5 id="unshift"><a href="#unshift" class="headerlink" title="unshift"></a><strong>unshift</strong></h5><p>unshift() 方法用于在数组开始处插入一些元素(就像是栈底插入)，并返回数组新的长度。</p>
 <p>语法：<em>arr.unshift(element1, …, elementN)</em></p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> array = [<span class="string">"red"</span>, <span class="string">"green"</span>, <span class="string">"blue"</span>];</div><div class="line"><span class="keyword">var</span> length = array.unshift(<span class="string">"yellow"</span>);</div><div class="line"><span class="built_in">console</span>.log(array); <span class="comment">// ["yellow", "red", "green", "blue"]</span></div><div class="line"><span class="built_in">console</span>.log(length); <span class="comment">// 4</span></div></pre></td></tr></table></figure>
+<pre><code class="js">var array = [&quot;red&quot;, &quot;green&quot;, &quot;blue&quot;];
+var length = array.unshift(&quot;yellow&quot;);
+console.log(array); // [&quot;yellow&quot;, &quot;red&quot;, &quot;green&quot;, &quot;blue&quot;]
+console.log(length); // 4
+</code></pre>
 <p>如果给unshift方法传入一个数组呢？</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> array = [<span class="string">"red"</span>, <span class="string">"green"</span>, <span class="string">"blue"</span>];</div><div class="line"><span class="keyword">var</span> length = array.unshift([<span class="string">"yellow"</span>]);</div><div class="line"><span class="built_in">console</span>.log(array); <span class="comment">// [["yellow"], "red", "green", "blue"]</span></div><div class="line"><span class="built_in">console</span>.log(length); <span class="comment">// 4, 可见数组也能成功插入</span></div></pre></td></tr></table></figure>
+<pre><code class="js">var array = [&quot;red&quot;, &quot;green&quot;, &quot;blue&quot;];
+var length = array.unshift([&quot;yellow&quot;]);
+console.log(array); // [[&quot;yellow&quot;], &quot;red&quot;, &quot;green&quot;, &quot;blue&quot;]
+console.log(length); // 4, 可见数组也能成功插入
+</code></pre>
 <p>同上，unshift也受益于鸭式辨型，呈上栗子：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> o = &#123;<span class="number">0</span>:<span class="string">"red"</span>, <span class="number">1</span>:<span class="string">"green"</span>, <span class="number">2</span>:<span class="string">"blue"</span>,<span class="attr">length</span>:<span class="number">3</span>&#125;;</div><div class="line"><span class="keyword">var</span> length = <span class="built_in">Array</span>.prototype.unshift.call(o,<span class="string">"gray"</span>);</div><div class="line"><span class="built_in">console</span>.log(o); <span class="comment">// Object &#123;0: "gray", 1: "red", 2: "green", 3: "blue", length: 4&#125;</span></div><div class="line"><span class="built_in">console</span>.log(length); <span class="comment">// 4</span></div></pre></td></tr></table></figure>
+<pre><code class="js">var o = {0:&quot;red&quot;, 1:&quot;green&quot;, 2:&quot;blue&quot;,length:3};
+var length = Array.prototype.unshift.call(o,&quot;gray&quot;);
+console.log(o); // Object {0: &quot;gray&quot;, 1: &quot;red&quot;, 2: &quot;green&quot;, 3: &quot;blue&quot;, length: 4}
+console.log(length); // 4
+</code></pre>
 <p>注意：如果类数组对象不指定length属性，则返回结果是这样的 <code>Object {0: &quot;gray&quot;, 1: &quot;green&quot;, 2: &quot;blue&quot;, length: 1}</code>，shift会认为数组长度为0，此时将从对象下标为0的位置开始插入，相应位置属性将被替换，此时初始化类数组对象的length属性为插入元素个数。</p>
 <h5 id="copyWithin-ES6"><a href="#copyWithin-ES6" class="headerlink" title="copyWithin(ES6)"></a><strong>copyWithin(ES6)</strong></h5><p>copyWithin() 方法基于<strong>ECMAScript 2015（ES6）规范</strong>，用于数组内元素之间的替换，即替换元素和被替换元素均是数组内的元素。</p>
 <p>语法：<em>arr.copyWithin(target, start[, end = this.length])</em></p>
 <p>taget 指定被替换元素的索引，start 指定替换元素起始的索引，end 可选，指的是替换元素结束位置的索引。</p>
 <p>如果start为负，则其指定的索引位置等同于length+start，length为数组的长度。end也是如此。</p>
 <p>注：目前只有Firefox（版本32及其以上版本）实现了该方法。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> array = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>]; </div><div class="line"><span class="keyword">var</span> array2 = array.copyWithin(<span class="number">0</span>,<span class="number">3</span>);</div><div class="line"><span class="built_in">console</span>.log(array===array2,array2); <span class="comment">// true [4, 5, 3, 4, 5]</span></div><div class="line"></div><div class="line"><span class="keyword">var</span> array = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>]; </div><div class="line"><span class="built_in">console</span>.log(array.copyWithin(<span class="number">0</span>,<span class="number">3</span>,<span class="number">4</span>)); <span class="comment">// [4, 2, 3, 4, 5]</span></div><div class="line"></div><div class="line"><span class="keyword">var</span> array = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>]; </div><div class="line"><span class="built_in">console</span>.log(array.copyWithin(<span class="number">0</span>,<span class="number">-2</span>,<span class="number">-1</span>)); <span class="comment">// [4, 2, 3, 4, 5]</span></div></pre></td></tr></table></figure>
+<pre><code class="js">var array = [1,2,3,4,5]; 
+var array2 = array.copyWithin(0,3);
+console.log(array===array2,array2); // true [4, 5, 3, 4, 5]
+
+var array = [1,2,3,4,5]; 
+console.log(array.copyWithin(0,3,4)); // [4, 2, 3, 4, 5]
+
+var array = [1,2,3,4,5]; 
+console.log(array.copyWithin(0,-2,-1)); // [4, 2, 3, 4, 5]
+</code></pre>
 <p>同上，copyWithin一样受益于鸭式辨型，例如：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> o = &#123;<span class="number">0</span>:<span class="number">1</span>, <span class="number">1</span>:<span class="number">2</span>, <span class="number">2</span>:<span class="number">3</span>, <span class="number">3</span>:<span class="number">4</span>, <span class="number">4</span>:<span class="number">5</span>,<span class="attr">length</span>:<span class="number">5</span>&#125;</div><div class="line"><span class="keyword">var</span> o2 = <span class="built_in">Array</span>.prototype.copyWithin.call(o,<span class="number">0</span>,<span class="number">3</span>);</div><div class="line"><span class="built_in">console</span>.log(o===o2,o2); <span class="comment">// true Object &#123; 0=4,  1=5,  2=3,  更多...&#125;</span></div></pre></td></tr></table></figure>
+<pre><code class="js">var o = {0:1, 1:2, 2:3, 3:4, 4:5,length:5}
+var o2 = Array.prototype.copyWithin.call(o,0,3);
+console.log(o===o2,o2); // true Object { 0=4,  1=5,  2=3,  更多...}
+</code></pre>
 <p>如需在Firefox之外的浏览器使用copyWithin方法，请参考 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array/copyWithin#Polyfill" target="_blank" rel="external">Polyfill</a>。</p>
 <h5 id="fill-ES6"><a href="#fill-ES6" class="headerlink" title="fill(ES6)"></a><strong>fill(ES6)</strong></h5><p>fill() 方法基于<strong>ECMAScript 2015（ES6）规范</strong>，它同样用于数组元素替换，但与copyWithin略有不同，它主要用于将数组指定区间内的元素替换为某个值。</p>
 <p>语法：<em>arr.fill(value, start[, end = this.length])</em></p>
 <p>value 指定被替换的值，start 指定替换元素起始的索引，end 可选，指的是替换元素结束位置的索引。</p>
 <p>如果start为负，则其指定的索引位置等同于length+start，length为数组的长度。end也是如此。</p>
 <p>注：目前只有Firefox（版本31及其以上版本）实现了该方法。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> array = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>];</div><div class="line"><span class="keyword">var</span> array2 = array.fill(<span class="number">10</span>,<span class="number">0</span>,<span class="number">3</span>);</div><div class="line"><span class="built_in">console</span>.log(array===array2,array2); <span class="comment">// true [10, 10, 10, 4, 5], 可见数组区间[0,3]的元素全部替换为10</span></div><div class="line"><span class="comment">// 其他的举例请参考copyWithin</span></div></pre></td></tr></table></figure>
+<pre><code class="js">var array = [1,2,3,4,5];
+var array2 = array.fill(10,0,3);
+console.log(array===array2,array2); // true [10, 10, 10, 4, 5], 可见数组区间[0,3]的元素全部替换为10
+// 其他的举例请参考copyWithin
+</code></pre>
 <p>同上，fill 一样受益于鸭式辨型，例如：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> o = &#123;<span class="number">0</span>:<span class="number">1</span>, <span class="number">1</span>:<span class="number">2</span>, <span class="number">2</span>:<span class="number">3</span>, <span class="number">3</span>:<span class="number">4</span>, <span class="number">4</span>:<span class="number">5</span>,<span class="attr">length</span>:<span class="number">5</span>&#125;</div><div class="line"><span class="keyword">var</span> o2 = <span class="built_in">Array</span>.prototype.fill.call(o,<span class="number">10</span>,<span class="number">0</span>,<span class="number">2</span>);</div><div class="line"><span class="built_in">console</span>.log(o===o2,o2); <span class="literal">true</span> <span class="built_in">Object</span> &#123; <span class="number">0</span>=<span class="number">10</span>,  <span class="number">1</span>=<span class="number">10</span>,  <span class="number">2</span>=<span class="number">3</span>,  更多...&#125;</div></pre></td></tr></table></figure>
+<pre><code class="js">var o = {0:1, 1:2, 2:3, 3:4, 4:5,length:5}
+var o2 = Array.prototype.fill.call(o,10,0,2);
+console.log(o===o2,o2); true Object { 0=10,  1=10,  2=3,  更多...}
+</code></pre>
 <p>如需在Firefox之外的浏览器使用fill方法,请参考 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array/fill#Compatibility" target="_blank" rel="external">Polyfill</a>。</p>
 <h4 id="不会改变自身的方法-9个"><a href="#不会改变自身的方法-9个" class="headerlink" title="不会改变自身的方法(9个)"></a><strong>不会改变自身的方法(9个)</strong></h4><p>基于ES7，不会改变自身的方法一共有9个，分别为concat、join、slice、toString、toLocateString、indexOf、lastIndexOf、未标准的toSource以及ES7新增的方法includes。</p>
 <h5 id="concat"><a href="#concat" class="headerlink" title="concat"></a><strong>concat</strong></h5><p>concat() 方法将传入的数组或者元素与原数组合并，组成一个新的数组并返回。</p>
 <p>语法：<em>arr.concat(value1, value2, …, valueN)</em></p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> array = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>];</div><div class="line"><span class="keyword">var</span> array2 = array.concat(<span class="number">4</span>,[<span class="number">5</span>,<span class="number">6</span>],[<span class="number">7</span>,<span class="number">8</span>,<span class="number">9</span>]);</div><div class="line"><span class="built_in">console</span>.log(array2); <span class="comment">// [1, 2, 3, 4, 5, 6, 7, 8, 9]</span></div><div class="line"><span class="built_in">console</span>.log(array); <span class="comment">// [1, 2, 3], 可见原数组并未被修改</span></div></pre></td></tr></table></figure>
+<pre><code class="js">var array = [1, 2, 3];
+var array2 = array.concat(4,[5,6],[7,8,9]);
+console.log(array2); // [1, 2, 3, 4, 5, 6, 7, 8, 9]
+console.log(array); // [1, 2, 3], 可见原数组并未被修改
+</code></pre>
 <p>若concat方法中不传入参数，那么将基于原数组<strong>浅复制</strong>生成一个一模一样的新数组（指向新的地址空间）。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> array = [&#123;<span class="attr">a</span>: <span class="number">1</span>&#125;];</div><div class="line"><span class="keyword">var</span> array3 = array.concat();</div><div class="line"><span class="built_in">console</span>.log(array3); <span class="comment">// [&#123;a: 1&#125;]</span></div><div class="line"><span class="built_in">console</span>.log(array3 === array); <span class="comment">// false</span></div><div class="line"><span class="built_in">console</span>.log(array[<span class="number">0</span>] === array3[<span class="number">0</span>]); <span class="comment">// true，新旧数组第一个元素依旧共用一个同一个对象的引用</span></div></pre></td></tr></table></figure>
+<pre><code class="js">var array = [{a: 1}];
+var array3 = array.concat();
+console.log(array3); // [{a: 1}]
+console.log(array3 === array); // false
+console.log(array[0] === array3[0]); // true，新旧数组第一个元素依旧共用一个同一个对象的引用
+</code></pre>
 <p>同上，concat 一样受益于鸭式辨型，但其效果可能达不到我们的期望，如下：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> o = &#123;<span class="number">0</span>:<span class="string">"a"</span>, <span class="number">1</span>:<span class="string">"b"</span>, <span class="number">2</span>:<span class="string">"c"</span>,<span class="attr">length</span>:<span class="number">3</span>&#125;;</div><div class="line"><span class="keyword">var</span> o2 = <span class="built_in">Array</span>.prototype.concat.call(o,<span class="string">'d'</span>,&#123;<span class="number">3</span>:<span class="string">'e'</span>,<span class="number">4</span>:<span class="string">'f'</span>,<span class="attr">length</span>:<span class="number">2</span>&#125;,[<span class="string">'g'</span>,<span class="string">'h'</span>,<span class="string">'i'</span>]);</div><div class="line"><span class="built_in">console</span>.log(o2); <span class="comment">// [&#123;0:"a", 1:"b", 2:"c", length:3&#125;, 'd', &#123;3:'e', 4:'f', length:2&#125;, 'g', 'h', 'i']</span></div></pre></td></tr></table></figure>
+<pre><code class="js">var o = {0:&quot;a&quot;, 1:&quot;b&quot;, 2:&quot;c&quot;,length:3};
+var o2 = Array.prototype.concat.call(o,&#39;d&#39;,{3:&#39;e&#39;,4:&#39;f&#39;,length:2},[&#39;g&#39;,&#39;h&#39;,&#39;i&#39;]);
+console.log(o2); // [{0:&quot;a&quot;, 1:&quot;b&quot;, 2:&quot;c&quot;, length:3}, &#39;d&#39;, {3:&#39;e&#39;, 4:&#39;f&#39;, length:2}, &#39;g&#39;, &#39;h&#39;, &#39;i&#39;]
+</code></pre>
 <p>可见，类数组对象合并后返回的是依然是数组，并不是我们期望的对象。</p>
 <h5 id="join"><a href="#join" class="headerlink" title="join"></a><strong>join</strong></h5><p>join() 方法将数组中的所有元素连接成一个字符串。</p>
 <p>语法：<em>arr.join([separator = ‘,’])</em> separator可选，缺省默认为逗号。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> array = [<span class="string">'We'</span>, <span class="string">'are'</span>, <span class="string">'Chinese'</span>];</div><div class="line"><span class="built_in">console</span>.log(array.join()); <span class="comment">// "We,are,Chinese"</span></div><div class="line"><span class="built_in">console</span>.log(array.join(<span class="string">'+'</span>)); <span class="comment">// "We+are+Chinese"</span></div><div class="line"><span class="built_in">console</span>.log(array.join(<span class="string">''</span>)); <span class="comment">// "WeareChinese"</span></div></pre></td></tr></table></figure>
+<pre><code class="js">var array = [&#39;We&#39;, &#39;are&#39;, &#39;Chinese&#39;];
+console.log(array.join()); // &quot;We,are,Chinese&quot;
+console.log(array.join(&#39;+&#39;)); // &quot;We+are+Chinese&quot;
+console.log(array.join(&#39;&#39;)); // &quot;WeareChinese&quot;
+</code></pre>
 <p>同上，join 一样受益于鸭式辨型，如下：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> o = &#123;<span class="number">0</span>:<span class="string">"We"</span>, <span class="number">1</span>:<span class="string">"are"</span>, <span class="number">2</span>:<span class="string">"Chinese"</span>, <span class="attr">length</span>:<span class="number">3</span>&#125;;</div><div class="line"><span class="built_in">console</span>.log(<span class="built_in">Array</span>.prototype.join.call(o,<span class="string">'+'</span>)); <span class="comment">// "We+are+Chinese"</span></div><div class="line"><span class="built_in">console</span>.log(<span class="built_in">Array</span>.prototype.join.call(<span class="string">'abc'</span>)); <span class="comment">// "a,b,c"</span></div></pre></td></tr></table></figure>
+<pre><code class="js">var o = {0:&quot;We&quot;, 1:&quot;are&quot;, 2:&quot;Chinese&quot;, length:3};
+console.log(Array.prototype.join.call(o,&#39;+&#39;)); // &quot;We+are+Chinese&quot;
+console.log(Array.prototype.join.call(&#39;abc&#39;)); // &quot;a,b,c&quot;
+</code></pre>
 <h5 id="slice"><a href="#slice" class="headerlink" title="slice"></a><strong>slice</strong></h5><p>slice() 方法将数组中一部分元素浅复制存入新的数组对象，并且返回这个数组对象。</p>
 <p>语法：<em>arr.slice([start[, end]])</em></p>
 <p>参数 start 指定复制开始位置的索引，end如果有值则表示复制结束位置的索引（不包括此位置）。</p>
 <p>如果 start 的值为负数，假如数组长度为 length，则表示从 length+start 的位置开始复制，此时参数 end 如果有值，只能是比 start 大的负数，否则将返回空数组。</p>
 <p>slice方法参数为空时，同concat方法一样，都是浅复制生成一个新数组。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> array = [<span class="string">"one"</span>, <span class="string">"two"</span>, <span class="string">"three"</span>,<span class="string">"four"</span>, <span class="string">"five"</span>];</div><div class="line"><span class="built_in">console</span>.log(array.slice()); <span class="comment">// ["one", "two", "three","four", "five"]</span></div><div class="line"><span class="built_in">console</span>.log(array.slice(<span class="number">2</span>,<span class="number">3</span>)); <span class="comment">// ["three"]</span></div></pre></td></tr></table></figure>
+<pre><code class="js">var array = [&quot;one&quot;, &quot;two&quot;, &quot;three&quot;,&quot;four&quot;, &quot;five&quot;];
+console.log(array.slice()); // [&quot;one&quot;, &quot;two&quot;, &quot;three&quot;,&quot;four&quot;, &quot;five&quot;]
+console.log(array.slice(2,3)); // [&quot;three&quot;]
+</code></pre>
 <p><strong>浅复制</strong> 是指当对象的被复制时，只是复制了对象的引用，指向的依然是同一个对象。下面来说明slice为什么是浅复制。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> array = [&#123;<span class="attr">color</span>:<span class="string">"yellow"</span>&#125;, <span class="number">2</span>, <span class="number">3</span>];</div><div class="line"><span class="keyword">var</span> array2 = array.slice(<span class="number">0</span>,<span class="number">1</span>);</div><div class="line"><span class="built_in">console</span>.log(array2); <span class="comment">// [&#123;color:"yellow"&#125;]</span></div><div class="line">array[<span class="number">0</span>][<span class="string">"color"</span>] = <span class="string">"blue"</span>;</div><div class="line"><span class="built_in">console</span>.log(array2); <span class="comment">// [&#123;color:"bule"&#125;]</span></div></pre></td></tr></table></figure>
+<pre><code class="js">var array = [{color:&quot;yellow&quot;}, 2, 3];
+var array2 = array.slice(0,1);
+console.log(array2); // [{color:&quot;yellow&quot;}]
+array[0][&quot;color&quot;] = &quot;blue&quot;;
+console.log(array2); // [{color:&quot;bule&quot;}]
+</code></pre>
 <p>由于slice是浅复制，复制到的对象只是一个引用，改变原数组array的值，array2也随之改变。</p>
 <p>同时，稍微利用下 slice 方法第一个参数为负数时的特性，我们可以非常方便的拿到数组的最后一项元素，如下：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>].slice(<span class="number">-1</span>));<span class="comment">//[3]</span></div></pre></td></tr></table></figure>
+<pre><code class="js">console.log([1,2,3].slice(-1));//[3]
+</code></pre>
 <p>同上，slice 一样受益于鸭式辨型。如下：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> o = &#123;<span class="number">0</span>:&#123;<span class="string">"color"</span>:<span class="string">"yellow"</span>&#125;, <span class="number">1</span>:<span class="number">2</span>, <span class="number">2</span>:<span class="number">3</span>, <span class="attr">length</span>:<span class="number">3</span>&#125;;</div><div class="line"><span class="keyword">var</span> o2 = <span class="built_in">Array</span>.prototype.slice.call(o,<span class="number">0</span>,<span class="number">1</span>);</div><div class="line"><span class="built_in">console</span>.log(o2); <span class="comment">// [&#123;color:"yellow"&#125;] ,毫无违和感...</span></div></pre></td></tr></table></figure>
+<pre><code class="js">var o = {0:{&quot;color&quot;:&quot;yellow&quot;}, 1:2, 2:3, length:3};
+var o2 = Array.prototype.slice.call(o,0,1);
+console.log(o2); // [{color:&quot;yellow&quot;}] ,毫无违和感...
+</code></pre>
 <p>鉴于IE9以下版本对于该方法支持性并不是很好，如需更好的支持低版本IE浏览器，请参考<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array/slice" target="_blank" rel="external">polyfill</a>。</p>
 <h5 id="toString-NaN"><a href="#toString-NaN" class="headerlink" title="toString"></a><strong>toString</strong></h5><p>toString() 方法返回数组的字符串形式，该字符串由数组中的每个元素的 <code>toString()</code> 返回值经调用 <code>join()</code> 方法连接（由逗号隔开）组成。</p>
 <p>语法： <em>arr.toString()</em></p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> array = [<span class="string">'Jan'</span>, <span class="string">'Feb'</span>, <span class="string">'Mar'</span>, <span class="string">'Apr'</span>];</div><div class="line"><span class="keyword">var</span> str = array.toString();</div><div class="line"><span class="built_in">console</span>.log(str); <span class="comment">// Jan,Feb,Mar,Apr</span></div></pre></td></tr></table></figure>
+<pre><code class="js">var array = [&#39;Jan&#39;, &#39;Feb&#39;, &#39;Mar&#39;, &#39;Apr&#39;];
+var str = array.toString();
+console.log(str); // Jan,Feb,Mar,Apr
+</code></pre>
 <p>当数组直接和字符串作连接操作时，将会自动调用其toString() 方法。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> str = [<span class="string">'Jan'</span>, <span class="string">'Feb'</span>, <span class="string">'Mar'</span>, <span class="string">'Apr'</span>] + <span class="string">',May'</span>;</div><div class="line"><span class="built_in">console</span>.log(str); <span class="comment">// "Jan,Feb,Mar,Apr,May"</span></div><div class="line"><span class="comment">// 下面我们来试试鸭式辨型</span></div><div class="line"><span class="keyword">var</span> o = &#123;<span class="number">0</span>:<span class="string">'Jan'</span>, <span class="number">1</span>:<span class="string">'Feb'</span>, <span class="number">2</span>:<span class="string">'Mar'</span>, <span class="attr">length</span>:<span class="number">3</span>&#125;;</div><div class="line"><span class="keyword">var</span> o2 = <span class="built_in">Array</span>.prototype.toString.call(o);</div><div class="line"><span class="built_in">console</span>.log(o2); <span class="comment">// [object Object]</span></div><div class="line"><span class="built_in">console</span>.log(o.toString()==o2); <span class="comment">// true</span></div></pre></td></tr></table></figure>
+<pre><code class="js">var str = [&#39;Jan&#39;, &#39;Feb&#39;, &#39;Mar&#39;, &#39;Apr&#39;] + &#39;,May&#39;;
+console.log(str); // &quot;Jan,Feb,Mar,Apr,May&quot;
+// 下面我们来试试鸭式辨型
+var o = {0:&#39;Jan&#39;, 1:&#39;Feb&#39;, 2:&#39;Mar&#39;, length:3};
+var o2 = Array.prototype.toString.call(o);
+console.log(o2); // [object Object]
+console.log(o.toString()==o2); // true
+</code></pre>
 <p>可见，<code>Array.prototype.toString()</code>方法处理类数组对象时，跟类数组对象直接调用<code>Object.prototype.toString()</code>方法结果完全一致，说好的鸭式辨型呢？</p>
 <p>根据ES5语义，toString() 方法是通用的，可被用于任何对象。如果对象有一个join() 方法，将会被调用，其返回值将被返回，没有则调用<code>Object.prototype.toString()</code>，为此，我们给o对象添加一个join方法。如下：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> o = &#123;</div><div class="line">  <span class="number">0</span>:<span class="string">'Jan'</span>, </div><div class="line">  <span class="number">1</span>:<span class="string">'Feb'</span>, </div><div class="line">  <span class="number">2</span>:<span class="string">'Mar'</span>, </div><div class="line">  <span class="attr">length</span>:<span class="number">3</span>, </div><div class="line">  <span class="attr">join</span>:<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">    <span class="keyword">return</span> <span class="built_in">Array</span>.prototype.join.call(<span class="keyword">this</span>);</div><div class="line">  &#125;</div><div class="line">&#125;;</div><div class="line"><span class="built_in">console</span>.log(<span class="built_in">Array</span>.prototype.toString.call(o)); <span class="comment">// "Jan,Feb,Mar"</span></div></pre></td></tr></table></figure>
+<pre><code class="js">var o = {
+  0:&#39;Jan&#39;, 
+  1:&#39;Feb&#39;, 
+  2:&#39;Mar&#39;, 
+  length:3, 
+  join:function(){
+    return Array.prototype.join.call(this);
+  }
+};
+console.log(Array.prototype.toString.call(o)); // &quot;Jan,Feb,Mar&quot;
+</code></pre>
 <h5 id="toLocaleString-NaN"><a href="#toLocaleString-NaN" class="headerlink" title="toLocaleString"></a><strong>toLocaleString</strong></h5><p>toLocaleString() 类似toString()的变型，该字符串由数组中的每个元素的 <code>toLocaleString()</code> 返回值经调用 <code>join()</code> 方法连接（由逗号隔开）组成。</p>
 <p>语法：<em>arr.toLocaleString()</em></p>
 <p>数组中的元素将调用各自的 toLocaleString 方法：</p>
@@ -641,17 +978,37 @@
 <li><code>Number</code>：<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Number/toLocaleString" target="_blank" rel="external"><code>Number.prototype.toLocaleString()</code></a></li>
 <li><code>Date</code>：<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Date/toLocaleString" target="_blank" rel="external"><code>Date.prototype.toLocaleString()</code></a></li>
 </ul>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> array= [&#123;<span class="attr">name</span>:<span class="string">'zz'</span>&#125;, <span class="number">123</span>, <span class="string">"abc"</span>, <span class="keyword">new</span> <span class="built_in">Date</span>()];</div><div class="line"><span class="keyword">var</span> str = array.toLocaleString();</div><div class="line"><span class="built_in">console</span>.log(str); <span class="comment">// [object Object],123,abc,2016/1/5 下午1:06:23</span></div></pre></td></tr></table></figure>
+<pre><code class="js">var array= [{name:&#39;zz&#39;}, 123, &quot;abc&quot;, new Date()];
+var str = array.toLocaleString();
+console.log(str); // [object Object],123,abc,2016/1/5 下午1:06:23
+</code></pre>
 <p>其鸭式辨型的写法也同toString 保持一致，如下：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> o = &#123;</div><div class="line">  <span class="number">0</span>:<span class="number">123</span>, </div><div class="line">  <span class="number">1</span>:<span class="string">'abc'</span>, </div><div class="line">  <span class="number">2</span>:<span class="keyword">new</span> <span class="built_in">Date</span>(), </div><div class="line">  <span class="attr">length</span>:<span class="number">3</span>, </div><div class="line">  <span class="attr">join</span>:<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">    <span class="keyword">return</span> <span class="built_in">Array</span>.prototype.join.call(<span class="keyword">this</span>);</div><div class="line">  &#125;</div><div class="line">&#125;;</div><div class="line"><span class="built_in">console</span>.log(<span class="built_in">Array</span>.prototype.toLocaleString.call(o)); <span class="comment">// 123,abc,2016/1/5 下午1:16:50</span></div></pre></td></tr></table></figure>
+<pre><code class="js">var o = {
+  0:123, 
+  1:&#39;abc&#39;, 
+  2:new Date(), 
+  length:3, 
+  join:function(){
+    return Array.prototype.join.call(this);
+  }
+};
+console.log(Array.prototype.toLocaleString.call(o)); // 123,abc,2016/1/5 下午1:16:50
+</code></pre>
 <h5 id="indexOf"><a href="#indexOf" class="headerlink" title="indexOf"></a><strong>indexOf</strong></h5><p>indexOf() 方法用于查找元素在数组中第一次出现时的索引，如果没有，则返回-1。</p>
 <p>语法：<em>arr.indexOf(element, fromIndex=0)</em></p>
 <p>element 为需要查找的元素。</p>
 <p>fromIndex 为开始查找的位置，缺省默认为0。如果超出数组长度，则返回-1。如果为负值，假设数组长度为length，则从数组的第 length + fromIndex项开始往数组末尾查找，如果length + fromIndex&lt;0 则整个数组都会被查找。</p>
 <p>indexOf使用严格相等（即使用 === 去匹配数组中的元素）。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> array = [<span class="string">'abc'</span>, <span class="string">'def'</span>, <span class="string">'ghi'</span>,<span class="string">'123'</span>];</div><div class="line"><span class="built_in">console</span>.log(array.indexOf(<span class="string">'def'</span>)); <span class="comment">// 1</span></div><div class="line"><span class="built_in">console</span>.log(array.indexOf(<span class="string">'def'</span>,<span class="number">-1</span>)); <span class="comment">// -1 此时表示从最后一个元素往后查找,因此查找失败返回-1</span></div><div class="line"><span class="built_in">console</span>.log(array.indexOf(<span class="string">'def'</span>,<span class="number">-4</span>)); <span class="comment">// 1 由于4大于数组长度,此时将查找整个数组,因此返回1</span></div><div class="line"><span class="built_in">console</span>.log(array.indexOf(<span class="number">123</span>)); <span class="comment">// -1, 由于是严格匹配,因此并不会匹配到字符串'123'</span></div></pre></td></tr></table></figure>
+<pre><code class="js">var array = [&#39;abc&#39;, &#39;def&#39;, &#39;ghi&#39;,&#39;123&#39;];
+console.log(array.indexOf(&#39;def&#39;)); // 1
+console.log(array.indexOf(&#39;def&#39;,-1)); // -1 此时表示从最后一个元素往后查找,因此查找失败返回-1
+console.log(array.indexOf(&#39;def&#39;,-4)); // 1 由于4大于数组长度,此时将查找整个数组,因此返回1
+console.log(array.indexOf(123)); // -1, 由于是严格匹配,因此并不会匹配到字符串&#39;123&#39;
+</code></pre>
 <p>得益于鸭式辨型，indexOf 可以处理类数组对象。如下：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> o = &#123;<span class="number">0</span>:<span class="string">'abc'</span>, <span class="number">1</span>:<span class="string">'def'</span>, <span class="number">2</span>:<span class="string">'ghi'</span>, <span class="attr">length</span>:<span class="number">3</span>&#125;;</div><div class="line"><span class="built_in">console</span>.log(<span class="built_in">Array</span>.prototype.indexOf.call(o,<span class="string">'ghi'</span>,<span class="number">-4</span>));<span class="comment">//2</span></div></pre></td></tr></table></figure>
+<pre><code class="js">var o = {0:&#39;abc&#39;, 1:&#39;def&#39;, 2:&#39;ghi&#39;, length:3};
+console.log(Array.prototype.indexOf.call(o,&#39;ghi&#39;,-4));//2
+</code></pre>
 <p>然而该方法并不支持IE9以下版本，如需更好的支持低版本IE浏览器（IE6~8）， 请参考 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array/indexOf#Polyfill" target="_blank" rel="external">Polyfill</a>。</p>
 <h5 id="lastIndexOf"><a href="#lastIndexOf" class="headerlink" title="lastIndexOf"></a><strong>lastIndexOf</strong></h5><p>lastIndexOf() 方法用于查找元素在数组中最后一次出现时的索引，如果没有，则返回-1。并且它是indexOf的逆向查找，即从数组最后一个往前查找。</p>
 <p>语法：<em>arr.lastIndexOf(element, fromIndex=length-1)</em></p>
@@ -663,16 +1020,31 @@
 <p>语法：<em>arr.includes(element, fromIndex=0)</em></p>
 <p>element 为需要查找的元素。</p>
 <p>fromIndex 表示从该索引位置开始查找 element，缺省为0，它是正向查找，即从索引处往数组末尾查找。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> array = [<span class="number">-0</span>, <span class="number">1</span>, <span class="number">2</span>];</div><div class="line"><span class="built_in">console</span>.log(array.includes(+<span class="number">0</span>)); <span class="comment">// true</span></div><div class="line"><span class="built_in">console</span>.log(array.includes(<span class="number">1</span>)); <span class="comment">// true</span></div><div class="line"><span class="built_in">console</span>.log(array.includes(<span class="number">2</span>,<span class="number">-4</span>)); <span class="comment">// true</span></div></pre></td></tr></table></figure>
+<pre><code class="js">var array = [-0, 1, 2];
+console.log(array.includes(+0)); // true
+console.log(array.includes(1)); // true
+console.log(array.includes(2,-4)); // true
+</code></pre>
 <p>以上，includes似乎忽略了 <code>-0</code> 与 <code>+0</code> 的区别，这不是问题，因为JavaScript一直以来都是不区分 <code>-0</code> 和 <code>+0</code> 的。</p>
 <p>你可能会问，既然有了indexOf方法，为什么又造一个includes方法，<code>arr.indexOf(x)&gt;-1</code>不就等于<code>arr.includes(x)</code>？看起来是的，几乎所有的时候它们都等同，唯一的区别就是includes能够发现NaN，而indexOf不能。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> array = [<span class="literal">NaN</span>];</div><div class="line"><span class="built_in">console</span>.log(array.includes(<span class="literal">NaN</span>)); <span class="comment">// true</span></div><div class="line"><span class="built_in">console</span>.log(arra.indexOf(<span class="literal">NaN</span>)&gt;<span class="number">-1</span>); <span class="comment">// false</span></div></pre></td></tr></table></figure>
+<pre><code class="js">var array = [NaN];
+console.log(array.includes(NaN)); // true
+console.log(arra.indexOf(NaN)&gt;-1); // false
+</code></pre>
 <p>该方法同样受益于鸭式辨型。如下：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> o = &#123;<span class="number">0</span>:<span class="string">'a'</span>, <span class="number">1</span>:<span class="string">'b'</span>, <span class="number">2</span>:<span class="string">'c'</span>, <span class="attr">length</span>:<span class="number">3</span>&#125;;</div><div class="line"><span class="keyword">var</span> bool = <span class="built_in">Array</span>.prototype.includes.call(o, <span class="string">'a'</span>);</div><div class="line"><span class="built_in">console</span>.log(bool); <span class="comment">// true</span></div></pre></td></tr></table></figure>
+<pre><code class="js">var o = {0:&#39;a&#39;, 1:&#39;b&#39;, 2:&#39;c&#39;, length:3};
+var bool = Array.prototype.includes.call(o, &#39;a&#39;);
+console.log(bool); // true
+</code></pre>
 <p>该方法只有在Chrome 47、opera 34、Safari 9版本及其更高版本中才被实现。如需支持其他浏览器，请参考 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array/includes#Polyfill" target="_blank" rel="external">Polyfill</a>。</p>
 <h5 id="toSource-非标准"><a href="#toSource-非标准" class="headerlink" title="toSource(非标准)"></a><strong>toSource(非标准)</strong></h5><p>toSource() 方法是<strong>非标准的</strong>，该方法返回数组的源代码，目前只有 Firefox 实现了它。</p>
 <p>语法：<em>arr.toSource()</em></p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> array = [<span class="string">'a'</span>, <span class="string">'b'</span>, <span class="string">'c'</span>];</div><div class="line"><span class="built_in">console</span>.log(array.toSource()); <span class="comment">// ["a", "b", "c"]</span></div><div class="line"><span class="comment">// 测试鸭式辨型</span></div><div class="line"><span class="keyword">var</span> o = &#123;<span class="number">0</span>:<span class="string">'a'</span>, <span class="number">1</span>:<span class="string">'b'</span>, <span class="number">2</span>:<span class="string">'c'</span>, <span class="attr">length</span>:<span class="number">3</span>&#125;;</div><div class="line"><span class="built_in">console</span>.log(<span class="built_in">Array</span>.prototype.toSource.call(o)); <span class="comment">// ["a","b","c"]</span></div></pre></td></tr></table></figure>
+<pre><code class="js">var array = [&#39;a&#39;, &#39;b&#39;, &#39;c&#39;];
+console.log(array.toSource()); // [&quot;a&quot;, &quot;b&quot;, &quot;c&quot;]
+// 测试鸭式辨型
+var o = {0:&#39;a&#39;, 1:&#39;b&#39;, 2:&#39;c&#39;, length:3};
+console.log(Array.prototype.toSource.call(o)); // [&quot;a&quot;,&quot;b&quot;,&quot;c&quot;]
+</code></pre>
 <h4 id="遍历方法-12个"><a href="#遍历方法-12个" class="headerlink" title="遍历方法(12个)"></a><strong>遍历方法(12个)</strong></h4><p>基于ES6，不会改变自身的方法一共有12个，分别为forEach、every、some、filter、map、reduce、reduceRight 以及ES6新增的方法entries、find、findIndex、keys、values。</p>
 <h5 id="forEach"><a href="#forEach" class="headerlink" title="forEach"></a><strong>forEach</strong></h5><p>forEach() 方法指定数组的每项元素都执行一次传入的函数，返回值为undefined。</p>
 <p>语法：<em>arr.forEach(fn, thisArg)</em></p>
@@ -685,9 +1057,26 @@
 <p>thisArg 可选，用来当做fn函数内的this对象。</p>
 <p>forEach 将为数组中每一项执行一次 fn 函数，那些已删除，新增或者从未赋值的项将被跳过（但不包括值为 undefined 的项）。</p>
 <p>遍历过程中，fn会被传入上述三个参数。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> array = [<span class="number">1</span>, <span class="number">3</span>, <span class="number">5</span>];</div><div class="line"><span class="keyword">var</span> obj = &#123;<span class="attr">name</span>:<span class="string">'cc'</span>&#125;;</div><div class="line"><span class="keyword">var</span> sReturn = array.forEach(<span class="function"><span class="keyword">function</span>(<span class="params">value, index, array</span>)</span>&#123;</div><div class="line">  array[index] = value * value;</div><div class="line">  <span class="built_in">console</span>.log(<span class="keyword">this</span>.name); <span class="comment">// cc被打印了三次</span></div><div class="line">&#125;,obj);</div><div class="line"><span class="built_in">console</span>.log(array); <span class="comment">// [1, 9, 25], 可见原数组改变了</span></div><div class="line"><span class="built_in">console</span>.log(sReturn); <span class="comment">// undefined, 可见返回值为undefined</span></div></pre></td></tr></table></figure>
+<pre><code class="js">var array = [1, 3, 5];
+var obj = {name:&#39;cc&#39;};
+var sReturn = array.forEach(function(value, index, array){
+  array[index] = value * value;
+  console.log(this.name); // cc被打印了三次
+},obj);
+console.log(array); // [1, 9, 25], 可见原数组改变了
+console.log(sReturn); // undefined, 可见返回值为undefined
+</code></pre>
 <p>得益于鸭式辨型，虽然forEach不能直接遍历对象，但它可以通过call方式遍历类数组对象。如下：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> o = &#123;<span class="number">0</span>:<span class="number">1</span>, <span class="number">1</span>:<span class="number">3</span>, <span class="number">2</span>:<span class="number">5</span>, <span class="attr">length</span>:<span class="number">3</span>&#125;;</div><div class="line"><span class="built_in">Array</span>.prototype.forEach.call(o,<span class="function"><span class="keyword">function</span>(<span class="params">value, index, obj</span>)</span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(value,index,obj);</div><div class="line">  obj[index] = value * value;</div><div class="line">&#125;,o);</div><div class="line"><span class="comment">// 1 0 Object &#123;0: 1, 1: 3, 2: 5, length: 3&#125;</span></div><div class="line"><span class="comment">// 3 1 Object &#123;0: 1, 1: 3, 2: 5, length: 3&#125;</span></div><div class="line"><span class="comment">// 5 2 Object &#123;0: 1, 1: 9, 2: 5, length: 3&#125;</span></div><div class="line"><span class="built_in">console</span>.log(o); <span class="comment">// Object &#123;0: 1, 1: 9, 2: 25, length: 3&#125;</span></div></pre></td></tr></table></figure>
+<pre><code class="js">var o = {0:1, 1:3, 2:5, length:3};
+Array.prototype.forEach.call(o,function(value, index, obj){
+  console.log(value,index,obj);
+  obj[index] = value * value;
+},o);
+// 1 0 Object {0: 1, 1: 3, 2: 5, length: 3}
+// 3 1 Object {0: 1, 1: 3, 2: 5, length: 3}
+// 5 2 Object {0: 1, 1: 9, 2: 5, length: 3}
+console.log(o); // Object {0: 1, 1: 9, 2: 25, length: 3}
+</code></pre>
 <p>参考前面的文章 <a href="http://louiszhai.github.io/2015/12/18/traverse/#forEach"><code>详解JS遍历</code></a> 中 forEach的讲解，我们知道，forEach无法直接退出循环，只能使用return 来达到for循环中continue的效果，并且forEach不能在低版本IE（6~8）中使用，兼容写法请参考 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array/forEach#兼容旧环境（Polyfill）" target="_blank" rel="external">Polyfill</a>。</p>
 <h5 id="every"><a href="#every" class="headerlink" title="every"></a><strong>every</strong></h5><p>every() 方法使用传入的函数测试所有元素，只要其中有一个函数返回值为 false，那么该方法的结果为 false；如果全部返回 true，那么该方法的结果才为 true。因此 every 方法存在如下规律：</p>
 <ul>
@@ -698,7 +1087,12 @@
 </ul>
 <p>语法同上述forEach，具体还可以参考 <a href="http://louiszhai.github.io/2015/12/18/traverse/#every"><code>详解JS遍历</code></a> 中every的讲解。</p>
 <p>以下是鸭式辨型的写法：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> o = &#123;<span class="number">0</span>:<span class="number">10</span>, <span class="number">1</span>:<span class="number">8</span>, <span class="number">2</span>:<span class="number">25</span>, <span class="attr">length</span>:<span class="number">3</span>&#125;;</div><div class="line"><span class="keyword">var</span> bool = <span class="built_in">Array</span>.prototype.every.call(o,<span class="function"><span class="keyword">function</span>(<span class="params">value, index, obj</span>)</span>&#123;</div><div class="line">  <span class="keyword">return</span> value &gt;= <span class="number">8</span>;</div><div class="line">&#125;,o);</div><div class="line"><span class="built_in">console</span>.log(bool); <span class="comment">// true</span></div></pre></td></tr></table></figure>
+<pre><code class="js">var o = {0:10, 1:8, 2:25, length:3};
+var bool = Array.prototype.every.call(o,function(value, index, obj){
+  return value &gt;= 8;
+},o);
+console.log(bool); // true
+</code></pre>
 <p>every 一样不能在低版本IE(6~8)中使用，兼容写法请参考 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array/every#Compatibility" target="_blank" rel="external">Polyfill</a>。</p>
 <h5 id="some"><a href="#some" class="headerlink" title="some"></a><strong>some</strong></h5><p>some() 方法刚好同 every() 方法相反，some 测试数组元素时，只要有一个函数返回值为 true，则该方法返回 true，若全部返回 false，则该方法返回 false。some 方法存在如下规律：</p>
 <ul>
@@ -711,7 +1105,12 @@
 <p>some 的鸭式辨型写法可以参照every，同样它也不能在低版本IE（6~8）中使用，兼容写法请参考 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array/some#Compatibility" target="_blank" rel="external">Polyfill</a>。</p>
 <h5 id="filter"><a href="#filter" class="headerlink" title="filter"></a><strong>filter</strong></h5><p>filter() 方法使用传入的函数测试所有元素，并返回所有通过测试的元素组成的新数组。它就好比一个过滤器，筛掉不符合条件的元素。</p>
 <p>语法：<em>arr.filter(fn, thisArg)</em></p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> array = [<span class="number">18</span>, <span class="number">9</span>, <span class="number">10</span>, <span class="number">35</span>, <span class="number">80</span>];</div><div class="line"><span class="keyword">var</span> array2 = array.filter(<span class="function"><span class="keyword">function</span>(<span class="params">value, index, array</span>)</span>&#123;</div><div class="line">  <span class="keyword">return</span> value &gt; <span class="number">20</span>;</div><div class="line">&#125;);</div><div class="line"><span class="built_in">console</span>.log(array2); <span class="comment">// [35, 80]</span></div></pre></td></tr></table></figure>
+<pre><code class="js">var array = [18, 9, 10, 35, 80];
+var array2 = array.filter(function(value, index, array){
+  return value &gt; 20;
+});
+console.log(array2); // [35, 80]
+</code></pre>
 <p>filter一样支持鸭式辨型，具体请参考every方法鸭式辨型写法。其在低版本IE（6~8）的兼容写法请参考 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array/filter#Compatibility" target="_blank" rel="external">Polyfill</a>。</p>
 <h5 id="map"><a href="#map" class="headerlink" title="map"></a><strong>map</strong></h5><p>map() 方法遍历数组，使用传入函数处理每个元素，并返回函数的返回值组成的新数组。</p>
 <p>语法：<em>arr.map(fn, thisArg)</em></p>
@@ -735,7 +1134,14 @@
 <li>如果 initialValue 未被提供，那么 previousVaule 等于数组中的第一个值，item 等于数组中的第二个值。此时如果数组为空，那么将抛出 TypeError。</li>
 <li>如果数组仅有一个元素，并且没有提供 initialValue，或提供了 initialValue 但数组为空，那么fn不会被执行，数组的唯一值将被返回。</li>
 </ul>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> array = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>];</div><div class="line"><span class="keyword">var</span> s = array.reduce(<span class="function"><span class="keyword">function</span>(<span class="params">previousValue, value, index, array</span>)</span>&#123;</div><div class="line">  <span class="keyword">return</span> previousValue * value;</div><div class="line">&#125;,<span class="number">1</span>);</div><div class="line"><span class="built_in">console</span>.log(s); <span class="comment">// 24</span></div><div class="line"><span class="comment">// ES6写法更加简洁</span></div><div class="line">array.reduce(<span class="function">(<span class="params">p, v</span>) =&gt;</span> p * v); <span class="comment">// 24</span></div></pre></td></tr></table></figure>
+<pre><code class="js">var array = [1, 2, 3, 4];
+var s = array.reduce(function(previousValue, value, index, array){
+  return previousValue * value;
+},1);
+console.log(s); // 24
+// ES6写法更加简洁
+array.reduce((p, v) =&gt; p * v); // 24
+</code></pre>
 <p>以上回调被调用4次，每次的参数和返回见下表：</p>
 <table>
 <thead>
@@ -789,9 +1195,20 @@
 <p>其在低版本IE（6~8）的兼容写法请参考 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array/reduceRight#.E5.85.BC.E5.AE.B9.E6.80.A7.E6.97.A7.E7.8E.AF.E5.A2.83.EF.BC.88Polyfill.EF.BC.89" target="_blank" rel="external">Polyfill</a>。</p>
 <h5 id="entries-ES6"><a href="#entries-ES6" class="headerlink" title="entries(ES6)"></a><strong>entries(ES6)</strong></h5><p>entries() 方法基于<strong>ECMAScript 2015（ES6）规范</strong>，返回一个数组迭代器对象，该对象包含数组中每个索引的键值对。</p>
 <p>语法：<em>arr.entries()</em></p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> array = [<span class="string">"a"</span>, <span class="string">"b"</span>, <span class="string">"c"</span>];</div><div class="line"><span class="keyword">var</span> iterator = array.entries();</div><div class="line"><span class="built_in">console</span>.log(iterator.next().value); <span class="comment">// [0, "a"]</span></div><div class="line"><span class="built_in">console</span>.log(iterator.next().value); <span class="comment">// [1, "b"]</span></div><div class="line"><span class="built_in">console</span>.log(iterator.next().value); <span class="comment">// [2, "c"]</span></div><div class="line"><span class="built_in">console</span>.log(iterator.next().value); <span class="comment">// undefined, 迭代器处于数组末尾时, 再迭代就会返回undefined</span></div></pre></td></tr></table></figure>
+<pre><code class="js">var array = [&quot;a&quot;, &quot;b&quot;, &quot;c&quot;];
+var iterator = array.entries();
+console.log(iterator.next().value); // [0, &quot;a&quot;]
+console.log(iterator.next().value); // [1, &quot;b&quot;]
+console.log(iterator.next().value); // [2, &quot;c&quot;]
+console.log(iterator.next().value); // undefined, 迭代器处于数组末尾时, 再迭代就会返回undefined
+</code></pre>
 <p>很明显，entries 也受益于鸭式辨型，如下：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> o = &#123;<span class="number">0</span>:<span class="string">"a"</span>, <span class="number">1</span>:<span class="string">"b"</span>, <span class="number">2</span>:<span class="string">"c"</span>, <span class="attr">length</span>:<span class="number">3</span>&#125;;</div><div class="line"><span class="keyword">var</span> iterator = <span class="built_in">Array</span>.prototype.entries.call(o);</div><div class="line"><span class="built_in">console</span>.log(iterator.next().value); <span class="comment">// [0, "a"]</span></div><div class="line"><span class="built_in">console</span>.log(iterator.next().value); <span class="comment">// [1, "b"]</span></div><div class="line"><span class="built_in">console</span>.log(iterator.next().value); <span class="comment">// [2, "c"]</span></div></pre></td></tr></table></figure>
+<pre><code class="js">var o = {0:&quot;a&quot;, 1:&quot;b&quot;, 2:&quot;c&quot;, length:3};
+var iterator = Array.prototype.entries.call(o);
+console.log(iterator.next().value); // [0, &quot;a&quot;]
+console.log(iterator.next().value); // [1, &quot;b&quot;]
+console.log(iterator.next().value); // [2, &quot;c&quot;]
+</code></pre>
 <p>由于该方法基于ES6，因此目前并不支持所有浏览器，以下是各浏览器支持版本：</p>
 <table>
 <thead>
@@ -819,17 +1236,40 @@
 <p>findIndex() 方法也基于<strong>ECMAScript 2015（ES6）规范</strong>，它返回数组中第一个满足条件的元素的索引（如果有的话）否则返回-1。</p>
 <p>语法：<em>arr.find(fn, thisArg)</em>，<em>arr.findIndex(fn, thisArg)</em></p>
 <p>我们发现它们的语法与forEach等十分相似，其实不光语法，find（或findIndex）在参数及其使用注意事项上，均与forEach一致。因此此处将略去 find（或findIndex）的参数介绍。下面我们来看个例子🌰 ：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> array = [<span class="number">1</span>, <span class="number">3</span>, <span class="number">5</span>, <span class="number">7</span>, <span class="number">8</span>, <span class="number">9</span>, <span class="number">10</span>];</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params">value, index, array</span>)</span>&#123;</div><div class="line">  <span class="keyword">return</span> value%<span class="number">2</span>==<span class="number">0</span>; <span class="comment">// 返回偶数</span></div><div class="line">&#125;</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">f2</span>(<span class="params">value, index, array</span>)</span>&#123;</div><div class="line">  <span class="keyword">return</span> value &gt; <span class="number">20</span>; <span class="comment">// 返回大于20的数</span></div><div class="line">&#125;</div><div class="line"><span class="built_in">console</span>.log(array.find(f)); <span class="comment">// 8</span></div><div class="line"><span class="built_in">console</span>.log(array.find(f2)); <span class="comment">// undefined</span></div><div class="line"><span class="built_in">console</span>.log(array.findIndex(f)); <span class="comment">// 4</span></div><div class="line"><span class="built_in">console</span>.log(array.findIndex(f2)); <span class="comment">// -1</span></div></pre></td></tr></table></figure>
+<pre><code class="js">var array = [1, 3, 5, 7, 8, 9, 10];
+function f(value, index, array){
+  return value%2==0; // 返回偶数
+}
+function f2(value, index, array){
+  return value &gt; 20; // 返回大于20的数
+}
+console.log(array.find(f)); // 8
+console.log(array.find(f2)); // undefined
+console.log(array.findIndex(f)); // 4
+console.log(array.findIndex(f2)); // -1
+</code></pre>
 <p>由于其鸭式辨型写法也与forEach方法一致，故此处略去。</p>
 <p>兼容性上我没有详测，可以知道的是，最新版的Chrome v47，以及Firefox的版本25均实现了它们。</p>
 <h5 id="keys-ES6"><a href="#keys-ES6" class="headerlink" title="keys(ES6)"></a><strong>keys(ES6)</strong></h5><p>keys() 方法基于<strong>ECMAScript 2015（ES6）规范</strong>，返回一个数组索引的迭代器。（浏览器实际实现可能会有调整）</p>
 <p>语法：<em>arr.keys()</em></p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> array = [<span class="string">"abc"</span>, <span class="string">"xyz"</span>];</div><div class="line"><span class="keyword">var</span> iterator = array.keys();</div><div class="line"><span class="built_in">console</span>.log(iterator.next()); <span class="comment">// Object &#123;value: 0, done: false&#125;</span></div><div class="line"><span class="built_in">console</span>.log(iterator.next()); <span class="comment">// Object &#123;value: 1, done: false&#125;</span></div><div class="line"><span class="built_in">console</span>.log(iterator.next()); <span class="comment">// Object &#123;value: undefined, done: false&#125;</span></div></pre></td></tr></table></figure>
+<pre><code class="js">var array = [&quot;abc&quot;, &quot;xyz&quot;];
+var iterator = array.keys();
+console.log(iterator.next()); // Object {value: 0, done: false}
+console.log(iterator.next()); // Object {value: 1, done: false}
+console.log(iterator.next()); // Object {value: undefined, done: false}
+</code></pre>
 <p>索引迭代器会包含那些没有对应元素的索引，如下：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> array = [<span class="string">"abc"</span>, , <span class="string">"xyz"</span>];</div><div class="line"><span class="keyword">var</span> sparseKeys = <span class="built_in">Object</span>.keys(array);</div><div class="line"><span class="keyword">var</span> denseKeys = [...array.keys()];</div><div class="line"><span class="built_in">console</span>.log(sparseKeys); <span class="comment">// ["0", "2"]</span></div><div class="line"><span class="built_in">console</span>.log(denseKeys);  <span class="comment">// [0, 1, 2]</span></div></pre></td></tr></table></figure>
+<pre><code class="js">var array = [&quot;abc&quot;, , &quot;xyz&quot;];
+var sparseKeys = Object.keys(array);
+var denseKeys = [...array.keys()];
+console.log(sparseKeys); // [&quot;0&quot;, &quot;2&quot;]
+console.log(denseKeys);  // [0, 1, 2]
+</code></pre>
 <p>其鸭式辨型写法请参考上述 entries 方法。</p>
 <p>前面我们用Array.from生成一个从0到指定数字的新数组，利用keys也很容易实现。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[...Array(<span class="number">10</span>).keys()]; <span class="comment">// [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]</span></div><div class="line">[...new <span class="built_in">Array</span>(<span class="number">10</span>).keys()]; <span class="comment">// [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]</span></div></pre></td></tr></table></figure>
+<pre><code class="js">[...Array(10).keys()]; // [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+[...new Array(10).keys()]; // [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+</code></pre>
 <p>由于Array的特性，new Array 和 Array 对单个数字的处理相同，因此以上两种均可行。</p>
 <p>keys基于ES6，并未完全支持，以下是各浏览器支持版本：</p>
 <table>
@@ -857,10 +1297,18 @@
 <h5 id="values-ES6"><a href="#values-ES6" class="headerlink" title="values(ES6)"></a><strong>values(ES6)</strong></h5><p>values() 方法基于<strong>ECMAScript 2015（ES6）规范</strong>，返回一个数组迭代器对象，该对象包含数组中每个索引的值。其用法基本与上述 entries 方法一致。</p>
 <p>语法：<em>arr.values()</em></p>
 <p>遗憾的是，现在没有浏览器实现了该方法，因此下面将就着看看吧。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> array = [<span class="string">"abc"</span>, <span class="string">"xyz"</span>];</div><div class="line"><span class="keyword">var</span> iterator = array.values();</div><div class="line"><span class="built_in">console</span>.log(iterator.next().value);<span class="comment">//abc</span></div><div class="line"><span class="built_in">console</span>.log(iterator.next().value);<span class="comment">//xyz</span></div></pre></td></tr></table></figure>
+<pre><code class="js">var array = [&quot;abc&quot;, &quot;xyz&quot;];
+var iterator = array.values();
+console.log(iterator.next().value);//abc
+console.log(iterator.next().value);//xyz
+</code></pre>
 <h5 id="Symbol-iterator-ES6"><a href="#Symbol-iterator-ES6" class="headerlink" title="Symbol.iterator(ES6)"></a><strong>Symbol.iterator(ES6)</strong></h5><p>该方法基于<strong>ECMAScript 2015（ES6）规范</strong>，同 values 方法功能相同。</p>
 <p>语法：<em>arr[Symbol.iterator]()</em></p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> array = [<span class="string">"abc"</span>, <span class="string">"xyz"</span>];</div><div class="line"><span class="keyword">var</span> iterator = array[<span class="built_in">Symbol</span>.iterator]();</div><div class="line"><span class="built_in">console</span>.log(iterator.next().value); <span class="comment">// abc</span></div><div class="line"><span class="built_in">console</span>.log(iterator.next().value); <span class="comment">// xyz</span></div></pre></td></tr></table></figure>
+<pre><code class="js">var array = [&quot;abc&quot;, &quot;xyz&quot;];
+var iterator = array[Symbol.iterator]();
+console.log(iterator.next().value); // abc
+console.log(iterator.next().value); // xyz
+</code></pre>
 <p>其鸭式辨型写法请参考上述 entries 方法。</p>
 <p>由于该方法基于ES6，并未完全支持，以下是各浏览器支持版本：</p>
 <table>
@@ -918,7 +1366,7 @@
         <a id="btn_donate" class="btn_donate" href="javascript:;" title="打赏"></a>
         <span class="donate_txt">
            &uarr;<br>
-       如果你觉得有用，就支持一下吧！
+       支持一杯咖啡吧！
         </span>
       </div>  
   <div id="donate_guide" class="donate_bar center hidden" >
@@ -985,69 +1433,103 @@
 
 
 
-<div class="duoshuo">
-	<div class="ds-thread" data-thread-key="array" data-title="【深度长文】JavaScript数组所有API全解密" data-url="http://louiszhai.github.io/2017/04/28/array/"></div>
-	<style>
-		#ds-reset .ds-avatar img{width:54px;height:54px;border-radius:27px;-webkit-border-radius:27px;-moz-border-radius:27px;box-shadow:inset 0 -1px 0 #3333sf;-webkit-box-shadow:inset 0 -1px 0 #3333sf;-webkit-transition:0.4s;-webkit-transition:-webkit-transform 0.4s ease-out;transition:transform 0.4s ease-out;-moz-transition:-moz-transform 0.4s ease-out;}
-		#ds-reset .ds-avatar img:hover{box-shadow:0 0 10px #fff;rgba(255,255,255,.6),inset 0 0 20px rgba(255,255,255,1);-webkit-box-shadow:0 0 10px #fff;rgba(255,255,255,.6),inset 0 0 20px rgba(255,255,255,1);transform:rotateZ(360deg);-webkit-transform:rotateZ(360deg);-moz-transform:rotateZ(360deg);}
-		p.ds-powered-by,#ds-sync-checkbox,.ds-sync label{display:none!important;}
-		#ds-reset .ds-rounded-top{-webkit-border-top-right-radius:0px;-webkit-border-top-left-radius:0px;border-top-right-radius:0px;border-top-left-radius:0px;}
-		#ds-thread #ds-reset .ds-textarea-wrapper{background:#fff;border:0;margin-bottom:20px;padding-right:0px;}
-		#ds-thread #ds-reset .ds-textarea-wrapper textarea{min-height:80px;border:1px solid #ccc;padding:10px;-webkit-appearance:none;border-radius:0;background-color:#FFFFFF;border-color:#cccccc;box-shadow:inset 0 1px 2px rgba(0,0,0,0.1);color:rgba(0,0,0,0.75);-webkit-box-sizing:border-box;box-sizing:border-box;-webkit-transition:border-color 0.15s linear,background 0.15s linear;-moz-transition:border-color 0.15s linear,background 0.15s linear;-ms-transition:border-color 0.15s linear,background 0.15s linear;-o-transition:border-color 0.15s linear,background 0.15s linear;transition:border-color 0.15s linear,background 0.15s linear;}
-		/*#ds-thread #ds-reset .ds-textarea-wrapper textarea:focus{border-color:#999999;background:#fafafa;outline:none;}*/
-		#ds-thread #ds-reset .ds-post-options{border-bottom-left-radius:0px;-webkit-border-bottom-left-radius:0px;border:none;background:none!important;}
-		#ds-reset .ds-textarea-wrapper textarea:focus{border-color:#66afe9;outline:0;-webkit-box-shadow:inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);box-shadow:inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);}
-		#ds-thread #ds-reset .ds-post-button:hover,#ds-thread #ds-reset .ds-post-button:focus{
-		    background-color: #51a351;
-		    background-position: 0 -32px;
-		    color:white;
-		}
-		#ds-thread #ds-reset .ds-post-toolbar,#ds-reset .ds-avatar{box-shadow:none;}
-		#ds-thread #ds-reset .ds-textarea-wrapper textarea:focus{
-	    	/*background: none repeat scroll 0 0 #F4FAFF;*/
-	    	border-color:#9DD4FD;
-	    	border-width:1px;
-	    	box-shadow:0 1px 1px rgba(0,0,0,0.075) inset, 0 0 8px rgba(82, 168, 236, 0.6);
-	    	outline:0 none;
-    	}
-		#ds-thread #ds-reset .ds-textarea-wrapper textarea:active{
-	    	/*background: none repeat scroll 0 0 #F4FAFF;*/
-	    	border-width:1px;
-	    	border-color:#9DD4FD;
-	    	box-shadow:0 1px 1px rgba(0,0,0,0.075) inset, 0 0 8px rgba(82, 168, 236, 0.6);
-	    	outline:0 none;
-    	}
-    	#ds-thread #ds-reset .ds-post-button{
-    		box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset, 0 1px 2px rgba(0, 0, 0, 0.05);
-		    border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
-		    border-width: 1px;
-		    border-style: solid;
-		    border-radius: 3px;
-		    background: #5bb75b;
-		    color:white;
-		    text-shadow:none;
-		    transition:background-color 300ms ease-out;
-    	}
-    	#ds-reset .ds-avatar{
-    		background-color:initial;
-    	}
-
-	</style>
-	<script type="text/javascript">
-	var duoshuoQuery = {short_name:"true"};
-	(function() {
-		var ds = document.createElement('script');
-		ds.type = 'text/javascript';ds.async = true;
-		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-		ds.charset = 'UTF-8';
-		(document.getElementsByTagName('head')[0] 
-		 || document.getElementsByTagName('body')[0]).appendChild(ds);
-	})();
-	</script>
-</div>
 
 
 
+
+  <style>
+/*
+    Name:     Kimbie (light)
+    Author:   Jan T. Sott
+    License:  Creative Commons Attribution-ShareAlike 4.0 Unported License
+    URL:      https://github.com/idleberg/Kimbie-highlight.js
+*/
+
+/* Kimbie Comment */
+.hljs-comment,
+.hljs-quote {
+  color: #a57a4c;
+}
+
+/* Kimbie Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-meta {
+  color: #dc3958;
+}
+
+/* Kimbie Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-deletion,
+.hljs-link {
+  color: #f79a32;
+}
+
+/* Kimbie Yellow */
+.hljs-title,
+.hljs-section,
+.hljs-attribute {
+  color: #f06431;
+}
+
+/* Kimbie Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+  color: #889b4a;
+}
+
+/* Kimbie Purple */
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-function {
+  color: #98676a;
+}
+
+.hljs {
+  display: block;
+  overflow-x: auto;
+  /*background: #fbebd4;*/
+  color: #84613d;
+  padding: 0.5em;
+}
+
+.hljs-emphasis {
+  font-style: italic;
+}
+
+.hljs-strong {
+  font-weight: bold;
+}
+</style>
+  <script src="//cdn.bootcss.com/highlight.js/9.2.0/highlight.min.js"></script>
+  <script>
+    // hljs.initHighlightingOnLoad();
+    [].slice.call(document.querySelectorAll('pre code')).forEach(function(block, i) {
+      hljs.highlightBlock(block);
+      var lines = block.innerText.split('\n').length - 1;
+      var ul = document.createElement('ul');
+      ul.className = 'pre-numbering';
+      block.className += ' has-numbering';
+      block.parentNode.appendChild(ul);
+      for(i=1;i<=lines;i++){
+        var li = document.createElement('li');
+        li.innerText = i;
+        ul.appendChild(li);
+      }
+    });
+  </script>
 </div>
         <link rel="stylesheet" href="/css/content.css" type="text/css">
 <footer id="footer">

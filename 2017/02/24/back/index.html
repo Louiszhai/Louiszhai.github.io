@@ -253,10 +253,44 @@
 </ul>
 <p>从产品上看, 这些需求都是合理的. 那么如何从最后一个页面, 成功地返回到初始的A或B页面, 这里我想到了一个解决方案. 思路如下:</p>
 <p><code>history.go</code>方法是可用的. 只要get到了网页处于历史栈的位置, 就可以正常的返回n步. 虽然通常情况下从初始页面A跳出时, <code>history.length</code>并不可靠, 但是从A页面跳到(通过location.href跳转)的第一个页面X中, <code>history.length</code>却是可靠的, 此时该值准确地记录了页面X在历史栈中的位置.(不懂的可以去看上述第④步解析) 只要在页面X中执行如下语句, 便可记录页面A的位置.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//假定原页面A中跳转时执行如下语句</span></div><div class="line"><span class="keyword">let</span> linkA = <span class="string">"http://www.a.com/a?params=abc"</span>;</div><div class="line">linkA = <span class="built_in">window</span>.encodeURIComponent(linkA);</div><div class="line"><span class="keyword">const</span> targetLink = <span class="string">`http://www.x.com/x?from=<span class="subst">$&#123;linkA&#125;</span>#test`</span>;</div><div class="line">location.href = targetLink;</div><div class="line"></div><div class="line"><span class="comment">//在页面X执行如下语句</span></div><div class="line"><span class="keyword">const</span> cursor = history.length - <span class="number">1</span>;</div><div class="line"><span class="keyword">let</span> params = location.search.match(<span class="regexp">/from=([^&amp;]*)/</span>),</div><div class="line">    <span class="keyword">from</span>;</div><div class="line"><span class="keyword">if</span> (params <span class="keyword">instanceof</span> <span class="built_in">Array</span> &amp;&amp; params.length === <span class="number">2</span>) &#123;</div><div class="line">  <span class="comment">// 获取原页面A的链接</span></div><div class="line">  <span class="keyword">from</span> = <span class="built_in">window</span>.decodeURIComponent(params[<span class="number">1</span>]);</div><div class="line">  <span class="keyword">const</span> a = <span class="built_in">document</span>.createElement(<span class="string">'a'</span>);</div><div class="line">  a.href = <span class="keyword">from</span>;</div><div class="line">  <span class="keyword">const</span> paramStr = <span class="string">`historyCursor=<span class="subst">$&#123;history.length - <span class="number">1</span>&#125;</span>`</span>;</div><div class="line">  <span class="comment">// 追加historyCursor=history.length参数</span></div><div class="line">  <span class="keyword">const</span> searchStr = a.search ? <span class="string">`<span class="subst">$&#123;a.search&#125;</span>&amp;<span class="subst">$&#123;paramStr&#125;</span>`</span> : <span class="string">`?<span class="subst">$&#123;paramStr&#125;</span>`</span>;</div><div class="line">  <span class="keyword">from</span> = a.origin + a.pathname + searchStr + a.hash;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<pre><code class="js">//假定原页面A中跳转时执行如下语句
+let linkA = &quot;http://www.a.com/a?params=abc&quot;;
+linkA = window.encodeURIComponent(linkA);
+const targetLink = `http://www.x.com/x?from=${linkA}#test`;
+location.href = targetLink;
+
+//在页面X执行如下语句
+const cursor = history.length - 1;
+let params = location.search.match(/from=([^&amp;]*)/),
+    from;
+if (params instanceof Array &amp;&amp; params.length === 2) {
+  // 获取原页面A的链接
+  from = window.decodeURIComponent(params[1]);
+  const a = document.createElement(&#39;a&#39;);
+  a.href = from;
+  const paramStr = `historyCursor=${history.length - 1}`;
+  // 追加historyCursor=history.length参数
+  const searchStr = a.search ? `${a.search}&amp;${paramStr}` : `?${paramStr}`;
+  from = a.origin + a.pathname + searchStr + a.hash;
+}
+</code></pre>
 <p>页面X经过n次跳转, 其中可能经过了各种支付中间页, 最终又重定向回到页面X’(与页面x链接相同, 但是新的页面), 在页面X’上点击返回按钮时, 此时可以直接重定向回到原页面A’(与页面A链接相似, 仅仅多了参数historyCursor, 是新的页面).</p>
 <p>待用户回到了页面A’后, 此时点击返回按钮时, 走的并不是通常的<code>history.back</code> , 而应该是回到页面A的前一个页面, 换句话说 , 此时用户将往回跳n个页面. 这里的主要判断逻辑如下:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">goBack</span>(<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="keyword">let</span> start, current, step;</div><div class="line">  <span class="keyword">const</span> params = location.search.match(<span class="regexp">/historyCursor=(\d+)/</span>);</div><div class="line">  <span class="keyword">if</span>(params <span class="keyword">instanceof</span> <span class="built_in">Array</span> &amp;&amp; params.length === <span class="number">2</span>) &#123;</div><div class="line">    <span class="comment">// 如参数中带有historyCursor, 返回时将回跳n步</span></div><div class="line">    start = +params[<span class="number">1</span>];</div><div class="line">    current = history.length;</div><div class="line">    step = current - start + <span class="number">1</span>;</div><div class="line">    location.go(-step);</div><div class="line">  &#125; <span class="keyword">else</span> &#123;</div><div class="line">    <span class="comment">// 默认将返回上一个页面</span></div><div class="line">    history.back();</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<pre><code class="js">function goBack() {
+  let start, current, step;
+  const params = location.search.match(/historyCursor=(\d+)/);
+  if(params instanceof Array &amp;&amp; params.length === 2) {
+    // 如参数中带有historyCursor, 返回时将回跳n步
+    start = +params[1];
+    current = history.length;
+    step = current - start + 1;
+    location.go(-step);
+  } else {
+    // 默认将返回上一个页面
+    history.back();
+  }
+}
+</code></pre>
 <p>以上, 由多个页面传递historyCursor的值, 基本将需求中的返回逻辑落地了. 美中不足的是, 页面A的返回逻辑依赖了页面X的代码(页面X中需要设置对的historyCursor值), 存在耦合. 这样开发页面A的同学将通知开发页面X的同学, 返回时你要给我加一个historyCursor的参数, 巴拉巴拉. 开发页面X的同学也很纠结, 因为他始终要确认是不是从页面A跳过来的, 如果是, 那他就要加一个historyCursor参数, 并且重定向到页面A. 同时Android系统自带的返回键也会让这套方案更加雪上加霜.</p>
 <p>有鉴于此, 以上纯H5的解决方案便不太完美.</p>
 <h3 id="H5是否可以打开新的网页窗口"><a href="#H5是否可以打开新的网页窗口" class="headerlink" title="H5是否可以打开新的网页窗口"></a>H5是否可以打开新的网页窗口</h3><p>对于非嵌入app的H5应用, 那么使用场景就是各家的浏览器, 应用中对于有可能打乱历史记录的网页, 直接新开窗口就行.</p>
@@ -275,7 +309,14 @@
 <li><p><strong>回退时检查当前页面的返回逻辑</strong>: 一旦H5中调用<code>history.go</code> 和 <code>history.back</code>方法返回之前的页面, native自动检查该页面之前是否设置过返回url, 如有则从历史记录栈中捞出该url的位置, 继续调用js原生的<code>history.go</code>方法进行跳转, 同时忽略本次历史; 如无则直接通过原方法跳转页面, 同时忽略本次历史.</p>
 </li>
 <li><p>重写Android自带的物理返回键.</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//改写物理返回键的逻辑</span></div><div class="line"><span class="meta">@Override</span></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">onKeyDown</span><span class="params">(<span class="keyword">int</span> keyCode, KeyEvent event)</span> </span>&#123;</div><div class="line">  <span class="keyword">if</span>(keyCode==KeyEvent.KEYCODE_BACK)&#123;</div><div class="line">    <span class="comment">//参照第4步策略实现</span></div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<pre><code class="java">//改写物理返回键的逻辑
+@Override
+public boolean onKeyDown(int keyCode, KeyEvent event) {
+  if(keyCode==KeyEvent.KEYCODE_BACK){
+    //参照第4步策略实现
+  }
+}
+</code></pre>
 </li>
 <li><p><strong>激进策略—拦截页面主动发起的重定向(选用)</strong>: 每次加载url前, 都将检查该url是否在当前页面之前的历史记录栈中出现过, 如有则直接调用js原生的<code>history.go</code>方法, 回退到该url原来的页面.</p>
 </li>
@@ -283,7 +324,37 @@
 <p>注: 虽然返回时shouldOverrideUrlLoading事件不会触发, 但onPageStarted和onPageFinished会依次触发一次. 因此上述第4步返回时需要忽略本次历史.</p>
 <p>那么如何记录webview历史栈, 并且重写js方法呢? </p>
 <p>嫌我啰嗦, 你可能会说 “Talk is cheap, show me the code.” 那么, 请看如下Android代码:</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">History</span> </span>&#123;</div><div class="line">  <span class="keyword">public</span> url;</div><div class="line">  <span class="keyword">public</span> backItem;</div><div class="line">  <span class="function"><span class="keyword">public</span> <span class="title">History</span><span class="params">(String url)</span></span>&#123;</div><div class="line">    <span class="keyword">this</span>.url = url;</div><div class="line">  &#125;</div><div class="line">  <span class="function"><span class="keyword">public</span> <span class="title">History</span><span class="params">(String url, History backItem)</span></span>&#123;</div><div class="line">    <span class="keyword">this</span>.url = url;</div><div class="line">    <span class="keyword">this</span>.backItem = backItem;</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"><span class="comment">/*-----------华丽丽的class分界线------------*/</span></div><div class="line"></div><div class="line">ArrayList&lt;History&gt; historyList = <span class="keyword">new</span> ArrayList&lt;History&gt;;</div><div class="line"></div><div class="line"><span class="comment">/*-----------华丽丽的class分界线------------*/</span></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">WebViewManager</span> </span>&#123;</div><div class="line">  <span class="comment">//此处略去webView元素的获取</span></div><div class="line">  webView.setWebViewClient(<span class="keyword">new</span> WebViewClient() &#123;</div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onPageStarted</span><span class="params">(WebView view, String url, Bitmap favicon)</span> </span>&#123;</div><div class="line">      <span class="comment">// 存储当前页面URL</span></div><div class="line">      History history = <span class="keyword">new</span> History(url);</div><div class="line">      historyList.append(history);</div><div class="line">      <span class="comment">// 重写js返回方法</span></div><div class="line">      String fnString = <span class="string">"(function()&#123;/*在这里重写history.go和history.back方法*/&#125;)()"</span>;</div><div class="line">      webView.loadUrl(<span class="string">"javascript:"</span> + fnString);</div><div class="line">    &#125;</div><div class="line">  &#125;);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<pre><code class="java">public class History {
+  public url;
+  public backItem;
+  public History(String url){
+    this.url = url;
+  }
+  public History(String url, History backItem){
+    this.url = url;
+    this.backItem = backItem;
+  }
+}
+/*-----------华丽丽的class分界线------------*/
+
+ArrayList&lt;History&gt; historyList = new ArrayList&lt;History&gt;;
+
+/*-----------华丽丽的class分界线------------*/
+public class WebViewManager {
+  //此处略去webView元素的获取
+  webView.setWebViewClient(new WebViewClient() {
+    @Override
+    public void onPageStarted(WebView view, String url, Bitmap favicon) {
+      // 存储当前页面URL
+      History history = new History(url);
+      historyList.append(history);
+      // 重写js返回方法
+      String fnString = &quot;(function(){/*在这里重写history.go和history.back方法*/})()&quot;;
+      webView.loadUrl(&quot;javascript:&quot; + fnString);
+    }
+  });
+}
+</code></pre>
 <p>上面只是Simple的体验, 实际请求中, 一定会有url重定向场景. 接下来我们将着重讨论这种场景.</p>
 <h3 id="如何在webview中判断页面是否加载完成"><a href="#如何在webview中判断页面是否加载完成" class="headerlink" title="如何在webview中判断页面是否加载完成"></a>如何在webview中判断页面是否加载完成</h3><p>首先, 加载页面有两种方式:</p>
 <ol>
@@ -348,7 +419,7 @@
         <a id="btn_donate" class="btn_donate" href="javascript:;" title="打赏"></a>
         <span class="donate_txt">
            &uarr;<br>
-       如果你觉得有用，就支持一下吧！
+       支持一杯咖啡吧！
         </span>
       </div>  
   <div id="donate_guide" class="donate_bar center hidden" >
@@ -415,69 +486,103 @@
 
 
 
-<div class="duoshuo">
-	<div class="ds-thread" data-thread-key="back" data-title="为什么Web App的返回逻辑如此复杂" data-url="http://louiszhai.github.io/2017/02/24/back/"></div>
-	<style>
-		#ds-reset .ds-avatar img{width:54px;height:54px;border-radius:27px;-webkit-border-radius:27px;-moz-border-radius:27px;box-shadow:inset 0 -1px 0 #3333sf;-webkit-box-shadow:inset 0 -1px 0 #3333sf;-webkit-transition:0.4s;-webkit-transition:-webkit-transform 0.4s ease-out;transition:transform 0.4s ease-out;-moz-transition:-moz-transform 0.4s ease-out;}
-		#ds-reset .ds-avatar img:hover{box-shadow:0 0 10px #fff;rgba(255,255,255,.6),inset 0 0 20px rgba(255,255,255,1);-webkit-box-shadow:0 0 10px #fff;rgba(255,255,255,.6),inset 0 0 20px rgba(255,255,255,1);transform:rotateZ(360deg);-webkit-transform:rotateZ(360deg);-moz-transform:rotateZ(360deg);}
-		p.ds-powered-by,#ds-sync-checkbox,.ds-sync label{display:none!important;}
-		#ds-reset .ds-rounded-top{-webkit-border-top-right-radius:0px;-webkit-border-top-left-radius:0px;border-top-right-radius:0px;border-top-left-radius:0px;}
-		#ds-thread #ds-reset .ds-textarea-wrapper{background:#fff;border:0;margin-bottom:20px;padding-right:0px;}
-		#ds-thread #ds-reset .ds-textarea-wrapper textarea{min-height:80px;border:1px solid #ccc;padding:10px;-webkit-appearance:none;border-radius:0;background-color:#FFFFFF;border-color:#cccccc;box-shadow:inset 0 1px 2px rgba(0,0,0,0.1);color:rgba(0,0,0,0.75);-webkit-box-sizing:border-box;box-sizing:border-box;-webkit-transition:border-color 0.15s linear,background 0.15s linear;-moz-transition:border-color 0.15s linear,background 0.15s linear;-ms-transition:border-color 0.15s linear,background 0.15s linear;-o-transition:border-color 0.15s linear,background 0.15s linear;transition:border-color 0.15s linear,background 0.15s linear;}
-		/*#ds-thread #ds-reset .ds-textarea-wrapper textarea:focus{border-color:#999999;background:#fafafa;outline:none;}*/
-		#ds-thread #ds-reset .ds-post-options{border-bottom-left-radius:0px;-webkit-border-bottom-left-radius:0px;border:none;background:none!important;}
-		#ds-reset .ds-textarea-wrapper textarea:focus{border-color:#66afe9;outline:0;-webkit-box-shadow:inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);box-shadow:inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);}
-		#ds-thread #ds-reset .ds-post-button:hover,#ds-thread #ds-reset .ds-post-button:focus{
-		    background-color: #51a351;
-		    background-position: 0 -32px;
-		    color:white;
-		}
-		#ds-thread #ds-reset .ds-post-toolbar,#ds-reset .ds-avatar{box-shadow:none;}
-		#ds-thread #ds-reset .ds-textarea-wrapper textarea:focus{
-	    	/*background: none repeat scroll 0 0 #F4FAFF;*/
-	    	border-color:#9DD4FD;
-	    	border-width:1px;
-	    	box-shadow:0 1px 1px rgba(0,0,0,0.075) inset, 0 0 8px rgba(82, 168, 236, 0.6);
-	    	outline:0 none;
-    	}
-		#ds-thread #ds-reset .ds-textarea-wrapper textarea:active{
-	    	/*background: none repeat scroll 0 0 #F4FAFF;*/
-	    	border-width:1px;
-	    	border-color:#9DD4FD;
-	    	box-shadow:0 1px 1px rgba(0,0,0,0.075) inset, 0 0 8px rgba(82, 168, 236, 0.6);
-	    	outline:0 none;
-    	}
-    	#ds-thread #ds-reset .ds-post-button{
-    		box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset, 0 1px 2px rgba(0, 0, 0, 0.05);
-		    border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
-		    border-width: 1px;
-		    border-style: solid;
-		    border-radius: 3px;
-		    background: #5bb75b;
-		    color:white;
-		    text-shadow:none;
-		    transition:background-color 300ms ease-out;
-    	}
-    	#ds-reset .ds-avatar{
-    		background-color:initial;
-    	}
-
-	</style>
-	<script type="text/javascript">
-	var duoshuoQuery = {short_name:"true"};
-	(function() {
-		var ds = document.createElement('script');
-		ds.type = 'text/javascript';ds.async = true;
-		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-		ds.charset = 'UTF-8';
-		(document.getElementsByTagName('head')[0] 
-		 || document.getElementsByTagName('body')[0]).appendChild(ds);
-	})();
-	</script>
-</div>
 
 
 
+
+  <style>
+/*
+    Name:     Kimbie (light)
+    Author:   Jan T. Sott
+    License:  Creative Commons Attribution-ShareAlike 4.0 Unported License
+    URL:      https://github.com/idleberg/Kimbie-highlight.js
+*/
+
+/* Kimbie Comment */
+.hljs-comment,
+.hljs-quote {
+  color: #a57a4c;
+}
+
+/* Kimbie Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-meta {
+  color: #dc3958;
+}
+
+/* Kimbie Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-deletion,
+.hljs-link {
+  color: #f79a32;
+}
+
+/* Kimbie Yellow */
+.hljs-title,
+.hljs-section,
+.hljs-attribute {
+  color: #f06431;
+}
+
+/* Kimbie Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+  color: #889b4a;
+}
+
+/* Kimbie Purple */
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-function {
+  color: #98676a;
+}
+
+.hljs {
+  display: block;
+  overflow-x: auto;
+  /*background: #fbebd4;*/
+  color: #84613d;
+  padding: 0.5em;
+}
+
+.hljs-emphasis {
+  font-style: italic;
+}
+
+.hljs-strong {
+  font-weight: bold;
+}
+</style>
+  <script src="//cdn.bootcss.com/highlight.js/9.2.0/highlight.min.js"></script>
+  <script>
+    // hljs.initHighlightingOnLoad();
+    [].slice.call(document.querySelectorAll('pre code')).forEach(function(block, i) {
+      hljs.highlightBlock(block);
+      var lines = block.innerText.split('\n').length - 1;
+      var ul = document.createElement('ul');
+      ul.className = 'pre-numbering';
+      block.className += ' has-numbering';
+      block.parentNode.appendChild(ul);
+      for(i=1;i<=lines;i++){
+        var li = document.createElement('li');
+        li.innerText = i;
+        ul.appendChild(li);
+      }
+    });
+  </script>
 </div>
         <link rel="stylesheet" href="/css/content.css" type="text/css">
 <footer id="footer">

@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://louiszhai.github.io/2016/11/02/ajax/</loc>
+    
+    <lastmod>2017-11-02T00:54:59.948Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://louiszhai.github.io/2016/11/25/manifest/</loc>
     
     <lastmod>2017-10-24T12:13:32.193Z</lastmod>
@@ -107,14 +114,14 @@
   </url>
   
   <url>
-    <loc>http://louiszhai.github.io/2017/01/13/flex/</loc>
+    <loc>http://louiszhai.github.io/2017/04/19/hmr/</loc>
     
     <lastmod>2017-10-11T08:32:28.572Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://louiszhai.github.io/2017/04/19/hmr/</loc>
+    <loc>http://louiszhai.github.io/2017/01/13/flex/</loc>
     
     <lastmod>2017-10-11T08:32:28.572Z</lastmod>
     
@@ -208,13 +215,6 @@
     <loc>http://louiszhai.github.io/2015/12/15/arguments/</loc>
     
     <lastmod>2017-10-11T08:32:28.551Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://louiszhai.github.io/2016/11/02/ajax/</loc>
-    
-    <lastmod>2017-10-11T08:32:28.548Z</lastmod>
     
   </url>
   

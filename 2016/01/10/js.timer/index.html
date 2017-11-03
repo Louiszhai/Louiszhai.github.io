@@ -227,38 +227,123 @@
 <h3 id="setTimeout"><a href="#setTimeout" class="headerlink" title="setTimeout"></a>setTimeout</h3><p>语法1: setTimeout(func, millisec, [param1, param2, …])</p>
 <p>语法2: setTimeout(code, millisec)</p>
 <p>setTimeout() 方法在指定的时间后, 执行一次传入的函数. 可通过 window.clearTimeout 函数取消 setTimeout 操作.</p>
-<h4 id="基本用法"><a href="#基本用法" class="headerlink" title="基本用法"></a>基本用法</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">fn</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(+<span class="keyword">new</span> <span class="built_in">Date</span>());</div><div class="line">&#125;</div><div class="line">setTimeout(fn, <span class="number">1000</span>);<span class="comment">//1452405077119, 延迟1s后打印了当前的时间戳</span></div><div class="line">setTimeout(<span class="string">"console.log(+new Date())"</span>, <span class="number">1000</span>);<span class="comment">//1452405077120, 延迟1s后执行了字符串中的语句</span></div></pre></td></tr></table></figure>
+<h4 id="基本用法"><a href="#基本用法" class="headerlink" title="基本用法"></a>基本用法</h4><pre><code class="js">function fn(){
+  console.log(+new Date());
+}
+setTimeout(fn, 1000);//1452405077119, 延迟1s后打印了当前的时间戳
+setTimeout(&quot;console.log(+new Date())&quot;, 1000);//1452405077120, 延迟1s后执行了字符串中的语句
+</code></pre>
 <h4 id="js引擎的排队机制"><a href="#js引擎的排队机制" class="headerlink" title="js引擎的排队机制"></a>js引擎的排队机制</h4><p>javaScript的世界里只有一个线程, 从来就没有同时做两件事的能力, 因此setTimeout只是一种委托机制. 它告诉js 引擎, 帮它在指定的时间点将一段代码插入到 js 引擎的 <code>待处理任务队列</code>  末尾, 插入的代码并不能立即执行, 至少也要等到队列前面的代码全部执行完毕(如果队列刚好为空, 则是指定时间立即执行, 否则要等待队列前面的代码顺序执行完毕).</p>
 <p>下面我们来通过栗子感受一下setTimeout是怎么排队的.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//假如我们要在输入框失去焦点时, 做一些事情, 然后重新获取焦点</span></div><div class="line">$(<span class="string">'input'</span>).blur(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  <span class="comment">//To do something...</span></div><div class="line">  $(<span class="keyword">this</span>).focus();</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<pre><code class="js">//假如我们要在输入框失去焦点时, 做一些事情, 然后重新获取焦点
+$(&#39;input&#39;).blur(function(){
+  //To do something...
+  $(this).focus();
+});
+</code></pre>
 <p>像上面这种写法在IE下是没有什么问题, 输入框失去焦点后马上就能获取焦点, 然而Firefox就没那么幸运了, 因为Firefox的focus只能出现在blur之后. 利用 setTimeout 的排队特点, 我们可以像下面这样实现:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">$(<span class="string">'input'</span>).blur(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  <span class="comment">//To do something...</span></div><div class="line">  setTimeout(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">    $(<span class="keyword">this</span>).focus();</div><div class="line">  &#125;,<span class="number">0</span>);</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<pre><code class="js">$(&#39;input&#39;).blur(function(){
+  //To do something...
+  setTimeout(function(){
+    $(this).focus();
+  },0);
+});
+</code></pre>
 <p>虽然 setTimeout 延时为0, 但获取焦点的语句并不会立即执行, 原因就在于 setTimeout 只是将获取焦点的语句插入到 js 引擎的 <code>待处理任务队列</code>  末尾, 它需要等待整个 blur 完全执行完才能发挥作用, 这样就保证了 focus 事件在 blur 事件之后发生了.</p>
 <h4 id="充当定时器"><a href="#充当定时器" class="headerlink" title="充当定时器"></a>充当定时器</h4><p>setTimeout 原本只能延迟一段时间执行一段代码, 如果我们将 setTimeout 写在函数内部, 并在 setTimeout 里调用函数本身, 这样就完成了简单的定时器. 如下:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">fn</span>(<span class="params">i</span>)</span>&#123;</div><div class="line">  <span class="keyword">if</span>(!i) i = <span class="number">0</span>;</div><div class="line">  ++i;</div><div class="line">  <span class="keyword">if</span>(i&lt;<span class="number">10</span>) setTimeout(fn,<span class="number">100</span>,i);</div><div class="line">  <span class="keyword">else</span> <span class="built_in">console</span>.log(i);</div><div class="line">&#125;</div><div class="line">fn();<span class="comment">//10, fn每隔100ms执行一次, 直到第10次, 因不符合条件(i=10), 退出定时器, 从而输出10</span></div></pre></td></tr></table></figure>
+<pre><code class="js">function fn(i){
+  if(!i) i = 0;
+  ++i;
+  if(i&lt;10) setTimeout(fn,100,i);
+  else console.log(i);
+}
+fn();//10, fn每隔100ms执行一次, 直到第10次, 因不符合条件(i=10), 退出定时器, 从而输出10
+</code></pre>
 <h4 id="this带来的问题"><a href="#this带来的问题" class="headerlink" title="this带来的问题"></a>this带来的问题</h4><p>由setTimeout()调用的代码运行在与所在函数完全分离的执行环境上. 这会导致,这些代码中包含的 <code>this</code> 关键字会指向 <code>window</code> (或<code>全局</code>)对象. </p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> o = &#123;<span class="attr">fruit</span>: <span class="string">"apple"</span>&#125;;</div><div class="line">o.shareFruit = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(<span class="keyword">this</span>.fruit);</div><div class="line">&#125;</div><div class="line">o.shareFruit();<span class="comment">//apple</span></div><div class="line">setTimeout(o.shareFruit,<span class="number">1000</span>);<span class="comment">//undefined</span></div><div class="line">setTimeout.call(o,o.shareFruit,<span class="number">1000</span>);<span class="comment">//Illegal operation on WrappedNative prototype object</span></div></pre></td></tr></table></figure>
+<pre><code class="js">var o = {fruit: &quot;apple&quot;};
+o.shareFruit = function(){
+  console.log(this.fruit);
+}
+o.shareFruit();//apple
+setTimeout(o.shareFruit,1000);//undefined
+setTimeout.call(o,o.shareFruit,1000);//Illegal operation on WrappedNative prototype object
+</code></pre>
 <p>甚至连 call 方法都没有办法改变当前作用域, 使用中要特别注意避免这个问题. 可参考如下方案: </p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">setTimeout(o.shareFruit.bind(o), <span class="number">1000</span>);<span class="comment">//apple</span></div></pre></td></tr></table></figure>
+<pre><code class="js">setTimeout(o.shareFruit.bind(o), 1000);//apple
+</code></pre>
 <h4 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h4><p>下面我们来使用两个非原生的 setTimeout 和 setInterval 全局函数代替原生的, 使得它们能够借用 call 方法激活正确的作用域.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// Enable the passage of the 'this' object through the JavaScript timers</span></div><div class="line"></div><div class="line"><span class="keyword">var</span> __nativeST__ = <span class="built_in">window</span>.setTimeout, __nativeSI__ = <span class="built_in">window</span>.setInterval;</div><div class="line"></div><div class="line"><span class="built_in">window</span>.setTimeout = <span class="function"><span class="keyword">function</span> (<span class="params">vCallback, nDelay</span>) </span>&#123;</div><div class="line">  <span class="keyword">var</span> oThis = <span class="keyword">this</span>, aArgs = <span class="built_in">Array</span>.prototype.slice.call(<span class="built_in">arguments</span>, <span class="number">2</span>);</div><div class="line">  <span class="keyword">return</span> __nativeST__(vCallback <span class="keyword">instanceof</span> <span class="built_in">Function</span> ? <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">    vCallback.apply(oThis, aArgs);</div><div class="line">  &#125; : vCallback, nDelay);</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="built_in">window</span>.setInterval = <span class="function"><span class="keyword">function</span> (<span class="params">vCallback, nDelay</span>) </span>&#123;</div><div class="line">  <span class="keyword">var</span> oThis = <span class="keyword">this</span>, aArgs = <span class="built_in">Array</span>.prototype.slice.call(<span class="built_in">arguments</span>, <span class="number">2</span>);</div><div class="line">  <span class="keyword">return</span> __nativeSI__(vCallback <span class="keyword">instanceof</span> <span class="built_in">Function</span> ? <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">    vCallback.apply(oThis, aArgs);</div><div class="line">  &#125; : vCallback, nDelay);</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="comment">//再运行以下代码将能正确执行</span></div><div class="line">setTimeout.call(o,o.shareFruit,<span class="number">1000</span>);<span class="comment">//apple</span></div></pre></td></tr></table></figure>
+<pre><code class="js">// Enable the passage of the &#39;this&#39; object through the JavaScript timers
+
+var __nativeST__ = window.setTimeout, __nativeSI__ = window.setInterval;
+
+window.setTimeout = function (vCallback, nDelay) {
+  var oThis = this, aArgs = Array.prototype.slice.call(arguments, 2);
+  return __nativeST__(vCallback instanceof Function ? function () {
+    vCallback.apply(oThis, aArgs);
+  } : vCallback, nDelay);
+};
+
+window.setInterval = function (vCallback, nDelay) {
+  var oThis = this, aArgs = Array.prototype.slice.call(arguments, 2);
+  return __nativeSI__(vCallback instanceof Function ? function () {
+    vCallback.apply(oThis, aArgs);
+  } : vCallback, nDelay);
+};
+
+//再运行以下代码将能正确执行
+setTimeout.call(o,o.shareFruit,1000);//apple
+</code></pre>
 <h3 id="setInterval"><a href="#setInterval" class="headerlink" title="setInterval"></a>setInterval</h3><p>语法1: setInterval(func, millisec, [param1, param2, …])</p>
 <p>语法2: setInterval(code, millisec)</p>
 <p>setInterval() 方法按照指定的周期(以毫秒为单位)来调用函数或表达式. 可通过 window.clearInterval 函数取消 setInterval 操作.</p>
 <h4 id="基本用法-1"><a href="#基本用法-1" class="headerlink" title="基本用法"></a>基本用法</h4><p>setInterval 与 setTimeout 不同, 它会周期性的去调用函数或者表达式, 直到它本身被取消. 如下:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> i = <span class="number">0</span>;</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">fn</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  ++i;</div><div class="line">&#125;</div><div class="line"><span class="keyword">var</span> timer = setInterval(fn,<span class="number">100</span>);<span class="comment">//设置了一个定时器, 每100ms执行一次fn函数</span></div><div class="line">setTimeout(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  <span class="built_in">window</span>.clearInterval(timer);</div><div class="line">  <span class="built_in">console</span>.log(i);</div><div class="line">&#125;,<span class="number">2000</span>);<span class="comment">//两秒后清除定时器, 并打印i的值</span></div><div class="line"><span class="comment">//20, 可见2s后fn刚好被执行了20次</span></div></pre></td></tr></table></figure>
+<pre><code class="js">var i = 0;
+function fn(){
+  ++i;
+}
+var timer = setInterval(fn,100);//设置了一个定时器, 每100ms执行一次fn函数
+setTimeout(function(){
+  window.clearInterval(timer);
+  console.log(i);
+},2000);//两秒后清除定时器, 并打印i的值
+//20, 可见2s后fn刚好被执行了20次
+</code></pre>
 <h4 id="它真的可以作为定时器吗"><a href="#它真的可以作为定时器吗" class="headerlink" title="它真的可以作为定时器吗"></a>它真的可以作为定时器吗</h4><p>实际上 setInterval 真的能作为定时器, 准确无误的在指定间隔时间内执行函数 fn 吗?</p>
 <p>答案是 no. 请看下面栗子:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> i = <span class="number">0</span>;</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">fn</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  ++i;</div><div class="line">&#125;</div><div class="line"><span class="keyword">var</span> timer = setInterval(fn,<span class="number">2</span>);<span class="comment">//设置了一个定时器, 将时间间隔减少至2ms</span></div><div class="line">setTimeout(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  <span class="built_in">window</span>.clearInterval(timer);</div><div class="line">  <span class="built_in">console</span>.log(i);</div><div class="line">&#125;,<span class="number">2000</span>);<span class="comment">//两秒后清除定时器, 并打印i的值</span></div><div class="line"><span class="comment">//501, 可见2s后fn只是被执行了501次(为什么不是1000次?)</span></div></pre></td></tr></table></figure>
+<pre><code class="js">var i = 0;
+function fn(){
+  ++i;
+}
+var timer = setInterval(fn,2);//设置了一个定时器, 将时间间隔减少至2ms
+setTimeout(function(){
+  window.clearInterval(timer);
+  console.log(i);
+},2000);//两秒后清除定时器, 并打印i的值
+//501, 可见2s后fn只是被执行了501次(为什么不是1000次?)
+</code></pre>
 <p>以上 fn 应该被执行 2000 次, 实际上才执行501次, 这是为什么呢?</p>
 <p>原来, js 引擎在指定时间点往 <code>待处理消息队列</code> 插入代码片段这种机制有个特点, js引擎只允许有一份未执行的process代码(相当于fn), 对上述代码为而言, 每当1ms来临时, js引擎先判断队列中有没有process代码, 如果 fn 函数执行时间大于1ms, 这就意味着fn尚未被执行完, 定时就来了, 然后定时候着, 静静地等待 fn的执行, 这种情况下引擎队列中就可能存在尚未执行的process代码, 如果有则本次插入的时间点就被无情的跳过. </p>
 <p>由此可见, 上述代码中, fn 函数被无情的跳过了499次. 我们也可以据此计算出运行一次 fn 函数大致需要2000/501~ = 4ms. 而当我们将上述 timer 的时间间隔设置为4ms时, fn 刚好被执行了 500 次.</p>
 <p>因此上面的这段代码并不可靠, 下面我们来看一个更为可靠的版本:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> i = <span class="number">0</span>,timer;</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">fn</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  <span class="keyword">if</span>(++i &gt;= <span class="number">1000</span>)&#123;<span class="comment">//fn调用1000次后自动退出</span></div><div class="line">    <span class="built_in">console</span>.log(i);</div><div class="line">    <span class="keyword">return</span>;</div><div class="line">  &#125;</div><div class="line">  timer = setTimeout(<span class="built_in">arguments</span>.callee, <span class="number">4</span>);<span class="comment">//设置延时2ms后执行自身</span></div><div class="line">&#125;</div><div class="line">fn();</div><div class="line">setTimeout(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(i)</div><div class="line">  <span class="built_in">window</span>.clearTimeout(timer);</div><div class="line">&#125;,<span class="number">2000</span>);<span class="comment">//384</span></div></pre></td></tr></table></figure>
+<pre><code class="js">var i = 0,timer;
+function fn(){
+  if(++i &gt;= 1000){//fn调用1000次后自动退出
+    console.log(i);
+    return;
+  }
+  timer = setTimeout(arguments.callee, 4);//设置延时2ms后执行自身
+}
+fn();
+setTimeout(function(){
+  console.log(i)
+  window.clearTimeout(timer);
+},2000);//384
+</code></pre>
 <p>可见, 2s之后取消定时器时, fn被执行了384次,如果仅仅希望fn被执行1000次后退出, 删除最后一个setTimeout即可. 此时, 本次fn调用 与 下次调用, 间隔时间将大于或者等于2ms. 这样既保证了调用次数, 又基本保证了调用间隔.</p>
 <p>实际上, 上述测试中有个很大的问题. <strong>HTML5标准规定了setTimeout 最短运行间隔是4ms</strong>, 如果低于这个值, 则会自动按4ms间隔运行. <strong>老版本浏览器一般将这个最短间隔设置为10ms</strong>. 将上述 setTimeout 方法第二个参数设置为4, 测试发现, 刚好运行384次. 在老版IE浏览器中测试, 发现运行198次, 接近200次, 也验证了老版浏览器10ms的时间间隔.</p>
 <p>注: IE9 及更早版本的IE 浏览器不支持它们第一个语法中的向回调函数中传参数的功能. 如需支持, 请参考<a href="https://developer.mozilla.org/zh-CN/docs/Web/API/Window/setTimeout#回调参数" target="_blank" rel="external">兼容写法</a>, 或者借用 Function.prototype.bind 函数, 如下:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">setTimeout(<span class="function"><span class="keyword">function</span>(<span class="params">arg1</span>)</span>&#123;&#125;.bind(<span class="literal">undefined</span>, <span class="number">10</span>), <span class="number">1000</span>);</div></pre></td></tr></table></figure>
+<pre><code class="js">setTimeout(function(arg1){}.bind(undefined, 10), 1000);
+</code></pre>
 <hr>
 <p>本文就讨论这么多内容,大家有什么问题或好的想法欢迎在下方参与<a href="#respond">留言和评论</a>.</p>
 <p>本文作者: <a href="https://github.com/Louiszhai" target="_blank" rel="external">louis</a></p>
@@ -282,7 +367,7 @@
         <a id="btn_donate" class="btn_donate" href="javascript:;" title="打赏"></a>
         <span class="donate_txt">
            &uarr;<br>
-       如果你觉得有用，就支持一下吧！
+       支持一杯咖啡吧！
         </span>
       </div>  
   <div id="donate_guide" class="donate_bar center hidden" >
@@ -349,69 +434,103 @@
 
 
 
-<div class="duoshuo">
-	<div class="ds-thread" data-thread-key="js.timer" data-title="web定时器之setTimeout &amp; setInterval" data-url="http://louiszhai.github.io/2016/01/10/js.timer/"></div>
-	<style>
-		#ds-reset .ds-avatar img{width:54px;height:54px;border-radius:27px;-webkit-border-radius:27px;-moz-border-radius:27px;box-shadow:inset 0 -1px 0 #3333sf;-webkit-box-shadow:inset 0 -1px 0 #3333sf;-webkit-transition:0.4s;-webkit-transition:-webkit-transform 0.4s ease-out;transition:transform 0.4s ease-out;-moz-transition:-moz-transform 0.4s ease-out;}
-		#ds-reset .ds-avatar img:hover{box-shadow:0 0 10px #fff;rgba(255,255,255,.6),inset 0 0 20px rgba(255,255,255,1);-webkit-box-shadow:0 0 10px #fff;rgba(255,255,255,.6),inset 0 0 20px rgba(255,255,255,1);transform:rotateZ(360deg);-webkit-transform:rotateZ(360deg);-moz-transform:rotateZ(360deg);}
-		p.ds-powered-by,#ds-sync-checkbox,.ds-sync label{display:none!important;}
-		#ds-reset .ds-rounded-top{-webkit-border-top-right-radius:0px;-webkit-border-top-left-radius:0px;border-top-right-radius:0px;border-top-left-radius:0px;}
-		#ds-thread #ds-reset .ds-textarea-wrapper{background:#fff;border:0;margin-bottom:20px;padding-right:0px;}
-		#ds-thread #ds-reset .ds-textarea-wrapper textarea{min-height:80px;border:1px solid #ccc;padding:10px;-webkit-appearance:none;border-radius:0;background-color:#FFFFFF;border-color:#cccccc;box-shadow:inset 0 1px 2px rgba(0,0,0,0.1);color:rgba(0,0,0,0.75);-webkit-box-sizing:border-box;box-sizing:border-box;-webkit-transition:border-color 0.15s linear,background 0.15s linear;-moz-transition:border-color 0.15s linear,background 0.15s linear;-ms-transition:border-color 0.15s linear,background 0.15s linear;-o-transition:border-color 0.15s linear,background 0.15s linear;transition:border-color 0.15s linear,background 0.15s linear;}
-		/*#ds-thread #ds-reset .ds-textarea-wrapper textarea:focus{border-color:#999999;background:#fafafa;outline:none;}*/
-		#ds-thread #ds-reset .ds-post-options{border-bottom-left-radius:0px;-webkit-border-bottom-left-radius:0px;border:none;background:none!important;}
-		#ds-reset .ds-textarea-wrapper textarea:focus{border-color:#66afe9;outline:0;-webkit-box-shadow:inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);box-shadow:inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);}
-		#ds-thread #ds-reset .ds-post-button:hover,#ds-thread #ds-reset .ds-post-button:focus{
-		    background-color: #51a351;
-		    background-position: 0 -32px;
-		    color:white;
-		}
-		#ds-thread #ds-reset .ds-post-toolbar,#ds-reset .ds-avatar{box-shadow:none;}
-		#ds-thread #ds-reset .ds-textarea-wrapper textarea:focus{
-	    	/*background: none repeat scroll 0 0 #F4FAFF;*/
-	    	border-color:#9DD4FD;
-	    	border-width:1px;
-	    	box-shadow:0 1px 1px rgba(0,0,0,0.075) inset, 0 0 8px rgba(82, 168, 236, 0.6);
-	    	outline:0 none;
-    	}
-		#ds-thread #ds-reset .ds-textarea-wrapper textarea:active{
-	    	/*background: none repeat scroll 0 0 #F4FAFF;*/
-	    	border-width:1px;
-	    	border-color:#9DD4FD;
-	    	box-shadow:0 1px 1px rgba(0,0,0,0.075) inset, 0 0 8px rgba(82, 168, 236, 0.6);
-	    	outline:0 none;
-    	}
-    	#ds-thread #ds-reset .ds-post-button{
-    		box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset, 0 1px 2px rgba(0, 0, 0, 0.05);
-		    border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
-		    border-width: 1px;
-		    border-style: solid;
-		    border-radius: 3px;
-		    background: #5bb75b;
-		    color:white;
-		    text-shadow:none;
-		    transition:background-color 300ms ease-out;
-    	}
-    	#ds-reset .ds-avatar{
-    		background-color:initial;
-    	}
-
-	</style>
-	<script type="text/javascript">
-	var duoshuoQuery = {short_name:"true"};
-	(function() {
-		var ds = document.createElement('script');
-		ds.type = 'text/javascript';ds.async = true;
-		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-		ds.charset = 'UTF-8';
-		(document.getElementsByTagName('head')[0] 
-		 || document.getElementsByTagName('body')[0]).appendChild(ds);
-	})();
-	</script>
-</div>
 
 
 
+
+  <style>
+/*
+    Name:     Kimbie (light)
+    Author:   Jan T. Sott
+    License:  Creative Commons Attribution-ShareAlike 4.0 Unported License
+    URL:      https://github.com/idleberg/Kimbie-highlight.js
+*/
+
+/* Kimbie Comment */
+.hljs-comment,
+.hljs-quote {
+  color: #a57a4c;
+}
+
+/* Kimbie Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-meta {
+  color: #dc3958;
+}
+
+/* Kimbie Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-deletion,
+.hljs-link {
+  color: #f79a32;
+}
+
+/* Kimbie Yellow */
+.hljs-title,
+.hljs-section,
+.hljs-attribute {
+  color: #f06431;
+}
+
+/* Kimbie Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+  color: #889b4a;
+}
+
+/* Kimbie Purple */
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-function {
+  color: #98676a;
+}
+
+.hljs {
+  display: block;
+  overflow-x: auto;
+  /*background: #fbebd4;*/
+  color: #84613d;
+  padding: 0.5em;
+}
+
+.hljs-emphasis {
+  font-style: italic;
+}
+
+.hljs-strong {
+  font-weight: bold;
+}
+</style>
+  <script src="//cdn.bootcss.com/highlight.js/9.2.0/highlight.min.js"></script>
+  <script>
+    // hljs.initHighlightingOnLoad();
+    [].slice.call(document.querySelectorAll('pre code')).forEach(function(block, i) {
+      hljs.highlightBlock(block);
+      var lines = block.innerText.split('\n').length - 1;
+      var ul = document.createElement('ul');
+      ul.className = 'pre-numbering';
+      block.className += ' has-numbering';
+      block.parentNode.appendChild(ul);
+      for(i=1;i<=lines;i++){
+        var li = document.createElement('li');
+        li.innerText = i;
+        ul.appendChild(li);
+      }
+    });
+  </script>
 </div>
         <link rel="stylesheet" href="/css/content.css" type="text/css">
 <footer id="footer">

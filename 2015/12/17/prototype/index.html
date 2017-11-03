@@ -229,7 +229,17 @@
 <p>由上, <strong>prototype</strong> 只有函数才有, 其他(非函数)对象不具有该属性. 而 <strong>__proto__</strong> 是对象的内部属性, 任何对象都拥有该属性. </p>
 <a id="more"></a>
 <h3 id="栗子"><a href="#栗子" class="headerlink" title="栗子"></a>栗子</h3><p>下面我们来吃个栗子帮助消化下:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">Person</span>(<span class="params">name</span>)</span>&#123;</div><div class="line">  <span class="keyword">this</span>.name = name;</div><div class="line">&#125;</div><div class="line"><span class="keyword">var</span> p1 = <span class="keyword">new</span> Person(<span class="string">'louis'</span>);</div><div class="line"></div><div class="line"><span class="built_in">console</span>.log(Person.prototype);<span class="comment">//Person原型 &#123;constructor: Person(name),__proto__: Object&#125;</span></div><div class="line"><span class="built_in">console</span>.log(p1.prototype);<span class="comment">//undefined</span></div><div class="line"></div><div class="line"><span class="built_in">console</span>.log(Person.__proto__);<span class="comment">//空函数, function()&#123;&#125;</span></div><div class="line"><span class="built_in">console</span>.log(p1.__proto__ == Person.prototype);<span class="comment">//true</span></div></pre></td></tr></table></figure>
+<pre><code class="js">function Person(name){
+  this.name = name;
+}
+var p1 = new Person(&#39;louis&#39;);
+
+console.log(Person.prototype);//Person原型 {constructor: Person(name),__proto__: Object}
+console.log(p1.prototype);//undefined
+
+console.log(Person.__proto__);//空函数, function(){}
+console.log(p1.__proto__ == Person.prototype);//true
+</code></pre>
 <p>吃栗子时我们发现, Person.prototype(原型) 默认拥有两个属性:</p>
 <ul>
 <li>constructor 属性, 指向构造器, 即Person本身</li>
@@ -241,24 +251,57 @@
 <p>p1.__proto__ 属性 指向的是 构造器(Person) 的原型, 即 Person.prototype. 此处佐证了<code>概念2</code></p>
 <p>这里我们发现: 原型链查询时, 正是通过这个属性(__proto__) 链接到构造器的原型, 从而实现查询的层层深入.</p>
 <p>对 <code>概念1</code> 不太理解的同学, 说明你们不会吃栗子, 咱们忽略他们. 对 <code>概念2</code> 不太理解的同学, 我们来多吃几个栗子, 边吃边想:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> obj = &#123;<span class="attr">name</span>: <span class="string">'jack'</span>&#125;,</div><div class="line">	arr = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>],</div><div class="line">	reg = <span class="regexp">/hello/g</span>,</div><div class="line">	date = <span class="keyword">new</span> <span class="built_in">Date</span>,</div><div class="line">	err = <span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">'exception'</span>);</div><div class="line"></div><div class="line"><span class="built_in">console</span>.log(obj.__proto__  === <span class="built_in">Object</span>.prototype); <span class="comment">// true</span></div><div class="line"><span class="built_in">console</span>.log(arr.__proto__  === <span class="built_in">Array</span>.prototype);  <span class="comment">// true</span></div><div class="line"><span class="built_in">console</span>.log(reg.__proto__  === <span class="built_in">RegExp</span>.prototype); <span class="comment">// true</span></div><div class="line"><span class="built_in">console</span>.log(date.__proto__ === <span class="built_in">Date</span>.prototype);   <span class="comment">// true</span></div><div class="line"><span class="built_in">console</span>.log(err.__proto__  === <span class="built_in">Error</span>.prototype);  <span class="comment">// true</span></div></pre></td></tr></table></figure>
+<pre><code class="js">var obj = {name: &#39;jack&#39;},
+    arr = [1,2,3],
+    reg = /hello/g,
+    date = new Date,
+    err = new Error(&#39;exception&#39;);
+
+console.log(obj.__proto__  === Object.prototype); // true
+console.log(arr.__proto__  === Array.prototype);  // true
+console.log(reg.__proto__  === RegExp.prototype); // true
+console.log(date.__proto__ === Date.prototype);   // true
+console.log(err.__proto__  === Error.prototype);  // true
+</code></pre>
 <p>可见, 以上通过 <code>对象字面量</code> 和 new + JS引擎内置构造器() 创建的对象, 无一例外, 它们的__proto__ 属性全部指向构造器的原型(prototype). 充分佐证了 <code>概念2</code> .</p>
 <h3 id="proto"><a href="#proto" class="headerlink" title="__proto__"></a>__proto__</h3><p>刚才留下了一个问题: Person.__proto__ 指向的是一个空函数, 下面我们来看看这个空函数究竟是什么.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(Person.__proto__ === <span class="built_in">Function</span>.prototype);<span class="comment">//true</span></div></pre></td></tr></table></figure>
+<pre><code class="js">console.log(Person.__proto__ === Function.prototype);//true
+</code></pre>
 <p>Person 是构造器也是函数(function), Person的__proto__ 属性自然就指向 函数(function)的原型, 即 Function.prototype.</p>
 <p>这说明了什么呢?</p>
 <p>我们由 “特殊” 联想到 “通用” , 由Person构造器联想一般的构造器.</p>
 <p>这说明 <strong>所有的构造器都继承于Function.prototype</strong> (此处我们只是由特殊总结出了普适规律, 并没有给出证明, 请耐心看到后面) , 甚至包括根构造器Object及Function自身。所有构造器都继承了Function.prototype的属性及方法。如length、call、apply、bind（ES5）等. 如下:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(<span class="built_in">Number</span>.__proto__   === <span class="built_in">Function</span>.prototype); <span class="comment">// true</span></div><div class="line"><span class="built_in">console</span>.log(<span class="built_in">Boolean</span>.__proto__  === <span class="built_in">Function</span>.prototype); <span class="comment">// true</span></div><div class="line"><span class="built_in">console</span>.log(<span class="built_in">String</span>.__proto__   === <span class="built_in">Function</span>.prototype); <span class="comment">// true</span></div><div class="line"><span class="built_in">console</span>.log(<span class="built_in">Object</span>.__proto__   === <span class="built_in">Function</span>.prototype); <span class="comment">// true</span></div><div class="line"><span class="built_in">console</span>.log(<span class="built_in">Function</span>.__proto__ === <span class="built_in">Function</span>.prototype); <span class="comment">// true</span></div><div class="line"><span class="built_in">console</span>.log(<span class="built_in">Array</span>.__proto__    === <span class="built_in">Function</span>.prototype); <span class="comment">// true</span></div><div class="line"><span class="built_in">console</span>.log(<span class="built_in">RegExp</span>.__proto__   === <span class="built_in">Function</span>.prototype); <span class="comment">// true</span></div><div class="line"><span class="built_in">console</span>.log(<span class="built_in">Error</span>.__proto__    === <span class="built_in">Function</span>.prototype); <span class="comment">// true</span></div><div class="line"><span class="built_in">console</span>.log(<span class="built_in">Date</span>.__proto__     === <span class="built_in">Function</span>.prototype); <span class="comment">// true</span></div></pre></td></tr></table></figure>
+<pre><code class="js">console.log(Number.__proto__   === Function.prototype); // true
+console.log(Boolean.__proto__  === Function.prototype); // true
+console.log(String.__proto__   === Function.prototype); // true
+console.log(Object.__proto__   === Function.prototype); // true
+console.log(Function.__proto__ === Function.prototype); // true
+console.log(Array.__proto__    === Function.prototype); // true
+console.log(RegExp.__proto__   === Function.prototype); // true
+console.log(Error.__proto__    === Function.prototype); // true
+console.log(Date.__proto__     === Function.prototype); // true
+</code></pre>
 <p>JavaScript中有内置(build-in)构造器/对象共计13个（<a href="http://kangax.github.com/es5-compat-table/" target="_blank" rel="external">ES5</a>中新加了JSON），这里列举了可访问的9个构造器。剩下如Global不能直接访问，Arguments仅在函数调用时由JS引擎创建，Math，JSON是以对象形式存在的，无需new。由于任何对象都拥有 __proto__ 属性指向构造器的原型. 即它们的 __proto__ 指向Object对象的原型(Object.prototype)。如下所示:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(<span class="built_in">Math</span>.__proto__ === <span class="built_in">Object</span>.prototype);  <span class="comment">// true</span></div><div class="line"><span class="built_in">console</span>.log(<span class="built_in">JSON</span>.__proto__ === <span class="built_in">Object</span>.prototype);  <span class="comment">// true</span></div></pre></td></tr></table></figure>
+<pre><code class="js">console.log(Math.__proto__ === Object.prototype);  // true
+console.log(JSON.__proto__ === Object.prototype);  // true
+</code></pre>
 <p>如上所述, 既然所有的构造器都来自于Function.prototype, 那么Function.prototype 到底是什么呢?</p>
 <h3 id="Function-prototype"><a href="#Function-prototype" class="headerlink" title="Function.prototype"></a>Function.prototype</h3><p>我们借用 typeof 运算符来看看它的类型. </p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(<span class="keyword">typeof</span> <span class="built_in">Function</span>.prototype) <span class="comment">// "function"</span></div></pre></td></tr></table></figure>
+<pre><code class="js">console.log(typeof Function.prototype) // &quot;function&quot;
+</code></pre>
 <p>实际上, Function.prototype也是唯一一个typeof XXX.prototype为 “function”的prototype。其它的构造器的prototype都是一个对象。如下:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(<span class="keyword">typeof</span> <span class="built_in">Number</span>.prototype)   <span class="comment">// object</span></div><div class="line"><span class="built_in">console</span>.log(<span class="keyword">typeof</span> <span class="built_in">Boolean</span>.prototype)  <span class="comment">// object</span></div><div class="line"><span class="built_in">console</span>.log(<span class="keyword">typeof</span> <span class="built_in">String</span>.prototype)   <span class="comment">// object</span></div><div class="line"><span class="built_in">console</span>.log(<span class="keyword">typeof</span> <span class="built_in">Object</span>.prototype)   <span class="comment">// object</span></div><div class="line"><span class="built_in">console</span>.log(<span class="keyword">typeof</span> <span class="built_in">Array</span>.prototype)    <span class="comment">// object</span></div><div class="line"><span class="built_in">console</span>.log(<span class="keyword">typeof</span> <span class="built_in">RegExp</span>.prototype)   <span class="comment">// object</span></div><div class="line"><span class="built_in">console</span>.log(<span class="keyword">typeof</span> <span class="built_in">Error</span>.prototype)    <span class="comment">// object</span></div><div class="line"><span class="built_in">console</span>.log(<span class="keyword">typeof</span> <span class="built_in">Date</span>.prototype)     <span class="comment">// object</span></div></pre></td></tr></table></figure>
+<pre><code class="js">console.log(typeof Number.prototype)   // object
+console.log(typeof Boolean.prototype)  // object
+console.log(typeof String.prototype)   // object
+console.log(typeof Object.prototype)   // object
+console.log(typeof Array.prototype)    // object
+console.log(typeof RegExp.prototype)   // object
+console.log(typeof Error.prototype)    // object
+console.log(typeof Date.prototype)     // object
+</code></pre>
 <h3 id="JS中函数是一等公民"><a href="#JS中函数是一等公民" class="headerlink" title="JS中函数是一等公民"></a>JS中函数是一等公民</h3><p>既然Function.prototype 的类型是函数, 那么它会拥有 __proto__ 属性吗, Function.prototype.__proto__ 会指向哪里呢? 会指向对象的原型吗? 请看下方:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(<span class="built_in">Function</span>.prototype.__proto__ === <span class="built_in">Object</span>.prototype) <span class="comment">// true</span></div></pre></td></tr></table></figure>
+<pre><code class="js">console.log(Function.prototype.__proto__ === Object.prototype) // true
+</code></pre>
 <p>透过上方代码, 且我们了解到: Function.prototype 的类型是函数, 也就意味着一个函数拥有 __proto__ 属性, 并且该属性指向了对象(Object)构造器的原型. 这意味着啥?</p>
 <p>根据我们在 <code>概念2</code> 中了解到的: <strong>__proto__</strong>   是对象的内部属性, 它指向构造器的原型.</p>
 <p>这意味着 Function.prototype 函数 拥有了一个对象的内部属性, 并且该属性还恰好指向对象构造器的原型. 它是一个对象吗? 是的, 它一定是对象. 它必须是. </p>
@@ -267,7 +310,8 @@
 <h3 id="Object-prototype"><a href="#Object-prototype" class="headerlink" title="Object.prototype"></a>Object.prototype</h3><p>函数的 __proto__ 属性指向 Function.prototype, 如: Person.__proto__ —&gt; Function.prototype</p>
 <p>Function.prototype 函数的 __proto__ 属性指向 Object.prototype, 如: Function.prototype.__proto__ —&gt; Object.prototype.</p>
 <p>那么Object.prototype.__proto__ 指向什么呢? </p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(<span class="built_in">Object</span>.prototype.__proto__ === <span class="literal">null</span>);<span class="comment">//true</span></div></pre></td></tr></table></figure>
+<pre><code class="js">console.log(Object.prototype.__proto__ === null);//true
+</code></pre>
 <p>由于已经到顶, JS世界的源头一片荒芜, 竟然什么都没有! 令人嗟叹不已.</p>
 <p>都说一图胜千言, 我也不能免俗. 下面附一张 <a href="http://stackoverflow.com/" target="_blank" rel="external">stackoverflow</a> 上的图:</p>
 <p><img src="/docImages/prototype.png" alt=""></p>
@@ -278,7 +322,10 @@
 <ul>
 <li>Function.__proto__ == Function.prototype.</li>
 </ul>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//虽然上面做过测试, 我们还是再次测试下</span></div><div class="line"><span class="built_in">console</span>.log(<span class="built_in">Object</span>.__proto__   == <span class="built_in">Function</span>.prototype);<span class="comment">//true</span></div><div class="line"><span class="built_in">console</span>.log(<span class="built_in">Function</span>.__proto__ == <span class="built_in">Function</span>.prototype);<span class="comment">//true</span></div></pre></td></tr></table></figure>
+<pre><code class="js">//虽然上面做过测试, 我们还是再次测试下
+console.log(Object.__proto__   == Function.prototype);//true
+console.log(Function.__proto__ == Function.prototype);//true
+</code></pre>
 <p>由于对象构造器 (Object) 也是构造器, 又构造器都是函数, 又函数是一等公民, 函数也是对象.</p>
 <p>故, 对象构造器 (Object) 拥有<strong>3</strong>种身份:</p>
 <ul>
@@ -312,7 +359,7 @@
         <a id="btn_donate" class="btn_donate" href="javascript:;" title="打赏"></a>
         <span class="donate_txt">
            &uarr;<br>
-       如果你觉得有用，就支持一下吧！
+       支持一杯咖啡吧！
         </span>
       </div>  
   <div id="donate_guide" class="donate_bar center hidden" >
@@ -379,69 +426,103 @@
 
 
 
-<div class="duoshuo">
-	<div class="ds-thread" data-thread-key="prototype" data-title="详解prototype与__proto__" data-url="http://louiszhai.github.io/2015/12/17/prototype/"></div>
-	<style>
-		#ds-reset .ds-avatar img{width:54px;height:54px;border-radius:27px;-webkit-border-radius:27px;-moz-border-radius:27px;box-shadow:inset 0 -1px 0 #3333sf;-webkit-box-shadow:inset 0 -1px 0 #3333sf;-webkit-transition:0.4s;-webkit-transition:-webkit-transform 0.4s ease-out;transition:transform 0.4s ease-out;-moz-transition:-moz-transform 0.4s ease-out;}
-		#ds-reset .ds-avatar img:hover{box-shadow:0 0 10px #fff;rgba(255,255,255,.6),inset 0 0 20px rgba(255,255,255,1);-webkit-box-shadow:0 0 10px #fff;rgba(255,255,255,.6),inset 0 0 20px rgba(255,255,255,1);transform:rotateZ(360deg);-webkit-transform:rotateZ(360deg);-moz-transform:rotateZ(360deg);}
-		p.ds-powered-by,#ds-sync-checkbox,.ds-sync label{display:none!important;}
-		#ds-reset .ds-rounded-top{-webkit-border-top-right-radius:0px;-webkit-border-top-left-radius:0px;border-top-right-radius:0px;border-top-left-radius:0px;}
-		#ds-thread #ds-reset .ds-textarea-wrapper{background:#fff;border:0;margin-bottom:20px;padding-right:0px;}
-		#ds-thread #ds-reset .ds-textarea-wrapper textarea{min-height:80px;border:1px solid #ccc;padding:10px;-webkit-appearance:none;border-radius:0;background-color:#FFFFFF;border-color:#cccccc;box-shadow:inset 0 1px 2px rgba(0,0,0,0.1);color:rgba(0,0,0,0.75);-webkit-box-sizing:border-box;box-sizing:border-box;-webkit-transition:border-color 0.15s linear,background 0.15s linear;-moz-transition:border-color 0.15s linear,background 0.15s linear;-ms-transition:border-color 0.15s linear,background 0.15s linear;-o-transition:border-color 0.15s linear,background 0.15s linear;transition:border-color 0.15s linear,background 0.15s linear;}
-		/*#ds-thread #ds-reset .ds-textarea-wrapper textarea:focus{border-color:#999999;background:#fafafa;outline:none;}*/
-		#ds-thread #ds-reset .ds-post-options{border-bottom-left-radius:0px;-webkit-border-bottom-left-radius:0px;border:none;background:none!important;}
-		#ds-reset .ds-textarea-wrapper textarea:focus{border-color:#66afe9;outline:0;-webkit-box-shadow:inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);box-shadow:inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);}
-		#ds-thread #ds-reset .ds-post-button:hover,#ds-thread #ds-reset .ds-post-button:focus{
-		    background-color: #51a351;
-		    background-position: 0 -32px;
-		    color:white;
-		}
-		#ds-thread #ds-reset .ds-post-toolbar,#ds-reset .ds-avatar{box-shadow:none;}
-		#ds-thread #ds-reset .ds-textarea-wrapper textarea:focus{
-	    	/*background: none repeat scroll 0 0 #F4FAFF;*/
-	    	border-color:#9DD4FD;
-	    	border-width:1px;
-	    	box-shadow:0 1px 1px rgba(0,0,0,0.075) inset, 0 0 8px rgba(82, 168, 236, 0.6);
-	    	outline:0 none;
-    	}
-		#ds-thread #ds-reset .ds-textarea-wrapper textarea:active{
-	    	/*background: none repeat scroll 0 0 #F4FAFF;*/
-	    	border-width:1px;
-	    	border-color:#9DD4FD;
-	    	box-shadow:0 1px 1px rgba(0,0,0,0.075) inset, 0 0 8px rgba(82, 168, 236, 0.6);
-	    	outline:0 none;
-    	}
-    	#ds-thread #ds-reset .ds-post-button{
-    		box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset, 0 1px 2px rgba(0, 0, 0, 0.05);
-		    border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
-		    border-width: 1px;
-		    border-style: solid;
-		    border-radius: 3px;
-		    background: #5bb75b;
-		    color:white;
-		    text-shadow:none;
-		    transition:background-color 300ms ease-out;
-    	}
-    	#ds-reset .ds-avatar{
-    		background-color:initial;
-    	}
-
-	</style>
-	<script type="text/javascript">
-	var duoshuoQuery = {short_name:"true"};
-	(function() {
-		var ds = document.createElement('script');
-		ds.type = 'text/javascript';ds.async = true;
-		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-		ds.charset = 'UTF-8';
-		(document.getElementsByTagName('head')[0] 
-		 || document.getElementsByTagName('body')[0]).appendChild(ds);
-	})();
-	</script>
-</div>
 
 
 
+
+  <style>
+/*
+    Name:     Kimbie (light)
+    Author:   Jan T. Sott
+    License:  Creative Commons Attribution-ShareAlike 4.0 Unported License
+    URL:      https://github.com/idleberg/Kimbie-highlight.js
+*/
+
+/* Kimbie Comment */
+.hljs-comment,
+.hljs-quote {
+  color: #a57a4c;
+}
+
+/* Kimbie Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-meta {
+  color: #dc3958;
+}
+
+/* Kimbie Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-deletion,
+.hljs-link {
+  color: #f79a32;
+}
+
+/* Kimbie Yellow */
+.hljs-title,
+.hljs-section,
+.hljs-attribute {
+  color: #f06431;
+}
+
+/* Kimbie Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+  color: #889b4a;
+}
+
+/* Kimbie Purple */
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-function {
+  color: #98676a;
+}
+
+.hljs {
+  display: block;
+  overflow-x: auto;
+  /*background: #fbebd4;*/
+  color: #84613d;
+  padding: 0.5em;
+}
+
+.hljs-emphasis {
+  font-style: italic;
+}
+
+.hljs-strong {
+  font-weight: bold;
+}
+</style>
+  <script src="//cdn.bootcss.com/highlight.js/9.2.0/highlight.min.js"></script>
+  <script>
+    // hljs.initHighlightingOnLoad();
+    [].slice.call(document.querySelectorAll('pre code')).forEach(function(block, i) {
+      hljs.highlightBlock(block);
+      var lines = block.innerText.split('\n').length - 1;
+      var ul = document.createElement('ul');
+      ul.className = 'pre-numbering';
+      block.className += ' has-numbering';
+      block.parentNode.appendChild(ul);
+      for(i=1;i<=lines;i++){
+        var li = document.createElement('li');
+        li.innerText = i;
+        ul.appendChild(li);
+      }
+    });
+  </script>
 </div>
         <link rel="stylesheet" href="/css/content.css" type="text/css">
 <footer id="footer">

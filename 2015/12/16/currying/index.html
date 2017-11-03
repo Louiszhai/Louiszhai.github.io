@@ -224,17 +224,90 @@
 <h3 id="柯里化-Currying"><a href="#柯里化-Currying" class="headerlink" title="柯里化(Currying)"></a>柯里化(Currying)</h3><p>柯里化有3个常见作用：1. 参数复用；2. 提前返回；3. 延迟计算/运行。</p>
 <p>通俗的柯里化函数原型如下:</p>
 <a id="more"></a>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> currying = <span class="function"><span class="keyword">function</span>(<span class="params">fn</span>) </span>&#123;</div><div class="line">     <span class="keyword">var</span> args = [].slice.call(<span class="built_in">arguments</span>, <span class="number">1</span>);</div><div class="line">     <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">          <span class="keyword">var</span> newArgs = args.concat([].slice.call(<span class="built_in">arguments</span>));</div><div class="line">          <span class="keyword">return</span> fn.apply(<span class="literal">null</span>, newArgs);</div><div class="line">     &#125;;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<pre><code class="js">var currying = function(fn) {
+     var args = [].slice.call(arguments, 1);
+     return function() {
+          var newArgs = args.concat([].slice.call(arguments));
+          return fn.apply(null, newArgs);
+     };
+};
+</code></pre>
 <h4 id="柯里化的通用实现"><a href="#柯里化的通用实现" class="headerlink" title="柯里化的通用实现"></a>柯里化的通用实现</h4><p>我们来定义一个比较通用的currying函数：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 第一个参数为要应用的function，第二个参数是需要传入的最少参数个数 </span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">curry</span>(<span class="params">func, minArgs</span>) </span>&#123;</div><div class="line">    <span class="keyword">if</span> (minArgs == <span class="literal">undefined</span>) &#123;</div><div class="line">        minArgs = <span class="number">1</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">function</span> <span class="title">A</span>(<span class="params">frozenargs</span>) </span>&#123;</div><div class="line">        <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123; <span class="comment">// 优化处理，如果调用时没有参数，返回该函数本身 </span></div><div class="line">	        <span class="keyword">var</span> args = <span class="built_in">Array</span>.prototype.slice.call(<span class="built_in">arguments</span>); </div><div class="line">	        <span class="keyword">var</span> newArgs = frozenargs.concat(args); </div><div class="line">	        <span class="keyword">if</span> (newArgs.length &gt;= minArgs) &#123; </div><div class="line">	        	<span class="keyword">return</span> func.apply(<span class="keyword">this</span>, newArgs); </div><div class="line">	        &#125; <span class="keyword">else</span> &#123; </div><div class="line">	        	<span class="keyword">return</span> A(newArgs); </div><div class="line">	        &#125; </div><div class="line">	    &#125;; </div><div class="line">	&#125; </div><div class="line">	<span class="keyword">return</span> A([]); </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<pre><code class="js">// 第一个参数为要应用的function，第二个参数是需要传入的最少参数个数 
+function curry(func, minArgs) {
+    if (minArgs == undefined) {
+        minArgs = 1;
+    }
+
+    function A(frozenargs) {
+        return function() { // 优化处理，如果调用时没有参数，返回该函数本身 
+            var args = Array.prototype.slice.call(arguments); 
+            var newArgs = frozenargs.concat(args); 
+            if (newArgs.length &gt;= minArgs) { 
+                return func.apply(this, newArgs); 
+            } else { 
+                return A(newArgs); 
+            } 
+        }; 
+    } 
+    return A([]); 
+}
+</code></pre>
 <h4 id="柯里化的栗子"><a href="#柯里化的栗子" class="headerlink" title="柯里化的栗子"></a>柯里化的栗子</h4><p>这样，我们就可以随意定义我们的业务行为了，比如定义加法：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> plus = curry(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">	<span class="keyword">var</span> result = <span class="number">0</span>;</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; <span class="built_in">arguments</span>.length; ++i) &#123;</div><div class="line">    	result += <span class="built_in">arguments</span>[i];</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> result;</div><div class="line">&#125;, <span class="number">2</span>);</div><div class="line">plus(<span class="number">3</span>, <span class="number">2</span>); <span class="comment">// 正常调用,返回 5</span></div><div class="line">plus(<span class="number">3</span>); <span class="comment">// 偏应用，返回一个函数（返回值为3+参数值） </span></div><div class="line">plus(<span class="number">3</span>)(<span class="number">2</span>); <span class="comment">// 完整应用（返回5） </span></div><div class="line">plus()(<span class="number">3</span>)()()(<span class="number">2</span>); <span class="comment">// 返回 5 </span></div><div class="line">plus(<span class="number">3</span>, <span class="number">2</span>, <span class="number">4</span>, <span class="number">5</span>); <span class="comment">// 可以接收多个参数,返回 14</span></div><div class="line">plus(<span class="number">3</span>)(<span class="number">2</span>, <span class="number">3</span>, <span class="number">5</span>); <span class="comment">// 同理,返回13</span></div></pre></td></tr></table></figure>
+<pre><code class="js">var plus = curry(function () {
+    var result = 0;
+    for (var i = 0; i &lt; arguments.length; ++i) {
+        result += arguments[i];
+    }
+    return result;
+}, 2);
+plus(3, 2); // 正常调用,返回 5
+plus(3); // 偏应用，返回一个函数（返回值为3+参数值） 
+plus(3)(2); // 完整应用（返回5） 
+plus()(3)()()(2); // 返回 5 
+plus(3, 2, 4, 5); // 可以接收多个参数,返回 14
+plus(3)(2, 3, 5); // 同理,返回13
+</code></pre>
 <p>如下是减法的例子:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> minus = curry(<span class="function"><span class="keyword">function</span>(<span class="params">x</span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> result = x;</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">1</span>; i &lt; <span class="built_in">arguments</span>.length; ++i) &#123;</div><div class="line">        result -= <span class="built_in">arguments</span>[i];</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> result;</div><div class="line">&#125;, <span class="number">2</span>);</div><div class="line">minus(<span class="number">5</span>,<span class="number">3</span>);<span class="comment">//正常调用,返回 2</span></div><div class="line">minus(<span class="number">5</span>)(<span class="number">3</span>);<span class="comment">//完整应用,返回 2</span></div><div class="line">minus()(<span class="number">3</span>)()()(<span class="number">2</span>);<span class="comment">//返回 1</span></div><div class="line">minus(<span class="number">8</span>)(<span class="number">2</span>, <span class="number">3</span>, <span class="number">5</span>);<span class="comment">// 接受多个参数,返回 -2</span></div></pre></td></tr></table></figure>
+<pre><code class="js">var minus = curry(function(x) {
+    var result = x;
+    for (var i = 1; i &lt; arguments.length; ++i) {
+        result -= arguments[i];
+    }
+    return result;
+}, 2);
+minus(5,3);//正常调用,返回 2
+minus(5)(3);//完整应用,返回 2
+minus()(3)()()(2);//返回 1
+minus(8)(2, 3, 5);// 接受多个参数,返回 -2
+</code></pre>
 <h4 id="多次柯里化"><a href="#多次柯里化" class="headerlink" title="多次柯里化"></a>多次柯里化</h4><p>或者如果你想交换参数的顺序，你可以这样定义:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> flip = curry(<span class="function"><span class="keyword">function</span>(<span class="params">f</span>) </span>&#123;</div><div class="line">    <span class="keyword">return</span> curry(<span class="function"><span class="keyword">function</span>(<span class="params">a, b</span>) </span>&#123;</div><div class="line">        <span class="keyword">return</span> f(b, a);</div><div class="line">    &#125;, <span class="number">2</span>);</div><div class="line">&#125;);</div><div class="line"><span class="keyword">var</span> flip_minus = flip()(minus);<span class="comment">//返回一个具有柯里化能力的函数</span></div><div class="line">flip_minus(<span class="number">2</span>)(<span class="number">10</span>);<span class="comment">//8</span></div><div class="line">flip_minus()(<span class="number">1</span>)()(<span class="number">6</span>);<span class="comment">//5</span></div></pre></td></tr></table></figure>
+<pre><code class="js">var flip = curry(function(f) {
+    return curry(function(a, b) {
+        return f(b, a);
+    }, 2);
+});
+var flip_minus = flip()(minus);//返回一个具有柯里化能力的函数
+flip_minus(2)(10);//8
+flip_minus()(1)()(6);//5
+</code></pre>
 <p>这里为什么要调用两次 curry 呢, 第一次调用是为了固定 func ,返回了curry 内部的A的内部方法,即返回:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;	<span class="comment">//该函数即flip,以下将称作`方法①`</span></div><div class="line">  <span class="keyword">var</span> args = <span class="built_in">Array</span>.prototype.slice.call(<span class="built_in">arguments</span>); </div><div class="line">  <span class="keyword">var</span> newArgs = frozenargs.concat(args); </div><div class="line">  <span class="keyword">if</span> (newArgs.length &gt;= minArgs) &#123; </div><div class="line">    <span class="keyword">return</span> func.apply(<span class="keyword">this</span>, newArgs);</div><div class="line">  &#125; <span class="keyword">else</span> &#123; </div><div class="line">    <span class="keyword">return</span> A(newArgs); </div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"><span class="comment">//其中func指的是curry传入的第一个参数,表示一个方法,即如下:</span></div><div class="line"><span class="function"><span class="keyword">function</span>(<span class="params">f</span>) </span>&#123;<span class="comment">//该方法表示上述func,以下将称作`方法②`</span></div><div class="line">    <span class="keyword">return</span> curry(<span class="function"><span class="keyword">function</span>(<span class="params">a, b</span>) </span>&#123;</div><div class="line">        <span class="keyword">return</span> f(b, a);</div><div class="line">    &#125;, <span class="number">2</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<pre><code class="js">function(){    //该函数即flip,以下将称作`方法①`
+  var args = Array.prototype.slice.call(arguments); 
+  var newArgs = frozenargs.concat(args); 
+  if (newArgs.length &gt;= minArgs) { 
+    return func.apply(this, newArgs);
+  } else { 
+    return A(newArgs); 
+  }
+}
+//其中func指的是curry传入的第一个参数,表示一个方法,即如下:
+function(f) {//该方法表示上述func,以下将称作`方法②`
+    return curry(function(a, b) {
+        return f(b, a);
+    }, 2);
+}
+</code></pre>
 <p>分析</p>
 <ul>
 <li>此时调用 flip(minus) , 实际上是执行了一遍 “方法①” , 由于实参长度等于minArgs(即1), 因此返回 func.apply(this, newArgs); </li>
@@ -246,7 +319,13 @@
 <h3 id="反柯里化-unCurrying"><a href="#反柯里化-unCurrying" class="headerlink" title="反柯里化(unCurrying)"></a>反柯里化(unCurrying)</h3><p>函数柯里化，是固定部分参数，返回一个接受剩余参数的函数，也称为部分计算函数，目的是为了固定参数, 延迟计算等。</p>
 <p>那么反柯里化函数，从字面讲，意义和用法跟函数柯里化相比正好相反，扩大适用范围，创建一个应用范围更广的函数。使得本来只有特定对象才适用的方法，扩展到更多的对象。</p>
 <h4 id="反柯里化的三种实现"><a href="#反柯里化的三种实现" class="headerlink" title="反柯里化的三种实现"></a>反柯里化的三种实现</h4><p>看一下通用函数：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">Function</span>.prototype.unCurrying = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> that = <span class="keyword">this</span>;</div><div class="line">    <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">        <span class="keyword">return</span> <span class="built_in">Function</span>.prototype.call.apply(that, <span class="built_in">arguments</span>);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<pre><code class="js">Function.prototype.unCurrying = function() {
+    var that = this;
+    return function() {
+        return Function.prototype.call.apply(that, arguments);
+    }
+}
+</code></pre>
 <p>以上这段代码做了3件事:</p>
 <ul>
 <li>在Function原型上增加 unCurrying 方法, 方便所有方法继承;</li>
@@ -254,26 +333,74 @@
 <li>借用call, call 的参数由 apply提供;</li>
 </ul>
 <p>上述代码先后调用了call, apply 方法 来保证参数传递正常. 自然也可以直接调用apply(因arguments类似数组,调用apply较为方便). 如下:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">Function</span>.prototype.unCurrying = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> that = <span class="keyword">this</span>;</div><div class="line">    <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">        <span class="keyword">var</span> a = <span class="built_in">arguments</span>;</div><div class="line">        <span class="keyword">return</span> that.apply(a[<span class="number">0</span>], [].slice.call(a, <span class="number">1</span>));分割<span class="built_in">arguments</span>,方便apply传参</div><div class="line">    &#125;;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<pre><code class="js">Function.prototype.unCurrying = function() {
+    var that = this;
+    return function() {
+        var a = arguments;
+        return that.apply(a[0], [].slice.call(a, 1));分割arguments,方便apply传参
+    };
+};
+</code></pre>
 <p>当然, 还可以利用<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Function/bind" target="_blank" rel="external">Function.prototype.bind()</a>方法返回一个新函数.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">Function</span>.prototype.unCurrying = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123; </div><div class="line">  <span class="keyword">return</span> <span class="keyword">this</span>.call.bind(<span class="keyword">this</span>);</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<pre><code class="js">Function.prototype.unCurrying = function () { 
+  return this.call.bind(this);
+};
+</code></pre>
 <p>bind() 方法会创建一个新函数, 称为绑定函数, 当调用这个绑定函数时, 绑定函数会以创建它时传入bind() 方法的第一个参数作为this ,也就是说, 传入的this将成为最终的上下文, 从第二个参数开始的参数, 将按照顺序作为原函数的参数来调用原函数. </p>
 <p>也就是说, 谁(假设为方法f)调用 unCurrying 方法, 将返回一个如下的方法.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  <span class="built_in">Function</span>.prototype.call.apply(f, <span class="built_in">arguments</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<pre><code class="js">function(){
+  Function.prototype.call.apply(f, arguments);
+}
+</code></pre>
 <p>原理都相同，最终就是把 this.method 转化成 method(this,arg1,arg2….) 以实现方法借用和this的泛化。</p>
 <h4 id="反柯里化的前因"><a href="#反柯里化的前因" class="headerlink" title="反柯里化的前因"></a>反柯里化的前因</h4><p>接下来我们来回顾下前一篇文章&lt;<a href="http://louiszhai.github.io/2015/12/15/arguments/">详解JS之Arguments对象</a>&gt;中所讲到的<a href="http://louiszhai.github.io/2015/12/15/arguments/#u9E2D_u5F0F_u8FA9_u578B">鸭式辩型</a>: 如果一个对象可以像鸭子一样走路,游泳,并且嘎嘎叫,就认为这个对象是鸭子,哪怕它并不是从鸭子对象继承过来的。</p>
 <p>Array构造器和String构造器的prototype上的方法就被特意设计成了鸭子类型。这些方法不对this的数据类型做任何校验。这也就是为什么arguments能冒充array调用push方法.</p>
 <p>下面我们来看下v8引擎里面 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array/push" target="_blank" rel="external">Array.prototype.push</a> 的代码:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">ArrayPush</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> n = TO_UINT32(<span class="keyword">this</span>.length);</div><div class="line">    <span class="keyword">var</span> m = % _ArgumentsLength();</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; m; i++) &#123;</div><div class="line">        <span class="keyword">this</span>[i + n] = % _Arguments(i); <span class="comment">//属性拷贝 </span></div><div class="line">        <span class="keyword">this</span>.length = n + m; <span class="comment">//修正length </span></div><div class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.length; </div><div class="line">    &#125; </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<pre><code class="js">function ArrayPush() {
+    var n = TO_UINT32(this.length);
+    var m = % _ArgumentsLength();
+    for (var i = 0; i &lt; m; i++) {
+        this[i + n] = % _Arguments(i); //属性拷贝 
+        this.length = n + m; //修正length 
+        return this.length; 
+    } 
+}
+</code></pre>
 <p>Array.prototype.push 方法并没有去判断调用对象是不是数组, 这给对象冒充提供了天然条件, 基于此函数反柯里化(unCurrying) 才具有可行性. </p>
 <h4 id="反柯里化的栗子"><a href="#反柯里化的栗子" class="headerlink" title="反柯里化的栗子"></a>反柯里化的栗子</h4><p>下面我们让普通对象具有push方法的能力:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> push = <span class="built_in">Array</span>.prototype.push.unCurrying(),</div><div class="line">obj = &#123;&#125;;</div><div class="line">push(obj, <span class="string">'123'</span>, <span class="string">'456'</span>);</div><div class="line"><span class="built_in">console</span>.log(obj); <span class="comment">//Object &#123;0: "123", 1: "456", length: 2&#125;</span></div></pre></td></tr></table></figure>
+<pre><code class="js">var push = Array.prototype.push.unCurrying(),
+obj = {};
+push(obj, &#39;123&#39;, &#39;456&#39;);
+console.log(obj); //Object {0: &quot;123&quot;, 1: &quot;456&quot;, length: 2}
+</code></pre>
 <p>obj本来是一个空对象, 它被push了两个元素 “123” 和 “456”, 并且拥有了 length 属性. obj实际上已经变成了一个数组(即[ “123”, “456” ]). </p>
 <p>下面我们来看看更多的例子:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/*反柯里化toUpperCase*/</span></div><div class="line"><span class="keyword">var</span> toUpperCase = <span class="built_in">String</span>.prototype.toUpperCase.unCurrying(); <span class="built_in">console</span>.log(toUpperCase(<span class="string">'abc'</span>)); <span class="comment">// ABC</span></div><div class="line"></div><div class="line"><span class="comment">/*反柯里化toLowerCase*/</span></div><div class="line"><span class="keyword">var</span> toLowerCase = <span class="built_in">String</span>.prototype.toLowerCase.unCurrying();</div><div class="line"><span class="built_in">console</span>.log(toLowerCase(<span class="string">'DEF'</span>)); <span class="comment">// def</span></div><div class="line"></div><div class="line"><span class="comment">/*反柯里化call*/</span></div><div class="line"><span class="keyword">var</span> call = <span class="built_in">Function</span>.prototype.call.unCurrying();</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params">action</span>)</span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(<span class="keyword">this</span>.name+<span class="string">" is "</span>+action);</div><div class="line">&#125;</div><div class="line"><span class="keyword">var</span> obj = &#123;</div><div class="line">  <span class="attr">name</span>:<span class="string">'louis'</span></div><div class="line">&#125;;</div><div class="line">call(f,obj,<span class="string">'working.'</span>);<span class="comment">//call的3个参数分别为 函数, 上下文对象, 形参</span></div></pre></td></tr></table></figure>
+<pre><code class="js">/*反柯里化toUpperCase*/
+var toUpperCase = String.prototype.toUpperCase.unCurrying(); console.log(toUpperCase(&#39;abc&#39;)); // ABC
+
+/*反柯里化toLowerCase*/
+var toLowerCase = String.prototype.toLowerCase.unCurrying();
+console.log(toLowerCase(&#39;DEF&#39;)); // def
+
+/*反柯里化call*/
+var call = Function.prototype.call.unCurrying();
+function f(action){
+  console.log(this.name+&quot; is &quot;+action);
+}
+var obj = {
+  name:&#39;louis&#39;
+};
+call(f,obj,&#39;working.&#39;);//call的3个参数分别为 函数, 上下文对象, 形参
+</code></pre>
 <p>其中反柯里化 call 可能不大好理解, 它表示 obj 对象借用方法 f , 替换了其中的this(上下文).</p>
 <h4 id="反柯里化自身"><a href="#反柯里化自身" class="headerlink" title="反柯里化自身"></a>反柯里化自身</h4><p>更有趣的是, unCurrying本身也是方法, 它同样可以被反柯里化, 这就是反柯里化的值得玩味的地方.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> unCurrying = <span class="built_in">Function</span>.prototype.unCurrying.unCurrying();</div><div class="line"><span class="keyword">var</span> sort = unCurrying(<span class="built_in">Array</span>.prototype.sort);</div><div class="line"><span class="keyword">var</span> array = sort([<span class="number">5</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">1</span>],<span class="function"><span class="keyword">function</span>(<span class="params">a,b</span>)</span>&#123;</div><div class="line">  <span class="keyword">return</span> a-b;</div><div class="line">&#125;);</div><div class="line"><span class="built_in">console</span>.log(array);<span class="comment">//[1,2,3,4,5]</span></div></pre></td></tr></table></figure>
+<pre><code class="js">var unCurrying = Function.prototype.unCurrying.unCurrying();
+var sort = unCurrying(Array.prototype.sort);
+var array = sort([5,2,3,4,1],function(a,b){
+  return a-b;
+});
+console.log(array);//[1,2,3,4,5]
+</code></pre>
 <p>以上是关于 <code>javaScript</code> 柯里化与反柯里化的一些理解. </p>
 <p>柯里化体现的思想是”归一”, 多个参数化为一个参数, 然后逐个处理, 便于产生偏函数, 实现链式调用; 反柯里化体现的思想是”延伸”, 通过拓展方法的作用域, 使得它变得更通用, 提高了代码的复用性. 它们都提升了代码的优雅性.</p>
 <hr>
@@ -298,7 +425,7 @@
         <a id="btn_donate" class="btn_donate" href="javascript:;" title="打赏"></a>
         <span class="donate_txt">
            &uarr;<br>
-       如果你觉得有用，就支持一下吧！
+       支持一杯咖啡吧！
         </span>
       </div>  
   <div id="donate_guide" class="donate_bar center hidden" >
@@ -365,69 +492,103 @@
 
 
 
-<div class="duoshuo">
-	<div class="ds-thread" data-thread-key="currying" data-title="函数式编程之柯里化与反柯里化" data-url="http://louiszhai.github.io/2015/12/16/currying/"></div>
-	<style>
-		#ds-reset .ds-avatar img{width:54px;height:54px;border-radius:27px;-webkit-border-radius:27px;-moz-border-radius:27px;box-shadow:inset 0 -1px 0 #3333sf;-webkit-box-shadow:inset 0 -1px 0 #3333sf;-webkit-transition:0.4s;-webkit-transition:-webkit-transform 0.4s ease-out;transition:transform 0.4s ease-out;-moz-transition:-moz-transform 0.4s ease-out;}
-		#ds-reset .ds-avatar img:hover{box-shadow:0 0 10px #fff;rgba(255,255,255,.6),inset 0 0 20px rgba(255,255,255,1);-webkit-box-shadow:0 0 10px #fff;rgba(255,255,255,.6),inset 0 0 20px rgba(255,255,255,1);transform:rotateZ(360deg);-webkit-transform:rotateZ(360deg);-moz-transform:rotateZ(360deg);}
-		p.ds-powered-by,#ds-sync-checkbox,.ds-sync label{display:none!important;}
-		#ds-reset .ds-rounded-top{-webkit-border-top-right-radius:0px;-webkit-border-top-left-radius:0px;border-top-right-radius:0px;border-top-left-radius:0px;}
-		#ds-thread #ds-reset .ds-textarea-wrapper{background:#fff;border:0;margin-bottom:20px;padding-right:0px;}
-		#ds-thread #ds-reset .ds-textarea-wrapper textarea{min-height:80px;border:1px solid #ccc;padding:10px;-webkit-appearance:none;border-radius:0;background-color:#FFFFFF;border-color:#cccccc;box-shadow:inset 0 1px 2px rgba(0,0,0,0.1);color:rgba(0,0,0,0.75);-webkit-box-sizing:border-box;box-sizing:border-box;-webkit-transition:border-color 0.15s linear,background 0.15s linear;-moz-transition:border-color 0.15s linear,background 0.15s linear;-ms-transition:border-color 0.15s linear,background 0.15s linear;-o-transition:border-color 0.15s linear,background 0.15s linear;transition:border-color 0.15s linear,background 0.15s linear;}
-		/*#ds-thread #ds-reset .ds-textarea-wrapper textarea:focus{border-color:#999999;background:#fafafa;outline:none;}*/
-		#ds-thread #ds-reset .ds-post-options{border-bottom-left-radius:0px;-webkit-border-bottom-left-radius:0px;border:none;background:none!important;}
-		#ds-reset .ds-textarea-wrapper textarea:focus{border-color:#66afe9;outline:0;-webkit-box-shadow:inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);box-shadow:inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);}
-		#ds-thread #ds-reset .ds-post-button:hover,#ds-thread #ds-reset .ds-post-button:focus{
-		    background-color: #51a351;
-		    background-position: 0 -32px;
-		    color:white;
-		}
-		#ds-thread #ds-reset .ds-post-toolbar,#ds-reset .ds-avatar{box-shadow:none;}
-		#ds-thread #ds-reset .ds-textarea-wrapper textarea:focus{
-	    	/*background: none repeat scroll 0 0 #F4FAFF;*/
-	    	border-color:#9DD4FD;
-	    	border-width:1px;
-	    	box-shadow:0 1px 1px rgba(0,0,0,0.075) inset, 0 0 8px rgba(82, 168, 236, 0.6);
-	    	outline:0 none;
-    	}
-		#ds-thread #ds-reset .ds-textarea-wrapper textarea:active{
-	    	/*background: none repeat scroll 0 0 #F4FAFF;*/
-	    	border-width:1px;
-	    	border-color:#9DD4FD;
-	    	box-shadow:0 1px 1px rgba(0,0,0,0.075) inset, 0 0 8px rgba(82, 168, 236, 0.6);
-	    	outline:0 none;
-    	}
-    	#ds-thread #ds-reset .ds-post-button{
-    		box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset, 0 1px 2px rgba(0, 0, 0, 0.05);
-		    border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
-		    border-width: 1px;
-		    border-style: solid;
-		    border-radius: 3px;
-		    background: #5bb75b;
-		    color:white;
-		    text-shadow:none;
-		    transition:background-color 300ms ease-out;
-    	}
-    	#ds-reset .ds-avatar{
-    		background-color:initial;
-    	}
-
-	</style>
-	<script type="text/javascript">
-	var duoshuoQuery = {short_name:"true"};
-	(function() {
-		var ds = document.createElement('script');
-		ds.type = 'text/javascript';ds.async = true;
-		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-		ds.charset = 'UTF-8';
-		(document.getElementsByTagName('head')[0] 
-		 || document.getElementsByTagName('body')[0]).appendChild(ds);
-	})();
-	</script>
-</div>
 
 
 
+
+  <style>
+/*
+    Name:     Kimbie (light)
+    Author:   Jan T. Sott
+    License:  Creative Commons Attribution-ShareAlike 4.0 Unported License
+    URL:      https://github.com/idleberg/Kimbie-highlight.js
+*/
+
+/* Kimbie Comment */
+.hljs-comment,
+.hljs-quote {
+  color: #a57a4c;
+}
+
+/* Kimbie Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-meta {
+  color: #dc3958;
+}
+
+/* Kimbie Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-deletion,
+.hljs-link {
+  color: #f79a32;
+}
+
+/* Kimbie Yellow */
+.hljs-title,
+.hljs-section,
+.hljs-attribute {
+  color: #f06431;
+}
+
+/* Kimbie Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+  color: #889b4a;
+}
+
+/* Kimbie Purple */
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-function {
+  color: #98676a;
+}
+
+.hljs {
+  display: block;
+  overflow-x: auto;
+  /*background: #fbebd4;*/
+  color: #84613d;
+  padding: 0.5em;
+}
+
+.hljs-emphasis {
+  font-style: italic;
+}
+
+.hljs-strong {
+  font-weight: bold;
+}
+</style>
+  <script src="//cdn.bootcss.com/highlight.js/9.2.0/highlight.min.js"></script>
+  <script>
+    // hljs.initHighlightingOnLoad();
+    [].slice.call(document.querySelectorAll('pre code')).forEach(function(block, i) {
+      hljs.highlightBlock(block);
+      var lines = block.innerText.split('\n').length - 1;
+      var ul = document.createElement('ul');
+      ul.className = 'pre-numbering';
+      block.className += ' has-numbering';
+      block.parentNode.appendChild(ul);
+      for(i=1;i<=lines;i++){
+        var li = document.createElement('li');
+        li.innerText = i;
+        ul.appendChild(li);
+      }
+    });
+  </script>
 </div>
         <link rel="stylesheet" href="/css/content.css" type="text/css">
 <footer id="footer">

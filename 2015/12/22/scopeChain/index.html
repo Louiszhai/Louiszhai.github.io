@@ -226,20 +226,75 @@
         <h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h3><p>上一篇我们讲到数组遍历, 本文我们更进一步, 讲讲如何提高遍历的效率. 欢迎阅读本篇<strong><code>详解JS作用域链及闭包</code></strong>.</p>
 <a id="more"></a>
 <h3 id="回顾上篇"><a href="#回顾上篇" class="headerlink" title="回顾上篇"></a>回顾上篇</h3><p>请先看上一篇中提到的for循环代码:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> array = [];</div><div class="line">array.length = <span class="number">10000000</span>;<span class="comment">//(一千万)</span></div><div class="line"><span class="keyword">for</span>(<span class="keyword">var</span> i=<span class="number">0</span>,length=array.length;i&lt;length;i++)&#123;</div><div class="line">  array[i] = <span class="string">'hi'</span>;</div><div class="line">&#125;</div><div class="line"><span class="keyword">var</span> t1 = +<span class="keyword">new</span> <span class="built_in">Date</span>();</div><div class="line"><span class="keyword">for</span>(<span class="keyword">var</span> i=<span class="number">0</span>,length=array.length;i&lt;length;i++)&#123;</div><div class="line">&#125;</div><div class="line"><span class="keyword">var</span> t2 = +<span class="keyword">new</span> <span class="built_in">Date</span>();</div><div class="line"><span class="built_in">console</span>.log(t2-t1);</div><div class="line"><span class="comment">//以下是连续5次的运行时间</span></div><div class="line"><span class="comment">//168+158+170+159+165 = 820(ms)</span></div></pre></td></tr></table></figure>
+<pre><code class="js">var array = [];
+array.length = 10000000;//(一千万)
+for(var i=0,length=array.length;i&lt;length;i++){
+  array[i] = &#39;hi&#39;;
+}
+var t1 = +new Date();
+for(var i=0,length=array.length;i&lt;length;i++){
+}
+var t2 = +new Date();
+console.log(t2-t1);
+//以下是连续5次的运行时间
+//168+158+170+159+165 = 820(ms)
+</code></pre>
 <p>我们再看下面一段代码, 测试环境为 chrome 52.0.2743.116 (64-bit):</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> t1 = +<span class="keyword">new</span> <span class="built_in">Date</span>();</div><div class="line">(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;<span class="comment">//闭包</span></div><div class="line">  <span class="keyword">for</span>(<span class="keyword">var</span> i=<span class="number">0</span>,length=array.length;i&lt;length;i++)&#123;</div><div class="line">  	<span class="comment">//array.push(i);</span></div><div class="line">  &#125;</div><div class="line">&#125;)();</div><div class="line"><span class="keyword">var</span> t2 = +<span class="keyword">new</span> <span class="built_in">Date</span>();</div><div class="line"><span class="built_in">console</span>.log(t2-t1);</div><div class="line"><span class="comment">//以下是连续5次的运行时间:</span></div><div class="line"><span class="comment">//8+6+8+7+6 = 35(ms)</span></div></pre></td></tr></table></figure>
+<pre><code class="js">var t1 = +new Date();
+(function(){//闭包
+  for(var i=0,length=array.length;i&lt;length;i++){
+      //array.push(i);
+  }
+})();
+var t2 = +new Date();
+console.log(t2-t1);
+//以下是连续5次的运行时间:
+//8+6+8+7+6 = 35(ms)
+</code></pre>
 <p>计算一下: 820/35 = 23 效率提升大致20倍. 实际上, 在 Firefox 及 Safari 对 for有做底层优化的情况下, 仍然有4~6倍的性能提升. 这是为什么呢?</p>
 <p>我们注意到两段代码最大的区别就是, 第二段代码使用了匿名函数包裹for循环. 我们将在后面讲到, 请耐心阅读.</p>
 <h3 id="作用域"><a href="#作用域" class="headerlink" title="作用域"></a>作用域</h3><p>所谓作用域, <a href="http://blog.csdn.net/yueguanghaidao" target="_blank" rel="external">Skycrab</a> 有句解释还不错, 指的是, 变量在声明它们的函数体以及这个函数体嵌套的任意函数体内都是有定义的.</p>
 <h4 id="js中只有函数作用域"><a href="#js中只有函数作用域" class="headerlink" title="js中只有函数作用域"></a>js中只有函数作用域</h4><p>众所周知, JS中并没有块作用域, 只有函数作用域. 如下:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">for</span>(<span class="keyword">var</span> i=<span class="number">0</span>;i&lt;<span class="number">10</span>;i++)&#123;</div><div class="line">  ;</div><div class="line">&#125;</div><div class="line"><span class="built_in">console</span>.log(i);<span class="comment">//10</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  <span class="keyword">var</span> a = <span class="number">123</span>;</div><div class="line">&#125;</div><div class="line">f();</div><div class="line"><span class="built_in">console</span>.log(a);<span class="comment">//a is not defined</span></div></pre></td></tr></table></figure>
+<pre><code class="js">for(var i=0;i&lt;10;i++){
+  ;
+}
+console.log(i);//10
+function f(){
+  var a = 123;
+}
+f();
+console.log(a);//a is not defined
+</code></pre>
 <p>因此 js 中只有一种局部作用域, 即函数作用域.</p>
 <h4 id="使用-var-声明变量"><a href="#使用-var-声明变量" class="headerlink" title="使用 var 声明变量"></a>使用 var 声明变量</h4><p>通常我们知道, js 作为一种弱类型语言, 声明一个变量只需要var保留字, 如果在函数中不使用 var 声明变量, 该变量将提升为全局变量, 进而脱离函数作用域, 如下:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  b = <span class="number">123</span>;</div><div class="line">&#125;</div><div class="line">f();</div><div class="line"><span class="built_in">console</span>.log(b);<span class="comment">//123</span></div></pre></td></tr></table></figure>
+<pre><code class="js">function f(){
+  b = 123;
+}
+f();
+console.log(b);//123
+</code></pre>
 <p>此时相对于前面使用var声明的 a 变量, b 变量被提升为全局变量, 在函数作用域外依然可以访问.</p>
 <p>既然在函数作用域内不使用 var 声明变量, 会将变量提升为全局变量, 那么在全局下, 不使用var, 会怎么样呢?</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//全局下不使用var声明,该变量依然是全局变量</span></div><div class="line">c = <span class="string">"hello scope"</span>;</div><div class="line"><span class="built_in">console</span>.log(c);<span class="comment">//hello scope</span></div><div class="line"><span class="built_in">console</span>.log(<span class="built_in">window</span>.c);<span class="comment">//hello scope</span></div><div class="line"></div><div class="line"><span class="comment">//查看c变量的属性</span></div><div class="line"><span class="built_in">console</span>.log(<span class="built_in">Object</span>.getOwnPropertyDescriptor(<span class="built_in">window</span>, <span class="string">'c'</span>));<span class="comment">//Object &#123;value: "hello scope", writable: true, enumerable: true, configurable: true&#125; ,此时c变量可赋值,可列举,可配置</span></div><div class="line"></div><div class="line"><span class="comment">//试着删除c变量</span></div><div class="line"><span class="keyword">delete</span> c;<span class="comment">//true 表示c变量被成功删除</span></div><div class="line"><span class="built_in">console</span>.log(c);<span class="comment">//c is not defined</span></div><div class="line"><span class="built_in">console</span>.log(<span class="built_in">window</span>.c);<span class="comment">//undefined</span></div><div class="line"></div><div class="line"><span class="comment">//使用var声明后再删除d变量</span></div><div class="line"><span class="keyword">var</span> d = <span class="number">1</span>;</div><div class="line"><span class="built_in">console</span>.log(<span class="built_in">Object</span>.getOwnPropertyDescriptor(<span class="built_in">window</span>, <span class="string">'d'</span>));<span class="comment">//Object &#123;value: 1, writable: true, enumerable: true, configurable: false&#125; ,此时d变量可赋值,可列举,但不可配置</span></div><div class="line"><span class="keyword">delete</span> d;<span class="comment">//false 表示d变量删除失败</span></div><div class="line"><span class="built_in">console</span>.log(d);<span class="comment">//1 </span></div><div class="line"><span class="built_in">console</span>.log(<span class="built_in">window</span>.d);<span class="comment">//1</span></div></pre></td></tr></table></figure>
+<pre><code class="js">//全局下不使用var声明,该变量依然是全局变量
+c = &quot;hello scope&quot;;
+console.log(c);//hello scope
+console.log(window.c);//hello scope
+
+//查看c变量的属性
+console.log(Object.getOwnPropertyDescriptor(window, &#39;c&#39;));//Object {value: &quot;hello scope&quot;, writable: true, enumerable: true, configurable: true} ,此时c变量可赋值,可列举,可配置
+
+//试着删除c变量
+delete c;//true 表示c变量被成功删除
+console.log(c);//c is not defined
+console.log(window.c);//undefined
+
+//使用var声明后再删除d变量
+var d = 1;
+console.log(Object.getOwnPropertyDescriptor(window, &#39;d&#39;));//Object {value: 1, writable: true, enumerable: true, configurable: false} ,此时d变量可赋值,可列举,但不可配置
+delete d;//false 表示d变量删除失败
+console.log(d);//1 
+console.log(window.d);//1
+</code></pre>
 <p>综上, 有如下规律:</p>
 <ul>
 <li>不使用var保留字声明变量, 变量提升为全局变量, 而不论变量处于哪种作用域;</li>
@@ -248,7 +303,12 @@
 </ul>
 <h3 id="JS中的作用域链"><a href="#JS中的作用域链" class="headerlink" title="JS中的作用域链"></a>JS中的作用域链</h3><p>函数对象和其它对象一样，拥有可以通过代码访问的属性和一系列仅供JavaScript引擎访问的内部属性。其中一个内部属性是[[Scope]]，由ECMA-262标准第三版定义，该内部属性包含了函数被创建的作用域中对象的集合，这个集合被称为函数的作用域链，它决定了哪些数据能被函数访问。</p>
 <p>我们先看一个栗子:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> e = <span class="string">"hello"</span>;</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  e = <span class="string">"scope chain"</span>;</div><div class="line">  <span class="keyword">var</span> g = = <span class="string">"good"</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<pre><code class="js">var e = &quot;hello&quot;;
+function f(){
+  e = &quot;scope chain&quot;;
+  var g = = &quot;good&quot;;
+}
+</code></pre>
 <p>以上作用域链的图如下所示:</p>
 <p><img src="/docImages/scopeChain01.png" alt=""></p>
 <p>函数执行时, 在函数 f 内部会生成一个 active object 和 scope chain. JavaScript引擎内部对象会放入 active object中, 外部的 e 变量处于scope chain的第二层, index=1, 而内部的g变量处于scope chain的顶层, index=0, 因此访问g变量总比访问e变量来的快些.</p>
@@ -260,7 +320,17 @@
 <li>在函数外部通过访问暴露在外的函数内部私有函数, 从而具有访问函数内部私有作用域的效果, 就是闭包.</li>
 </ol>
 <p>ES6之前, 通常我们实现的模块就是利用了闭包. 闭包依赖的结构有个鲜明的特点, 即: 一个函数在词法作用域之外执行. 如下, f2是闭包的关键, 它的词法作用域便是函数f的内部私有作用域, 且它在f的作用域外部执行.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> h = <span class="number">1</span>;</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  <span class="keyword">var</span> i = <span class="number">2</span>;</div><div class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> <span class="title">f2</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  	<span class="keyword">var</span> j = <span class="number">3</span> + i + h;</div><div class="line">    <span class="built_in">console</span>.log(j);</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"><span class="keyword">var</span> ff = f();</div><div class="line">ff();<span class="comment">//6</span></div></pre></td></tr></table></figure>
+<pre><code class="js">var h = 1;
+function f(){
+  var i = 2;
+  return function f2(){
+      var j = 3 + i + h;
+    console.log(j);
+  }
+}
+var ff = f();
+ff();//6
+</code></pre>
 <p>由于定义时 f2 处于 f 的内部, 因此 f2 内可以访问到 f 的内部私有作用域, 这样通过返回 f2 就能保证在 f 函数外部也能访问到 i 变量.</p>
 <p>当f2执行时, 变量 j 处于scope chain的 index0的位置上, 变量 i 和变量 h 分别处于 scope chain 的 index1 index2 的位置上. 因此 j 的赋值过程其实就是沿着 scope chain 第二层 第三层 依次找到 i 和 h 的值, 然后将它们和3一起求和, 最终赋值给 j .</p>
 <p>浏览器沿着 scope chain 寻找变量总是需要耗费CPU时间, 越是 scope chain 的 外层(或者离f2越远的变量), 浏览器查找起来越是需要时间, 因为 scope chain 需要历经更多次遍历. 因此全局变量(window)总是需要最多的访问时间.</p>
@@ -283,7 +353,13 @@
 <li>如果整个作用域链上都无法找到, 则返回undefined.</li>
 </ol>
 <p>小结, 本段中提到了两个重要的词语: 函数的<strong>定义</strong>与<strong>执行</strong>. 文中提到函数的作用域是在定义函数时候就已经确定, 而不是在执行的时候确定(参看步骤1和3).用一段代码来说明这个问题:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params">x</span>) </span>&#123; </div><div class="line">  <span class="keyword">var</span> g = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123; <span class="keyword">return</span> x; &#125;</div><div class="line">  <span class="keyword">return</span> g;</div><div class="line">&#125;</div><div class="line"><span class="keyword">var</span> h = f(<span class="number">1</span>);</div><div class="line">alert(h());</div></pre></td></tr></table></figure>
+<pre><code class="js">function f(x) { 
+  var g = function () { return x; }
+  return g;
+}
+var h = f(1);
+alert(h());
+</code></pre>
 <p>这段代码中变量h指向了f中的那个匿名函数(由g返回).</p>
 <ul>
 <li>假设函数h的作用域是在执行alert(h())确定的, 那么此时h的作用域链是: h的活动对象-&gt;alert的活动对象-&gt;window对象.</li>
@@ -292,7 +368,13 @@
 <p>如果第一种假设成立, 那输出值就是undefined; 如果第二种假设成立, 输出值则为1。</p>
 <p>运行结果证明了第2个假设是正确的，说明函数的作用域确实是在定义这个函数的时候就已经确定了.</p>
 <h4 id="闭包有可能导致IE浏览器内存泄漏"><a href="#闭包有可能导致IE浏览器内存泄漏" class="headerlink" title="闭包有可能导致IE浏览器内存泄漏"></a>闭包有可能导致IE浏览器内存泄漏</h4><p>先看一个栗子:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  <span class="keyword">var</span> div = <span class="built_in">document</span>.createElement(<span class="string">"div"</span>);   </div><div class="line">  div.onclick = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">    <span class="keyword">return</span> <span class="literal">false</span>;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<pre><code class="js">function f(){
+  var div = document.createElement(&quot;div&quot;);   
+  div.onclick = function(){
+    return false;
+  }
+}
+</code></pre>
 <p>上述div的click事件就是一个闭包, 由于该闭包的存在使得 f 函数内部的 div 变量对DOM元素的引用将一直存在.</p>
 <p>而早期IE浏览器( IE9之前 ) js 对象和 DOM 对象使用不同的垃圾收集方法, DOM对象使用计数垃圾回收机制, 只要匿名函数( 比如说onclick事件 )存在, DOM对象的引用便至少为1,因此它所占用的内存就永远不会被销毁.</p>
 <p>有趣的是,不同的IE版本将导致不同的现象:</p>
@@ -306,28 +388,66 @@
 <h3 id="for循环问题分析"><a href="#for循环问题分析" class="headerlink" title="for循环问题分析"></a>for循环问题分析</h3><p>我们再来看看开篇的for循环问题, 增加匿名函数后, for循环内部的变量便处于匿名函数的局部作用域下, 此时访问 length 属性, 或者访问 i 属性, 都只需要在匿名函数作用域内查找即可, 因此查询效率大大提升(测试数据发现提升有两百多倍).</p>
 <p>使用匿名函数后, 不止是作用域查询更快, 作用域内的变量还与外部隔离, 避免了像 i , length 这样的变量对后续代码产生影响. 可谓一举两得.</p>
 <h3 id="踩个作用域的坑"><a href="#踩个作用域的坑" class="headerlink" title="踩个作用域的坑"></a>踩个作用域的坑</h3><p>下面我们来踩一个作用域经典的坑.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> div = <span class="built_in">document</span>.getElementsByTagName(<span class="string">"div"</span>);</div><div class="line"><span class="keyword">for</span>(<span class="keyword">var</span> i=<span class="number">0</span>,len=div.length;i&lt;len;i++)&#123;</div><div class="line">  div[i].onclick = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  	<span class="built_in">console</span>.log(i);</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<pre><code class="js">var div = document.getElementsByTagName(&quot;div&quot;);
+for(var i=0,len=div.length;i&lt;len;i++){
+  div[i].onclick = function(){
+      console.log(i);
+  }
+}
+</code></pre>
 <p>上述代码的本意是每次点击div, 打印div的索引, 实际上打印的却是 len 的值. 我们来分析下原因.</p>
 <p>点击div时, 将会执行 console.log(i) 语句, 显然 i 变量不在 click 事件的局部作用域内, 浏览器将沿着 scope chain 寻找 i 变量, 在 index1 的地方, 即 for循环开始的地方, 此处定义了一个 i 变量, 又 js 没有块作用域, 故 i 变量并不会在 for循环块执行完成后被销毁,又 i的最后一次自加使得 i = len, 于是浏览器在scope chain index=1索引的地方停下来了, 返回了i的值, 即len的值.</p>
 <p>为了解决这个问题, 我们将根据症结, 对症下药, 从作用域入手, 改变click事件的局部作用域, 如下:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> div = <span class="built_in">document</span>.getElementsByTagName(<span class="string">"div"</span>);</div><div class="line"><span class="keyword">for</span>(<span class="keyword">var</span> i=<span class="number">0</span>,len=div.length;i&lt;len;i++)&#123;</div><div class="line">  (<span class="function"><span class="keyword">function</span>(<span class="params">n</span>)</span>&#123;</div><div class="line">  	div[n].onclick = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">      <span class="built_in">console</span>.log(n);</div><div class="line">    &#125;</div><div class="line">  &#125;)(i);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<pre><code class="js">var div = document.getElementsByTagName(&quot;div&quot;);
+for(var i=0,len=div.length;i&lt;len;i++){
+  (function(n){
+      div[n].onclick = function(){
+      console.log(n);
+    }
+  })(i);
+}
+</code></pre>
 <p>由于 click 事件被闭包包裹, 并且闭包自执行, 因此闭包内 n 变量的值每次都不一样, 点击div时, 浏览器将沿着 scope chain 寻找 n 变量, 最终会找到闭包内的 n 变量, 并且打印出div 的索引.</p>
 <h3 id="this作用域"><a href="#this作用域" class="headerlink" title="this作用域"></a>this作用域</h3><p>前面我们学习了作用域链, 闭包等基础知识, 下面我们来聊聊神秘莫测的this作用域.</p>
 <p>熟悉OOP的开发人员都知道, this是对象实例的引用, 始终指向对象实例. 然而 js 的世界里, this随着它的执行环境改变而改变, 并且它总是指向它所在方法的对象. 如下,</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  alert(<span class="keyword">this</span>);</div><div class="line">&#125;</div><div class="line"><span class="keyword">var</span> o = &#123;&#125;;</div><div class="line">o.func = f;</div><div class="line">f();<span class="comment">//[object Window]</span></div><div class="line">o.func();<span class="comment">//[object Object]</span></div><div class="line"><span class="built_in">console</span>.log(f===<span class="built_in">window</span>.f);<span class="comment">//true</span></div></pre></td></tr></table></figure>
+<pre><code class="js">function f(){
+  alert(this);
+}
+var o = {};
+o.func = f;
+f();//[object Window]
+o.func();//[object Object]
+console.log(f===window.f);//true
+</code></pre>
 <p>当f单独执行时, 其内部this指向window对象, 但是当f成为o对象的属性func时, this指向的是o对象, 又f === window.f, 故它们实际上指向的都是this所在方法的对象.</p>
 <p>下面我们来应用下</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">Array</span>.prototype.slice.call([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>],<span class="number">1</span>);<span class="comment">//[2,3],正确用法</span></div><div class="line"><span class="built_in">Array</span>.prototype.slice([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>],<span class="number">1</span>);<span class="comment">//[], 错误用法,此时slice内部this仍然指向Array.prototype</span></div><div class="line"><span class="keyword">var</span> slice = <span class="built_in">Array</span>.prototype.slice;</div><div class="line">slice([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>],<span class="number">1</span>);<span class="comment">//Uncaught TypeError: Array.prototype.slice called on null or undefined</span></div><div class="line"><span class="comment">//此时slice内部this指向的是window对象,离开了原来的Array.prototype对象作用域,故报错~~</span></div></pre></td></tr></table></figure>
+<pre><code class="js">Array.prototype.slice.call([1,2,3],1);//[2,3],正确用法
+Array.prototype.slice([1,2,3],1);//[], 错误用法,此时slice内部this仍然指向Array.prototype
+var slice = Array.prototype.slice;
+slice([1,2,3],1);//Uncaught TypeError: Array.prototype.slice called on null or undefined
+//此时slice内部this指向的是window对象,离开了原来的Array.prototype对象作用域,故报错~~
+</code></pre>
 <p>总结下, this的使用只需要注意一点:</p>
 <blockquote>
 <p>this 总是指向它所在方法的对象.</p>
 </blockquote>
 <h3 id="with语句"><a href="#with语句" class="headerlink" title="with语句"></a>with语句</h3><p>聊到作用域链就不得不说with语句了, with语句可以用来临时改变作用域, 将语句中的对象添加到作用域的顶部.</p>
 <p>语法: with (expression){statement} 例如:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> k = &#123;<span class="attr">name</span>:<span class="string">"daicy"</span>&#125;;</div><div class="line"><span class="keyword">with</span>(k)&#123;</div><div class="line">  <span class="built_in">console</span>.log(name);<span class="comment">//daicy</span></div><div class="line">&#125;</div><div class="line"><span class="built_in">console</span>.log(name);<span class="comment">//undefined</span></div></pre></td></tr></table></figure>
+<pre><code class="js">var k = {name:&quot;daicy&quot;};
+with(k){
+  console.log(name);//daicy
+}
+console.log(name);//undefined
+</code></pre>
 <p>with 语句用于对象 k, 作用域第一层为 k 对象内部作用域, 故能直接打印出 name 的值, 在with之外的语句不受此影响. </p>
 <p>再看一个栗子:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> l = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>];</div><div class="line"><span class="keyword">with</span>(l) &#123;</div><div class="line">  <span class="built_in">console</span>.log(map(<span class="function"><span class="keyword">function</span>(<span class="params">i</span>)</span>&#123;</div><div class="line">  	<span class="keyword">return</span> i*i;</div><div class="line">  &#125;));<span class="comment">//[1,4,9]</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<pre><code class="js">var l = [1,2,3];
+with(l) {
+  console.log(map(function(i){
+      return i*i;
+  }));//[1,4,9]
+}
+</code></pre>
 <p>在这个例子中，with 语句用于数组，所以在调用 map() 方法时，解释程序将检查该方法是否是本地函数。如果不是，它将检查伪对象 l，看它是否为该对象的方法, 又map是Array对象的方法, 数组l继承了该方法, 故能正确执行.</p>
 <p>注意: with语句容易引起歧义, 由于需要强制改变作用域链, 它将带来更多的cpu消耗, 建议慎用 with 语句.</p>
 <hr>
@@ -357,7 +477,7 @@
         <a id="btn_donate" class="btn_donate" href="javascript:;" title="打赏"></a>
         <span class="donate_txt">
            &uarr;<br>
-       如果你觉得有用，就支持一下吧！
+       支持一杯咖啡吧！
         </span>
       </div>  
   <div id="donate_guide" class="donate_bar center hidden" >
@@ -424,69 +544,103 @@
 
 
 
-<div class="duoshuo">
-	<div class="ds-thread" data-thread-key="scopeChain" data-title="详解JS作用域链及闭包" data-url="http://louiszhai.github.io/2015/12/22/scopeChain/"></div>
-	<style>
-		#ds-reset .ds-avatar img{width:54px;height:54px;border-radius:27px;-webkit-border-radius:27px;-moz-border-radius:27px;box-shadow:inset 0 -1px 0 #3333sf;-webkit-box-shadow:inset 0 -1px 0 #3333sf;-webkit-transition:0.4s;-webkit-transition:-webkit-transform 0.4s ease-out;transition:transform 0.4s ease-out;-moz-transition:-moz-transform 0.4s ease-out;}
-		#ds-reset .ds-avatar img:hover{box-shadow:0 0 10px #fff;rgba(255,255,255,.6),inset 0 0 20px rgba(255,255,255,1);-webkit-box-shadow:0 0 10px #fff;rgba(255,255,255,.6),inset 0 0 20px rgba(255,255,255,1);transform:rotateZ(360deg);-webkit-transform:rotateZ(360deg);-moz-transform:rotateZ(360deg);}
-		p.ds-powered-by,#ds-sync-checkbox,.ds-sync label{display:none!important;}
-		#ds-reset .ds-rounded-top{-webkit-border-top-right-radius:0px;-webkit-border-top-left-radius:0px;border-top-right-radius:0px;border-top-left-radius:0px;}
-		#ds-thread #ds-reset .ds-textarea-wrapper{background:#fff;border:0;margin-bottom:20px;padding-right:0px;}
-		#ds-thread #ds-reset .ds-textarea-wrapper textarea{min-height:80px;border:1px solid #ccc;padding:10px;-webkit-appearance:none;border-radius:0;background-color:#FFFFFF;border-color:#cccccc;box-shadow:inset 0 1px 2px rgba(0,0,0,0.1);color:rgba(0,0,0,0.75);-webkit-box-sizing:border-box;box-sizing:border-box;-webkit-transition:border-color 0.15s linear,background 0.15s linear;-moz-transition:border-color 0.15s linear,background 0.15s linear;-ms-transition:border-color 0.15s linear,background 0.15s linear;-o-transition:border-color 0.15s linear,background 0.15s linear;transition:border-color 0.15s linear,background 0.15s linear;}
-		/*#ds-thread #ds-reset .ds-textarea-wrapper textarea:focus{border-color:#999999;background:#fafafa;outline:none;}*/
-		#ds-thread #ds-reset .ds-post-options{border-bottom-left-radius:0px;-webkit-border-bottom-left-radius:0px;border:none;background:none!important;}
-		#ds-reset .ds-textarea-wrapper textarea:focus{border-color:#66afe9;outline:0;-webkit-box-shadow:inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);box-shadow:inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);}
-		#ds-thread #ds-reset .ds-post-button:hover,#ds-thread #ds-reset .ds-post-button:focus{
-		    background-color: #51a351;
-		    background-position: 0 -32px;
-		    color:white;
-		}
-		#ds-thread #ds-reset .ds-post-toolbar,#ds-reset .ds-avatar{box-shadow:none;}
-		#ds-thread #ds-reset .ds-textarea-wrapper textarea:focus{
-	    	/*background: none repeat scroll 0 0 #F4FAFF;*/
-	    	border-color:#9DD4FD;
-	    	border-width:1px;
-	    	box-shadow:0 1px 1px rgba(0,0,0,0.075) inset, 0 0 8px rgba(82, 168, 236, 0.6);
-	    	outline:0 none;
-    	}
-		#ds-thread #ds-reset .ds-textarea-wrapper textarea:active{
-	    	/*background: none repeat scroll 0 0 #F4FAFF;*/
-	    	border-width:1px;
-	    	border-color:#9DD4FD;
-	    	box-shadow:0 1px 1px rgba(0,0,0,0.075) inset, 0 0 8px rgba(82, 168, 236, 0.6);
-	    	outline:0 none;
-    	}
-    	#ds-thread #ds-reset .ds-post-button{
-    		box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset, 0 1px 2px rgba(0, 0, 0, 0.05);
-		    border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
-		    border-width: 1px;
-		    border-style: solid;
-		    border-radius: 3px;
-		    background: #5bb75b;
-		    color:white;
-		    text-shadow:none;
-		    transition:background-color 300ms ease-out;
-    	}
-    	#ds-reset .ds-avatar{
-    		background-color:initial;
-    	}
-
-	</style>
-	<script type="text/javascript">
-	var duoshuoQuery = {short_name:"true"};
-	(function() {
-		var ds = document.createElement('script');
-		ds.type = 'text/javascript';ds.async = true;
-		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-		ds.charset = 'UTF-8';
-		(document.getElementsByTagName('head')[0] 
-		 || document.getElementsByTagName('body')[0]).appendChild(ds);
-	})();
-	</script>
-</div>
 
 
 
+
+  <style>
+/*
+    Name:     Kimbie (light)
+    Author:   Jan T. Sott
+    License:  Creative Commons Attribution-ShareAlike 4.0 Unported License
+    URL:      https://github.com/idleberg/Kimbie-highlight.js
+*/
+
+/* Kimbie Comment */
+.hljs-comment,
+.hljs-quote {
+  color: #a57a4c;
+}
+
+/* Kimbie Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-meta {
+  color: #dc3958;
+}
+
+/* Kimbie Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-deletion,
+.hljs-link {
+  color: #f79a32;
+}
+
+/* Kimbie Yellow */
+.hljs-title,
+.hljs-section,
+.hljs-attribute {
+  color: #f06431;
+}
+
+/* Kimbie Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+  color: #889b4a;
+}
+
+/* Kimbie Purple */
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-function {
+  color: #98676a;
+}
+
+.hljs {
+  display: block;
+  overflow-x: auto;
+  /*background: #fbebd4;*/
+  color: #84613d;
+  padding: 0.5em;
+}
+
+.hljs-emphasis {
+  font-style: italic;
+}
+
+.hljs-strong {
+  font-weight: bold;
+}
+</style>
+  <script src="//cdn.bootcss.com/highlight.js/9.2.0/highlight.min.js"></script>
+  <script>
+    // hljs.initHighlightingOnLoad();
+    [].slice.call(document.querySelectorAll('pre code')).forEach(function(block, i) {
+      hljs.highlightBlock(block);
+      var lines = block.innerText.split('\n').length - 1;
+      var ul = document.createElement('ul');
+      ul.className = 'pre-numbering';
+      block.className += ' has-numbering';
+      block.parentNode.appendChild(ul);
+      for(i=1;i<=lines;i++){
+        var li = document.createElement('li');
+        li.innerText = i;
+        ul.appendChild(li);
+      }
+    });
+  </script>
 </div>
         <link rel="stylesheet" href="/css/content.css" type="text/css">
 <footer id="footer">

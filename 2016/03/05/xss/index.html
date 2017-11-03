@@ -265,8 +265,9 @@
 <p>可以通过http头控制是否打开 xss-filter, 默认为开启.</p>
 </blockquote>
 <p>通常情况下, 在http header中加入以下字段表示启用xss-filter.</p>
-<figure class="highlight makefile"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="section">X-XSS-Protection:1 (默认)</span></div><div class="line"><span class="section">X-XSS-Protection:1;mode=block (强制不渲染, chrome跳空白页,IE展示一个#号)</span></div></pre></td></tr></table></figure>
-<p>如需禁用xss-filter, 将 <code>X-XSS-Protection</code> 设置为0即可.</p>
+<pre><code>X-XSS-Protection:1 (默认)
+X-XSS-Protection:1;mode=block (强制不渲染, chrome跳空白页,IE展示一个#号)
+</code></pre><p>如需禁用xss-filter, 将 <code>X-XSS-Protection</code> 设置为0即可.</p>
 <p>如上, 现代浏览器都对反射型xss有一定的防御力, 其原理是检查url和dom中元素的相关性. 但这并不能完全防止反射型xss. 这里有个可供测试的链接, 传送门: <a href="http://www.enhanceie.com/test/xss/" target="_blank" rel="external">XSS Test Page</a>.</p>
 <p>另外, 浏览器对于存储型xss并没有抵抗力, 原因很简单, 用户的需求是多种多样的. 所以, 抵御xss这件事情不能指望浏览器.</p>
 <h4 id="Content-Security-Policy"><a href="#Content-Security-Policy" class="headerlink" title="Content Security Policy"></a>Content Security Policy</h4><p>Content Security Policy, 即内容安全策略, 简称csp.</p>
@@ -300,9 +301,20 @@
 </blockquote>
 <p>可以看出, CSP是一个强大的策略, 几乎可以限制了所有能够用到的资源的来源. 使用好CSP可以很大成都降低XSS带来的风险.</p>
 <p>另外, CSP还提供一个报告的头域 <code>Content-Security-Policy-Report-Only</code>, 使用这个头域, 浏览器会向服务器报告csp状态.</p>
-<figure class="highlight http"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="attribute">Content-Security-Policy-Report-Only</span>: script-src 'self'; report-uri http://cspReport/</div></pre></td></tr></table></figure>
+<pre><code class="http">Content-Security-Policy-Report-Only: script-src &#39;self&#39;; report-uri http://cspReport/
+</code></pre>
 <p>使用了上面的设置, 若页面上存在内联的js, 它依然会执行, 不过浏览器会向发送一个post请求, 包含如下信息.</p>
-<figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">&#123; </div><div class="line">  <span class="attr">"csp-report"</span>:</div><div class="line">  	&#123; </div><div class="line">      <span class="attr">"document-uri"</span>: <span class="string">"http://cspReport/test.php"</span>,</div><div class="line">      <span class="attr">"referrer"</span>: <span class="string">""</span>,</div><div class="line">      <span class="attr">"violated-directive"</span>: <span class="string">"script-src 'self'"</span>,</div><div class="line">      <span class="attr">"original-policy"</span>: <span class="string">"script-src 'self'; report-uri http://cspReport/"</span>,</div><div class="line">      <span class="attr">"blocked-uri"</span>: <span class="string">""</span></div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<pre><code class="JSON">{ 
+  &quot;csp-report&quot;:
+      { 
+      &quot;document-uri&quot;: &quot;http://cspReport/test.php&quot;,
+      &quot;referrer&quot;: &quot;&quot;,
+      &quot;violated-directive&quot;: &quot;script-src &#39;self&#39;&quot;,
+      &quot;original-policy&quot;: &quot;script-src &#39;self&#39;; report-uri http://cspReport/&quot;,
+      &quot;blocked-uri&quot;: &quot;&quot;
+    }
+}
+</code></pre>
 <p>CSP 目前有两版, [CSP1][<a href="https://www.w3.org/TR/2012/CR-CSP-20121115/" target="_blank" rel="external">https://www.w3.org/TR/2012/CR-CSP-20121115/</a>] 和 [CSP2][<a href="https://www.w3.org/TR/CSP2/" target="_blank" rel="external">https://www.w3.org/TR/CSP2/</a>]. 两版的支持状态可以在 <a href="http://caniuse.com/#search=csp" target="_blank" rel="external">http://caniuse.com/#search=csp</a> 中查到. 如下:</p>
 <p><strong>CSP1支持性</strong></p>
 <p><img src="http://louiszhai.github.io/docImages/xss03-csp1.png" alt="CSP1"></p>
@@ -318,11 +330,14 @@
 </ul>
 <p>服务器配置</p>
 <p><strong>java代码:</strong></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">response.addHeader(<span class="string">"x-frame-options"</span>,<span class="string">"SAMEORIGIN"</span>);</div></pre></td></tr></table></figure>
+<pre><code class="java">response.addHeader(&quot;x-frame-options&quot;,&quot;SAMEORIGIN&quot;);
+</code></pre>
 <p><strong>Nginx配置:</strong></p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">addheader X-Frame-Options SAMEORIGIN</div></pre></td></tr></table></figure>
+<pre><code class="nginx">addheader X-Frame-Options SAMEORIGIN
+</code></pre>
 <p><strong>Apache配置:</strong></p>
-<figure class="highlight apache"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="attribute"><span class="nomarkup">Header</span></span> always append X-Frame-Options SAMEORIGIN</div></pre></td></tr></table></figure>
+<pre><code class="apache">Header always append X-Frame-Options SAMEORIGIN
+</code></pre>
 <p><strong>浏览器兼容性</strong></p>
 <table>
 <thead>
@@ -356,23 +371,45 @@
 </table>
 <h4 id="Http-Only"><a href="#Http-Only" class="headerlink" title="Http-Only"></a>Http-Only</h4><p>使用 http-only后, 可禁止js读写cookie,  可以保证即使发生了xss, 用户的cookie也是安全的.</p>
 <h4 id="iframe-沙箱环境"><a href="#iframe-沙箱环境" class="headerlink" title="iframe 沙箱环境"></a>iframe 沙箱环境</h4><p>HTML5为iframe提供了安全属性 sandbox, 进而限制iframe的能力. 如下:</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">iframe</span> <span class="attr">src</span>=<span class="string">"untrusted.html"</span> <span class="attr">sandbox</span>=<span class="string">"allow-scripts allow-forms"</span>&gt;</span><span class="tag">&lt;/<span class="name">iframe</span>&gt;</span></div></pre></td></tr></table></figure>
+<pre><code class="html">&lt;iframe src=&quot;untrusted.html&quot; sandbox=&quot;allow-scripts allow-forms&quot;&gt;&lt;/iframe&gt;
+</code></pre>
 <h4 id="其他安全相关的HTTP头"><a href="#其他安全相关的HTTP头" class="headerlink" title="其他安全相关的HTTP头"></a>其他安全相关的HTTP头</h4><h5 id="X-Content-Type-Options"><a href="#X-Content-Type-Options" class="headerlink" title="X-Content-Type-Options"></a>X-Content-Type-Options</h5><p>X-Content-Type-Options 阻止浏览器进行content-type 嗅探, 能够防止类型嗅探攻击.</p>
 <p>这个header主要用来防止在IE9、chrome和safari中的MIME类型混淆攻击. 通常浏览器可以通过嗅探内容本身的方法来决定它是什么类型, 而不是看响应中的content-type值. 通过设置 X-Content-Type-Options：如果content-type和期望的类型匹配，则不需要嗅探，只能从外部加载确定类型的资源. 举个例子, 如果加载了一个样式表, 那么资源的MIME类型只能是text/css, 对于IE中的脚本资源, 以下的内容类型是有效的:</p>
-<figure class="highlight applescript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">application</span>/ecmascript  </div><div class="line"><span class="built_in">application</span>/javascript  </div><div class="line"><span class="built_in">application</span>/x-javascript  </div><div class="line"><span class="built_in">text</span>/ecmascript  </div><div class="line"><span class="built_in">text</span>/javascript  </div><div class="line"><span class="built_in">text</span>/jscript  </div><div class="line"><span class="built_in">text</span>/x-javascript  </div><div class="line"><span class="built_in">text</span>/vbs  </div><div class="line"><span class="built_in">text</span>/vbscript</div></pre></td></tr></table></figure>
-<p>对于chrome, 则支持下面的MIME 类型:</p>
-<figure class="highlight applescript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">text</span>/javascript  </div><div class="line"><span class="built_in">text</span>/ecmascript  </div><div class="line"><span class="built_in">application</span>/javascript  </div><div class="line"><span class="built_in">application</span>/ecmascript  </div><div class="line"><span class="built_in">application</span>/x-javascript  </div><div class="line"><span class="built_in">text</span>/javascript1<span class="number">.1</span>  </div><div class="line"><span class="built_in">text</span>/javascript1<span class="number">.2</span>  </div><div class="line"><span class="built_in">text</span>/javascript1<span class="number">.3</span>  </div><div class="line"><span class="built_in">text</span>/jscript  </div><div class="line"><span class="built_in">text</span>/live <span class="keyword">script</span></div></pre></td></tr></table></figure>
-<p><strong>正确的设置</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">nosniff – 这个是唯一正确的设置.</div></pre></td></tr></table></figure>
+<pre><code>application/ecmascript  
+application/javascript  
+application/x-javascript  
+text/ecmascript  
+text/javascript  
+text/jscript  
+text/x-javascript  
+text/vbs  
+text/vbscript
+</code></pre><p>对于chrome, 则支持下面的MIME 类型:</p>
+<pre><code>text/javascript  
+text/ecmascript  
+application/javascript  
+application/ecmascript  
+application/x-javascript  
+text/javascript1.1  
+text/javascript1.2  
+text/javascript1.3  
+text/jscript  
+text/live script
+</code></pre><p><strong>正确的设置</strong></p>
+<pre><code class="text">nosniff – 这个是唯一正确的设置.
+</code></pre>
 <p>通常不正确的设置</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">‘nosniff’ – 引号是不允许的</div><div class="line">: nosniff – 冒号也是错误的</div></pre></td></tr></table></figure>
+<pre><code class="text">‘nosniff’ – 引号是不允许的
+: nosniff – 冒号也是错误的
+</code></pre>
 <p><strong>如何检测</strong></p>
 <p>在IE和chrome中打开开发者工具，在控制台中观察配置了nosniff和没有配置nosniff的输出有啥区别.</p>
 <h5 id="HPKP-Public-Key-Pinning"><a href="#HPKP-Public-Key-Pinning" class="headerlink" title="HPKP(Public Key Pinning)"></a>HPKP(Public Key Pinning)</h5><p>HPKP 是一个response 头, 用来检测一个证书的公钥是否发生了改变, 防止中间人攻击.</p>
 <p>我们知道, 受信任的 CA（证书颁发机构）有好几百个, 他们成为整个网站身份认证过程中一个较大的攻击面. 现有的证书信任链机制最大的问题是, 任何一家受信任的 CA 都可以签发任意网站的站点证书, 这些证书在浏览器看来, 都是合法的.</p>
 <p>HPKP 技术给予我们主动选择信任 CA 的权利. 它的工作原理是通过响应头或者 <meta> 标签告诉浏览器当前网站的证书指纹, 以及过期时间等其它信息. 未来一段时间内, 浏览器再次访问这个网站必须验证证书链中的证书指纹, 如果跟之前指定的值不匹配, 即便证书本身是合法的, 也必须断开连接.</p>
 <p>HPKP 官方文档见 <a href="https://tools.ietf.org/html/rfc7469" target="_blank" rel="external">RFC7469</a> , 目前 Firefox 35+ 和 Chrome 38+ 已经支持. 它的基本格式如下:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Public-Key-Pins: pin-sha256=&quot;base64==&quot;; max-age=expireTime [; includeSubdomains][; report-uri=&quot;reportURI&quot;]</div></pre></td></tr></table></figure>
+<pre><code class="text">Public-Key-Pins: pin-sha256=&quot;base64==&quot;; max-age=expireTime [; includeSubdomains][; report-uri=&quot;reportURI&quot;]
+</code></pre>
 <h5 id="HSTS-HTTP-Strict-Transport-Security"><a href="#HSTS-HTTP-Strict-Transport-Security" class="headerlink" title="HSTS (HTTP Strict-Transport-Security)"></a>HSTS (HTTP Strict-Transport-Security)</h5><p>HSTS 是国际互联网工程组织IETE正在推行一种新的Web安全协议, 可以用来抵御中间人攻击, 它强制浏览器使用TSL作为数据通道, 即强制使用HTTPS与服务器创建连接.</p>
 <p>服务器开启HSTS的方法是, 当客户端通过HTTPS发出请求时, 在服务器返回的超文本传输协议响应头中包含Strict-Transport-Security字段. 非加密传输时设置的HSTS字段无效.</p>
 <p>比如, <a href="https://xxx" target="_blank" rel="external">https://xxx</a> 的响应头含有Strict-Transport-Security: max-age=31536000; includeSubDomains. 这意味着两点:</p>
@@ -380,7 +417,22 @@
 <p>在接下来的一年中, 如果 xxx 服务器发送的TLS证书无效, 用户不能忽略浏览器警告继续访问网站.</p>
 <p>不足就是, 用户首次访问网址是不受HSTS保护的, 这是因为首次还未收到HSTS. 解决方案有两个, 一是浏览器预置 HSTS域名列表, Google Chrome、Firefox 和 Internet Explorer 实现了这一方案. 二是将HSTS信息加入到域名系统记录中.</p>
 <h3 id="前端xss过滤"><a href="#前端xss过滤" class="headerlink" title="前端xss过滤"></a>前端xss过滤</h3><p>最后提供一种前端xss过滤的方法</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">xssCheck</span>(<span class="params">str,reg</span>)</span>&#123;</div><div class="line">  <span class="keyword">return</span> str ? str.replace(reg || <span class="regexp">/[&amp;&lt;"&gt;'](?:(amp|lt|quot|gt|#39|nbsp|#\d+);)?/g</span>, <span class="function"><span class="keyword">function</span> (<span class="params">a, b</span>) </span>&#123;</div><div class="line">    <span class="keyword">if</span>(b)&#123;</div><div class="line">      <span class="keyword">return</span> a;</div><div class="line">    &#125;<span class="keyword">else</span>&#123;</div><div class="line">      <span class="keyword">return</span> &#123;</div><div class="line">        <span class="string">'&lt;'</span>:<span class="string">'&amp;lt;'</span>,</div><div class="line">        <span class="string">'&amp;'</span>:<span class="string">'&amp;amp;'</span>,</div><div class="line">        <span class="string">'"'</span>:<span class="string">'&amp;quot;'</span>,</div><div class="line">        <span class="string">'&gt;'</span>:<span class="string">'&amp;gt;'</span>,</div><div class="line">        <span class="string">"'"</span>:<span class="string">'&amp;#39;'</span>,</div><div class="line">      &#125;[a]</div><div class="line">    &#125;</div><div class="line">  &#125;) : <span class="string">''</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<pre><code class="js">function xssCheck(str,reg){
+  return str ? str.replace(reg || /[&amp;&lt;&quot;&gt;&#39;](?:(amp|lt|quot|gt|#39|nbsp|#\d+);)?/g, function (a, b) {
+    if(b){
+      return a;
+    }else{
+      return {
+        &#39;&lt;&#39;:&#39;&amp;lt;&#39;,
+        &#39;&amp;&#39;:&#39;&amp;amp;&#39;,
+        &#39;&quot;&#39;:&#39;&amp;quot;&#39;,
+        &#39;&gt;&#39;:&#39;&amp;gt;&#39;,
+        &quot;&#39;&quot;:&#39;&amp;#39;&#39;,
+      }[a]
+    }
+  }) : &#39;&#39;;
+}
+</code></pre>
 <hr>
 <p>本文就讨论这么多内容,大家有什么问题或好的想法欢迎在下方参与<a href="#respond">留言和评论</a>.</p>
 <p>本文作者: <a href="https://github.com/Louiszhai" target="_blank" rel="external">louis</a></p>
@@ -405,7 +457,7 @@
         <a id="btn_donate" class="btn_donate" href="javascript:;" title="打赏"></a>
         <span class="donate_txt">
            &uarr;<br>
-       如果你觉得有用，就支持一下吧！
+       支持一杯咖啡吧！
         </span>
       </div>  
   <div id="donate_guide" class="donate_bar center hidden" >
@@ -472,69 +524,103 @@
 
 
 
-<div class="duoshuo">
-	<div class="ds-thread" data-thread-key="xss" data-title="xss攻防浅谈" data-url="http://louiszhai.github.io/2016/03/05/xss/"></div>
-	<style>
-		#ds-reset .ds-avatar img{width:54px;height:54px;border-radius:27px;-webkit-border-radius:27px;-moz-border-radius:27px;box-shadow:inset 0 -1px 0 #3333sf;-webkit-box-shadow:inset 0 -1px 0 #3333sf;-webkit-transition:0.4s;-webkit-transition:-webkit-transform 0.4s ease-out;transition:transform 0.4s ease-out;-moz-transition:-moz-transform 0.4s ease-out;}
-		#ds-reset .ds-avatar img:hover{box-shadow:0 0 10px #fff;rgba(255,255,255,.6),inset 0 0 20px rgba(255,255,255,1);-webkit-box-shadow:0 0 10px #fff;rgba(255,255,255,.6),inset 0 0 20px rgba(255,255,255,1);transform:rotateZ(360deg);-webkit-transform:rotateZ(360deg);-moz-transform:rotateZ(360deg);}
-		p.ds-powered-by,#ds-sync-checkbox,.ds-sync label{display:none!important;}
-		#ds-reset .ds-rounded-top{-webkit-border-top-right-radius:0px;-webkit-border-top-left-radius:0px;border-top-right-radius:0px;border-top-left-radius:0px;}
-		#ds-thread #ds-reset .ds-textarea-wrapper{background:#fff;border:0;margin-bottom:20px;padding-right:0px;}
-		#ds-thread #ds-reset .ds-textarea-wrapper textarea{min-height:80px;border:1px solid #ccc;padding:10px;-webkit-appearance:none;border-radius:0;background-color:#FFFFFF;border-color:#cccccc;box-shadow:inset 0 1px 2px rgba(0,0,0,0.1);color:rgba(0,0,0,0.75);-webkit-box-sizing:border-box;box-sizing:border-box;-webkit-transition:border-color 0.15s linear,background 0.15s linear;-moz-transition:border-color 0.15s linear,background 0.15s linear;-ms-transition:border-color 0.15s linear,background 0.15s linear;-o-transition:border-color 0.15s linear,background 0.15s linear;transition:border-color 0.15s linear,background 0.15s linear;}
-		/*#ds-thread #ds-reset .ds-textarea-wrapper textarea:focus{border-color:#999999;background:#fafafa;outline:none;}*/
-		#ds-thread #ds-reset .ds-post-options{border-bottom-left-radius:0px;-webkit-border-bottom-left-radius:0px;border:none;background:none!important;}
-		#ds-reset .ds-textarea-wrapper textarea:focus{border-color:#66afe9;outline:0;-webkit-box-shadow:inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);box-shadow:inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);}
-		#ds-thread #ds-reset .ds-post-button:hover,#ds-thread #ds-reset .ds-post-button:focus{
-		    background-color: #51a351;
-		    background-position: 0 -32px;
-		    color:white;
-		}
-		#ds-thread #ds-reset .ds-post-toolbar,#ds-reset .ds-avatar{box-shadow:none;}
-		#ds-thread #ds-reset .ds-textarea-wrapper textarea:focus{
-	    	/*background: none repeat scroll 0 0 #F4FAFF;*/
-	    	border-color:#9DD4FD;
-	    	border-width:1px;
-	    	box-shadow:0 1px 1px rgba(0,0,0,0.075) inset, 0 0 8px rgba(82, 168, 236, 0.6);
-	    	outline:0 none;
-    	}
-		#ds-thread #ds-reset .ds-textarea-wrapper textarea:active{
-	    	/*background: none repeat scroll 0 0 #F4FAFF;*/
-	    	border-width:1px;
-	    	border-color:#9DD4FD;
-	    	box-shadow:0 1px 1px rgba(0,0,0,0.075) inset, 0 0 8px rgba(82, 168, 236, 0.6);
-	    	outline:0 none;
-    	}
-    	#ds-thread #ds-reset .ds-post-button{
-    		box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset, 0 1px 2px rgba(0, 0, 0, 0.05);
-		    border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
-		    border-width: 1px;
-		    border-style: solid;
-		    border-radius: 3px;
-		    background: #5bb75b;
-		    color:white;
-		    text-shadow:none;
-		    transition:background-color 300ms ease-out;
-    	}
-    	#ds-reset .ds-avatar{
-    		background-color:initial;
-    	}
-
-	</style>
-	<script type="text/javascript">
-	var duoshuoQuery = {short_name:"true"};
-	(function() {
-		var ds = document.createElement('script');
-		ds.type = 'text/javascript';ds.async = true;
-		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-		ds.charset = 'UTF-8';
-		(document.getElementsByTagName('head')[0] 
-		 || document.getElementsByTagName('body')[0]).appendChild(ds);
-	})();
-	</script>
-</div>
 
 
 
+
+  <style>
+/*
+    Name:     Kimbie (light)
+    Author:   Jan T. Sott
+    License:  Creative Commons Attribution-ShareAlike 4.0 Unported License
+    URL:      https://github.com/idleberg/Kimbie-highlight.js
+*/
+
+/* Kimbie Comment */
+.hljs-comment,
+.hljs-quote {
+  color: #a57a4c;
+}
+
+/* Kimbie Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-meta {
+  color: #dc3958;
+}
+
+/* Kimbie Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-deletion,
+.hljs-link {
+  color: #f79a32;
+}
+
+/* Kimbie Yellow */
+.hljs-title,
+.hljs-section,
+.hljs-attribute {
+  color: #f06431;
+}
+
+/* Kimbie Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+  color: #889b4a;
+}
+
+/* Kimbie Purple */
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-function {
+  color: #98676a;
+}
+
+.hljs {
+  display: block;
+  overflow-x: auto;
+  /*background: #fbebd4;*/
+  color: #84613d;
+  padding: 0.5em;
+}
+
+.hljs-emphasis {
+  font-style: italic;
+}
+
+.hljs-strong {
+  font-weight: bold;
+}
+</style>
+  <script src="//cdn.bootcss.com/highlight.js/9.2.0/highlight.min.js"></script>
+  <script>
+    // hljs.initHighlightingOnLoad();
+    [].slice.call(document.querySelectorAll('pre code')).forEach(function(block, i) {
+      hljs.highlightBlock(block);
+      var lines = block.innerText.split('\n').length - 1;
+      var ul = document.createElement('ul');
+      ul.className = 'pre-numbering';
+      block.className += ' has-numbering';
+      block.parentNode.appendChild(ul);
+      for(i=1;i<=lines;i++){
+        var li = document.createElement('li');
+        li.innerText = i;
+        ul.appendChild(li);
+      }
+    });
+  </script>
 </div>
         <link rel="stylesheet" href="/css/content.css" type="text/css">
 <footer id="footer">

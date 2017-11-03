@@ -236,8 +236,9 @@
 <p>随后, 发现可以将这一工作应用于使用 Ken Thompson 的计算搜索算法的一些早期研究中. 而 Ken Thompson 又是 Unix 的主要发明人. 因此半个世纪以前的Unix 中的 qed 编辑器(1966 qed编辑器问世) 成了第一个使用正则表达式的应用程序.</p>
 <p>至此之后, 正则表达式成为家喻户晓的文本处理工具, 几乎各大编程语言都以支持正则表达式作为卖点, 当然 JavaScript 也不例外.</p>
 <h3 id="正则表达式的定义"><a href="#正则表达式的定义" class="headerlink" title="正则表达式的定义"></a>正则表达式的定义</h3><p>正则表达式是由普通字符和特殊字符(也叫元字符或限定符)组成的文字模板. 如下便是简单的匹配连续数字的正则表达式:</p>
-<figure class="highlight awk"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="regexp">/[0-9]+/</span></div><div class="line"><span class="regexp">/\d+/</span></div></pre></td></tr></table></figure>
-<p>“\d” 就是元字符, 而 “+” 则是限定符.</p>
+<pre><code>/[0-9]+/
+/\d+/
+</code></pre><p>“\d” 就是元字符, 而 “+” 则是限定符.</p>
 <h4 id="元字符"><a href="#元字符" class="headerlink" title="元字符"></a>元字符</h4><table>
 <thead>
 <tr>
@@ -363,7 +364,8 @@
 <li>u (ES6新增)</li>
 </ul>
 <h4 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h4><p>我们来测试下上面的知识点, 写一个匹配手机号码的正则表达式, 如下:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">(\+<span class="number">86</span>)?<span class="number">1</span>\d&#123;<span class="number">10</span>&#125;</div></pre></td></tr></table></figure>
+<pre><code class="js">(\+86)?1\d{10}
+</code></pre>
 <p>① “\+86” 匹配文本 “+86”, 后面接元字符问号, 表示可匹配1次或0次, 合起来表示 “(\+86)?” 匹配 “+86” 或者 “”.</p>
 <p>② 普通字符”1” 匹配文本 “1”.</p>
 <p>③ 元字符 “\d” 匹配数字0到9, 区间量词 “{10}” 表示匹配 10 次, 合起来表示 “\d{10}” 匹配连续的10个数字.</p>
@@ -378,7 +380,8 @@
 <li>中国邮政编码: [1-9]\d{5}(?!\d) (邮政编码为6位数字)</li>
 </ol>
 <h4 id="密码验证"><a href="#密码验证" class="headerlink" title="密码验证"></a>密码验证</h4><p>密码验证是常见的需求, 一般来说, 常规密码大致会满足规律: 6-16位, 数字, 字母, 字符至少包含两种, 同时不能包含中文和空格. 如下便是常规密码验证的正则描述:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> reg = <span class="regexp">/(?!^[0-9]+$)(?!^[A-z]+$)(?!^[^A-z0-9]+$)^[^\s\u4e00-\u9fa5]&#123;6,16&#125;$/</span>;</div></pre></td></tr></table></figure>
+<pre><code class="js">var reg = /(?!^[0-9]+$)(?!^[A-z]+$)(?!^[^A-z0-9]+$)^[^\s\u4e00-\u9fa5]{6,16}$/;
+</code></pre>
 <h3 id="正则的几大家族"><a href="#正则的几大家族" class="headerlink" title="正则的几大家族"></a>正则的几大家族</h3><h4 id="正则表达式分类"><a href="#正则表达式分类" class="headerlink" title="正则表达式分类"></a>正则表达式分类</h4><p>在 linux 和 osx 下, 常见的正则表达式, 至少有以下三种: </p>
 <ul>
 <li>基本的正则表达式( Basic Regular Expression 又叫 Basic RegEx  简称 <strong>BREs</strong> )</li>
@@ -864,9 +867,19 @@
 </li>
 </ol>
 <h3 id="正则表达式初阶技能"><a href="#正则表达式初阶技能" class="headerlink" title="正则表达式初阶技能"></a>正则表达式初阶技能</h3><h4 id="贪婪模式与非贪婪模式"><a href="#贪婪模式与非贪婪模式" class="headerlink" title="贪婪模式与非贪婪模式"></a>贪婪模式与非贪婪模式</h4><p>默认情况下, 所有的限定词都是贪婪模式, 表示尽可能多的去捕获字符; 而在限定词后增加?, 则是非贪婪模式, 表示尽可能少的去捕获字符. 如下:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> str = <span class="string">"aaab"</span>,</div><div class="line">    reg1 = <span class="regexp">/a+/</span>, <span class="comment">//贪婪模式</span></div><div class="line">    reg2 = <span class="regexp">/a+?/</span>;<span class="comment">//非贪婪模式</span></div><div class="line"><span class="built_in">console</span>.log(str.match(reg1)); <span class="comment">//["aaa"], 由于是贪婪模式, 捕获了所有的a</span></div><div class="line"><span class="built_in">console</span>.log(str.match(reg2)); <span class="comment">//["a"], 由于是非贪婪模式, 只捕获到第一个a</span></div></pre></td></tr></table></figure>
+<pre><code class="js">var str = &quot;aaab&quot;,
+    reg1 = /a+/, //贪婪模式
+    reg2 = /a+?/;//非贪婪模式
+console.log(str.match(reg1)); //[&quot;aaa&quot;], 由于是贪婪模式, 捕获了所有的a
+console.log(str.match(reg2)); //[&quot;a&quot;], 由于是非贪婪模式, 只捕获到第一个a
+</code></pre>
 <p>实际上, 非贪婪模式非常有效, 特别是当匹配html标签时. 比如匹配一个配对出现的div, 方案一可能会匹配到很多的div标签对, 而方案二则只会匹配一个div标签对.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> str = <span class="string">"&lt;div class='v1'&gt;&lt;div class='v2'&gt;test&lt;/div&gt;&lt;input type='text'/&gt;&lt;/div&gt;"</span>;</div><div class="line"><span class="keyword">var</span> reg1 = <span class="regexp">/&lt;div.*&lt;\/div&gt;/</span>; <span class="comment">//方案一,贪婪匹配</span></div><div class="line"><span class="keyword">var</span> reg2 = <span class="regexp">/&lt;div.*?&lt;\/div&gt;/</span>;<span class="comment">//方案二,非贪婪匹配</span></div><div class="line"><span class="built_in">console</span>.log(str.match(reg1));<span class="comment">//"&lt;div class='v1'&gt;&lt;div class='v2'&gt;test&lt;/div&gt;&lt;input type='text'/&gt;&lt;/div&gt;"</span></div><div class="line"><span class="built_in">console</span>.log(str.match(reg2));<span class="comment">//"&lt;div class='v1'&gt;&lt;div class='v2'&gt;test&lt;/div&gt;"</span></div></pre></td></tr></table></figure>
+<pre><code class="js">var str = &quot;&lt;div class=&#39;v1&#39;&gt;&lt;div class=&#39;v2&#39;&gt;test&lt;/div&gt;&lt;input type=&#39;text&#39;/&gt;&lt;/div&gt;&quot;;
+var reg1 = /&lt;div.*&lt;\/div&gt;/; //方案一,贪婪匹配
+var reg2 = /&lt;div.*?&lt;\/div&gt;/;//方案二,非贪婪匹配
+console.log(str.match(reg1));//&quot;&lt;div class=&#39;v1&#39;&gt;&lt;div class=&#39;v2&#39;&gt;test&lt;/div&gt;&lt;input type=&#39;text&#39;/&gt;&lt;/div&gt;&quot;
+console.log(str.match(reg2));//&quot;&lt;div class=&#39;v1&#39;&gt;&lt;div class=&#39;v2&#39;&gt;test&lt;/div&gt;&quot;
+</code></pre>
 <h5 id="区间量词的非贪婪模式"><a href="#区间量词的非贪婪模式" class="headerlink" title="区间量词的非贪婪模式"></a>区间量词的非贪婪模式</h5><p>一般情况下, 非贪婪模式, 我们使用的是”*?”, 或 “+?” 这种形式, 还有一种是 “{n,m}?”.</p>
 <p>区间量词”{n,m}” 也是匹配优先, 虽有匹配次数上限, 但是在到达上限之前, 它依然是尽可能多的匹配, 而”{n,m}?” 则表示在区间范围内, 尽可能少的匹配.</p>
 <p><strong>需要注意的是</strong>: </p>
@@ -876,42 +889,63 @@
 <li>贪婪模式可以与<code>固化分组</code>(后面会讲到)结合，提升匹配效率，而非贪婪模式却不可以.</li>
 </ul>
 <h4 id="分组"><a href="#分组" class="headerlink" title="分组"></a>分组</h4><p>正则的分组主要通过小括号来实现, 括号包裹的子表达式作为一个分组, 括号后可以紧跟限定词表示重复次数. 如下, 小括号内包裹的abc便是一个分组:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">/(abc)+<span class="regexp">/.test("abc123") == true</span></div></pre></td></tr></table></figure>
+<pre><code class="js">/(abc)+/.test(&quot;abc123&quot;) == true
+</code></pre>
 <p>那么分组有什么用呢? 一般来说, 分组是为了方便的表示重复次数, 除此之外, 还有一个作用就是用于捕获, 请往下看.</p>
 <h4 id="捕获性分组"><a href="#捕获性分组" class="headerlink" title="捕获性分组"></a>捕获性分组</h4><p>捕获性分组, 通常由一对小括号加上子表达式组成. 捕获性分组会创建反向引用, 每个反向引用都由一个编号或名称来标识, js中主要是通过 <code>$+编号</code> 或者 <code>\+编号</code> 表示法进行引用. 如下便是一个捕获性分组的例子.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> color = <span class="string">"#808080"</span>;</div><div class="line"><span class="keyword">var</span> output = color.replace(<span class="regexp">/#(\d+)/</span>,<span class="string">"$1"</span>+<span class="string">"~~"</span>);<span class="comment">//自然也可以写成 "$1~~"</span></div><div class="line"><span class="built_in">console</span>.log(<span class="built_in">RegExp</span>.$<span class="number">1</span>);<span class="comment">//808080</span></div><div class="line"><span class="built_in">console</span>.log(output);<span class="comment">//808080~~</span></div></pre></td></tr></table></figure>
+<pre><code class="js">var color = &quot;#808080&quot;;
+var output = color.replace(/#(\d+)/,&quot;$1&quot;+&quot;~~&quot;);//自然也可以写成 &quot;$1~~&quot;
+console.log(RegExp.$1);//808080
+console.log(output);//808080~~
+</code></pre>
 <p>以上, (\d+) 表示一个捕获性分组, <code>RegExp.$1</code> 指向该分组捕获的内容. <code>$+编号</code> 只能在正则表达式之外使用.</p>
 <p>实际上，捕获性分组捕获到的内容不仅可以在正则表达式外部引用，还可以在正则表达式内部引用。</p>
 <h4 id="反向引用"><a href="#反向引用" class="headerlink" title="反向引用"></a>反向引用</h4><p>能在正则表达式内部使用的引用只有『反向引用』，其格式为<code>\+数字</code> ，通常用于匹配不同位置相同部分的子串。如下：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> url = <span class="string">"www.google.google.com"</span>;</div><div class="line"><span class="keyword">var</span> re = <span class="regexp">/([a-z]+)\.\1/</span>;</div><div class="line"><span class="built_in">console</span>.log(url.replace(re,<span class="string">"$1"</span>));<span class="comment">//"www.google.com"</span></div></pre></td></tr></table></figure>
+<pre><code class="js">var url = &quot;www.google.google.com&quot;;
+var re = /([a-z]+)\.\1/;
+console.log(url.replace(re,&quot;$1&quot;));//&quot;www.google.com&quot;
+</code></pre>
 <p>以上，相同部分的”google”字符串只被替换一次。</p>
 <p>实例之后，我们来看看反向引用的原理。</p>
 <blockquote>
 <p>正则表达式匹配时，各个捕获性分组匹配到的内容，会依次保存在内存中一个特定的组里，通过<code>\+数字</code>的方式可以在正则中引用组里的内容，这种引用称作<strong>反向引用</strong>。捕获性分组匹配成功之前，它的内容的是不确定的，一旦匹配成功，组里的内容也就确定了。</p>
 </blockquote>
 <p>打个比方就是，假如有字符串<code>abcaabcabbcabcc</code>，对于正则表达式<code>/([abc])\1/</code>，捕获性分组中的子表达式<code>[abc]</code>，虽然可以匹配”a”、”b” 或 “c”，但是一旦匹配成功了，反向引用的内容也就是确定了，那么相对的，反向引用的子表达式<code>\1</code>将依次匹配”a”、”b” 或 “c”。因此实际上，捕获性分组<code>[abc]</code>和反向引用<code>\1</code>将同时捕获”a”、”b” 或 “c”中的同一个字符，即有三种可能捕获的结果：”aa”，”bb” 或 “cc”。如下：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="string">"abcaabcabbcabcc"</span>.match(<span class="regexp">/([abc])\1/g</span>); <span class="comment">// ["aa", "bb", "cc"]</span></div></pre></td></tr></table></figure>
+<pre><code class="js">&quot;abcaabcabbcabcc&quot;.match(/([abc])\1/g); // [&quot;aa&quot;, &quot;bb&quot;, &quot;cc&quot;]
+</code></pre>
 <p>反向引用中<code>\n</code>指向正则表达式前面第n个捕获性分组匹配到的内容，这里面有一个问题，对于子表达式<code>\12</code>，有下面两种可能：</p>
 <ul>
 <li>指向第1个捕获性分组匹配到的内容，同时匹配普通字符2，目前IE浏览器按照这种方式解析正则。</li>
 <li>指向第12个捕获性分组匹配到的内容，目前非IE等现代浏览器都是这样解析正则的。</li>
 </ul>
 <p>有关反向引用，其他非JavaScript语言中，还没有仔细测试，猜测跟现代浏览器的处理方式一致。为避免各语言或者浏览器解析不一致，因此建议<strong>反向引用不要索引大于9的捕获性分组</strong>。不仅如此，反向引用如果不存在，正则将会匹配失败。如下：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="string">"abcaabcabbcabcc"</span>.match(<span class="regexp">/([abc])\2/g</span>); <span class="comment">// null</span></div></pre></td></tr></table></figure>
+<pre><code class="js">&quot;abcaabcabbcabcc&quot;.match(/([abc])\2/g); // null
+</code></pre>
 <p>由于不存在第二个捕获性分组，因此反向引用子表达式<code>\2</code>匹配失败，进而整个表达式匹配失败。</p>
 <p><strong>反向引用常用来匹配重复出现的字符串，而不是重复出现的子表达式，这点要尤为注意。</strong>因此如果想要匹配4个或2个数字的话，使用如下正则表达式是万万不行的。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&quot;1234567890&quot;.match(/(\d)&#123;4&#125;|\1&#123;2&#125;/g); // [&quot;1234&quot;, &quot;5678&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;]</div></pre></td></tr></table></figure>
+<pre><code class="js;">&quot;1234567890&quot;.match(/(\d){4}|\1{2}/g); // [&quot;1234&quot;, &quot;5678&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;]
+</code></pre>
 <p>以上正则表达式，想用反向引用<code>\1</code>代替前面的捕获性分组<code>\d</code>，这是不可行的。修饰符g表示全文查找，因此前两次匹配到了 “1234” 和 “5678”，此时正则引擎的指针处于数字8的后面，再往后匹配显然子表达式<code>(\d){4}</code>无法匹配了，此时第一个捕获组匹配到空字符串，那么反向引用<code>\1</code>将指向空字符串，也就是一个位置（有些类似后面将要讲到的零宽断言），对于”890”子字符串，8、9或0后面共有3个位置可供反向引用匹配，故最终又匹配到三个空字符串。正确的正则表达式如下：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="string">"1234567890"</span>.match(<span class="regexp">/\d&#123;4&#125;|\d&#123;2&#125;/g</span>); <span class="comment">// ["1234", "5678", "90"]</span></div></pre></td></tr></table></figure>
+<pre><code class="js">&quot;1234567890&quot;.match(/\d{4}|\d{2}/g); // [&quot;1234&quot;, &quot;5678&quot;, &quot;90&quot;]
+</code></pre>
 <p>只能重复写一次子表达式<code>\d</code>。</p>
 <h4 id="非捕获性分组"><a href="#非捕获性分组" class="headerlink" title="非捕获性分组"></a>非捕获性分组</h4><p>非捕获性分组, 通常由一对括号加上”?:”加上子表达式组成, 非捕获性分组不会创建反向引用, 就好像没有括号一样. 如下:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> color = <span class="string">"#808080"</span>;</div><div class="line"><span class="keyword">var</span> output = color.replace(<span class="regexp">/#(?:\d+)/</span>,<span class="string">"$1"</span>+<span class="string">"~~"</span>);</div><div class="line"><span class="built_in">console</span>.log(<span class="built_in">RegExp</span>.$<span class="number">1</span>);<span class="comment">//""</span></div><div class="line"><span class="built_in">console</span>.log(output);<span class="comment">//$1~~</span></div></pre></td></tr></table></figure>
+<pre><code class="js">var color = &quot;#808080&quot;;
+var output = color.replace(/#(?:\d+)/,&quot;$1&quot;+&quot;~~&quot;);
+console.log(RegExp.$1);//&quot;&quot;
+console.log(output);//$1~~
+</code></pre>
 <p>以上, (?:\d+) 表示一个非捕获性分组, 由于分组不捕获任何内容, 所以, <code>RegExp.$1</code> 就指向了空字符串.</p>
 <p>同时, 由于<code>$1</code> 的反向引用不存在, 因此最终它被当成了普通字符串进行替换.</p>
 <p>实际上, 捕获性分组和无捕获性分组在搜索效率方面也没什么不同, 没有哪一个比另一个更快.</p>
 <h4 id="命名分组"><a href="#命名分组" class="headerlink" title="命名分组"></a>命名分组</h4><p>语法: (?<name>…)</name></p>
 <p>命名分组也是捕获性分组,  它将匹配的字符串捕获到一个组名称或编号名称中, 在获得匹配结果后, 可通过分组名进行获取. 如下是一个python的命名分组的例子.</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> re</div><div class="line">data = <span class="string">"#808080"</span></div><div class="line">regExp = <span class="string">r"#(?P&lt;one&gt;\d+)"</span></div><div class="line">replaceString = <span class="string">"\g&lt;one&gt;"</span> + <span class="string">"~~"</span></div><div class="line"><span class="keyword">print</span> re.sub(regExp,replaceString,data) <span class="comment"># 808080~~</span></div></pre></td></tr></table></figure>
+<pre><code class="python">import re
+data = &quot;#808080&quot;
+regExp = r&quot;#(?P&lt;one&gt;\d+)&quot;
+replaceString = &quot;\g&lt;one&gt;&quot; + &quot;~~&quot;
+print re.sub(regExp,replaceString,data) # 808080~~
+</code></pre>
 <p>python的命名分组表达式与标准格式相比, 在 ? 后多了一大写的 P 字符, 并且python通过“\g&lt;命名&gt;”表示法进行引用. (如果是捕获性分组, python通过”\g&lt;编号&gt;”表示法进行引用)</p>
 <p>与python不同的是, javaScript 中并不支持命名分组.</p>
 <h4 id="固化分组"><a href="#固化分组" class="headerlink" title="固化分组"></a>固化分组</h4><p>固化分组, 又叫原子组.</p>
@@ -919,9 +953,13 @@
 <p>如上所述, 我们在使用非贪婪模式时, 匹配过程中可能会进行多次的回溯, 回溯越多, 正则表达式的运行效率就越低. 而固化分组就是用来减少回溯次数的.</p>
 <p>实际上, 固化分组(?&gt;…)的匹配与正常的匹配并无分别, 它并不会改变匹配结果. 唯一的不同就是: 固化分组匹配结束时, 它匹配到的文本已经固化为一个单元, 只能作为整体而保留或放弃, 括号内的子表达式中未尝试过的备用状态都会被放弃, 所以回溯永远也不能选择其中的状态(因此不能参与回溯). 下面我们来通过一个例子更好地理解固化分组.</p>
 <p>假如要处理一批数据, 原格式为 123.456, 因为浮点数显示问题, 部分数据格式会变为123.456000000789这种, 现要求只保留小数点后2~3位, 但是最后一位不能为0, 那么这个正则怎么写呢?</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> str = <span class="string">"123.456000000789"</span>;</div><div class="line">str = str.replace(<span class="regexp">/(\.\d\d[1-9]?)\d*/</span>,<span class="string">"$1"</span>); <span class="comment">//123.456</span></div></pre></td></tr></table></figure>
+<pre><code class="js">var str = &quot;123.456000000789&quot;;
+str = str.replace(/(\.\d\d[1-9]?)\d*/,&quot;$1&quot;); //123.456
+</code></pre>
 <p>以上的正则, 对于”123.456” 这种格式的数据, 将白白处理一遍. 为了提高效率, 我们将正则最后的一个”*”改为”+”. 如下:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> str = <span class="string">"123.456"</span>;</div><div class="line">str = str.replace(<span class="regexp">/(\.\d\d[1-9]?)\d+/</span>,<span class="string">"$1"</span>); <span class="comment">//123.45</span></div></pre></td></tr></table></figure>
+<pre><code class="js">var str = &quot;123.456&quot;;
+str = str.replace(/(\.\d\d[1-9]?)\d+/,&quot;$1&quot;); //123.45
+</code></pre>
 <p>此时, “\d\d[1-9]?” 子表达式, 匹配是 “45”, 而不是 “456”, 这是因为正则末尾使用了”+”, 表示末尾至少要匹配一个数字, 因此末尾的子表达式”\d+” 匹配到了 “6”. 显然 “123.45” 不是我们期望的匹配结果, 那我们应该怎么做呢? 能否让 “[1-9]?” 一旦匹配成功, 便不再进行回溯, 这里就要用到我们上面说的固化分组.</p>
 <p>“(\.\d\d(?&gt;[1-9]?))\d+” 便是上述正则的固化分组形式. 由于字符串 “123.456” 不满足该固化分组的正则, 所以, 匹配会失败, 符合我们期望.</p>
 <p>下面我们来分析下固化分组的正则 (\.\d\d(?&gt;[1-9]?))\d+ 为什么匹配不到字符串”123.456”.</p>
@@ -948,11 +986,17 @@
 
 <p><img src="http://louiszhai.github.io/docImages/regexp02.png" alt="正则表达式流程图"></p>
 <p>遗憾的是, javaScript, java 和 python中并不支持固化分组的语法, 不过, 它在php和.NET中表现良好. 下面提供了一个php版的固化分组形式的正则表达式, 以供尝试.</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$str = <span class="string">"123.456"</span>;</div><div class="line"><span class="keyword">echo</span> preg_replace(<span class="string">"/(\.\d\d(?&gt;[1-9]?))\d+/"</span>,<span class="string">"\\1"</span>,$str); <span class="comment">//固化分组</span></div></pre></td></tr></table></figure>
+<pre><code class="php">$str = &quot;123.456&quot;;
+echo preg_replace(&quot;/(\.\d\d(?&gt;[1-9]?))\d+/&quot;,&quot;\\1&quot;,$str); //固化分组
+</code></pre>
 <p>不仅如此, php还提供了占有量词优先的语法. 如下:</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$str = <span class="string">"123.456"</span>;</div><div class="line"><span class="keyword">echo</span> preg_replace(<span class="string">"/(\.\d\d[1-9]?+)\d+/"</span>,<span class="string">"\\1"</span>,$str); <span class="comment">//占有量词优先</span></div></pre></td></tr></table></figure>
+<pre><code class="php">$str = &quot;123.456&quot;;
+echo preg_replace(&quot;/(\.\d\d[1-9]?+)\d+/&quot;,&quot;\\1&quot;,$str); //占有量词优先
+</code></pre>
 <p>虽然java不支持固化分组的语法, 但java也提供了占有量词优先的语法, 同样能够避免正则回溯. 如下: </p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">String str = <span class="string">"123.456"</span>;</div><div class="line">System.out.println(str.replaceAll(<span class="string">"(\\.\\d\\d[1-9]?+)\\d+"</span>, <span class="string">"$1"</span>));<span class="comment">// 123.456</span></div></pre></td></tr></table></figure>
+<pre><code class="java">String str = &quot;123.456&quot;;
+System.out.println(str.replaceAll(&quot;(\\.\\d\\d[1-9]?+)\\d+&quot;, &quot;$1&quot;));// 123.456
+</code></pre>
 <p>值得注意的是: java中 replaceAll 方法需要转义反斜杠.</p>
 <h3 id="正则表达式高阶技能-零宽断言"><a href="#正则表达式高阶技能-零宽断言" class="headerlink" title="正则表达式高阶技能-零宽断言"></a>正则表达式高阶技能-零宽断言</h3><p>如果说正则分组是写轮眼, 那么零宽断言就是万花筒写轮眼终极奥义-须佐能乎(这里借火影忍术打个比方). 合理地使用零宽断言, 能够能分组之不能, 极大地增强正则匹配能力, 它甚至可以帮助你在匹配条件非常模糊的情况下快速地定位文本.</p>
 <p>零宽断言, 又叫环视. 环视只进行子表达式的匹配, 匹配到的内容不保存到最终的匹配结果, 由于匹配是零宽度的, 故最终匹配到的只是一个位置. </p>
@@ -994,23 +1038,52 @@
 </tbody>
 </table>
 <p>非捕获性分组由于结构与环视相似, 故列在表中, 以做对比. 以上4种环视中, 目前 javaScript 中只支持前两种, 也就是只支持 <strong>顺序肯定环视</strong> 和 <strong>顺序否定环视</strong>. 下面我们通过实例来帮助理解下:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> str = <span class="string">"123abc789"</span>,s;</div><div class="line"><span class="comment">//没有使用环视,abc直接被替换</span></div><div class="line">s = str.replace(<span class="regexp">/abc/</span>,<span class="number">456</span>);</div><div class="line"><span class="built_in">console</span>.log(s); <span class="comment">//123456789</span></div><div class="line"></div><div class="line"><span class="comment">//使用了顺序肯定环视,捕获到了a前面的位置,所以abc没有被替换,只是将3替换成了3456</span></div><div class="line">s = str.replace(<span class="regexp">/3(?=abc)/</span>,<span class="number">3456</span>);</div><div class="line"><span class="built_in">console</span>.log(s); <span class="comment">//123456abc789</span></div><div class="line"></div><div class="line"><span class="comment">//使用了顺序否定环视,由于3后面跟着abc,不满意条件,故捕获失败,所以原字符串没有被替换</span></div><div class="line">s = str.replace(<span class="regexp">/3(?!abc)/</span>,<span class="number">3456</span>);</div><div class="line"><span class="built_in">console</span>.log(s); <span class="comment">//123abc789</span></div></pre></td></tr></table></figure>
+<pre><code class="js">var str = &quot;123abc789&quot;,s;
+//没有使用环视,abc直接被替换
+s = str.replace(/abc/,456);
+console.log(s); //123456789
+
+//使用了顺序肯定环视,捕获到了a前面的位置,所以abc没有被替换,只是将3替换成了3456
+s = str.replace(/3(?=abc)/,3456);
+console.log(s); //123456abc789
+
+//使用了顺序否定环视,由于3后面跟着abc,不满意条件,故捕获失败,所以原字符串没有被替换
+s = str.replace(/3(?!abc)/,3456);
+console.log(s); //123abc789
+</code></pre>
 <p>下面通过python来演示下 <strong>逆序肯定环视</strong> 和 <strong>逆序否定环视</strong> 的用法.</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> re</div><div class="line">data = <span class="string">"123abc789"</span></div><div class="line"><span class="comment"># 使用了逆序肯定环视,替换左边为123的连续的小写英文字母,匹配成功,故abc被替换为456</span></div><div class="line">regExp = <span class="string">r"(?&lt;=123)[a-z]+"</span></div><div class="line">replaceString = <span class="string">"456"</span></div><div class="line"><span class="keyword">print</span> re.sub(regExp,replaceString,data) <span class="comment"># 123456789</span></div><div class="line"></div><div class="line"><span class="comment"># 使用了逆序否定环视,由于英文字母左侧不能为123,故子表达式[a-z]+捕获到bc,最终bc被替换为456</span></div><div class="line">regExp = <span class="string">r"(?&lt;!123)[a-z]+"</span></div><div class="line">replaceString = <span class="string">"456"</span></div><div class="line"><span class="keyword">print</span> re.sub(regExp,replaceString,data) <span class="comment"># 123a456789</span></div></pre></td></tr></table></figure>
+<pre><code class="python">import re
+data = &quot;123abc789&quot;
+# 使用了逆序肯定环视,替换左边为123的连续的小写英文字母,匹配成功,故abc被替换为456
+regExp = r&quot;(?&lt;=123)[a-z]+&quot;
+replaceString = &quot;456&quot;
+print re.sub(regExp,replaceString,data) # 123456789
+
+# 使用了逆序否定环视,由于英文字母左侧不能为123,故子表达式[a-z]+捕获到bc,最终bc被替换为456
+regExp = r&quot;(?&lt;!123)[a-z]+&quot;
+replaceString = &quot;456&quot;
+print re.sub(regExp,replaceString,data) # 123a456789
+</code></pre>
 <p>需要注意的是: python 和 perl 语言中的 <strong>逆序环视</strong> 的子表达式只能使用定长的文本. 比如将上述 “(?&lt;=123)” (逆序肯定环视)子表达式写成 “(?&lt;=[0-9]+)”, python解释器将会报错: “error: look-behind requires fixed-width pattern”.</p>
 <h4 id="场景回顾"><a href="#场景回顾" class="headerlink" title="场景回顾"></a>场景回顾</h4><h5 id="获取html片段"><a href="#获取html片段" class="headerlink" title="获取html片段"></a>获取html片段</h5><p>假如现在, js 通过 ajax 获取到一段 html 代码如下:</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">var responseText = "<span class="tag">&lt;<span class="name">div</span> <span class="attr">data</span>=<span class="string">'dev.xxx.txt'</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">'dev.xxx.png'</span> /&gt;</span>";</div></pre></td></tr></table></figure>
+<pre><code class="html">var responseText = &quot;&lt;div data=&#39;dev.xxx.txt&#39;&gt;&lt;/div&gt;&lt;img src=&#39;dev.xxx.png&#39; /&gt;&quot;;
+</code></pre>
 <p>现我们需要替换img标签的src 属性中的 “dev”字符串 为 “test” 字符串. </p>
 <p>① 由于上述 responseText 字符串中包含至少两个子字符串 “dev”, 显然不能直接 replace 字符串 “dev”为 “test”. </p>
 <p>② 同时由于 js 中不支持逆序环视, 我们也不能在正则中判断前缀为 “src=’”, 然后再替换”dev”. </p>
 <p>③ 我们注意到 img 标签的 src 属性以 “.png” 结尾, 基于此, 就可以使用顺序肯定环视. 如下:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> reg = <span class="regexp">/dev(?=[^']*png)/</span>; <span class="comment">//为了防止匹配到第一个dev, 通配符前面需要排除单引号或者是尖括号</span></div><div class="line"><span class="keyword">var</span> str = responseText.replace(reg,<span class="string">"test"</span>);</div><div class="line"><span class="built_in">console</span>.log(str);<span class="comment">//&lt;div data='dev.xxx'&gt;&lt;/div&gt;&lt;img src='test.xxx.png' /&gt;</span></div></pre></td></tr></table></figure>
+<pre><code class="js">var reg = /dev(?=[^&#39;]*png)/; //为了防止匹配到第一个dev, 通配符前面需要排除单引号或者是尖括号
+var str = responseText.replace(reg,&quot;test&quot;);
+console.log(str);//&lt;div data=&#39;dev.xxx&#39;&gt;&lt;/div&gt;&lt;img src=&#39;test.xxx.png&#39; /&gt;
+</code></pre>
 <p>当然, 以上不止顺序肯定环视一种解法, 捕获性分组同样可以做到. 那么环视高级在哪里呢? 环视高级的地方就在于它通过一次捕获就可以定位到一个位置, 对于复杂的文本替换场景, 常有奇效, 而分组则需要更多的操作. 请往下看.</p>
 <h5 id="千位分割符"><a href="#千位分割符" class="headerlink" title="千位分割符"></a>千位分割符</h5><blockquote>
 <p>千位分隔符, 顾名思义, 就是数字中的逗号. 参考西方的习惯, 数字之中加入一个符号, 避免因数字太长难以直观的看出它的值. 故而数字之中, 每隔三位添加一个逗号, 即千位分隔符.</p>
 </blockquote>
 <p>那么怎么将一串数字转化为千位分隔符形式呢?</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> str = <span class="string">"1234567890"</span>;</div><div class="line">(+str).toLocaleString();<span class="comment">//"1,234,567,890"</span></div></pre></td></tr></table></figure>
+<pre><code class="js">var str = &quot;1234567890&quot;;
+(+str).toLocaleString();//&quot;1,234,567,890&quot;
+</code></pre>
 <p>如上, <code>toLocaleString()</code> 返回当前对象的”本地化”字符串形式. </p>
 <ul>
 <li>如果该对象是Number类型, 那么将返回该数值的按照特定符号分割的字符串形式.</li>
@@ -1018,7 +1091,13 @@
 </ul>
 <p><code>toLocaleString</code> 方法特殊, 有本地化特性, 对于天朝, 默认的分隔符是英文逗号. 因此使用它恰好可以将数值转化为千位分隔符形式的字符串. 如果考虑到国际化, 以上方法就有可能会失效了.</p>
 <p>我们尝试使用环视来处理下.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">thousand</span>(<span class="params">str</span>)</span>&#123;</div><div class="line">  <span class="keyword">return</span> str.replace(<span class="regexp">/(?!^)(?=([0-9]&#123;3&#125;)+$)/g</span>,<span class="string">','</span>);</div><div class="line">&#125;</div><div class="line"><span class="built_in">console</span>.log(thousand(str));<span class="comment">//"1,234,567,890"</span></div><div class="line"><span class="built_in">console</span>.log(thousand(<span class="string">"123456"</span>));<span class="comment">//"123,456"</span></div><div class="line"><span class="built_in">console</span>.log(thousand(<span class="string">"1234567879876543210"</span>));<span class="comment">//"1,234,567,879,876,543,210"</span></div></pre></td></tr></table></figure>
+<pre><code class="js">function thousand(str){
+  return str.replace(/(?!^)(?=([0-9]{3})+$)/g,&#39;,&#39;);
+}
+console.log(thousand(str));//&quot;1,234,567,890&quot;
+console.log(thousand(&quot;123456&quot;));//&quot;123,456&quot;
+console.log(thousand(&quot;1234567879876543210&quot;));//&quot;1,234,567,879,876,543,210&quot;
+</code></pre>
 <p>上述使用到的正则分为两块. <code>(?!^)</code> 和 <code>(?=([0-9]{3})+$)</code>. 我们先来看后面的部分, 然后逐步分析之.</p>
 <ol>
 <li>“[0-9]{3}” 表示连续3位数字.</li>
@@ -1034,17 +1113,33 @@
 <ul>
 <li>y (粘连sticky修饰符), 与g类似, 也是全局匹配, 并且下一次匹配都是从上一次匹配成功的下一个位置开始, 不同之处在于, g修饰符只要剩余位置中存在匹配即可, 而y修饰符确保匹配必须从剩余的第一个位置开始.</li>
 </ul>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> s = <span class="string">"abc_ab_a"</span>;</div><div class="line"><span class="keyword">var</span> r1 = <span class="regexp">/[a-z]+/g</span>;</div><div class="line"><span class="keyword">var</span> r2 = <span class="regexp">/[a-z]+/y</span>;</div><div class="line"><span class="built_in">console</span>.log(r1.exec(s),r1.lastIndex); <span class="comment">// ["abc", index: 0, input: "abc_ab_a"] 3</span></div><div class="line"><span class="built_in">console</span>.log(r2.exec(s),r2.lastIndex); <span class="comment">// ["abc", index: 0, input: "abc_ab_a"] 3</span></div><div class="line"></div><div class="line"><span class="built_in">console</span>.log(r1.exec(s),r1.lastIndex); <span class="comment">// ["ab", index: 4, input: "abc_ab_a"] 6</span></div><div class="line"><span class="built_in">console</span>.log(r2.exec(s),r2.lastIndex); <span class="comment">// null 0</span></div></pre></td></tr></table></figure>
+<pre><code class="js">var s = &quot;abc_ab_a&quot;;
+var r1 = /[a-z]+/g;
+var r2 = /[a-z]+/y;
+console.log(r1.exec(s),r1.lastIndex); // [&quot;abc&quot;, index: 0, input: &quot;abc_ab_a&quot;] 3
+console.log(r2.exec(s),r2.lastIndex); // [&quot;abc&quot;, index: 0, input: &quot;abc_ab_a&quot;] 3
+
+console.log(r1.exec(s),r1.lastIndex); // [&quot;ab&quot;, index: 4, input: &quot;abc_ab_a&quot;] 6
+console.log(r2.exec(s),r2.lastIndex); // null 0
+</code></pre>
 <p>如上, 由于第二次匹配的开始位置是下标3,  对应的字符串是 “_”, 而使用y修饰符的正则对象r2, 需要从剩余的第一个位置开始, 所以匹配失败, 返回null.</p>
 <p>正则对象的 sticky 属性, 表示是否设置了y修饰符. 这点将会在后面讲到.</p>
 <ul>
 <li>u 修饰符, 提供了对正则表达式添加4字节码点的支持. 比如 “𝌆” 字符是一个4字节字符, 直接使用正则匹配将会失败, 而使用u修饰符后, 将会等到正确的结果.</li>
 </ul>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> s = <span class="string">"𝌆"</span>;</div><div class="line"><span class="built_in">console</span>.log(<span class="regexp">/^.$/</span>.test(s));<span class="comment">//false</span></div><div class="line"><span class="built_in">console</span>.log(<span class="regexp">/^.$/u</span>.test(s));<span class="comment">//true</span></div></pre></td></tr></table></figure>
+<pre><code class="js">var s = &quot;𝌆&quot;;
+console.log(/^.$/.test(s));//false
+console.log(/^.$/u.test(s));//true
+</code></pre>
 <h5 id="UCS-2字节码"><a href="#UCS-2字节码" class="headerlink" title="UCS-2字节码"></a>UCS-2字节码</h5><p>有关字节码点, 稍微提下. javaScript 只能处理UCS-2编码(js于1995年5月被Brendan Eich花费10天设计出来, 比1996年7月发布的编码规范UTF-16早了一年多, 当时只有UCS-2可选). 由于UCS-2先天不足, 造成了所有字符在js中都是2个字节. 如果是4个字节的字符, 将会默认被当作两个双字节字符处理. 因此 js 的字符处理函数都会受到限制, 无法返回正确结果. 如下:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> s = <span class="string">"𝌆"</span>;</div><div class="line"><span class="built_in">console</span>.log(s == <span class="string">"\uD834\uDF06"</span>);<span class="comment">//true 𝌆相当于UTF-16中的0xD834DF06</span></div><div class="line"><span class="built_in">console</span>.log(s.length);<span class="comment">//2 长度为2, 表示这是4字节字符</span></div></pre></td></tr></table></figure>
+<pre><code class="js">var s = &quot;𝌆&quot;;
+console.log(s == &quot;\uD834\uDF06&quot;);//true 𝌆相当于UTF-16中的0xD834DF06
+console.log(s.length);//2 长度为2, 表示这是4字节字符
+</code></pre>
 <p>幸运的是, ES6可以自动识别4字节的字符.因此遍历字符串可以直接使用for of循环. 同时, js中如果直接使用码点表示Unicode字符, 对于4字节字符, ES5里是没办法识别的. 为此ES6修复了这个问题, 只需将码点放在大括号内即可.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(s === <span class="string">"\u1D306"</span>);<span class="comment">//false   ES5无法识别𝌆</span></div><div class="line"><span class="built_in">console</span>.log(s === <span class="string">"\u&#123;1D306&#125;"</span>);<span class="comment">//true  ES6可以借助大括号识别𝌆</span></div></pre></td></tr></table></figure>
+<pre><code class="js">console.log(s === &quot;\u1D306&quot;);//false   ES5无法识别𝌆
+console.log(s === &quot;\u{1D306}&quot;);//true  ES6可以借助大括号识别𝌆
+</code></pre>
 <h5 id="附-ES6新增的处理4字节码的函数"><a href="#附-ES6新增的处理4字节码的函数" class="headerlink" title="附: ES6新增的处理4字节码的函数"></a>附: ES6新增的处理4字节码的函数</h5><ul>
 <li><strong>String.fromCodePoint()</strong>：从Unicode码点返回对应字符</li>
 <li><strong>String.prototype.codePointAt()</strong>：从字符返回对应的码点</li>
@@ -1083,7 +1178,11 @@
 <p>语法: new RegExp(pattern[, flags])</p>
 <p>参数 <em>pattern</em> 是一个字符串, 指定了正则表达式字符串或其他的正则表达式对象.</p>
 <p>参数 <em>flags</em> 是一个可选的字符串, 包含属性 “g”、”i” 和 “m”, 分别用于指定全局匹配、区分大小写的匹配和多行匹配. 如果<em>pattern</em> 是正则表达式, 而不是字符串, 则必须省略该参数.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> pattern = <span class="string">"[0-9]"</span>;</div><div class="line"><span class="keyword">var</span> reg = <span class="keyword">new</span> <span class="built_in">RegExp</span>(pattern,<span class="string">"g"</span>);</div><div class="line"><span class="comment">// 上述创建正则表达式对象,可以用对象字面量形式代替,也推荐下面这种</span></div><div class="line"><span class="keyword">var</span> reg = <span class="regexp">/[0-9]/g</span>;</div></pre></td></tr></table></figure>
+<pre><code class="js">var pattern = &quot;[0-9]&quot;;
+var reg = new RegExp(pattern,&quot;g&quot;);
+// 上述创建正则表达式对象,可以用对象字面量形式代替,也推荐下面这种
+var reg = /[0-9]/g;
+</code></pre>
 <p>以上, 通过对象字面量和构造函数创建正则表达式, 有个小插曲.</p>
 <p>“对于正则表达式的直接量, ECMAscript 3规定在每次它时都会返回同一个RegExp对象, 因此用直接量创建的正则表达式的会共享一个实例. 直到ECMAScript 5才规定每次返回不同的实例.”</p>
 <p>所以, 现在我们基本不用担心这个问题, 只需要注意在低版本的非IE浏览器中尽量使用构造函数创建正则(这点上, IE一直遵守ES5规定, 其他浏览器的低级版本遵循ES3规定).</p>
@@ -1129,17 +1228,32 @@
 <h5 id="compile"><a href="#compile" class="headerlink" title="compile"></a>compile</h5><p>compile 方法用于在执行过程中改变和重新编译正则表达式.</p>
 <p>语法: compile(pattern[, flags])</p>
 <p>参数介绍请参考上述 RegExp 构造器. 用法如下:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> reg = <span class="keyword">new</span> <span class="built_in">RegExp</span>(<span class="string">"abc"</span>, <span class="string">"gi"</span>); </div><div class="line"><span class="keyword">var</span> reg2 = reg.compile(<span class="string">"new abc"</span>, <span class="string">"g"</span>);</div><div class="line"><span class="built_in">console</span>.log(reg);<span class="comment">// /new abc/g</span></div><div class="line"><span class="built_in">console</span>.log(reg2);<span class="comment">// undefined</span></div></pre></td></tr></table></figure>
+<pre><code class="js">var reg = new RegExp(&quot;abc&quot;, &quot;gi&quot;); 
+var reg2 = reg.compile(&quot;new abc&quot;, &quot;g&quot;);
+console.log(reg);// /new abc/g
+console.log(reg2);// undefined
+</code></pre>
 <p>可见 compile 方法会改变原正则表达式对象, 并重新编译, 而且它的返回值为空.</p>
 <h5 id="test"><a href="#test" class="headerlink" title="test"></a>test</h5><p>test 方法用于检测一个字符串是否匹配某个正则规则, 只要是字符串中含有与正则规则匹配的文本, 该方法就返回true, 否则返回 false.</p>
 <p>语法: test(string), 用法如下:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(<span class="regexp">/[0-9]+/</span>.test(<span class="string">"abc123"</span>));<span class="comment">//true</span></div><div class="line"><span class="built_in">console</span>.log(<span class="regexp">/[0-9]+/</span>.test(<span class="string">"abc"</span>));<span class="comment">//false</span></div></pre></td></tr></table></figure>
+<pre><code class="js">console.log(/[0-9]+/.test(&quot;abc123&quot;));//true
+console.log(/[0-9]+/.test(&quot;abc&quot;));//false
+</code></pre>
 <p>以上, 字符串”abc123” 包含数字, 故 test 方法返回 true; 而 字符串”abc” 不包含数字, 故返回 false.</p>
 <p>如果需要使用 test 方法测试字符串是否完成匹配某个正则规则, 那么可以在正则表达式里增加开始(^)和结束($)元字符. 如下: </p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(<span class="regexp">/^[0-9]+$/</span>.test(<span class="string">"abc123"</span>));<span class="comment">//false</span></div></pre></td></tr></table></figure>
+<pre><code class="js">console.log(/^[0-9]+$/.test(&quot;abc123&quot;));//false
+</code></pre>
 <p>以上, 由于字符串”abc123” 并非以数字开始, 也并非以数字结束, 故 test 方法返回false.</p>
 <p>实际上, 如果正则表达式带有全局标志(带有参数g)时, test 方法还受正则对象的lastIndex属性影响,如下:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> reg = <span class="regexp">/[a-z]+/</span>;<span class="comment">//正则不带全局标志</span></div><div class="line"><span class="built_in">console</span>.log(reg.test(<span class="string">"abc"</span>));<span class="comment">//true</span></div><div class="line"><span class="built_in">console</span>.log(reg.test(<span class="string">"de"</span>));<span class="comment">//true</span></div><div class="line"></div><div class="line"><span class="keyword">var</span> reg = <span class="regexp">/[a-z]+/g</span>;<span class="comment">//正则带有全局标志g</span></div><div class="line"><span class="built_in">console</span>.log(reg.test(<span class="string">"abc"</span>));<span class="comment">//true</span></div><div class="line"><span class="built_in">console</span>.log(reg.lastIndex);<span class="comment">//3, 下次运行test时,将从索引为3的位置开始查找</span></div><div class="line"><span class="built_in">console</span>.log(reg.test(<span class="string">"de"</span>));<span class="comment">//false</span></div></pre></td></tr></table></figure>
+<pre><code class="js">var reg = /[a-z]+/;//正则不带全局标志
+console.log(reg.test(&quot;abc&quot;));//true
+console.log(reg.test(&quot;de&quot;));//true
+
+var reg = /[a-z]+/g;//正则带有全局标志g
+console.log(reg.test(&quot;abc&quot;));//true
+console.log(reg.lastIndex);//3, 下次运行test时,将从索引为3的位置开始查找
+console.log(reg.test(&quot;de&quot;));//false
+</code></pre>
 <p>该影响将在exec 方法讲解中予以分析.</p>
 <h5 id="exec"><a href="#exec" class="headerlink" title="exec"></a>exec</h5><p>exec 方法用于检测字符串对正则表达式的匹配, 如果找到了匹配的文本, 则返回一个结果数组, 否则返回null.</p>
 <p>语法: exec(string)</p>
@@ -1153,21 +1267,66 @@
 <p>无论正则表达式有无全局标示”g”, exec 的表现都相同. 但正则表达式对象的表现却有些不同. 下面我们来详细说明下正则表达式对象的表现都有哪些不同.</p>
 <p>假设正则表达式对象为 reg , 检测的字符为 string , reg.exec(string) 返回值为 array.</p>
 <p>若 reg 包含全局标示”g”, 那么 reg.lastIndex 属性表示原字符串中匹配的字符串末尾的后一个位置, 即下次匹配开始的位置, 此时 reg.lastIndex == array.index(匹配开始的位置) + array[0].length(匹配字符串的长度). 如下:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> reg = <span class="regexp">/([a-z]+)/gi</span>,</div><div class="line">    string = <span class="string">"World Internet Conference"</span>;</div><div class="line"><span class="keyword">var</span> array = reg.exec(string);</div><div class="line"><span class="built_in">console</span>.log(array);<span class="comment">//["World", "World", index: 0, input: "World Internet Conference"]</span></div><div class="line"><span class="built_in">console</span>.log(<span class="built_in">RegExp</span>.$<span class="number">1</span>);<span class="comment">//World</span></div><div class="line"><span class="built_in">console</span>.log(reg.lastIndex);<span class="comment">//5, 刚好等于 array.index + array[0].length</span></div></pre></td></tr></table></figure>
+<pre><code class="js">var reg = /([a-z]+)/gi,
+    string = &quot;World Internet Conference&quot;;
+var array = reg.exec(string);
+console.log(array);//[&quot;World&quot;, &quot;World&quot;, index: 0, input: &quot;World Internet Conference&quot;]
+console.log(RegExp.$1);//World
+console.log(reg.lastIndex);//5, 刚好等于 array.index + array[0].length
+</code></pre>
 <p>随着检索继续, array.index 的值将往后递增, 也就是说, reg.lastIndex 的值也会同步往后递增. 因此, 我们也可以通过反复调用 exec 方法来遍历字符串中所有的匹配文本. 直到 exec 方法再也匹配不到文本时, 它将返回 null, 并把 reg.lastIndex 属性重置为 0. </p>
 <p>接着上述例子, 我们继续执行代码, 看看上面说的对不对, 如下所示:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">array = reg.exec(string);</div><div class="line"><span class="built_in">console</span>.log(array);<span class="comment">//["Internet", "Internet", index: 6, input: "World Internet Conference"]</span></div><div class="line"><span class="built_in">console</span>.log(reg.lastIndex);<span class="comment">//14</span></div><div class="line"></div><div class="line">array = reg.exec(string);</div><div class="line"><span class="built_in">console</span>.log(array);<span class="comment">//["Conference", "Conference", index: 15, input: "World Internet Conference"]</span></div><div class="line"><span class="built_in">console</span>.log(reg.lastIndex);<span class="comment">//25</span></div><div class="line"></div><div class="line">array = reg.exec(string);</div><div class="line"><span class="built_in">console</span>.log(array);<span class="comment">//null</span></div><div class="line"><span class="built_in">console</span>.log(reg.lastIndex);<span class="comment">//0</span></div></pre></td></tr></table></figure>
+<pre><code class="js">array = reg.exec(string);
+console.log(array);//[&quot;Internet&quot;, &quot;Internet&quot;, index: 6, input: &quot;World Internet Conference&quot;]
+console.log(reg.lastIndex);//14
+
+array = reg.exec(string);
+console.log(array);//[&quot;Conference&quot;, &quot;Conference&quot;, index: 15, input: &quot;World Internet Conference&quot;]
+console.log(reg.lastIndex);//25
+
+array = reg.exec(string);
+console.log(array);//null
+console.log(reg.lastIndex);//0
+</code></pre>
 <p>以上代码中, 随着反复调用 exec 方法, reg.lastIndex 属性最终被重置为 0.</p>
 <p><strong>问题回顾</strong></p>
 <p>在 test 方法的讲解中, 我们留下了一个问题. 如果正则表达式带有全局标志g, 以上 test 方法的执行结果将受 reg.lastIndex影响, 不仅如此, exec 方法也一样. 由于 reg.lastIndex 的值并不总是为零, 并且它决定了下次匹配开始的位置, 如果在一个字符串中完成了一次匹配之后要开始检索新的字符串, 那就必须要手动地把 lastIndex 属性重置为 0. 避免出现下面这种错误:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> reg = <span class="regexp">/[0-9]+/g</span>,</div><div class="line">    str1 = <span class="string">"123abc"</span>,</div><div class="line">    str2 = <span class="string">"123456"</span>;</div><div class="line">reg.exec(str1);</div><div class="line"><span class="built_in">console</span>.log(reg.lastIndex);<span class="comment">//3</span></div><div class="line"><span class="keyword">var</span> array = reg.exec(str2);</div><div class="line"><span class="built_in">console</span>.log(array);<span class="comment">//["456", index: 3, input: "123456"]</span></div></pre></td></tr></table></figure>
+<pre><code class="js">var reg = /[0-9]+/g,
+    str1 = &quot;123abc&quot;,
+    str2 = &quot;123456&quot;;
+reg.exec(str1);
+console.log(reg.lastIndex);//3
+var array = reg.exec(str2);
+console.log(array);//[&quot;456&quot;, index: 3, input: &quot;123456&quot;]
+</code></pre>
 <p>以上代码, 正确执行结果应该是 “123456”,  因此建议在第二次执行 exec 方法前, 增加一句 “reg.lastIndex = 0;”.</p>
 <p>若 reg 不包含全局标示”g”, 那么 exec 方法的执行结果(array)将与 string.match(reg) 方法执行结果完全相同.</p>
 <h4 id="String"><a href="#String" class="headerlink" title="String"></a>String</h4><p>match, search, replace, split 方法请参考 <a href="http://louiszhai.github.io/2016/01/12/js.String/"><code>字符串常用方法</code></a> 中的讲解.</p>
 <p>如下展示了使用捕获性分组处理文本模板, 最终生成完整字符串的过程:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> tmp = <span class="string">"An $&#123;a&#125; a $&#123;b&#125; keeps the $&#123;c&#125; away"</span>;</div><div class="line"><span class="keyword">var</span> obj = &#123;</div><div class="line">  <span class="attr">a</span>:<span class="string">"apple"</span>,</div><div class="line">  <span class="attr">b</span>:<span class="string">"day"</span>,</div><div class="line">  <span class="attr">c</span>:<span class="string">"doctor"</span></div><div class="line">&#125;;</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">tmpl</span>(<span class="params">t,o</span>)</span>&#123;</div><div class="line">  <span class="keyword">return</span> t.replace(<span class="regexp">/\$&#123;(.)&#125;/g</span>,<span class="function"><span class="keyword">function</span>(<span class="params">m,p</span>)</span>&#123;</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'m:'</span>+m+<span class="string">' p:'</span>+p);</div><div class="line">    <span class="keyword">return</span> o[p];</div><div class="line">  &#125;);</div><div class="line">&#125;</div><div class="line">tmpl(tmp,obj);</div></pre></td></tr></table></figure>
+<pre><code class="js">var tmp = &quot;An ${a} a ${b} keeps the ${c} away&quot;;
+var obj = {
+  a:&quot;apple&quot;,
+  b:&quot;day&quot;,
+  c:&quot;doctor&quot;
+};
+function tmpl(t,o){
+  return t.replace(/\${(.)}/g,function(m,p){
+    console.log(&#39;m:&#39;+m+&#39; p:&#39;+p);
+    return o[p];
+  });
+}
+tmpl(tmp,obj);
+</code></pre>
 <p>上述功能使用ES6可这么实现:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> obj = &#123;</div><div class="line">  <span class="attr">a</span>:<span class="string">"apple"</span>,</div><div class="line">  <span class="attr">b</span>:<span class="string">"day"</span>,</div><div class="line">  <span class="attr">c</span>:<span class="string">"doctor"</span></div><div class="line">&#125;;</div><div class="line"><span class="keyword">with</span>(obj)&#123;</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">`An <span class="subst">$&#123;a&#125;</span> a <span class="subst">$&#123;b&#125;</span> keeps the <span class="subst">$&#123;c&#125;</span> away`</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<pre><code class="js">var obj = {
+  a:&quot;apple&quot;,
+  b:&quot;day&quot;,
+  c:&quot;doctor&quot;
+};
+with(obj){
+  console.log(`An ${a} a ${b} keeps the ${c} away`);
+}
+</code></pre>
 <h3 id="正则表达式在H5中的应用"><a href="#正则表达式在H5中的应用" class="headerlink" title="正则表达式在H5中的应用"></a>正则表达式在H5中的应用</h3><p>H5中新增了 pattern 属性, 规定了用于验证输入字段的模式, pattern的模式匹配支持正则表达式的书写方式. 默认 pattern 属性是全部匹配, 即无论正则表达式中有无 “^”, “$” 元字符, 它都是匹配所有文本.</p>
 <p>注: pattern 适用于以下 input 类型：text, search, url, telephone, email 以及 password. 如果需要取消表单验证, 在form标签上增加 novalidate 属性即可.</p>
 <h3 id="正则引擎"><a href="#正则引擎" class="headerlink" title="正则引擎"></a>正则引擎</h3><p>目前正则引擎有两种, DFA 和 NFA, NFA又可以分为传统型NFA和POSIX NFA.</p>
@@ -1219,7 +1378,7 @@
         <a id="btn_donate" class="btn_donate" href="javascript:;" title="打赏"></a>
         <span class="donate_txt">
            &uarr;<br>
-       如果你觉得有用，就支持一下吧！
+       支持一杯咖啡吧！
         </span>
       </div>  
   <div id="donate_guide" class="donate_bar center hidden" >
@@ -1286,69 +1445,103 @@
 
 
 
-<div class="duoshuo">
-	<div class="ds-thread" data-thread-key="regexp" data-title="正则表达式前端使用手册" data-url="http://louiszhai.github.io/2016/06/13/regexp/"></div>
-	<style>
-		#ds-reset .ds-avatar img{width:54px;height:54px;border-radius:27px;-webkit-border-radius:27px;-moz-border-radius:27px;box-shadow:inset 0 -1px 0 #3333sf;-webkit-box-shadow:inset 0 -1px 0 #3333sf;-webkit-transition:0.4s;-webkit-transition:-webkit-transform 0.4s ease-out;transition:transform 0.4s ease-out;-moz-transition:-moz-transform 0.4s ease-out;}
-		#ds-reset .ds-avatar img:hover{box-shadow:0 0 10px #fff;rgba(255,255,255,.6),inset 0 0 20px rgba(255,255,255,1);-webkit-box-shadow:0 0 10px #fff;rgba(255,255,255,.6),inset 0 0 20px rgba(255,255,255,1);transform:rotateZ(360deg);-webkit-transform:rotateZ(360deg);-moz-transform:rotateZ(360deg);}
-		p.ds-powered-by,#ds-sync-checkbox,.ds-sync label{display:none!important;}
-		#ds-reset .ds-rounded-top{-webkit-border-top-right-radius:0px;-webkit-border-top-left-radius:0px;border-top-right-radius:0px;border-top-left-radius:0px;}
-		#ds-thread #ds-reset .ds-textarea-wrapper{background:#fff;border:0;margin-bottom:20px;padding-right:0px;}
-		#ds-thread #ds-reset .ds-textarea-wrapper textarea{min-height:80px;border:1px solid #ccc;padding:10px;-webkit-appearance:none;border-radius:0;background-color:#FFFFFF;border-color:#cccccc;box-shadow:inset 0 1px 2px rgba(0,0,0,0.1);color:rgba(0,0,0,0.75);-webkit-box-sizing:border-box;box-sizing:border-box;-webkit-transition:border-color 0.15s linear,background 0.15s linear;-moz-transition:border-color 0.15s linear,background 0.15s linear;-ms-transition:border-color 0.15s linear,background 0.15s linear;-o-transition:border-color 0.15s linear,background 0.15s linear;transition:border-color 0.15s linear,background 0.15s linear;}
-		/*#ds-thread #ds-reset .ds-textarea-wrapper textarea:focus{border-color:#999999;background:#fafafa;outline:none;}*/
-		#ds-thread #ds-reset .ds-post-options{border-bottom-left-radius:0px;-webkit-border-bottom-left-radius:0px;border:none;background:none!important;}
-		#ds-reset .ds-textarea-wrapper textarea:focus{border-color:#66afe9;outline:0;-webkit-box-shadow:inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);box-shadow:inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);}
-		#ds-thread #ds-reset .ds-post-button:hover,#ds-thread #ds-reset .ds-post-button:focus{
-		    background-color: #51a351;
-		    background-position: 0 -32px;
-		    color:white;
-		}
-		#ds-thread #ds-reset .ds-post-toolbar,#ds-reset .ds-avatar{box-shadow:none;}
-		#ds-thread #ds-reset .ds-textarea-wrapper textarea:focus{
-	    	/*background: none repeat scroll 0 0 #F4FAFF;*/
-	    	border-color:#9DD4FD;
-	    	border-width:1px;
-	    	box-shadow:0 1px 1px rgba(0,0,0,0.075) inset, 0 0 8px rgba(82, 168, 236, 0.6);
-	    	outline:0 none;
-    	}
-		#ds-thread #ds-reset .ds-textarea-wrapper textarea:active{
-	    	/*background: none repeat scroll 0 0 #F4FAFF;*/
-	    	border-width:1px;
-	    	border-color:#9DD4FD;
-	    	box-shadow:0 1px 1px rgba(0,0,0,0.075) inset, 0 0 8px rgba(82, 168, 236, 0.6);
-	    	outline:0 none;
-    	}
-    	#ds-thread #ds-reset .ds-post-button{
-    		box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset, 0 1px 2px rgba(0, 0, 0, 0.05);
-		    border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
-		    border-width: 1px;
-		    border-style: solid;
-		    border-radius: 3px;
-		    background: #5bb75b;
-		    color:white;
-		    text-shadow:none;
-		    transition:background-color 300ms ease-out;
-    	}
-    	#ds-reset .ds-avatar{
-    		background-color:initial;
-    	}
-
-	</style>
-	<script type="text/javascript">
-	var duoshuoQuery = {short_name:"true"};
-	(function() {
-		var ds = document.createElement('script');
-		ds.type = 'text/javascript';ds.async = true;
-		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-		ds.charset = 'UTF-8';
-		(document.getElementsByTagName('head')[0] 
-		 || document.getElementsByTagName('body')[0]).appendChild(ds);
-	})();
-	</script>
-</div>
 
 
 
+
+  <style>
+/*
+    Name:     Kimbie (light)
+    Author:   Jan T. Sott
+    License:  Creative Commons Attribution-ShareAlike 4.0 Unported License
+    URL:      https://github.com/idleberg/Kimbie-highlight.js
+*/
+
+/* Kimbie Comment */
+.hljs-comment,
+.hljs-quote {
+  color: #a57a4c;
+}
+
+/* Kimbie Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-meta {
+  color: #dc3958;
+}
+
+/* Kimbie Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-deletion,
+.hljs-link {
+  color: #f79a32;
+}
+
+/* Kimbie Yellow */
+.hljs-title,
+.hljs-section,
+.hljs-attribute {
+  color: #f06431;
+}
+
+/* Kimbie Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+  color: #889b4a;
+}
+
+/* Kimbie Purple */
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-function {
+  color: #98676a;
+}
+
+.hljs {
+  display: block;
+  overflow-x: auto;
+  /*background: #fbebd4;*/
+  color: #84613d;
+  padding: 0.5em;
+}
+
+.hljs-emphasis {
+  font-style: italic;
+}
+
+.hljs-strong {
+  font-weight: bold;
+}
+</style>
+  <script src="//cdn.bootcss.com/highlight.js/9.2.0/highlight.min.js"></script>
+  <script>
+    // hljs.initHighlightingOnLoad();
+    [].slice.call(document.querySelectorAll('pre code')).forEach(function(block, i) {
+      hljs.highlightBlock(block);
+      var lines = block.innerText.split('\n').length - 1;
+      var ul = document.createElement('ul');
+      ul.className = 'pre-numbering';
+      block.className += ' has-numbering';
+      block.parentNode.appendChild(ul);
+      for(i=1;i<=lines;i++){
+        var li = document.createElement('li');
+        li.innerText = i;
+        ul.appendChild(li);
+      }
+    });
+  </script>
 </div>
         <link rel="stylesheet" href="/css/content.css" type="text/css">
 <footer id="footer">

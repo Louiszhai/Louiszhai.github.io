@@ -471,7 +471,11 @@
 <li>没有参数或者参数为零的情况下, toFixed() 方法返回该数值的四舍五入后的整数形式, 等同于 Math.round(x);</li>
 <li>其他情况下, 返回该数的指定小数位数的四舍五入后的结果.</li>
 </ul>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> num = <span class="number">1234.56789</span>;</div><div class="line"><span class="built_in">console</span>.log(num.toFixed(),num.toFixed(<span class="number">0</span>));<span class="comment">//1235,1235</span></div><div class="line"><span class="built_in">console</span>.log(num.toFixed(<span class="number">1</span>));<span class="comment">//1234.6</span></div><div class="line"><span class="built_in">console</span>.log(<span class="number">-1.235</span>.toFixed(<span class="number">2</span>));<span class="comment">//-1.24</span></div></pre></td></tr></table></figure>
+<pre><code class="js">var num = 1234.56789;
+console.log(num.toFixed(),num.toFixed(0));//1235,1235
+console.log(num.toFixed(1));//1234.6
+console.log(-1.235.toFixed(2));//-1.24
+</code></pre>
 <h3 id="Math方法的一些规律"><a href="#Math方法的一些规律" class="headerlink" title="Math方法的一些规律"></a>Math方法的一些规律</h3><p>以上, 数值运算中, 存在如下规律:</p>
 <ol>
 <li>Math.trunc(x) 方法当 ① x为正数时, 运算结果同 Math.floor(x); ② x为负数时, 运算结果同 Math.ceil(x). 实际上, 它完全可以由位运算替代, 且运算速度更快, 如 2.5&amp;-1 或 2.5|0 或 ~~2.5 或 2.5^0 , 它们的运算结果都为2; 如 -2.5&amp;-1 或 -2.5|0 或 ~~-2.5 或 -2.5^0 , 它们的运算结果都为-2;</li>
@@ -479,23 +483,95 @@
 <li>稍微利用 Math.random() 方法的特性, 就可以生成任意范围的数字. 如: 生成10到80之间的随机数, ~~(Math.random()*70 + 10);// 返回10~80之间的随机数, 包含10不包含80</li>
 </ol>
 <p>除去上述方法, Math作为对象, 继承了来之Object对象的方法. 其中一些如下:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">Math</span>.valueOf();<span class="comment">//返回Math对象本身</span></div><div class="line">+<span class="built_in">Math</span>; <span class="comment">//NaN, 试图转换成数字,由于不能转换为数字,返回NaN</span></div><div class="line"><span class="built_in">Math</span>.toString();<span class="comment">//"[object Math]"</span></div></pre></td></tr></table></figure>
+<pre><code class="js">Math.valueOf();//返回Math对象本身
++Math; //NaN, 试图转换成数字,由于不能转换为数字,返回NaN
+Math.toString();//&quot;[object Math]&quot;
+</code></pre>
 <h3 id="位运算"><a href="#位运算" class="headerlink" title="位运算"></a>位运算</h3><p>Math对象提供的方法种类繁多, 且覆盖面非常全面, 基本上能够满足日常开发所需. 但同时我们也都知道, 使用Math对象的方法进行数值运算时, js代码经过解释编译, 最终会以二进制的方式进行运算. 这种运算方式效率较低, 那么能不能进一步提高运算的效率的呢? 如果我们使用位运算就可. 这是因为位运算本就是直接进行二进制运算.</p>
 <h4 id="数值的二进制值"><a href="#数值的二进制值" class="headerlink" title="数值的二进制值"></a>数值的二进制值</h4><p>由于位运算是基于二进制的, 因此我们需要先获取数值的二进制值. 实际上, toString 方法已经帮我们做好了一部分工作, 如下:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//正整数可通过toString获取</span></div><div class="line"><span class="number">12.</span>.toString(<span class="number">2</span>);<span class="comment">//1100</span></div><div class="line"><span class="comment">//负整数问题就来了</span></div><div class="line">(<span class="number">-12</span>).toString(<span class="number">2</span>);<span class="comment">//-1100</span></div></pre></td></tr></table></figure>
+<pre><code class="js">//正整数可通过toString获取
+12..toString(2);//1100
+//负整数问题就来了
+(-12).toString(2);//-1100
+</code></pre>
 <p>已知: 负数在计算机内部是采用补码表示的. 例如 -1, 1的原码是 0000 0001, 那么1的反码是 1111 1110, 补码是 1111 1111.</p>
 <p>故: 负数的十进制转换为二进制时,符号位不变,其它位取反后+1. 即: <strong><code>-x的二进制 = x的二进制取反+1</code></strong> . 由按位取反可借助^运算符, 故负整数的二进制可以借助下面这个函数来获取:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">getBinary</span>(<span class="params">num</span>)</span>&#123;</div><div class="line">  <span class="keyword">var</span> s = (-num).toString(<span class="number">2</span>),</div><div class="line">      array = [].map.call(s,<span class="function"><span class="keyword">function</span>(<span class="params">v</span>)</span>&#123;</div><div class="line">        <span class="keyword">return</span> v^<span class="number">1</span>;</div><div class="line">      &#125;);</div><div class="line">  array.reduceRight(<span class="function"><span class="keyword">function</span>(<span class="params">previousValue, value, index, array</span>)</span>&#123;</div><div class="line">    <span class="keyword">var</span> v = previousValue ^ value;</div><div class="line">    array[index] = v;</div><div class="line">    <span class="keyword">return</span> +!v;</div><div class="line">  &#125;,<span class="number">1</span>);</div><div class="line">  <span class="keyword">return</span> array.join(<span class="string">''</span>);</div><div class="line">&#125;</div><div class="line">getBinary(<span class="number">-12</span>);<span class="comment">//0100, 前面未补全的部分全部为1</span></div></pre></td></tr></table></figure>
+<pre><code class="js">function getBinary(num){
+  var s = (-num).toString(2),
+      array = [].map.call(s,function(v){
+        return v^1;
+      });
+  array.reduceRight(function(previousValue, value, index, array){
+    var v = previousValue ^ value;
+    array[index] = v;
+    return +!v;
+  },1);
+  return array.join(&#39;&#39;);
+}
+getBinary(-12);//0100, 前面未补全的部分全部为1
+</code></pre>
 <p>然后, 多试几次就会发现:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">getBinary(<span class="number">-1</span>) == <span class="number">1.</span>.toString(<span class="number">2</span>); <span class="comment">//true</span></div><div class="line">getBinary(<span class="number">-2</span>) == <span class="number">2.</span>.toString(<span class="number">2</span>); <span class="comment">//true</span></div><div class="line">getBinary(<span class="number">-4</span>) == <span class="number">4.</span>.toString(<span class="number">2</span>); <span class="comment">//true</span></div><div class="line">getBinary(<span class="number">-8</span>) == <span class="number">8.</span>.toString(<span class="number">2</span>); <span class="comment">//true</span></div></pre></td></tr></table></figure>
+<pre><code class="js">getBinary(-1) == 1..toString(2); //true
+getBinary(-2) == 2..toString(2); //true
+getBinary(-4) == 4..toString(2); //true
+getBinary(-8) == 8..toString(2); //true
+</code></pre>
 <p>这表明:</p>
 <ul>
 <li><strong>2的整数次方的值与它的相对数, 他们后面真正有效的那几位都相同</strong>.</li>
 </ul>
 <p>同样, 负数的二进制转十进制时, 符号位不变, 其他位取反后+1. 可参考:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">translateBinary2Decimal</span>(<span class="params">binaryString</span>)</span>&#123;</div><div class="line">  <span class="keyword">var</span> array = [].map.call(binaryString,<span class="function"><span class="keyword">function</span>(<span class="params">v</span>)</span>&#123;</div><div class="line">    <span class="keyword">return</span> v^<span class="number">1</span>;</div><div class="line">  &#125;);</div><div class="line">  array.reduceRight(<span class="function"><span class="keyword">function</span>(<span class="params">previousValue, value, index, array</span>)</span>&#123;</div><div class="line">    <span class="keyword">var</span> v = previousValue ^ value;</div><div class="line">    array[index] = v;</div><div class="line">    <span class="keyword">return</span> +!v;</div><div class="line">  &#125;,<span class="number">1</span>);</div><div class="line">  <span class="keyword">return</span> <span class="built_in">parseInt</span>(array.join(<span class="string">''</span>),<span class="number">2</span>);</div><div class="line">&#125;</div><div class="line">translateBinary2Decimal(getBinary(<span class="number">-12</span>));<span class="comment">//12</span></div></pre></td></tr></table></figure>
+<pre><code class="js">function translateBinary2Decimal(binaryString){
+  var array = [].map.call(binaryString,function(v){
+    return v^1;
+  });
+  array.reduceRight(function(previousValue, value, index, array){
+    var v = previousValue ^ value;
+    array[index] = v;
+    return +!v;
+  },1);
+  return parseInt(array.join(&#39;&#39;),2);
+}
+translateBinary2Decimal(getBinary(-12));//12
+</code></pre>
 <p>由上, 二进制转十进制和十进制转二进制的函数, 大部分都可以共用, 因此下面提供一个统一的函数解决它们的互转问题:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">translateBinary</span>(<span class="params">item</span>)</span>&#123;</div><div class="line">  <span class="keyword">var</span> s = <span class="literal">null</span>,</div><div class="line">      array = <span class="literal">null</span>,</div><div class="line">      type = <span class="keyword">typeof</span> item,</div><div class="line">      symbol = !<span class="regexp">/^-/</span>.test(item+<span class="string">''</span>);</div><div class="line">  <span class="keyword">switch</span>(type)&#123;</div><div class="line">    <span class="keyword">case</span> <span class="string">"number"</span>: </div><div class="line">      s = <span class="built_in">Math</span>.abs(item).toString(<span class="number">2</span>);</div><div class="line">      <span class="keyword">if</span>(symbol)&#123;</div><div class="line">        <span class="keyword">return</span> s;</div><div class="line">      &#125;</div><div class="line">      <span class="keyword">break</span>;</div><div class="line">    <span class="keyword">case</span> <span class="string">"string"</span>:</div><div class="line">      <span class="keyword">if</span>(symbol)&#123;</div><div class="line">        <span class="keyword">return</span> <span class="built_in">parseInt</span>(item,<span class="number">2</span>);</div><div class="line">      &#125;</div><div class="line">      s = item.substring(<span class="number">1</span>);</div><div class="line">      <span class="keyword">break</span>;</div><div class="line">    <span class="keyword">default</span>:</div><div class="line">      <span class="keyword">return</span> <span class="literal">false</span>;</div><div class="line">  &#125;</div><div class="line">  <span class="comment">//按位取反</span></div><div class="line">  array = [].map.call(s,<span class="function"><span class="keyword">function</span>(<span class="params">v</span>)</span>&#123;</div><div class="line">    <span class="keyword">return</span> v^<span class="number">1</span>;</div><div class="line">  &#125;);</div><div class="line">  <span class="comment">//+1</span></div><div class="line">  array.reduceRight(<span class="function"><span class="keyword">function</span>(<span class="params">previousValue, value, index, array</span>)</span>&#123;</div><div class="line">    <span class="keyword">var</span> v = (previousValue + value)==<span class="number">2</span>;</div><div class="line">    array[index] = previousValue ^ value;</div><div class="line">    <span class="keyword">return</span> +v;</div><div class="line">  &#125;,<span class="number">1</span>);</div><div class="line">  s = array.join(<span class="string">''</span>);</div><div class="line">  <span class="keyword">return</span> type==<span class="string">"number"</span>?<span class="string">'-'</span>+s:-<span class="built_in">parseInt</span>(s,<span class="number">2</span>);</div><div class="line">&#125;</div><div class="line">translateBinary(<span class="number">-12</span>);<span class="comment">//"-0100"</span></div><div class="line">translateBinary(<span class="string">'-0100'</span>);<span class="comment">//-12</span></div></pre></td></tr></table></figure>
+<pre><code class="js">function translateBinary(item){
+  var s = null,
+      array = null,
+      type = typeof item,
+      symbol = !/^-/.test(item+&#39;&#39;);
+  switch(type){
+    case &quot;number&quot;: 
+      s = Math.abs(item).toString(2);
+      if(symbol){
+        return s;
+      }
+      break;
+    case &quot;string&quot;:
+      if(symbol){
+        return parseInt(item,2);
+      }
+      s = item.substring(1);
+      break;
+    default:
+      return false;
+  }
+  //按位取反
+  array = [].map.call(s,function(v){
+    return v^1;
+  });
+  //+1
+  array.reduceRight(function(previousValue, value, index, array){
+    var v = (previousValue + value)==2;
+    array[index] = previousValue ^ value;
+    return +v;
+  },1);
+  s = array.join(&#39;&#39;);
+  return type==&quot;number&quot;?&#39;-&#39;+s:-parseInt(s,2);
+}
+translateBinary(-12);//&quot;-0100&quot;
+translateBinary(&#39;-0100&#39;);//-12
+</code></pre>
 <h4 id="常用的二进制数"><a href="#常用的二进制数" class="headerlink" title="常用的二进制数"></a>常用的二进制数</h4><table>
 <thead>
 <tr>
@@ -547,10 +623,14 @@
 </tbody>
 </table>
 <p>现在也可以使用上述方法来验证下常用的二进制值对不对. 如下:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">translateBinary(<span class="number">0xAAAAAAAA</span>);<span class="comment">//"10101010101010101010101010101010"</span></div></pre></td></tr></table></figure>
+<pre><code class="js">translateBinary(0xAAAAAAAA);//&quot;10101010101010101010101010101010&quot;
+</code></pre>
 <h4 id="按位与-amp"><a href="#按位与-amp" class="headerlink" title="按位与(&amp;)"></a>按位与(&amp;)</h4><p>&amp;运算符用于连接两个数, 连接的两个数它们二进制补码形式的值每位都将参与运算, 只有相对应的位上都为1时, 该位的运算才返回1. 比如 3 和 9 进行按位与运算, 以下是运算过程:</p>
-<figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="code">	0011	//3的二进制补码形式</span></div><div class="line"><span class="section">&amp;	1001	//9的二进制补码形式</span></div><div class="line">--------------------</div><div class="line"><span class="code">	0001	//1,相同位数依次运算,除最后一位都是1,返回1以外, 其它位数由于不同时为1都返回0</span></div></pre></td></tr></table></figure>
-<p>由上, 3&amp;9的运算结果为1. 实际上, 由于按位与(&amp;)运算同位上返回1的要求较为严苛, 因此, 它是一种趋向减小最大值的运算.(无论最大值是正数还是负数, 参与按位与运算后, 该数总是趋向减少二进制值位上1的数量, 因此总是有值减小的趋势. ) 对于按位与(&amp;)运算, 满足如下规律:</p>
+<pre><code>    0011    //3的二进制补码形式
+&amp;    1001    //9的二进制补码形式
+--------------------
+    0001    //1,相同位数依次运算,除最后一位都是1,返回1以外, 其它位数由于不同时为1都返回0
+</code></pre><p>由上, 3&amp;9的运算结果为1. 实际上, 由于按位与(&amp;)运算同位上返回1的要求较为严苛, 因此, 它是一种趋向减小最大值的运算.(无论最大值是正数还是负数, 参与按位与运算后, 该数总是趋向减少二进制值位上1的数量, 因此总是有值减小的趋势. ) 对于按位与(&amp;)运算, 满足如下规律:</p>
 <ol>
 <li><strong>数值与自身(或者-1)按位与运算返回数值自身</strong>.</li>
 <li><strong>2的整数次方的值与它的相对数按位与运算返回它自身</strong>.</li>
@@ -559,12 +639,21 @@
 <li><strong>按位与运算的结果不大于两数中的最大值</strong>.</li>
 </ol>
 <p>由公式1, 我们可以对非整数取整. 即 <code>x&amp;x === x&amp;-1 === Math.trunc(x)</code> 如下:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(<span class="number">5.2</span>&amp;<span class="number">5.2</span>);<span class="comment">//5</span></div><div class="line"><span class="built_in">console</span>.log(<span class="number">-5.2</span>&amp;<span class="number">-1</span>);<span class="comment">//-5</span></div><div class="line"><span class="built_in">console</span>.log(<span class="built_in">Math</span>.trunc(<span class="number">-5.2</span>)===(<span class="number">-5.2</span>&amp;<span class="number">-1</span>));<span class="comment">//true</span></div></pre></td></tr></table></figure>
+<pre><code class="js">console.log(5.2&amp;5.2);//5
+console.log(-5.2&amp;-1);//-5
+console.log(Math.trunc(-5.2)===(-5.2&amp;-1));//true
+</code></pre>
 <p>由公式4, 我们可以由此判断数值是否为奇数. 如下:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span>(<span class="number">1</span> &amp; x)&#123;<span class="comment">//如果x为奇数,它的二进制补码形式最后一位必然是1,同1进行按位与运算后,将返回1,而1又会隐式转换为true</span></div><div class="line">  <span class="built_in">console</span>.log(<span class="string">"x为奇数"</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<pre><code class="js">if(1 &amp; x){//如果x为奇数,它的二进制补码形式最后一位必然是1,同1进行按位与运算后,将返回1,而1又会隐式转换为true
+  console.log(&quot;x为奇数&quot;);
+}
+</code></pre>
 <h4 id="按位或"><a href="#按位或" class="headerlink" title="按位或(|)"></a>按位或(|)</h4><p>|不同于&amp;, |运算符连接的两个数, 只要其二进制补码形式的各位上有一个为1, 该位的运算就返回1, 否则返回0. 比如 3 和 12 进行按位或运算, 以下是运算过程:</p>
-<figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="code">	0011	//3的二进制补码形式</span></div><div class="line"><span class="section">|	1100	//12的二进制补码形式</span></div><div class="line">--------------------</div><div class="line"><span class="code">	1111	//15, 相同位数依次运算,遇1返回1,故最终结果为4个1.</span></div></pre></td></tr></table></figure>
-<p>由上, 3|12的运算结果为15. 实际上, 由于按位与(&amp;)运算同位上返回0的要求较为严苛, 因此, 它是一种趋向增大最小值的运算. 对于按位或(|)运算, 满足如下规律: </p>
+<pre><code>    0011    //3的二进制补码形式
+|    1100    //12的二进制补码形式
+--------------------
+    1111    //15, 相同位数依次运算,遇1返回1,故最终结果为4个1.
+</code></pre><p>由上, 3|12的运算结果为15. 实际上, 由于按位与(&amp;)运算同位上返回0的要求较为严苛, 因此, 它是一种趋向增大最小值的运算. 对于按位或(|)运算, 满足如下规律: </p>
 <ol>
 <li><strong>数值与自身按位或运算返回数值自身</strong>.</li>
 <li><strong>2的整数次方的值与它的相对数按位或运算返回它的相对数</strong>.</li>
@@ -573,26 +662,62 @@
 <li><strong>按位或运算的结果不小于两数中的最小值</strong>.</li>
 </ol>
 <p>稍微利用公式1, 我们便可以将非整数取整.   即 <strong><code>x|0 === Math.trunc(x)</code></strong> 如下:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(<span class="number">5.2</span>|<span class="number">0</span>);<span class="comment">//5</span></div><div class="line"><span class="built_in">console</span>.log(<span class="number">-5.2</span>|<span class="number">0</span>);<span class="comment">//-5</span></div><div class="line"><span class="built_in">console</span>.log(<span class="built_in">Math</span>.trunc(<span class="number">-5.2</span>)===(<span class="number">-5.2</span>|<span class="number">0</span>));<span class="comment">//true</span></div></pre></td></tr></table></figure>
+<pre><code class="js">console.log(5.2|0);//5
+console.log(-5.2|0);//-5
+console.log(Math.trunc(-5.2)===(-5.2|0));//true
+</code></pre>
 <p>为什么 5.2|0 运算后会返回5呢? 这是因为浮点数并不支持位运算, 运算前, 5.2会转换为整数5再和0进行位运算, 故, 最终返回5.</p>
 <h4 id="按位非"><a href="#按位非" class="headerlink" title="按位非(~)"></a>按位非(~)</h4><p>~运算符, 返回数值二进制补码形式的反码. 什么意思呢, 就是说一个数值二进制补码形式中的每一位都将取反, 如果该位为1, 取反为0, 如果该位为0, 取反为1. 我们来举个例子理解下:</p>
-<figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">~	<span class="number">0000</span> <span class="number">0000</span> <span class="number">0000</span> <span class="number">0000</span> <span class="number">0000</span> <span class="number">0000</span> <span class="number">0000</span> <span class="number">0011</span>	<span class="comment">//3的32位二进制补码形式</span></div><div class="line">--------------------------------------------</div><div class="line">	<span class="number">1111</span> <span class="number">1111</span> <span class="number">1111</span> <span class="number">1111</span> <span class="number">1111</span> <span class="number">1111</span> <span class="number">1111</span> <span class="number">1100</span>	<span class="comment">//按位取反后为负数(最高位(第一位)表示正负,1代表负,0代表正)</span></div><div class="line">--------------------------------------------</div><div class="line">	<span class="number">1000</span> <span class="number">0000</span> <span class="number">0000</span> <span class="number">0000</span> <span class="number">0000</span> <span class="number">0000</span> <span class="number">0000</span> <span class="number">0011</span>	<span class="comment">//负数的二进制转换为十进制时,符号位不变,其它位取反(后+1)</span></div><div class="line">	<span class="number">1000</span> <span class="number">0000</span> <span class="number">0000</span> <span class="number">0000</span> <span class="number">0000</span> <span class="number">0000</span> <span class="number">0000</span> <span class="number">0100</span> <span class="comment">// +1</span></div><div class="line">--------------------------------------------</div><div class="line">                                      <span class="number">-4</span>	 <span class="comment">//最终运算结果为-4</span></div></pre></td></tr></table></figure>
-<p>实际上, 按位非(~)操作不需要这么兴师动众地去计算, 它有且仅有一条运算规律:</p>
+<pre><code>~    0000 0000 0000 0000 0000 0000 0000 0011    //3的32位二进制补码形式
+--------------------------------------------
+    1111 1111 1111 1111 1111 1111 1111 1100    //按位取反后为负数(最高位(第一位)表示正负,1代表负,0代表正)
+--------------------------------------------
+    1000 0000 0000 0000 0000 0000 0000 0011    //负数的二进制转换为十进制时,符号位不变,其它位取反(后+1)
+    1000 0000 0000 0000 0000 0000 0000 0100 // +1
+--------------------------------------------
+                                      -4     //最终运算结果为-4
+</code></pre><p>实际上, 按位非(~)操作不需要这么兴师动众地去计算, 它有且仅有一条运算规律:</p>
 <ul>
 <li><strong>按位非操作一个数值, 等同于这个数值加1然后符号改变. 即: <code>~x === -x-1</code></strong>.</li>
 </ul>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">~<span class="number">5</span> ==&gt; <span class="number">-5</span><span class="number">-1</span> === <span class="number">-6</span>;</div><div class="line">~<span class="number">-2016</span> ==&gt; <span class="number">2016</span><span class="number">-1</span> === <span class="number">2015</span>;</div></pre></td></tr></table></figure>
+<pre><code class="js">~5 ==&gt; -5-1 === -6;
+~-2016 ==&gt; 2016-1 === 2015;
+</code></pre>
 <p>由上述公式可推出: <strong><code>~~x === -(-x-1)-1 === x</code></strong>. 由于位运算摈除小数部分的特性, 连续两次按位非也可用于将非整数取整. 即, <strong><code>~~x === Math.trunc(x)</code></strong> 如下:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(~~<span class="number">5.2</span>);<span class="comment">//5</span></div><div class="line"><span class="built_in">console</span>.log(~~<span class="number">-5.2</span>);<span class="comment">//-5</span></div><div class="line"><span class="built_in">console</span>.log(<span class="built_in">Math</span>.trunc(<span class="number">-5.2</span>)===(~~<span class="number">-5.2</span>));<span class="comment">//true</span></div></pre></td></tr></table></figure>
+<pre><code class="js">console.log(~~5.2);//5
+console.log(~~-5.2);//-5
+console.log(Math.trunc(-5.2)===(~~-5.2));//true
+</code></pre>
 <p>按位非(~)运算符只能用来求数值的反码, 并且还不能输出反码的二进制字符串. 我们来稍微扩展下, 使它变得更易用.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">waveExtend</span>(<span class="params">item</span>)</span>&#123;</div><div class="line">  <span class="keyword">var</span> s = <span class="keyword">typeof</span> item == <span class="string">'number'</span> &amp;&amp; translateBinary(~item);</div><div class="line">  <span class="keyword">return</span> <span class="keyword">typeof</span> s == <span class="string">'string'</span>?s:[].map.call(item,<span class="function"><span class="keyword">function</span>(<span class="params">v</span>)</span>&#123;</div><div class="line">    <span class="keyword">return</span> v===<span class="string">'-'</span>?v:v^<span class="number">1</span>;</div><div class="line">  &#125;).join(<span class="string">''</span>).replace(<span class="regexp">/^-?/</span>,<span class="function"><span class="keyword">function</span>(<span class="params">m</span>)</span>&#123;<span class="keyword">return</span> m==<span class="string">''</span>?<span class="string">'-'</span>:<span class="string">''</span>&#125;);</div><div class="line">&#125;</div><div class="line">waveExtend(<span class="number">-8</span>);<span class="comment">//111 -8反码,正数省略的位全部为0</span></div><div class="line">waveExtend(<span class="number">12</span>);<span class="comment">//-0011 12的反码,负数省略的位全部为1</span></div></pre></td></tr></table></figure>
+<pre><code class="js">function waveExtend(item){
+  var s = typeof item == &#39;number&#39; &amp;&amp; translateBinary(~item);
+  return typeof s == &#39;string&#39;?s:[].map.call(item,function(v){
+    return v===&#39;-&#39;?v:v^1;
+  }).join(&#39;&#39;).replace(/^-?/,function(m){return m==&#39;&#39;?&#39;-&#39;:&#39;&#39;});
+}
+waveExtend(-8);//111 -8反码,正数省略的位全部为0
+waveExtend(12);//-0011 12的反码,负数省略的位全部为1
+</code></pre>
 <p>实际上, 按位非(~)运算符要求其运算数为整型, 如果运算数不是整型, 它将和其他位运算符一样尝试将其转换为32位整型, 如果无法转换, 就返回NaN. 那么~NaN等于多少呢?</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(~<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;alert(<span class="number">20</span>);&#125;());<span class="comment">//先alert(20),然后输出-1</span></div></pre></td></tr></table></figure>
+<pre><code class="js">console.log(~function(){alert(20);}());//先alert(20),然后输出-1
+</code></pre>
 <p>以上语句意在打印一个自执行函数的按位非运算结果. 而该自执行函数又没有显式指定返回值, 默认将返回undefined. 因此它实际上是在输出~undefined的值. 而undefined值不能转换成整型, 通过测试, 运算结果为-1(即~NaN === -1). 我们不妨来看看下来测试, 以便加深理解.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(~<span class="string">'abc'</span>);<span class="comment">//-1</span></div><div class="line"><span class="built_in">console</span>.log(~[]);<span class="comment">//-1</span></div><div class="line"><span class="built_in">console</span>.log(~&#123;&#125;);<span class="comment">//-1</span></div><div class="line"><span class="built_in">console</span>.log(~<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;&#125;);<span class="comment">//-1</span></div><div class="line"><span class="built_in">console</span>.log(~<span class="regexp">/\d/</span>);<span class="comment">//-1</span></div><div class="line"><span class="built_in">console</span>.log(~<span class="literal">Infinity</span>);<span class="comment">//-1</span></div><div class="line"><span class="built_in">console</span>.log(~<span class="literal">null</span>);<span class="comment">//-1</span></div><div class="line"><span class="built_in">console</span>.log(~<span class="literal">undefined</span>);<span class="comment">//-1</span></div><div class="line"><span class="built_in">console</span>.log(~<span class="literal">NaN</span>);<span class="comment">//-1</span></div></pre></td></tr></table></figure>
+<pre><code class="js">console.log(~&#39;abc&#39;);//-1
+console.log(~[]);//-1
+console.log(~{});//-1
+console.log(~function(){});//-1
+console.log(~/\d/);//-1
+console.log(~Infinity);//-1
+console.log(~null);//-1
+console.log(~undefined);//-1
+console.log(~NaN);//-1
+</code></pre>
 <h4 id="按位异或"><a href="#按位异或" class="headerlink" title="按位异或(^)"></a>按位异或(^)</h4><p>^运算符连接的两个数, 它们二进制补码形式的值每位参与运算, 只有相对应的每位值不同, 才返回1, 否则返回0.<br>(相同则消去, 有些类似两两消失的消消乐). 如下:</p>
-<figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="code">	0011	//3的二进制补码形式</span></div><div class="line"><span class="section">^	1000	//8的二进制补码形式</span></div><div class="line">--------------------</div><div class="line"><span class="code">	1011	//11, 相同位数依次运算, 值不同的返回1</span></div></pre></td></tr></table></figure>
-<p>对于按位异或(^)操作, 满足如下规律:</p>
+<pre><code>    0011    //3的二进制补码形式
+^    1000    //8的二进制补码形式
+--------------------
+    1011    //11, 相同位数依次运算, 值不同的返回1
+</code></pre><p>对于按位异或(^)操作, 满足如下规律:</p>
 <ol>
 <li><strong>由于按位异或位运算的特殊性, 数值与自身按位异或运算返回0</strong>. 如: <code>8^8=0</code> , 公式为 <code>a^a=0</code> .</li>
 <li><strong>任意整数与0进行按位异或运算, 都将会返回它本身</strong>. 如: <code>0^-98=-98</code> , 公式为 <code>0^a=a</code>.</li>
@@ -603,7 +728,21 @@
 </ol>
 <p>以上公式中, 1, 2, 3和4都是由按位异或运算特性推出的, 公式5可由公式1和2推出, 公式6可由公式5推出.</p>
 <p>由于按位异或运算的这种可交换的性质, 我们可用它辅助交换两个整数的值. 如下, 假设这两个值为a和b:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> a=<span class="number">1</span>,b=<span class="number">2</span>;</div><div class="line"><span class="comment">//常规方法</span></div><div class="line"><span class="keyword">var</span> tmp = a;</div><div class="line">a=b;</div><div class="line">b=tmp;</div><div class="line"><span class="built_in">console</span>.log(a,b);<span class="comment">//2 1</span></div><div class="line"></div><div class="line"><span class="comment">//使用按位异或~的方法</span></div><div class="line">a=a^b;	<span class="comment">//假设a,b的原始值分别为a0,b0</span></div><div class="line">b=a^b;	<span class="comment">//等价于 b=a0^b0^b0 ==&gt; b=a0</span></div><div class="line">a=a^b;	<span class="comment">//等价于 a=a0^b0^a0 ==&gt; a=b0</span></div><div class="line"><span class="built_in">console</span>.log(a,b);<span class="comment">//2 1</span></div><div class="line"><span class="comment">//以上可简写为</span></div><div class="line">a^=b;b^=a;a^=b;</div></pre></td></tr></table></figure>
+<pre><code class="js">var a=1,b=2;
+//常规方法
+var tmp = a;
+a=b;
+b=tmp;
+console.log(a,b);//2 1
+
+//使用按位异或~的方法
+a=a^b;    //假设a,b的原始值分别为a0,b0
+b=a^b;    //等价于 b=a0^b0^b0 ==&gt; b=a0
+a=a^b;    //等价于 a=a0^b0^a0 ==&gt; a=b0
+console.log(a,b);//2 1
+//以上可简写为
+a^=b;b^=a;a^=b;
+</code></pre>
 <h4 id="位运算小结"><a href="#位运算小结" class="headerlink" title="位运算小结"></a>位运算小结</h4><p>由上可以看出:</p>
 <ul>
 <li>由于连接两个数值的位运算均是对相同的位进行比较操作, 故运算数值的先后位置并不重要, 这些位运算(&amp; | ^)满足交换律. 即: <code>a操作符b === b操作符a</code>.</li>
@@ -611,27 +750,43 @@
 <li>位运算(&amp;|~^)可用于取整, 同 Math.trunc().</li>
 </ul>
 <h4 id="有符号左移-lt-lt"><a href="#有符号左移-lt-lt" class="headerlink" title="有符号左移(&lt;&lt;)"></a>有符号左移(&lt;&lt;)</h4><p>&lt;&lt;运算符, 表示将数值的32位二进制补码形式的除符号位之外的其他位都往左移动若干位数. 当x为整数时, 有: <code>x&lt;&lt;n === x*Math.pow(2,n)</code> 如下:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(<span class="number">1</span>&lt;&lt;<span class="number">3</span>);<span class="comment">//8</span></div><div class="line"><span class="built_in">console</span>.log(<span class="number">100</span>&lt;&lt;<span class="number">4</span>);<span class="comment">//1600</span></div></pre></td></tr></table></figure>
+<pre><code class="js">console.log(1&lt;&lt;3);//8
+console.log(100&lt;&lt;4);//1600
+</code></pre>
 <p>如此, Math.pow(2,n) 便可简写为 1&lt;&lt;n.</p>
 <h5 id="运算符之一为NaN"><a href="#运算符之一为NaN" class="headerlink" title="运算符之一为NaN"></a>运算符之一为NaN</h5><p>对于表达式 <code>x&lt;&lt;n</code> , <strong>当运算数x无法被转换为整数时，运算结果为0.</strong></p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(&#123;&#125;&lt;&lt;<span class="number">3</span>);<span class="comment">//0</span></div><div class="line"><span class="built_in">console</span>.log(<span class="literal">NaN</span>&lt;&lt;<span class="number">2</span>);<span class="comment">//0</span></div></pre></td></tr></table></figure>
+<pre><code class="js">console.log({}&lt;&lt;3);//0
+console.log(NaN&lt;&lt;2);//0
+</code></pre>
 <p><strong>当运算数n无法被转换为整数时，运算结果为x.</strong> 相当于 <code>x&lt;&lt;0</code> .</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(<span class="number">2</span>&lt;&lt;<span class="literal">NaN</span>);<span class="comment">//2</span></div></pre></td></tr></table></figure>
+<pre><code class="js">console.log(2&lt;&lt;NaN);//2
+</code></pre>
 <p><strong>当运算数x和n均无法被转换为整数时，运算结果为0.</strong></p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(<span class="literal">NaN</span>&lt;&lt;<span class="literal">NaN</span>);<span class="comment">//0</span></div></pre></td></tr></table></figure>
+<pre><code class="js">console.log(NaN&lt;&lt;NaN);//0
+</code></pre>
 <h4 id="有符号右移-gt-gt"><a href="#有符号右移-gt-gt" class="headerlink" title="有符号右移(&gt;&gt;)"></a>有符号右移(&gt;&gt;)</h4><p>>&gt;运算符, 除了方向向右, 其他同&lt;&lt;运算符. 当x为整数时, 有: <code>x&gt;&gt;n === Math.floor(x*Math.pow(2,-n))</code> . 如下:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(<span class="number">-5</span>&gt;&gt;<span class="number">2</span>);<span class="comment">//-2</span></div><div class="line"><span class="built_in">console</span>.log(<span class="number">-7</span>&gt;&gt;<span class="number">3</span>);<span class="comment">//-1</span></div></pre></td></tr></table></figure>
+<pre><code class="js">console.log(-5&gt;&gt;2);//-2
+console.log(-7&gt;&gt;3);//-1
+</code></pre>
 <p>右移负整数时, 返回值最大为-1.</p>
 <p>右移正整数时, 返回值最小为0.</p>
 <p>其他规律请参考 有符号左移时运算符之一为NaN的场景.</p>
 <h4 id="无符号右移-gt-gt-gt"><a href="#无符号右移-gt-gt-gt" class="headerlink" title="无符号右移(&gt;&gt;&gt;)"></a>无符号右移(&gt;&gt;&gt;)</h4><p>>&gt;&gt;运算符, 表示连同符号也一起右移. </p>
 <p>注意:无符号右移(&gt;&gt;&gt;)会把负数的二进制码当成正数的二进制码. 如下:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(<span class="number">-8</span>&gt;&gt;&gt;<span class="number">5</span>);<span class="comment">//134217727</span></div><div class="line"><span class="built_in">console</span>.log(<span class="number">-1</span>&gt;&gt;&gt;<span class="number">0</span>);<span class="comment">//4294967295</span></div></pre></td></tr></table></figure>
+<pre><code class="js">console.log(-8&gt;&gt;&gt;5);//134217727
+console.log(-1&gt;&gt;&gt;0);//4294967295
+</code></pre>
 <p>以上, 虽然-1没有发生向右位移, 但是-1的二进制码, 已经变成了正数的二进制码. 我们来回顾下这个过程.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">translateAry(<span class="number">-1</span>);<span class="comment">//-1,补全-1的二进制码至32位: 11111111111111111111111111111111</span></div><div class="line">translateAry(<span class="string">'11111111111111111111111111111111'</span>);<span class="comment">//4294967295</span></div></pre></td></tr></table></figure>
+<pre><code class="js">translateAry(-1);//-1,补全-1的二进制码至32位: 11111111111111111111111111111111
+translateAry(&#39;11111111111111111111111111111111&#39;);//4294967295
+</code></pre>
 <p>可见, -1的二进制原码本就是32个1, 将这32个1当正数的二进制处理, 直接还原成十进制, 刚好就是 4294967295.</p>
 <p>由此, 使用 &gt;&gt;&gt;运算符, 即使是右移0位, 对于负数而言也是翻天覆地的变化. 但是对于正数却没有改变. 利用这个特性, 可以判断数值的正负. 如下:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">getSymbol</span>(<span class="params">num</span>)</span>&#123;</div><div class="line">  <span class="keyword">return</span> num === (num&gt;&gt;&gt;<span class="number">0</span>)?<span class="string">"正数"</span>:<span class="string">"负数"</span>;</div><div class="line">&#125;</div><div class="line"><span class="built_in">console</span>.log(getSymbol(<span class="number">-100</span>), getSymbol(<span class="number">123</span>));<span class="comment">//负数 正数</span></div></pre></td></tr></table></figure>
+<pre><code class="js">function getSymbol(num){
+  return num === (num&gt;&gt;&gt;0)?&quot;正数&quot;:&quot;负数&quot;;
+}
+console.log(getSymbol(-100), getSymbol(123));//负数 正数
+</code></pre>
 <p>其他规律请参考 有符号左移时运算符之一为NaN的场景.</p>
 <h4 id="运算符优先级"><a href="#运算符优先级" class="headerlink" title="运算符优先级"></a>运算符优先级</h4><p>使用运算符, 如果不知道它们的运算优先级. 就像驾驶法拉利却分不清楚油门和刹车一样恐怖. 因此我为您准备了常用运算符的运算优先级表. 请对号入座.</p>
 <table>
@@ -722,27 +877,55 @@
 </table>
 <p>可以看到, ① 除了按位非(~)以外, 其他的位运算符的优先级都是低于+-运算符的; ② 按位与(&amp;), 按位异或(^) 或 按位或(|) 的运算优先级均低于比较运算符(&gt;,&lt;,=等); ③位运算符中按位或(|)优先级最低.</p>
 <h3 id="综合运用"><a href="#综合运用" class="headerlink" title="综合运用"></a>综合运用</h3><h4 id="计算绝对值"><a href="#计算绝对值" class="headerlink" title="计算绝对值"></a>计算绝对值</h4><p>使用有符号右移(&gt;&gt;)运算符, 以及按位异或(^)运算符, 我们可以实现一个 Math.abs方法. 如下:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">abs</span>(<span class="params">num</span>)</span>&#123;</div><div class="line">  <span class="keyword">var</span> x = num&gt;&gt;<span class="number">31</span>,	<span class="comment">//保留32二进制中的符号位,根据num的正负性分别返回0或-1</span></div><div class="line">      y = num^x;	<span class="comment">//返回正数,且利用按位异或中的公式2,若num为正数,num^0则返回num本身;若num为负数,则相当于num^-1,利用公式4, 此时返回-num-1</span></div><div class="line">  <span class="keyword">return</span> y-x;		<span class="comment">//若num为正数,则返回num-0即num;若num为负数则返回-num-1-(-1)即|num|</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<pre><code class="js">function abs(num){
+  var x = num&gt;&gt;31,    //保留32二进制中的符号位,根据num的正负性分别返回0或-1
+      y = num^x;    //返回正数,且利用按位异或中的公式2,若num为正数,num^0则返回num本身;若num为负数,则相当于num^-1,利用公式4, 此时返回-num-1
+  return y-x;        //若num为正数,则返回num-0即num;若num为负数则返回-num-1-(-1)即|num|
+}
+</code></pre>
 <h4 id="比较两数是否符号相同"><a href="#比较两数是否符号相同" class="headerlink" title="比较两数是否符号相同"></a>比较两数是否符号相同</h4><p>通常, 比较两个数是否符号相同, 我们使用x*y&gt;0 来判断即可. 但如果利用按位异或(^), 运算速度将更快.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(<span class="number">-17</span> ^ <span class="number">9</span> &gt; <span class="number">0</span>);<span class="comment">//false</span></div></pre></td></tr></table></figure>
+<pre><code class="js">console.log(-17 ^ 9 &gt; 0);//false
+</code></pre>
 <h4 id="对2的n次方取模-n为正整数"><a href="#对2的n次方取模-n为正整数" class="headerlink" title="对2的n次方取模(n为正整数)"></a>对2的n次方取模(n为正整数)</h4><p>比如 123%8, 实际上就是求一个余数, 并且这个余数还不大于8, 最大为7. 然后剩下的就是比较二进制值里, 123与7有几成相似了. 便不难推出公式: <code>x%(1&lt;&lt;n)==x&amp;(1&lt;&lt;n)-1</code> . </p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(<span class="number">123</span>%<span class="number">8</span>);<span class="comment">//3</span></div><div class="line"><span class="built_in">console</span>.log(<span class="number">123</span>&amp;(<span class="number">1</span>&lt;&lt;<span class="number">3</span>)<span class="number">-1</span>);<span class="comment">//3 , 为什么-1时不用括号括起来, 这是因为-优先级高于&amp;</span></div></pre></td></tr></table></figure>
+<pre><code class="js">console.log(123%8);//3
+console.log(123&amp;(1&lt;&lt;3)-1);//3 , 为什么-1时不用括号括起来, 这是因为-优先级高于&amp;
+</code></pre>
 <h4 id="统计正数二进制值中1的个数"><a href="#统计正数二进制值中1的个数" class="headerlink" title="统计正数二进制值中1的个数"></a>统计正数二进制值中1的个数</h4><p>不妨先判断n的奇偶性, 为奇数时计数器增加1, 然后将n右移一位, 重复上面步骤, 直到递归退出.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">getTotalForOne</span>(<span class="params">n</span>)</span>&#123;</div><div class="line">  	<span class="keyword">return</span> n?(n&amp;<span class="number">1</span>)+<span class="built_in">arguments</span>.callee(n&gt;&gt;<span class="number">1</span>):<span class="number">0</span>;</div><div class="line">&#125;</div><div class="line">getTotalForOne(<span class="number">9</span>);<span class="comment">//2</span></div></pre></td></tr></table></figure>
+<pre><code class="js">function getTotalForOne(n){
+      return n?(n&amp;1)+arguments.callee(n&gt;&gt;1):0;
+}
+getTotalForOne(9);//2
+</code></pre>
 <h4 id="实现加法运算"><a href="#实现加法运算" class="headerlink" title="实现加法运算"></a>实现加法运算</h4><p>加法运算, 从二进制值的角度看, 有 ①同位相加 和 ②遇2进1 两种运算(实际上, 十进制运算也是一样, 同位相加, 遇10进1). </p>
 <p>首先我们看看第①种, 同位相加, 不考虑②遇2进1.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="number">1</span> + <span class="number">1</span> = <span class="number">0</span></div><div class="line"><span class="number">1</span> + <span class="number">0</span> = <span class="number">1</span></div><div class="line"><span class="number">0</span> + <span class="number">1</span> = <span class="number">1</span></div><div class="line"><span class="number">0</span> + <span class="number">0</span> = <span class="number">0</span></div></pre></td></tr></table></figure>
+<pre><code class="js">1 + 1 = 0
+1 + 0 = 1
+0 + 1 = 1
+0 + 0 = 0
+</code></pre>
 <p>以上运算过程有没有很熟悉. 是不是和按位异或(^)运算有着惊人的相似. 如:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="number">1</span> ^ <span class="number">1</span> = <span class="number">0</span></div><div class="line"><span class="number">1</span> ^ <span class="number">0</span> = <span class="number">1</span></div><div class="line"><span class="number">0</span> ^ <span class="number">1</span> = <span class="number">1</span></div><div class="line"><span class="number">0</span> ^ <span class="number">0</span> = <span class="number">0</span></div></pre></td></tr></table></figure>
+<pre><code class="js">1 ^ 1 = 0
+1 ^ 0 = 1
+0 ^ 1 = 1
+0 ^ 0 = 0
+</code></pre>
 <p>因此①同位相加的运算, 完全可由按位异或(^)代替, 即: x^y.</p>
 <p>那么②遇2进1 应该怎么实现呢? 实际上, 非位移位运算中, 只有按位与(&amp;)才能满足遇2的场景, 且只有有符号左移(&lt;&lt;)能满足进1的场景.</p>
 <p>现在范围缩小了, 就看&amp;和&lt;&lt;运算符能不能真正满足需要了. 值得高兴的是, 按位与(&amp;)只有在同位都是1的情况下才返回1, 其他情况均返回0. 如果对其运算结果再做左移一位的运算, 即: (x&amp;y)&lt;&lt;1. 刚好满足了②遇2进1的场景.</p>
 <p>因为我们是将①同位相加和②遇2进1的两种运算分开进行. 那么最终的加法运算结果应该还要做一次加法. 如下:</p>
 <p>最终公式: <code>x + y = x^y + (x&amp;y)&lt;&lt;1</code> </p>
 <p>这个公式并不完美, 因为它还是使用了加法, 推导公式怎么能直接使用推导结果呢? 太可怕了, 就不怕掉入递归深渊吗? 下面我们就来绕过这个坑. 而绕过这个坑有一个前提, 那就是只要 x^y 或 (x&amp;y)&lt;&lt;1中有一个值为0就行了, 这样便不用进行加法运算了. 讲了这么多, 不如看代码.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">add</span>(<span class="params">x, y</span>)</span>&#123;</div><div class="line">  <span class="keyword">var</span> _x = x^y,</div><div class="line">      _y = (x&amp;y)&lt;&lt;<span class="number">1</span>;</div><div class="line">  <span class="keyword">return</span> !_x &amp;&amp; _y || !_y &amp;&amp; _x || <span class="built_in">arguments</span>.callee(_x,_y);</div><div class="line">&#125;</div><div class="line">add(<span class="number">12345678</span>,<span class="number">87654321</span>);<span class="comment">//999999999</span></div><div class="line">add(<span class="number">9527</span>,<span class="number">-12</span>);<span class="comment">//9515</span></div></pre></td></tr></table></figure>
+<pre><code class="js">function add(x, y){
+  var _x = x^y,
+      _y = (x&amp;y)&lt;&lt;1;
+  return !_x &amp;&amp; _y || !_y &amp;&amp; _x || arguments.callee(_x,_y);
+}
+add(12345678,87654321);//999999999
+add(9527,-12);//9515
+</code></pre>
 <h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>最后补充一点: 位运算一般只适用 [-2^31, 2^31-1] (即 -2147483648~2147483647) 以内的正负数. 超过这个范围, 计算将可能出现错误. 如下: </p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(<span class="number">1</span>&lt;&lt;<span class="number">31</span>);<span class="comment">//-2147483648</span></div></pre></td></tr></table></figure>
+<pre><code class="js">console.log(1&lt;&lt;31);//-2147483648
+</code></pre>
 <p>由于数值(2^31)超过了31位(加上保留的一个符号位,共32位), 故计算出错, 于是按照负数的方式解释二进制的值了.说好的不改变符号呢!!!</p>
 <p>本文啰嗦几千字, 就为了说清楚两个事儿. ① Math对象中, 比较常用的就是数值运算方法, 不妨多看看, 其他的知道有这个api就行了. ② 位运算中, 则需要基本了解每种位运算符的运算方式, 如果能注意运算中 0和1等特殊数值 的一些妙用就更好了. 无论如何, 本文不可能面面俱到. 如果您对负数的位运算不甚理解, 建议去补下计算机的补码. 希望能对您有所帮助.</p>
 <h3 id="注解"><a href="#注解" class="headerlink" title="注解"></a>注解</h3><ol>
@@ -773,7 +956,7 @@
         <a id="btn_donate" class="btn_donate" href="javascript:;" title="打赏"></a>
         <span class="donate_txt">
            &uarr;<br>
-       如果你觉得有用，就支持一下吧！
+       支持一杯咖啡吧！
         </span>
       </div>  
   <div id="donate_guide" class="donate_bar center hidden" >
@@ -840,69 +1023,103 @@
 
 
 
-<div class="duoshuo">
-	<div class="ds-thread" data-thread-key="Math" data-title="全面解读Math对象及位运算" data-url="http://louiszhai.github.io/2016/07/01/Math/"></div>
-	<style>
-		#ds-reset .ds-avatar img{width:54px;height:54px;border-radius:27px;-webkit-border-radius:27px;-moz-border-radius:27px;box-shadow:inset 0 -1px 0 #3333sf;-webkit-box-shadow:inset 0 -1px 0 #3333sf;-webkit-transition:0.4s;-webkit-transition:-webkit-transform 0.4s ease-out;transition:transform 0.4s ease-out;-moz-transition:-moz-transform 0.4s ease-out;}
-		#ds-reset .ds-avatar img:hover{box-shadow:0 0 10px #fff;rgba(255,255,255,.6),inset 0 0 20px rgba(255,255,255,1);-webkit-box-shadow:0 0 10px #fff;rgba(255,255,255,.6),inset 0 0 20px rgba(255,255,255,1);transform:rotateZ(360deg);-webkit-transform:rotateZ(360deg);-moz-transform:rotateZ(360deg);}
-		p.ds-powered-by,#ds-sync-checkbox,.ds-sync label{display:none!important;}
-		#ds-reset .ds-rounded-top{-webkit-border-top-right-radius:0px;-webkit-border-top-left-radius:0px;border-top-right-radius:0px;border-top-left-radius:0px;}
-		#ds-thread #ds-reset .ds-textarea-wrapper{background:#fff;border:0;margin-bottom:20px;padding-right:0px;}
-		#ds-thread #ds-reset .ds-textarea-wrapper textarea{min-height:80px;border:1px solid #ccc;padding:10px;-webkit-appearance:none;border-radius:0;background-color:#FFFFFF;border-color:#cccccc;box-shadow:inset 0 1px 2px rgba(0,0,0,0.1);color:rgba(0,0,0,0.75);-webkit-box-sizing:border-box;box-sizing:border-box;-webkit-transition:border-color 0.15s linear,background 0.15s linear;-moz-transition:border-color 0.15s linear,background 0.15s linear;-ms-transition:border-color 0.15s linear,background 0.15s linear;-o-transition:border-color 0.15s linear,background 0.15s linear;transition:border-color 0.15s linear,background 0.15s linear;}
-		/*#ds-thread #ds-reset .ds-textarea-wrapper textarea:focus{border-color:#999999;background:#fafafa;outline:none;}*/
-		#ds-thread #ds-reset .ds-post-options{border-bottom-left-radius:0px;-webkit-border-bottom-left-radius:0px;border:none;background:none!important;}
-		#ds-reset .ds-textarea-wrapper textarea:focus{border-color:#66afe9;outline:0;-webkit-box-shadow:inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);box-shadow:inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);}
-		#ds-thread #ds-reset .ds-post-button:hover,#ds-thread #ds-reset .ds-post-button:focus{
-		    background-color: #51a351;
-		    background-position: 0 -32px;
-		    color:white;
-		}
-		#ds-thread #ds-reset .ds-post-toolbar,#ds-reset .ds-avatar{box-shadow:none;}
-		#ds-thread #ds-reset .ds-textarea-wrapper textarea:focus{
-	    	/*background: none repeat scroll 0 0 #F4FAFF;*/
-	    	border-color:#9DD4FD;
-	    	border-width:1px;
-	    	box-shadow:0 1px 1px rgba(0,0,0,0.075) inset, 0 0 8px rgba(82, 168, 236, 0.6);
-	    	outline:0 none;
-    	}
-		#ds-thread #ds-reset .ds-textarea-wrapper textarea:active{
-	    	/*background: none repeat scroll 0 0 #F4FAFF;*/
-	    	border-width:1px;
-	    	border-color:#9DD4FD;
-	    	box-shadow:0 1px 1px rgba(0,0,0,0.075) inset, 0 0 8px rgba(82, 168, 236, 0.6);
-	    	outline:0 none;
-    	}
-    	#ds-thread #ds-reset .ds-post-button{
-    		box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset, 0 1px 2px rgba(0, 0, 0, 0.05);
-		    border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
-		    border-width: 1px;
-		    border-style: solid;
-		    border-radius: 3px;
-		    background: #5bb75b;
-		    color:white;
-		    text-shadow:none;
-		    transition:background-color 300ms ease-out;
-    	}
-    	#ds-reset .ds-avatar{
-    		background-color:initial;
-    	}
-
-	</style>
-	<script type="text/javascript">
-	var duoshuoQuery = {short_name:"true"};
-	(function() {
-		var ds = document.createElement('script');
-		ds.type = 'text/javascript';ds.async = true;
-		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-		ds.charset = 'UTF-8';
-		(document.getElementsByTagName('head')[0] 
-		 || document.getElementsByTagName('body')[0]).appendChild(ds);
-	})();
-	</script>
-</div>
 
 
 
+
+  <style>
+/*
+    Name:     Kimbie (light)
+    Author:   Jan T. Sott
+    License:  Creative Commons Attribution-ShareAlike 4.0 Unported License
+    URL:      https://github.com/idleberg/Kimbie-highlight.js
+*/
+
+/* Kimbie Comment */
+.hljs-comment,
+.hljs-quote {
+  color: #a57a4c;
+}
+
+/* Kimbie Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-meta {
+  color: #dc3958;
+}
+
+/* Kimbie Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-deletion,
+.hljs-link {
+  color: #f79a32;
+}
+
+/* Kimbie Yellow */
+.hljs-title,
+.hljs-section,
+.hljs-attribute {
+  color: #f06431;
+}
+
+/* Kimbie Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+  color: #889b4a;
+}
+
+/* Kimbie Purple */
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-function {
+  color: #98676a;
+}
+
+.hljs {
+  display: block;
+  overflow-x: auto;
+  /*background: #fbebd4;*/
+  color: #84613d;
+  padding: 0.5em;
+}
+
+.hljs-emphasis {
+  font-style: italic;
+}
+
+.hljs-strong {
+  font-weight: bold;
+}
+</style>
+  <script src="//cdn.bootcss.com/highlight.js/9.2.0/highlight.min.js"></script>
+  <script>
+    // hljs.initHighlightingOnLoad();
+    [].slice.call(document.querySelectorAll('pre code')).forEach(function(block, i) {
+      hljs.highlightBlock(block);
+      var lines = block.innerText.split('\n').length - 1;
+      var ul = document.createElement('ul');
+      ul.className = 'pre-numbering';
+      block.className += ' has-numbering';
+      block.parentNode.appendChild(ul);
+      for(i=1;i<=lines;i++){
+        var li = document.createElement('li');
+        li.innerText = i;
+        ul.appendChild(li);
+      }
+    });
+  </script>
 </div>
         <link rel="stylesheet" href="/css/content.css" type="text/css">
 <footer id="footer">

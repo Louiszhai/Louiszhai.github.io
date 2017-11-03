@@ -254,20 +254,44 @@
 <p>这样, 我们便拿到了跨域数据.</p>
 <h4 id="JSONP"><a href="#JSONP" class="headerlink" title="JSONP"></a>JSONP</h4><p>由上, script标签并不受同源策略约束, 基于script 标签可做 jsonp 形式的访问, 可以通过第三方服务器生成动态的js代码来回调本地的js方法，而方法中的参数则由第三方服务器在后台获取，并以JSON的形式填充到JS方法当中. 即 JSON with Padding. 具体如下:</p>
 <p>1) 可用js生成以下html 代码, 去做jsonp的请求.</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">"text/javascript"</span> <span class="attr">src</span>=<span class="string">"https://www.targetDomain.com/jsonp?callback=callbackName"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div></pre></td></tr></table></figure>
+<pre><code class="html">&lt;script type=&quot;text/javascript&quot; src=&quot;https://www.targetDomain.com/jsonp?callback=callbackName&quot;&gt;&lt;/script&gt;
+</code></pre>
 <p>使用 jquery, 即</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">jQuery.getJSON(</div><div class="line">  <span class="string">"https://www.yourdomain.com/jsonp?callback=?"</span>,</div><div class="line">  <span class="function"><span class="keyword">function</span>(<span class="params">data</span>) </span>&#123;</div><div class="line">      <span class="built_in">console</span>.log(<span class="string">"name: "</span> + data.name);</div><div class="line">  &#125;</div><div class="line">);</div></pre></td></tr></table></figure>
+<pre><code class="js">jQuery.getJSON(
+  &quot;https://www.yourdomain.com/jsonp?callback=?&quot;,
+  function(data) {
+      console.log(&quot;name: &quot; + data.name);
+  }
+);
+</code></pre>
 <p>其中回调函数名 “callback” 为 “?”, 即不需要用户指定，而是由jquery生成.</p>
 <p>2) 服务器端,以 java 为例, 参考如下: </p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException &#123;</div><div class="line">  //获取JSON数据</div><div class="line">  String jsonData = "&#123;\"name\":\"jsonp\""&#125;";</div><div class="line">  //获取回调函数名</div><div class="line">  String callback = req.getParameter("callback");  </div><div class="line">  //拼接动态JS代码</div><div class="line">  String output = callback + "(" + jsonData + ");</div><div class="line">    resp.setContentType("text/javascript");</div><div class="line">  PrintWriter out = resp.getWriter();</div><div class="line">  out.println(output);</div><div class="line">  // 响应为 callbackName(&#123;\"name\":\"jsonp\""&#125;);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<pre><code class="java">protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+  //获取JSON数据
+  String jsonData = &quot;{\&quot;name\&quot;:\&quot;jsonp\&quot;&quot;}&quot;;
+  //获取回调函数名
+  String callback = req.getParameter(&quot;callback&quot;);  
+  //拼接动态JS代码
+  String output = callback + &quot;(&quot; + jsonData + &quot;);
+    resp.setContentType(&quot;text/javascript&quot;);
+  PrintWriter out = resp.getWriter();
+  out.println(output);
+  // 响应为 callbackName({\&quot;name\&quot;:\&quot;jsonp\&quot;&quot;});
+}
+</code></pre>
 <h4 id="postMessage"><a href="#postMessage" class="headerlink" title="postMessage"></a>postMessage</h4><p>ES5新增的 postMessage() 方法允许来自不同源的脚本采用异步方式进行有限的通信，可以实现跨文本档、多窗口、跨域消息传递.</p>
 <p>语法: postMessage(data,origin)</p>
 <p><strong>data</strong>: 要传递的数据，html5规范中提到该参数可以是JavaScript的任意基本类型或可复制的对象，然而并不是所有浏览器都做到了这点儿，部分浏览器只能处理字符串参数，所以我们在传递参数的时候建议使用JSON.stringify()方法对对象参数序列化，在低版本IE中引用json2.js可以实现类似效果.</p>
 <p><strong>origin</strong>：字符串参数，指明目标窗口的源，协议+主机+端口号[+URL]，URL会被忽略，所以可以不写，这个参数是为了安全考虑，postMessage()方法只会将message传递给指定窗口，当然如果愿意也可以建参数设置为”*”，这样可以传递给任意窗口，如果要指定和当前窗口同源的话设置为”/“。</p>
 <p>父页面发送消息: </p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">window</span>.frames[<span class="number">0</span>].postMessage(<span class="string">'message'</span>, origin)</div></pre></td></tr></table></figure>
+<pre><code class="js">window.frames[0].postMessage(&#39;message&#39;, origin)
+</code></pre>
 <p>iframe接受消息: </p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">window</span>.addEventListener(<span class="string">'message'</span>,<span class="function"><span class="keyword">function</span>(<span class="params">e</span>)</span>&#123;</div><div class="line">	<span class="keyword">if</span>(e.source!=<span class="built_in">window</span>.parent) <span class="keyword">return</span>;<span class="comment">//若消息源不是父页面则退出</span></div><div class="line">  	<span class="comment">//TODO ...</span></div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<pre><code class="js">window.addEventListener(&#39;message&#39;,function(e){
+    if(e.source!=window.parent) return;//若消息源不是父页面则退出
+      //TODO ...
+});
+</code></pre>
 <p>其中 e 对象有三个重要的属性    </p>
 <ul>
 <li>data, 表示父页面传递过来的message</li>
@@ -277,24 +301,41 @@
 <h4 id="CORS-跨域访问"><a href="#CORS-跨域访问" class="headerlink" title="CORS 跨域访问"></a>CORS 跨域访问</h4><p>HTML5带来了一种新的跨域请求的方式 — CORS, 即 <a href="https://www.w3.org/TR/cors/" target="_blank" rel="external">Cross-origin resource sharing</a>. 它更加安全, 上述的 JSONP, postMessage 等, 资源本身没有能力保证自己不被滥用. CORS的目标是保护资源只被可信的访问源以正确的方式访问.</p>
 <p>目前, 主流的浏览器都支持此协议, 可以在caniuse.com 中查到<a href="http://caniuse.com/#search=cors" target="_blank" rel="external">http://caniuse.com/#search=cors</a>.</p>
 <p>简而言之, 浏览器不再一味禁止跨域访问, 而是检查目的站点的响应头域, 进而判断是否允许当前站点访问. 通常, 服务器使用以下的这些响应头域用来通知浏览器:</p>
-<figure class="highlight fortran"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">Response headers[edit]</div><div class="line"><span class="keyword">Access</span>-Control-Allow-Origin</div><div class="line"><span class="keyword">Access</span>-Control-Allow-Credentials</div><div class="line"><span class="keyword">Access</span>-Control-Allow-Methods</div><div class="line"><span class="keyword">Access</span>-Control-Allow-Headers</div><div class="line"><span class="keyword">Access</span>-Control-Expose-Headers</div><div class="line"><span class="keyword">Access</span>-Control-<span class="built_in">Max</span>-Age</div></pre></td></tr></table></figure>
-<p>CORS的解决办法是在服务端Response的HTTP头域加入资源的访问权限信息. 如: A站只需要在response头中加一个字段就能让B站跨站访问.</p>
-<figure class="highlight ada"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">access</span>-control-allow-origin:*</div></pre></td></tr></table></figure>
-<p>其中<code>*</code> 表示通配, 所有的域都能访问此资源, 如果严谨一些只允许B站访问:</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">access-control-allow-origin:<span class="xml"><span class="tag">&lt;<span class="name">B-DOMAIN</span>&gt;</span></span></div></pre></td></tr></table></figure>
-<p>这样B站就可以直接访问此资源, 不需要JSONP 也不需要iframe了.</p>
+<pre><code>Response headers[edit]
+Access-Control-Allow-Origin
+Access-Control-Allow-Credentials
+Access-Control-Allow-Methods
+Access-Control-Allow-Headers
+Access-Control-Expose-Headers
+Access-Control-Max-Age
+</code></pre><p>CORS的解决办法是在服务端Response的HTTP头域加入资源的访问权限信息. 如: A站只需要在response头中加一个字段就能让B站跨站访问.</p>
+<pre><code>access-control-allow-origin:*
+</code></pre><p>其中<code>*</code> 表示通配, 所有的域都能访问此资源, 如果严谨一些只允许B站访问:</p>
+<pre><code>access-control-allow-origin:&lt;B-DOMAIN&gt;
+</code></pre><p>这样B站就可以直接访问此资源, 不需要JSONP 也不需要iframe了.</p>
 <p>CORS需要指定METHOD访问, 对于GET和POST请求, 至少要指定以下三种methods, 如下:</p>
-<figure class="highlight ada"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">Access</span>-Control-Allow-Methods: POST, GET, OPTIONS</div></pre></td></tr></table></figure>
-<p>如果是POST请求, 且提交的数据类型是json, 那么, CORS需要指定headers.</p>
-<figure class="highlight ada"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">Access</span>-Control-Allow-Headers: Content-<span class="keyword">Type</span></div></pre></td></tr></table></figure>
-<p>CORS默认是不带cookie的, 设置以下字段将允许浏览器发送cookie.</p>
-<figure class="highlight yaml"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="attr">Access-Control-Allow-Credentials:</span> <span class="literal">true</span></div></pre></td></tr></table></figure>
-<p>除此之外, 为了跨站发送cookie等验证信息, <code>access-control-allow-origin</code> 字段将不允许设置为<code>*</code>, 它需要明确指定与请求网页一致的域名.</p>
+<pre><code>Access-Control-Allow-Methods: POST, GET, OPTIONS
+</code></pre><p>如果是POST请求, 且提交的数据类型是json, 那么, CORS需要指定headers.</p>
+<pre><code>Access-Control-Allow-Headers: Content-Type
+</code></pre><p>CORS默认是不带cookie的, 设置以下字段将允许浏览器发送cookie.</p>
+<pre><code>Access-Control-Allow-Credentials: true
+</code></pre><p>除此之外, 为了跨站发送cookie等验证信息, <code>access-control-allow-origin</code> 字段将不允许设置为<code>*</code>, 它需要明确指定与请求网页一致的域名.</p>
 <p>同时, 请求网页中需要做如下显式设置才能真正发送cookie.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">xhr.withCredentials = <span class="literal">true</span>;</div></pre></td></tr></table></figure>
+<pre><code class="js">xhr.withCredentials = true;
+</code></pre>
 <h4 id="document-domain"><a href="#document-domain" class="headerlink" title="document.domain"></a>document.domain</h4><p>通过修改document的domain属性，我们可以在域和子域或者不同的子域之间通信(即它们必须在同一个一级域名下). 同域策略认为域和子域隶属于不同的域，比如a.com和 script.a.com是不同的域，这时，我们无法在a.com下的页面中调用script.a.com中定义的JavaScript方法。但是当我们把它们document的domain属性都修改为a.com，浏览器就会认为它们处于同一个域下，那么我们就可以互相获取对方数据或者操作对方DOM了。</p>
 <p>比如, 我们在 www.a.com/a.html 下, 现在想获取 www.script.a.com/b.html, 即主域名相同, 二级域名不同. 那么可以这么做:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">document</span>.domain = <span class="string">'a.com'</span>;</div><div class="line"><span class="keyword">var</span> iframe = <span class="built_in">document</span>.createElement(<span class="string">'iframe'</span>);</div><div class="line">iframe.src = <span class="string">'http://www.script.a.com/b.html'</span>;</div><div class="line">iframe.style.display = <span class="string">'none'</span>;</div><div class="line"><span class="built_in">document</span>.body.appendChild(iframe);</div><div class="line">iframe.addEventListener(<span class="string">'load'</span>,<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">	<span class="comment">//TODO 载入完成时做的事情</span></div><div class="line">	<span class="comment">//var _document = iframe.contentWindow.document;</span></div><div class="line"> 	<span class="comment">//...</span></div><div class="line">&#125;,<span class="literal">false</span>);</div></pre></td></tr></table></figure>
+<pre><code class="js">document.domain = &#39;a.com&#39;;
+var iframe = document.createElement(&#39;iframe&#39;);
+iframe.src = &#39;http://www.script.a.com/b.html&#39;;
+iframe.style.display = &#39;none&#39;;
+document.body.appendChild(iframe);
+iframe.addEventListener(&#39;load&#39;,function(){
+    //TODO 载入完成时做的事情
+    //var _document = iframe.contentWindow.document;
+     //...
+},false);
+</code></pre>
 <p>注意: </p>
 <ul>
 <li>2个页面都要设置, 哪怕 a.html 页已处于 <em>a.com</em> 域名下, 也必须显式设置.</li>
@@ -306,18 +347,28 @@
 <li>只适用于iframe.</li>
 </ul>
 <h5 id="Internet-Explorer同源策略绕过"><a href="#Internet-Explorer同源策略绕过" class="headerlink" title="Internet Explorer同源策略绕过"></a>Internet Explorer同源策略绕过</h5><p>Internet Explorer8以及前面的版本很容易通过document.domain实现同源策略绕过, 通过重写文档对象, 域属性这个问题可以十分轻松的被利用.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> <span class="built_in">document</span>;</div><div class="line"><span class="built_in">document</span> = &#123;&#125;;</div><div class="line"><span class="built_in">document</span>.domain = <span class="string">'http://www.a.com'</span>;</div><div class="line"><span class="built_in">console</span>.log(<span class="built_in">document</span>.domain);</div></pre></td></tr></table></figure>
+<pre><code class="js">var document;
+document = {};
+document.domain = &#39;http://www.a.com&#39;;
+console.log(document.domain);
+</code></pre>
 <p>如果你在最新的浏览器中运行这段代码, 可能在JavaScript控制台会显示一个同源策略绕过错误.</p>
 <h4 id="window-name"><a href="#window-name" class="headerlink" title="window.name"></a>window.name</h4><p>window 对象的name属性是一个很特别的属性, 当该window的location变化, 然后重新加载, 它的name属性可以依然保持不变. 那么我们可以在页面 A中用iframe加载其他域的页面B, 而页面B中用JavaScript把需要传递的数据赋值给window.name, iframe加载完成之后（iframe.onload）, 页面A修改iframe的地址, 将其变成同域的一个地址, 然后就可以读出iframe的window.name的值了(因为A中的window.name和iframe中的window.name互相独立的, 所以不能直接在A中获取window.name, 而要通过iframe获取其window.name). 这个方式非常适合单向的数据请求，而且协议简单、安全. 不会像JSONP那样不做限制地执行外部脚本.</p>
 <h4 id="location-hash"><a href="#location-hash" class="headerlink" title="location.hash"></a>location.hash</h4><p><strong>location.hash(两个iframe之间), 又称FIM, Fragment Identitier Messaging的简写</strong>.</p>
 <p>因为父窗口可以对iframe进行URL读写, iframe也可以读写父窗口的URL, URL有一部分被称为hash, 就是#号及其后面的字符, 它一般用于浏览器锚点定位, Server端并不关心这部分, 所以这部分的修改不会产生HTTP请求, 但是会产生浏览器历史记录. 此方法的原理就是改变URL的hash部分来进行双向通信. 每个window通过改变其他 window的location来发送消息（由于两个页面不在同一个域下IE、Chrome不允许修改parent.location.hash的值，所以要借助于父窗口域名下的一个代理iframe）, 并通过监听自己的URL的变化来接收消息. 这个方式的通信会造成一些不必要的浏览器历史记录, 而且有些浏览器不支持onhashchange事件, 需要轮询来获知URL的改变, 最后, 这样做也存在缺点, 比如数据直接暴露在了url中, 数据容量和类型都有限等.</p>
 <h4 id="Access-Control"><a href="#Access-Control" class="headerlink" title="Access Control"></a>Access Control</h4><p>此跨域方法目前只在很少的浏览器中得以支持, 这些浏览器可以发送一个跨域的HTTP请求（Firefox, Google Chrome等通过XMLHTTPRequest实现, IE8下通过XDomainRequest实现）, 请求的响应必须包含一个Access- Control-Allow-Origin的HTTP响应头, 该响应头声明了请求域的可访问权限. 例如baidu.com对google.com下的getUsers.php发送了一个跨域的HTTP请求（通过ajax）, 那么getUsers.php必须加入如下的响应头:</p>
-<figure class="highlight jsp"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">header(<span class="string">"Access-Control-Allow-Origin: http://www.baidu.com"</span>);<span class="comment">//表示允许baidu.com跨域请求本文件</span></div></pre></td></tr></table></figure>
+<pre><code class="jsp">header(&quot;Access-Control-Allow-Origin: http://www.baidu.com&quot;);//表示允许baidu.com跨域请求本文件
+</code></pre>
 <h4 id="flash-URLLoder"><a href="#flash-URLLoder" class="headerlink" title="flash URLLoder"></a>flash URLLoder</h4><p>flash有自己的一套安全策略, 服务器可以通过crossdomain.xml文件来声明能被哪些域的SWF文件访问, SWF也可以通过API来确定自身能被哪些域的SWF加载. 当跨域访问资源时, 例如从域 a.com 请求域 b.com上的数据, 我们可以借助flash来发送HTTP请求. </p>
 <ul>
 <li>首先, 修改域 b.com上的 crossdomain.xml(一般存放在根目录, 如果没有需要手动创建) , 把 a.com 加入到白名单;</li>
 </ul>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="php"><span class="meta">&lt;?</span>xml version=<span class="string">"1.0"</span><span class="meta">?&gt;</span></span></div><div class="line"><span class="tag">&lt;<span class="name">cross-domain-policy</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">site-control</span> <span class="attr">permitted-cross-domain-policies</span>=<span class="string">"by-content-type"</span>/&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">allow-access-from</span> <span class="attr">domain</span>=<span class="string">"a.com"</span> /&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">cross-domain-policy</span>&gt;</span></div></pre></td></tr></table></figure>
+<pre><code class="xml">&lt;?xml version=&quot;1.0&quot;?&gt;
+&lt;cross-domain-policy&gt;
+&lt;site-control permitted-cross-domain-policies=&quot;by-content-type&quot;/&gt;
+&lt;allow-access-from domain=&quot;a.com&quot; /&gt;
+&lt;/cross-domain-policy&gt;
+</code></pre>
 <ul>
 <li>其次, 通过Flash URLLoader发送HTTP请求, 拿到请求后并返回;</li>
 <li>最后, 通过Flash API把响应结果传递给JavaScript.</li>
@@ -356,7 +407,7 @@
         <a id="btn_donate" class="btn_donate" href="javascript:;" title="打赏"></a>
         <span class="donate_txt">
            &uarr;<br>
-       如果你觉得有用，就支持一下吧！
+       支持一杯咖啡吧！
         </span>
       </div>  
   <div id="donate_guide" class="donate_bar center hidden" >
@@ -423,69 +474,103 @@
 
 
 
-<div class="duoshuo">
-	<div class="ds-thread" data-thread-key="cross-domain" data-title="由同源策略到前端跨域" data-url="http://louiszhai.github.io/2016/01/11/cross-domain/"></div>
-	<style>
-		#ds-reset .ds-avatar img{width:54px;height:54px;border-radius:27px;-webkit-border-radius:27px;-moz-border-radius:27px;box-shadow:inset 0 -1px 0 #3333sf;-webkit-box-shadow:inset 0 -1px 0 #3333sf;-webkit-transition:0.4s;-webkit-transition:-webkit-transform 0.4s ease-out;transition:transform 0.4s ease-out;-moz-transition:-moz-transform 0.4s ease-out;}
-		#ds-reset .ds-avatar img:hover{box-shadow:0 0 10px #fff;rgba(255,255,255,.6),inset 0 0 20px rgba(255,255,255,1);-webkit-box-shadow:0 0 10px #fff;rgba(255,255,255,.6),inset 0 0 20px rgba(255,255,255,1);transform:rotateZ(360deg);-webkit-transform:rotateZ(360deg);-moz-transform:rotateZ(360deg);}
-		p.ds-powered-by,#ds-sync-checkbox,.ds-sync label{display:none!important;}
-		#ds-reset .ds-rounded-top{-webkit-border-top-right-radius:0px;-webkit-border-top-left-radius:0px;border-top-right-radius:0px;border-top-left-radius:0px;}
-		#ds-thread #ds-reset .ds-textarea-wrapper{background:#fff;border:0;margin-bottom:20px;padding-right:0px;}
-		#ds-thread #ds-reset .ds-textarea-wrapper textarea{min-height:80px;border:1px solid #ccc;padding:10px;-webkit-appearance:none;border-radius:0;background-color:#FFFFFF;border-color:#cccccc;box-shadow:inset 0 1px 2px rgba(0,0,0,0.1);color:rgba(0,0,0,0.75);-webkit-box-sizing:border-box;box-sizing:border-box;-webkit-transition:border-color 0.15s linear,background 0.15s linear;-moz-transition:border-color 0.15s linear,background 0.15s linear;-ms-transition:border-color 0.15s linear,background 0.15s linear;-o-transition:border-color 0.15s linear,background 0.15s linear;transition:border-color 0.15s linear,background 0.15s linear;}
-		/*#ds-thread #ds-reset .ds-textarea-wrapper textarea:focus{border-color:#999999;background:#fafafa;outline:none;}*/
-		#ds-thread #ds-reset .ds-post-options{border-bottom-left-radius:0px;-webkit-border-bottom-left-radius:0px;border:none;background:none!important;}
-		#ds-reset .ds-textarea-wrapper textarea:focus{border-color:#66afe9;outline:0;-webkit-box-shadow:inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);box-shadow:inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);}
-		#ds-thread #ds-reset .ds-post-button:hover,#ds-thread #ds-reset .ds-post-button:focus{
-		    background-color: #51a351;
-		    background-position: 0 -32px;
-		    color:white;
-		}
-		#ds-thread #ds-reset .ds-post-toolbar,#ds-reset .ds-avatar{box-shadow:none;}
-		#ds-thread #ds-reset .ds-textarea-wrapper textarea:focus{
-	    	/*background: none repeat scroll 0 0 #F4FAFF;*/
-	    	border-color:#9DD4FD;
-	    	border-width:1px;
-	    	box-shadow:0 1px 1px rgba(0,0,0,0.075) inset, 0 0 8px rgba(82, 168, 236, 0.6);
-	    	outline:0 none;
-    	}
-		#ds-thread #ds-reset .ds-textarea-wrapper textarea:active{
-	    	/*background: none repeat scroll 0 0 #F4FAFF;*/
-	    	border-width:1px;
-	    	border-color:#9DD4FD;
-	    	box-shadow:0 1px 1px rgba(0,0,0,0.075) inset, 0 0 8px rgba(82, 168, 236, 0.6);
-	    	outline:0 none;
-    	}
-    	#ds-thread #ds-reset .ds-post-button{
-    		box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset, 0 1px 2px rgba(0, 0, 0, 0.05);
-		    border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
-		    border-width: 1px;
-		    border-style: solid;
-		    border-radius: 3px;
-		    background: #5bb75b;
-		    color:white;
-		    text-shadow:none;
-		    transition:background-color 300ms ease-out;
-    	}
-    	#ds-reset .ds-avatar{
-    		background-color:initial;
-    	}
-
-	</style>
-	<script type="text/javascript">
-	var duoshuoQuery = {short_name:"true"};
-	(function() {
-		var ds = document.createElement('script');
-		ds.type = 'text/javascript';ds.async = true;
-		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-		ds.charset = 'UTF-8';
-		(document.getElementsByTagName('head')[0] 
-		 || document.getElementsByTagName('body')[0]).appendChild(ds);
-	})();
-	</script>
-</div>
 
 
 
+
+  <style>
+/*
+    Name:     Kimbie (light)
+    Author:   Jan T. Sott
+    License:  Creative Commons Attribution-ShareAlike 4.0 Unported License
+    URL:      https://github.com/idleberg/Kimbie-highlight.js
+*/
+
+/* Kimbie Comment */
+.hljs-comment,
+.hljs-quote {
+  color: #a57a4c;
+}
+
+/* Kimbie Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-meta {
+  color: #dc3958;
+}
+
+/* Kimbie Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-deletion,
+.hljs-link {
+  color: #f79a32;
+}
+
+/* Kimbie Yellow */
+.hljs-title,
+.hljs-section,
+.hljs-attribute {
+  color: #f06431;
+}
+
+/* Kimbie Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+  color: #889b4a;
+}
+
+/* Kimbie Purple */
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-function {
+  color: #98676a;
+}
+
+.hljs {
+  display: block;
+  overflow-x: auto;
+  /*background: #fbebd4;*/
+  color: #84613d;
+  padding: 0.5em;
+}
+
+.hljs-emphasis {
+  font-style: italic;
+}
+
+.hljs-strong {
+  font-weight: bold;
+}
+</style>
+  <script src="//cdn.bootcss.com/highlight.js/9.2.0/highlight.min.js"></script>
+  <script>
+    // hljs.initHighlightingOnLoad();
+    [].slice.call(document.querySelectorAll('pre code')).forEach(function(block, i) {
+      hljs.highlightBlock(block);
+      var lines = block.innerText.split('\n').length - 1;
+      var ul = document.createElement('ul');
+      ul.className = 'pre-numbering';
+      block.className += ' has-numbering';
+      block.parentNode.appendChild(ul);
+      for(i=1;i<=lines;i++){
+        var li = document.createElement('li');
+        li.innerText = i;
+        ul.appendChild(li);
+      }
+    });
+  </script>
 </div>
         <link rel="stylesheet" href="/css/content.css" type="text/css">
 <footer id="footer">

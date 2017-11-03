@@ -277,12 +277,39 @@
 <li>IE6-7负margin隐藏Bug, 修复方案: 去掉父元素的hasLayout; 或者赋hasLayout给子元素, 并添加position:relative;</li>
 </ol>
 <h3 id="怎么检测IE下的某个元素是否拥有hasLayout"><a href="#怎么检测IE下的某个元素是否拥有hasLayout" class="headerlink" title="怎么检测IE下的某个元素是否拥有hasLayout"></a>怎么检测IE下的某个元素是否拥有hasLayout</h3><p>在 IE Developer Toolbar 下, 拥有 haslayout的元素, 通常显示为 “haslayout = -1”. 也可通过js的方式检测, 如下所示:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> element = <span class="built_in">document</span>.getElementById(<span class="string">"myDiv"</span>);</div><div class="line"><span class="built_in">console</span>.log(element.currentStyle.hasLayout);<span class="comment">//该方式只能获取值, 而不能设置</span></div></pre></td></tr></table></figure>
+<pre><code class="js">var element = document.getElementById(&quot;myDiv&quot;);
+console.log(element.currentStyle.hasLayout);//该方式只能获取值, 而不能设置
+</code></pre>
 <p>以下代码可用于在IE6-7下测试某个元素是否拥有hasLayout:</p>
 <p>Code example: <a href="http://samples.msdn.microsoft.com/workshop/samples/author/dhtml/refs/hasLayout.htm" target="_blank" rel="external">http://samples.msdn.microsoft.com/workshop/samples/author/dhtml/refs/hasLayout.htm</a></p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span> </div><div class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span> </div><div class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span> </div><div class="line">  <span class="tag">&lt;<span class="name">title</span>&gt;</span>hasLayout Property<span class="tag">&lt;/<span class="name">title</span>&gt;</span> </div><div class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span> </div><div class="line"> </div><div class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span> </div><div class="line">  <span class="tag">&lt;<span class="name">h1</span>&gt;</span>hasLayout Property<span class="tag">&lt;/<span class="name">h1</span>&gt;</span> </div><div class="line">  <span class="tag">&lt;<span class="name">p</span>&gt;</span>This example uses the <span class="tag">&lt;<span class="name">strong</span>&gt;</span>hasLayout<span class="tag">&lt;/<span class="name">strong</span>&gt;</span> property of the <span class="tag">&lt;<span class="name">strong</span>&gt;</span>currentStyle<span class="tag">&lt;/<span class="name">strong</span>&gt;</span> object to  </div><div class="line">    show that an element has layout when it is absolutely positioned, or when its height and/or width are specified.   </div><div class="line">    The <span class="tag">&lt;<span class="name">strong</span>&gt;</span>hasLayout<span class="tag">&lt;/<span class="name">strong</span>&gt;</span> property returns <span class="tag">&lt;<span class="name">strong</span>&gt;</span>true<span class="tag">&lt;/<span class="name">strong</span>&gt;</span> for an object that has layout, and  </div><div class="line">    <span class="tag">&lt;<span class="name">strong</span>&gt;</span>false<span class="tag">&lt;/<span class="name">strong</span>&gt;</span> for an object that has no layout.<span class="tag">&lt;/<span class="name">p</span>&gt;</span> </div><div class="line">  <span class="tag">&lt;<span class="name">fieldset</span> <span class="attr">style</span>=<span class="string">"width: 50%; text-align: center;"</span>&gt;</span> </div><div class="line">    <span class="tag">&lt;<span class="name">legend</span>&gt;</span><span class="tag">&lt;<span class="name">strong</span>&gt;</span>hasLayout<span class="tag">&lt;/<span class="name">strong</span>&gt;</span> Property<span class="tag">&lt;/<span class="name">legend</span>&gt;</span> </div><div class="line">    <span class="tag">&lt;<span class="name">p</span> <span class="attr">style</span>=<span class="string">"text-align: left;"</span>&gt;</span><span class="tag">&lt;<span class="name">em</span>&gt;</span>Which DIV element has layout?<span class="tag">&lt;/<span class="name">em</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span> </div><div class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"oWidthSet"</span> <span class="attr">style</span>=<span class="string">"width: 100%; text-align: left;"</span>&gt;</span><span class="tag">&lt;<span class="name">strong</span>&gt;</span>DIV<span class="tag">&lt;/<span class="name">strong</span>&gt;</span> element A has its <span class="tag">&lt;<span class="name">strong</span>&gt;</span>width<span class="tag">&lt;/<span class="name">strong</span>&gt;</span> set to <span class="tag">&lt;<span class="name">strong</span>&gt;</span>100%<span class="tag">&lt;/<span class="name">strong</span>&gt;</span>.<span class="tag">&lt;/<span class="name">div</span>&gt;</span> </div><div class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"oNotSet"</span> <span class="attr">style</span>=<span class="string">"text-align: left;"</span>&gt;</span><span class="tag">&lt;<span class="name">strong</span>&gt;</span>DIV<span class="tag">&lt;/<span class="name">strong</span>&gt;</span> element B is not positioned, and neither its <span class="tag">&lt;<span class="name">strong</span>&gt;</span>height<span class="tag">&lt;/<span class="name">strong</span>&gt;</span> nor <span class="tag">&lt;<span class="name">strong</span>&gt;</span>width<span class="tag">&lt;/<span class="name">strong</span>&gt;</span> is set.<span class="tag">&lt;/<span class="name">div</span>&gt;</span> </div><div class="line">    <span class="tag">&lt;<span class="name">br</span>&gt;</span> </div><div class="line">    <span class="tag">&lt;<span class="name">button</span> <span class="attr">onclick</span>=<span class="string">"document.getElementById('messageBox').textContent = document.getElementById('oWidthSet').currentStyle.hasLayout;"</span>&gt;</span>DIV Element A<span class="tag">&lt;/<span class="name">button</span>&gt;</span> </div><div class="line">    <span class="tag">&lt;<span class="name">button</span> <span class="attr">onclick</span>=<span class="string">"document.getElementById('messageBox').textContent = document.getElementById('oNotSet').currentStyle.hasLayout;"</span>&gt;</span>DIV Element B<span class="tag">&lt;/<span class="name">button</span>&gt;</span> </div><div class="line">  <span class="tag">&lt;/<span class="name">fieldset</span>&gt;</span> </div><div class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"messageBox"</span> <span class="attr">style</span>=<span class="string">"padding-top: 1em; font-weight: bold;"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span> </div><div class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span> </div><div class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></div></pre></td></tr></table></figure>
+<pre><code class="html">&lt;!DOCTYPE html&gt; 
+&lt;html&gt; 
+&lt;head&gt; 
+  &lt;title&gt;hasLayout Property&lt;/title&gt; 
+&lt;/head&gt; 
+
+&lt;body&gt; 
+  &lt;h1&gt;hasLayout Property&lt;/h1&gt; 
+  &lt;p&gt;This example uses the &lt;strong&gt;hasLayout&lt;/strong&gt; property of the &lt;strong&gt;currentStyle&lt;/strong&gt; object to  
+    show that an element has layout when it is absolutely positioned, or when its height and/or width are specified.   
+    The &lt;strong&gt;hasLayout&lt;/strong&gt; property returns &lt;strong&gt;true&lt;/strong&gt; for an object that has layout, and  
+    &lt;strong&gt;false&lt;/strong&gt; for an object that has no layout.&lt;/p&gt; 
+  &lt;fieldset style=&quot;width: 50%; text-align: center;&quot;&gt; 
+    &lt;legend&gt;&lt;strong&gt;hasLayout&lt;/strong&gt; Property&lt;/legend&gt; 
+    &lt;p style=&quot;text-align: left;&quot;&gt;&lt;em&gt;Which DIV element has layout?&lt;/em&gt;&lt;/p&gt; 
+    &lt;div id=&quot;oWidthSet&quot; style=&quot;width: 100%; text-align: left;&quot;&gt;&lt;strong&gt;DIV&lt;/strong&gt; element A has its &lt;strong&gt;width&lt;/strong&gt; set to &lt;strong&gt;100%&lt;/strong&gt;.&lt;/div&gt; 
+    &lt;div id=&quot;oNotSet&quot; style=&quot;text-align: left;&quot;&gt;&lt;strong&gt;DIV&lt;/strong&gt; element B is not positioned, and neither its &lt;strong&gt;height&lt;/strong&gt; nor &lt;strong&gt;width&lt;/strong&gt; is set.&lt;/div&gt; 
+    &lt;br&gt; 
+    &lt;button onclick=&quot;document.getElementById(&#39;messageBox&#39;).textContent = document.getElementById(&#39;oWidthSet&#39;).currentStyle.hasLayout;&quot;&gt;DIV Element A&lt;/button&gt; 
+    &lt;button onclick=&quot;document.getElementById(&#39;messageBox&#39;).textContent = document.getElementById(&#39;oNotSet&#39;).currentStyle.hasLayout;&quot;&gt;DIV Element B&lt;/button&gt; 
+  &lt;/fieldset&gt; 
+  &lt;div id=&quot;messageBox&quot; style=&quot;padding-top: 1em; font-weight: bold;&quot;&gt;&lt;/div&gt; 
+&lt;/body&gt; 
+&lt;/html&gt;
+</code></pre>
 <p>另外, 若一个元素没有布局(layout), 那么IE下 clientWidth/clientHeight 总是返回0. 基于这点, 可以使用另一种js的方法检测元素是否拥有hasLayout, 如下:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(element.clientHeight==<span class="number">0</span>);<span class="comment">//等于true则表示该元素不拥有hasLayout</span></div></pre></td></tr></table></figure>
+<pre><code class="js">console.log(element.clientHeight==0);//等于true则表示该元素不拥有hasLayout
+</code></pre>
 <h3 id="需要注意的是"><a href="#需要注意的是" class="headerlink" title="需要注意的是"></a>需要注意的是</h3><ul>
 <li>hasLayout 功能只存在于IE7及低版本的浏览器上, IE8中已删除 hasLayout 功能.</li>
 <li>hasLayout 触发后, 没有办法直接设置 hasLayout=false, 只有将那些触发 hasLayout 的 css 属性去除, 才能恢复原样.</li>
@@ -311,7 +338,7 @@
         <a id="btn_donate" class="btn_donate" href="javascript:;" title="打赏"></a>
         <span class="donate_txt">
            &uarr;<br>
-       如果你觉得有用，就支持一下吧！
+       支持一杯咖啡吧！
         </span>
       </div>  
   <div id="donate_guide" class="donate_bar center hidden" >
@@ -378,69 +405,103 @@
 
 
 
-<div class="duoshuo">
-	<div class="ds-thread" data-thread-key="css-hasLayout" data-title="详解IE7以下独有的hasLayout" data-url="http://louiszhai.github.io/2016/03/31/css-hasLayout/"></div>
-	<style>
-		#ds-reset .ds-avatar img{width:54px;height:54px;border-radius:27px;-webkit-border-radius:27px;-moz-border-radius:27px;box-shadow:inset 0 -1px 0 #3333sf;-webkit-box-shadow:inset 0 -1px 0 #3333sf;-webkit-transition:0.4s;-webkit-transition:-webkit-transform 0.4s ease-out;transition:transform 0.4s ease-out;-moz-transition:-moz-transform 0.4s ease-out;}
-		#ds-reset .ds-avatar img:hover{box-shadow:0 0 10px #fff;rgba(255,255,255,.6),inset 0 0 20px rgba(255,255,255,1);-webkit-box-shadow:0 0 10px #fff;rgba(255,255,255,.6),inset 0 0 20px rgba(255,255,255,1);transform:rotateZ(360deg);-webkit-transform:rotateZ(360deg);-moz-transform:rotateZ(360deg);}
-		p.ds-powered-by,#ds-sync-checkbox,.ds-sync label{display:none!important;}
-		#ds-reset .ds-rounded-top{-webkit-border-top-right-radius:0px;-webkit-border-top-left-radius:0px;border-top-right-radius:0px;border-top-left-radius:0px;}
-		#ds-thread #ds-reset .ds-textarea-wrapper{background:#fff;border:0;margin-bottom:20px;padding-right:0px;}
-		#ds-thread #ds-reset .ds-textarea-wrapper textarea{min-height:80px;border:1px solid #ccc;padding:10px;-webkit-appearance:none;border-radius:0;background-color:#FFFFFF;border-color:#cccccc;box-shadow:inset 0 1px 2px rgba(0,0,0,0.1);color:rgba(0,0,0,0.75);-webkit-box-sizing:border-box;box-sizing:border-box;-webkit-transition:border-color 0.15s linear,background 0.15s linear;-moz-transition:border-color 0.15s linear,background 0.15s linear;-ms-transition:border-color 0.15s linear,background 0.15s linear;-o-transition:border-color 0.15s linear,background 0.15s linear;transition:border-color 0.15s linear,background 0.15s linear;}
-		/*#ds-thread #ds-reset .ds-textarea-wrapper textarea:focus{border-color:#999999;background:#fafafa;outline:none;}*/
-		#ds-thread #ds-reset .ds-post-options{border-bottom-left-radius:0px;-webkit-border-bottom-left-radius:0px;border:none;background:none!important;}
-		#ds-reset .ds-textarea-wrapper textarea:focus{border-color:#66afe9;outline:0;-webkit-box-shadow:inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);box-shadow:inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);}
-		#ds-thread #ds-reset .ds-post-button:hover,#ds-thread #ds-reset .ds-post-button:focus{
-		    background-color: #51a351;
-		    background-position: 0 -32px;
-		    color:white;
-		}
-		#ds-thread #ds-reset .ds-post-toolbar,#ds-reset .ds-avatar{box-shadow:none;}
-		#ds-thread #ds-reset .ds-textarea-wrapper textarea:focus{
-	    	/*background: none repeat scroll 0 0 #F4FAFF;*/
-	    	border-color:#9DD4FD;
-	    	border-width:1px;
-	    	box-shadow:0 1px 1px rgba(0,0,0,0.075) inset, 0 0 8px rgba(82, 168, 236, 0.6);
-	    	outline:0 none;
-    	}
-		#ds-thread #ds-reset .ds-textarea-wrapper textarea:active{
-	    	/*background: none repeat scroll 0 0 #F4FAFF;*/
-	    	border-width:1px;
-	    	border-color:#9DD4FD;
-	    	box-shadow:0 1px 1px rgba(0,0,0,0.075) inset, 0 0 8px rgba(82, 168, 236, 0.6);
-	    	outline:0 none;
-    	}
-    	#ds-thread #ds-reset .ds-post-button{
-    		box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset, 0 1px 2px rgba(0, 0, 0, 0.05);
-		    border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
-		    border-width: 1px;
-		    border-style: solid;
-		    border-radius: 3px;
-		    background: #5bb75b;
-		    color:white;
-		    text-shadow:none;
-		    transition:background-color 300ms ease-out;
-    	}
-    	#ds-reset .ds-avatar{
-    		background-color:initial;
-    	}
-
-	</style>
-	<script type="text/javascript">
-	var duoshuoQuery = {short_name:"true"};
-	(function() {
-		var ds = document.createElement('script');
-		ds.type = 'text/javascript';ds.async = true;
-		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-		ds.charset = 'UTF-8';
-		(document.getElementsByTagName('head')[0] 
-		 || document.getElementsByTagName('body')[0]).appendChild(ds);
-	})();
-	</script>
-</div>
 
 
 
+
+  <style>
+/*
+    Name:     Kimbie (light)
+    Author:   Jan T. Sott
+    License:  Creative Commons Attribution-ShareAlike 4.0 Unported License
+    URL:      https://github.com/idleberg/Kimbie-highlight.js
+*/
+
+/* Kimbie Comment */
+.hljs-comment,
+.hljs-quote {
+  color: #a57a4c;
+}
+
+/* Kimbie Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-meta {
+  color: #dc3958;
+}
+
+/* Kimbie Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-deletion,
+.hljs-link {
+  color: #f79a32;
+}
+
+/* Kimbie Yellow */
+.hljs-title,
+.hljs-section,
+.hljs-attribute {
+  color: #f06431;
+}
+
+/* Kimbie Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+  color: #889b4a;
+}
+
+/* Kimbie Purple */
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-function {
+  color: #98676a;
+}
+
+.hljs {
+  display: block;
+  overflow-x: auto;
+  /*background: #fbebd4;*/
+  color: #84613d;
+  padding: 0.5em;
+}
+
+.hljs-emphasis {
+  font-style: italic;
+}
+
+.hljs-strong {
+  font-weight: bold;
+}
+</style>
+  <script src="//cdn.bootcss.com/highlight.js/9.2.0/highlight.min.js"></script>
+  <script>
+    // hljs.initHighlightingOnLoad();
+    [].slice.call(document.querySelectorAll('pre code')).forEach(function(block, i) {
+      hljs.highlightBlock(block);
+      var lines = block.innerText.split('\n').length - 1;
+      var ul = document.createElement('ul');
+      ul.className = 'pre-numbering';
+      block.className += ' has-numbering';
+      block.parentNode.appendChild(ul);
+      for(i=1;i<=lines;i++){
+        var li = document.createElement('li');
+        li.innerText = i;
+        ul.appendChild(li);
+      }
+    });
+  </script>
 </div>
         <link rel="stylesheet" href="/css/content.css" type="text/css">
 <footer id="footer">

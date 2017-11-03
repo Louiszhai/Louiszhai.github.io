@@ -248,7 +248,8 @@
 <h3 id="EventSource"><a href="#EventSource" class="headerlink" title="EventSource"></a><strong>EventSource</strong></h3><p>EventSource 不是一个新鲜的技术，它早就随着H5规范提出了，正式一点应该叫<code>Server-sent events</code>，即<code>SSE</code>。</p>
 <p>鉴于传统的通过ajax轮训获取服务器信息的技术方案已经过时，我们迫切需要一个高效的节省资源的方式去获取服务器信息，一旦服务器资源有更新，能够及时地通知到客户端，从而实时地反馈到用户界面上。EventSource就是这样的技术，它本质上还是HTTP，通过response流实时推送服务器信息到客户端。</p>
 <p>新建一个EventSource对象非常简单。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> es = <span class="keyword">new</span> EventSource(<span class="string">'/message'</span>);<span class="comment">// /message是服务端支持EventSource的接口</span></div></pre></td></tr></table></figure>
+<pre><code class="js">const es = new EventSource(&#39;/message&#39;);// /message是服务端支持EventSource的接口
+</code></pre>
 <p>新创建的EventSource对象拥有如下属性：</p>
 <table>
 <thead>
@@ -273,28 +274,61 @@
 </tbody>
 </table>
 <p>服务端实现<code>/message</code>接口，需要返回类型为 <code>text/event-stream</code>的响应头。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> http = <span class="built_in">require</span>(<span class="string">'http'</span>);</div><div class="line">http.createServer(<span class="function"><span class="keyword">function</span>(<span class="params">req，res</span>)</span>&#123;</div><div class="line">  <span class="keyword">if</span>(req.url === <span class="string">'/message'</span>)&#123;</div><div class="line">    res.writeHead(<span class="number">200</span>，&#123;</div><div class="line">      <span class="string">'Content-Type'</span>: <span class="string">'text/event-stream'</span>,</div><div class="line">      <span class="string">'Cache-Control'</span>: <span class="string">'no-cache'</span>,</div><div class="line">      <span class="string">'Connection'</span>: <span class="string">'keep-alive'</span></div><div class="line">    &#125;);</div><div class="line">    setInterval(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">      res.write(<span class="string">'data: '</span> + +<span class="keyword">new</span> <span class="built_in">Date</span>() + <span class="string">'\n\n'</span>);</div><div class="line">    &#125;, <span class="number">1000</span>);</div><div class="line">  &#125;</div><div class="line">&#125;).listen(<span class="number">8888</span>);</div></pre></td></tr></table></figure>
+<pre><code class="js">var http = require(&#39;http&#39;);
+http.createServer(function(req，res){
+  if(req.url === &#39;/message&#39;){
+    res.writeHead(200，{
+      &#39;Content-Type&#39;: &#39;text/event-stream&#39;,
+      &#39;Cache-Control&#39;: &#39;no-cache&#39;,
+      &#39;Connection&#39;: &#39;keep-alive&#39;
+    });
+    setInterval(function(){
+      res.write(&#39;data: &#39; + +new Date() + &#39;\n\n&#39;);
+    }, 1000);
+  }
+}).listen(8888);
+</code></pre>
 <p>我们注意到，为了避免缓存，Cache-Control 特别设置成了 no-cache，为了能够发送多个response， Connection被设置成了keep-alive.。发送数据时，请务必保证服务器推送的数据以 <code>data:</code>开始，以<code>\n\n</code>结束，否则推送将会失败(原因就不说了，这是约定的)。</p>
 <p>以上，服务器每隔1s主动向客户端发送当前时间戳，为了接受这个信息，客户端需要监听服务器。如下：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">es.onmessage = <span class="function"><span class="keyword">function</span>(<span class="params">e</span>)</span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(e.data); <span class="comment">// 打印服务器推送的信息</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<pre><code class="js">es.onmessage = function(e){
+  console.log(e.data); // 打印服务器推送的信息
+}
+</code></pre>
 <p>如下是消息推送的过程：</p>
 <p><img src="http://louiszhai.github.io/docImages/hot-replace01.gif" alt="response size不断增加"></p>
 <p><img src="http://louiszhai.github.io/docImages/hot-replace02.gif" alt="接收消息"></p>
 <p>你以为es只能监听message事件吗？并不是，message只是缺省的事件类型。实际上，它可以监听任何指定类型的事件。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">es.addEventListener(<span class="string">"####"</span>, <span class="function"><span class="keyword">function</span>(<span class="params">e</span>) </span>&#123;<span class="comment">// 事件类型可以随你定义</span></div><div class="line">  <span class="built_in">console</span>.log(<span class="string">'####:'</span>, e.data);</div><div class="line">&#125;，<span class="literal">false</span>);</div></pre></td></tr></table></figure>
+<pre><code class="js">es.addEventListener(&quot;####&quot;, function(e) {// 事件类型可以随你定义
+  console.log(&#39;####:&#39;, e.data);
+}，false);
+</code></pre>
 <p>服务器发送不同类型的事件时，需要指定event字段。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">res.write(<span class="string">'event: ####\n'</span>);</div><div class="line">res.write(<span class="string">'data: 这是一个自定义的####类型事件\n'</span>);</div><div class="line">res.write(<span class="string">'data: 多个data字段将被解析成一个字段\n\n'</span>);</div></pre></td></tr></table></figure>
+<pre><code class="js">res.write(&#39;event: ####\n&#39;);
+res.write(&#39;data: 这是一个自定义的####类型事件\n&#39;);
+res.write(&#39;data: 多个data字段将被解析成一个字段\n\n&#39;);
+</code></pre>
 <p>如下所示：</p>
 <p><img src="http://louiszhai.github.io/docImages/hot-replace04.png" alt="####消息"></p>
 <p>可以看到，服务端指定event事件名为”####”后，客户端触发了对应的事件回调，同时服务端设置的多个data字段，客户端使用换行符连接成了一个字符串。</p>
 <p>不仅如此，事件流中还可以混合多种事件，请看我们是怎么收到消息的，如下：</p>
 <p><img src="http://louiszhai.github.io/docImages/hot-replace03.gif" alt="混合消息"></p>
 <p>除此之外，es对象还拥有另外3个方法: <code>onopen()</code>、<code>onerror()</code>、<code>close()</code>，请参考如下实现。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">es.onopen = <span class="function"><span class="keyword">function</span>(<span class="params">e</span>)</span>&#123;<span class="comment">// 链接打开时的回调</span></div><div class="line">  <span class="built_in">console</span>.log(<span class="string">'当前状态readyState:'</span>, es.readyState);<span class="comment">// open时readyState===1</span></div><div class="line">&#125;</div><div class="line">es.onerror = <span class="function"><span class="keyword">function</span>(<span class="params">e</span>)</span>&#123;<span class="comment">// 出错时的回调(网络问题,或者服务下线等都有可能导致出错)</span></div><div class="line">  <span class="built_in">console</span>.log(es.readyState);<span class="comment">// 出错时readyState===0</span></div><div class="line">  es.close();<span class="comment">// 出错时，chrome浏览器会每隔3秒向服务器重发原请求,直到成功. 因此出错时，可主动断开原连接.</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<pre><code class="js">es.onopen = function(e){// 链接打开时的回调
+  console.log(&#39;当前状态readyState:&#39;, es.readyState);// open时readyState===1
+}
+es.onerror = function(e){// 出错时的回调(网络问题,或者服务下线等都有可能导致出错)
+  console.log(es.readyState);// 出错时readyState===0
+  es.close();// 出错时，chrome浏览器会每隔3秒向服务器重发原请求,直到成功. 因此出错时，可主动断开原连接.
+}
+</code></pre>
 <p>使用EventSource技术实时更新网页信息十分高效。实际使用中，我们几乎不用担心兼容性问题，主流浏览器都了支持EventSource，当然，除了掉队的IE系。对于不支持的浏览器，其PolyFill方案请参考<a href="https://github.com/Modernizr/Modernizr/wiki/HTML5-Cross-Browser-Polyfills#eventsource" target="_blank" rel="external">HTML5 Cross Browser Polyfills</a>。</p>
 <h4 id="CORS"><a href="#CORS" class="headerlink" title="CORS"></a><strong>CORS</strong></h4><p>另外，如果需要支持跨域调用，请设置响应头<code>Access-Control-Allow-Origin&#39;: &#39;*&#39;</code>。</p>
 <p>如需支持发送cookie，请设置响应头<code>Access-Control-Allow-Origin&#39;: req.headers.origin</code> 和 <code>Access-Control-Allow-Credentials:true</code>，并且创建es对象时，需要明确指定是否发送凭证。如下：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> es = <span class="keyword">new</span> EventSource(<span class="string">'/message'</span>, &#123;</div><div class="line">  <span class="attr">withCredentials</span>: <span class="literal">true</span></div><div class="line">&#125;); <span class="comment">// 创建时指定配置才是有效的</span></div><div class="line">es.withCredentials = <span class="literal">true</span>; <span class="comment">// 与ajax不同，这样设置是无效的</span></div></pre></td></tr></table></figure>
+<pre><code class="js">var es = new EventSource(&#39;/message&#39;, {
+  withCredentials: true
+}); // 创建时指定配置才是有效的
+es.withCredentials = true; // 与ajax不同，这样设置是无效的
+</code></pre>
 <p>以下是主流浏览器对EventSource的CORS的支持：</p>
 <table>
 <thead>
@@ -321,7 +355,15 @@
 <h4 id="nginx配置"><a href="#nginx配置" class="headerlink" title="nginx配置"></a><strong>nginx配置</strong></h4><p>既然说到了EventSource，便有必要谈谈遇到的坑，接下来，就说说我遇到的webpack热更新延迟问题。</p>
 <p>如我们所知，webpack借助webpack-hot-middleware插件，实现了网页热更新机制，正常情况下，浏览器打开 <a href="http://localhost:8080" target="_blank" rel="external">http://localhost:8080</a> 这样的网页即可开始调试。然而实际开发中，由于远程服务器需要种cookie登录态到特定的域名上等原因，因此本地往往会用nginx做一层反向代理。即把 <a href="http://www.test.com" target="_blank" rel="external">http://www.test.com</a> 的请求转发到 <a href="http://localhost:8080" target="_blank" rel="external">http://localhost:8080</a> 上(配置过程这里不详述，具体请参考<a href="http://louiszhai.github.io/2016/11/02/ajax/ajax调试技巧">Ajax知识体系大梳理-ajax调试技巧</a>)。转发过后，发现热更新便延迟了。</p>
 <p>原因是nginx默认开启的buffer机制缓存了服务器推送的片段信息，缓存达到一定的量才会返回响应内容。只要关闭proxy_buffering即可。配置如下所示：</p>
-<figure class="highlight nginx"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="section">server</span> &#123;</div><div class="line">    <span class="attribute">listen</span>       <span class="number">80</span>;</div><div class="line">    <span class="attribute">server_name</span>  www.test.company.com;</div><div class="line">    <span class="attribute">location</span> / &#123;</div><div class="line">        <span class="attribute">proxy_pass</span> http://localhost:8080;</div><div class="line">        <span class="attribute">proxy_buffering</span> <span class="literal">off</span>;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<pre><code class="nginx">server {
+    listen       80;
+    server_name  www.test.company.com;
+    location / {
+        proxy_pass http://localhost:8080;
+        proxy_buffering off;
+    }
+}
+</code></pre>
 <p>至此，EventSource部分便告一段落。学习讲究由浅入深，循序渐进。后面我将重点讲解的<code>browser-sync</code>热更新机制，请耐心细读。</p>
 <h3 id="browser-sync"><a href="#browser-sync" class="headerlink" title="browser-sync"></a><strong>browser-sync</strong></h3><p>开发中使用<code>browser-sync</code>插件调试，一个网页里的所有交互动作（包括滚动，输入，点击等等），可以实时地同步到其他所有打开该网页的设备，能够节省大量的手工操作时间，从而带来流畅的开发调试体验。目前<code>browser-sync</code>可以结合<code>Gulp</code>或<code>Grunt</code>一起使用，其API请参考：<a href="http://www.browsersync.cn/docs/api/" target="_blank" rel="external">Browsersync API</a>。</p>
 <p>通过上面的了解，我们知道<code>EventSouce</code>的使用是比较便捷的，那为什么<code>browser-sync</code>不使用EventSource技术进行代码推送呢？这是因为<code>browser-sync</code>插件共做了两件事：</p>
@@ -385,21 +427,56 @@
 </tbody>
 </table>
 <h4 id="Frame"><a href="#Frame" class="headerlink" title="Frame"></a><strong>Frame</strong></h4><p>根据RFC6455文档，WebSocket协议基于Frame而非Stream（EventSource是基于Stream的）。因此其传输的数据都是Frame（帧）。想要了解数据的往返，弄懂协议处理过程，Frame的解读是必不可少。如下便是Frame的结构：</p>
-<figure class="highlight gherkin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"> 0                   1                   2                   3</div><div class="line"> 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1</div><div class="line">+-+-+-+-+-------+-+-------------+-------------------------------+</div><div class="line">|<span class="string">F</span>|<span class="string">R</span>|<span class="string">R</span>|<span class="string">R</span>|<span class="string"> opcode</span>|<span class="string">M</span>|<span class="string"> Payload len </span>|<span class="string">    Extended payload length    </span>|</div><div class="line">|<span class="string">I</span>|<span class="string">S</span>|<span class="string">S</span>|<span class="string">S</span>|<span class="string">  (4)  </span>|<span class="string">A</span>|<span class="string">     (7)     </span>|<span class="string">             (16/64)           </span>|</div><div class="line">|<span class="string">N</span>|<span class="string">V</span>|<span class="string">V</span>|<span class="string">V</span>|<span class="string">       </span>|<span class="string">S</span>|<span class="string">             </span>|<span class="string">   (if payload len==126/127)   </span>|</div><div class="line">|<span class="string"> </span>|<span class="string">1</span>|<span class="string">2</span>|<span class="string">3</span>|<span class="string">       </span>|<span class="string">K</span>|<span class="string">             </span>|<span class="string">                               </span>|</div><div class="line">+-+-+-+-+-------+-+-------------+ - - - - - - - - - - - - - - - +</div><div class="line">|<span class="string">     Extended payload length continued，if payload len == 127  </span>|</div><div class="line">+ - - - - - - - - - - - - - - - +-------------------------------+</div><div class="line">|<span class="string">                               </span>|<span class="string">Masking-key，if MASK set to 1  </span>|</div><div class="line">+-------------------------------+-------------------------------+</div><div class="line">|<span class="string"> Masking-key (continued)       </span>|<span class="string">          Payload Data         </span>|</div><div class="line">+-------------------------------- - - - - - - - - - - - - - - - +</div><div class="line">:                     Payload Data continued ...                :</div><div class="line">+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - +</div><div class="line">|<span class="string">                     Payload Data continued ...                </span>|</div><div class="line">+---------------------------------------------------------------+</div></pre></td></tr></table></figure>
-<p>第一个字节包含FIN、RSV、Opcode。</p>
+<pre><code>  0                   1                   2                   3
+  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+ +-+-+-+-+-------+-+-------------+-------------------------------+
+ |F|R|R|R| opcode|M| Payload len |    Extended payload length    |
+ |I|S|S|S|  (4)  |A|     (7)     |             (16/64)           |
+ |N|V|V|V|       |S|             |   (if payload len==126/127)   |
+ | |1|2|3|       |K|             |                               |
+ +-+-+-+-+-------+-+-------------+ - - - - - - - - - - - - - - - +
+ |     Extended payload length continued，if payload len == 127  |
+ + - - - - - - - - - - - - - - - +-------------------------------+
+ |                               |Masking-key，if MASK set to 1  |
+ +-------------------------------+-------------------------------+
+ | Masking-key (continued)       |          Payload Data         |
+ +-------------------------------- - - - - - - - - - - - - - - - +
+ :                     Payload Data continued ...                :
+ + - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - +
+ |                     Payload Data continued ...                |
+ +---------------------------------------------------------------+
+</code></pre><p>第一个字节包含FIN、RSV、Opcode。</p>
 <ul>
 <li><p>FIN：size为1bit，标示是否最后一帧。<code>%x0</code>表示还有后续帧，<code>%x1</code>表示这是最后一帧。</p>
 </li>
 <li><p>RSV1、2、3，每个size都是1bit，默认值都是0，如果没有定义非零值的含义，却出现了非零值，则WebSocket链接将失败。</p>
 </li>
 <li><p>Opcode，size为4bits，表示『payload data』的类型。如果收到未知的opcode，连接将会断开。已定义的opcode值如下：</p>
-<figure class="highlight haml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="tag">%<span class="selector-tag">x0</span></span>:	代表连续的帧</div><div class="line"><span class="tag">%<span class="selector-tag">x1</span></span>:	文本帧</div><div class="line"><span class="tag">%<span class="selector-tag">x2</span></span>:	二进制帧</div><div class="line"><span class="tag">%<span class="selector-tag">x3</span></span>~7:	预留的非控制帧</div><div class="line"><span class="tag">%<span class="selector-tag">x8</span></span>:	关闭握手帧</div><div class="line"><span class="tag">%<span class="selector-tag">x9</span></span>:	ping帧，后续心跳连接会讲到</div><div class="line"><span class="tag">%<span class="selector-tag">xA</span></span>:	pong帧，后续心跳连接会讲到</div><div class="line"><span class="tag">%<span class="selector-tag">xB</span></span>~F:	预留的非控制帧</div></pre></td></tr></table></figure>
-</li>
+<pre><code>%x0:    代表连续的帧
+%x1:    文本帧
+%x2:    二进制帧
+%x3~7:    预留的非控制帧
+%x8:    关闭握手帧
+%x9:    ping帧，后续心跳连接会讲到
+%xA:    pong帧，后续心跳连接会讲到
+%xB~F:    预留的非控制帧
+</code></pre></li>
 </ul>
 <p>第二个字节包含Mask、Payload len。</p>
 <ul>
 <li><p>Mask：size为1bit，标示『payload data』是否添加掩码。所有从客户端发送到服务端的帧都会被置为1，如果置1，<code>Masking-key</code>便会赋值。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//若server是一个WebSocket服务端实例</span></div><div class="line"><span class="comment">//监听客户端消息</span></div><div class="line">server.on(<span class="string">'message'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">msg, flags</span>) </span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">'client say: %s'</span>, msg);</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">'mask value:'</span>, flags.masked);<span class="comment">// true，进一步佐证了客户端发送到服务端的Mask帧都会被置为1</span></div><div class="line">&#125;);</div><div class="line"><span class="comment">//监听客户端pong帧响应</span></div><div class="line">server.on(<span class="string">'pong'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">msg, flags</span>) </span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">'pong data: %s'</span>, msg);</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">'mask value:'</span>, flags.masked);<span class="comment">// true，进一步佐证了客户端发送到服务端的Mask帧都会被置为1</span></div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<pre><code class="js">//若server是一个WebSocket服务端实例
+//监听客户端消息
+server.on(&#39;message&#39;, function(msg, flags) {
+  console.log(&#39;client say: %s&#39;, msg);
+  console.log(&#39;mask value:&#39;, flags.masked);// true，进一步佐证了客户端发送到服务端的Mask帧都会被置为1
+});
+//监听客户端pong帧响应
+server.on(&#39;pong&#39;, function(msg, flags) {
+  console.log(&#39;pong data: %s&#39;, msg);
+  console.log(&#39;mask value:&#39;, flags.masked);// true，进一步佐证了客户端发送到服务端的Mask帧都会被置为1
+});
+</code></pre>
 </li>
 <li><p>Payload len：size为7bits，即使是当做无符号整型也只能表示0~127的值，所以它不能表示更大的值，因此规定”Payload data”长度小于或等于125的时候才用来描述数据长度。如果<code>Payload len==126</code>，则使用随后的2bytes（16bits）来存储数据长度。如果<code>Payload len==127</code>，则使用随后的8bytes（64bits）来存储数据长度。</p>
 </li>
@@ -414,14 +491,19 @@
 <p>关于Frame的更多理论介绍不妨读读 <a href="https://github.com/abbshr/abbshr.github.io/issues/22" target="_blank" rel="external">学习WebSocket协议—从顶层到底层的实现原理（修订版）</a>。</p>
 <p>关于Frame的数据帧解析不妨读读 <a href="https://www.web-tinker.com/article/20306.html" target="_blank" rel="external">WebSocket(贰) 解析数据帧</a> 及其后续文章。</p>
 <h4 id="建立连接"><a href="#建立连接" class="headerlink" title="建立连接"></a><strong>建立连接</strong></h4><p>了解了Frame的数据结构后，我们来实际练习下。浏览器上，新建一个ws对象十分简单。如下：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> ws = <span class="keyword">new</span> WebSocket(<span class="string">'ws://127.0.0.1:10103/'</span>);<span class="comment">// 本地使用10103端口进行测试</span></div></pre></td></tr></table></figure>
+<pre><code class="js">let ws = new WebSocket(&#39;ws://127.0.0.1:10103/&#39;);// 本地使用10103端口进行测试
+</code></pre>
 <p>新建的WebSocket对象如下所示：</p>
 <p><img src="http://louiszhai.github.io/docImages/hot-replace09.png" alt="Websocket对象"></p>
 <p>这中间包含了一次Websocket握手的过程，我们分两步来理解。</p>
 <p>第一步，客户端请求。</p>
 <p><img src="http://louiszhai.github.io/docImages/hot-replace05.png" alt="Websocket Request"></p>
 <p>这是一个GET请求，主要字段如下：</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">Connection: Upgrade</div><div class="line">Upgrade: websocket</div><div class="line">Sec-WebSocket-Key:61x6lFN92sJHgzXzCHfBJQ==</div><div class="line">Sec-WebSocket-Version:13</div></pre></td></tr></table></figure>
+<pre><code class="http">Connection: Upgrade
+Upgrade: websocket
+Sec-WebSocket-Key:61x6lFN92sJHgzXzCHfBJQ==
+Sec-WebSocket-Version:13
+</code></pre>
 <p>Connection字段指定为Upgrade，表示客户端希望连接升级。</p>
 <p>Upgrade字段设置为websocket，表示希望升级至Websocket协议。</p>
 <p>Sec-WebSocket-Key字段是随机字符串，服务器根据它来构造一个SHA-1的信息摘要。</p>
@@ -433,24 +515,55 @@
 <p>Sec-WebSocket-Accept字段是由Sec-WebSocket-Key字段加上特定字符串”258EAFA5-E914-47DA-95CA-C5AB0DC85B11”，计算SHA-1摘要，然后再base64编码之后生成的. 该操作可避免普通http请求，被误认为Websocket协议。</p>
 <p>Sec-WebSocket-Extensions字段表示服务端对Websocket协议的扩展。</p>
 <p>以上，WebSocket构造器不止可以传入url，还能传入一个可选的协议名称字符串或数组。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ws = <span class="keyword">new</span> WebSocket(<span class="string">'ws://127.0.0.1:10103/'</span>, [<span class="string">'abc'</span>,<span class="string">'son_protocols'</span>]);</div></pre></td></tr></table></figure>
+<pre><code class="js">ws = new WebSocket(&#39;ws://127.0.0.1:10103/&#39;, [&#39;abc&#39;,&#39;son_protocols&#39;]);
+</code></pre>
 <h4 id="服务端实现"><a href="#服务端实现" class="headerlink" title="服务端实现"></a><strong>服务端实现</strong></h4><p>等等，我们慢一点，上面好像漏掉了一步，似乎没有提到服务端是怎么实现的。请继续往下看：</p>
 <p>先做一些准备。ws是一个nodejs版的WebSocketServer实现。使用 <code>npm install ws</code> 即可安装。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> WebSocketServer = <span class="built_in">require</span>(<span class="string">'ws'</span>).Server，</div><div class="line">    server = <span class="keyword">new</span> WebSocketServer(&#123;<span class="attr">port</span>: <span class="number">10103</span>&#125;);</div><div class="line">server.on(<span class="string">'connection'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">s</span>) </span>&#123;</div><div class="line">  s.on(<span class="string">'message'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">msg</span>) </span>&#123; <span class="comment">//监听客户端消息</span></div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'client say: %s'</span>, msg);</div><div class="line">  &#125;);</div><div class="line">  s.send(<span class="string">'server ready!'</span>);<span class="comment">// 连接建立好后，向客户端发送一条消息</span></div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<pre><code class="js">var WebSocketServer = require(&#39;ws&#39;).Server，
+    server = new WebSocketServer({port: 10103});
+server.on(&#39;connection&#39;, function(s) {
+  s.on(&#39;message&#39;, function(msg) { //监听客户端消息
+    console.log(&#39;client say: %s&#39;, msg);
+  });
+  s.send(&#39;server ready!&#39;);// 连接建立好后，向客户端发送一条消息
+});
+</code></pre>
 <p>以上，<code>new WebSocketServer()</code>创建服务器时如需权限验证，请指定<code>verifyClient</code>为验权的函数。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">server = <span class="keyword">new</span> WebSocketServer(&#123;</div><div class="line">  <span class="attr">port</span>: <span class="number">10103</span>,</div><div class="line">  <span class="attr">verifyClient</span>: verify</div><div class="line">&#125;);</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">verify</span>(<span class="params">info</span>)</span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(<span class="built_in">Object</span>.keys(info));<span class="comment">// [ 'origin', 'secure', 'req' ]</span></div><div class="line">  <span class="built_in">console</span>.log(info.orgin);<span class="comment">// "file://"</span></div><div class="line">  <span class="keyword">return</span> <span class="literal">true</span>;<span class="comment">// 返回true时表示验权通过，否则客户端将抛出"HTTP Authentication failed"错误</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<pre><code class="js">server = new WebSocketServer({
+  port: 10103,
+  verifyClient: verify
+});
+function verify(info){
+  console.log(Object.keys(info));// [ &#39;origin&#39;, &#39;secure&#39;, &#39;req&#39; ]
+  console.log(info.orgin);// &quot;file://&quot;
+  return true;// 返回true时表示验权通过，否则客户端将抛出&quot;HTTP Authentication failed&quot;错误
+}
+</code></pre>
 <p>以上，<code>verifyClient</code>指定的函数只有一个形参，若为它显式指定两个形参，那么第一个参数同上info，第二个参数将是一个<code>cb</code>回调函数。该函数用于显式指定拒绝时的HTTP状态码等，它默认拥有3个形参，依次为：</p>
 <ul>
 <li>result，布尔值类型，表示是否通过权限验证。</li>
 <li>code，数值类型，若result值为false时，表示HTTP的错误状态码。</li>
 <li>name，字符串类型，若result值为false时，表示HTTP状态码的错误信息。</li>
 </ul>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 若verify定义如下</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">verify</span>(<span class="params">info, cb</span>)</span>&#123;</div><div class="line">  <span class="comment">//一旦拥有第二个形参，如果不调用，默认将通过验权</span></div><div class="line">  cb(<span class="literal">false</span>, <span class="number">401</span>, <span class="string">'权限不够'</span>);<span class="comment">// 此时表示验权失败，HTTP状态码为401，错误信息为"权限不够"</span></div><div class="line">  <span class="keyword">return</span> <span class="literal">true</span>;<span class="comment">// 一旦拥有第二个形参，响应就被cb接管了，返回什么值都不会影响前面的处理结果</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<pre><code class="js">// 若verify定义如下
+function verify(info, cb){
+  //一旦拥有第二个形参，如果不调用，默认将通过验权
+  cb(false, 401, &#39;权限不够&#39;);// 此时表示验权失败，HTTP状态码为401，错误信息为&quot;权限不够&quot;
+  return true;// 一旦拥有第二个形参，响应就被cb接管了，返回什么值都不会影响前面的处理结果
+}
+</code></pre>
 <p>除了<code>port</code> 和 <code>verifyClient</code>设置外，其它设置项及更多API，请参考文档 <a href="https://github.com/websockets/ws/blob/master/doc/ws.md" target="_blank" rel="external">ws-doc</a>。</p>
 <h4 id="发送和监听消息"><a href="#发送和监听消息" class="headerlink" title="发送和监听消息"></a><strong>发送和监听消息</strong></h4><p>接下来，我们来实现消息收发。如下是客户端发送消息。</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">ws.onopen = function(e)&#123;</div><div class="line">  // 可发送字符串，ArrayBuffer 或者 Blob数据</div><div class="line">  ws.send('client ready!);</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<pre><code class="js">ws.onopen = function(e){
+  // 可发送字符串，ArrayBuffer 或者 Blob数据
+  ws.send(&#39;client ready!);
+};
+</code></pre>
 <p>客户端监听信息。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">ws.onmessage = <span class="function"><span class="keyword">function</span>(<span class="params">e</span>)</span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">'server say:'</span>, e.data);</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<pre><code class="js">ws.onmessage = function(e){
+  console.log(&#39;server say:&#39;, e.data);
+};
+</code></pre>
 <p>如下是浏览器的运行截图。</p>
 <p><img src="http://louiszhai.github.io/docImages/hot-replace06.png" alt="message"></p>
 <p>消息的内容都在Frames栏，第一条彩色背景的信息是客户端发送的，第二条是服务端发送的。两条消息的长度都是13。</p>
@@ -461,7 +574,12 @@
 <p>语法：<em>close(short code，string reason);</em></p>
 <p>close默认可传入两个参数。code是数字，表示关闭连接的状态号，默认是1000，即正常关闭。（code取值范围从0到4999，其中有些是保留状态号，正常关闭时只能指定为1000或者3000~4999之间的值，具体请参考<a href="https://developer.mozilla.org/en-US/docs/Web/API/CloseEvent#Status_codes" target="_blank" rel="external">CloseEvent - Web APIs</a>）。reason是UTF-8文本，表示关闭的原因（文本长度需小于或等于123字节）。</p>
 <p>由于code 和 reason都有限制，因此该方法可能抛出异常，建议catch下.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">try</span>&#123;</div><div class="line">  ws.close(<span class="number">1001</span>, <span class="string">'CLOSE_GOING_AWAY'</span>);</div><div class="line">&#125;<span class="keyword">catch</span>(e)&#123;</div><div class="line">  <span class="built_in">console</span>.log(e);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<pre><code class="js">try{
+  ws.close(1001, &#39;CLOSE_GOING_AWAY&#39;);
+}catch(e){
+  console.log(e);
+}
+</code></pre>
 <p>ws对象还拥有onclose和onerror监听器，分别监听关闭和错误事件。（注：EventSource没有onclose监听）</p>
 <h4 id="拥有的属性"><a href="#拥有的属性" class="headerlink" title="拥有的属性"></a><strong>拥有的属性</strong></h4><p>ws的readyState属性拥有4个值，比es的readyState的多一个CLOSING的状态。</p>
 <table>
@@ -530,11 +648,57 @@
 <h4 id="文件上传"><a href="#文件上传" class="headerlink" title="文件上传"></a><strong>文件上传</strong></h4><p>以前一直是使用ajax做文件上传，实际上，Websocket上传文件也是一把好刀. 其send方法可以发送String，ArrayBuffer，Blob共三种数据类型，发送二进制文件完全不在话下。</p>
 <p>由于各个浏览器对Websocket单次发送的数据有限制，所以我们需要将待上传文件切成片段去发送。如下是实现。</p>
 <p>1) html。</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"file"</span> <span class="attr">id</span>=<span class="string">"file"</span>/&gt;</span></div></pre></td></tr></table></figure>
+<pre><code class="html">&lt;input type=&quot;file&quot; id=&quot;file&quot;/&gt;
+</code></pre>
 <p>2) js。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> ws = <span class="keyword">new</span> WebSocket(<span class="string">'ws://127.0.0.1:10103/'</span>);<span class="comment">// 连接服务器</span></div><div class="line"><span class="keyword">const</span> fileSelect = <span class="built_in">document</span>.getElementById(<span class="string">'file'</span>);</div><div class="line"><span class="keyword">const</span> size = <span class="number">1024</span> * <span class="number">128</span>;<span class="comment">// 分段发送的文件大小(字节)</span></div><div class="line"><span class="keyword">let</span> curSize, total, file, fileReader;</div><div class="line"></div><div class="line">fileSelect.onchange = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  file = <span class="keyword">this</span>.files[<span class="number">0</span>];<span class="comment">// 选中的待上传文件</span></div><div class="line">  curSize = <span class="number">0</span>;<span class="comment">// 当前已发送的文件大小</span></div><div class="line">  total = file.size;<span class="comment">// 文件大小</span></div><div class="line">  ws.send(file.name);<span class="comment">// 先发送待上传文件的名称</span></div><div class="line">  fileReader = <span class="keyword">new</span> FileReader();<span class="comment">// 准备读取文件</span></div><div class="line">  fileReader.onload = loadAndSend;</div><div class="line">  readFragment();<span class="comment">// 读取文件片段</span></div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">loadAndSend</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  <span class="keyword">if</span>(ws.bufferedAmount &gt; size * <span class="number">5</span>)&#123;<span class="comment">// 若发送队列中的数据太多,先等一等</span></div><div class="line">    setTimeout(loadAndSend，<span class="number">4</span>);</div><div class="line">    <span class="keyword">return</span>;</div><div class="line">  &#125;</div><div class="line">  ws.send(fileReader.result);<span class="comment">// 发送本次读取的片段内容</span></div><div class="line">  curSize += size;<span class="comment">// 更新已发送文件大小</span></div><div class="line">  curSize &lt; total ? readFragment() : <span class="built_in">console</span>.log(<span class="string">'upload successed!'</span>);<span class="comment">// 下一步操作</span></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">readFragment</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  <span class="keyword">const</span> blob = file.slice(curSize, curSize + size);<span class="comment">// 获取文件指定片段</span></div><div class="line">  fileReader.readAsArrayBuffer(blob);<span class="comment">// 读取文件为ArrayBuffer对象</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<pre><code class="js">const ws = new WebSocket(&#39;ws://127.0.0.1:10103/&#39;);// 连接服务器
+const fileSelect = document.getElementById(&#39;file&#39;);
+const size = 1024 * 128;// 分段发送的文件大小(字节)
+let curSize, total, file, fileReader;
+
+fileSelect.onchange = function(){
+  file = this.files[0];// 选中的待上传文件
+  curSize = 0;// 当前已发送的文件大小
+  total = file.size;// 文件大小
+  ws.send(file.name);// 先发送待上传文件的名称
+  fileReader = new FileReader();// 准备读取文件
+  fileReader.onload = loadAndSend;
+  readFragment();// 读取文件片段
+};
+
+function loadAndSend(){
+  if(ws.bufferedAmount &gt; size * 5){// 若发送队列中的数据太多,先等一等
+    setTimeout(loadAndSend，4);
+    return;
+  }
+  ws.send(fileReader.result);// 发送本次读取的片段内容
+  curSize += size;// 更新已发送文件大小
+  curSize &lt; total ? readFragment() : console.log(&#39;upload successed!&#39;);// 下一步操作
+}
+
+function readFragment(){
+  const blob = file.slice(curSize, curSize + size);// 获取文件指定片段
+  fileReader.readAsArrayBuffer(blob);// 读取文件为ArrayBuffer对象
+}
+</code></pre>
 <p>3) server(node)。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> WebSocketServer = <span class="built_in">require</span>(<span class="string">'ws'</span>).Server,</div><div class="line">    server = <span class="keyword">new</span> WebSocketServer(&#123;<span class="attr">port</span>: <span class="number">10103</span>&#125;),<span class="comment">// 启动服务器</span></div><div class="line">    fs = <span class="built_in">require</span>(<span class="string">'fs'</span>);</div><div class="line">server.on(<span class="string">'connection'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">wsServer</span>)</span>&#123;</div><div class="line">  <span class="keyword">var</span> fileName, i = <span class="number">0</span>;<span class="comment">// 变量定义不可放在全局,因每个连接都不一样,这里才是私有作用域</span></div><div class="line">  server.on(<span class="string">'message'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">data, flags</span>)</span>&#123;<span class="comment">// 监听客户端消息</span></div><div class="line">    <span class="keyword">if</span>(flags.binary)&#123;<span class="comment">// 判断是否二进制数据</span></div><div class="line">      <span class="keyword">var</span> method = i++ ? <span class="string">'appendFileSync'</span> : <span class="string">'writeFileSync'</span>;</div><div class="line">      <span class="comment">// 当前目录下写入或者追加写入文件(建议加上try语句捕获可能的错误)</span></div><div class="line">      fs[method](<span class="string">'./'</span> + fileName, data，<span class="string">'utf-8'</span>);</div><div class="line">    &#125;<span class="keyword">else</span>&#123;<span class="comment">// 非二进制数据则认为是文件名称</span></div><div class="line">      fileName = data;</div><div class="line">    &#125;</div><div class="line">  &#125;);</div><div class="line">  wsServer.send(<span class="string">'server ready!'</span>);<span class="comment">// 告知客户端服务器已就绪</span></div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<pre><code class="js">var WebSocketServer = require(&#39;ws&#39;).Server,
+    server = new WebSocketServer({port: 10103}),// 启动服务器
+    fs = require(&#39;fs&#39;);
+server.on(&#39;connection&#39;, function(wsServer){
+  var fileName, i = 0;// 变量定义不可放在全局,因每个连接都不一样,这里才是私有作用域
+  server.on(&#39;message&#39;, function(data, flags){// 监听客户端消息
+    if(flags.binary){// 判断是否二进制数据
+      var method = i++ ? &#39;appendFileSync&#39; : &#39;writeFileSync&#39;;
+      // 当前目录下写入或者追加写入文件(建议加上try语句捕获可能的错误)
+      fs[method](&#39;./&#39; + fileName, data，&#39;utf-8&#39;);
+    }else{// 非二进制数据则认为是文件名称
+      fileName = data;
+    }
+  });
+  wsServer.send(&#39;server ready!&#39;);// 告知客户端服务器已就绪
+});
+</code></pre>
 <p>运行效果如下：</p>
 <p><img src="http://louiszhai.github.io/docImages/hot-replace10.png" alt="Websocket upload"></p>
 <p>上述测试代码中没有过多涉及服务器的存储过程。通常，服务器也会有缓存区上限，如果客户端单次发送的数据量超过服务端缓存区上限，那么服务端也需要多次读取。</p>
@@ -543,9 +707,14 @@
 <p>为此，早在websocket协议实现时，设计者们便提供了一种 Ping/Pong Frame的心跳机制。一端发送Ping Frame，另一端以 Pong Frame响应。这种Frame是一种特殊的数据包，它只包含一些元数据，能够在不影响原通信的情况下维持住连接。</p>
 <p>根据规范<a href="https://tools.ietf.org/html/rfc6455#section-5.5.2" target="_blank" rel="external">RFC 6455</a>，Ping Frame包含一个值为9的opcode，它可能携带数据。收到Ping Frame后，Pong Frame必须被作为响应发出。Pong Frame包含一个值为10的opcode，它将包含与Ping Frame中相同的数据。</p>
 <p>借助ws包，服务端可以这么来发送Ping Frame。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">wsServer.ping();</div></pre></td></tr></table></figure>
+<pre><code class="js">wsServer.ping();
+</code></pre>
 <p>同时，需要监听客户端响应的pong Frame.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">wsServer.on(<span class="string">'pong'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">data, flags</span>) </span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(data);<span class="comment">// ""</span></div><div class="line">  <span class="built_in">console</span>.log(flags);<span class="comment">// &#123; masked: true，binary: true &#125;</span></div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<pre><code class="js">wsServer.on(&#39;pong&#39;, function(data, flags) {
+  console.log(data);// &quot;&quot;
+  console.log(flags);// { masked: true，binary: true }
+});
+</code></pre>
 <p>以上，由于Ping Frame 不带数据，因此作为响应的Pong Frame的data值为空串。遗憾的是，目前浏览器只能被动发送Pong Frame作为响应（<a href="http://stackoverflow.com/questions/10585355/sending-websocket-ping-pong-frame-from-browser" target="_blank" rel="external">Sending websocket ping/pong frame from browser</a>），无法通过JS API主动向服务端发送Ping Frame。因此对于web服务，可以采取服务端主动ping的方式，来保持住链接。实际应用中，服务端还需要设置心跳的周期，以保证心跳连接可以一直持续。同时，还应该有重发机制，若连续几次没有收到心跳连接的回复，则认为连接已经断开，此时便可以关闭Websocket连接了。</p>
 <h4 id="Socket-IO"><a href="#Socket-IO" class="headerlink" title="Socket.IO"></a><strong>Socket.IO</strong></h4><p>WebSocket出世已久，很多优秀的大神基于此开发出了各式各样的库。其中<a href="http://Socket.IO" target="_blank" rel="external">Socket.IO</a>是一个非常不错的开源WebSocke库，旨在抹平浏览器之间的兼容性问题。它基于Node.js，支持以下方式优雅降级：</p>
 <ul>
@@ -585,7 +754,7 @@
         <a id="btn_donate" class="btn_donate" href="javascript:;" title="打赏"></a>
         <span class="donate_txt">
            &uarr;<br>
-       如果你觉得有用，就支持一下吧！
+       支持一杯咖啡吧！
         </span>
       </div>  
   <div id="donate_guide" class="donate_bar center hidden" >
@@ -652,69 +821,103 @@
 
 
 
-<div class="duoshuo">
-	<div class="ds-thread" data-thread-key="hmr" data-title="webpack与browser-sync热更新原理深度讲解" data-url="http://louiszhai.github.io/2017/04/19/hmr/"></div>
-	<style>
-		#ds-reset .ds-avatar img{width:54px;height:54px;border-radius:27px;-webkit-border-radius:27px;-moz-border-radius:27px;box-shadow:inset 0 -1px 0 #3333sf;-webkit-box-shadow:inset 0 -1px 0 #3333sf;-webkit-transition:0.4s;-webkit-transition:-webkit-transform 0.4s ease-out;transition:transform 0.4s ease-out;-moz-transition:-moz-transform 0.4s ease-out;}
-		#ds-reset .ds-avatar img:hover{box-shadow:0 0 10px #fff;rgba(255,255,255,.6),inset 0 0 20px rgba(255,255,255,1);-webkit-box-shadow:0 0 10px #fff;rgba(255,255,255,.6),inset 0 0 20px rgba(255,255,255,1);transform:rotateZ(360deg);-webkit-transform:rotateZ(360deg);-moz-transform:rotateZ(360deg);}
-		p.ds-powered-by,#ds-sync-checkbox,.ds-sync label{display:none!important;}
-		#ds-reset .ds-rounded-top{-webkit-border-top-right-radius:0px;-webkit-border-top-left-radius:0px;border-top-right-radius:0px;border-top-left-radius:0px;}
-		#ds-thread #ds-reset .ds-textarea-wrapper{background:#fff;border:0;margin-bottom:20px;padding-right:0px;}
-		#ds-thread #ds-reset .ds-textarea-wrapper textarea{min-height:80px;border:1px solid #ccc;padding:10px;-webkit-appearance:none;border-radius:0;background-color:#FFFFFF;border-color:#cccccc;box-shadow:inset 0 1px 2px rgba(0,0,0,0.1);color:rgba(0,0,0,0.75);-webkit-box-sizing:border-box;box-sizing:border-box;-webkit-transition:border-color 0.15s linear,background 0.15s linear;-moz-transition:border-color 0.15s linear,background 0.15s linear;-ms-transition:border-color 0.15s linear,background 0.15s linear;-o-transition:border-color 0.15s linear,background 0.15s linear;transition:border-color 0.15s linear,background 0.15s linear;}
-		/*#ds-thread #ds-reset .ds-textarea-wrapper textarea:focus{border-color:#999999;background:#fafafa;outline:none;}*/
-		#ds-thread #ds-reset .ds-post-options{border-bottom-left-radius:0px;-webkit-border-bottom-left-radius:0px;border:none;background:none!important;}
-		#ds-reset .ds-textarea-wrapper textarea:focus{border-color:#66afe9;outline:0;-webkit-box-shadow:inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);box-shadow:inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);}
-		#ds-thread #ds-reset .ds-post-button:hover,#ds-thread #ds-reset .ds-post-button:focus{
-		    background-color: #51a351;
-		    background-position: 0 -32px;
-		    color:white;
-		}
-		#ds-thread #ds-reset .ds-post-toolbar,#ds-reset .ds-avatar{box-shadow:none;}
-		#ds-thread #ds-reset .ds-textarea-wrapper textarea:focus{
-	    	/*background: none repeat scroll 0 0 #F4FAFF;*/
-	    	border-color:#9DD4FD;
-	    	border-width:1px;
-	    	box-shadow:0 1px 1px rgba(0,0,0,0.075) inset, 0 0 8px rgba(82, 168, 236, 0.6);
-	    	outline:0 none;
-    	}
-		#ds-thread #ds-reset .ds-textarea-wrapper textarea:active{
-	    	/*background: none repeat scroll 0 0 #F4FAFF;*/
-	    	border-width:1px;
-	    	border-color:#9DD4FD;
-	    	box-shadow:0 1px 1px rgba(0,0,0,0.075) inset, 0 0 8px rgba(82, 168, 236, 0.6);
-	    	outline:0 none;
-    	}
-    	#ds-thread #ds-reset .ds-post-button{
-    		box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset, 0 1px 2px rgba(0, 0, 0, 0.05);
-		    border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
-		    border-width: 1px;
-		    border-style: solid;
-		    border-radius: 3px;
-		    background: #5bb75b;
-		    color:white;
-		    text-shadow:none;
-		    transition:background-color 300ms ease-out;
-    	}
-    	#ds-reset .ds-avatar{
-    		background-color:initial;
-    	}
-
-	</style>
-	<script type="text/javascript">
-	var duoshuoQuery = {short_name:"true"};
-	(function() {
-		var ds = document.createElement('script');
-		ds.type = 'text/javascript';ds.async = true;
-		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-		ds.charset = 'UTF-8';
-		(document.getElementsByTagName('head')[0] 
-		 || document.getElementsByTagName('body')[0]).appendChild(ds);
-	})();
-	</script>
-</div>
 
 
 
+
+  <style>
+/*
+    Name:     Kimbie (light)
+    Author:   Jan T. Sott
+    License:  Creative Commons Attribution-ShareAlike 4.0 Unported License
+    URL:      https://github.com/idleberg/Kimbie-highlight.js
+*/
+
+/* Kimbie Comment */
+.hljs-comment,
+.hljs-quote {
+  color: #a57a4c;
+}
+
+/* Kimbie Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-meta {
+  color: #dc3958;
+}
+
+/* Kimbie Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-deletion,
+.hljs-link {
+  color: #f79a32;
+}
+
+/* Kimbie Yellow */
+.hljs-title,
+.hljs-section,
+.hljs-attribute {
+  color: #f06431;
+}
+
+/* Kimbie Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+  color: #889b4a;
+}
+
+/* Kimbie Purple */
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-function {
+  color: #98676a;
+}
+
+.hljs {
+  display: block;
+  overflow-x: auto;
+  /*background: #fbebd4;*/
+  color: #84613d;
+  padding: 0.5em;
+}
+
+.hljs-emphasis {
+  font-style: italic;
+}
+
+.hljs-strong {
+  font-weight: bold;
+}
+</style>
+  <script src="//cdn.bootcss.com/highlight.js/9.2.0/highlight.min.js"></script>
+  <script>
+    // hljs.initHighlightingOnLoad();
+    [].slice.call(document.querySelectorAll('pre code')).forEach(function(block, i) {
+      hljs.highlightBlock(block);
+      var lines = block.innerText.split('\n').length - 1;
+      var ul = document.createElement('ul');
+      ul.className = 'pre-numbering';
+      block.className += ' has-numbering';
+      block.parentNode.appendChild(ul);
+      for(i=1;i<=lines;i++){
+        var li = document.createElement('li');
+        li.innerText = i;
+        ul.appendChild(li);
+      }
+    });
+  </script>
 </div>
         <link rel="stylesheet" href="/css/content.css" type="text/css">
 <footer id="footer">

@@ -244,7 +244,16 @@
 </ul>
 <p>由于IE8基于ES3, IE9支持大部分ES5, IE11支持少量ES5, 其中只有IE10对ES5支持比较完整. 因此IE8+浏览器, 建议依次装载上述垫片.</p>
 <h4 id="尝试一个fetch"><a href="#尝试一个fetch" class="headerlink" title="尝试一个fetch"></a>尝试一个fetch</h4><p>先来看一个简单的fetch.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> word = <span class="string">'123'</span>,</div><div class="line">    url = <span class="string">'https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su?wd='</span>+word+<span class="string">'&amp;json=1&amp;p=3'</span>;</div><div class="line">fetch(url,&#123;<span class="attr">mode</span>: <span class="string">"no-cors"</span>&#125;).then(<span class="function"><span class="keyword">function</span>(<span class="params">response</span>) </span>&#123;</div><div class="line">  <span class="keyword">return</span> response;</div><div class="line">&#125;).then(<span class="function"><span class="keyword">function</span>(<span class="params">data</span>) </span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(data);</div><div class="line">&#125;).catch(<span class="function"><span class="keyword">function</span>(<span class="params">e</span>) </span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">"Oops, error"</span>);</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<pre><code class="js">var word = &#39;123&#39;,
+    url = &#39;https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su?wd=&#39;+word+&#39;&amp;json=1&amp;p=3&#39;;
+fetch(url,{mode: &quot;no-cors&quot;}).then(function(response) {
+  return response;
+}).then(function(data) {
+  console.log(data);
+}).catch(function(e) {
+  console.log(&quot;Oops, error&quot;);
+});
+</code></pre>
 <p>fetch执行后返回一个 <code>Promise</code> 对象, 执行成功后, 成功打印出 <code>Response</code> 对象.</p>
 <p><img src="http://louiszhai.github.io/docImages/ajax11.png" alt="response headers"></p>
 <p>该fetch可以在任何域名的网站直接运行, 且能正常返回百度搜索的建议词条. 以下是常规输入时的是界面截图.</p>
@@ -255,7 +264,29 @@
 <h4 id="Promise特性"><a href="#Promise特性" class="headerlink" title="Promise特性"></a>Promise特性</h4><p>fetch方法返回一个Promise对象, 根据 <code>Promise Api</code> 的特性, fetch可以方便地使用then方法将各个处理逻辑串起来, 使用 Promise.resolve() 或 Promise.reject() 方法将分别返会肯定结果的Promise或否定结果的Promise, 从而调用下一个then 或者 catch. 一但then中的语句出现错误, 也将跳到catch中.</p>
 <p>Promise若有疑问, 请阅读 <a href="https://www.promisejs.org/" target="_blank" rel="external">Promises</a> .</p>
 <p>① 我们不妨在 <a href="https://sp0.baidu.com" target="_blank" rel="external">https://sp0.baidu.com</a> 域名的网页控制台运行以下代码.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> word = <span class="string">'123'</span>,</div><div class="line">    url = <span class="string">'https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su?wd='</span>+word+<span class="string">'&amp;json=1&amp;p=3'</span>;</div><div class="line">fetch(url).then(<span class="function"><span class="keyword">function</span>(<span class="params">response</span>)</span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">'第一次进入then...'</span>);</div><div class="line">  <span class="keyword">if</span>(response.status&gt;=<span class="number">200</span> &amp;&amp; response.status&lt;<span class="number">300</span>)&#123;</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'Content-Type: '</span> + response.headers.get(<span class="string">'Content-Type'</span>));</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'Date: '</span> + response.headers.get(<span class="string">'Date'</span>));</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'status: '</span> + response.status);</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'statusText: '</span> + response.statusText);</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'type: '</span> + response.type);</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'url: '</span> + response.url);</div><div class="line">    <span class="keyword">return</span> <span class="built_in">Promise</span>.resolve(response);</div><div class="line">  &#125;<span class="keyword">else</span>&#123;</div><div class="line">    <span class="keyword">return</span> <span class="built_in">Promise</span>.reject(<span class="keyword">new</span> <span class="built_in">Error</span>(response.statusText));</div><div class="line">  &#125;</div><div class="line">&#125;).then(<span class="function"><span class="keyword">function</span>(<span class="params">data</span>)</span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">'第二次进入then...'</span>);</div><div class="line">  <span class="built_in">console</span>.log(data);</div><div class="line">&#125;).catch(<span class="function"><span class="keyword">function</span>(<span class="params">e</span>)</span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">'抛出的错误如下:'</span>);</div><div class="line">  <span class="built_in">console</span>.log(e);</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<pre><code class="js">var word = &#39;123&#39;,
+    url = &#39;https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su?wd=&#39;+word+&#39;&amp;json=1&amp;p=3&#39;;
+fetch(url).then(function(response){
+  console.log(&#39;第一次进入then...&#39;);
+  if(response.status&gt;=200 &amp;&amp; response.status&lt;300){
+    console.log(&#39;Content-Type: &#39; + response.headers.get(&#39;Content-Type&#39;));
+    console.log(&#39;Date: &#39; + response.headers.get(&#39;Date&#39;));
+    console.log(&#39;status: &#39; + response.status);
+    console.log(&#39;statusText: &#39; + response.statusText);
+    console.log(&#39;type: &#39; + response.type);
+    console.log(&#39;url: &#39; + response.url);
+    return Promise.resolve(response);
+  }else{
+    return Promise.reject(new Error(response.statusText));
+  }
+}).then(function(data){
+  console.log(&#39;第二次进入then...&#39;);
+  console.log(data);
+}).catch(function(e){
+  console.log(&#39;抛出的错误如下:&#39;);
+  console.log(e);
+});
+</code></pre>
 <p>运行截图如下:</p>
 <p><img src="http://louiszhai.github.io/docImages/ajax12.png" alt="fetch then"></p>
 <p>② 我们不妨在非 <a href="https://sp0.baidu.com" target="_blank" rel="external">https://sp0.baidu.com</a> 域名的网页控制台再次运行以上代码.(别忘了给fetch的第二参数传递{mode: “no-cors”})</p>
@@ -274,7 +305,8 @@
 <p>同样是跨域下, 如果服务器返回了CORS响应头, 那么响应类型将为 “cors”. 此时响应头中除 <code>Cache-Control</code> , <code>Content-Language</code> , <code>Content-Type</code> , <code>Expores</code> , <code>Last-Modified</code> 和 <code>Progma</code> 之外的字段都不可见.</p>
 <p>注意: 无论是同域还是跨域, 以上 fetch 请求都到达了服务器.</p>
 <h4 id="mode"><a href="#mode" class="headerlink" title="mode"></a>mode</h4><p>fetch可以设置不同的模式使得请求有效. 模式可在fetch方法的第二个参数对象中定义.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">fetch(url, &#123;<span class="attr">mode</span>: <span class="string">'cors'</span>&#125;);</div></pre></td></tr></table></figure>
+<pre><code class="js">fetch(url, {mode: &#39;cors&#39;});
+</code></pre>
 <p>可定义的模式如下:</p>
 <ul>
 <li>same-origin: 表示同域下可请求成功; 反之, 浏览器将拒绝发送本次fetch, 同时抛出错误 “TypeError: Failed to fetch(…)”.</li>
@@ -284,15 +316,41 @@
 </ul>
 <p>除此之外, 还有两种不太常用的mode类型, 分别是 <code>navigate</code> , <code>websocket</code> , 它们是 <a href="https://html.spec.whatwg.org/multipage/" target="_blank" rel="external">HTML标准</a> 中特殊的值, 这里不做详细介绍.</p>
 <h4 id="header"><a href="#header" class="headerlink" title="header"></a>header</h4><p>fetch获取http响应头非常easy. 如下:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">fetch(url).then(<span class="function"><span class="keyword">function</span>(<span class="params">response</span>) </span>&#123; </div><div class="line">    <span class="built_in">console</span>.log(response.headers.get(<span class="string">'Content-Type'</span>));</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<pre><code class="js">fetch(url).then(function(response) { 
+    console.log(response.headers.get(&#39;Content-Type&#39;));
+});
+</code></pre>
 <p>设置http请求头也一样简单.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> headers = <span class="keyword">new</span> Headers();</div><div class="line">headers.append(<span class="string">"Content-Type"</span>, <span class="string">"text/html"</span>);</div><div class="line">fetch(url,&#123;</div><div class="line">  <span class="attr">headers</span>: headers</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<pre><code class="js">var headers = new Headers();
+headers.append(&quot;Content-Type&quot;, &quot;text/html&quot;);
+fetch(url,{
+  headers: headers
+});
+</code></pre>
 <p>header的内容也是可以被检索的.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> header = <span class="keyword">new</span> Headers(&#123;</div><div class="line">  <span class="string">"Content-Type"</span>: <span class="string">"text/plain"</span></div><div class="line">&#125;);</div><div class="line"><span class="built_in">console</span>.log(header.has(<span class="string">"Content-Type"</span>)); <span class="comment">//true</span></div><div class="line"><span class="built_in">console</span>.log(header.has(<span class="string">"Content-Length"</span>)); <span class="comment">//false</span></div></pre></td></tr></table></figure>
+<pre><code class="js">var header = new Headers({
+  &quot;Content-Type&quot;: &quot;text/plain&quot;
+});
+console.log(header.has(&quot;Content-Type&quot;)); //true
+console.log(header.has(&quot;Content-Length&quot;)); //false
+</code></pre>
 <h4 id="post"><a href="#post" class="headerlink" title="post"></a>post</h4><p>在fetch中发送post请求, 同样可以在fetch方法的第二个参数对象中设置.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> headers = <span class="keyword">new</span> Headers();</div><div class="line">headers.append(<span class="string">"Content-Type"</span>, <span class="string">"application/json;charset=UTF-8"</span>);</div><div class="line">fetch(url, &#123;</div><div class="line">  <span class="attr">method</span>: <span class="string">'post'</span>,</div><div class="line">  <span class="attr">headers</span>: headers,</div><div class="line">  <span class="attr">body</span>: <span class="built_in">JSON</span>.stringify(&#123;</div><div class="line">    <span class="attr">date</span>: <span class="string">'2016-10-08'</span>,</div><div class="line">    <span class="attr">time</span>: <span class="string">'15:16:00'</span></div><div class="line">  &#125;)</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<pre><code class="js">var headers = new Headers();
+headers.append(&quot;Content-Type&quot;, &quot;application/json;charset=UTF-8&quot;);
+fetch(url, {
+  method: &#39;post&#39;,
+  headers: headers,
+  body: JSON.stringify({
+    date: &#39;2016-10-08&#39;,
+    time: &#39;15:16:00&#39;
+  })
+});
+</code></pre>
 <h4 id="credentials"><a href="#credentials" class="headerlink" title="credentials"></a>credentials</h4><p>跨域请求中需要带有cookie时, 可在fetch方法的第二个参数对象中添加credentials属性, 并将值设置为”include”.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">fetch(url,&#123;</div><div class="line">  <span class="attr">credentials</span>: <span class="string">'include'</span></div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<pre><code class="js">fetch(url,{
+  credentials: &#39;include&#39;
+});
+</code></pre>
 <p>除此之外, credentials 还可以取以下值:</p>
 <ul>
 <li>omit: 缺省值, 默认为该值.</li>
@@ -316,47 +374,114 @@
 <p>为此, ES7 提供了更标准的解决方案 — async/await. async/await 几乎没有引入新的语法, 表面上看起来, 它就和alert一样易用,  虽然它尚处于ES7的草案中, 不过这并不影响我们提前使用它.</p>
 <h5 id="async-await语法"><a href="#async-await语法" class="headerlink" title="async/await语法"></a>async/await语法</h5><p>async 用于声明一个异步函数, 该函数需返回一个 Promise 对象. 而 await 通常后接一个 Promise对象, 需等待该 Promise 对象的 resolve() 方法执行并且返回值后才能继续执行. (如果await后接的是其他对象, 便会立即执行)</p>
 <p>因此, async/await 天生可用于处理 fetch请求(毫无违和感). 如下:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> word = <span class="string">'123'</span>,</div><div class="line">    url = <span class="string">'https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su?wd='</span>+word+<span class="string">'&amp;json=1&amp;p=3'</span>;</div><div class="line"><span class="function">(<span class="params"><span class="keyword">async</span> (</span>)=&gt;</span>&#123;</div><div class="line">  <span class="keyword">try</span> &#123;</div><div class="line">    <span class="keyword">let</span> res = <span class="keyword">await</span> fetch(url, &#123;<span class="attr">mode</span>: <span class="string">'no-cors'</span>&#125;);<span class="comment">//等待fetch被resolve()后才能继续执行</span></div><div class="line">    <span class="built_in">console</span>.log(res);</div><div class="line">  &#125; <span class="keyword">catch</span>(e) &#123;</div><div class="line">    <span class="built_in">console</span>.log(e);</div><div class="line">  &#125;</div><div class="line">&#125;)();</div></pre></td></tr></table></figure>
+<pre><code class="js">var word = &#39;123&#39;,
+    url = &#39;https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su?wd=&#39;+word+&#39;&amp;json=1&amp;p=3&#39;;
+(async ()=&gt;{
+  try {
+    let res = await fetch(url, {mode: &#39;no-cors&#39;});//等待fetch被resolve()后才能继续执行
+    console.log(res);
+  } catch(e) {
+    console.log(e);
+  }
+})();
+</code></pre>
 <p>自然, async/await 也可处理 Promise 对象.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> wait = <span class="function"><span class="keyword">function</span>(<span class="params">ts</span>)</span>&#123;</div><div class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="keyword">function</span>(<span class="params">resolve, reject</span>)</span>&#123;</div><div class="line">    setTimeout(resolve,ts,<span class="string">'Copy that!'</span>);</div><div class="line">  &#125;);</div><div class="line">&#125;;</div><div class="line">(<span class="keyword">async</span> <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  <span class="keyword">try</span> &#123;</div><div class="line">    <span class="keyword">let</span> res = <span class="keyword">await</span> wait(<span class="number">1000</span>);<span class="comment">//① 等待1s后返回结果</span></div><div class="line">    <span class="built_in">console</span>.log(res);</div><div class="line">    res = <span class="keyword">await</span> wait(<span class="number">1000</span>);<span class="comment">//② 重复执行一次</span></div><div class="line">    <span class="built_in">console</span>.log(res);</div><div class="line">  &#125; <span class="keyword">catch</span>(e) &#123;</div><div class="line">    <span class="built_in">console</span>.log(e);</div><div class="line">  &#125;</div><div class="line">&#125;)();</div><div class="line"><span class="comment">//"Copy that!"</span></div></pre></td></tr></table></figure>
+<pre><code class="js">let wait = function(ts){
+  return new Promise(function(resolve, reject){
+    setTimeout(resolve,ts,&#39;Copy that!&#39;);
+  });
+};
+(async function(){
+  try {
+    let res = await wait(1000);//① 等待1s后返回结果
+    console.log(res);
+    res = await wait(1000);//② 重复执行一次
+    console.log(res);
+  } catch(e) {
+    console.log(e);
+  }
+})();
+//&quot;Copy that!&quot;
+</code></pre>
 <p>可见使用await后, 可以直接得到返回值, 不必写 <code>.then(callback)</code> , 也不必写 <code>.catch(error)</code> 了, 更可以使用 <code>try catch</code> 标准语法捕获错误.</p>
 <p>由于await采用的是同步的写法, 看起来它就和alert函数一样, 可以自动阻塞上下文. 因此它可以重复执行多次, 就像上述代码②一样.</p>
 <p>可以看到, await/async 同步阻塞式的写法解决了完全使用 Promise 的一大痛点——不同Promise之间共享数据问题. Promise 需要设置上层变量从而实现数据共享, 而 await/async 就不存在这样的问题, 只需要像写alert一样书写就可以了.</p>
 <p>值得注意的是, <strong>await 只能用于 async 声明的函数上下文中</strong>. 如下 forEach 中, 是不能直接使用await的.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> array = [<span class="number">0</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>];</div><div class="line"><span class="function">(<span class="params"><span class="keyword">async</span> (</span>)=&gt;</span>&#123;</div><div class="line">  array.forEach(<span class="function"><span class="keyword">function</span>(<span class="params">item</span>)</span>&#123;</div><div class="line">    <span class="keyword">await</span> wait(<span class="number">1000</span>);<span class="comment">//这是错误的写法, 因await不在async声明的函数上下文中</span></div><div class="line">    <span class="built_in">console</span>.log(item);</div><div class="line">  &#125;);</div><div class="line">&#125;)();</div></pre></td></tr></table></figure>
+<pre><code class="js">let array = [0,1,2,3,4,5];
+(async ()=&gt;{
+  array.forEach(function(item){
+    await wait(1000);//这是错误的写法, 因await不在async声明的函数上下文中
+    console.log(item);
+  });
+})();
+</code></pre>
 <p>如果是试图将async声明的函数作为回调传给forEach，该回调将同时触发多次，回调内部await依然有效，只是多次的await随着回调一起同步执行了，这便不符合我们阻塞循环的初衷。如下：</p>
-<figure class="highlight gauss"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">const <span class="function"><span class="keyword">fn</span> = <span class="title">async</span> <span class="params">(item)</span>=&gt;&#123;</span></div><div class="line">  await <span class="built_in">wait</span><span class="params">(<span class="number">1000</span>)</span>; <span class="comment">// 循环中的多个await同时执行，因此等待1s后将同时输出数组各个元素</span></div><div class="line">  console.<span class="built_in">log</span>(item);</div><div class="line">&#125;;</div><div class="line">array.forEach(<span class="function"><span class="keyword">fn</span>)</span>;</div></pre></td></tr></table></figure>
-<p>正确的写法如下：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">(<span class="keyword">async</span> ()=&gt;&#123;</div><div class="line">  <span class="keyword">for</span>(<span class="keyword">let</span> i=<span class="number">0</span>,len=array.length;i&lt;len;i++)&#123;</div><div class="line">    <span class="keyword">await</span> wait(<span class="number">1000</span>);</div><div class="line">    <span class="built_in">console</span>.log(array[i]);</div><div class="line">  &#125;</div><div class="line">&#125;)();</div></pre></td></tr></table></figure>
+<pre><code>const fn = async (item)=&gt;{
+  await wait(1000); // 循环中的多个await同时执行，因此等待1s后将同时输出数组各个元素
+  console.log(item);
+};
+array.forEach(fn);
+</code></pre><p>正确的写法如下：</p>
+<pre><code class="js">(async ()=&gt;{
+  for(let i=0,len=array.length;i&lt;len;i++){
+    await wait(1000);
+    console.log(array[i]);
+  }
+})();
+</code></pre>
 <h5 id="如何试运行async-await"><a href="#如何试运行async-await" class="headerlink" title="如何试运行async/await"></a>如何试运行async/await</h5><p>鉴于目前只有Edge支持 async/await, 我们可以使用以下方法之一运行我们的代码.</p>
 <ol>
 <li><p>随着node7.0的发布, node中可以使用如下方式直接运行:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">node --harmony-async-await test.js</div></pre></td></tr></table></figure>
+<pre><code class="bash">node --harmony-async-await test.js
+</code></pre>
 </li>
 <li><p>babel在线编译并运行 <a href="https://babeljs.io/repl/#?babili=false&amp;evaluate=true&amp;lineWrap=false&amp;presets=es2015%2Creact%2Cstage-2&amp;code=" target="_blank" rel="external">Babel · The compiler for writing next generation JavaScript</a> .</p>
 </li>
 <li><p>本地使用babel编译es6或更高版本es.</p>
 <p>1) 安装.</p>
 <p>由于Babel5默认自带各种转换插件, 不需要手动安装. 然而从Babel6开始, 插件需要手动下载, 因此以下安装babel后需要再顺便安装两个插件.</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">npm i babel-cli -g	<span class="comment"># babel已更名为babel-cli</span></div><div class="line">npm install babel-preset-es2015 --save-dev</div><div class="line">npm install babel-preset-stage-0 --save-dev</div></pre></td></tr></table></figure>
+<pre><code class="bash">npm i babel-cli -g    # babel已更名为babel-cli
+npm install babel-preset-es2015 --save-dev
+npm install babel-preset-stage-0 --save-dev
+</code></pre>
 <p>2) 书写.babelrc配置文件.</p>
-<figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">    <span class="attr">"presets"</span>: [</div><div class="line">        <span class="string">"es2015"</span>,</div><div class="line">        <span class="string">"stage-0"</span></div><div class="line">    ],</div><div class="line">    <span class="attr">"plugins"</span>: []</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<pre><code class="json">{
+    &quot;presets&quot;: [
+        &quot;es2015&quot;,
+        &quot;stage-0&quot;
+    ],
+    &quot;plugins&quot;: []
+}
+</code></pre>
 <p>3) 如果不配置.babelrc. 也可在命令行显式指定插件.</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">babel es6.js -o es5.js --presets es2015 stage-0 <span class="comment"># 指定使用插件es2015和stage-0编译js</span></div></pre></td></tr></table></figure>
+<pre><code class="bash">babel es6.js -o es5.js --presets es2015 stage-0 # 指定使用插件es2015和stage-0编译js
+</code></pre>
 <p>4) 编译.</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">babel es6.js -o es5.js  <span class="comment"># 编译源文件es6.js,输出为es5.js,编译规则在上述.babelrc中指定</span></div><div class="line">babel es6.js --out-file es5.js <span class="comment"># 或者将-o写全为--out-file也行</span></div><div class="line">bable es6.js <span class="comment"># 如果不指定输出文件路径,babel会将编译生成的文本标准输出到控制台</span></div></pre></td></tr></table></figure>
+<pre><code class="bash">babel es6.js -o es5.js  # 编译源文件es6.js,输出为es5.js,编译规则在上述.babelrc中指定
+babel es6.js --out-file es5.js # 或者将-o写全为--out-file也行
+bable es6.js # 如果不指定输出文件路径,babel会将编译生成的文本标准输出到控制台
+</code></pre>
 <p>5) 实时编译</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">babel es6.js -w -o es5.js <span class="comment"># 实时watch es6.js的变化,一旦改变就重新编译</span></div><div class="line">babel es6.js -watch -o es5.js <span class="comment"># -w也可写全为--watch</span></div></pre></td></tr></table></figure>
+<pre><code class="bash">babel es6.js -w -o es5.js # 实时watch es6.js的变化,一旦改变就重新编译
+babel es6.js -watch -o es5.js # -w也可写全为--watch
+</code></pre>
 <p>6) 编译目录输出到其他目录</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">babel src -d build <span class="comment"># 编译src目录下所有js,并输出到build目录</span></div><div class="line">babel src --out-dir build <span class="comment"># -d也可写全为--out-dir</span></div></pre></td></tr></table></figure>
+<pre><code class="bash">babel src -d build # 编译src目录下所有js,并输出到build目录
+babel src --out-dir build # -d也可写全为--out-dir
+</code></pre>
 <p>7) 编译目录输出到单个文件</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">babel src -o es5.js <span class="comment"># 编译src目录所有js,合并输出为es5.js</span></div></pre></td></tr></table></figure>
+<pre><code class="bash">babel src -o es5.js # 编译src目录所有js,合并输出为es5.js
+</code></pre>
 <p>8) 想要直接运行es6.js, 可使用babel-node.</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">npm i babel-node -g <span class="comment"># 全局安装babel-node</span></div><div class="line">babel-node es6.js <span class="comment"># 直接运行js文件</span></div></pre></td></tr></table></figure>
+<pre><code class="bash">npm i babel-node -g # 全局安装babel-node
+babel-node es6.js # 直接运行js文件
+</code></pre>
 <p>9) 如需在代码中使用fetch, 且使用babel-node运行, 需引入 <code>node-fetch</code> 模块.</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">npm i node-fetch --save-dev</div></pre></td></tr></table></figure>
+<pre><code class="bash">npm i node-fetch --save-dev
+</code></pre>
 <p>然后在es6.js中require <code>node-fetch</code> 模块.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> fetch = <span class="built_in">require</span>(<span class="string">'node-fetch'</span>);</div></pre></td></tr></table></figure>
+<pre><code class="js">var fetch = require(&#39;node-fetch&#39;);
+</code></pre>
 </li>
 <li><p>本地使用traceur编译es6或更高版本es.请参考 <a href="http://www.codesec.net/view/450316.html" target="_blank" rel="external">在项目开发中优雅地使用ES6：Traceur &amp; Babel</a> .</p>
 </li>
@@ -364,29 +489,132 @@
 <h3 id="如何弥补Fetch的不足"><a href="#如何弥补Fetch的不足" class="headerlink" title="如何弥补Fetch的不足"></a>如何弥补Fetch的不足</h3><p>fetch基于Promise, Promise受限, fetch也难幸免. ES6的Promise基于 <a href="https://promisesaplus.com/" target="_blank" rel="external">Promises/A+</a> 规范 (对规范感兴趣的同学可选读 <a href="http://www.cnblogs.com/fsjohnhuang/p/4135149.html" target="_blank" rel="external">剖析源码理解Promises/A规范</a> ), 它只提供极简的api, 没有 timeout 机制, 没有 progress 提示, 没有 deferred 处理 (这个可以被async/await替代).</p>
 <h4 id="fetch-jsonp"><a href="#fetch-jsonp" class="headerlink" title="fetch-jsonp"></a>fetch-jsonp</h4><p>除此之外, fetch还不支持jsonp请求. 不过办法总比问题多, 万能的开源作者提供了 <a href="https://github.com/camsong/fetch-jsonp" target="_blank" rel="external"><code>fetch-jsonp</code></a> 库, 解决了这个问题. </p>
 <p><code>fetch-jsonp</code> 使用起来非常简单. 如下是安装:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">npm install fetch-jsonp --save-dev</div></pre></td></tr></table></figure>
+<pre><code class="bash">npm install fetch-jsonp --save-dev
+</code></pre>
 <p>如下是使用:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">fetchJsonp(url, &#123;</div><div class="line">  <span class="attr">timeout</span>: <span class="number">3000</span>,</div><div class="line">  <span class="attr">jsonpCallback</span>: <span class="string">'callback'</span></div><div class="line">&#125;).then(<span class="function"><span class="keyword">function</span>(<span class="params">response</span>) </span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(response.json());</div><div class="line">&#125;).catch(<span class="function"><span class="keyword">function</span>(<span class="params">e</span>) </span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(e)</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<pre><code class="js">fetchJsonp(url, {
+  timeout: 3000,
+  jsonpCallback: &#39;callback&#39;
+}).then(function(response) {
+  console.log(response.json());
+}).catch(function(e) {
+  console.log(e)
+});
+</code></pre>
 <h4 id="abort"><a href="#abort" class="headerlink" title="abort"></a>abort</h4><p>由于Promise的限制, fetch 并不支持原生的abort机制, 但这并不妨碍我们使用 Promise.race() 实现一个.</p>
 <blockquote>
 <p>Promise.race(iterable) 方法返回一个Promise对象, 只要 iterable 中任意一个Promise 被 resolve 或者 reject 后, 外部的Promise 就会以相同的值被 resolve 或者 reject.</p>
 </blockquote>
 <p>支持性: 从 chrome33, Firefox29, Safari7.1, Opera20, EdgeHTML12(并非Edge版本) 起, Promise就被完整的支持. Promise.race()也随之可用. 下面我们来看下实现.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> _fetch = (<span class="function"><span class="keyword">function</span>(<span class="params">fetch</span>)</span>&#123;</div><div class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params">url,options</span>)</span>&#123;</div><div class="line">    <span class="keyword">var</span> abort = <span class="literal">null</span>;</div><div class="line">    <span class="keyword">var</span> abort_promise = <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>)=&gt;</span>&#123;</div><div class="line">      abort = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</div><div class="line">        reject(<span class="string">'abort.'</span>);</div><div class="line">        <span class="built_in">console</span>.info(<span class="string">'abort done.'</span>);</div><div class="line">      &#125;;</div><div class="line">    &#125;);</div><div class="line">    <span class="keyword">var</span> promise = <span class="built_in">Promise</span>.race([</div><div class="line">      fetch(url,options),</div><div class="line">      abort_promise</div><div class="line">    ]);</div><div class="line">    promise.abort = abort;</div><div class="line">    <span class="keyword">return</span> promise;</div><div class="line">  &#125;;</div><div class="line">&#125;)(fetch);</div></pre></td></tr></table></figure>
+<pre><code class="js">var _fetch = (function(fetch){
+  return function(url,options){
+    var abort = null;
+    var abort_promise = new Promise((resolve, reject)=&gt;{
+      abort = () =&gt; {
+        reject(&#39;abort.&#39;);
+        console.info(&#39;abort done.&#39;);
+      };
+    });
+    var promise = Promise.race([
+      fetch(url,options),
+      abort_promise
+    ]);
+    promise.abort = abort;
+    return promise;
+  };
+})(fetch);
+</code></pre>
 <p>然后, 使用如下方法测试新的fetch.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> p = _fetch(<span class="string">'https://www.baidu.com'</span>,&#123;<span class="attr">mode</span>:<span class="string">'no-cors'</span>&#125;);</div><div class="line">p.then(<span class="function"><span class="keyword">function</span>(<span class="params">res</span>) </span>&#123;</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'response:'</span>, res);</div><div class="line">&#125;, <span class="function"><span class="keyword">function</span>(<span class="params">e</span>) </span>&#123;</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'error:'</span>, e);</div><div class="line">&#125;);</div><div class="line">p.abort();</div><div class="line"><span class="comment">//"abort done."</span></div><div class="line"><span class="comment">//"error: abort."</span></div></pre></td></tr></table></figure>
+<pre><code class="js">var p = _fetch(&#39;https://www.baidu.com&#39;,{mode:&#39;no-cors&#39;});
+p.then(function(res) {
+    console.log(&#39;response:&#39;, res);
+}, function(e) {
+    console.log(&#39;error:&#39;, e);
+});
+p.abort();
+//&quot;abort done.&quot;
+//&quot;error: abort.&quot;
+</code></pre>
 <p>以上, fetch请求后, 立即调用abort方法, 该promise被拒绝, 符合预期. 细心的同学可能已经注意到了, “p.abort();” 该语句我是单独写一行的, 没有链式写在then方法之后. 为什么这么干呢? 这是因为then方法调用后, 返回的是新的promise对象. 该对象不具有abort方法, 因此使用时要注意绕开这个坑.</p>
 <h4 id="timeout"><a href="#timeout" class="headerlink" title="timeout"></a>timeout</h4><p>同上, 由于Promise的限制, fetch 并不支持原生的timeout机制, 但这并不妨碍我们使用 Promise.race() 实现一个.</p>
 <p>下面是一个简易的版本.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">timer</span>(<span class="params">t</span>)</span>&#123;</div><div class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="params">resolve</span>=&gt;</span>setTimeout(resolve, t))</div><div class="line">  .then(<span class="function"><span class="keyword">function</span>(<span class="params">res</span>) </span>&#123;</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'timeout'</span>);</div><div class="line">  &#125;);</div><div class="line">&#125;</div><div class="line"><span class="keyword">var</span> p = fetch(<span class="string">'https://www.baidu.com'</span>,&#123;<span class="attr">mode</span>:<span class="string">'no-cors'</span>&#125;);</div><div class="line"><span class="built_in">Promise</span>.race([p, timer(<span class="number">1000</span>)]);</div><div class="line"><span class="comment">//"timeout"</span></div></pre></td></tr></table></figure>
+<pre><code class="js">function timer(t){
+  return new Promise(resolve=&gt;setTimeout(resolve, t))
+  .then(function(res) {
+    console.log(&#39;timeout&#39;);
+  });
+}
+var p = fetch(&#39;https://www.baidu.com&#39;,{mode:&#39;no-cors&#39;});
+Promise.race([p, timer(1000)]);
+//&quot;timeout&quot;
+</code></pre>
 <p>实际上, 无论超时时间设置为多长, 控制台都将输出log “timeout”. 这是因为, 即使fetch执行成功, 外部的promise执行完毕, 此时 setTimeout 所在的那个promise也不会reject.</p>
 <p>下面我们来看一个类似xhr版本的timeout.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> _fetch = (<span class="function"><span class="keyword">function</span>(<span class="params">fetch</span>)</span>&#123;</div><div class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params">url,options</span>)</span>&#123;</div><div class="line">    <span class="keyword">var</span> abort = <span class="literal">null</span>,</div><div class="line">        timeout = <span class="number">0</span>;</div><div class="line">    <span class="keyword">var</span> abort_promise = <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>)=&gt;</span>&#123;</div><div class="line">      abort = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</div><div class="line">        reject(<span class="string">'timeout.'</span>);</div><div class="line">        <span class="built_in">console</span>.info(<span class="string">'abort done.'</span>);</div><div class="line">      &#125;;</div><div class="line">    &#125;);</div><div class="line">    <span class="keyword">var</span> promise = <span class="built_in">Promise</span>.race([</div><div class="line">      fetch(url,options),</div><div class="line">      abort_promise</div><div class="line">    ]);</div><div class="line">    promise.abort = abort;</div><div class="line">    <span class="built_in">Object</span>.defineProperty(promise, <span class="string">'timeout'</span>,&#123;</div><div class="line">      <span class="attr">set</span>: <span class="function"><span class="keyword">function</span>(<span class="params">ts</span>)</span>&#123;</div><div class="line">        <span class="keyword">if</span>((ts=+ts))&#123;</div><div class="line">          timeout = ts;</div><div class="line">          setTimeout(abort,ts);</div><div class="line">        &#125;</div><div class="line">      &#125;,</div><div class="line">      <span class="attr">get</span>: <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">        <span class="keyword">return</span> timeout;</div><div class="line">      &#125;</div><div class="line">    &#125;);</div><div class="line">    <span class="keyword">return</span> promise;</div><div class="line">  &#125;;</div><div class="line">&#125;)(fetch);</div></pre></td></tr></table></figure>
+<pre><code class="js">var _fetch = (function(fetch){
+  return function(url,options){
+    var abort = null,
+        timeout = 0;
+    var abort_promise = new Promise((resolve, reject)=&gt;{
+      abort = () =&gt; {
+        reject(&#39;timeout.&#39;);
+        console.info(&#39;abort done.&#39;);
+      };
+    });
+    var promise = Promise.race([
+      fetch(url,options),
+      abort_promise
+    ]);
+    promise.abort = abort;
+    Object.defineProperty(promise, &#39;timeout&#39;,{
+      set: function(ts){
+        if((ts=+ts)){
+          timeout = ts;
+          setTimeout(abort,ts);
+        }
+      },
+      get: function(){
+        return timeout;
+      }
+    });
+    return promise;
+  };
+})(fetch);
+</code></pre>
 <p>然后, 使用如下方法测试新的fetch.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> p = _fetch(<span class="string">'https://www.baidu.com'</span>,&#123;<span class="attr">mode</span>:<span class="string">'no-cors'</span>&#125;);</div><div class="line">p.then(<span class="function"><span class="keyword">function</span>(<span class="params">res</span>) </span>&#123;</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'response:'</span>, res);</div><div class="line">&#125;, <span class="function"><span class="keyword">function</span>(<span class="params">e</span>) </span>&#123;</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'error:'</span>, e);</div><div class="line">&#125;);</div><div class="line">p.timeout = <span class="number">1</span>;</div><div class="line"><span class="comment">//"abort done."</span></div><div class="line"><span class="comment">//"error: timeout."</span></div></pre></td></tr></table></figure>
+<pre><code class="js">var p = _fetch(&#39;https://www.baidu.com&#39;,{mode:&#39;no-cors&#39;});
+p.then(function(res) {
+    console.log(&#39;response:&#39;, res);
+}, function(e) {
+    console.log(&#39;error:&#39;, e);
+});
+p.timeout = 1;
+//&quot;abort done.&quot;
+//&quot;error: timeout.&quot;
+</code></pre>
 <h4 id="progress"><a href="#progress" class="headerlink" title="progress"></a>progress</h4><p>xhr的 onprogress 让我们可以掌控下载进度, fetch显然没有提供原生api 做类似的事情. 不过 Fetch中的<code>Response.body</code> 中实现了<code>getReader()</code>方法用于读取原始字节流, 该字节流可以循环读取, 直到body下载完成. 因此我们完全可以模拟fetch的progress.</p>
 <p>以下是 stackoverflow 上的一段代码, 用于模拟fetch的progress事件. 为了方便测试, 请求url已改为本地服务.(原文请戳 <a href="http://stackoverflow.com/questions/35711724/progress-indicators-for-fetch" target="_blank" rel="external">javascript - Progress indicators for fetch? - Stack Overflow</a>)</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">consume</span>(<span class="params">reader</span>) </span>&#123;</div><div class="line">  <span class="keyword">var</span> total = <span class="number">0</span></div><div class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</div><div class="line">    <span class="function"><span class="keyword">function</span> <span class="title">pump</span>(<span class="params"></span>) </span>&#123;</div><div class="line">      reader.read().then(<span class="function">(<span class="params">&#123;done, value&#125;</span>) =&gt;</span> &#123;</div><div class="line">        <span class="keyword">if</span> (done) &#123;</div><div class="line">          resolve();</div><div class="line">          <span class="keyword">return</span>;</div><div class="line">        &#125;</div><div class="line">        total += value.byteLength;</div><div class="line">        <span class="built_in">console</span>.log(<span class="string">`received <span class="subst">$&#123;value.byteLength&#125;</span> bytes (<span class="subst">$&#123;total&#125;</span> bytes in total)`</span>);</div><div class="line">        pump();</div><div class="line">      &#125;).catch(reject)</div><div class="line">    &#125;</div><div class="line">    pump();</div><div class="line">  &#125;);</div><div class="line">&#125;</div><div class="line">fetch(<span class="string">'http://localhost:10101/notification/'</span>,&#123;<span class="attr">mode</span>:<span class="string">'no-cors'</span>&#125;)</div><div class="line">  .then(<span class="function"><span class="params">res</span> =&gt;</span> consume(res.body.getReader()))</div><div class="line">  .then(<span class="function"><span class="params">()</span> =&gt;</span> <span class="built_in">console</span>.log(<span class="string">"consumed the entire body without keeping the whole thing in memory!"</span>))</div><div class="line">  .catch(<span class="function"><span class="params">e</span> =&gt;</span> <span class="built_in">console</span>.log(<span class="string">"something went wrong: "</span> + e));</div></pre></td></tr></table></figure>
+<pre><code class="js">function consume(reader) {
+  var total = 0
+  return new Promise((resolve, reject) =&gt; {
+    function pump() {
+      reader.read().then(({done, value}) =&gt; {
+        if (done) {
+          resolve();
+          return;
+        }
+        total += value.byteLength;
+        console.log(`received ${value.byteLength} bytes (${total} bytes in total)`);
+        pump();
+      }).catch(reject)
+    }
+    pump();
+  });
+}
+fetch(&#39;http://localhost:10101/notification/&#39;,{mode:&#39;no-cors&#39;})
+  .then(res =&gt; consume(res.body.getReader()))
+  .then(() =&gt; console.log(&quot;consumed the entire body without keeping the whole thing in memory!&quot;))
+  .catch(e =&gt; console.log(&quot;something went wrong: &quot; + e));
+</code></pre>
 <p>以下是日志截图:</p>
 <p><img src="http://louiszhai.github.io/docImages/ajax15.png" alt=""></p>
 <p>刚好github上有个fetch progress的demo, 感兴趣的小伙伴请参看这里: <a href="https://labs.jxck.io/fetch/progress.html" target="_blank" rel="external">Fetch Progress DEMO</a> .</p>
@@ -419,7 +647,7 @@
         <a id="btn_donate" class="btn_donate" href="javascript:;" title="打赏"></a>
         <span class="donate_txt">
            &uarr;<br>
-       如果你觉得有用，就支持一下吧！
+       支持一杯咖啡吧！
         </span>
       </div>  
   <div id="donate_guide" class="donate_bar center hidden" >
@@ -486,69 +714,103 @@
 
 
 
-<div class="duoshuo">
-	<div class="ds-thread" data-thread-key="fetch" data-title="Fetch进阶指南" data-url="http://louiszhai.github.io/2016/11/02/fetch/"></div>
-	<style>
-		#ds-reset .ds-avatar img{width:54px;height:54px;border-radius:27px;-webkit-border-radius:27px;-moz-border-radius:27px;box-shadow:inset 0 -1px 0 #3333sf;-webkit-box-shadow:inset 0 -1px 0 #3333sf;-webkit-transition:0.4s;-webkit-transition:-webkit-transform 0.4s ease-out;transition:transform 0.4s ease-out;-moz-transition:-moz-transform 0.4s ease-out;}
-		#ds-reset .ds-avatar img:hover{box-shadow:0 0 10px #fff;rgba(255,255,255,.6),inset 0 0 20px rgba(255,255,255,1);-webkit-box-shadow:0 0 10px #fff;rgba(255,255,255,.6),inset 0 0 20px rgba(255,255,255,1);transform:rotateZ(360deg);-webkit-transform:rotateZ(360deg);-moz-transform:rotateZ(360deg);}
-		p.ds-powered-by,#ds-sync-checkbox,.ds-sync label{display:none!important;}
-		#ds-reset .ds-rounded-top{-webkit-border-top-right-radius:0px;-webkit-border-top-left-radius:0px;border-top-right-radius:0px;border-top-left-radius:0px;}
-		#ds-thread #ds-reset .ds-textarea-wrapper{background:#fff;border:0;margin-bottom:20px;padding-right:0px;}
-		#ds-thread #ds-reset .ds-textarea-wrapper textarea{min-height:80px;border:1px solid #ccc;padding:10px;-webkit-appearance:none;border-radius:0;background-color:#FFFFFF;border-color:#cccccc;box-shadow:inset 0 1px 2px rgba(0,0,0,0.1);color:rgba(0,0,0,0.75);-webkit-box-sizing:border-box;box-sizing:border-box;-webkit-transition:border-color 0.15s linear,background 0.15s linear;-moz-transition:border-color 0.15s linear,background 0.15s linear;-ms-transition:border-color 0.15s linear,background 0.15s linear;-o-transition:border-color 0.15s linear,background 0.15s linear;transition:border-color 0.15s linear,background 0.15s linear;}
-		/*#ds-thread #ds-reset .ds-textarea-wrapper textarea:focus{border-color:#999999;background:#fafafa;outline:none;}*/
-		#ds-thread #ds-reset .ds-post-options{border-bottom-left-radius:0px;-webkit-border-bottom-left-radius:0px;border:none;background:none!important;}
-		#ds-reset .ds-textarea-wrapper textarea:focus{border-color:#66afe9;outline:0;-webkit-box-shadow:inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);box-shadow:inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);}
-		#ds-thread #ds-reset .ds-post-button:hover,#ds-thread #ds-reset .ds-post-button:focus{
-		    background-color: #51a351;
-		    background-position: 0 -32px;
-		    color:white;
-		}
-		#ds-thread #ds-reset .ds-post-toolbar,#ds-reset .ds-avatar{box-shadow:none;}
-		#ds-thread #ds-reset .ds-textarea-wrapper textarea:focus{
-	    	/*background: none repeat scroll 0 0 #F4FAFF;*/
-	    	border-color:#9DD4FD;
-	    	border-width:1px;
-	    	box-shadow:0 1px 1px rgba(0,0,0,0.075) inset, 0 0 8px rgba(82, 168, 236, 0.6);
-	    	outline:0 none;
-    	}
-		#ds-thread #ds-reset .ds-textarea-wrapper textarea:active{
-	    	/*background: none repeat scroll 0 0 #F4FAFF;*/
-	    	border-width:1px;
-	    	border-color:#9DD4FD;
-	    	box-shadow:0 1px 1px rgba(0,0,0,0.075) inset, 0 0 8px rgba(82, 168, 236, 0.6);
-	    	outline:0 none;
-    	}
-    	#ds-thread #ds-reset .ds-post-button{
-    		box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset, 0 1px 2px rgba(0, 0, 0, 0.05);
-		    border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
-		    border-width: 1px;
-		    border-style: solid;
-		    border-radius: 3px;
-		    background: #5bb75b;
-		    color:white;
-		    text-shadow:none;
-		    transition:background-color 300ms ease-out;
-    	}
-    	#ds-reset .ds-avatar{
-    		background-color:initial;
-    	}
-
-	</style>
-	<script type="text/javascript">
-	var duoshuoQuery = {short_name:"true"};
-	(function() {
-		var ds = document.createElement('script');
-		ds.type = 'text/javascript';ds.async = true;
-		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-		ds.charset = 'UTF-8';
-		(document.getElementsByTagName('head')[0] 
-		 || document.getElementsByTagName('body')[0]).appendChild(ds);
-	})();
-	</script>
-</div>
 
 
 
+
+  <style>
+/*
+    Name:     Kimbie (light)
+    Author:   Jan T. Sott
+    License:  Creative Commons Attribution-ShareAlike 4.0 Unported License
+    URL:      https://github.com/idleberg/Kimbie-highlight.js
+*/
+
+/* Kimbie Comment */
+.hljs-comment,
+.hljs-quote {
+  color: #a57a4c;
+}
+
+/* Kimbie Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-meta {
+  color: #dc3958;
+}
+
+/* Kimbie Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-deletion,
+.hljs-link {
+  color: #f79a32;
+}
+
+/* Kimbie Yellow */
+.hljs-title,
+.hljs-section,
+.hljs-attribute {
+  color: #f06431;
+}
+
+/* Kimbie Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+  color: #889b4a;
+}
+
+/* Kimbie Purple */
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-function {
+  color: #98676a;
+}
+
+.hljs {
+  display: block;
+  overflow-x: auto;
+  /*background: #fbebd4;*/
+  color: #84613d;
+  padding: 0.5em;
+}
+
+.hljs-emphasis {
+  font-style: italic;
+}
+
+.hljs-strong {
+  font-weight: bold;
+}
+</style>
+  <script src="//cdn.bootcss.com/highlight.js/9.2.0/highlight.min.js"></script>
+  <script>
+    // hljs.initHighlightingOnLoad();
+    [].slice.call(document.querySelectorAll('pre code')).forEach(function(block, i) {
+      hljs.highlightBlock(block);
+      var lines = block.innerText.split('\n').length - 1;
+      var ul = document.createElement('ul');
+      ul.className = 'pre-numbering';
+      block.className += ' has-numbering';
+      block.parentNode.appendChild(ul);
+      for(i=1;i<=lines;i++){
+        var li = document.createElement('li');
+        li.innerText = i;
+        ul.appendChild(li);
+      }
+    });
+  </script>
 </div>
         <link rel="stylesheet" href="/css/content.css" type="text/css">
 <footer id="footer">

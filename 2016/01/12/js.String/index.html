@@ -227,31 +227,78 @@
 <h3 id="String构造器方法"><a href="#String构造器方法" class="headerlink" title="String构造器方法"></a><strong>String构造器方法</strong></h3><h4 id="fromCharCode"><a href="#fromCharCode" class="headerlink" title="fromCharCode"></a><strong>fromCharCode</strong></h4><p>fromCharCode() 方法返回使用指定的Unicode序列创建的字符串，也就是说传入Unicode序列，返回基于此创建的字符串。</p>
 <p>语法：<em>fromCharCode(num1, num2,…)</em>，传入的参数均为数字。</p>
 <p>如下这是一个简单的例子，将返回 ABC、abc、*、+、- 和 /：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">String</span>.fromCharCode(<span class="number">65</span>, <span class="number">66</span>, <span class="number">67</span>); <span class="comment">// "ABC"</span></div><div class="line"><span class="built_in">String</span>.fromCharCode(<span class="number">97</span>, <span class="number">98</span>, <span class="number">99</span>); <span class="comment">// "abc"</span></div><div class="line"><span class="built_in">String</span>.fromCharCode(<span class="number">42</span>); <span class="comment">// "*"</span></div><div class="line"><span class="built_in">String</span>.fromCharCode(<span class="number">43</span>); <span class="comment">// "+"</span></div><div class="line"><span class="built_in">String</span>.fromCharCode(<span class="number">45</span>); <span class="comment">// "-"</span></div><div class="line"><span class="built_in">String</span>.fromCharCode(<span class="number">47</span>); <span class="comment">// "/"</span></div></pre></td></tr></table></figure>
+<pre><code class="js">String.fromCharCode(65, 66, 67); // &quot;ABC&quot;
+String.fromCharCode(97, 98, 99); // &quot;abc&quot;
+String.fromCharCode(42); // &quot;*&quot;
+String.fromCharCode(43); // &quot;+&quot;
+String.fromCharCode(45); // &quot;-&quot;
+String.fromCharCode(47); // &quot;/&quot;
+</code></pre>
 <p>看起来fromCharCode像是满足了需求，但实际上由于js语言设计时的先天不足（只能处理UCS-2编码，即所有字符都是2个字节，无法处理4字节字符），通过该方法并不能返回一个4字节的字符，为了弥补这个缺陷，ES6新增了fromCodePoint方法，请往下看。</p>
 <h4 id="fromCodePoint-ES6"><a href="#fromCodePoint-ES6" class="headerlink" title="fromCodePoint(ES6)"></a><strong>fromCodePoint(ES6)</strong></h4><p>fromCodePoint() 方法基于<strong>ECMAScript 2015（ES6）规范</strong>，作用和语法同fromCharCode方法，该方法主要扩展了对4字节字符的支持。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// "𝌆" 是一个4字节字符，我们先看下它的数字形式</span></div><div class="line"><span class="string">"𝌆"</span>.codePointAt(); <span class="comment">// 119558</span></div><div class="line"><span class="comment">//调用fromCharCode解析之，返回乱码</span></div><div class="line"><span class="built_in">String</span>.fromCharCode(<span class="number">119558</span>); <span class="comment">// "팆"</span></div><div class="line"><span class="comment">//调用fromCodePoint解析之，正常解析</span></div><div class="line"><span class="built_in">String</span>.fromCodePoint(<span class="number">119558</span>); <span class="comment">// "𝌆"</span></div></pre></td></tr></table></figure>
+<pre><code class="js">// &quot;𝌆&quot; 是一个4字节字符，我们先看下它的数字形式
+&quot;𝌆&quot;.codePointAt(); // 119558
+//调用fromCharCode解析之，返回乱码
+String.fromCharCode(119558); // &quot;팆&quot;
+//调用fromCodePoint解析之，正常解析
+String.fromCodePoint(119558); // &quot;𝌆&quot;
+</code></pre>
 <p>除了扩展对4字节的支持外，fromCodePoint还规范了错误处理，只要是无效的Unicode编码，就会抛出错误<code>RangeError: Invalid code point...</code>，这就意味着，只要不是符合Unicode字符范围的正整数（Unicode最多可容纳1114112个码位），均会抛出错误。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">String</span>.fromCodePoint(<span class="string">'abc'</span>); <span class="comment">// RangeError: Invalid code point NaN</span></div><div class="line"><span class="built_in">String</span>.fromCodePoint(<span class="literal">Infinity</span>); <span class="comment">// RangeError: Invalid code point Infinity</span></div><div class="line"><span class="built_in">String</span>.fromCodePoint(<span class="number">-1.23</span>); <span class="comment">// RangeError: Invalid code point -1.23</span></div></pre></td></tr></table></figure>
+<pre><code class="js">String.fromCodePoint(&#39;abc&#39;); // RangeError: Invalid code point NaN
+String.fromCodePoint(Infinity); // RangeError: Invalid code point Infinity
+String.fromCodePoint(-1.23); // RangeError: Invalid code point -1.23
+</code></pre>
 <p>注：进一步了解Unicode编码，推荐这篇文章：<a href="http://www.fmddlmyy.cn/mytext.html" target="_blank" rel="external">浅谈文字编码和Unicode（下）</a>。如需在老的浏览器中使用该方法，请参考<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/String/fromCodePoint#Polyfill-浏览器补丁" target="_blank" rel="external">Polyfill</a>。</p>
 <h4 id="raw-ES6"><a href="#raw-ES6" class="headerlink" title="raw(ES6)"></a>raw(ES6)</h4><p>raw() 方法基于<strong>ECMAScript 2015（ES6）规范</strong>，它是一个模板字符串的标签函数，作用类似于Python的r和C#的@字符串前缀，都是用来获取一个模板字符串的原始字面量。</p>
 <p>语法： <em>String.raw(callSite, …substitutions)</em>，callSite即模板字符串的『调用点对象』，…substitutions表示任意个内插表达式对应的值，这里理解起来相当拗口，下面我将通俗的讲解它。</p>
 <p>如下是python的字符串前缀r：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 防止特殊字符串被转义</span></div><div class="line"><span class="keyword">print</span> <span class="string">r'a\nb\tc'</span> <span class="comment"># 打印出来依然是 "a\nb\tc"</span></div><div class="line"><span class="comment"># python中常用于正则表达式</span></div><div class="line">regExp = <span class="string">r'(?&lt;=123)[a-z]+'</span></div></pre></td></tr></table></figure>
+<pre><code class="python"># 防止特殊字符串被转义
+print r&#39;a\nb\tc&#39; # 打印出来依然是 &quot;a\nb\tc&quot;
+# python中常用于正则表达式
+regExp = r&#39;(?&lt;=123)[a-z]+&#39;
+</code></pre>
 <p>如下是String.raw作为前缀的用法：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 防止特殊字符串被转义</span></div><div class="line"><span class="built_in">String</span>.raw<span class="string">`a\nb\tc`</span>; <span class="comment">// 输出为 "a\nb\tc"</span></div><div class="line"><span class="comment">// 支持内插表达式</span></div><div class="line"><span class="keyword">let</span> name = <span class="string">"louis"</span>;</div><div class="line"><span class="built_in">String</span>.raw<span class="string">`Hello \n <span class="subst">$&#123;name&#125;</span>`</span>;  <span class="comment">// "Hello \n louis"</span></div><div class="line"><span class="comment">// 内插表达式还可以运算</span></div><div class="line"><span class="built_in">String</span>.raw<span class="string">`1+2=<span class="subst">$&#123;<span class="number">1</span>+<span class="number">2</span>&#125;</span>,2*3=<span class="subst">$&#123;<span class="number">2</span>*<span class="number">3</span>&#125;</span>`</span>; <span class="comment">// "1+2=3,2*3=6"</span></div></pre></td></tr></table></figure>
+<pre><code class="js">// 防止特殊字符串被转义
+String.raw`a\nb\tc`; // 输出为 &quot;a\nb\tc&quot;
+// 支持内插表达式
+let name = &quot;louis&quot;;
+String.raw`Hello \n ${name}`;  // &quot;Hello \n louis&quot;
+// 内插表达式还可以运算
+String.raw`1+2=${1+2},2*3=${2*3}`; // &quot;1+2=3,2*3=6&quot;
+</code></pre>
 <p>String.raw作为函数来调用的场景不太多，如下是用法：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 对象的raw属性值为字符串时，从第二个参数起，它们分别被插入到下标为0，1，2，...n的元素后面</span></div><div class="line"><span class="built_in">String</span>.raw(&#123;<span class="attr">raw</span>: <span class="string">'abcd'</span>&#125;, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>); <span class="comment">// "a1b2c3d"</span></div><div class="line"><span class="comment">// 对象的raw属性值为数组时，从第二个参数起，它们分别被插入到数组下标为0，1，2，...n的元素后面</span></div><div class="line"><span class="built_in">String</span>.raw(&#123;<span class="attr">raw</span>: [<span class="string">'a'</span>, <span class="string">'b'</span>, <span class="string">'c'</span>, <span class="string">'d'</span>]&#125;, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>); <span class="comment">// "a1b2c3d"</span></div></pre></td></tr></table></figure>
+<pre><code class="js">// 对象的raw属性值为字符串时，从第二个参数起，它们分别被插入到下标为0，1，2，...n的元素后面
+String.raw({raw: &#39;abcd&#39;}, 1, 2, 3); // &quot;a1b2c3d&quot;
+// 对象的raw属性值为数组时，从第二个参数起，它们分别被插入到数组下标为0，1，2，...n的元素后面
+String.raw({raw: [&#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;d&#39;]}, 1, 2, 3); // &quot;a1b2c3d&quot;
+</code></pre>
 <p>那么怎么解释String.raw函数按照下标挨个去插入的特性呢？MDN上有段描述如下：</p>
 <blockquote>
 <p>In most cases, <code>String.raw()</code> is used with template strings. The first syntax mentioned above is only rarely used, because <strong>the JavaScript engine will call this with proper arguments for you</strong>, just like with other tag functions.</p>
 </blockquote>
 <p>这意味着，String.raw作为函数调用时，基本与ES6的tag标签模板一样。如下：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 如下是tag函数的实现</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">tag</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  <span class="keyword">const</span> array = <span class="built_in">arguments</span>[<span class="number">0</span>];</div><div class="line">  <span class="keyword">return</span> array.reduce(<span class="function">(<span class="params">p, v, i</span>) =&gt;</span> p + (<span class="built_in">arguments</span>[i] || <span class="string">''</span>) + v);</div><div class="line">&#125;</div><div class="line"><span class="comment">// 回顾一个simple的tag标签模板</span></div><div class="line">tag<span class="string">`Hello <span class="subst">$&#123; <span class="number">2</span> + <span class="number">3</span> &#125;</span> world <span class="subst">$&#123; <span class="number">2</span> * <span class="number">3</span> &#125;</span>`</span>; <span class="comment">// "Hello 5 world 6"</span></div><div class="line"><span class="comment">// 其实就想当于如下调用</span></div><div class="line">tag([<span class="string">'Hello '</span>, <span class="string">' world '</span>, <span class="string">''</span>], <span class="number">5</span>, <span class="number">6</span>); <span class="comment">// "Hello 5 world 6"</span></div></pre></td></tr></table></figure>
+<pre><code class="js">// 如下是tag函数的实现
+function tag(){
+  const array = arguments[0];
+  return array.reduce((p, v, i) =&gt; p + (arguments[i] || &#39;&#39;) + v);
+}
+// 回顾一个simple的tag标签模板
+tag`Hello ${ 2 + 3 } world ${ 2 * 3 }`; // &quot;Hello 5 world 6&quot;
+// 其实就想当于如下调用
+tag([&#39;Hello &#39;, &#39; world &#39;, &#39;&#39;], 5, 6); // &quot;Hello 5 world 6&quot;
+</code></pre>
 <p>因此String.raw作为函数调用时，不论对象的raw属性值是字符串还是数组，插槽都是天生的，下标为0，1，2，…n的元素后面都是插槽（不包括最后一个元素）。实际上，它相当于是这样的tag函数：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">tag</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  <span class="keyword">const</span> array = <span class="built_in">arguments</span>[<span class="number">0</span>].raw;</div><div class="line">  <span class="keyword">if</span>(array === <span class="literal">undefined</span> || array === <span class="literal">null</span>)&#123; <span class="comment">// 这里可简写成 array == undefined</span></div><div class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">TypeError</span>(<span class="string">'Cannot convert undefined or null to object'</span>);</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">return</span> array.reduce(<span class="function">(<span class="params">p, v, i</span>) =&gt;</span> p + (<span class="built_in">arguments</span>[i] || <span class="string">''</span>) + v);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<pre><code class="js">function tag(){
+  const array = arguments[0].raw;
+  if(array === undefined || array === null){ // 这里可简写成 array == undefined
+    throw new TypeError(&#39;Cannot convert undefined or null to object&#39;);
+  }
+  return array.reduce((p, v, i) =&gt; p + (arguments[i] || &#39;&#39;) + v);
+}
+</code></pre>
 <p>实际上，String.raw作为函数调用时，若第一个参数不是一个符合标准格式的对象，执行将抛出TypeError错误。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">String</span>.raw(&#123;<span class="number">123</span>: <span class="string">'abcd'</span>&#125;, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>); <span class="comment">// TypeError: Cannot convert undefined or null to object</span></div></pre></td></tr></table></figure>
+<pre><code class="js">String.raw({123: &#39;abcd&#39;}, 1, 2, 3); // TypeError: Cannot convert undefined or null to object
+</code></pre>
 <p>目前只有Chrome v41+和Firefox v34+版本浏览器实现了该方法。</p>
 <h3 id="String-prototype"><a href="#String-prototype" class="headerlink" title="String.prototype"></a><strong>String.prototype</strong></h3><p>和其他所有对象一样，字符串实例的所有方法均来自String.prototype。以下是它的属性特性：</p>
 <table>
@@ -284,24 +331,35 @@
 <h6 id="charAt"><a href="#charAt" class="headerlink" title="charAt"></a><strong>charAt</strong></h6><p>charAt() 方法返回字符串中指定位置的字符。</p>
 <p>语法：<em>str.charAt(index)</em></p>
 <p>index 为字符串索引（取值从0至length-1），如果超出该范围，则返回空串。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(<span class="string">"Hello, World"</span>.charAt(<span class="number">8</span>)); <span class="comment">// o, 返回下标为8的字符串o</span></div></pre></td></tr></table></figure>
+<pre><code class="js">console.log(&quot;Hello, World&quot;.charAt(8)); // o, 返回下标为8的字符串o
+</code></pre>
 <h6 id="charCodeAt"><a href="#charCodeAt" class="headerlink" title="charCodeAt"></a><strong>charCodeAt</strong></h6><p>charCodeAt() 返回指定索引处字符的 Unicode 数值。</p>
 <p>语法：<em>str.charCodeAt(index)</em></p>
 <p>index 为一个从0至length-1的整数。如果不是一个数值，则默认为 0，如果小于0或者大于字符串长度，则返回 NaN。</p>
 <p>Unicode 编码单元（code points）的范围从 0 到 1,114,111。开头的 128 个 Unicode 编码单元和 ASCII 字符编码一样. </p>
 <p>charCodeAt() 总是返回一个小于 65,536 的值。因为高位编码单元需要由一对字符来表示，为了查看其编码的完成字符，需要查看 charCodeAt(i) 以及 charCodeAt(i+1) 的值。如需更多了解请参考 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/String/prototype" target="_blank" rel="external">fixedCharCodeAt</a>。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(<span class="string">"Hello, World"</span>.charCodeAt(<span class="number">8</span>)); <span class="comment">// 111</span></div><div class="line"><span class="built_in">console</span>.log(<span class="string">"前端工程师"</span>.charCodeAt(<span class="number">2</span>)); <span class="comment">// 24037, 可见也可以查看中文Unicode编码</span></div></pre></td></tr></table></figure>
+<pre><code class="js">console.log(&quot;Hello, World&quot;.charCodeAt(8)); // 111
+console.log(&quot;前端工程师&quot;.charCodeAt(2)); // 24037, 可见也可以查看中文Unicode编码
+</code></pre>
 <h6 id="concat"><a href="#concat" class="headerlink" title="concat"></a><strong>concat</strong></h6><p>concat() 方法将一个或多个字符串拼接在一起，组成新的字符串并返回。</p>
 <p>语法：<em>str.concat(string2, string3, …)</em></p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(<span class="string">"早"</span>.concat(<span class="string">"上"</span>,<span class="string">"好"</span>)); <span class="comment">// 早上好</span></div></pre></td></tr></table></figure>
+<pre><code class="js">console.log(&quot;早&quot;.concat(&quot;上&quot;,&quot;好&quot;)); // 早上好
+</code></pre>
 <p>但是 concat 的性能表现不佳，强烈推荐使用赋值操作符（+或+=）代替 concat。”+” 操作符大概快了 concat 几十倍。（数据参考 <a href="http://jsperf.com/concat-vs-plus-vs-join" target="_blank" rel="external">性能测试</a>）。</p>
 <h6 id="indexOf"><a href="#indexOf" class="headerlink" title="indexOf"></a><strong>indexOf</strong></h6><h6 id="lastIndexOf"><a href="#lastIndexOf" class="headerlink" title="lastIndexOf"></a><strong>lastIndexOf</strong></h6><p>indexOf() 方法用于查找子字符串在字符串中首次出现的位置，没有则返回 -1。该方法严格区分大小写，并且从左往右查找。而 lastIndexOf 则从右往左查找，其它与前者一致。</p>
 <p>语法：<em>str.indexOf(searchValue [, fromIndex=0])</em>，<em>str.lastIndexOf(searchValue [, fromIndex=0])</em></p>
 <p>searchValue 表示被查找的字符串，fromIndex 表示开始查找的位置，默认为0，如果小于0，则查找整个字符串，若超过字符串长度，则该方法返回-1，除非被查找的是空字符串，此时返回字符串长度。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(<span class="string">""</span>.indexOf(<span class="string">""</span>,<span class="number">100</span>)); <span class="comment">// 0</span></div><div class="line"><span class="built_in">console</span>.log(<span class="string">"IT改变世界"</span>.indexOf(<span class="string">"世界"</span>)); <span class="comment">// 4</span></div><div class="line"><span class="built_in">console</span>.log(<span class="string">"IT改变世界"</span>.lastIndexOf(<span class="string">"世界"</span>)); <span class="comment">// 4</span></div></pre></td></tr></table></figure>
+<pre><code class="js">console.log(&quot;&quot;.indexOf(&quot;&quot;,100)); // 0
+console.log(&quot;IT改变世界&quot;.indexOf(&quot;世界&quot;)); // 4
+console.log(&quot;IT改变世界&quot;.lastIndexOf(&quot;世界&quot;)); // 4
+</code></pre>
 <h6 id="localeCompare"><a href="#localeCompare" class="headerlink" title="localeCompare"></a><strong>localeCompare</strong></h6><p>localeCompare() 方法用来比较字符串，如果指定字符串在原字符串的前面则返回负数，否则返回正数或0，其中0 表示两个字符串相同。该方法实现依赖具体的本地实现，不同的语言下可能有不同的返回。</p>
 <p>语法：<em>str.localeCompare(str2 [, locales [, options]])</em></p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> str = <span class="string">"apple"</span>;</div><div class="line"><span class="keyword">var</span> str2 = <span class="string">"orange"</span>;</div><div class="line"><span class="built_in">console</span>.log(str.localeCompare(str2)); <span class="comment">// -1</span></div><div class="line"><span class="built_in">console</span>.log(str.localeCompare(<span class="string">"123"</span>)); <span class="comment">// 1</span></div></pre></td></tr></table></figure>
+<pre><code class="js">var str = &quot;apple&quot;;
+var str2 = &quot;orange&quot;;
+console.log(str.localeCompare(str2)); // -1
+console.log(str.localeCompare(&quot;123&quot;)); // 1
+</code></pre>
 <p>目前 Safari 浏览器暂不支持该方法，但Chrome v24+、Firefox v29+，IE11+ 和 Opera v15+ 都已实现了它。</p>
 <h6 id="match"><a href="#match" class="headerlink" title="match"></a><strong>match</strong></h6><p>match() 方法用于测试字符串是否支持指定正则表达式的规则，即使传入的是非正则表达式对象，它也会隐式地使用<code>new RegExp(obj)</code>将其转换为正则表达式对象。</p>
 <p>语法：<em>str.match(regexp)</em></p>
@@ -316,36 +374,58 @@
 <li>若需测试字符串是否匹配正则，请参考 RegExp.test(str)。</li>
 <li>若只需第一个匹配结果，请参考 RegExp.exec(str)。</li>
 </ul>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> str = <span class="string">"World Internet Conference"</span>;</div><div class="line"><span class="built_in">console</span>.log(str.match(<span class="regexp">/[a-d]/i</span>)); <span class="comment">// ["d", index: 4, input: "World Internet Conference"]</span></div><div class="line"><span class="built_in">console</span>.log(str.match(<span class="regexp">/[a-d]/gi</span>)); <span class="comment">// ["d", "C", "c"]</span></div><div class="line"><span class="comment">// RegExp 方法如下</span></div><div class="line"><span class="built_in">console</span>.log(<span class="regexp">/[a-d]/gi</span>.test(str)); <span class="comment">// true</span></div><div class="line"><span class="built_in">console</span>.log(<span class="regexp">/[a-d]/gi</span>.exec(str)); <span class="comment">// ["d", index: 4, input: "World Internet Conference"]</span></div></pre></td></tr></table></figure>
+<pre><code class="js">var str = &quot;World Internet Conference&quot;;
+console.log(str.match(/[a-d]/i)); // [&quot;d&quot;, index: 4, input: &quot;World Internet Conference&quot;]
+console.log(str.match(/[a-d]/gi)); // [&quot;d&quot;, &quot;C&quot;, &quot;c&quot;]
+// RegExp 方法如下
+console.log(/[a-d]/gi.test(str)); // true
+console.log(/[a-d]/gi.exec(str)); // [&quot;d&quot;, index: 4, input: &quot;World Internet Conference&quot;]
+</code></pre>
 <p>由上可知，RegExp.test(str) 方法只要匹配到了一个字符也返回true。而RegExp.exec(str) 方法无论正则中有没有包含 g 标志，RegExp.exec将直接返回第一个匹配结果，且该结果同 str.match(regexp) 方法不包含 g 标志时的返回一致。</p>
 <h6 id="replace"><a href="#replace" class="headerlink" title="replace"></a><strong>replace</strong></h6><p>该方法在之前已经讲过，详细请参考 <a href="http://louiszhai.github.io/2015/12/11/js.replace/"><code>String.prototype.replace高阶技能</code></a> 。</p>
 <h6 id="search"><a href="#search" class="headerlink" title="search"></a><strong>search</strong></h6><p>search() 方法用于测试字符串对象是否包含某个正则匹配，相当于正则表达式的 test 方法，且该方法比 match() 方法更快。如果匹配成功，search() 返回正则表达式在字符串中首次匹配项的索引，否则返回-1。</p>
 <p>注意：<strong>search方法与indexOf方法作用基本一致，都是查询到了就返回子串第一次出现的下标，否则返回-1，唯一的区别就在于search默认会将子串转化为正则表达式形式，而indexOf不做此处理，也不能处理正则。</strong></p>
 <p>语法：<em>str.search(regexp)</em></p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> str = <span class="string">"abcdefg"</span>;</div><div class="line"><span class="built_in">console</span>.log(str.search(<span class="regexp">/[d-g]/</span>)); <span class="comment">// 3, 匹配到子串"defg",而d在原字符串中的索引为3</span></div></pre></td></tr></table></figure>
+<pre><code class="js">var str = &quot;abcdefg&quot;;
+console.log(str.search(/[d-g]/)); // 3, 匹配到子串&quot;defg&quot;,而d在原字符串中的索引为3
+</code></pre>
 <p>search() 方法不支持全局匹配（正则中包含g参数），如下：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(str.search(<span class="regexp">/[d-g]/g</span>)); <span class="comment">// 3, 与无g参数时,返回相同</span></div></pre></td></tr></table></figure>
+<pre><code class="js">console.log(str.search(/[d-g]/g)); // 3, 与无g参数时,返回相同
+</code></pre>
 <h6 id="slice"><a href="#slice" class="headerlink" title="slice"></a><strong>slice</strong></h6><p>slice() 方法提取字符串的一部分，并返回新的字符串。该方法有些类似 Array.prototype.slice 方法。</p>
 <p>语法：<em>str.slice(start, end)</em></p>
 <p>首先 end 参数可选，start可取正值，也可取负值。</p>
 <p>取正值时表示从索引为start的位置截取到end的位置（不包括end所在位置的字符，如果end省略则截取到字符串末尾）。</p>
 <p>取负值时表示从索引为 length+start 位置截取到end所在位置的字符。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> str = <span class="string">"It is our choices that show what we truly are, far more than our abilities."</span>;</div><div class="line"><span class="built_in">console</span>.log(str.slice(<span class="number">0</span>,<span class="number">-30</span>)); <span class="comment">// It is our choices that show what we truly are</span></div><div class="line"><span class="built_in">console</span>.log(str.slice(<span class="number">-30</span>)); <span class="comment">// , far more than our abilities.</span></div></pre></td></tr></table></figure>
+<pre><code class="js">var str = &quot;It is our choices that show what we truly are, far more than our abilities.&quot;;
+console.log(str.slice(0,-30)); // It is our choices that show what we truly are
+console.log(str.slice(-30)); // , far more than our abilities.
+</code></pre>
 <h6 id="split"><a href="#split" class="headerlink" title="split"></a><strong>split</strong></h6><p>split() 方法把原字符串分割成子字符串组成数组，并返回该数组。</p>
 <p>语法：<em>str.split(separator, limit)</em></p>
 <p>两个参数均是可选的，其中 separator 表示分隔符，它可以是字符串也可以是正则表达式。如果忽略 separator，则返回的数组包含一个由原字符串组成的元素。如果 separator 是一个空串，则 str 将会被分割成一个由原字符串中字符组成的数组。limit 表示从返回的数组中截取前 limit 个元素，从而限定返回的数组长度。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> str = <span class="string">"today is a sunny day"</span>;</div><div class="line"><span class="built_in">console</span>.log(str.split()); <span class="comment">// ["today is a sunny day"]</span></div><div class="line"><span class="built_in">console</span>.log(str.split(<span class="string">""</span>)); <span class="comment">// ["t", "o", "d", "a", "y", " ", "i", "s", " ", "a", " ", "s", "u", "n", "n", "y", " ", "d", "a", "y"]</span></div><div class="line"><span class="built_in">console</span>.log(str.split(<span class="string">" "</span>)); <span class="comment">// ["today", "is", "a", "sunny", "day"]</span></div></pre></td></tr></table></figure>
+<pre><code class="js">var str = &quot;today is a sunny day&quot;;
+console.log(str.split()); // [&quot;today is a sunny day&quot;]
+console.log(str.split(&quot;&quot;)); // [&quot;t&quot;, &quot;o&quot;, &quot;d&quot;, &quot;a&quot;, &quot;y&quot;, &quot; &quot;, &quot;i&quot;, &quot;s&quot;, &quot; &quot;, &quot;a&quot;, &quot; &quot;, &quot;s&quot;, &quot;u&quot;, &quot;n&quot;, &quot;n&quot;, &quot;y&quot;, &quot; &quot;, &quot;d&quot;, &quot;a&quot;, &quot;y&quot;]
+console.log(str.split(&quot; &quot;)); // [&quot;today&quot;, &quot;is&quot;, &quot;a&quot;, &quot;sunny&quot;, &quot;day&quot;]
+</code></pre>
 <p>使用limit限定返回的数组大小，如下：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(str.split(<span class="string">" "</span>)); <span class="comment">// ["today"]</span></div></pre></td></tr></table></figure>
+<pre><code class="js">console.log(str.split(&quot; &quot;)); // [&quot;today&quot;]
+</code></pre>
 <p>使用正则分隔符（RegExp separator）， 如下：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(str.split(<span class="regexp">/\s*is\s*/</span>)); <span class="comment">// ["today", "a sunny day"]</span></div></pre></td></tr></table></figure>
+<pre><code class="js">console.log(str.split(/\s*is\s*/)); // [&quot;today&quot;, &quot;a sunny day&quot;]
+</code></pre>
 <p>若正则分隔符里包含捕获括号，则括号匹配的结果将会包含在返回的数组中。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(str.split(<span class="regexp">/(\s*is\s*)/</span>)); <span class="comment">// ["today", " is ", "a sunny day"]</span></div></pre></td></tr></table></figure>
+<pre><code class="js">console.log(str.split(/(\s*is\s*)/)); // [&quot;today&quot;, &quot; is &quot;, &quot;a sunny day&quot;]
+</code></pre>
 <h6 id="substr"><a href="#substr" class="headerlink" title="substr"></a><strong>substr</strong></h6><p>substr() 方法返回字符串指定位置开始的指定数量的字符。</p>
 <p>语法：<em>str.substr(start[, length])</em></p>
 <p>start 表示开始截取字符的位置，可取正值或负值。取正值时表示start位置的索引，取负值时表示 length+start位置的索引。</p>
 <p>length 表示截取的字符长度。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> str = <span class="string">"Yesterday is history. Tomorrow is mystery. But today is a gift."</span>;</div><div class="line"><span class="built_in">console</span>.log(str.substr(<span class="number">47</span>)); <span class="comment">// today is a gift.</span></div><div class="line"><span class="built_in">console</span>.log(str.substr(<span class="number">-16</span>)); <span class="comment">// today is a gift.</span></div></pre></td></tr></table></figure>
+<pre><code class="js">var str = &quot;Yesterday is history. Tomorrow is mystery. But today is a gift.&quot;;
+console.log(str.substr(47)); // today is a gift.
+console.log(str.substr(-16)); // today is a gift.
+</code></pre>
 <p>目前 Microsoft’s JScript 不支持 start 参数取负的索引，如需在 IE 下支持，请参考 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/String/substr#Description" target="_blank" rel="external">Polyfill</a>。</p>
 <h6 id="substring"><a href="#substring" class="headerlink" title="substring"></a><strong>substring</strong></h6><p>substring() 方法返回字符串两个索引之间的子串。</p>
 <p>语法：<em>str.substring(indexA[, indexB])</em></p>
@@ -359,50 +439,102 @@
 <li>若 任一参数大于 length，则被当作 length。</li>
 </ul>
 <p>而 如果 indexA &gt; indexB，则 substring 的执行效果就像是两个参数调换一般。比如：str.substring(0, 1) == str.substring(1, 0)</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> str = <span class="string">"Get outside every day. Miracles are waiting everywhere."</span>;</div><div class="line"><span class="built_in">console</span>.log(str.substring(<span class="number">1</span>,<span class="number">1</span>)); <span class="comment">// ""</span></div><div class="line"><span class="built_in">console</span>.log(str.substring(<span class="number">0</span>)); <span class="comment">// Get outside every day. Miracles are waiting everywhere.</span></div><div class="line"><span class="built_in">console</span>.log(str.substring(<span class="number">-1</span>)); <span class="comment">// Get outside every day. Miracles are waiting everywhere.</span></div><div class="line"><span class="built_in">console</span>.log(str.substring(<span class="number">0</span>,<span class="number">100</span>)); <span class="comment">// Get outside every day. Miracles are waiting everywhere.</span></div><div class="line"><span class="built_in">console</span>.log(str.substring(<span class="number">22</span>,<span class="literal">NaN</span>)); <span class="comment">// Get outside every day.</span></div></pre></td></tr></table></figure>
+<pre><code class="js">var str = &quot;Get outside every day. Miracles are waiting everywhere.&quot;;
+console.log(str.substring(1,1)); // &quot;&quot;
+console.log(str.substring(0)); // Get outside every day. Miracles are waiting everywhere.
+console.log(str.substring(-1)); // Get outside every day. Miracles are waiting everywhere.
+console.log(str.substring(0,100)); // Get outside every day. Miracles are waiting everywhere.
+console.log(str.substring(22,NaN)); // Get outside every day.
+</code></pre>
 <h6 id="toLocaleLowerCase"><a href="#toLocaleLowerCase" class="headerlink" title="toLocaleLowerCase"></a><strong>toLocaleLowerCase</strong></h6><h6 id="toLocaleUpperCase"><a href="#toLocaleUpperCase" class="headerlink" title="toLocaleUpperCase"></a><strong>toLocaleUpperCase</strong></h6><p>toLocaleLowerCase() 方法返回调用该方法的字符串被转换成小写的值，转换规则根据本地化的大小写映射。而toLocaleUpperCase() 方法则是转换成大写的值。</p>
 <p>语法：<em>str.toLocaleLowerCase()</em>, <em>str.toLocaleUpperCase()</em></p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(<span class="string">'ABCDEFG'</span>.toLocaleLowerCase()); <span class="comment">// abcdefg</span></div><div class="line"><span class="built_in">console</span>.log(<span class="string">'abcdefg'</span>.toLocaleUpperCase()); <span class="comment">// ABCDEFG</span></div></pre></td></tr></table></figure>
+<pre><code class="js">console.log(&#39;ABCDEFG&#39;.toLocaleLowerCase()); // abcdefg
+console.log(&#39;abcdefg&#39;.toLocaleUpperCase()); // ABCDEFG
+</code></pre>
 <h6 id="toLowerCase"><a href="#toLowerCase" class="headerlink" title="toLowerCase"></a><strong>toLowerCase</strong></h6><h6 id="toUpperCase"><a href="#toUpperCase" class="headerlink" title="toUpperCase"></a><strong>toUpperCase</strong></h6><p>这两个方法分别表示将字符串转换为相应的小写，大写形式，并返回。如下：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(<span class="string">'ABCDEFG'</span>.toLowerCase()); <span class="comment">// abcdefg</span></div><div class="line"><span class="built_in">console</span>.log(<span class="string">'abcdefg'</span>.toUpperCase()); <span class="comment">// ABCDEFG</span></div></pre></td></tr></table></figure>
+<pre><code class="js">console.log(&#39;ABCDEFG&#39;.toLowerCase()); // abcdefg
+console.log(&#39;abcdefg&#39;.toUpperCase()); // ABCDEFG
+</code></pre>
 <h6 id="toString-NaN"><a href="#toString-NaN" class="headerlink" title="toString"></a><strong>toString</strong></h6><h6 id="valueOf-NaN"><a href="#valueOf-NaN" class="headerlink" title="valueOf"></a><strong>valueOf</strong></h6><p>这两个方法都是返回字符串本身。</p>
 <p>语法：<em>str.toString()</em>, <em>str.valueOf()</em></p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> str = <span class="string">"abc"</span>;</div><div class="line"><span class="built_in">console</span>.log(str.toString()); <span class="comment">// abc</span></div><div class="line"><span class="built_in">console</span>.log(str.toString()==str.valueOf()); <span class="comment">// true</span></div></pre></td></tr></table></figure>
+<pre><code class="js">var str = &quot;abc&quot;;
+console.log(str.toString()); // abc
+console.log(str.toString()==str.valueOf()); // true
+</code></pre>
 <p>对于对象而言，toString和valueOf也是非常的相似，它们之间有着细微的差别，请尝试运行以下一段代码：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> x = &#123;</div><div class="line">    <span class="attr">toString</span>: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123; <span class="keyword">return</span> <span class="string">"test"</span>; &#125;,</div><div class="line">    <span class="attr">valueOf</span>: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123; <span class="keyword">return</span> <span class="number">123</span>; &#125;</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="built_in">console</span>.log(x); <span class="comment">// test</span></div><div class="line"><span class="built_in">console</span>.log(<span class="string">"x="</span> + x); <span class="comment">// "x=123"</span></div><div class="line"><span class="built_in">console</span>.log(x + <span class="string">"=x"</span>); <span class="comment">// "123=x"</span></div><div class="line"><span class="built_in">console</span>.log(x + <span class="string">"1"</span>); <span class="comment">// 1231</span></div><div class="line"><span class="built_in">console</span>.log(x + <span class="number">1</span>); <span class="comment">// 124</span></div><div class="line"><span class="built_in">console</span>.log([<span class="string">"x="</span>, x].join(<span class="string">""</span>)); <span class="comment">// "x=test"</span></div></pre></td></tr></table></figure>
+<pre><code class="js">var x = {
+    toString: function () { return &quot;test&quot;; },
+    valueOf: function () { return 123; }
+};
+
+console.log(x); // test
+console.log(&quot;x=&quot; + x); // &quot;x=123&quot;
+console.log(x + &quot;=x&quot;); // &quot;123=x&quot;
+console.log(x + &quot;1&quot;); // 1231
+console.log(x + 1); // 124
+console.log([&quot;x=&quot;, x].join(&quot;&quot;)); // &quot;x=test&quot;
+</code></pre>
 <p>当 “+” 操作符一边为数字时，对象x趋向于转换为数字，表达式会优先调用 valueOf 方法，如果调用数组的 join 方法，对象x趋向于转换为字符串，表达式会优先调用 toString 方法。</p>
 <h6 id="trim"><a href="#trim" class="headerlink" title="trim"></a><strong>trim</strong></h6><p>trim() 方法清除字符串首尾的空白并返回。</p>
 <p>语法：<em>str.trim()</em></p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(<span class="string">" a b c "</span>.trim()); <span class="comment">// "a b c"</span></div></pre></td></tr></table></figure>
+<pre><code class="js">console.log(&quot; a b c &quot;.trim()); // &quot;a b c&quot;
+</code></pre>
 <p>trim() 方法是 ECMAScript 5.1 标准加入的，它并不支持IE9以下的低版本IE浏览器，如需支持，请参考以下兼容写法：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span>(!<span class="built_in">String</span>.prototype.trim) &#123;</div><div class="line">  <span class="built_in">String</span>.prototype.trim = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.replace(<span class="regexp">/^\s+|\s+$/g</span>,<span class="string">''</span>);</div><div class="line">  &#125;;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<pre><code class="js">if(!String.prototype.trim) {
+  String.prototype.trim = function () {
+    return this.replace(/^\s+|\s+$/g,&#39;&#39;);
+  };
+}
+</code></pre>
 <h6 id="codePointAt-ES6"><a href="#codePointAt-ES6" class="headerlink" title="codePointAt(ES6)"></a><strong>codePointAt(ES6)</strong></h6><p>codePointAt() 方法基于<strong>ECMAScript 2015（ES6）规范</strong>，返回使用UTF-16编码的给定位置的值的非负整数。</p>
 <p>语法：<em>str.codePointAt(position)</em></p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(<span class="string">"a"</span>.codePointAt(<span class="number">0</span>)); <span class="comment">// 97</span></div><div class="line"><span class="built_in">console</span>.log(<span class="string">"\u4f60\u597d"</span>.codePointAt(<span class="number">0</span>)); <span class="comment">// 20320</span></div></pre></td></tr></table></figure>
+<pre><code class="js">console.log(&quot;a&quot;.codePointAt(0)); // 97
+console.log(&quot;\u4f60\u597d&quot;.codePointAt(0)); // 20320
+</code></pre>
 <p>如需在老的浏览器中使用该方法，请参考 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/String/codePointAt#Polyfill" target="_blank" rel="external">Polyfill</a>。</p>
 <h6 id="includes-ES6"><a href="#includes-ES6" class="headerlink" title="includes(ES6)"></a><strong>includes(ES6)</strong></h6><p>includes() 方法基于<strong>ECMAScript 2015（ES6）规范</strong>，它用来判断一个字符串是否属于另一个字符。如果是，则返回true，否则返回false。</p>
 <p>语法：<em>str.includes(subString [, position])</em></p>
 <p>subString 表示要搜索的字符串，position 表示从当前字符串的哪个位置开始搜索字符串，默认值为0。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> str = <span class="string">"Practice makes perfect."</span>;</div><div class="line"><span class="built_in">console</span>.log(str.includes(<span class="string">"perfect"</span>)); <span class="comment">// true</span></div><div class="line"><span class="built_in">console</span>.log(str.includes(<span class="string">"perfect"</span>,<span class="number">100</span>)); <span class="comment">// false</span></div></pre></td></tr></table></figure>
+<pre><code class="js">var str = &quot;Practice makes perfect.&quot;;
+console.log(str.includes(&quot;perfect&quot;)); // true
+console.log(str.includes(&quot;perfect&quot;,100)); // false
+</code></pre>
 <p>实际上，Firefox 18~39中该方法的名称为contains，由于<a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1102219" target="_blank" rel="external">bug 1102219</a>的存在，它被重命名为<code>includes()</code> 。目前只有Chrome v41+和Firefox v40+版本浏览器实现了它，如需在其它版本浏览器中使用该方法，请参考 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/String/includes#填充" target="_blank" rel="external">Polyfill</a>。</p>
 <h6 id="endsWith-ES6"><a href="#endsWith-ES6" class="headerlink" title="endsWith(ES6)"></a><strong>endsWith(ES6)</strong></h6><p>endsWith() 方法基于<strong>ECMAScript 2015（ES6）规范</strong>，它基本与 contains() 功能相同，不同的是，它用来判断一个字符串是否是原字符串的结尾。若是则返回true，否则返回false。</p>
 <p>语法：<em>str.endsWith(substring [, position])</em></p>
 <p>与contains 方法不同，position 参数的默认值为字符串长度。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> str = <span class="string">"Learn and live."</span>;</div><div class="line"><span class="built_in">console</span>.log(str.endsWith(<span class="string">"live."</span>)); <span class="comment">// true</span></div><div class="line"><span class="built_in">console</span>.log(str.endsWith(<span class="string">"Learn"</span>,<span class="number">5</span>)); <span class="comment">// true</span></div></pre></td></tr></table></figure>
+<pre><code class="js">var str = &quot;Learn and live.&quot;;
+console.log(str.endsWith(&quot;live.&quot;)); // true
+console.log(str.endsWith(&quot;Learn&quot;,5)); // true
+</code></pre>
 <p>同样目前只有 Firefox v17+版本实现了该方法。其它浏览器请参考 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/String/endsWith#Polyfill" target="_blank" rel="external">Polyfill</a>。</p>
 <h6 id="normalize-ES6"><a href="#normalize-ES6" class="headerlink" title="normalize(ES6)"></a><strong>normalize(ES6)</strong></h6><p>normalize() 方法基于<strong>ECMAScript 2015（ES6）规范</strong>，它会按照指定的 Unicode 正规形式将原字符串正规化。</p>
 <p>语法：<em>str.normalize([form])</em></p>
 <p>form 参数可省略，目前有四种 Unicode 正规形式，即 “NFC”、”NFD”、”NFKC” 以及 “NFKD”，form的默认值为 “NFC”。如果form 传入了非法的参数值，则会抛出 RangeError 错误。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> str = <span class="string">"\u4f60\u597d"</span>;</div><div class="line"><span class="built_in">console</span>.log(str.normalize()); <span class="comment">// 你好</span></div><div class="line"><span class="built_in">console</span>.log(str.normalize(<span class="string">"NFC"</span>)); <span class="comment">// 你好</span></div><div class="line"><span class="built_in">console</span>.log(str.normalize(<span class="string">"NFD"</span>)); <span class="comment">// 你好</span></div><div class="line"><span class="built_in">console</span>.log(str.normalize(<span class="string">"NFKC"</span>)); <span class="comment">// 你好</span></div><div class="line"><span class="built_in">console</span>.log(str.normalize(<span class="string">"NFKD"</span>)); <span class="comment">// 你好</span></div></pre></td></tr></table></figure>
+<pre><code class="js">var str = &quot;\u4f60\u597d&quot;;
+console.log(str.normalize()); // 你好
+console.log(str.normalize(&quot;NFC&quot;)); // 你好
+console.log(str.normalize(&quot;NFD&quot;)); // 你好
+console.log(str.normalize(&quot;NFKC&quot;)); // 你好
+console.log(str.normalize(&quot;NFKD&quot;)); // 你好
+</code></pre>
 <p>目前只有Chrome v34+和Firefox v31+实现了它。</p>
 <h6 id="repeat-ES6"><a href="#repeat-ES6" class="headerlink" title="repeat(ES6)"></a><strong>repeat(ES6)</strong></h6><p>repeat() 方法基于<strong>ECMAScript 2015（ES6）规范</strong>，它返回重复原字符串多次的新字符串。</p>
 <p>语法：<em>str.repeat(count)</em></p>
 <p>count 参数只能取大于等于0 的数字。若该数字不为整数，将自动转换为整数形式，若为负数或者其他值将报错。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> str = <span class="string">"A still tongue makes a wise head."</span>;</div><div class="line"><span class="built_in">console</span>.log(str.repeat(<span class="number">0</span>)); <span class="comment">// ""</span></div><div class="line"><span class="built_in">console</span>.log(str.repeat(<span class="number">1</span>)); <span class="comment">// A still tongue makes a wise head.</span></div><div class="line"><span class="built_in">console</span>.log(str.repeat(<span class="number">1.5</span>)); <span class="comment">// A still tongue makes a wise head.</span></div><div class="line"><span class="built_in">console</span>.log(str.repeat(<span class="number">-1</span>)); <span class="comment">// RangeError:Invalid count value</span></div></pre></td></tr></table></figure>
+<pre><code class="js">var str = &quot;A still tongue makes a wise head.&quot;;
+console.log(str.repeat(0)); // &quot;&quot;
+console.log(str.repeat(1)); // A still tongue makes a wise head.
+console.log(str.repeat(1.5)); // A still tongue makes a wise head.
+console.log(str.repeat(-1)); // RangeError:Invalid count value
+</code></pre>
 <p>目前只有 Chrome v41+、Firefox v24+和Safari v9+版本浏览器实现了该方法。其他浏览器请参考 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/String/repeat#填充" target="_blank" rel="external">Polyfill</a>。</p>
 <h6 id="startsWith-ES6"><a href="#startsWith-ES6" class="headerlink" title="startsWith(ES6)"></a><strong>startsWith(ES6)</strong></h6><p>startsWith() 方法基于<strong>ECMAScript 2015（ES6）规范</strong>，它用来判断当前字符串是否是以给定字符串开始的，若是则返回true，否则返回false。</p>
 <p>语法：<em>str.startsWith(subString [, position])</em></p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> str = <span class="string">"Where there is a will, there is a way."</span>;</div><div class="line"><span class="built_in">console</span>.log(str.startsWith(<span class="string">"Where"</span>)); <span class="comment">// true</span></div><div class="line"><span class="built_in">console</span>.log(str.startsWith(<span class="string">"there"</span>,<span class="number">6</span>)); <span class="comment">// true</span></div></pre></td></tr></table></figure>
+<pre><code class="js">var str = &quot;Where there is a will, there is a way.&quot;;
+console.log(str.startsWith(&quot;Where&quot;)); // true
+console.log(str.startsWith(&quot;there&quot;,6)); // true
+</code></pre>
 <p>目前以下版本浏览器实现了该方法，其他浏览器请参考 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/String/startsWith#Polyfill" target="_blank" rel="external">Polyfill</a>。</p>
 <table>
 <thead>
@@ -430,11 +562,15 @@
 <h6 id="anchor"><a href="#anchor" class="headerlink" title="anchor"></a><strong>anchor</strong></h6><p>anchor() 方法创建一个锚标签。</p>
 <p>语法：<em>str.anchor(name)</em></p>
 <p>name 指定被创建的a标签的name属性，使用该方法创建的锚点，将会成为 document.anchors 数组的元素。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> str = <span class="string">"this is a anchor tag"</span>;</div><div class="line"><span class="built_in">document</span>.body.innerHTML = <span class="built_in">document</span>.body.innerHTML + str.anchor(<span class="string">"anchor1"</span>); <span class="comment">// body末尾将会追加这些内容 &lt;a name="anchor1"&gt;this is a anchor tag&lt;/a&gt;</span></div></pre></td></tr></table></figure>
+<pre><code class="js">var str = &quot;this is a anchor tag&quot;;
+document.body.innerHTML = document.body.innerHTML + str.anchor(&quot;anchor1&quot;); // body末尾将会追加这些内容 &lt;a name=&quot;anchor1&quot;&gt;this is a anchor tag&lt;/a&gt;
+</code></pre>
 <h6 id="link"><a href="#link" class="headerlink" title="link"></a><strong>link</strong></h6><p>link() 方法同样创建一个a标签。</p>
 <p>语法：<em>str.link(url)</em></p>
 <p>url 指定被创建的a标签的href属性，如果url中包含特殊字符，将自动进行编码。例如 <code>&quot;</code> 会被转义为 <code>&amp;\quot</code>。 使用该方法创建的a标签，将会成为 document.links 数组中的元素。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> str = <span class="string">"百度"</span>;</div><div class="line"><span class="built_in">document</span>.write(str.link(<span class="string">"https://www.baidu.com"</span>)); <span class="comment">// &lt;a href="https://www.baidu.com"&gt;百度&lt;/a&gt;</span></div></pre></td></tr></table></figure>
+<pre><code class="js">var str = &quot;百度&quot;;
+document.write(str.link(&quot;https://www.baidu.com&quot;)); // &lt;a href=&quot;https://www.baidu.com&quot;&gt;百度&lt;/a&gt;
+</code></pre>
 <hr>
 <h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a><strong>小结</strong></h3><p>部分字符串方法之间存在很大的相似性，要注意区分他们的功能和使用场景。如：</p>
 <ul>
@@ -466,7 +602,7 @@
         <a id="btn_donate" class="btn_donate" href="javascript:;" title="打赏"></a>
         <span class="donate_txt">
            &uarr;<br>
-       如果你觉得有用，就支持一下吧！
+       支持一杯咖啡吧！
         </span>
       </div>  
   <div id="donate_guide" class="donate_bar center hidden" >
@@ -533,69 +669,103 @@
 
 
 
-<div class="duoshuo">
-	<div class="ds-thread" data-thread-key="js.String" data-title="JavaScript字符串所有API全解密" data-url="http://louiszhai.github.io/2016/01/12/js.String/"></div>
-	<style>
-		#ds-reset .ds-avatar img{width:54px;height:54px;border-radius:27px;-webkit-border-radius:27px;-moz-border-radius:27px;box-shadow:inset 0 -1px 0 #3333sf;-webkit-box-shadow:inset 0 -1px 0 #3333sf;-webkit-transition:0.4s;-webkit-transition:-webkit-transform 0.4s ease-out;transition:transform 0.4s ease-out;-moz-transition:-moz-transform 0.4s ease-out;}
-		#ds-reset .ds-avatar img:hover{box-shadow:0 0 10px #fff;rgba(255,255,255,.6),inset 0 0 20px rgba(255,255,255,1);-webkit-box-shadow:0 0 10px #fff;rgba(255,255,255,.6),inset 0 0 20px rgba(255,255,255,1);transform:rotateZ(360deg);-webkit-transform:rotateZ(360deg);-moz-transform:rotateZ(360deg);}
-		p.ds-powered-by,#ds-sync-checkbox,.ds-sync label{display:none!important;}
-		#ds-reset .ds-rounded-top{-webkit-border-top-right-radius:0px;-webkit-border-top-left-radius:0px;border-top-right-radius:0px;border-top-left-radius:0px;}
-		#ds-thread #ds-reset .ds-textarea-wrapper{background:#fff;border:0;margin-bottom:20px;padding-right:0px;}
-		#ds-thread #ds-reset .ds-textarea-wrapper textarea{min-height:80px;border:1px solid #ccc;padding:10px;-webkit-appearance:none;border-radius:0;background-color:#FFFFFF;border-color:#cccccc;box-shadow:inset 0 1px 2px rgba(0,0,0,0.1);color:rgba(0,0,0,0.75);-webkit-box-sizing:border-box;box-sizing:border-box;-webkit-transition:border-color 0.15s linear,background 0.15s linear;-moz-transition:border-color 0.15s linear,background 0.15s linear;-ms-transition:border-color 0.15s linear,background 0.15s linear;-o-transition:border-color 0.15s linear,background 0.15s linear;transition:border-color 0.15s linear,background 0.15s linear;}
-		/*#ds-thread #ds-reset .ds-textarea-wrapper textarea:focus{border-color:#999999;background:#fafafa;outline:none;}*/
-		#ds-thread #ds-reset .ds-post-options{border-bottom-left-radius:0px;-webkit-border-bottom-left-radius:0px;border:none;background:none!important;}
-		#ds-reset .ds-textarea-wrapper textarea:focus{border-color:#66afe9;outline:0;-webkit-box-shadow:inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);box-shadow:inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);}
-		#ds-thread #ds-reset .ds-post-button:hover,#ds-thread #ds-reset .ds-post-button:focus{
-		    background-color: #51a351;
-		    background-position: 0 -32px;
-		    color:white;
-		}
-		#ds-thread #ds-reset .ds-post-toolbar,#ds-reset .ds-avatar{box-shadow:none;}
-		#ds-thread #ds-reset .ds-textarea-wrapper textarea:focus{
-	    	/*background: none repeat scroll 0 0 #F4FAFF;*/
-	    	border-color:#9DD4FD;
-	    	border-width:1px;
-	    	box-shadow:0 1px 1px rgba(0,0,0,0.075) inset, 0 0 8px rgba(82, 168, 236, 0.6);
-	    	outline:0 none;
-    	}
-		#ds-thread #ds-reset .ds-textarea-wrapper textarea:active{
-	    	/*background: none repeat scroll 0 0 #F4FAFF;*/
-	    	border-width:1px;
-	    	border-color:#9DD4FD;
-	    	box-shadow:0 1px 1px rgba(0,0,0,0.075) inset, 0 0 8px rgba(82, 168, 236, 0.6);
-	    	outline:0 none;
-    	}
-    	#ds-thread #ds-reset .ds-post-button{
-    		box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset, 0 1px 2px rgba(0, 0, 0, 0.05);
-		    border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
-		    border-width: 1px;
-		    border-style: solid;
-		    border-radius: 3px;
-		    background: #5bb75b;
-		    color:white;
-		    text-shadow:none;
-		    transition:background-color 300ms ease-out;
-    	}
-    	#ds-reset .ds-avatar{
-    		background-color:initial;
-    	}
-
-	</style>
-	<script type="text/javascript">
-	var duoshuoQuery = {short_name:"true"};
-	(function() {
-		var ds = document.createElement('script');
-		ds.type = 'text/javascript';ds.async = true;
-		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-		ds.charset = 'UTF-8';
-		(document.getElementsByTagName('head')[0] 
-		 || document.getElementsByTagName('body')[0]).appendChild(ds);
-	})();
-	</script>
-</div>
 
 
 
+
+  <style>
+/*
+    Name:     Kimbie (light)
+    Author:   Jan T. Sott
+    License:  Creative Commons Attribution-ShareAlike 4.0 Unported License
+    URL:      https://github.com/idleberg/Kimbie-highlight.js
+*/
+
+/* Kimbie Comment */
+.hljs-comment,
+.hljs-quote {
+  color: #a57a4c;
+}
+
+/* Kimbie Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-meta {
+  color: #dc3958;
+}
+
+/* Kimbie Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-deletion,
+.hljs-link {
+  color: #f79a32;
+}
+
+/* Kimbie Yellow */
+.hljs-title,
+.hljs-section,
+.hljs-attribute {
+  color: #f06431;
+}
+
+/* Kimbie Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+  color: #889b4a;
+}
+
+/* Kimbie Purple */
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-function {
+  color: #98676a;
+}
+
+.hljs {
+  display: block;
+  overflow-x: auto;
+  /*background: #fbebd4;*/
+  color: #84613d;
+  padding: 0.5em;
+}
+
+.hljs-emphasis {
+  font-style: italic;
+}
+
+.hljs-strong {
+  font-weight: bold;
+}
+</style>
+  <script src="//cdn.bootcss.com/highlight.js/9.2.0/highlight.min.js"></script>
+  <script>
+    // hljs.initHighlightingOnLoad();
+    [].slice.call(document.querySelectorAll('pre code')).forEach(function(block, i) {
+      hljs.highlightBlock(block);
+      var lines = block.innerText.split('\n').length - 1;
+      var ul = document.createElement('ul');
+      ul.className = 'pre-numbering';
+      block.className += ' has-numbering';
+      block.parentNode.appendChild(ul);
+      for(i=1;i<=lines;i++){
+        var li = document.createElement('li');
+        li.innerText = i;
+        ul.appendChild(li);
+      }
+    });
+  </script>
 </div>
         <link rel="stylesheet" href="/css/content.css" type="text/css">
 <footer id="footer">

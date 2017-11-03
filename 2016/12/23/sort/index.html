@@ -276,17 +276,71 @@
 <p>如下是动图效果(对应于方案1: 内/外层循环均是正序遍历.</p>
 <p><img src="http://louiszhai.github.io/docImages/sort05.gif" alt="冒泡排序"></p>
 <p>如下是上图的算法实现(对应<strong>方案一</strong>: 内/外层循环均是正序遍历).</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//先将交换元素部分抽象出来</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">swap</span>(<span class="params">i,j,array</span>)</span>&#123;</div><div class="line">  <span class="keyword">var</span> temp = array[j];</div><div class="line">  array[j] = array[i];</div><div class="line">  array[i] = temp;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">bubbleSort</span>(<span class="params">array</span>) </span>&#123;</div><div class="line">  <span class="keyword">var</span> length = array.length, isSwap;</div><div class="line">  <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; length; i++) &#123;			<span class="comment">//正序</span></div><div class="line">    isSwap = <span class="literal">false</span>;</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">var</span> j = <span class="number">0</span>; j &lt; length - <span class="number">1</span> - i; j++) &#123;	 <span class="comment">//正序</span></div><div class="line">      array[j] &gt; array[j+<span class="number">1</span>] &amp;&amp; (isSwap = <span class="literal">true</span>) &amp;&amp; swap(j,j+<span class="number">1</span>,array);</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">if</span>(!isSwap)</div><div class="line">      <span class="keyword">break</span>;</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">return</span> array;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<pre><code class="js">//先将交换元素部分抽象出来
+function swap(i,j,array){
+  var temp = array[j];
+  array[j] = array[i];
+  array[i] = temp;
+}
+</code></pre>
+<pre><code class="js">function bubbleSort(array) {
+  var length = array.length, isSwap;
+  for (var i = 0; i &lt; length; i++) {            //正序
+    isSwap = false;
+    for (var j = 0; j &lt; length - 1 - i; j++) {     //正序
+      array[j] &gt; array[j+1] &amp;&amp; (isSwap = true) &amp;&amp; swap(j,j+1,array);
+    }
+    if(!isSwap)
+      break;
+  }
+  return array;
+}
+</code></pre>
 <p>以上, 排序的特点就是: 靠后的元素位置先确定.</p>
 <p><strong>方案二</strong>: 外循环正序遍历, 内循环逆序遍历, 代码如下:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">bubbleSort</span>(<span class="params">array</span>) </span>&#123;</div><div class="line">  <span class="keyword">var</span> length = array.length, isSwap;</div><div class="line">  <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; length; i++) &#123;			<span class="comment">//正序</span></div><div class="line">    isSwap = <span class="literal">false</span>;</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">var</span> j = length - <span class="number">1</span>; j &gt;= i+<span class="number">1</span>; j--) &#123;	 <span class="comment">//逆序</span></div><div class="line">      array[j] &lt; array[j<span class="number">-1</span>] &amp;&amp; (isSwap = <span class="literal">true</span>) &amp;&amp; swap(j,j<span class="number">-1</span>,array);</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">if</span>(!isSwap)</div><div class="line">      <span class="keyword">break</span>;</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">return</span> array;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<pre><code class="js">function bubbleSort(array) {
+  var length = array.length, isSwap;
+  for (var i = 0; i &lt; length; i++) {            //正序
+    isSwap = false;
+    for (var j = length - 1; j &gt;= i+1; j--) {     //逆序
+      array[j] &lt; array[j-1] &amp;&amp; (isSwap = true) &amp;&amp; swap(j,j-1,array);
+    }
+    if(!isSwap)
+      break;
+  }
+  return array;
+}
+</code></pre>
 <p>以上, 靠前的元素位置先确定.</p>
 <p><strong>方案三</strong>: 外循环逆序遍历, 内循环正序遍历, 代码如下:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">bubbleSort</span>(<span class="params">array</span>) </span>&#123;</div><div class="line">  <span class="keyword">var</span> length = array.length, isSwap;</div><div class="line">  <span class="keyword">for</span> (<span class="keyword">var</span> i = length - <span class="number">1</span>; i &gt;= <span class="number">0</span>; i--) &#123;	 <span class="comment">//逆序</span></div><div class="line">    isSwap = <span class="literal">false</span>;</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">var</span> j = <span class="number">0</span>; j &lt; i; j++) &#123;			<span class="comment">//正序</span></div><div class="line">      array[j] &gt; array[j+<span class="number">1</span>] &amp;&amp; (isSwap = <span class="literal">true</span>) &amp;&amp; swap(j,j+<span class="number">1</span>,array);</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">if</span>(!isSwap)</div><div class="line">      <span class="keyword">break</span>;</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">return</span> array;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<pre><code class="js">function bubbleSort(array) {
+  var length = array.length, isSwap;
+  for (var i = length - 1; i &gt;= 0; i--) {     //逆序
+    isSwap = false;
+    for (var j = 0; j &lt; i; j++) {            //正序
+      array[j] &gt; array[j+1] &amp;&amp; (isSwap = true) &amp;&amp; swap(j,j+1,array);
+    }
+    if(!isSwap)
+      break;
+  }
+  return array;
+}
+</code></pre>
 <p>以上, 由于内循环是正序遍历, 因此靠后的元素位置先确定.</p>
 <p><strong>方案四</strong>: 外循环逆序遍历, 内循环逆序遍历, 代码如下:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">bubbleSort</span>(<span class="params">array</span>) </span>&#123;</div><div class="line">  <span class="keyword">var</span> length = array.length, isSwap;</div><div class="line">  <span class="keyword">for</span> (<span class="keyword">var</span> i = length - <span class="number">1</span>; i &gt;= <span class="number">0</span>; i--) &#123;				<span class="comment">//逆序</span></div><div class="line">    isSwap = <span class="literal">false</span>;</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">var</span> j = length - <span class="number">1</span>; j &gt;= length - <span class="number">1</span> - i; j--) &#123; <span class="comment">//逆序</span></div><div class="line">      array[j] &lt; array[j<span class="number">-1</span>] &amp;&amp; (isSwap = <span class="literal">true</span>) &amp;&amp; swap(j,j<span class="number">-1</span>,array);</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">if</span>(!isSwap)</div><div class="line">      <span class="keyword">break</span>;</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">return</span> array;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<pre><code class="js">function bubbleSort(array) {
+  var length = array.length, isSwap;
+  for (var i = length - 1; i &gt;= 0; i--) {                //逆序
+    isSwap = false;
+    for (var j = length - 1; j &gt;= length - 1 - i; j--) { //逆序
+      array[j] &lt; array[j-1] &amp;&amp; (isSwap = true) &amp;&amp; swap(j,j-1,array);
+    }
+    if(!isSwap)
+      break;
+  }
+  return array;
+}
+</code></pre>
 <p>以上, 由于内循环是逆序遍历, 因此靠前的元素位置先确定.</p>
 <p>以下是其算法复杂度:</p>
 <table>
@@ -310,13 +364,37 @@
 <p>冒泡排序是最容易实现的排序, 最坏的情况是每次都需要交换, 共需遍历并交换将近n²/2次, 时间复杂度为O(n²). 最佳的情况是内循环遍历一次后发现排序是对的, 因此退出循环, 时间复杂度为O(n). 平均来讲, 时间复杂度为O(n²). 由于冒泡排序中只有缓存的temp变量需要内存空间, 因此空间复杂度为常量O(1).</p>
 <h3 id="双向冒泡排序"><a href="#双向冒泡排序" class="headerlink" title="双向冒泡排序"></a>双向冒泡排序</h3><p>双向冒泡排序是冒泡排序的一个简易升级版, 又称鸡尾酒排序. 冒泡排序是从低到高(或者从高到低)单向排序, 双向冒泡排序顾名思义就是从两个方向分别排序(通常, 先从低到高, 然后从高到低). 因此它比冒泡排序性能稍好一些.</p>
 <p>如下是算法实现:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">bothwayBubbleSort</span>(<span class="params">array</span>)</span>&#123;</div><div class="line">  <span class="keyword">var</span> tail = array.length<span class="number">-1</span>, i, isSwap = <span class="literal">false</span>;</div><div class="line">  <span class="keyword">for</span>(i = <span class="number">0</span>; i &lt; tail; tail--)&#123;</div><div class="line">    <span class="keyword">for</span>(<span class="keyword">var</span> j = tail; j &gt; i; j--)&#123;	<span class="comment">//第一轮, 先将最小的数据冒泡到前面</span></div><div class="line">      array[j<span class="number">-1</span>] &gt; array[j] &amp;&amp; (isSwap = <span class="literal">true</span>) &amp;&amp; swap(j,j<span class="number">-1</span>,array);</div><div class="line">    &#125;</div><div class="line">    i++;</div><div class="line">    <span class="keyword">for</span>(j = i; j &lt; tail; j++)&#123;		<span class="comment">//第二轮, 将最大的数据冒泡到后面</span></div><div class="line">      array[j] &gt; array[j+<span class="number">1</span>] &amp;&amp; (isSwap = <span class="literal">true</span>) &amp;&amp; swap(j,j+<span class="number">1</span>,array);</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">return</span> array;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<pre><code class="js">function bothwayBubbleSort(array){
+  var tail = array.length-1, i, isSwap = false;
+  for(i = 0; i &lt; tail; tail--){
+    for(var j = tail; j &gt; i; j--){    //第一轮, 先将最小的数据冒泡到前面
+      array[j-1] &gt; array[j] &amp;&amp; (isSwap = true) &amp;&amp; swap(j,j-1,array);
+    }
+    i++;
+    for(j = i; j &lt; tail; j++){        //第二轮, 将最大的数据冒泡到后面
+      array[j] &gt; array[j+1] &amp;&amp; (isSwap = true) &amp;&amp; swap(j,j+1,array);
+    }
+  }
+  return array;
+}
+</code></pre>
 <h3 id="选择排序"><a href="#选择排序" class="headerlink" title="选择排序"></a>选择排序</h3><p>从算法逻辑上看, 选择排序是一种简单且直观的排序算法. 它也是两层循环. <code>内层循环</code>就像工人一样, 它是真正做事情的, <code>内层循环</code>每执行一遍, 将选出本次待排序的元素中最小(或最大)的一个, 存放在数组的起始位置. 而 <code>外层循环</code>则像老板一样, 它告诉<code>内层循环</code>你需要不停的工作, 直到工作完成(也就是全部的元素排序完成).</p>
 <p><strong><em>Tips</em></strong>: 选择排序每次交换的元素都有可能不是相邻的, 因此它有可能打破原来值为相同的元素之间的顺序. 比如数组[2,2,1,3], 正向排序时, 第一个数字2将与数字1交换, 那么两个数字2之间的顺序将和原来的顺序不一致, <strong>虽然它们的值相同, 但它们相对的顺序却发生了变化</strong>. 我们将这种现象称作 <code>不稳定性</code> .</p>
 <p>如下是动图效果:</p>
 <p><img src="http://louiszhai.github.io/docImages/sort06.gif" alt="选择排序"></p>
 <p>如下是上图的算法实现:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">selectSort</span>(<span class="params">array</span>) </span>&#123;</div><div class="line">  <span class="keyword">var</span> length = array.length, min;</div><div class="line">  <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; length - <span class="number">1</span>; i++) &#123;</div><div class="line">    min = i;</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">var</span> j = i + <span class="number">1</span>; j &lt; length; j++) &#123;</div><div class="line">      array[j] &lt; array[min] &amp;&amp; (min = j); <span class="comment">//记住最小数的下标</span></div><div class="line">    &#125;</div><div class="line">    min!=i &amp;&amp; swap(i,min,array);</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">return</span> array;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<pre><code class="js">function selectSort(array) {
+  var length = array.length, min;
+  for (var i = 0; i &lt; length - 1; i++) {
+    min = i;
+    for (var j = i + 1; j &lt; length; j++) {
+      array[j] &lt; array[min] &amp;&amp; (min = j); //记住最小数的下标
+    }
+    min!=i &amp;&amp; swap(i,min,array);
+  }
+  return array;
+}
+</code></pre>
 <p>以下是其算法复杂度:</p>
 <table>
 <thead>
@@ -343,7 +421,24 @@
 <p>如下是动图效果:</p>
 <p><img src="http://louiszhai.github.io/docImages/sort07.gif" alt="直接插入排序"></p>
 <p>如下是上图的算法实现:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">directInsertionSort</span>(<span class="params">array</span>) </span>&#123;</div><div class="line">  <span class="keyword">var</span> length = array.length, index, current;</div><div class="line">  <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">1</span>; i &lt; length; i++) &#123;</div><div class="line">    index = i - <span class="number">1</span>;		 <span class="comment">//待比较元素的下标</span></div><div class="line">    current = array[i];	 <span class="comment">//当前元素</span></div><div class="line">    <span class="keyword">while</span>(index &gt;= <span class="number">0</span> &amp;&amp; array[index] &gt; current) &#123; <span class="comment">//前置条件之一:待比较元素比当前元素大</span></div><div class="line">      array[index+<span class="number">1</span>] = array[index];	<span class="comment">//将待比较元素后移一位</span></div><div class="line">      index--;					       <span class="comment">//游标前移一位</span></div><div class="line">      <span class="comment">//console.log(array);</span></div><div class="line">    &#125;</div><div class="line">    <span class="keyword">if</span>(index+<span class="number">1</span> != i)&#123;				   <span class="comment">//避免同一个元素赋值给自身</span></div><div class="line">      array[index+<span class="number">1</span>] = current;		    <span class="comment">//将当前元素插入预留空位</span></div><div class="line">      <span class="comment">//console.log(array);</span></div><div class="line">    &#125;		</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">return</span> array;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<pre><code class="js">function directInsertionSort(array) {
+  var length = array.length, index, current;
+  for (var i = 1; i &lt; length; i++) {
+    index = i - 1;         //待比较元素的下标
+    current = array[i];     //当前元素
+    while(index &gt;= 0 &amp;&amp; array[index] &gt; current) { //前置条件之一:待比较元素比当前元素大
+      array[index+1] = array[index];    //将待比较元素后移一位
+      index--;                           //游标前移一位
+      //console.log(array);
+    }
+    if(index+1 != i){                   //避免同一个元素赋值给自身
+      array[index+1] = current;            //将当前元素插入预留空位
+      //console.log(array);
+    }        
+  }
+  return array;
+}
+</code></pre>
 <p>为了更好的观察到直接插入排序的实现过程, 我们不妨将上述代码中的注释部分加入. 以数组 [5,4,3,2,1] 为例, 如下便是原数组的演化过程.</p>
 <p><img src="http://louiszhai.github.io/docImages/sort01.png" alt=""></p>
 <p>可见, 数组的各个元素, 从后往前, 只要比前面的元素小, 都依次插入到了合理的位置.</p>
@@ -361,7 +456,29 @@
 <p>注: <code>x&gt;&gt;1</code> 是位运算中的右移运算, 表示右移一位, 等同于x除以2再取整, 即 <code>x&gt;&gt;1 == Math.floor(x/2)</code> .</p>
 </blockquote>
 <p>如下是算法实现:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">binaryInsertionSort</span>(<span class="params">array</span>)</span>&#123;</div><div class="line">  <span class="keyword">var</span> current, i, j, low, high, m;</div><div class="line">  <span class="keyword">for</span>(i = <span class="number">1</span>; i &lt; array.length; i++)&#123;</div><div class="line">    low = <span class="number">0</span>;</div><div class="line">    high = i - <span class="number">1</span>;</div><div class="line">    current = array[i];</div><div class="line"></div><div class="line">    <span class="keyword">while</span>(low &lt;= high)&#123;			<span class="comment">//步骤1&amp;2:折半查找</span></div><div class="line">      m = (low + high)&gt;&gt;<span class="number">1</span>;</div><div class="line">      <span class="keyword">if</span>(array[i] &gt;= array[m])&#123;<span class="comment">//值相同时, 切换到高半区，保证稳定性</span></div><div class="line">        low = m + <span class="number">1</span>;		<span class="comment">//插入点在高半区</span></div><div class="line">      &#125;<span class="keyword">else</span>&#123;</div><div class="line">        high = m - <span class="number">1</span>;		<span class="comment">//插入点在低半区</span></div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">for</span>(j = i; j &gt; low; j--)&#123;	 <span class="comment">//步骤3:插入位置之后的元素全部后移一位</span></div><div class="line">      array[j] = array[j<span class="number">-1</span>];</div><div class="line">    &#125;</div><div class="line">    array[low] = current;		 <span class="comment">//步骤4:插入该元素</span></div><div class="line">  &#125;</div><div class="line">  <span class="keyword">return</span> array;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<pre><code class="js">function binaryInsertionSort(array){
+  var current, i, j, low, high, m;
+  for(i = 1; i &lt; array.length; i++){
+    low = 0;
+    high = i - 1;
+    current = array[i];
+
+    while(low &lt;= high){            //步骤1&amp;2:折半查找
+      m = (low + high)&gt;&gt;1;
+      if(array[i] &gt;= array[m]){//值相同时, 切换到高半区，保证稳定性
+        low = m + 1;        //插入点在高半区
+      }else{
+        high = m - 1;        //插入点在低半区
+      }
+    }
+    for(j = i; j &gt; low; j--){     //步骤3:插入位置之后的元素全部后移一位
+      array[j] = array[j-1];
+    }
+    array[low] = current;         //步骤4:插入该元素
+  }
+  return array;
+}
+</code></pre>
 <p>为了便于对比, 同样以数组 [5,4,3,2,1] 举例🌰. 原数组的演化过程如下(与上述一样):</p>
 <p><img src="http://louiszhai.github.io/docImages/sort.png" alt="折半插入排序"></p>
 <p>虽然折半插入排序明显减少了查询的次数, 但是数组元素移动的次数却没有改变. 它们的时间复杂度都是O(n²).</p>
@@ -377,9 +494,34 @@
 <p><img src="http://louiszhai.github.io/docImages/sort04.png" alt="希尔排序示意图"></p>
 <p>可见, 希尔排序实际上就是不断的进行直接插入排序, 分组是为了先将局部元素有序化. 因为直接插入排序在元素基本有序的状态下, 效率非常高. 而希尔排序呢, 通过先分组后排序的方式, 制造了直接插入排序高效运行的场景. 因此希尔排序效率更高.</p>
 <p>我们试着抽象出共同点, 便不难发现上述希尔排序的第四步就是一次直接插入排序, 而希尔排序原本就是从”增量”为n开始, 直至”增量”为1, 循环应用直接插入排序的一种封装. 因此直接插入排序就可以看做是步长为1的希尔排序. 为此我们先来封装下直接插入排序.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//形参增加步数gap(实际上就相当于gap替换了原来的数字1)</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">directInsertionSort</span>(<span class="params">array, gap</span>) </span>&#123;</div><div class="line">  gap = (gap == <span class="literal">undefined</span>) ? <span class="number">1</span> : gap;       <span class="comment">//默认从下标为1的元素开始遍历</span></div><div class="line">  <span class="keyword">var</span> length = array.length, index, current;</div><div class="line">  <span class="keyword">for</span> (<span class="keyword">var</span> i = gap; i &lt; length; i++) &#123;</div><div class="line">    index = i - gap;	<span class="comment">//待比较元素的下标</span></div><div class="line">    current = array[i];	<span class="comment">//当前元素</span></div><div class="line">    <span class="keyword">while</span>(index &gt;= <span class="number">0</span> &amp;&amp; array[index] &gt; current) &#123; <span class="comment">//前置条件之一:待比较元素比当前元素大</span></div><div class="line">      array[index + gap] = array[index];	<span class="comment">//将待比较元素后移gap位</span></div><div class="line">      index -= gap;					       <span class="comment">//游标前移gap位</span></div><div class="line">    &#125;</div><div class="line">    <span class="keyword">if</span>(index + gap != i)&#123;				   <span class="comment">//避免同一个元素赋值给自身</span></div><div class="line">      array[index + gap] = current;		    <span class="comment">//将当前元素插入预留空位</span></div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">return</span> array;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<pre><code class="js">//形参增加步数gap(实际上就相当于gap替换了原来的数字1)
+function directInsertionSort(array, gap) {
+  gap = (gap == undefined) ? 1 : gap;       //默认从下标为1的元素开始遍历
+  var length = array.length, index, current;
+  for (var i = gap; i &lt; length; i++) {
+    index = i - gap;    //待比较元素的下标
+    current = array[i];    //当前元素
+    while(index &gt;= 0 &amp;&amp; array[index] &gt; current) { //前置条件之一:待比较元素比当前元素大
+      array[index + gap] = array[index];    //将待比较元素后移gap位
+      index -= gap;                           //游标前移gap位
+    }
+    if(index + gap != i){                   //避免同一个元素赋值给自身
+      array[index + gap] = current;            //将当前元素插入预留空位
+    }
+  }
+  return array;
+}
+</code></pre>
 <p>那么希尔排序的算法实现如下:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">shellSort</span>(<span class="params">array</span>)</span>&#123;</div><div class="line">  <span class="keyword">var</span> length = array.length, gap = length&gt;&gt;<span class="number">1</span>, current, i, j;</div><div class="line">  <span class="keyword">while</span>(gap &gt; <span class="number">0</span>)&#123;</div><div class="line">    directInsertionSort(array, gap); <span class="comment">//按指定步长进行直接插入排序</span></div><div class="line">    gap = gap&gt;&gt;<span class="number">1</span>;</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">return</span> array;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<pre><code class="js">function shellSort(array){
+  var length = array.length, gap = length&gt;&gt;1, current, i, j;
+  while(gap &gt; 0){
+    directInsertionSort(array, gap); //按指定步长进行直接插入排序
+    gap = gap&gt;&gt;1;
+  }
+  return array;
+}
+</code></pre>
 <p>同样以数组[5,4,3,2,1] 举例🌰. 原数组的演化过程如下:</p>
 <p><img src="http://louiszhai.github.io/docImages/sort03.png" alt="希尔排序"></p>
 <p>对比上述直接插入排序和折半插入排序, 数组元素的移动次数由14次减少为7次. 通过拆分原数组为粒度更小的子数组, 希尔排序进一步提高了排序的效率.</p>
@@ -395,7 +537,25 @@
 <li>自下而上的迭代</li>
 </ol>
 <p>如下是算法实现(方式1:递归):</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">mergeSort</span>(<span class="params">array</span>) </span>&#123;  <span class="comment">//采用自上而下的递归方法</span></div><div class="line">  <span class="keyword">var</span> length = array.length;</div><div class="line">  <span class="keyword">if</span>(length &lt; <span class="number">2</span>) &#123;</div><div class="line">    <span class="keyword">return</span> array;</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">var</span> m = (length &gt;&gt; <span class="number">1</span>),</div><div class="line">      left = array.slice(<span class="number">0</span>, m),</div><div class="line">      right = array.slice(m); <span class="comment">//拆分为两个子数组</span></div><div class="line">  <span class="keyword">return</span> merge(mergeSort(left), mergeSort(right));<span class="comment">//子数组继续递归拆分,然后再合并</span></div><div class="line">&#125;</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">merge</span>(<span class="params">left, right</span>)</span>&#123; <span class="comment">//合并两个子数组</span></div><div class="line">  <span class="keyword">var</span> result = [];</div><div class="line">  <span class="keyword">while</span> (left.length &amp;&amp; right.length) &#123;</div><div class="line">    <span class="keyword">var</span> item = left[<span class="number">0</span>] &lt;= right[<span class="number">0</span>] ? left.shift() : right.shift();<span class="comment">//注意:判断的条件是小于或等于,如果只是小于,那么排序将不稳定.</span></div><div class="line">    result.push(item);</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">return</span> result.concat(left.length ? left : right);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<pre><code class="js">function mergeSort(array) {  //采用自上而下的递归方法
+  var length = array.length;
+  if(length &lt; 2) {
+    return array;
+  }
+  var m = (length &gt;&gt; 1),
+      left = array.slice(0, m),
+      right = array.slice(m); //拆分为两个子数组
+  return merge(mergeSort(left), mergeSort(right));//子数组继续递归拆分,然后再合并
+}
+function merge(left, right){ //合并两个子数组
+  var result = [];
+  while (left.length &amp;&amp; right.length) {
+    var item = left[0] &lt;= right[0] ? left.shift() : right.shift();//注意:判断的条件是小于或等于,如果只是小于,那么排序将不稳定.
+    result.push(item);
+  }
+  return result.concat(left.length ? left : right);
+}
+</code></pre>
 <p>由上, 长度为n的数组, 最终会调用mergeSort函数2n-1次. 通过自上而下的递归实现的归并排序, 将存在堆栈溢出的风险. 亲测各浏览器的堆栈溢出所需的递归调用次数大致为:</p>
 <ul>
 <li>Chrome v55: 15670</li>
@@ -403,7 +563,17 @@
 <li>Safari v9.1.2: 50755</li>
 </ul>
 <p>以下是测试代码:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">computeMaxCallStackSize</span>(<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="keyword">try</span> &#123;</div><div class="line">    <span class="keyword">return</span> <span class="number">1</span> + computeMaxCallStackSize();</div><div class="line">  &#125; <span class="keyword">catch</span> (e) &#123;</div><div class="line">    <span class="comment">// Call stack overflow</span></div><div class="line">    <span class="keyword">return</span> <span class="number">1</span>;</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"><span class="keyword">var</span> time = computeMaxCallStackSize();</div><div class="line"><span class="built_in">console</span>.log(time);</div></pre></td></tr></table></figure>
+<pre><code class="js">function computeMaxCallStackSize() {
+  try {
+    return 1 + computeMaxCallStackSize();
+  } catch (e) {
+    // Call stack overflow
+    return 1;
+  }
+}
+var time = computeMaxCallStackSize();
+console.log(time);
+</code></pre>
 <p>为此, ES6规范中提出了尾调优化的思想: 如果一个函数的最后一步也是一个函数调用, 那么该函数所需要的栈空间将被释放, 它将直接进入到下次调用中, 最终调用栈里只保留最后一次的调用记录.</p>
 <p>虽然ES6规范如此诱人, 然而目前并没有浏览器支持尾调优化, 相信在不久的将来, 尾调优化就会得到主流浏览器的支持.</p>
 <p>以下是其算法复杂度:</p>
@@ -430,7 +600,25 @@
 <p>如下是动图效果:</p>
 <p><img src="http://louiszhai.github.io/docImages/sort09.gif" alt="快速排序"></p>
 <p>如下是算法实现:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">quickSort</span>(<span class="params">array, left, right</span>) </span>&#123;</div><div class="line">  <span class="keyword">var</span> partitionIndex,</div><div class="line">      left = <span class="keyword">typeof</span> left == <span class="string">'number'</span> ? left : <span class="number">0</span>,</div><div class="line">      right = <span class="keyword">typeof</span> right == <span class="string">'number'</span> ? right : array.length<span class="number">-1</span>;</div><div class="line">  <span class="keyword">if</span> (left &lt; right) &#123;</div><div class="line">    partitionIndex = partition(array, left, right);<span class="comment">//切分的基准值</span></div><div class="line">    quickSort(array, left, partitionIndex<span class="number">-1</span>);</div><div class="line">    quickSort(array, partitionIndex+<span class="number">1</span>, right);</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">return</span> array;</div><div class="line">&#125;</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">partition</span>(<span class="params">array, left ,right</span>) </span>&#123;   <span class="comment">//分区操作</span></div><div class="line">  <span class="keyword">for</span> (<span class="keyword">var</span> i = left+<span class="number">1</span>, j = left; i &lt;= right; i++) &#123;<span class="comment">//j是较小值存储位置的游标</span></div><div class="line">    array[i] &lt; array[left] &amp;&amp; swap(i, ++j, array);<span class="comment">//以第一个元素为基准</span></div><div class="line">  &#125;</div><div class="line">  swap(left, j, array);			<span class="comment">//将第一个元素移至中间</span></div><div class="line">  <span class="keyword">return</span> j;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<pre><code class="js">function quickSort(array, left, right) {
+  var partitionIndex,
+      left = typeof left == &#39;number&#39; ? left : 0,
+      right = typeof right == &#39;number&#39; ? right : array.length-1;
+  if (left &lt; right) {
+    partitionIndex = partition(array, left, right);//切分的基准值
+    quickSort(array, left, partitionIndex-1);
+    quickSort(array, partitionIndex+1, right);
+  }
+  return array;
+}
+function partition(array, left ,right) {   //分区操作
+  for (var i = left+1, j = left; i &lt;= right; i++) {//j是较小值存储位置的游标
+    array[i] &lt; array[left] &amp;&amp; swap(i, ++j, array);//以第一个元素为基准
+  }
+  swap(left, j, array);            //将第一个元素移至中间
+  return j;
+}
+</code></pre>
 <p>以下是其算法复杂度:</p>
 <table>
 <thead>
@@ -469,7 +657,35 @@
 <p>如下是动图效果:</p>
 <p><img src="http://upload-images.jianshu.io/upload_images/1867034-bf2472770e2258a9.gif?imageMogr2/auto-orient/strip" alt="桶排序示意图"></p>
 <p>如下是算法实现:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">heapAdjust</span>(<span class="params">array, i, length</span>) </span>&#123;<span class="comment">//堆调整</span></div><div class="line">  <span class="keyword">var</span> left = <span class="number">2</span> * i + <span class="number">1</span>,</div><div class="line">      right = <span class="number">2</span> * i + <span class="number">2</span>,</div><div class="line">      largest = i;</div><div class="line">  <span class="keyword">if</span> (left &lt; length &amp;&amp; array[largest] &lt; array[left]) &#123;</div><div class="line">    largest = left;</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">if</span> (right &lt; length &amp;&amp; array[largest] &lt; array[right]) &#123;</div><div class="line">    largest = right;</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">if</span> (largest != i) &#123;</div><div class="line">    swap(i, largest, array);</div><div class="line">    heapAdjust(array, largest, length);</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">heapSort</span>(<span class="params">array</span>) </span>&#123;</div><div class="line">  <span class="comment">//建立大顶堆</span></div><div class="line">  length = array.length;</div><div class="line">  <span class="keyword">for</span> (<span class="keyword">var</span> i = length&gt;&gt;<span class="number">1</span>; i &gt;= <span class="number">0</span>; i--) &#123;</div><div class="line">    heapAdjust(array, i, length);</div><div class="line">  &#125;</div><div class="line">  <span class="comment">//调换第一个与最后一个元素,重新调整为大顶堆</span></div><div class="line">  <span class="keyword">for</span> (<span class="keyword">var</span> i = length - <span class="number">1</span>; i &gt; <span class="number">0</span>; i--) &#123;</div><div class="line">    swap(<span class="number">0</span>, i, array);</div><div class="line">    heapAdjust(array, <span class="number">0</span>, --length);</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">return</span> array;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<pre><code class="js">function heapAdjust(array, i, length) {//堆调整
+  var left = 2 * i + 1,
+      right = 2 * i + 2,
+      largest = i;
+  if (left &lt; length &amp;&amp; array[largest] &lt; array[left]) {
+    largest = left;
+  }
+  if (right &lt; length &amp;&amp; array[largest] &lt; array[right]) {
+    largest = right;
+  }
+  if (largest != i) {
+    swap(i, largest, array);
+    heapAdjust(array, largest, length);
+  }
+}
+function heapSort(array) {
+  //建立大顶堆
+  length = array.length;
+  for (var i = length&gt;&gt;1; i &gt;= 0; i--) {
+    heapAdjust(array, i, length);
+  }
+  //调换第一个与最后一个元素,重新调整为大顶堆
+  for (var i = length - 1; i &gt; 0; i--) {
+    swap(0, i, array);
+    heapAdjust(array, 0, --length);
+  }
+  return array;
+}
+</code></pre>
 <p>以上, ①建立堆的过程, 从length/2 一直处理到0, 时间复杂度为O(n);</p>
 <p>②调整堆的过程是沿着堆的父子节点进行调整, 执行次数为堆的深度, 时间复杂度为O(lgn);</p>
 <p>③堆排序的过程由n次第②步完成, 时间复杂度为O(nlgn).</p>
@@ -494,15 +710,100 @@
 <p>如下是动图效果:</p>
 <p><img src="http://louiszhai.github.io/docImages/sort10.gif" alt="计数排序"></p>
 <p>如下是算法实现:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">countSort</span>(<span class="params">array, keyName</span>)</span>&#123;</div><div class="line">  <span class="keyword">var</span> length = array.length,</div><div class="line">      output = <span class="keyword">new</span> <span class="built_in">Array</span>(length),</div><div class="line">      max,</div><div class="line">      min,</div><div class="line">      simpleArray = keyName ? array.map(<span class="function"><span class="keyword">function</span>(<span class="params">v</span>)</span>&#123;</div><div class="line">        <span class="keyword">return</span> v[keyName];</div><div class="line">      &#125;) : array; <span class="comment">// 如果keyName是存在的，那么就创建一个只有keyValue的简单数组</span></div><div class="line">  </div><div class="line">  <span class="comment">// 获取最大最小值</span></div><div class="line">  max = min = simpleArray[<span class="number">0</span>];</div><div class="line">  simpleArray.forEach(<span class="function"><span class="keyword">function</span>(<span class="params">v</span>)</span>&#123;</div><div class="line">    v &gt; max &amp;&amp; (max = v);</div><div class="line">    v &lt; min &amp;&amp; (min = v);</div><div class="line">  &#125;);</div><div class="line">  <span class="comment">// 获取计数数组的长度</span></div><div class="line">  <span class="keyword">var</span> k = max - min + <span class="number">1</span>;</div><div class="line">  <span class="comment">// 新建并初始化计数数组</span></div><div class="line">  <span class="keyword">var</span> countArray = <span class="keyword">new</span> <span class="built_in">Array</span>(k);</div><div class="line">  simpleArray.forEach(<span class="function"><span class="keyword">function</span>(<span class="params">v</span>)</span>&#123;</div><div class="line">    countArray[v - min]= (countArray[v - min] || <span class="number">0</span>) + <span class="number">1</span>;</div><div class="line">  &#125;);</div><div class="line">  <span class="comment">// 累加计数，存储不同值的初始下标</span></div><div class="line">  countArray.reduce(<span class="function"><span class="keyword">function</span>(<span class="params">prev, current, i, arr</span>)</span>&#123;</div><div class="line">    arr[i] = prev;</div><div class="line">    <span class="keyword">return</span> prev + current;</div><div class="line">  &#125;, <span class="number">0</span>);</div><div class="line">  <span class="comment">// 从原数组挨个取值(因取的是原数组的相应值，只能通过遍历原数组来实现)</span></div><div class="line">  simpleArray.forEach(<span class="function"><span class="keyword">function</span>(<span class="params">v, i</span>)</span>&#123;</div><div class="line">    <span class="keyword">var</span> j = countArray[v - min]++;</div><div class="line">    output[j] = array[i];</div><div class="line">  &#125;);</div><div class="line">  <span class="keyword">return</span> output;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<pre><code class="js">function countSort(array, keyName){
+  var length = array.length,
+      output = new Array(length),
+      max,
+      min,
+      simpleArray = keyName ? array.map(function(v){
+        return v[keyName];
+      }) : array; // 如果keyName是存在的，那么就创建一个只有keyValue的简单数组
+
+  // 获取最大最小值
+  max = min = simpleArray[0];
+  simpleArray.forEach(function(v){
+    v &gt; max &amp;&amp; (max = v);
+    v &lt; min &amp;&amp; (min = v);
+  });
+  // 获取计数数组的长度
+  var k = max - min + 1;
+  // 新建并初始化计数数组
+  var countArray = new Array(k);
+  simpleArray.forEach(function(v){
+    countArray[v - min]= (countArray[v - min] || 0) + 1;
+  });
+  // 累加计数，存储不同值的初始下标
+  countArray.reduce(function(prev, current, i, arr){
+    arr[i] = prev;
+    return prev + current;
+  }, 0);
+  // 从原数组挨个取值(因取的是原数组的相应值，只能通过遍历原数组来实现)
+  simpleArray.forEach(function(v, i){
+    var j = countArray[v - min]++;
+    output[j] = array[i];
+  });
+  return output;
+}
+</code></pre>
 <p>以上实现不仅支持了数值序列的排序，还支持根据对象的某个属性值来排序。测试如下：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> a = [<span class="number">2</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">3</span>, <span class="number">2</span>, <span class="number">1</span>, <span class="number">4</span>, <span class="number">2</span>],</div><div class="line">    b = [</div><div class="line">      &#123;<span class="attr">id</span>: <span class="number">2</span>, <span class="attr">s</span>:<span class="string">'a'</span>&#125;, </div><div class="line">      &#123;<span class="attr">id</span>: <span class="number">1</span>, <span class="attr">s</span>: <span class="string">'b'</span>&#125;, </div><div class="line">      &#123;<span class="attr">id</span>: <span class="number">1</span>, <span class="attr">s</span>: <span class="string">'c'</span>&#125;, </div><div class="line">      &#123;<span class="attr">id</span>: <span class="number">3</span>, <span class="attr">s</span>: <span class="string">'d'</span>&#125;, </div><div class="line">      &#123;<span class="attr">id</span>: <span class="number">2</span>, <span class="attr">s</span>: <span class="string">'e'</span>&#125;, </div><div class="line">      &#123;<span class="attr">id</span>: <span class="number">1</span>, <span class="attr">s</span>: <span class="string">'f'</span>&#125;, </div><div class="line">      &#123;<span class="attr">id</span>: <span class="number">4</span>, <span class="attr">s</span>: <span class="string">'g'</span>&#125;, </div><div class="line">      &#123;<span class="attr">id</span>: <span class="number">2</span>, <span class="attr">s</span>: <span class="string">'h'</span>&#125;</div><div class="line">    ];</div><div class="line">countSort(a); <span class="comment">// [1, 1, 1, 2, 2, 2, 3, 4]</span></div><div class="line">countSort(b, <span class="string">'id'</span>); <span class="comment">// [&#123;id:1,s:'b'&#125;,&#123;id:1,s:'c'&#125;,&#123;id:1,s:'f'&#125;,&#123;id:2,s:'a'&#125;,&#123;id:2,s:'e'&#125;,&#123;id:2,s:'h'&#125;,&#123;id:3,s:'d'&#125;,&#123;id:4,s:'g'&#125;]</span></div></pre></td></tr></table></figure>
+<pre><code class="js">var a = [2, 1, 1, 3, 2, 1, 4, 2],
+    b = [
+      {id: 2, s:&#39;a&#39;}, 
+      {id: 1, s: &#39;b&#39;}, 
+      {id: 1, s: &#39;c&#39;}, 
+      {id: 3, s: &#39;d&#39;}, 
+      {id: 2, s: &#39;e&#39;}, 
+      {id: 1, s: &#39;f&#39;}, 
+      {id: 4, s: &#39;g&#39;}, 
+      {id: 2, s: &#39;h&#39;}
+    ];
+countSort(a); // [1, 1, 1, 2, 2, 2, 3, 4]
+countSort(b, &#39;id&#39;); // [{id:1,s:&#39;b&#39;},{id:1,s:&#39;c&#39;},{id:1,s:&#39;f&#39;},{id:2,s:&#39;a&#39;},{id:2,s:&#39;e&#39;},{id:2,s:&#39;h&#39;},{id:3,s:&#39;d&#39;},{id:4,s:&#39;g&#39;}]
+</code></pre>
 <p><strong><em>Tips</em></strong>: 计数排序不改变相同元素之间原本相对的顺序, 因此它是稳定的排序算法.</p>
 <h3 id="桶排序"><a href="#桶排序" class="headerlink" title="桶排序"></a>桶排序</h3><p>桶排序即所谓的箱排序, 它是将数组分配到有限数量的桶子里. 每个桶里再各自排序(因此有可能使用别的排序算法或以递归方式继续桶排序). 当每个桶里的元素个数趋于一致时, 桶排序只需花费O(n)的时间. 桶排序通过空间换时间的方式提高了效率, 因此它需要额外的存储空间(即桶的空间).</p>
 <p>算法的基本思想:</p>
 <p>桶排序的核心就在于怎么把元素平均分配到每个桶里, 合理的分配将大大提高排序的效率.</p>
 <p>如下是算法实现:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">bucketSort</span>(<span class="params">array, bucketSize</span>) </span>&#123;</div><div class="line">  <span class="keyword">if</span> (array.length === <span class="number">0</span>) &#123;</div><div class="line">    <span class="keyword">return</span> array;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="keyword">var</span> i = <span class="number">1</span>,</div><div class="line">      min = array[<span class="number">0</span>],</div><div class="line">      max = min;</div><div class="line">  <span class="keyword">while</span> (i++ <span class="xml"><span class="tag">&lt; <span class="attr">array.length</span>) &#123;</span></span></div><div class="line">    <span class="attr">if</span> (<span class="attr">array</span>[<span class="attr">i</span>] &lt; <span class="attr">min</span>) &#123;</div><div class="line">      <span class="attr">min</span> = <span class="string">array[i];</span>                //输入数据的最小值</div><div class="line">    &#125; <span class="attr">else</span> <span class="attr">if</span> (<span class="attr">array</span>[<span class="attr">i</span>] &gt; max) &#123;</div><div class="line">      max = array[i];                //输入数据的最大值</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  //桶的初始化</div><div class="line">  bucketSize = bucketSize || 5; //设置桶的默认大小为5</div><div class="line">  var bucketCount = ~~((max - min) / bucketSize) + 1, //桶的个数</div><div class="line">      buckets = new Array(bucketCount); //创建桶</div><div class="line">  for (i = 0; i <span class="tag">&lt; <span class="attr">buckets.length</span>; <span class="attr">i</span>++) &#123;</span></div><div class="line">    <span class="attr">buckets</span>[<span class="attr">i</span>] = <span class="string">[];</span> //初始化桶</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  //将数据分配到各个桶中,这里直接按照数据值的分布来分配,一定范围内均匀分布的数据效率最为高效</div><div class="line">  <span class="attr">for</span> (<span class="attr">i</span> = <span class="string">0;</span> <span class="attr">i</span> &lt; <span class="attr">array.length</span>; <span class="attr">i</span>++) &#123;</div><div class="line">    <span class="attr">buckets</span>[~~((<span class="attr">array</span>[<span class="attr">i</span>] <span class="attr">-</span> <span class="attr">min</span>) / <span class="attr">bucketSize</span>)]<span class="attr">.push</span>(<span class="attr">array</span>[<span class="attr">i</span>]);</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="attr">array.length</span> = <span class="string">0;</span></div><div class="line">  <span class="attr">for</span> (<span class="attr">i</span> = <span class="string">0;</span> <span class="attr">i</span> &lt; <span class="attr">buckets.length</span>; <span class="attr">i</span>++) &#123;</div><div class="line">    <span class="attr">quickSort</span>(<span class="attr">buckets</span>[<span class="attr">i</span>]); //对每个桶进行排序，这里使用了快速排序</div><div class="line">    <span class="attr">for</span> (<span class="attr">var</span> <span class="attr">j</span> = <span class="string">0;</span> <span class="attr">j</span> &lt; <span class="attr">buckets</span>[<span class="attr">i</span>]<span class="attr">.length</span>; <span class="attr">j</span>++) &#123;</div><div class="line">      <span class="attr">array.push</span>(<span class="attr">buckets</span>[<span class="attr">i</span>][<span class="attr">j</span>]); //将已排序的数据写回数组中</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">  <span class="attr">return</span> <span class="attr">array</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<pre><code class="js">function bucketSort(array, bucketSize) {
+  if (array.length === 0) {
+    return array;
+  }
+
+  var i = 1,
+      min = array[0],
+      max = min;
+  while (i++ &lt; array.length) {
+    if (array[i] &lt; min) {
+      min = array[i];                //输入数据的最小值
+    } else if (array[i] &gt; max) {
+      max = array[i];                //输入数据的最大值
+    }
+  }
+
+  //桶的初始化
+  bucketSize = bucketSize || 5; //设置桶的默认大小为5
+  var bucketCount = ~~((max - min) / bucketSize) + 1, //桶的个数
+      buckets = new Array(bucketCount); //创建桶
+  for (i = 0; i &lt; buckets.length; i++) {
+    buckets[i] = []; //初始化桶
+  }
+
+  //将数据分配到各个桶中,这里直接按照数据值的分布来分配,一定范围内均匀分布的数据效率最为高效
+  for (i = 0; i &lt; array.length; i++) {
+    buckets[~~((array[i] - min) / bucketSize)].push(array[i]);
+  }
+
+  array.length = 0;
+  for (i = 0; i &lt; buckets.length; i++) {
+    quickSort(buckets[i]); //对每个桶进行排序，这里使用了快速排序
+    for (var j = 0; j &lt; buckets[i].length; j++) {
+      array.push(buckets[i][j]); //将已排序的数据写回数组中
+    }
+  }
+  return array;
+}
+</code></pre>
 <p><strong><em>Tips</em></strong>: 桶排序本身是稳定的排序, 因此它的稳定性与桶内排序的稳定性保持一致.</p>
 <p>实际上, 桶也只是一个抽象的概念, 它的思想与归并排序,快速排序等类似, 都是通过将大量数据分配到N个不同的容器中, 分别排序, 最后再合并数据. 这种方式大大减少了排序时整体的遍历次数, 提高了算法效率.</p>
 <h3 id="基数排序"><a href="#基数排序" class="headerlink" title="基数排序"></a>基数排序</h3><p>基数排序源于老式穿孔机, 排序器每次只能看到一个列. 它是基于元素值的每个位上的字符来排序的. 对于数字而言就是分别基于个位, 十位, 百位 或千位等等数字来排序. (不明白不要紧, 我也不懂, 请接着往下读)</p>
@@ -514,7 +815,31 @@
 <p>如下是LSD的动图效果:</p>
 <p><img src="http://louiszhai.github.io//docImages/sort11.gif" alt="基数排序">)</p>
 <p>如下是算法实现:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">radixSort</span>(<span class="params">array, max</span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> buckets = [],</div><div class="line">        unit = <span class="number">10</span>,</div><div class="line">        base = <span class="number">1</span>;</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; max; i++, base *= <span class="number">10</span>, unit *= <span class="number">10</span>) &#123;</div><div class="line">        <span class="keyword">for</span>(<span class="keyword">var</span> j = <span class="number">0</span>; j &lt; array.length; j++) &#123;</div><div class="line">            <span class="keyword">var</span> index = ~~((array[j] % unit) / base);<span class="comment">//依次过滤出个位,十位等等数字</span></div><div class="line">            <span class="keyword">if</span>(buckets[index] == <span class="literal">null</span>) &#123;</div><div class="line">                buckets[index] = []; <span class="comment">//初始化桶</span></div><div class="line">            &#125;</div><div class="line">            buckets[index].push(array[j]);<span class="comment">//往不同桶里添加数据</span></div><div class="line">        &#125;</div><div class="line">        <span class="keyword">var</span> pos = <span class="number">0</span>,</div><div class="line">            value;</div><div class="line">        <span class="keyword">for</span>(<span class="keyword">var</span> j = <span class="number">0</span>, length = buckets.length; j &lt; length; j++) &#123;</div><div class="line">            <span class="keyword">if</span>(buckets[j] != <span class="literal">null</span>) &#123;</div><div class="line">                <span class="keyword">while</span> ((value = buckets[j].shift()) != <span class="literal">null</span>) &#123;</div><div class="line">                      array[pos++] = value; <span class="comment">//将不同桶里数据挨个捞出来,为下一轮高位排序做准备,由于靠近桶底的元素排名靠前,因此从桶底先捞</span></div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> array;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<pre><code class="js">function radixSort(array, max) {
+    var buckets = [],
+        unit = 10,
+        base = 1;
+    for (var i = 0; i &lt; max; i++, base *= 10, unit *= 10) {
+        for(var j = 0; j &lt; array.length; j++) {
+            var index = ~~((array[j] % unit) / base);//依次过滤出个位,十位等等数字
+            if(buckets[index] == null) {
+                buckets[index] = []; //初始化桶
+            }
+            buckets[index].push(array[j]);//往不同桶里添加数据
+        }
+        var pos = 0,
+            value;
+        for(var j = 0, length = buckets.length; j &lt; length; j++) {
+            if(buckets[j] != null) {
+                while ((value = buckets[j].shift()) != null) {
+                      array[pos++] = value; //将不同桶里数据挨个捞出来,为下一轮高位排序做准备,由于靠近桶底的元素排名靠前,因此从桶底先捞
+                }
+            }
+        }
+    }
+    return array;
+}
+</code></pre>
 <p>以上算法, 如果用来比较时间, 先按日排序, 再按月排序, 最后按年排序, 仅需排序三次.</p>
 <p>基数排序更适合用于对时间, 字符串等这些整体权值未知的数据进行排序.</p>
 <p><strong><em>Tips</em></strong>: 基数排序不改变相同元素之间的相对顺序, 因此它是稳定的排序算法.</p>
@@ -648,7 +973,7 @@
         <a id="btn_donate" class="btn_donate" href="javascript:;" title="打赏"></a>
         <span class="donate_txt">
            &uarr;<br>
-       如果你觉得有用，就支持一下吧！
+       支持一杯咖啡吧！
         </span>
       </div>  
   <div id="donate_guide" class="donate_bar center hidden" >
@@ -715,69 +1040,103 @@
 
 
 
-<div class="duoshuo">
-	<div class="ds-thread" data-thread-key="sort" data-title="JS中可能用得到的全部的排序算法" data-url="http://louiszhai.github.io/2016/12/23/sort/"></div>
-	<style>
-		#ds-reset .ds-avatar img{width:54px;height:54px;border-radius:27px;-webkit-border-radius:27px;-moz-border-radius:27px;box-shadow:inset 0 -1px 0 #3333sf;-webkit-box-shadow:inset 0 -1px 0 #3333sf;-webkit-transition:0.4s;-webkit-transition:-webkit-transform 0.4s ease-out;transition:transform 0.4s ease-out;-moz-transition:-moz-transform 0.4s ease-out;}
-		#ds-reset .ds-avatar img:hover{box-shadow:0 0 10px #fff;rgba(255,255,255,.6),inset 0 0 20px rgba(255,255,255,1);-webkit-box-shadow:0 0 10px #fff;rgba(255,255,255,.6),inset 0 0 20px rgba(255,255,255,1);transform:rotateZ(360deg);-webkit-transform:rotateZ(360deg);-moz-transform:rotateZ(360deg);}
-		p.ds-powered-by,#ds-sync-checkbox,.ds-sync label{display:none!important;}
-		#ds-reset .ds-rounded-top{-webkit-border-top-right-radius:0px;-webkit-border-top-left-radius:0px;border-top-right-radius:0px;border-top-left-radius:0px;}
-		#ds-thread #ds-reset .ds-textarea-wrapper{background:#fff;border:0;margin-bottom:20px;padding-right:0px;}
-		#ds-thread #ds-reset .ds-textarea-wrapper textarea{min-height:80px;border:1px solid #ccc;padding:10px;-webkit-appearance:none;border-radius:0;background-color:#FFFFFF;border-color:#cccccc;box-shadow:inset 0 1px 2px rgba(0,0,0,0.1);color:rgba(0,0,0,0.75);-webkit-box-sizing:border-box;box-sizing:border-box;-webkit-transition:border-color 0.15s linear,background 0.15s linear;-moz-transition:border-color 0.15s linear,background 0.15s linear;-ms-transition:border-color 0.15s linear,background 0.15s linear;-o-transition:border-color 0.15s linear,background 0.15s linear;transition:border-color 0.15s linear,background 0.15s linear;}
-		/*#ds-thread #ds-reset .ds-textarea-wrapper textarea:focus{border-color:#999999;background:#fafafa;outline:none;}*/
-		#ds-thread #ds-reset .ds-post-options{border-bottom-left-radius:0px;-webkit-border-bottom-left-radius:0px;border:none;background:none!important;}
-		#ds-reset .ds-textarea-wrapper textarea:focus{border-color:#66afe9;outline:0;-webkit-box-shadow:inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);box-shadow:inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);}
-		#ds-thread #ds-reset .ds-post-button:hover,#ds-thread #ds-reset .ds-post-button:focus{
-		    background-color: #51a351;
-		    background-position: 0 -32px;
-		    color:white;
-		}
-		#ds-thread #ds-reset .ds-post-toolbar,#ds-reset .ds-avatar{box-shadow:none;}
-		#ds-thread #ds-reset .ds-textarea-wrapper textarea:focus{
-	    	/*background: none repeat scroll 0 0 #F4FAFF;*/
-	    	border-color:#9DD4FD;
-	    	border-width:1px;
-	    	box-shadow:0 1px 1px rgba(0,0,0,0.075) inset, 0 0 8px rgba(82, 168, 236, 0.6);
-	    	outline:0 none;
-    	}
-		#ds-thread #ds-reset .ds-textarea-wrapper textarea:active{
-	    	/*background: none repeat scroll 0 0 #F4FAFF;*/
-	    	border-width:1px;
-	    	border-color:#9DD4FD;
-	    	box-shadow:0 1px 1px rgba(0,0,0,0.075) inset, 0 0 8px rgba(82, 168, 236, 0.6);
-	    	outline:0 none;
-    	}
-    	#ds-thread #ds-reset .ds-post-button{
-    		box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset, 0 1px 2px rgba(0, 0, 0, 0.05);
-		    border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
-		    border-width: 1px;
-		    border-style: solid;
-		    border-radius: 3px;
-		    background: #5bb75b;
-		    color:white;
-		    text-shadow:none;
-		    transition:background-color 300ms ease-out;
-    	}
-    	#ds-reset .ds-avatar{
-    		background-color:initial;
-    	}
-
-	</style>
-	<script type="text/javascript">
-	var duoshuoQuery = {short_name:"true"};
-	(function() {
-		var ds = document.createElement('script');
-		ds.type = 'text/javascript';ds.async = true;
-		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-		ds.charset = 'UTF-8';
-		(document.getElementsByTagName('head')[0] 
-		 || document.getElementsByTagName('body')[0]).appendChild(ds);
-	})();
-	</script>
-</div>
 
 
 
+
+  <style>
+/*
+    Name:     Kimbie (light)
+    Author:   Jan T. Sott
+    License:  Creative Commons Attribution-ShareAlike 4.0 Unported License
+    URL:      https://github.com/idleberg/Kimbie-highlight.js
+*/
+
+/* Kimbie Comment */
+.hljs-comment,
+.hljs-quote {
+  color: #a57a4c;
+}
+
+/* Kimbie Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-meta {
+  color: #dc3958;
+}
+
+/* Kimbie Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-deletion,
+.hljs-link {
+  color: #f79a32;
+}
+
+/* Kimbie Yellow */
+.hljs-title,
+.hljs-section,
+.hljs-attribute {
+  color: #f06431;
+}
+
+/* Kimbie Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+  color: #889b4a;
+}
+
+/* Kimbie Purple */
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-function {
+  color: #98676a;
+}
+
+.hljs {
+  display: block;
+  overflow-x: auto;
+  /*background: #fbebd4;*/
+  color: #84613d;
+  padding: 0.5em;
+}
+
+.hljs-emphasis {
+  font-style: italic;
+}
+
+.hljs-strong {
+  font-weight: bold;
+}
+</style>
+  <script src="//cdn.bootcss.com/highlight.js/9.2.0/highlight.min.js"></script>
+  <script>
+    // hljs.initHighlightingOnLoad();
+    [].slice.call(document.querySelectorAll('pre code')).forEach(function(block, i) {
+      hljs.highlightBlock(block);
+      var lines = block.innerText.split('\n').length - 1;
+      var ul = document.createElement('ul');
+      ul.className = 'pre-numbering';
+      block.className += ' has-numbering';
+      block.parentNode.appendChild(ul);
+      for(i=1;i<=lines;i++){
+        var li = document.createElement('li');
+        li.innerText = i;
+        ul.appendChild(li);
+      }
+    });
+  </script>
 </div>
         <link rel="stylesheet" href="/css/content.css" type="text/css">
 <footer id="footer">

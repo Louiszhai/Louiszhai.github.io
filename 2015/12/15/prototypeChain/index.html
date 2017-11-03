@@ -240,7 +240,23 @@
 <p>搜索轨迹: instance1–&gt; instance2 –&gt; constructor2.prototype…–&gt;Object.prototype</p>
 </blockquote>
 <p>这种搜索的轨迹,形似一条长链, 又因prototype在这个游戏规则中充当链接的作用,于是我们把这种实例与原型的链条称作 <strong>原型链</strong> . 下面有个例子</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">Father</span>(<span class="params"></span>)</span>&#123;</div><div class="line">	<span class="keyword">this</span>.property = <span class="literal">true</span>;</div><div class="line">&#125;</div><div class="line">Father.prototype.getFatherValue = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">	<span class="keyword">return</span> <span class="keyword">this</span>.property;</div><div class="line">&#125;</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">Son</span>(<span class="params"></span>)</span>&#123;</div><div class="line">	<span class="keyword">this</span>.sonProperty = <span class="literal">false</span>;</div><div class="line">&#125;</div><div class="line"><span class="comment">//继承 Father</span></div><div class="line">Son.prototype = <span class="keyword">new</span> Father();<span class="comment">//Son.prototype被重写,导致Son.prototype.constructor也一同被重写</span></div><div class="line">Son.prototype.getSonVaule = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">	<span class="keyword">return</span> <span class="keyword">this</span>.sonProperty;</div><div class="line">&#125;</div><div class="line"><span class="keyword">var</span> instance = <span class="keyword">new</span> Son();</div><div class="line">alert(instance.getFatherValue());<span class="comment">//true</span></div></pre></td></tr></table></figure>
+<pre><code class="js">function Father(){
+    this.property = true;
+}
+Father.prototype.getFatherValue = function(){
+    return this.property;
+}
+function Son(){
+    this.sonProperty = false;
+}
+//继承 Father
+Son.prototype = new Father();//Son.prototype被重写,导致Son.prototype.constructor也一同被重写
+Son.prototype.getSonVaule = function(){
+    return this.sonProperty;
+}
+var instance = new Son();
+alert(instance.getFatherValue());//true
+</code></pre>
 <p>instance实例通过原型链找到了Father原型中的getFatherValue方法.</p>
 <p>注意: 此时instance.constructor指向的是Father,这是因为Son.prototype中的constructor被重写的缘故.</p>
 <p>以上我们弄清楚了何为原型链,如有不清楚请尽量在下方<a href="#respond">给我留言</a></p>
@@ -249,12 +265,18 @@
 <blockquote>
 <p>第一种是使用 <strong>instanceof</strong> 操作符, 只要用这个操作符来测试实例(instance)与原型链中出现过的构造函数,结果就会返回true. 以下几行代码就说明了这点.</p>
 </blockquote>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">alert(instance <span class="keyword">instanceof</span> <span class="built_in">Object</span>);<span class="comment">//true</span></div><div class="line">alert(instance <span class="keyword">instanceof</span> Father);<span class="comment">//true</span></div><div class="line">alert(instance <span class="keyword">instanceof</span> Son);<span class="comment">//true</span></div></pre></td></tr></table></figure>
+<pre><code class="js">alert(instance instanceof Object);//true
+alert(instance instanceof Father);//true
+alert(instance instanceof Son);//true
+</code></pre>
 <p>由于原型链的关系, 我们可以说instance 是 Object, Father 或 Son中任何一个类型的实例. 因此, 这三个构造函数的结果都返回了true.</p>
 <blockquote>
 <p>第二种是使用 <strong>isPrototypeOf()</strong> 方法, 同样只要是原型链中出现过的原型,isPrototypeOf() 方法就会返回true, 如下所示.</p>
 </blockquote>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">alert(<span class="built_in">Object</span>.prototype.isPrototypeOf(instance));<span class="comment">//true</span></div><div class="line">alert(Father.prototype.isPrototypeOf(instance));<span class="comment">//true</span></div><div class="line">alert(Son.prototype.isPrototypeOf(instance));<span class="comment">//true</span></div></pre></td></tr></table></figure>
+<pre><code class="js">alert(Object.prototype.isPrototypeOf(instance));//true
+alert(Father.prototype.isPrototypeOf(instance));//true
+alert(Son.prototype.isPrototypeOf(instance));//true
+</code></pre>
 <p>原理同上.</p>
 <h3 id="原型链的问题"><a href="#原型链的问题" class="headerlink" title="原型链的问题"></a>原型链的问题</h3><p>原型链并非十分完美, 它包含如下两个问题.</p>
 <blockquote>
@@ -267,7 +289,19 @@
 <blockquote>
 <p>基本思想:即在子类型构造函数的内部调用超类型构造函数.</p>
 </blockquote>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">Father</span>(<span class="params"></span>)</span>&#123;</div><div class="line">	<span class="keyword">this</span>.colors = [<span class="string">"red"</span>,<span class="string">"blue"</span>,<span class="string">"green"</span>];</div><div class="line">&#125;</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">Son</span>(<span class="params"></span>)</span>&#123;</div><div class="line">	Father.call(<span class="keyword">this</span>);<span class="comment">//继承了Father,且向父类型传递参数</span></div><div class="line">&#125;</div><div class="line"><span class="keyword">var</span> instance1 = <span class="keyword">new</span> Son();</div><div class="line">instance1.colors.push(<span class="string">"black"</span>);</div><div class="line"><span class="built_in">console</span>.log(instance1.colors);<span class="comment">//"red,blue,green,black"</span></div><div class="line"></div><div class="line"><span class="keyword">var</span> instance2 = <span class="keyword">new</span> Son();</div><div class="line"><span class="built_in">console</span>.log(instance2.colors);<span class="comment">//"red,blue,green" 可见引用类型值是独立的</span></div></pre></td></tr></table></figure>
+<pre><code class="js">function Father(){
+    this.colors = [&quot;red&quot;,&quot;blue&quot;,&quot;green&quot;];
+}
+function Son(){
+    Father.call(this);//继承了Father,且向父类型传递参数
+}
+var instance1 = new Son();
+instance1.colors.push(&quot;black&quot;);
+console.log(instance1.colors);//&quot;red,blue,green,black&quot;
+
+var instance2 = new Son();
+console.log(instance2.colors);//&quot;red,blue,green&quot; 可见引用类型值是独立的
+</code></pre>
 <p>很明显,借用构造函数一举解决了原型链的两大问题:</p>
 <p>其一, 保证了原型链中引用类型值的独立,不再被所有实例共享;</p>
 <p>其二, 子类型创建时也能够向父类型传递参数.</p>
@@ -277,16 +311,54 @@
 <p>基本思路: 使用原型链实现对原型属性和方法的继承,通过借用构造函数来实现对实例属性的继承.</p>
 </blockquote>
 <p>这样,既通过在原型上定义方法实现了函数复用,又能保证每个实例都有它自己的属性. 如下所示.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">Father</span>(<span class="params">name</span>)</span>&#123;</div><div class="line">	<span class="keyword">this</span>.name = name;</div><div class="line">	<span class="keyword">this</span>.colors = [<span class="string">"red"</span>,<span class="string">"blue"</span>,<span class="string">"green"</span>];</div><div class="line">&#125;</div><div class="line">Father.prototype.sayName = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">	alert(<span class="keyword">this</span>.name);</div><div class="line">&#125;;</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">Son</span>(<span class="params">name,age</span>)</span>&#123;</div><div class="line">	Father.call(<span class="keyword">this</span>,name);<span class="comment">//继承实例属性，第一次调用Father()</span></div><div class="line">	<span class="keyword">this</span>.age = age;</div><div class="line">&#125;</div><div class="line">Son.prototype = <span class="keyword">new</span> Father();<span class="comment">//继承父类方法,第二次调用Father()</span></div><div class="line">Son.prototype.sayAge = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">	alert(<span class="keyword">this</span>.age);</div><div class="line">&#125;</div><div class="line"><span class="keyword">var</span> instance1 = <span class="keyword">new</span> Son(<span class="string">"louis"</span>,<span class="number">5</span>);</div><div class="line">instance1.colors.push(<span class="string">"black"</span>);</div><div class="line"><span class="built_in">console</span>.log(instance1.colors);<span class="comment">//"red,blue,green,black"</span></div><div class="line">instance1.sayName();<span class="comment">//louis</span></div><div class="line">instance1.sayAge();<span class="comment">//5</span></div><div class="line"></div><div class="line"><span class="keyword">var</span> instance1 = <span class="keyword">new</span> Son(<span class="string">"zhai"</span>,<span class="number">10</span>);</div><div class="line"><span class="built_in">console</span>.log(instance1.colors);<span class="comment">//"red,blue,green"</span></div><div class="line">instance1.sayName();<span class="comment">//zhai</span></div><div class="line">instance1.sayAge();<span class="comment">//10</span></div></pre></td></tr></table></figure>
+<pre><code class="js">function Father(name){
+    this.name = name;
+    this.colors = [&quot;red&quot;,&quot;blue&quot;,&quot;green&quot;];
+}
+Father.prototype.sayName = function(){
+    alert(this.name);
+};
+function Son(name,age){
+    Father.call(this,name);//继承实例属性，第一次调用Father()
+    this.age = age;
+}
+Son.prototype = new Father();//继承父类方法,第二次调用Father()
+Son.prototype.sayAge = function(){
+    alert(this.age);
+}
+var instance1 = new Son(&quot;louis&quot;,5);
+instance1.colors.push(&quot;black&quot;);
+console.log(instance1.colors);//&quot;red,blue,green,black&quot;
+instance1.sayName();//louis
+instance1.sayAge();//5
+
+var instance1 = new Son(&quot;zhai&quot;,10);
+console.log(instance1.colors);//&quot;red,blue,green&quot;
+instance1.sayName();//zhai
+instance1.sayAge();//10
+</code></pre>
 <p>组合继承避免了原型链和借用构造函数的缺陷,融合了它们的优点,成为 JavaScript 中最常用的继承模式. 而且, instanceof 和 isPrototypeOf( )也能用于识别基于组合继承创建的对象.</p>
 <p>同时我们还注意到组合继承其实调用了两次父类构造函数, 造成了不必要的消耗, 那么怎样才能避免这种不必要的消耗呢, 这个我们将在后面讲到.</p>
 <h3 id="原型继承"><a href="#原型继承" class="headerlink" title="原型继承"></a>原型继承</h3><p>该方法最初由道格拉斯·克罗克福德于2006年在一篇题为 《Prototypal Inheritance in JavaScript》(JavaScript中的原型式继承) 的文章中提出. 他的想法是借助原型可以基于已有的对象创建新对象， 同时还不必因此创建自定义类型. 大意如下:</p>
 <blockquote>
 <p>在object()函数内部, 先创建一个临时性的构造函数, 然后将传入的对象作为这个构造函数的原型,最后返回了这个临时类型的一个新实例. </p>
 </blockquote>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">object</span>(<span class="params">o</span>)</span>&#123;</div><div class="line">	<span class="function"><span class="keyword">function</span> <span class="title">F</span>(<span class="params"></span>)</span>&#123;&#125;</div><div class="line">	F.prototype = o;</div><div class="line">	<span class="keyword">return</span> <span class="keyword">new</span> F();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<pre><code class="js">function object(o){
+    function F(){}
+    F.prototype = o;
+    return new F();
+}
+</code></pre>
 <p>从本质上讲, object() 对传入其中的对象执行了一次浅复制. 下面我们来看看为什么是浅复制.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> person = &#123;</div><div class="line">	<span class="attr">friends</span> : [<span class="string">"Van"</span>,<span class="string">"Louis"</span>,<span class="string">"Nick"</span>]</div><div class="line">&#125;;</div><div class="line"><span class="keyword">var</span> anotherPerson = object(person);</div><div class="line">anotherPerson.friends.push(<span class="string">"Rob"</span>);</div><div class="line"><span class="keyword">var</span> yetAnotherPerson = object(person);</div><div class="line">yetAnotherPerson.friends.push(<span class="string">"Style"</span>);</div><div class="line">alert(person.friends);<span class="comment">//"Van,Louis,Nick,Rob,Style"</span></div></pre></td></tr></table></figure>
+<pre><code class="js">var person = {
+    friends : [&quot;Van&quot;,&quot;Louis&quot;,&quot;Nick&quot;]
+};
+var anotherPerson = object(person);
+anotherPerson.friends.push(&quot;Rob&quot;);
+var yetAnotherPerson = object(person);
+yetAnotherPerson.friends.push(&quot;Style&quot;);
+alert(person.friends);//&quot;Van,Louis,Nick,Rob,Style&quot;
+</code></pre>
 <p>在这个例子中,可以作为另一个对象基础的是person对象,于是我们把它传入到object()函数中,然后该函数就会返回一个新对象. 这个新对象将person作为原型,因此它的原型中就包含引用类型值属性. 这意味着person.friends不仅属于person所有,而且也会被anotherPerson以及yetAnotherPerson共享.</p>
 <p>在 ECMAScript5 中,通过新增 <strong>object.create()</strong> 方法规范化了上面的原型式继承.</p>
 <p><strong>object.create()</strong> 接收两个参数:</p>
@@ -294,33 +366,77 @@
 <li>一个用作新对象原型的对象</li>
 <li>(可选的)一个为新对象定义额外属性的对象</li>
 </ul>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> person = &#123;</div><div class="line">	<span class="attr">friends</span> : [<span class="string">"Van"</span>,<span class="string">"Louis"</span>,<span class="string">"Nick"</span>]</div><div class="line">&#125;;</div><div class="line"><span class="keyword">var</span> anotherPerson = <span class="built_in">Object</span>.create(person);</div><div class="line">anotherPerson.friends.push(<span class="string">"Rob"</span>);</div><div class="line"><span class="keyword">var</span> yetAnotherPerson = <span class="built_in">Object</span>.create(person);</div><div class="line">yetAnotherPerson.friends.push(<span class="string">"Style"</span>);</div><div class="line">alert(person.friends);<span class="comment">//"Van,Louis,Nick,Rob,Style"</span></div></pre></td></tr></table></figure>
+<pre><code class="js">var person = {
+    friends : [&quot;Van&quot;,&quot;Louis&quot;,&quot;Nick&quot;]
+};
+var anotherPerson = Object.create(person);
+anotherPerson.friends.push(&quot;Rob&quot;);
+var yetAnotherPerson = Object.create(person);
+yetAnotherPerson.friends.push(&quot;Style&quot;);
+alert(person.friends);//&quot;Van,Louis,Nick,Rob,Style&quot;
+</code></pre>
 <p><strong>object.create()</strong> 只有一个参数时功能与上述object方法相同, 它的第二个参数与Object.defineProperties()方法的第二个参数格式相同: 每个属性都是通过自己的描述符定义的.以这种方式指定的任何属性都会覆盖原型对象上的同名属性.例如:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> person = &#123;</div><div class="line">	<span class="attr">name</span> : <span class="string">"Van"</span></div><div class="line">&#125;;</div><div class="line"><span class="keyword">var</span> anotherPerson = <span class="built_in">Object</span>.create(person, &#123;</div><div class="line">	<span class="attr">name</span> : &#123;</div><div class="line">		<span class="attr">value</span> : <span class="string">"Louis"</span></div><div class="line">	&#125;</div><div class="line">&#125;);</div><div class="line">alert(anotherPerson.name);<span class="comment">//"Louis"</span></div></pre></td></tr></table></figure>
+<pre><code class="js">var person = {
+    name : &quot;Van&quot;
+};
+var anotherPerson = Object.create(person, {
+    name : {
+        value : &quot;Louis&quot;
+    }
+});
+alert(anotherPerson.name);//&quot;Louis&quot;
+</code></pre>
 <p>目前支持 <strong>Object.create()</strong> 的浏览器有 IE9+, Firefox 4+, Safari 5+, Opera 12+ 和 Chrome.</p>
 <p><strong>提醒:</strong> 原型式继承中, 包含引用类型值的属性始终都会共享相应的值, 就像使用原型模式一样.</p>
 <h3 id="寄生式继承"><a href="#寄生式继承" class="headerlink" title="寄生式继承"></a>寄生式继承</h3><p>寄生式继承是与原型式继承紧密相关的一种思路， 同样是克罗克福德推而广之.</p>
 <blockquote>
 <p>寄生式继承的思路与(寄生)构造函数和工厂模式类似, 即创建一个仅用于封装继承过程的函数,该函数在内部以某种方式来增强对象,最后再像真的是它做了所有工作一样返回对象. 如下.</p>
 </blockquote>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">createAnother</span>(<span class="params">original</span>)</span>&#123;</div><div class="line">	<span class="keyword">var</span> clone = object(original);<span class="comment">//通过调用object函数创建一个新对象</span></div><div class="line">	clone.sayHi = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;<span class="comment">//以某种方式来增强这个对象</span></div><div class="line">		alert(<span class="string">"hi"</span>);</div><div class="line">	&#125;;</div><div class="line">	<span class="keyword">return</span> clone;<span class="comment">//返回这个对象</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<pre><code class="js">function createAnother(original){
+    var clone = object(original);//通过调用object函数创建一个新对象
+    clone.sayHi = function(){//以某种方式来增强这个对象
+        alert(&quot;hi&quot;);
+    };
+    return clone;//返回这个对象
+}
+</code></pre>
 <p>这个例子中的代码基于person返回了一个新对象–anotherPerson. 新对象不仅具有 person 的所有属性和方法, 而且还被增强了, 拥有了sayH()方法. </p>
 <p><strong>注意:</strong> 使用寄生式继承来为对象添加函数, 会由于不能做到函数复用而降低效率;这一点与构造函数模式类似.</p>
 <h3 id="寄生组合式继承"><a href="#寄生组合式继承" class="headerlink" title="寄生组合式继承"></a>寄生组合式继承</h3><p>前面讲过,组合继承是 JavaScript 最常用的继承模式; 不过, 它也有自己的不足. 组合继承最大的问题就是无论什么情况下,都会调用两次父类构造函数: 一次是在创建子类型原型的时候, 另一次是在子类型构造函数内部. <strong>寄生组合式继承就是为了降低调用父类构造函数的开销而出现的</strong> .</p>
 <blockquote>
 <p>其背后的基本思路是: 不必为了指定子类型的原型而调用超类型的构造函数</p>
 </blockquote>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">extend</span>(<span class="params">subClass,superClass</span>)</span>&#123;</div><div class="line">	<span class="keyword">var</span> prototype = object(superClass.prototype);<span class="comment">//创建对象</span></div><div class="line">	prototype.constructor = subClass;<span class="comment">//增强对象</span></div><div class="line">	subClass.prototype = prototype;<span class="comment">//指定对象</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<pre><code class="js">function extend(subClass,superClass){
+    var prototype = object(superClass.prototype);//创建对象
+    prototype.constructor = subClass;//增强对象
+    subClass.prototype = prototype;//指定对象
+}
+</code></pre>
 <p>extend的高效率体现在它没有调用superClass构造函数,因此避免了在subClass.prototype上面创建不必要,多余的属性. 于此同时,原型链还能保持不变; 因此还能正常使用 instanceof 和 isPrototypeOf() 方法.</p>
 <p>以上,寄生组合式继承,集寄生式继承和组合继承的优点于一身,是实现基于类型继承的最有效方法.</p>
 <hr>
 <p>下面我们来看下extend的另一种更为有效的扩展.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">extend</span>(<span class="params">subClass, superClass</span>) </span>&#123;</div><div class="line">  <span class="keyword">var</span> F = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;&#125;;</div><div class="line">  F.prototype = superClass.prototype;</div><div class="line">  subClass.prototype = <span class="keyword">new</span> F(); </div><div class="line">  subClass.prototype.constructor = subClass;</div><div class="line"></div><div class="line">  subClass.superclass = superClass.prototype;</div><div class="line">  <span class="keyword">if</span>(superClass.prototype.constructor == <span class="built_in">Object</span>.prototype.constructor) &#123;</div><div class="line">    superClass.prototype.constructor = superClass;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<pre><code class="js">function extend(subClass, superClass) {
+  var F = function() {};
+  F.prototype = superClass.prototype;
+  subClass.prototype = new F(); 
+  subClass.prototype.constructor = subClass;
+
+  subClass.superclass = superClass.prototype;
+  if(superClass.prototype.constructor == Object.prototype.constructor) {
+    superClass.prototype.constructor = superClass;
+  }
+}
+</code></pre>
 <p>我一直不太明白的是为什么要 “<strong>new F()</strong>“, 既然extend的目的是将子类型的 prototype 指向超类型的 prototype,为什么不直接做如下操作呢?</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">subClass.prototype = superClass.prototype;<span class="comment">//直接指向超类型prototype</span></div></pre></td></tr></table></figure>
+<pre><code class="js">subClass.prototype = superClass.prototype;//直接指向超类型prototype
+</code></pre>
 <p>显然, 基于如上操作, 子类型原型将与超类型原型共用, 根本就没有继承关系.</p>
 <h3 id="new-运算符"><a href="#new-运算符" class="headerlink" title="new 运算符"></a>new 运算符</h3><p>为了追本溯源, 我顺便研究了new运算符具体干了什么?发现其实很简单，就干了三件事情.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> obj  = &#123;&#125;;</div><div class="line">obj.__proto__ = F.prototype;</div><div class="line">F.call(obj);</div></pre></td></tr></table></figure>
+<pre><code class="js">var obj  = {};
+obj.__proto__ = F.prototype;
+F.call(obj);
+</code></pre>
 <p>第一行，我们创建了一个空对象obj;</p>
 <p>第二行，我们将这个空对象的<strong>proto</strong>成员指向了F函数对象prototype成员对象;</p>
 <p>第三行，我们将F函数对象的this指针替换成obj，然后再调用F函数.</p>
@@ -329,24 +445,74 @@
 <p>  2、属性和方法被加入到 this 引用的对象中。</p>
 <p>  3、新创建的对象由 this 所引用，并且最后隐式的返回 this.</p>
 <h3 id="proto-属性是指定原型的关键"><a href="#proto-属性是指定原型的关键" class="headerlink" title="__proto__ 属性是指定原型的关键"></a>__proto__ 属性是指定原型的关键</h3><p>以上, 通过设置 __proto__ 属性继承了父类, 如果去掉new 操作, 直接参考如下写法</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">subClass.prototype = superClass.prototype;<span class="comment">//直接指向超类型prototype</span></div></pre></td></tr></table></figure>
+<pre><code class="js">subClass.prototype = superClass.prototype;//直接指向超类型prototype
+</code></pre>
 <p>那么, 使用 instanceof 方法判断对象是否是构造器的实例时, 将会出现紊乱.</p>
 <p>假如参考如上写法, 那么extend代码应该为</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">extend</span>(<span class="params">subClass, superClass</span>) </span>&#123;</div><div class="line">  subClass.prototype = superClass.prototype;</div><div class="line"></div><div class="line">  subClass.superclass = superClass.prototype;</div><div class="line">  <span class="keyword">if</span>(superClass.prototype.constructor == <span class="built_in">Object</span>.prototype.constructor) &#123;</div><div class="line">    superClass.prototype.constructor = superClass;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<pre><code class="js">function extend(subClass, superClass) {
+  subClass.prototype = superClass.prototype;
+
+  subClass.superclass = superClass.prototype;
+  if(superClass.prototype.constructor == Object.prototype.constructor) {
+    superClass.prototype.constructor = superClass;
+  }
+}
+</code></pre>
 <p>此时, 请看如下测试:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">a</span>(<span class="params"></span>)</span>&#123;&#125;</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">b</span>(<span class="params"></span>)</span>&#123;&#125;</div><div class="line">extend(b,a);</div><div class="line"><span class="keyword">var</span> c = <span class="keyword">new</span> a()&#123;&#125;;</div><div class="line"><span class="built_in">console</span>.log(c <span class="keyword">instanceof</span> a);<span class="comment">//true</span></div><div class="line"><span class="built_in">console</span>.log(c <span class="keyword">instanceof</span> b);<span class="comment">//true</span></div></pre></td></tr></table></figure>
+<pre><code class="js">function a(){}
+function b(){}
+extend(b,a);
+var c = new a(){};
+console.log(c instanceof a);//true
+console.log(c instanceof b);//true
+</code></pre>
 <p>c被认为是a的实例可以理解, 也是对的; 但c却被认为也是b的实例, 这就不对了. 究其原因, instanceof 操作符比较的应该是 c.__proto__ 与 构造器.prototype(即 b.prototype 或 a.prototype) 这两者是否相等, 又extend(b,a); 则b.prototype === a.prototype, 故这才打印出上述不合理的输出.</p>
 <hr>
 <p>那么最终,原型链继承可以这么实现,例如:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">Father</span>(<span class="params">name</span>)</span>&#123;</div><div class="line">	<span class="keyword">this</span>.name = name;</div><div class="line">	<span class="keyword">this</span>.colors = [<span class="string">"red"</span>,<span class="string">"blue"</span>,<span class="string">"green"</span>];</div><div class="line">&#125;</div><div class="line">Father.prototype.sayName = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">	alert(<span class="keyword">this</span>.name);</div><div class="line">&#125;;</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">Son</span>(<span class="params">name,age</span>)</span>&#123;</div><div class="line">	Father.call(<span class="keyword">this</span>,name);<span class="comment">//继承实例属性，第一次调用Father()</span></div><div class="line">	<span class="keyword">this</span>.age = age;</div><div class="line">&#125;</div><div class="line">extend(Son,Father)<span class="comment">//继承父类方法,此处并不会第二次调用Father()</span></div><div class="line">Son.prototype.sayAge = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">	alert(<span class="keyword">this</span>.age);</div><div class="line">&#125;</div><div class="line"><span class="keyword">var</span> instance1 = <span class="keyword">new</span> Son(<span class="string">"louis"</span>,<span class="number">5</span>);</div><div class="line">instance1.colors.push(<span class="string">"black"</span>);</div><div class="line"><span class="built_in">console</span>.log(instance1.colors);<span class="comment">//"red,blue,green,black"</span></div><div class="line">instance1.sayName();<span class="comment">//louis</span></div><div class="line">instance1.sayAge();<span class="comment">//5</span></div><div class="line"></div><div class="line"><span class="keyword">var</span> instance1 = <span class="keyword">new</span> Son(<span class="string">"zhai"</span>,<span class="number">10</span>);</div><div class="line"><span class="built_in">console</span>.log(instance1.colors);<span class="comment">//"red,blue,green"</span></div><div class="line">instance1.sayName();<span class="comment">//zhai</span></div><div class="line">instance1.sayAge();<span class="comment">//10</span></div></pre></td></tr></table></figure>
+<pre><code class="js">function Father(name){
+    this.name = name;
+    this.colors = [&quot;red&quot;,&quot;blue&quot;,&quot;green&quot;];
+}
+Father.prototype.sayName = function(){
+    alert(this.name);
+};
+function Son(name,age){
+    Father.call(this,name);//继承实例属性，第一次调用Father()
+    this.age = age;
+}
+extend(Son,Father)//继承父类方法,此处并不会第二次调用Father()
+Son.prototype.sayAge = function(){
+    alert(this.age);
+}
+var instance1 = new Son(&quot;louis&quot;,5);
+instance1.colors.push(&quot;black&quot;);
+console.log(instance1.colors);//&quot;red,blue,green,black&quot;
+instance1.sayName();//louis
+instance1.sayAge();//5
+
+var instance1 = new Son(&quot;zhai&quot;,10);
+console.log(instance1.colors);//&quot;red,blue,green&quot;
+instance1.sayName();//zhai
+instance1.sayAge();//10
+</code></pre>
 <hr>
 <h3 id="扩展"><a href="#扩展" class="headerlink" title="扩展:"></a>扩展:</h3><h4 id="属性查找"><a href="#属性查找" class="headerlink" title="属性查找"></a>属性查找</h4><p>​    使用了原型链后, 当查找一个对象的属性时，JavaScript 会向上遍历原型链，直到找到给定名称的属性为止，到查找到达原型链的顶部 - 也就是 Object.prototype - 但是仍然没有找到指定的属性，就会返回 undefined. 此时若想避免原型链查找, 建议使用 <strong>hasOwnProperty</strong> 方法. 因为 <strong>hasOwnProperty</strong> 是 JavaScript 中唯一一个处理属性但是不查找原型链的函数. 如:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(instance1.hasOwnProperty(<span class="string">'age'</span>));<span class="comment">//true</span></div></pre></td></tr></table></figure>
+<pre><code class="js">console.log(instance1.hasOwnProperty(&#39;age&#39;));//true
+</code></pre>
 <p>对比: <strong>isPrototypeOf</strong> 则是用来判断该方法所属的对象是不是参数的原型对象，是则返回true，否则返回false。如:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(Father.prototype.isPrototypeOf(instance1));<span class="comment">//true</span></div></pre></td></tr></table></figure>
+<pre><code class="js">console.log(Father.prototype.isPrototypeOf(instance1));//true
+</code></pre>
 <h4 id="instanceof-amp-amp-typeof"><a href="#instanceof-amp-amp-typeof" class="headerlink" title="instanceof &amp;&amp; typeof"></a>instanceof &amp;&amp; typeof</h4><p>上面提到几次提到 instanceof 运算符. 那么到底它是怎么玩的呢? 下面让我们来趴一趴它的使用场景.</p>
 <p><strong>instanceof</strong> 运算符是用来在运行时指出对象是否是构造器的一个实例, 例如漏写了new运算符去调用某个构造器, 此时构造器内部可以通过 instanceof 来判断.(java中功能类似)</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  <span class="keyword">if</span>(<span class="keyword">this</span> <span class="keyword">instanceof</span> <span class="built_in">arguments</span>.callee)</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'此处作为构造函数被调用'</span>);</div><div class="line">  <span class="keyword">else</span></div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'此处作为普通函数被调用'</span>);</div><div class="line">&#125;</div><div class="line">f();<span class="comment">//此处作为构造函数被调用</span></div><div class="line"><span class="keyword">new</span> f();<span class="comment">//此处作为普通函数被调用</span></div></pre></td></tr></table></figure>
+<pre><code class="js">function f(){
+  if(this instanceof arguments.callee)
+    console.log(&#39;此处作为构造函数被调用&#39;);
+  else
+    console.log(&#39;此处作为普通函数被调用&#39;);
+}
+f();//此处作为构造函数被调用
+new f();//此处作为普通函数被调用
+</code></pre>
 <p>以上, this instanceof <a href="http://louiszhai.github.io/2015/12/15/arguments/"><code>arguments</code></a>.callee 的值如果为 true 表示是作为构造函数被调用的,如果为 false 则表示是作为普通函数被调用的。</p>
 <p>对比: <strong>typeof</strong> 则用以获取一个变量或者表达式的类型, 一般只能返回如下几个结果:</p>
 <p>number,boolean,string,function（函数）,object（NULL,数组，对象）,undefined。</p>
@@ -358,7 +524,22 @@
 </blockquote>
 <p>其大意是，new 后必须跟一个对象并且此对象必须有一个名为 [[Construct]] 的内部方法（其实这种对象就是构造器），否则会抛出异常</p>
 <p>根据这些内容，我们完全可以构造一个伪 [[Construct]] 方法来模拟此流程</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">MyObject</span>(<span class="params">age</span>) </span>&#123;</div><div class="line">    <span class="keyword">this</span>.age = age;</div><div class="line">&#125;</div><div class="line"></div><div class="line">MyObject.construct = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> o = &#123;&#125;, Constructor = MyObject;</div><div class="line">    o.__proto__ = Constructor.prototype;</div><div class="line">    <span class="comment">// FF 支持用户引用内部属性 [[Prototype]]</span></div><div class="line">    Constructor.apply(o, <span class="built_in">arguments</span>);</div><div class="line">    <span class="keyword">return</span> o;</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="keyword">var</span> obj1 = <span class="keyword">new</span> MyObject(<span class="number">10</span>);</div><div class="line"><span class="keyword">var</span> obj2 = MyObject.construct(<span class="number">10</span>);</div><div class="line">alert(obj2 <span class="keyword">instanceof</span> MyObject);<span class="comment">// true</span></div></pre></td></tr></table></figure>
+<pre><code class="js">function MyObject(age) {
+    this.age = age;
+}
+
+MyObject.construct = function() {
+    var o = {}, Constructor = MyObject;
+    o.__proto__ = Constructor.prototype;
+    // FF 支持用户引用内部属性 [[Prototype]]
+    Constructor.apply(o, arguments);
+    return o;
+};
+
+var obj1 = new MyObject(10);
+var obj2 = MyObject.construct(10);
+alert(obj2 instanceof MyObject);// true
+</code></pre>
 <hr>
 <p>不知不觉本文已经写了3天, 其实还有很多引申的东西没有讲出来, 大家有什么问题或好的想法欢迎在下方参与<a href="#respond">留言和评论</a>.</p>
 <p>本文作者: <a href="https://github.com/Louiszhai" target="_blank" rel="external">louis</a></p>
@@ -382,7 +563,7 @@
         <a id="btn_donate" class="btn_donate" href="javascript:;" title="打赏"></a>
         <span class="donate_txt">
            &uarr;<br>
-       如果你觉得有用，就支持一下吧！
+       支持一杯咖啡吧！
         </span>
       </div>  
   <div id="donate_guide" class="donate_bar center hidden" >
@@ -449,69 +630,103 @@
 
 
 
-<div class="duoshuo">
-	<div class="ds-thread" data-thread-key="prototypeChain" data-title="详解JS原型链与继承" data-url="http://louiszhai.github.io/2015/12/15/prototypeChain/"></div>
-	<style>
-		#ds-reset .ds-avatar img{width:54px;height:54px;border-radius:27px;-webkit-border-radius:27px;-moz-border-radius:27px;box-shadow:inset 0 -1px 0 #3333sf;-webkit-box-shadow:inset 0 -1px 0 #3333sf;-webkit-transition:0.4s;-webkit-transition:-webkit-transform 0.4s ease-out;transition:transform 0.4s ease-out;-moz-transition:-moz-transform 0.4s ease-out;}
-		#ds-reset .ds-avatar img:hover{box-shadow:0 0 10px #fff;rgba(255,255,255,.6),inset 0 0 20px rgba(255,255,255,1);-webkit-box-shadow:0 0 10px #fff;rgba(255,255,255,.6),inset 0 0 20px rgba(255,255,255,1);transform:rotateZ(360deg);-webkit-transform:rotateZ(360deg);-moz-transform:rotateZ(360deg);}
-		p.ds-powered-by,#ds-sync-checkbox,.ds-sync label{display:none!important;}
-		#ds-reset .ds-rounded-top{-webkit-border-top-right-radius:0px;-webkit-border-top-left-radius:0px;border-top-right-radius:0px;border-top-left-radius:0px;}
-		#ds-thread #ds-reset .ds-textarea-wrapper{background:#fff;border:0;margin-bottom:20px;padding-right:0px;}
-		#ds-thread #ds-reset .ds-textarea-wrapper textarea{min-height:80px;border:1px solid #ccc;padding:10px;-webkit-appearance:none;border-radius:0;background-color:#FFFFFF;border-color:#cccccc;box-shadow:inset 0 1px 2px rgba(0,0,0,0.1);color:rgba(0,0,0,0.75);-webkit-box-sizing:border-box;box-sizing:border-box;-webkit-transition:border-color 0.15s linear,background 0.15s linear;-moz-transition:border-color 0.15s linear,background 0.15s linear;-ms-transition:border-color 0.15s linear,background 0.15s linear;-o-transition:border-color 0.15s linear,background 0.15s linear;transition:border-color 0.15s linear,background 0.15s linear;}
-		/*#ds-thread #ds-reset .ds-textarea-wrapper textarea:focus{border-color:#999999;background:#fafafa;outline:none;}*/
-		#ds-thread #ds-reset .ds-post-options{border-bottom-left-radius:0px;-webkit-border-bottom-left-radius:0px;border:none;background:none!important;}
-		#ds-reset .ds-textarea-wrapper textarea:focus{border-color:#66afe9;outline:0;-webkit-box-shadow:inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);box-shadow:inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);}
-		#ds-thread #ds-reset .ds-post-button:hover,#ds-thread #ds-reset .ds-post-button:focus{
-		    background-color: #51a351;
-		    background-position: 0 -32px;
-		    color:white;
-		}
-		#ds-thread #ds-reset .ds-post-toolbar,#ds-reset .ds-avatar{box-shadow:none;}
-		#ds-thread #ds-reset .ds-textarea-wrapper textarea:focus{
-	    	/*background: none repeat scroll 0 0 #F4FAFF;*/
-	    	border-color:#9DD4FD;
-	    	border-width:1px;
-	    	box-shadow:0 1px 1px rgba(0,0,0,0.075) inset, 0 0 8px rgba(82, 168, 236, 0.6);
-	    	outline:0 none;
-    	}
-		#ds-thread #ds-reset .ds-textarea-wrapper textarea:active{
-	    	/*background: none repeat scroll 0 0 #F4FAFF;*/
-	    	border-width:1px;
-	    	border-color:#9DD4FD;
-	    	box-shadow:0 1px 1px rgba(0,0,0,0.075) inset, 0 0 8px rgba(82, 168, 236, 0.6);
-	    	outline:0 none;
-    	}
-    	#ds-thread #ds-reset .ds-post-button{
-    		box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset, 0 1px 2px rgba(0, 0, 0, 0.05);
-		    border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
-		    border-width: 1px;
-		    border-style: solid;
-		    border-radius: 3px;
-		    background: #5bb75b;
-		    color:white;
-		    text-shadow:none;
-		    transition:background-color 300ms ease-out;
-    	}
-    	#ds-reset .ds-avatar{
-    		background-color:initial;
-    	}
-
-	</style>
-	<script type="text/javascript">
-	var duoshuoQuery = {short_name:"true"};
-	(function() {
-		var ds = document.createElement('script');
-		ds.type = 'text/javascript';ds.async = true;
-		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-		ds.charset = 'UTF-8';
-		(document.getElementsByTagName('head')[0] 
-		 || document.getElementsByTagName('body')[0]).appendChild(ds);
-	})();
-	</script>
-</div>
 
 
 
+
+  <style>
+/*
+    Name:     Kimbie (light)
+    Author:   Jan T. Sott
+    License:  Creative Commons Attribution-ShareAlike 4.0 Unported License
+    URL:      https://github.com/idleberg/Kimbie-highlight.js
+*/
+
+/* Kimbie Comment */
+.hljs-comment,
+.hljs-quote {
+  color: #a57a4c;
+}
+
+/* Kimbie Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-meta {
+  color: #dc3958;
+}
+
+/* Kimbie Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-deletion,
+.hljs-link {
+  color: #f79a32;
+}
+
+/* Kimbie Yellow */
+.hljs-title,
+.hljs-section,
+.hljs-attribute {
+  color: #f06431;
+}
+
+/* Kimbie Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+  color: #889b4a;
+}
+
+/* Kimbie Purple */
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-function {
+  color: #98676a;
+}
+
+.hljs {
+  display: block;
+  overflow-x: auto;
+  /*background: #fbebd4;*/
+  color: #84613d;
+  padding: 0.5em;
+}
+
+.hljs-emphasis {
+  font-style: italic;
+}
+
+.hljs-strong {
+  font-weight: bold;
+}
+</style>
+  <script src="//cdn.bootcss.com/highlight.js/9.2.0/highlight.min.js"></script>
+  <script>
+    // hljs.initHighlightingOnLoad();
+    [].slice.call(document.querySelectorAll('pre code')).forEach(function(block, i) {
+      hljs.highlightBlock(block);
+      var lines = block.innerText.split('\n').length - 1;
+      var ul = document.createElement('ul');
+      ul.className = 'pre-numbering';
+      block.className += ' has-numbering';
+      block.parentNode.appendChild(ul);
+      for(i=1;i<=lines;i++){
+        var li = document.createElement('li');
+        li.innerText = i;
+        ul.appendChild(li);
+      }
+    });
+  </script>
 </div>
         <link rel="stylesheet" href="/css/content.css" type="text/css">
 <footer id="footer">

@@ -240,20 +240,44 @@
 </ul>
 <p>最终我们将分析遍历效率选出最佳遍历选手.</p>
 <p>本文将针对如下两种数据进行详细的分析和举栗. 下面举栗中如果不加特殊说明将会用到如下数据.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> array = [<span class="string">"囚徒"</span>,<span class="string">"过客"</span>,<span class="string">"领袖"</span>];<span class="comment">//职场3种人</span></div><div class="line"><span class="keyword">var</span> o = &#123;<span class="number">0</span>:<span class="string">"linda"</span>,<span class="number">1</span>:<span class="string">"style"</span>,<span class="number">2</span>:<span class="string">"nick"</span>,<span class="attr">length</span>:<span class="number">3</span>&#125;;</div></pre></td></tr></table></figure>
+<pre><code class="js">var array = [&quot;囚徒&quot;,&quot;过客&quot;,&quot;领袖&quot;];//职场3种人
+var o = {0:&quot;linda&quot;,1:&quot;style&quot;,2:&quot;nick&quot;,length:3};
+</code></pre>
 <h3 id="for"><a href="#for" class="headerlink" title="for"></a>for</h3><p>语法: for(初始化; 循环执行条件; 每遍历一个元素后做的事情;){}</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;<span class="comment">//循环置于闭包之内</span></div><div class="line">  <span class="keyword">for</span>(<span class="keyword">var</span> i=<span class="number">0</span>,length=array.length;i&lt;length;i++)&#123;<span class="comment">//缓存数组长度</span></div><div class="line">  	<span class="built_in">console</span>.log(array[i]);<span class="comment">//内部方法若有可能相互影响,也要置于闭包之内</span></div><div class="line">  &#125;</div><div class="line">&#125;)();</div></pre></td></tr></table></figure>
+<pre><code class="js">(function(){//循环置于闭包之内
+  for(var i=0,length=array.length;i&lt;length;i++){//缓存数组长度
+      console.log(array[i]);//内部方法若有可能相互影响,也要置于闭包之内
+  }
+})();
+</code></pre>
 <p>for循环只能遍历数组, 不能遍历对象. 写for循环时有两点需要注意.</p>
 <ul>
 <li>其一, 为了避免遍历时执行多遍计算数组长度的操作, 影响效率,  建议在循环开始以变量的形式缓存下数组长度, 若在循环内部有可能改变数组长度, 请务必慎重处理, 避免数组越界.</li>
 <li>JavaScript中并没有类似java的块级作用域, for循环内部定义的变量会直接暴露在外(如 i,循环退出后,i变量将等于数组长度, 后续代码将能访问到 i 变量的值), 因此建议将for循环置于闭包内. 特别要注意的是: <strong>如果在循环内部, 前一个元素的遍历有可能影响到后一个元素的遍历, 那么for循环内部方法也需要置于闭包之内.</strong></li>
 </ul>
 <h3 id="do-while"><a href="#do-while" class="headerlink" title="do/while"></a>do/while</h3><p>语法: do{…}while(true);</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"> <span class="keyword">do</span> <span class="keyword">while</span></div><div class="line">(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> i = <span class="number">0</span>,</div><div class="line">        len = array.length;</div><div class="line">    <span class="keyword">do</span> &#123;</div><div class="line">        <span class="keyword">if</span> (i == <span class="number">2</span>) &#123;</div><div class="line">            <span class="keyword">break</span>; <span class="comment">// 循环被终止, 此处如果是continue就会造成循环无法退出</span></div><div class="line">        &#125;;</div><div class="line">        <span class="built_in">console</span>.log(<span class="string">'array['</span>+ i +<span class="string">']:'</span> + array[i]);</div><div class="line">        i++;<span class="comment">//此句建议放置循环while头部</span></div><div class="line">    &#125; <span class="keyword">while</span>(i&lt;len);</div><div class="line">&#125;)();</div></pre></td></tr></table></figure>
+<pre><code class="js"> do while
+(function() {
+    var i = 0,
+        len = array.length;
+    do {
+        if (i == 2) {
+            break; // 循环被终止, 此处如果是continue就会造成循环无法退出
+        };
+        console.log(&#39;array[&#39;+ i +&#39;]:&#39; + array[i]);
+        i++;//此句建议放置循环while头部
+    } while(i&lt;len);
+})();
+</code></pre>
 <p>do/while的语法简化了循环的实现, 只保留对循环条件的判断, 所以我们要在循环内部构造出循环退出的条件, 否则有可能造成死循环. 特别要注意的是: <strong>使用 continue 跳出本次遍历时, 要保证循环能够自动进入到下一次遍历, 因此保证循环走到下一次遍历的语句需要放到 continue 前面执行, 建议置于循环头部</strong>.(如上, i++ 语句最好放置循环头部)</p>
 <p>do/while 循环与for循环大体差不多,只支持数组遍历, 多用于对循环退出条件不是很明确的场景. 一般来说不建议使用这种方式遍历数组.</p>
 <h3 id="forEach"><a href="#forEach" class="headerlink" title="forEach"></a>forEach</h3><p>语法: array.forEach(function(item){}), 参数item表示数组每一项的元素</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">array.forEach(<span class="function"><span class="keyword">function</span>(<span class="params">item</span>)</span>&#123;</div><div class="line">  <span class="keyword">if</span>(item==<span class="string">"囚徒"</span>)</div><div class="line">    <span class="keyword">return</span>;<span class="comment">//这里只能使用return跳过当前元素处理</span></div><div class="line">  <span class="built_in">console</span>.log(item);</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<pre><code class="js">array.forEach(function(item){
+  if(item==&quot;囚徒&quot;)
+    return;//这里只能使用return跳过当前元素处理
+  console.log(item);
+});
+</code></pre>
 <p>forEach回调function默认有三个参数: item, index, array.</p>
 <p>使用forEach循环有几点需要特别注意:</p>
 <ul>
@@ -262,11 +286,35 @@
 <li>forEach无法使用break，continue跳出循环，使用return时，效果和在for循环中使用continue一致</li>
 </ul>
 <h3 id="for-in"><a href="#for-in" class="headerlink" title="for in"></a>for in</h3><p>语法: for(var item in array){}</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">for</span>(<span class="keyword">var</span> item <span class="keyword">in</span> array)&#123;</div><div class="line">  <span class="built_in">console</span>.log(item);</div><div class="line">&#125;<span class="comment">//0 1 2</span></div><div class="line"><span class="keyword">for</span>(<span class="keyword">var</span> item <span class="keyword">in</span> o)&#123;</div><div class="line">  <span class="built_in">console</span>.log(item);</div><div class="line">&#125;<span class="comment">//0 1 2 length</span></div></pre></td></tr></table></figure>
+<pre><code class="js">for(var item in array){
+  console.log(item);
+}//0 1 2
+for(var item in o){
+  console.log(item);
+}//0 1 2 length
+</code></pre>
 <p>for in 可用于遍历数组和对象, 但它输出的只是数组的索引和对象的key, 我们可以通过索引和key取到对应的值. 如下:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">for</span>(<span class="keyword">var</span> item <span class="keyword">in</span> array)&#123;</div><div class="line">  <span class="built_in">console</span>.log(array[item]);</div><div class="line">&#125;<span class="comment">//"囚徒" "过客" "领袖"</span></div><div class="line"><span class="keyword">for</span>(<span class="keyword">var</span> item <span class="keyword">in</span> o)&#123;</div><div class="line">  <span class="built_in">console</span>.log(o[item]);</div><div class="line">&#125;<span class="comment">//"linda" "style" "nick" "length"</span></div></pre></td></tr></table></figure>
+<pre><code class="js">for(var item in array){
+  console.log(array[item]);
+}//&quot;囚徒&quot; &quot;过客&quot; &quot;领袖&quot;
+for(var item in o){
+  console.log(o[item]);
+}//&quot;linda&quot; &quot;style&quot; &quot;nick&quot; &quot;length&quot;
+</code></pre>
 <h3 id="each"><a href="#each" class="headerlink" title="$.each"></a>$.each</h3><p>语法: $.each(array|o, function(i, ele){}) 支持数组和对象</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">$.each(array, <span class="function"><span class="keyword">function</span>(<span class="params">i, ele</span>)</span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(i,ele,<span class="keyword">this</span>==ele);</div><div class="line">&#125;);</div><div class="line"><span class="comment">//0 "囚徒" true</span></div><div class="line"><span class="comment">//1 "过客" true</span></div><div class="line"><span class="comment">//2 "领袖" true</span></div><div class="line">$.each(o, <span class="function"><span class="keyword">function</span>(<span class="params">i, ele</span>)</span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(i,ele,<span class="keyword">this</span>==ele);</div><div class="line">&#125;);</div><div class="line"><span class="comment">//0 "linda" true</span></div><div class="line"><span class="comment">//1 "style" true</span></div><div class="line"><span class="comment">//2 "nick" true</span></div></pre></td></tr></table></figure>
+<pre><code class="js">$.each(array, function(i, ele){
+  console.log(i,ele,this==ele);
+});
+//0 &quot;囚徒&quot; true
+//1 &quot;过客&quot; true
+//2 &quot;领袖&quot; true
+$.each(o, function(i, ele){
+  console.log(i,ele,this==ele);
+});
+//0 &quot;linda&quot; true
+//1 &quot;style&quot; true
+//2 &quot;nick&quot; true
+</code></pre>
 <p>这里我们注意到 <strong>this对象 指向当前属性的值</strong>,这是因为:</p>
 <p>参考jQuery api:</p>
 <blockquote>
@@ -274,14 +322,57 @@
 </blockquote>
 <p>同时,上述遍历时, o 对象的属性中有一个length属性并没有被输出. 这是为什么呢? 请耐心往下看.</p>
 <p>首先, 我们来看看遍历对象o时, 当前的this对象到底是什么?</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">$.each(o, <span class="function"><span class="keyword">function</span>(<span class="params">i, ele</span>)</span>&#123;</div><div class="line">  <span class="keyword">if</span>(<span class="keyword">this</span>==<span class="string">"linda"</span>)&#123;<span class="comment">//我们随机选取第一个属性</span></div><div class="line">    <span class="built_in">console</span>.log(<span class="keyword">this</span>,<span class="keyword">this</span>==ele);</div><div class="line">    $.each(<span class="keyword">this</span>, <span class="function"><span class="keyword">function</span>(<span class="params">e, ele2</span>) </span>&#123;</div><div class="line">    	<span class="built_in">console</span>.log(e, ele2);</div><div class="line">    &#125;);</div><div class="line">  &#125;</div><div class="line">&#125;);</div><div class="line"><span class="comment">//String &#123;0: "l", 1: "i", 2: "n", 3: "d", 4: "a", length: 5, [[PrimitiveValue]]: "linda"&#125; true</span></div><div class="line"><span class="comment">//0 "l"</span></div><div class="line"><span class="comment">//1 "i"</span></div><div class="line"><span class="comment">//2 "n"</span></div><div class="line"><span class="comment">//3 "d"</span></div><div class="line"><span class="comment">//4 "a"</span></div></pre></td></tr></table></figure>
+<pre><code class="js">$.each(o, function(i, ele){
+  if(this==&quot;linda&quot;){//我们随机选取第一个属性
+    console.log(this,this==ele);
+    $.each(this, function(e, ele2) {
+        console.log(e, ele2);
+    });
+  }
+});
+//String {0: &quot;l&quot;, 1: &quot;i&quot;, 2: &quot;n&quot;, 3: &quot;d&quot;, 4: &quot;a&quot;, length: 5, [[PrimitiveValue]]: &quot;linda&quot;} true
+//0 &quot;l&quot;
+//1 &quot;i&quot;
+//2 &quot;n&quot;
+//3 &quot;d&quot;
+//4 &quot;a&quot;
+</code></pre>
 <p>我们发现, this对象等于回调函数的第二个形参. 且它的 length 属性和 [[PrimitiveValue]] 属性并没有被打印出来, 为此我们来查看下length的内部属性.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">$.each(o, <span class="function"><span class="keyword">function</span>(<span class="params">i, ele</span>)</span>&#123;</div><div class="line">  <span class="keyword">if</span>(<span class="keyword">this</span>==<span class="string">"linda"</span>)<span class="comment">//我们还是随机选取第一个属性(这还是随机吗?)</span></div><div class="line">    <span class="built_in">console</span>.log(<span class="built_in">Object</span>.getOwnPropertyDescriptor(<span class="keyword">this</span>, <span class="string">'length'</span>));</div><div class="line">&#125;);</div><div class="line"><span class="comment">//Object &#123;value: 5, writable: false, enumerable: false, configurable: false&#125;</span></div></pre></td></tr></table></figure>
+<pre><code class="js">$.each(o, function(i, ele){
+  if(this==&quot;linda&quot;)//我们还是随机选取第一个属性(这还是随机吗?)
+    console.log(Object.getOwnPropertyDescriptor(this, &#39;length&#39;));
+});
+//Object {value: 5, writable: false, enumerable: false, configurable: false}
+</code></pre>
 <p>可见, this对象的length属性的 enumerable 属性被设置成了false, 这表示该对象不能被列举或遍历, 同时还不能被配置(configurable: false), 也不能被赋值(writable: false).</p>
 <p>此时, 前面遍历 o 对象时,它的 length 属性没有被打印出来的疑问似乎有解了. 让我们来看看 o.length 的内部属性吧.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(<span class="built_in">Object</span>.getOwnPropertyDescriptor(o, <span class="string">'length'</span>));</div><div class="line"><span class="comment">//Object &#123;value: 3, writable: true, enumerable: true, configurable: true&#125;</span></div></pre></td></tr></table></figure>
+<pre><code class="js">console.log(Object.getOwnPropertyDescriptor(o, &#39;length&#39;));
+//Object {value: 3, writable: true, enumerable: true, configurable: true}
+</code></pre>
 <p>o.length 值为3, 可赋值, 可列举, 可配置. 这可不对, 刚刚不是说 enumerable 属性被设置成了false 才不会被遍历吗. 现在该值为 true, 并且还不可遍历. 这不合常理, 自然该有别的原因. 我们接着往下看.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> o = &#123;<span class="number">0</span>:<span class="string">"linda"</span>,<span class="number">1</span>:<span class="string">"style"</span>,<span class="number">2</span>:<span class="string">"nick"</span>,<span class="attr">length</span>:<span class="number">1</span>&#125;; <span class="comment">// 试着改变length的值</span></div><div class="line">$.each(o, <span class="function"><span class="keyword">function</span>(<span class="params">i, ele</span>)</span>&#123;<span class="comment">//再遍历一次</span></div><div class="line">  <span class="built_in">console</span>.log(i,ele);</div><div class="line">&#125;);</div><div class="line"><span class="comment">//0 "linda"</span></div><div class="line"></div><div class="line"><span class="keyword">var</span> o = &#123;<span class="number">0</span>:<span class="string">"linda"</span>,<span class="number">1</span>:<span class="string">"style"</span>,<span class="number">2</span>:<span class="string">"nick"</span>,<span class="attr">length</span>:<span class="number">5</span>&#125;; <span class="comment">// 坚持改变length的值</span></div><div class="line">$.each(o, <span class="function"><span class="keyword">function</span>(<span class="params">i, ele</span>)</span>&#123;<span class="comment">//再遍历一次</span></div><div class="line">  <span class="built_in">console</span>.log(i,ele);</div><div class="line">&#125;);</div><div class="line"><span class="comment">// 0 linda</span></div><div class="line"><span class="comment">// 1 style</span></div><div class="line"><span class="comment">// 2 nick</span></div><div class="line"><span class="comment">// length 5</span></div><div class="line"></div><div class="line"><span class="keyword">var</span> o = &#123;<span class="number">0</span>:<span class="string">"linda"</span>,<span class="number">1</span>:<span class="string">"style"</span>,<span class="number">2</span>:<span class="string">"nick"</span>&#125;; <span class="comment">// 试试去掉length属性</span></div><div class="line">$.each(o, <span class="function"><span class="keyword">function</span>(<span class="params">i, ele</span>)</span>&#123;<span class="comment">//再遍历一次</span></div><div class="line">  <span class="built_in">console</span>.log(i,ele);</div><div class="line">&#125;);</div><div class="line"><span class="comment">// 0 linda</span></div><div class="line"><span class="comment">// 1 style</span></div><div class="line"><span class="comment">// 2 nick</span></div></pre></td></tr></table></figure>
+<pre><code class="js">var o = {0:&quot;linda&quot;,1:&quot;style&quot;,2:&quot;nick&quot;,length:1}; // 试着改变length的值
+$.each(o, function(i, ele){//再遍历一次
+  console.log(i,ele);
+});
+//0 &quot;linda&quot;
+
+var o = {0:&quot;linda&quot;,1:&quot;style&quot;,2:&quot;nick&quot;,length:5}; // 坚持改变length的值
+$.each(o, function(i, ele){//再遍历一次
+  console.log(i,ele);
+});
+// 0 linda
+// 1 style
+// 2 nick
+// length 5
+
+var o = {0:&quot;linda&quot;,1:&quot;style&quot;,2:&quot;nick&quot;}; // 试试去掉length属性
+$.each(o, function(i, ele){//再遍历一次
+  console.log(i,ele);
+});
+// 0 linda
+// 1 style
+// 2 nick
+</code></pre>
 <p>现象明了, 结合jquery源码, 当对象中存在length属性时, $.each 内部使用for循环去遍历对象, 否则它将使用for in循环去遍历, 因此$.each遍历对象遵循如下规律:</p>
 <ul>
 <li>如果对象中存在 length 属性, 遍历深度以length属性为准, 即length多大, 遍历多少个元素.</li>
@@ -294,7 +385,21 @@
 <li>无法使用 break 与 continue 来跳过循环.</li>
 </ul>
 <h3 id="selecter-each"><a href="#selecter-each" class="headerlink" title="$(selecter).each"></a>$(selecter).each</h3><p>语法: $(selecter|array|o).each(function(i, ele){})  支持数组和对象, 该方法基本上与$.each方法相同.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">$(<span class="string">'div'</span>).each(<span class="function"><span class="keyword">function</span>(<span class="params">i,ele</span>)</span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(<span class="keyword">this</span>,i,<span class="keyword">this</span> == ele);</div><div class="line">&#125;);</div><div class="line"><span class="comment">//dom... 0 dom.... true</span></div><div class="line">$(array).each(<span class="function"><span class="keyword">function</span>(<span class="params">i,ele</span>)</span>&#123;<span class="comment">//处理数组</span></div><div class="line">  <span class="keyword">if</span>(<span class="keyword">this</span> == <span class="string">"领袖"</span>)</div><div class="line">  	<span class="built_in">console</span>.log(<span class="keyword">this</span>,i,<span class="keyword">this</span> == ele);</div><div class="line">&#125;);</div><div class="line"><span class="comment">//String &#123;0: "领", 1: "袖", length: 2, [[PrimitiveValue]]: "领袖"&#125; 2 true</span></div><div class="line">$(o).each(<span class="function"><span class="keyword">function</span>(<span class="params">i,ele</span>)</span>&#123;<span class="comment">//处理对象</span></div><div class="line">  <span class="keyword">if</span>(<span class="keyword">this</span> == <span class="string">"nick"</span>)</div><div class="line">  	<span class="built_in">console</span>.log(<span class="keyword">this</span>,i,<span class="keyword">this</span> == ele);</div><div class="line">&#125;);</div><div class="line"><span class="comment">//String &#123;0: "n", 1: "i", 2: "c", 3: "k", length: 4, [[PrimitiveValue]]: "nick"&#125; 2 true</span></div></pre></td></tr></table></figure>
+<pre><code class="js">$(&#39;div&#39;).each(function(i,ele){
+  console.log(this,i,this == ele);
+});
+//dom... 0 dom.... true
+$(array).each(function(i,ele){//处理数组
+  if(this == &quot;领袖&quot;)
+      console.log(this,i,this == ele);
+});
+//String {0: &quot;领&quot;, 1: &quot;袖&quot;, length: 2, [[PrimitiveValue]]: &quot;领袖&quot;} 2 true
+$(o).each(function(i,ele){//处理对象
+  if(this == &quot;nick&quot;)
+      console.log(this,i,this == ele);
+});
+//String {0: &quot;n&quot;, 1: &quot;i&quot;, 2: &quot;c&quot;, 3: &quot;k&quot;, length: 4, [[PrimitiveValue]]: &quot;nick&quot;} 2 true
+</code></pre>
 <p>dom表示div元素, 由于this恒等ele, 说明this也表示div元素, 所以this并不是jquery对象, 而是普通的<a href="https://developer.mozilla.org/en-US/docs/Using_Web_Standards_in_your_Web_Pages/Using_the_W3C_DOM" target="_blank" rel="external"><code>DOM对象</code></a>(可以在this上随意使用DOM方法). 使用$(selecter).each方法,请注意以下几点:</p>
 <ul>
 <li>i: 即序列值 ele: 表示当前被遍历的DOM元素</li>
@@ -302,21 +407,52 @@
 </ul>
 <h3 id="map"><a href="#map" class="headerlink" title="map"></a>map</h3><p>即 Array.prototype.map,该方法只支持数组</p>
 <p>语法: array.map(callback[,thisArg]) map方法使用其提供函数的每次返回结果生成一个新的数组.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> array = [<span class="number">1</span>, <span class="number">4</span>, <span class="number">9</span>];</div><div class="line"><span class="keyword">var</span> roots = array.map(<span class="built_in">Math</span>.sqrt);<span class="comment">//map包裹方法名</span></div><div class="line"><span class="comment">// roots is now [1, 2, 3], array is still [1, 4, 9]</span></div><div class="line"><span class="keyword">var</span> array = [<span class="number">1</span>, <span class="number">4</span>, <span class="number">9</span>];</div><div class="line"><span class="keyword">var</span> doubles = array.map(<span class="function"><span class="keyword">function</span>(<span class="params">num</span>) </span>&#123;<span class="comment">//map包裹方法实体</span></div><div class="line">  <span class="keyword">return</span> num * <span class="number">2</span>;</div><div class="line">&#125;);</div><div class="line"><span class="comment">// doubles is now [2, 8, 18]. array is still [1, 4, 9]</span></div></pre></td></tr></table></figure>
+<pre><code class="js">var array = [1, 4, 9];
+var roots = array.map(Math.sqrt);//map包裹方法名
+// roots is now [1, 2, 3], array is still [1, 4, 9]
+var array = [1, 4, 9];
+var doubles = array.map(function(num) {//map包裹方法实体
+  return num * 2;
+});
+// doubles is now [2, 8, 18]. array is still [1, 4, 9]
+</code></pre>
 <p>实际上,由于map方法被设计成支持 [<code>鸭式辨型</code>][] , 该方法也可以用来处理形似数组的对象, 例如 NodeList.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> elems = <span class="built_in">document</span>.querySelectorAll(<span class="string">'select option:checked'</span>);</div><div class="line"><span class="keyword">var</span> values = <span class="built_in">Array</span>.prototype.map.call(elems, <span class="function"><span class="keyword">function</span>(<span class="params">obj</span>) </span>&#123;</div><div class="line">  <span class="keyword">return</span> obj.value;</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<pre><code class="js">var elems = document.querySelectorAll(&#39;select option:checked&#39;);
+var values = Array.prototype.map.call(elems, function(obj) {
+  return obj.value;
+});
+</code></pre>
 <p>甚至还可以用来处理字符串, 如下:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> map = <span class="built_in">Array</span>.prototype.map;</div><div class="line"><span class="keyword">var</span> array = map.call(<span class="string">'Hello 中国'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">x</span>) </span>&#123; </div><div class="line">  <span class="keyword">return</span> x.charCodeAt(<span class="number">0</span>);</div><div class="line">&#125;);</div><div class="line"><span class="built_in">console</span>.log(array);</div><div class="line"><span class="comment">//[72, 101, 108, 108, 111, 32, 20013, 22269]</span></div></pre></td></tr></table></figure>
+<pre><code class="js">var map = Array.prototype.map;
+var array = map.call(&#39;Hello 中国&#39;, function(x) { 
+  return x.charCodeAt(0);
+});
+console.log(array);
+//[72, 101, 108, 108, 111, 32, 20013, 22269]
+</code></pre>
 <p>map处理字符串的方式多种多样, 例如 反转等.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> str = <span class="string">'12345'</span>;</div><div class="line"><span class="keyword">var</span> output = <span class="built_in">Array</span>.prototype.map.call(str, <span class="function"><span class="keyword">function</span>(<span class="params">x</span>) </span>&#123;</div><div class="line">  <span class="keyword">return</span> x;</div><div class="line">&#125;).reverse().join(<span class="string">''</span>);</div><div class="line"><span class="built_in">console</span>.log(output);<span class="comment">//54321</span></div></pre></td></tr></table></figure>
+<pre><code class="js">var str = &#39;12345&#39;;
+var output = Array.prototype.map.call(str, function(x) {
+  return x;
+}).reverse().join(&#39;&#39;);
+console.log(output);//54321
+</code></pre>
 <p>例如 将字符串数组转换为数字数组, 只需一条语句, 如下:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log([<span class="string">'1'</span>, <span class="string">'2'</span>, <span class="string">'3'</span>].map(<span class="built_in">Number</span>));<span class="comment">//[1,2,3]</span></div></pre></td></tr></table></figure>
+<pre><code class="js">console.log([&#39;1&#39;, &#39;2&#39;, &#39;3&#39;].map(Number));//[1,2,3]
+</code></pre>
 <p>目前map方法被大部分浏览器支持, 除了IE 6,7,8.</p>
 <h3 id="every"><a href="#every" class="headerlink" title="every"></a>every</h3><p>即 Array.prototype.every, 该方法同上述map方法也只支持数组</p>
 <p>语法: arr.every(callback[, thisArg]) every 方法用于检验数组中的每一项是否符合某个条件, 若符合则放回true, 反之则返回false.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">isBigEnough</span>(<span class="params">element, index, array</span>) </span>&#123;</div><div class="line">  <span class="keyword">return</span> element &gt;= <span class="number">10</span>;</div><div class="line">&#125;</div><div class="line">[<span class="number">12</span>, <span class="number">5</span>, <span class="number">8</span>, <span class="number">130</span>, <span class="number">44</span>].every(isBigEnough);   <span class="comment">// false</span></div><div class="line">[<span class="number">12</span>, <span class="number">54</span>, <span class="number">18</span>, <span class="number">130</span>, <span class="number">44</span>].every(isBigEnough); <span class="comment">// true</span></div></pre></td></tr></table></figure>
+<pre><code class="js">function isBigEnough(element, index, array) {
+  return element &gt;= 10;
+}
+[12, 5, 8, 130, 44].every(isBigEnough);   // false
+[12, 54, 18, 130, 44].every(isBigEnough); // true
+</code></pre>
 <p>该方法还有简写方式, 如下:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[<span class="number">12</span>, <span class="number">5</span>, <span class="number">8</span>, <span class="number">130</span>, <span class="number">44</span>].every(<span class="function"><span class="params">elem</span> =&gt;</span> elem &gt;= <span class="number">10</span>); <span class="comment">// false</span></div><div class="line">[<span class="number">12</span>, <span class="number">54</span>, <span class="number">18</span>, <span class="number">130</span>, <span class="number">44</span>].every(<span class="function"><span class="params">elem</span> =&gt;</span> elem &gt;= <span class="number">10</span>); <span class="comment">// true</span></div></pre></td></tr></table></figure>
+<pre><code class="js">[12, 5, 8, 130, 44].every(elem =&gt; elem &gt;= 10); // false
+[12, 54, 18, 130, 44].every(elem =&gt; elem &gt;= 10); // true
+</code></pre>
 <p>以上, 遍历数组和对象的8种方法简单的介绍完, 小结如下:</p>
 <ul>
 <li>for in , $.each , $().each 既支持对象也支持数组遍历;</li>
@@ -327,7 +463,70 @@
 </ul>
 <h3 id="测试各方法效率"><a href="#测试各方法效率" class="headerlink" title="测试各方法效率"></a>测试各方法效率</h3><p>下面我们来测试下上述方法的效率.</p>
 <p>注: array数组默认为空, 依次赋值数组长度为1 000 000, 10 000 000, 100 000 000, 分别在 Chrome, Firefox, Safari 浏览器上进行两轮测试, 取测试时间平均值作为比较对象, 时间单位为ms. 如下是测试代码:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> array = [],</div><div class="line">	length = array.length = <span class="number">10000000</span>;<span class="comment">//(一千万)</span></div><div class="line"><span class="comment">//for(var i=0;i&lt;length;i++)&#123;</span></div><div class="line"><span class="comment">//  array[i] = 'louis';</span></div><div class="line"><span class="comment">//&#125;</span></div><div class="line"><span class="built_in">console</span>.log(array[<span class="number">0</span>]);</div><div class="line"><span class="comment">//-------------------------for</span></div><div class="line"><span class="keyword">var</span> t1 = +<span class="keyword">new</span> <span class="built_in">Date</span>();</div><div class="line"><span class="keyword">for</span>(<span class="keyword">var</span> i=<span class="number">0</span>;i&lt;length;i++)&#123;</div><div class="line">&#125;</div><div class="line"><span class="keyword">var</span> t2 = +<span class="keyword">new</span> <span class="built_in">Date</span>();</div><div class="line"><span class="built_in">console</span>.log(<span class="string">'for:'</span> + (t2-t1));</div><div class="line"></div><div class="line"><span class="comment">//-------------------------do/while</span></div><div class="line"><span class="keyword">var</span> t1 = +<span class="keyword">new</span> <span class="built_in">Date</span>();</div><div class="line"><span class="keyword">var</span> i = <span class="number">0</span>;</div><div class="line"><span class="keyword">do</span> &#123;</div><div class="line">    i++;</div><div class="line">&#125; <span class="keyword">while</span>(i&lt;length);</div><div class="line"><span class="keyword">var</span> t2 = +<span class="keyword">new</span> <span class="built_in">Date</span>();</div><div class="line"><span class="built_in">console</span>.log(<span class="string">'do while:'</span> + (t2-t1));</div><div class="line"></div><div class="line"><span class="comment">//-------------------------forEach</span></div><div class="line"><span class="keyword">var</span> t1 = +<span class="keyword">new</span> <span class="built_in">Date</span>();</div><div class="line">array.forEach(<span class="function"><span class="keyword">function</span>(<span class="params">item</span>)</span>&#123;</div><div class="line">&#125;);</div><div class="line"><span class="keyword">var</span> t2 = +<span class="keyword">new</span> <span class="built_in">Date</span>();</div><div class="line"><span class="built_in">console</span>.log(<span class="string">'forEach:'</span> + (t2-t1));</div><div class="line"></div><div class="line"><span class="comment">//-------------------------for in</span></div><div class="line"><span class="keyword">var</span> t1 = +<span class="keyword">new</span> <span class="built_in">Date</span>();</div><div class="line"><span class="keyword">for</span>(<span class="keyword">var</span> item <span class="keyword">in</span> array)&#123;</div><div class="line">&#125;</div><div class="line"><span class="keyword">var</span> t2 = +<span class="keyword">new</span> <span class="built_in">Date</span>();</div><div class="line"><span class="built_in">console</span>.log(<span class="string">'for in:'</span> + (t2-t1));</div><div class="line"></div><div class="line"><span class="comment">//------------------------- $.each</span></div><div class="line"><span class="keyword">var</span> t1 = +<span class="keyword">new</span> <span class="built_in">Date</span>();</div><div class="line">$.each(array, <span class="function"><span class="keyword">function</span>(<span class="params">i, ele</span>)</span>&#123;</div><div class="line">&#125;);</div><div class="line"><span class="keyword">var</span> t2 = +<span class="keyword">new</span> <span class="built_in">Date</span>();</div><div class="line"><span class="built_in">console</span>.log(<span class="string">'$.each:'</span> + (t2-t1));</div><div class="line"></div><div class="line"><span class="comment">//-------------------------$().each</span></div><div class="line"><span class="keyword">var</span> t1 = +<span class="keyword">new</span> <span class="built_in">Date</span>();</div><div class="line">$(array).each(<span class="function"><span class="keyword">function</span>(<span class="params">i,ele</span>)</span>&#123;</div><div class="line">&#125;);</div><div class="line"><span class="keyword">var</span> t2 = +<span class="keyword">new</span> <span class="built_in">Date</span>();</div><div class="line"><span class="built_in">console</span>.log(<span class="string">'$(ele).each:'</span> + (t2-t1));</div><div class="line"></div><div class="line"><span class="comment">//-------------------------map</span></div><div class="line"><span class="keyword">var</span> t1 = +<span class="keyword">new</span> <span class="built_in">Date</span>();</div><div class="line">array.map(<span class="function"><span class="keyword">function</span>(<span class="params">num</span>)</span>&#123;</div><div class="line">&#125;);</div><div class="line"><span class="keyword">var</span> t2 = +<span class="keyword">new</span> <span class="built_in">Date</span>();</div><div class="line"><span class="built_in">console</span>.log(<span class="string">'map:'</span> + (t2-t1));</div><div class="line"></div><div class="line"><span class="comment">//-------------------------every</span></div><div class="line"><span class="keyword">var</span> t1 = +<span class="keyword">new</span> <span class="built_in">Date</span>();</div><div class="line">array.every(<span class="function"><span class="keyword">function</span>(<span class="params">e,i,arr</span>)</span>&#123;</div><div class="line">&#125;);</div><div class="line"><span class="keyword">var</span> t2 = +<span class="keyword">new</span> <span class="built_in">Date</span>();</div><div class="line"><span class="built_in">console</span>.log(<span class="string">'every:'</span> + (t2-t1));</div></pre></td></tr></table></figure>
+<pre><code class="js">var array = [],
+    length = array.length = 10000000;//(一千万)
+//for(var i=0;i&lt;length;i++){
+//  array[i] = &#39;louis&#39;;
+//}
+console.log(array[0]);
+//-------------------------for
+var t1 = +new Date();
+for(var i=0;i&lt;length;i++){
+}
+var t2 = +new Date();
+console.log(&#39;for:&#39; + (t2-t1));
+
+//-------------------------do/while
+var t1 = +new Date();
+var i = 0;
+do {
+    i++;
+} while(i&lt;length);
+var t2 = +new Date();
+console.log(&#39;do while:&#39; + (t2-t1));
+
+//-------------------------forEach
+var t1 = +new Date();
+array.forEach(function(item){
+});
+var t2 = +new Date();
+console.log(&#39;forEach:&#39; + (t2-t1));
+
+//-------------------------for in
+var t1 = +new Date();
+for(var item in array){
+}
+var t2 = +new Date();
+console.log(&#39;for in:&#39; + (t2-t1));
+
+//------------------------- $.each
+var t1 = +new Date();
+$.each(array, function(i, ele){
+});
+var t2 = +new Date();
+console.log(&#39;$.each:&#39; + (t2-t1));
+
+//-------------------------$().each
+var t1 = +new Date();
+$(array).each(function(i,ele){
+});
+var t2 = +new Date();
+console.log(&#39;$(ele).each:&#39; + (t2-t1));
+
+//-------------------------map
+var t1 = +new Date();
+array.map(function(num){
+});
+var t2 = +new Date();
+console.log(&#39;map:&#39; + (t2-t1));
+
+//-------------------------every
+var t1 = +new Date();
+array.every(function(e,i,arr){
+});
+var t2 = +new Date();
+console.log(&#39;every:&#39; + (t2-t1));
+</code></pre>
 <p>测试机器正常运行 IDE, 编辑器, 浏览器, qq, 微信等常用应用, 系统空闲. 硬件设备如下:</p>
 <ul>
 <li>操作系统: OSX EI Capitan 版本 10.11.5</li>
@@ -517,7 +716,12 @@
 </tbody>
 </table>
 <p>综上, 我们发现for in 循环的性能不稳定, 猜测它可能没有进入循环. 因此将数组各元素进行如下赋值. 重新进行如下两轮测试.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> array = [],</div><div class="line">	length = array.length = <span class="number">1000000</span>;</div><div class="line"><span class="keyword">for</span>(<span class="keyword">var</span> i=<span class="number">0</span>;i&lt;length;i++)&#123;</div><div class="line">  array[i] = <span class="string">'louis'</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<pre><code class="js">var array = [],
+    length = array.length = 1000000;
+for(var i=0;i&lt;length;i++){
+  array[i] = &#39;louis&#39;;
+}
+</code></pre>
 <h4 id="数组赋值后-数组长度为10-6"><a href="#数组赋值后-数组长度为10-6" class="headerlink" title="数组赋值后, 数组长度为10^6"></a>数组赋值后, 数组长度为10^6</h4><table>
 <thead>
 <tr>
@@ -681,7 +885,7 @@
         <a id="btn_donate" class="btn_donate" href="javascript:;" title="打赏"></a>
         <span class="donate_txt">
            &uarr;<br>
-       如果你觉得有用，就支持一下吧！
+       支持一杯咖啡吧！
         </span>
       </div>  
   <div id="donate_guide" class="donate_bar center hidden" >
@@ -748,69 +952,103 @@
 
 
 
-<div class="duoshuo">
-	<div class="ds-thread" data-thread-key="traverse" data-title="详解JS遍历" data-url="http://louiszhai.github.io/2015/12/18/traverse/"></div>
-	<style>
-		#ds-reset .ds-avatar img{width:54px;height:54px;border-radius:27px;-webkit-border-radius:27px;-moz-border-radius:27px;box-shadow:inset 0 -1px 0 #3333sf;-webkit-box-shadow:inset 0 -1px 0 #3333sf;-webkit-transition:0.4s;-webkit-transition:-webkit-transform 0.4s ease-out;transition:transform 0.4s ease-out;-moz-transition:-moz-transform 0.4s ease-out;}
-		#ds-reset .ds-avatar img:hover{box-shadow:0 0 10px #fff;rgba(255,255,255,.6),inset 0 0 20px rgba(255,255,255,1);-webkit-box-shadow:0 0 10px #fff;rgba(255,255,255,.6),inset 0 0 20px rgba(255,255,255,1);transform:rotateZ(360deg);-webkit-transform:rotateZ(360deg);-moz-transform:rotateZ(360deg);}
-		p.ds-powered-by,#ds-sync-checkbox,.ds-sync label{display:none!important;}
-		#ds-reset .ds-rounded-top{-webkit-border-top-right-radius:0px;-webkit-border-top-left-radius:0px;border-top-right-radius:0px;border-top-left-radius:0px;}
-		#ds-thread #ds-reset .ds-textarea-wrapper{background:#fff;border:0;margin-bottom:20px;padding-right:0px;}
-		#ds-thread #ds-reset .ds-textarea-wrapper textarea{min-height:80px;border:1px solid #ccc;padding:10px;-webkit-appearance:none;border-radius:0;background-color:#FFFFFF;border-color:#cccccc;box-shadow:inset 0 1px 2px rgba(0,0,0,0.1);color:rgba(0,0,0,0.75);-webkit-box-sizing:border-box;box-sizing:border-box;-webkit-transition:border-color 0.15s linear,background 0.15s linear;-moz-transition:border-color 0.15s linear,background 0.15s linear;-ms-transition:border-color 0.15s linear,background 0.15s linear;-o-transition:border-color 0.15s linear,background 0.15s linear;transition:border-color 0.15s linear,background 0.15s linear;}
-		/*#ds-thread #ds-reset .ds-textarea-wrapper textarea:focus{border-color:#999999;background:#fafafa;outline:none;}*/
-		#ds-thread #ds-reset .ds-post-options{border-bottom-left-radius:0px;-webkit-border-bottom-left-radius:0px;border:none;background:none!important;}
-		#ds-reset .ds-textarea-wrapper textarea:focus{border-color:#66afe9;outline:0;-webkit-box-shadow:inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);box-shadow:inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);}
-		#ds-thread #ds-reset .ds-post-button:hover,#ds-thread #ds-reset .ds-post-button:focus{
-		    background-color: #51a351;
-		    background-position: 0 -32px;
-		    color:white;
-		}
-		#ds-thread #ds-reset .ds-post-toolbar,#ds-reset .ds-avatar{box-shadow:none;}
-		#ds-thread #ds-reset .ds-textarea-wrapper textarea:focus{
-	    	/*background: none repeat scroll 0 0 #F4FAFF;*/
-	    	border-color:#9DD4FD;
-	    	border-width:1px;
-	    	box-shadow:0 1px 1px rgba(0,0,0,0.075) inset, 0 0 8px rgba(82, 168, 236, 0.6);
-	    	outline:0 none;
-    	}
-		#ds-thread #ds-reset .ds-textarea-wrapper textarea:active{
-	    	/*background: none repeat scroll 0 0 #F4FAFF;*/
-	    	border-width:1px;
-	    	border-color:#9DD4FD;
-	    	box-shadow:0 1px 1px rgba(0,0,0,0.075) inset, 0 0 8px rgba(82, 168, 236, 0.6);
-	    	outline:0 none;
-    	}
-    	#ds-thread #ds-reset .ds-post-button{
-    		box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset, 0 1px 2px rgba(0, 0, 0, 0.05);
-		    border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
-		    border-width: 1px;
-		    border-style: solid;
-		    border-radius: 3px;
-		    background: #5bb75b;
-		    color:white;
-		    text-shadow:none;
-		    transition:background-color 300ms ease-out;
-    	}
-    	#ds-reset .ds-avatar{
-    		background-color:initial;
-    	}
-
-	</style>
-	<script type="text/javascript">
-	var duoshuoQuery = {short_name:"true"};
-	(function() {
-		var ds = document.createElement('script');
-		ds.type = 'text/javascript';ds.async = true;
-		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-		ds.charset = 'UTF-8';
-		(document.getElementsByTagName('head')[0] 
-		 || document.getElementsByTagName('body')[0]).appendChild(ds);
-	})();
-	</script>
-</div>
 
 
 
+
+  <style>
+/*
+    Name:     Kimbie (light)
+    Author:   Jan T. Sott
+    License:  Creative Commons Attribution-ShareAlike 4.0 Unported License
+    URL:      https://github.com/idleberg/Kimbie-highlight.js
+*/
+
+/* Kimbie Comment */
+.hljs-comment,
+.hljs-quote {
+  color: #a57a4c;
+}
+
+/* Kimbie Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-meta {
+  color: #dc3958;
+}
+
+/* Kimbie Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-deletion,
+.hljs-link {
+  color: #f79a32;
+}
+
+/* Kimbie Yellow */
+.hljs-title,
+.hljs-section,
+.hljs-attribute {
+  color: #f06431;
+}
+
+/* Kimbie Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+  color: #889b4a;
+}
+
+/* Kimbie Purple */
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-function {
+  color: #98676a;
+}
+
+.hljs {
+  display: block;
+  overflow-x: auto;
+  /*background: #fbebd4;*/
+  color: #84613d;
+  padding: 0.5em;
+}
+
+.hljs-emphasis {
+  font-style: italic;
+}
+
+.hljs-strong {
+  font-weight: bold;
+}
+</style>
+  <script src="//cdn.bootcss.com/highlight.js/9.2.0/highlight.min.js"></script>
+  <script>
+    // hljs.initHighlightingOnLoad();
+    [].slice.call(document.querySelectorAll('pre code')).forEach(function(block, i) {
+      hljs.highlightBlock(block);
+      var lines = block.innerText.split('\n').length - 1;
+      var ul = document.createElement('ul');
+      ul.className = 'pre-numbering';
+      block.className += ' has-numbering';
+      block.parentNode.appendChild(ul);
+      for(i=1;i<=lines;i++){
+        var li = document.createElement('li');
+        li.innerText = i;
+        ul.appendChild(li);
+      }
+    });
+  </script>
 </div>
         <link rel="stylesheet" href="/css/content.css" type="text/css">
 <footer id="footer">
