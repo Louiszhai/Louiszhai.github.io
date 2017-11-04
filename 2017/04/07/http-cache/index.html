@@ -7,6 +7,7 @@
   <title>浏览器缓存机制剖析 | louis blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="http-cache 浏览器缓存策略 浏览器缓存机制 304协商缓存 强缓存 Age Date Vary Cache-Control Expires ETag Last-Modified Pragma If-Modified-Since If-Unmodified-Since If-Match If-None-Match no-cache max-age max-stale min-fresh m">
+<meta name="keywords" content="Web">
 <meta property="og:type" content="article">
 <meta property="og:title" content="浏览器缓存机制剖析">
 <meta property="og:url" content="http://louiszhai.github.io/2017/04/07/http-cache/index.html">
@@ -20,7 +21,7 @@
 <meta property="og:image" content="http://louiszhai.github.io/docImages/http-cache02.png">
 <meta property="og:image" content="http://louiszhai.github.io/docImages/http-cache04.png">
 <meta property="og:image" content="http://louiszhai.github.io/docImages/http-cache05.png">
-<meta property="og:updated_time" content="2017-04-26T06:23:04.000Z">
+<meta property="og:updated_time" content="2017-10-11T08:32:28.573Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="浏览器缓存机制剖析">
 <meta name="twitter:description" content="http-cache 浏览器缓存策略 浏览器缓存机制 304协商缓存 强缓存 Age Date Vary Cache-Control Expires ETag Last-Modified Pragma If-Modified-Since If-Unmodified-Since If-Match If-None-Match no-cache max-age max-stale min-fresh m">
@@ -68,6 +69,11 @@
 							<div class="ribbon"></div>
 						</div>
 						
+						<div class="icon-wrap icon-link hide" data-idx="2">
+							<div class="loopback_l"></div>
+							<div class="loopback_r"></div>
+						</div>
+						
 						
 					</div>
 					
@@ -77,6 +83,8 @@
 					<ul class="tips-inner">
 						<li>Menu</li>
 						<li>Tags</li>
+						
+						<li>Links</li>
 						
 						
 					</ul>
@@ -110,11 +118,23 @@
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud" id="js-tagcloud">
-						<a href="/tags/CSS/" style="font-size: 16.67px;">CSS</a> <a href="/tags/JavaScript/" style="font-size: 20px;">JavaScript</a> <a href="/tags/Web/" style="font-size: 16.67px;">Web</a> <a href="/tags/XSS/" style="font-size: 10px;">XSS</a> <a href="/tags/css/" style="font-size: 13.33px;">css</a> <a href="/tags/javascript/" style="font-size: 10px;">javascript</a>
+						<a href="/tags/CSS/" style="font-size: 16.67px;">CSS</a> <a href="/tags/JavaScript/" style="font-size: 20px;">JavaScript</a> <a href="/tags/JavaScript-Canvas/" style="font-size: 10px;">JavaScript Canvas</a> <a href="/tags/Tool/" style="font-size: 10px;">Tool</a> <a href="/tags/Web/" style="font-size: 16.67px;">Web</a> <a href="/tags/XSS/" style="font-size: 10px;">XSS</a> <a href="/tags/css/" style="font-size: 13.33px;">css</a> <a href="/tags/javascript/" style="font-size: 10px;">javascript</a>
 					</div>
 				</section>
 				
 				
+				
+				<section class="switch-part switch-part3">
+					<div id="js-friends">
+					
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://www.ruanyifeng.com/blog/">阮一峰的网络日志</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://www.zhangxinxu.com/wordpress/category/js/">张鑫旭-鑫空间-鑫生活</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://evanyou.me/">尤雨溪主页</a>
+			        
+			        </div>
+				</section>
 				
 
 				
@@ -409,12 +429,19 @@
 <p>由于客户端总是采用最保守的缓存策略, 因此, 4月9日后, 对于该资源的请求将重新向服务器发起验证.</p>
 <h3 id="Pragma"><a href="#Pragma" class="headerlink" title="Pragma"></a><strong>Pragma</strong></h3><p>http1.0字段, 通常设置为<code>Pragma:no-cache</code>, 作用同<code>Cache-Control:no-cache</code>. 当一个no-cache请求发送给一个不遵循HTTP/1.1的服务器时, 客户端应该包含pragma指令. 为此, 勾选☑️ 上disable cache时, 浏览器自动带上了pragma字段. 如下:</p>
 <p><img src="http://louiszhai.github.io/docImages/http-cache03.png" alt="Pragma:no-cache"></p>
-<h3 id="Expires"><a href="#Expires" class="headerlink" title="Expires"></a><strong>Expires</strong></h3><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Expires:Wed, 05 Apr 2017 00:55:35 GMT</div></pre></td></tr></table></figure>
+<h3 id="Expires"><a href="#Expires" class="headerlink" title="Expires"></a><strong>Expires</strong></h3><pre><code class="http">Expires:Wed, 05 Apr 2017 00:55:35 GMT
+</code></pre>
 <p>即到期时间, 以服务器时间为参考系, 其优先级比 <code>Cache-Control:max-age</code> 低, 两者同时出现在响应头时, <code>Expires</code>将被后者覆盖. 如果<code>Expires</code>, <code>Cache-Control: max-age</code>, 或 <code>Cache-Control:s-maxage</code> 都没有在响应头中出现, 并且也没有其它缓存的设置, 那么浏览器默认会采用一个启发式的算法, 通常会取响应头的<code>Date_value - Last-Modified_value</code>值的10%作为缓存时间.</p>
 <p>如下资源便采取了启发式缓存算法.</p>
 <p><img src="http://louiszhai.github.io/docImages/http-cache06.png" alt="启发式缓存生效"></p>
 <p>其缓存时间为 <code>(Date_value - Last-Modified_value) * 10%</code>, 计算如下:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> Date_value = <span class="keyword">new</span> <span class="built_in">Date</span>(<span class="string">'Thu, 06 Apr 2017 01:30:56 GMT'</span>).getTime();</div><div class="line"><span class="keyword">const</span> LastModified_value = <span class="keyword">new</span> <span class="built_in">Date</span>(<span class="string">'Thu, 01 Dec 2016 06:23:23 GMT'</span>).getTime();</div><div class="line"><span class="keyword">const</span> cacheTime = (Date_value - LastModified_value) / <span class="number">10</span>;</div><div class="line"><span class="keyword">const</span> Expires_timestamp = Date_value + cacheTime;</div><div class="line"><span class="keyword">const</span> Expires_value = <span class="keyword">new</span> <span class="built_in">Date</span>(Expires_timestamp);</div><div class="line"><span class="built_in">console</span>.log(<span class="string">'Expires:'</span>, Expires_value); <span class="comment">// Expires: Tue Apr 18 2017 23:25:41 GMT+0800 (CST)</span></div></pre></td></tr></table></figure>
+<pre><code class="js">const Date_value = new Date(&#39;Thu, 06 Apr 2017 01:30:56 GMT&#39;).getTime();
+const LastModified_value = new Date(&#39;Thu, 01 Dec 2016 06:23:23 GMT&#39;).getTime();
+const cacheTime = (Date_value - LastModified_value) / 10;
+const Expires_timestamp = Date_value + cacheTime;
+const Expires_value = new Date(Expires_timestamp);
+console.log(&#39;Expires:&#39;, Expires_value); // Expires: Tue Apr 18 2017 23:25:41 GMT+0800 (CST)
+</code></pre>
 <p>可见该资源将于2017年4月18日23点25分41秒过期, 尝试以下两步进行验证:</p>
 <p>1) 试着把本地时间修改为2017年4月18日23点25分40秒, 迅速刷新页面, 发现强缓存依然有效(依旧是<code>200 OK (from disk cache)</code>).</p>
 <p>2) 然后又修改本地时间为2017年4月18日23点26分40秒(即往后拨1分钟), 刷新页面, 发现缓存已过期, 此时浏览器重新向服务器发起了验证, 且命中了304协商缓存, 如下所示.</p>
@@ -423,7 +450,8 @@
 <p><img src="http://louiszhai.github.io/docImages/http-cache08.png" alt="本地时间恢复正常, 缓存依然有效"></p>
 <p>从<code>⚠️ Provisional headers are shown</code> 和Date字段可以看出来, 浏览器并未发出请求, 缓存依然有效, 只不过此时Status Code显示为200 OK. (甚至我还专门打开了charles, 也没有发现该资源的任何请求, 可见这个200 OK多少有些误导人的意味)</p>
 <p>可见, 启发式缓存算法采用的缓存时间可长可短, 因此对于常规资源, 建议明确设置缓存时间(如指定max-age 或 expires).</p>
-<h3 id="ETag"><a href="#ETag" class="headerlink" title="ETag"></a><strong>ETag</strong></h3><figure class="highlight http"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="attribute">ETag:"fcb82312d92970bdf0d18a4eca08ebc7efede4fe"</span></div></pre></td></tr></table></figure>
+<h3 id="ETag"><a href="#ETag" class="headerlink" title="ETag"></a><strong>ETag</strong></h3><pre><code class="http">ETag:&quot;fcb82312d92970bdf0d18a4eca08ebc7efede4fe&quot;
+</code></pre>
 <p>实体标签, 服务器资源的唯一标识符, 浏览器可以根据ETag值缓存数据, 节省带宽. 如果资源已经改变, etag可以帮助防止同步更新资源的相互覆盖. ETag 优先级比 Last-Modified 高.</p>
 <h3 id="If-Match"><a href="#If-Match" class="headerlink" title="If-Match"></a><strong>If-Match</strong></h3><p>语法: <em>If-Match: ETag_value</em> 或者 <em>If-Match: ETag_value, ETag_value, …</em></p>
 <p>缓存校验字段, 其值为上次收到的一个或多个<code>etag</code> 值. 常用于判断条件是否满足, 如下两种场景:</p>
@@ -438,10 +466,12 @@
 <li>对于其他更新服务器资源的请求, 如果其etags列表匹配, 服务器将执行更新, 反之, 将返回412(Precondition Failed)状态码的响应.</li>
 </ul>
 <h3 id="Last-Modified"><a href="#Last-Modified" class="headerlink" title="Last-Modified"></a><strong>Last-Modified</strong></h3><p>语法: <em>Last-Modified: 星期,日期 月份 年份 时:分:秒 GMT</em></p>
-<figure class="highlight http"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="attribute">Last-Modified</span>: Tue, 04 Apr 2017 10:01:15 GMT</div></pre></td></tr></table></figure>
+<pre><code class="http">Last-Modified: Tue, 04 Apr 2017 10:01:15 GMT
+</code></pre>
 <p>用于标记请求资源的最后一次修改时间, 格式为GMT(格林尼治标准时间). 如可用 <code>new Date().toGMTString()</code>获取当前GMT时间. Last-Modified 是 ETag 的fallback机制, 优先级比 ETag 低, 且只能精确到秒, 因此不太适合短时间内频繁改动的资源. 不仅如此, 服务器端的静态资源, 通常需要编译打包, 可能出现资源内容没有改变, 而Last-Modified却改变的情况.</p>
 <h3 id="If-Modified-Since"><a href="#If-Modified-Since" class="headerlink" title="If-Modified-Since"></a><strong>If-Modified-Since</strong></h3><p>语法同上, 如:</p>
-<figure class="highlight http"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="attribute">If-Modified-Since</span>: Tue, 04 Apr 2017 10:12:27 GMT</div></pre></td></tr></table></figure>
+<pre><code class="http">If-Modified-Since: Tue, 04 Apr 2017 10:12:27 GMT
+</code></pre>
 <p>缓存校验字段, 其值为上次响应头的Last-Modified值, 若与请求资源当前的Last-Modified值相同, 那么将返回304状态码的响应, 反之, 将返回200状态码响应.</p>
 <h3 id="If-Unmodified-Since"><a href="#If-Unmodified-Since" class="headerlink" title="If-Unmodified-Since"></a><strong>If-Unmodified-Since</strong></h3><p>缓存校验字段, 语法同上. 表示资源未修改则正常执行更新, 否则返回412(Precondition Failed)状态码的响应. 常用于如下两种场景:</p>
 <ul>
@@ -461,25 +491,34 @@
 <p>如下忽略首次访问, 第二次通过 <code>If-Modified-Since</code> 命中了304协商缓存.</p>
 <p><img src="http://louiszhai.github.io/docImages/http-cache04.png" alt="304"></p>
 <p>协商缓存的响应结果, 不仅验证了资源的有效性, 同时还更新了浏览器缓存. 主要更新内容如下:</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">Age:0</div><div class="line">Cache-Control:max-age=600</div><div class="line">Date: Wed, 05 Apr 2017 13:09:36 GMT</div><div class="line">Expires:Wed, 05 Apr 2017 00:55:35 GMT</div></pre></td></tr></table></figure>
+<pre><code class="http">Age:0
+Cache-Control:max-age=600
+Date: Wed, 05 Apr 2017 13:09:36 GMT
+Expires:Wed, 05 Apr 2017 00:55:35 GMT
+</code></pre>
 <p><code>Age:0</code> 表示命中了代理服务器的缓存, age值为0表示代理服务器刚刚刷新了一次缓存.</p>
 <p><code>Cache-Control:max-age=600</code> 覆盖 <code>Expires</code> 字段, 表示从Date_value, 即 <code>Wed, 05 Apr 2017 13:09:36 GMT</code> 起, 10分钟之后缓存过期. 因此10分钟之内访问, 将会命中强缓存, 如下所示:</p>
 <p><img src="http://louiszhai.github.io/docImages/http-cache05.png" alt="200 from cache"></p>
 <p>当然, 除了上述与缓存直接相关的字段外, http header中还包括如下间接相关的字段.</p>
 <h3 id="Age"><a href="#Age" class="headerlink" title="Age"></a><strong>Age</strong></h3><p>出现此字段, 表示命中代理服务器的缓存. 它指的是代理服务器对于请求资源的已缓存时间, 单位为秒. 如下:</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Age:2383321</div><div class="line">Date:Wed, 08 Mar 2017 16:12:42 GMT</div></pre></td></tr></table></figure>
+<pre><code class="http">Age:2383321
+Date:Wed, 08 Mar 2017 16:12:42 GMT
+</code></pre>
 <p>以上指的是, 代理服务器在2017年3月8日16:12:42时向源服务器发起了对该资源的请求, 目前已缓存了该资源2383321秒.</p>
 <h3 id="Date"><a href="#Date" class="headerlink" title="Date"></a><strong>Date</strong></h3><p>指的是响应生成的时间. 请求经过代理服务器时, 返回的Date未必是最新的, 通常这个时候, 代理服务器将增加一个Age字段告知该资源已缓存了多久.</p>
 <h3 id="Vary"><a href="#Vary" class="headerlink" title="Vary"></a><strong>Vary</strong></h3><p>对于服务器而言, 资源文件可能不止一个版本, 比如说压缩和未压缩, 针对不同的客户端, 通常需要返回不同的资源版本. 比如说老式的浏览器可能不支持解压缩, 这个时候, 就需要返回一个未压缩的版本; 对于新的浏览器, 支持压缩, 返回一个压缩的版本, 有利于节省带宽, 提升体验. 那么怎么区分这个版本呢, 这个时候就需要Vary了.</p>
 <p>服务器通过指定<code>Vary: Accept-Encoding</code>, 告知代理服务器, 对于这个资源, 需要缓存两个版本: 压缩和未压缩. 这样老式浏览器和新的浏览器, 通过代理, 就分别拿到了未压缩和压缩版本的资源, 避免了都拿同一个资源的尴尬.</p>
-<figure class="highlight http"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="attribute">Vary:Accept-Encoding,User-Agent</span></div></pre></td></tr></table></figure>
+<pre><code class="http">Vary:Accept-Encoding,User-Agent
+</code></pre>
 <p>如上设置, 代理服务器将针对是否压缩和浏览器类型两个维度去缓存资源. 如此一来, 同一个url, 就能针对PC和Mobile返回不同的缓存内容.</p>
 <h3 id="怎么让浏览器不缓存静态资源"><a href="#怎么让浏览器不缓存静态资源" class="headerlink" title="怎么让浏览器不缓存静态资源"></a><strong>怎么让浏览器不缓存静态资源</strong></h3><p>实际上, 工作中很多场景都需要避免浏览器缓存, 除了浏览器隐私模式, 请求时想要禁用缓存, 还可以设置请求头: <code>Cache-Control: no-cache, no-store, must-revalidate</code> .</p>
 <p>当然, 还有一种常用做法: 即给请求的资源增加一个版本号, 如下:</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">"stylesheet"</span> <span class="attr">type</span>=<span class="string">"text/css"</span> <span class="attr">href</span>=<span class="string">"../css/style.css?version=1.8.9"</span>/&gt;</span></div></pre></td></tr></table></figure>
+<pre><code class="html">&lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;../css/style.css?version=1.8.9&quot;/&gt;
+</code></pre>
 <p>这样做的好处就是你可以自由控制什么时候加载最新的资源.</p>
 <p>不仅如此, HTML也可以禁用缓存, 即在页面的\<head\>节点中加入\<meta\>标签, 代码如下:</meta\></head\></p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">"Cache-Control"</span> <span class="attr">content</span>=<span class="string">"no-cache, no-store, must-revalidate"</span>/&gt;</span></div></pre></td></tr></table></figure>
+<pre><code class="html">&lt;meta http-equiv=&quot;Cache-Control&quot; content=&quot;no-cache, no-store, must-revalidate&quot;/&gt;
+</code></pre>
 <p>上述虽能禁用缓存, 但只有部分浏览器支持, 而且由于代理不解析HTML文档, 故代理服务器也不支持这种方式.</p>
 <h3 id="IE8的异常表现"><a href="#IE8的异常表现" class="headerlink" title="IE8的异常表现"></a><strong>IE8的异常表现</strong></h3><p>实际上, 上述缓存有关的规律, 并非所有浏览器都完全遵循. 比如说IE8.</p>
 <p>资源缓存是否有效相关.</p>
@@ -549,9 +588,9 @@
 <li><a href="http://stackoverflow.com/questions/1046966/whats-the-difference-between-cache-control-max-age-0-and-no-cache" target="_blank" rel="external">http - What’s the difference between Cache-Control: max-age=0 and no-cache? - Stack Overflow</a></li>
 <li><a href="http://www.baitouwei.com/2016/04/20/App-%E7%BC%93%E5%AD%98%E6%96%B9%E6%A1%88%EF%BC%9AHttp-%E7%BC%93%E5%AD%98/" target="_blank" rel="external">App 缓存方案：Http 缓存 · baitouwei</a></li>
 <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control" target="_blank" rel="external">Cache-Control - HTTP | MDN</a></li>
-<li><a href="https://mp.weixin.qq.com/s?__biz=MzA3NTYzODYzMg==&amp;mid=2653578381&amp;idx=1&amp;sn=3f676e2b2e08bcff831c69d31cf51c51&amp;key=dde62796d24517c892043e67f2520e046c13fc0558822ef7ba7fbe8003ddde05e22230fb4ccb2c31133df2a507940c5d4561c7b4f4570969a47cf1388ff57e4bfea70a3810f3fc805e2a5d9aa3192439&amp;ascene=0&amp;uin=MTM4MjU5NzA0MA%3D%3D&amp;devicetype=iMac+MacBookPro12%2C1+OSX+OSX+10.11.6+build(15G1212)&amp;version=12010110&amp;nettype=WIFI&amp;fontScale=100&amp;pass_ticket=n3plsW%2FV7Vb6O9hKzPNig5MYpXUoJo3tNUNxhJ5Jh6e9AS%2BRXmvJPbIzUeUmL3S2" target="_blank" rel="external">彻底弄懂 Http 缓存机制 - 基于缓存策略三要素分解法</a></li>
+<li>[彻底弄懂 Http 缓存机制 - 基于缓存策略三要素分解法][8]</li>
 </ul>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.2.7/raphael.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/flowchart/1.6.5/flowchart.min.js"></script><textarea id="flowchart-0-code" style="display: none">st=>start: 发起请求|pass
+<p>[8]: <a href="https://mp.weixin.qq.com/s?__biz=MzA3NTYzODYzMg==&amp;mid=2653578381&amp;idx=1&amp;sn=3f676e2b2e08bcff831c69d31cf51c51&amp;key=dde62796d24517c892043e67f2520e046c13fc0558822ef7ba7fbe8003ddde05e22230fb4ccb2c31133df2a507940c5d4561c7b4f4570969a47cf1388ff57e4bfea70a3810f3fc805e2a5d9aa3192439&amp;ascene=0&amp;uin=MTM4MjU5NzA0MA%3D%3D&amp;devicetype=iMac+MacBookPro12%2C1+OSX+OSX+10.11.6+build(15G1212)&amp;version=12010110&amp;nettype=WIFI&amp;fontScale=100&amp;pass_ticket=n3plsW%2FV7Vb6O9hKzPNig5MYpXUoJo3tNUNxhJ5Jh6e9AS%2BRXmvJPbIzUeUmL3S2" target="_blank" rel="external">https://mp.weixin.qq.com/s?__biz=MzA3NTYzODYzMg==&amp;mid=2653578381&amp;idx=1&amp;sn=3f676e2b2e08bcff831c69d31cf51c51&amp;key=dde62796d24517c892043e67f2520e046c13fc0558822ef7ba7fbe8003ddde05e22230fb4ccb2c31133df2a507940c5d4561c7b4f4570969a47cf1388ff57e4bfea70a3810f3fc805e2a5d9aa3192439&amp;ascene=0&amp;uin=MTM4MjU5NzA0MA%3D%3D&amp;devicetype=iMac+MacBookPro12%2C1+OSX+OSX+10.11.6+build(15G1212)&amp;version=12010110&amp;nettype=WIFI&amp;fontScale=100&amp;pass_ticket=n3plsW%2FV7Vb6O9hKzPNig5MYpXUoJo3tNUNxhJ5Jh6e9AS%2BRXmvJPbIzUeUmL3S2</a><script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.2.7/raphael.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/flowchart/1.6.5/flowchart.min.js"></script><textarea id="flowchart-0-code" style="display: none">st=>start: 发起请求|pass
 e=>end: 载入资源
 c1=>condition: 是否已缓存?
 c2=>condition: [过期策略]-
@@ -572,7 +611,8 @@ c1(no)->op2
 c2(yes, right)->op1(right)->c3
 c2(no)->e
 c3(yes, right)->op3->io2->e
-c3(no)->op2->io1->e</textarea><textarea id="flowchart-0-options" style="display: none">{"scale":1,"line-width":1,"line-length":50,"text-margin":10,"font-size":12,"maxWidth":3,"symbols":{"start":{"fill":"#B5CA92","element-color":"green"},"condition":{"fill":"#58C4A3","yes-text":"是","no-text":"否"},"operation":{"fill":"#F1D5A6"},"inputoutput":{"fill":"#C59E63"},"end":{"fill":"#92A8CD"}}}</textarea><script>  var code = document.getElementById("flowchart-0-code").value;  var options = JSON.parse(document.getElementById("flowchart-0-options").value);  var diagram = flowchart.parse(code);  diagram.drawSVG("flowchart-0", options);</script>
+c3(no)->op2->io1->e</textarea><textarea id="flowchart-0-options" style="display: none">{"scale":1,"line-width":1,"line-length":50,"text-margin":10,"font-size":12,"maxWidth":3,"symbols":{"start":{"fill":"#B5CA92","element-color":"green"},"condition":{"fill":"#58C4A3","yes-text":"是","no-text":"否"},"operation":{"fill":"#F1D5A6"},"inputoutput":{"fill":"#C59E63"},"end":{"fill":"#92A8CD"}}}</textarea><script>  var code = document.getElementById("flowchart-0-code").value;  var options = JSON.parse(decodeURIComponent(document.getElementById("flowchart-0-options").value));  var diagram = flowchart.parse(code);  diagram.drawSVG("flowchart-0", options);</script></p>
+
       
     </div>
     
@@ -585,7 +625,7 @@ c3(no)->op2->io1->e</textarea><textarea id="flowchart-0-options" style="display:
         <a id="btn_donate" class="btn_donate" href="javascript:;" title="打赏"></a>
         <span class="donate_txt">
            &uarr;<br>
-       如果你觉得有用，就支持一下吧！
+       支持一杯咖啡吧！
         </span>
       </div>  
   <div id="donate_guide" class="donate_bar center hidden" >
@@ -652,69 +692,103 @@ c3(no)->op2->io1->e</textarea><textarea id="flowchart-0-options" style="display:
 
 
 
-<div class="duoshuo">
-	<div class="ds-thread" data-thread-key="http-cache" data-title="浏览器缓存机制剖析" data-url="http://louiszhai.github.io/2017/04/07/http-cache/"></div>
-	<style>
-		#ds-reset .ds-avatar img{width:54px;height:54px;border-radius:27px;-webkit-border-radius:27px;-moz-border-radius:27px;box-shadow:inset 0 -1px 0 #3333sf;-webkit-box-shadow:inset 0 -1px 0 #3333sf;-webkit-transition:0.4s;-webkit-transition:-webkit-transform 0.4s ease-out;transition:transform 0.4s ease-out;-moz-transition:-moz-transform 0.4s ease-out;}
-		#ds-reset .ds-avatar img:hover{box-shadow:0 0 10px #fff;rgba(255,255,255,.6),inset 0 0 20px rgba(255,255,255,1);-webkit-box-shadow:0 0 10px #fff;rgba(255,255,255,.6),inset 0 0 20px rgba(255,255,255,1);transform:rotateZ(360deg);-webkit-transform:rotateZ(360deg);-moz-transform:rotateZ(360deg);}
-		p.ds-powered-by,#ds-sync-checkbox,.ds-sync label{display:none!important;}
-		#ds-reset .ds-rounded-top{-webkit-border-top-right-radius:0px;-webkit-border-top-left-radius:0px;border-top-right-radius:0px;border-top-left-radius:0px;}
-		#ds-thread #ds-reset .ds-textarea-wrapper{background:#fff;border:0;margin-bottom:20px;padding-right:0px;}
-		#ds-thread #ds-reset .ds-textarea-wrapper textarea{min-height:80px;border:1px solid #ccc;padding:10px;-webkit-appearance:none;border-radius:0;background-color:#FFFFFF;border-color:#cccccc;box-shadow:inset 0 1px 2px rgba(0,0,0,0.1);color:rgba(0,0,0,0.75);-webkit-box-sizing:border-box;box-sizing:border-box;-webkit-transition:border-color 0.15s linear,background 0.15s linear;-moz-transition:border-color 0.15s linear,background 0.15s linear;-ms-transition:border-color 0.15s linear,background 0.15s linear;-o-transition:border-color 0.15s linear,background 0.15s linear;transition:border-color 0.15s linear,background 0.15s linear;}
-		/*#ds-thread #ds-reset .ds-textarea-wrapper textarea:focus{border-color:#999999;background:#fafafa;outline:none;}*/
-		#ds-thread #ds-reset .ds-post-options{border-bottom-left-radius:0px;-webkit-border-bottom-left-radius:0px;border:none;background:none!important;}
-		#ds-reset .ds-textarea-wrapper textarea:focus{border-color:#66afe9;outline:0;-webkit-box-shadow:inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);box-shadow:inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);}
-		#ds-thread #ds-reset .ds-post-button:hover,#ds-thread #ds-reset .ds-post-button:focus{
-		    background-color: #51a351;
-		    background-position: 0 -32px;
-		    color:white;
-		}
-		#ds-thread #ds-reset .ds-post-toolbar,#ds-reset .ds-avatar{box-shadow:none;}
-		#ds-thread #ds-reset .ds-textarea-wrapper textarea:focus{
-	    	/*background: none repeat scroll 0 0 #F4FAFF;*/
-	    	border-color:#9DD4FD;
-	    	border-width:1px;
-	    	box-shadow:0 1px 1px rgba(0,0,0,0.075) inset, 0 0 8px rgba(82, 168, 236, 0.6);
-	    	outline:0 none;
-    	}
-		#ds-thread #ds-reset .ds-textarea-wrapper textarea:active{
-	    	/*background: none repeat scroll 0 0 #F4FAFF;*/
-	    	border-width:1px;
-	    	border-color:#9DD4FD;
-	    	box-shadow:0 1px 1px rgba(0,0,0,0.075) inset, 0 0 8px rgba(82, 168, 236, 0.6);
-	    	outline:0 none;
-    	}
-    	#ds-thread #ds-reset .ds-post-button{
-    		box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset, 0 1px 2px rgba(0, 0, 0, 0.05);
-		    border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
-		    border-width: 1px;
-		    border-style: solid;
-		    border-radius: 3px;
-		    background: #5bb75b;
-		    color:white;
-		    text-shadow:none;
-		    transition:background-color 300ms ease-out;
-    	}
-    	#ds-reset .ds-avatar{
-    		background-color:initial;
-    	}
-
-	</style>
-	<script type="text/javascript">
-	var duoshuoQuery = {short_name:"true"};
-	(function() {
-		var ds = document.createElement('script');
-		ds.type = 'text/javascript';ds.async = true;
-		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-		ds.charset = 'UTF-8';
-		(document.getElementsByTagName('head')[0] 
-		 || document.getElementsByTagName('body')[0]).appendChild(ds);
-	})();
-	</script>
-</div>
 
 
 
+
+  <style>
+/*
+    Name:     Kimbie (light)
+    Author:   Jan T. Sott
+    License:  Creative Commons Attribution-ShareAlike 4.0 Unported License
+    URL:      https://github.com/idleberg/Kimbie-highlight.js
+*/
+
+/* Kimbie Comment */
+.hljs-comment,
+.hljs-quote {
+  color: #a57a4c;
+}
+
+/* Kimbie Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-meta {
+  color: #dc3958;
+}
+
+/* Kimbie Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-deletion,
+.hljs-link {
+  color: #f79a32;
+}
+
+/* Kimbie Yellow */
+.hljs-title,
+.hljs-section,
+.hljs-attribute {
+  color: #f06431;
+}
+
+/* Kimbie Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+  color: #889b4a;
+}
+
+/* Kimbie Purple */
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-function {
+  color: #98676a;
+}
+
+.hljs {
+  display: block;
+  overflow-x: auto;
+  /*background: #fbebd4;*/
+  color: #84613d;
+  padding: 0.5em;
+}
+
+.hljs-emphasis {
+  font-style: italic;
+}
+
+.hljs-strong {
+  font-weight: bold;
+}
+</style>
+  <script src="//cdn.bootcss.com/highlight.js/9.2.0/highlight.min.js"></script>
+  <script>
+    // hljs.initHighlightingOnLoad();
+    [].slice.call(document.querySelectorAll('pre code')).forEach(function(block, i) {
+      hljs.highlightBlock(block);
+      var lines = block.innerText.split('\n').length - 1;
+      var ul = document.createElement('ul');
+      ul.className = 'pre-numbering';
+      block.className += ' has-numbering';
+      block.parentNode.appendChild(ul);
+      for(i=1;i<=lines;i++){
+        var li = document.createElement('li');
+        li.innerText = i;
+        ul.appendChild(li);
+      }
+    });
+  </script>
 </div>
         <link rel="stylesheet" href="/css/content.css" type="text/css">
 <footer id="footer">
