@@ -3033,19 +3033,17 @@ Date:Wed, 08 Mar 2017 16:12:42 GMT
 </tbody>
 </table>
 <hr>
-<p>本问就讨论这么多内容,大家有什么问题或好的想法欢迎在下方参与<a href="#respond">留言和评论</a>.</p>
-<p>本文作者: <a href="https://github.com/Louiszhai" target="_blank" rel="external">louis</a></p>
-<p>本文链接: <a href="http://louiszhai.github.io/2017/04/07/http-cache/">http://louiszhai.github.io/2017/04/07/http-cache/</a></p>
+<p>版权声明：转载需注明作者和出处。</p>
+<p>本文作者：<a href="https://github.com/Louiszhai" target="_blank" rel="external">louis</a></p>
+<p>本文链接：<a href="http://louiszhai.github.io/2017/04/07/http-cache/">http://louiszhai.github.io/2017/04/07/http-cache/</a></p>
 <p>参考文章</p>
 <ul>
-<li><a href="https://msdn.microsoft.com/en-us/library/27w3sx5e(v=vs.110).aspx" target="_blank" rel="external">Cache Policy Interaction—Maximum Age and Maximum Staleness</a></li>
+<li><a href="https://docs.microsoft.com/en-us/dotnet/framework/network-programming/cache-policy-interaction-maximum-age-and-maximum-staleness" target="_blank" rel="external">Cache Policy Interaction—Maximum Age and Maximum Staleness</a></li>
 <li><a href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html" target="_blank" rel="external">HTTP/1.1: Header Field Definitions</a></li>
 <li><a href="http://stackoverflow.com/questions/1046966/whats-the-difference-between-cache-control-max-age-0-and-no-cache" target="_blank" rel="external">http - What’s the difference between Cache-Control: max-age=0 and no-cache? - Stack Overflow</a></li>
 <li><a href="http://www.baitouwei.com/2016/04/20/App-%E7%BC%93%E5%AD%98%E6%96%B9%E6%A1%88%EF%BC%9AHttp-%E7%BC%93%E5%AD%98/" target="_blank" rel="external">App 缓存方案：Http 缓存 · baitouwei</a></li>
 <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control" target="_blank" rel="external">Cache-Control - HTTP | MDN</a></li>
-<li>[彻底弄懂 Http 缓存机制 - 基于缓存策略三要素分解法][8]</li>
-</ul>
-<p>[8]: <a href="https://mp.weixin.qq.com/s?__biz=MzA3NTYzODYzMg==&amp;mid=2653578381&amp;idx=1&amp;sn=3f676e2b2e08bcff831c69d31cf51c51&amp;key=dde62796d24517c892043e67f2520e046c13fc0558822ef7ba7fbe8003ddde05e22230fb4ccb2c31133df2a507940c5d4561c7b4f4570969a47cf1388ff57e4bfea70a3810f3fc805e2a5d9aa3192439&amp;ascene=0&amp;uin=MTM4MjU5NzA0MA%3D%3D&amp;devicetype=iMac+MacBookPro12%2C1+OSX+OSX+10.11.6+build(15G1212)&amp;version=12010110&amp;nettype=WIFI&amp;fontScale=100&amp;pass_ticket=n3plsW%2FV7Vb6O9hKzPNig5MYpXUoJo3tNUNxhJ5Jh6e9AS%2BRXmvJPbIzUeUmL3S2" target="_blank" rel="external">https://mp.weixin.qq.com/s?__biz=MzA3NTYzODYzMg==&amp;mid=2653578381&amp;idx=1&amp;sn=3f676e2b2e08bcff831c69d31cf51c51&amp;key=dde62796d24517c892043e67f2520e046c13fc0558822ef7ba7fbe8003ddde05e22230fb4ccb2c31133df2a507940c5d4561c7b4f4570969a47cf1388ff57e4bfea70a3810f3fc805e2a5d9aa3192439&amp;ascene=0&amp;uin=MTM4MjU5NzA0MA%3D%3D&amp;devicetype=iMac+MacBookPro12%2C1+OSX+OSX+10.11.6+build(15G1212)&amp;version=12010110&amp;nettype=WIFI&amp;fontScale=100&amp;pass_ticket=n3plsW%2FV7Vb6O9hKzPNig5MYpXUoJo3tNUNxhJ5Jh6e9AS%2BRXmvJPbIzUeUmL3S2</a><script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.2.7/raphael.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/flowchart/1.6.5/flowchart.min.js"></script><textarea id="flowchart-0-code" style="display: none">st=>start: 发起请求|pass
+<li><a href="http://t.cn/RlcCvtg" target="_blank" rel="external">彻底弄懂 Http 缓存机制 基于缓存策略三要素分解法</a><script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.2.7/raphael.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/flowchart/1.6.5/flowchart.min.js"></script><textarea id="flowchart-0-code" style="display: none">st=>start: 发起请求|pass
 e=>end: 载入资源
 c1=>condition: 是否已缓存?
 c2=>condition: [过期策略]-
@@ -3066,7 +3064,8 @@ c1(no)->op2
 c2(yes, right)->op1(right)->c3
 c2(no)->e
 c3(yes, right)->op3->io2->e
-c3(no)->op2->io1->e</textarea><textarea id="flowchart-0-options" style="display: none">{"scale":1,"line-width":1,"line-length":50,"text-margin":10,"font-size":12,"maxWidth":3,"symbols":{"start":{"fill":"#B5CA92","element-color":"green"},"condition":{"fill":"#58C4A3","yes-text":"是","no-text":"否"},"operation":{"fill":"#F1D5A6"},"inputoutput":{"fill":"#C59E63"},"end":{"fill":"#92A8CD"}}}</textarea><script>  var code = document.getElementById("flowchart-0-code").value;  var options = JSON.parse(decodeURIComponent(document.getElementById("flowchart-0-options").value));  var diagram = flowchart.parse(code);  diagram.drawSVG("flowchart-0", options);</script></p>
+c3(no)->op2->io1->e</textarea><textarea id="flowchart-0-options" style="display: none">{"scale":1,"line-width":1,"line-length":50,"text-margin":10,"font-size":12,"maxWidth":3,"symbols":{"start":{"fill":"#B5CA92","element-color":"green"},"condition":{"fill":"#58C4A3","yes-text":"是","no-text":"否"},"operation":{"fill":"#F1D5A6"},"inputoutput":{"fill":"#C59E63"},"end":{"fill":"#92A8CD"}}}</textarea><script>  var code = document.getElementById("flowchart-0-code").value;  var options = JSON.parse(decodeURIComponent(document.getElementById("flowchart-0-options").value));  var diagram = flowchart.parse(code);  diagram.drawSVG("flowchart-0", options);</script></li>
+</ul>
 ]]></content>
       
         
@@ -9903,6 +9902,112 @@ document.write(str.link(&quot;https://www.baidu.com&quot;)); // &lt;a href=&quot
     </entry>
     
     <entry>
+      <title><![CDATA[Function.prototype.bind方法指南]]></title>
+      <url>/2016/01/11/bind/</url>
+      <content type="html"><![CDATA[<h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h3><p>ES5新增了 Function.prototype.bind 方法, 该方法不同于jquery的bind 方法, 它主要用于固定 this 作用域, 避免各种由于上下文切换造成的语义问题. 常用在 setTimeout, for循环等内部.</p>
+<a id="more"></a>
+<h3 id="bind"><a href="#bind" class="headerlink" title="bind"></a>bind</h3><p>语法: func.bind(thisArg, arg1, arg2, ….)</p>
+<p>bind() 方法会返回一个新函数, 又叫绑定函数, 当调用这个绑定函数时, 绑定函数会以创建它时传入 bind() 方法的第一个参数作为当前的上下文, 即this, 传入 bind() 方法的第二个及之后的参数加上绑定函数运行时自身的参数按照顺序作为原函数的参数来调用原函数.</p>
+<p>绑定函数也能使用new操作符创建对象; 这就好比把原函数当做构造器. 此时提供的this将被忽略, this之后的参数将依然前置到运行时的参数列表中.</p>
+<h4 id="基本用法"><a href="#基本用法" class="headerlink" title="基本用法"></a>基本用法</h4><p>下面我们来看看bind 的基本用法.</p>
+<pre><code class="js">var x = 8;
+var o = {
+  x: 10,
+  getX: function(){
+      console.log(this.x);
+  }
+};
+var f = o.getX;
+f();//8, 由于没有绑定执行时的上下文, this默认指向window, 打印了全局变量x的值
+var g = f.bind(o);
+g();//10, 绑定this后, 成功的打印了o对象的x属性的值.
+</code></pre>
+<h4 id="分离参数"><a href="#分离参数" class="headerlink" title="分离参数"></a>分离参数</h4><p>bind() 方法还可以设置函数拥有的初始参数. 这些参数作为bind() 的第2,3…个参数跟在this(或其他对象的后面), 调用绑定函数时, 这些参数将插入到参数列表的最开始位置, 而传递给绑定函数的参数将跟在他们后面.</p>
+<pre><code class="js">//打印十个斐波那契数
+var f = function(n1, n2, length){
+  if(arguments.length&lt;3) console.log(&#39;参数不够...&#39;);
+  var array = [n1, n2];
+  for(var i=2;i&lt;length;i++){
+      array[i] = array[i-2] + array[i-1];
+  }
+  return array;
+}
+var g = f.bind(null, 1, 1);
+console.log(g(10));//[1, 1, 2, 3, 5, 8, 13, 21, 34, 55]
+</code></pre>
+<h4 id="绑定参数"><a href="#绑定参数" class="headerlink" title="绑定参数"></a>绑定参数</h4><p>如果使用new 操作符去构造绑定函数的实例时, 原来提供的this 将被忽略, this之后的参数将依然前置到构造函数的参数列表中. 此时 bind() 方法便具备了保留参数的能力, 我们可以此达到类似柯里化的效果.</p>
+<pre><code class="js">var f = function(){
+  if(arguments.length!=0)
+      this.sum = Array.prototype.reduce.call(arguments,function(prev,item){//对传入参数求和
+         return prev + item;
+    });
+  return Array.prototype.join.call(arguments);// 返回传入参数的字符串形式
+}
+f.prototype.toString = function(){
+  return this.sum;
+}
+var g = f.bind(null,2);
+var x = new g(8);
+console.log(x.toString());//10, 可见x被绑定了2+8=10
+console.log(g(8));//2,8 这告诉我们绑定的两个参数正是2和8
+
+console.log(x instanceof g);//true, 可见通过new创建的x继承了g
+console.log(x instanceof f);//true, 可见x也继承了f
+console.log(g instanceof Function);//true, 可见bind f()方法之后, 返回了一个新的函数g
+//函数g可用于求和,如下:
+console.log(g(1,3,5,7,9));//27 2+1+3+5+7+9=27
+</code></pre>
+<h4 id="快捷调用"><a href="#快捷调用" class="headerlink" title="快捷调用"></a>快捷调用</h4><p>使用Array.prototype的方法处理类数组对象时(鸭式辨型), 不可避免的需要借用call 或者 apply 方法, 使用 bind() 方法, 我们可以简化这个过程. 如下:</p>
+<pre><code class="js">var _slice = Array.prototype.slice;
+var slice = Function.prototype.call.bind(_slice);
+function f(){
+  return slice(arguments,1);
+}
+f(1,2,3,4,5);//[2, 3, 4, 5]
+</code></pre>
+<p>下面的实例将解释 bind() 方法做了一件什么事情:</p>
+<pre><code class="js">var _slice = Array.prototype.slice;
+var slice = function(){
+  return _slice.apply(arguments[0],_slice.call(arguments,1));
+};
+function f(){
+  return slice(arguments,1);
+}
+f(1,2,3,4,5);//[2, 3, 4, 5]
+</code></pre>
+<p>如下, 是bind() 方法的简单实现.</p>
+<pre><code class="js">Function.prototype.bind = function(thisArg,argN){
+  var _this = this;
+  var _arg = _slice.call(arguments,1);
+  return function(){
+       var arg = _slice.call(arguments);
+    arg = _arg.concat(arg);
+      return _this.apply(thisArg,arg);
+  }
+}
+</code></pre>
+<p>可以看出来, 使用 bind() 方法后, 代码优雅得多.</p>
+<p>注: 作为ES5标准加入的bind方法显然不支持 IE9之前的低版本IE, 如需使用, 请参考<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Function/bind#Compatibility" target="_blank" rel="external">Polyfill</a>.</p>
+<hr>
+<p>本文就讨论这么多内容,大家有什么问题或好的想法欢迎在下方参与<a href="#respond">留言和评论</a>.</p>
+<p>本文作者: <a href="https://github.com/Louiszhai" target="_blank" rel="external">louis</a></p>
+<p>本文链接: <a href="http://louiszhai.github.io/2016/01/11/bind/">http://louiszhai.github.io/2016/01/11/bind/</a></p>
+<p>参考文章</p>
+<ul>
+<li><a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Function/bind" target="_blank" rel="external">Function.prototype.bind() - JavaScript | MDN</a></li>
+</ul>
+]]></content>
+      
+        
+        <tags>
+            
+            <tag> JavaScript </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
       <title><![CDATA[由同源策略到前端跨域]]></title>
       <url>/2016/01/11/cross-domain/</url>
       <content type="html"><![CDATA[<h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h3><p>同源策略 (Same-Origin Policy) 最早由 Netscape 公司提出, 所谓同源就是要求, 域名, 协议, 端口相同. 非同源的脚本不能访问或者操作其他域的页面对象(如DOM等). 作为著名的安全策略, 虽然它只是一个规范, 并不强制要求,  但现在所有支持 javaScript 的浏览器都会使用这个策略. 以至于该策略成为浏览器最核心最基本的安全功能, 如果缺少了同源策略, web的安全将无从谈起.</p>
@@ -10076,112 +10181,6 @@ console.log(document.domain);
 <li><a href="http://www.freebuf.com/articles/web/65468.html" target="_blank" rel="external">同源策略详解及绕过（Part1） - FreeBuf.COM | 关注黑客与极客</a></li>
 <li><a href="http://www.plhwin.com/2014/05/28/nodejs-socketio/" target="_blank" rel="external">使用Node.js+Socket.IO搭建WebSocket实时应用 | 潘良虎的随想录</a></li>
 <li><a href="http://blog.jackxy.com/cross-origin-123/" target="_blank" rel="external">跨域资源访问的几种方式</a></li>
-</ul>
-]]></content>
-      
-        
-        <tags>
-            
-            <tag> JavaScript </tag>
-            
-        </tags>
-        
-    </entry>
-    
-    <entry>
-      <title><![CDATA[Function.prototype.bind方法指南]]></title>
-      <url>/2016/01/11/bind/</url>
-      <content type="html"><![CDATA[<h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h3><p>ES5新增了 Function.prototype.bind 方法, 该方法不同于jquery的bind 方法, 它主要用于固定 this 作用域, 避免各种由于上下文切换造成的语义问题. 常用在 setTimeout, for循环等内部.</p>
-<a id="more"></a>
-<h3 id="bind"><a href="#bind" class="headerlink" title="bind"></a>bind</h3><p>语法: func.bind(thisArg, arg1, arg2, ….)</p>
-<p>bind() 方法会返回一个新函数, 又叫绑定函数, 当调用这个绑定函数时, 绑定函数会以创建它时传入 bind() 方法的第一个参数作为当前的上下文, 即this, 传入 bind() 方法的第二个及之后的参数加上绑定函数运行时自身的参数按照顺序作为原函数的参数来调用原函数.</p>
-<p>绑定函数也能使用new操作符创建对象; 这就好比把原函数当做构造器. 此时提供的this将被忽略, this之后的参数将依然前置到运行时的参数列表中.</p>
-<h4 id="基本用法"><a href="#基本用法" class="headerlink" title="基本用法"></a>基本用法</h4><p>下面我们来看看bind 的基本用法.</p>
-<pre><code class="js">var x = 8;
-var o = {
-  x: 10,
-  getX: function(){
-      console.log(this.x);
-  }
-};
-var f = o.getX;
-f();//8, 由于没有绑定执行时的上下文, this默认指向window, 打印了全局变量x的值
-var g = f.bind(o);
-g();//10, 绑定this后, 成功的打印了o对象的x属性的值.
-</code></pre>
-<h4 id="分离参数"><a href="#分离参数" class="headerlink" title="分离参数"></a>分离参数</h4><p>bind() 方法还可以设置函数拥有的初始参数. 这些参数作为bind() 的第2,3…个参数跟在this(或其他对象的后面), 调用绑定函数时, 这些参数将插入到参数列表的最开始位置, 而传递给绑定函数的参数将跟在他们后面.</p>
-<pre><code class="js">//打印十个斐波那契数
-var f = function(n1, n2, length){
-  if(arguments.length&lt;3) console.log(&#39;参数不够...&#39;);
-  var array = [n1, n2];
-  for(var i=2;i&lt;length;i++){
-      array[i] = array[i-2] + array[i-1];
-  }
-  return array;
-}
-var g = f.bind(null, 1, 1);
-console.log(g(10));//[1, 1, 2, 3, 5, 8, 13, 21, 34, 55]
-</code></pre>
-<h4 id="绑定参数"><a href="#绑定参数" class="headerlink" title="绑定参数"></a>绑定参数</h4><p>如果使用new 操作符去构造绑定函数的实例时, 原来提供的this 将被忽略, this之后的参数将依然前置到构造函数的参数列表中. 此时 bind() 方法便具备了保留参数的能力, 我们可以此达到类似柯里化的效果.</p>
-<pre><code class="js">var f = function(){
-  if(arguments.length!=0)
-      this.sum = Array.prototype.reduce.call(arguments,function(prev,item){//对传入参数求和
-         return prev + item;
-    });
-  return Array.prototype.join.call(arguments);// 返回传入参数的字符串形式
-}
-f.prototype.toString = function(){
-  return this.sum;
-}
-var g = f.bind(null,2);
-var x = new g(8);
-console.log(x.toString());//10, 可见x被绑定了2+8=10
-console.log(g(8));//2,8 这告诉我们绑定的两个参数正是2和8
-
-console.log(x instanceof g);//true, 可见通过new创建的x继承了g
-console.log(x instanceof f);//true, 可见x也继承了f
-console.log(g instanceof Function);//true, 可见bind f()方法之后, 返回了一个新的函数g
-//函数g可用于求和,如下:
-console.log(g(1,3,5,7,9));//27 2+1+3+5+7+9=27
-</code></pre>
-<h4 id="快捷调用"><a href="#快捷调用" class="headerlink" title="快捷调用"></a>快捷调用</h4><p>使用Array.prototype的方法处理类数组对象时(鸭式辨型), 不可避免的需要借用call 或者 apply 方法, 使用 bind() 方法, 我们可以简化这个过程. 如下:</p>
-<pre><code class="js">var _slice = Array.prototype.slice;
-var slice = Function.prototype.call.bind(_slice);
-function f(){
-  return slice(arguments,1);
-}
-f(1,2,3,4,5);//[2, 3, 4, 5]
-</code></pre>
-<p>下面的实例将解释 bind() 方法做了一件什么事情:</p>
-<pre><code class="js">var _slice = Array.prototype.slice;
-var slice = function(){
-  return _slice.apply(arguments[0],_slice.call(arguments,1));
-};
-function f(){
-  return slice(arguments,1);
-}
-f(1,2,3,4,5);//[2, 3, 4, 5]
-</code></pre>
-<p>如下, 是bind() 方法的简单实现.</p>
-<pre><code class="js">Function.prototype.bind = function(thisArg,argN){
-  var _this = this;
-  var _arg = _slice.call(arguments,1);
-  return function(){
-       var arg = _slice.call(arguments);
-    arg = _arg.concat(arg);
-      return _this.apply(thisArg,arg);
-  }
-}
-</code></pre>
-<p>可以看出来, 使用 bind() 方法后, 代码优雅得多.</p>
-<p>注: 作为ES5标准加入的bind方法显然不支持 IE9之前的低版本IE, 如需使用, 请参考<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Function/bind#Compatibility" target="_blank" rel="external">Polyfill</a>.</p>
-<hr>
-<p>本文就讨论这么多内容,大家有什么问题或好的想法欢迎在下方参与<a href="#respond">留言和评论</a>.</p>
-<p>本文作者: <a href="https://github.com/Louiszhai" target="_blank" rel="external">louis</a></p>
-<p>本文链接: <a href="http://louiszhai.github.io/2016/01/11/bind/">http://louiszhai.github.io/2016/01/11/bind/</a></p>
-<p>参考文章</p>
-<ul>
-<li><a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Function/bind" target="_blank" rel="external">Function.prototype.bind() - JavaScript | MDN</a></li>
 </ul>
 ]]></content>
       
