@@ -5188,7 +5188,7 @@ Expires: [CURRENT TIME]
     <link href="http://louiszhai.github.io/2016/11/02/ajax/"/>
     <id>http://louiszhai.github.io/2016/11/02/ajax/</id>
     <published>2016-11-02T04:48:27.000Z</published>
-    <updated>2017-11-02T00:54:59.948Z</updated>
+    <updated>2017-11-11T10:31:34.232Z</updated>
     
     <content type="html"><![CDATA[<h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h3><p>Ajax 全称 Asynchronous JavaScript and XML, 即异步JS与XML. 它最早在IE5中被使用, 然后由Mozilla, Apple, Google推广开来. 典型的代表应用有 Outlook Web Access, 以及 GMail. 现代网页中几乎无ajax不欢. 前后端分离也正是建立在ajax异步通信的基础之上.</p>
 <a id="more"></a>
@@ -5346,7 +5346,7 @@ console.log(XMLHttpRequest.prototype.hasOwnProperty(&#39;timeout&#39;));//true
 <p>注意, readyState 是一个只读属性, 想要改变它的值是不可行的.</p>
 <h4 id="onreadystatechange"><a href="#onreadystatechange" class="headerlink" title="onreadystatechange"></a>onreadystatechange</h4><p>onreadystatechange事件回调方法在readystate状态改变时触发, 在一个收到响应的ajax请求周期中, onreadystatechange 方法会被触发4次. 因此可以在 onreadystatechange 方法中绑定一些事件回调, 比如:</p>
 <pre><code class="js">xhr.onreadystatechange = function(e){
-  if(xhr.readystate==4){
+  if(xhr.readyState==4){
     var s = xhr.status;
     if((s &gt;= 200 &amp;&amp; s &lt; 300) || s == 304){
       var resp = xhr.responseText;

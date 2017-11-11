@@ -30,7 +30,7 @@
 <meta property="og:image" content="http://louiszhai.github.io/docImages/ajax20.png">
 <meta property="og:image" content="http://louiszhai.github.io/docImages/ajax21.png">
 <meta property="og:image" content="http://louiszhai.github.io/docImages/ajax26.png">
-<meta property="og:updated_time" content="2017-11-02T00:54:59.948Z">
+<meta property="og:updated_time" content="2017-11-11T10:31:34.232Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Ajax知识体系大梳理">
 <meta name="twitter:description" content="ajax XMLHttpRequest xhr fetch XDomainRequest jquery.ajax overrideMimeType CORS FileReader postman angular withCredentials setRequestHeader getAllResponseHeaders upload ajax与history的兼容 ajax跨域请求 ajax文件上">
@@ -394,7 +394,7 @@ console.log(XMLHttpRequest.prototype.hasOwnProperty(&#39;timeout&#39;));//true
 <p>注意, readyState 是一个只读属性, 想要改变它的值是不可行的.</p>
 <h4 id="onreadystatechange"><a href="#onreadystatechange" class="headerlink" title="onreadystatechange"></a>onreadystatechange</h4><p>onreadystatechange事件回调方法在readystate状态改变时触发, 在一个收到响应的ajax请求周期中, onreadystatechange 方法会被触发4次. 因此可以在 onreadystatechange 方法中绑定一些事件回调, 比如:</p>
 <pre><code class="js">xhr.onreadystatechange = function(e){
-  if(xhr.readystate==4){
+  if(xhr.readyState==4){
     var s = xhr.status;
     if((s &gt;= 200 &amp;&amp; s &lt; 300) || s == 304){
       var resp = xhr.responseText;
