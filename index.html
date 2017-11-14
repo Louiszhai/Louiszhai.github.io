@@ -107,7 +107,7 @@
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud" id="js-tagcloud">
-						<a href="/tags/CSS/" style="font-size: 16.67px;">CSS</a> <a href="/tags/JavaScript/" style="font-size: 20px;">JavaScript</a> <a href="/tags/JavaScript-Canvas/" style="font-size: 10px;">JavaScript Canvas</a> <a href="/tags/Tool/" style="font-size: 10px;">Tool</a> <a href="/tags/Web/" style="font-size: 16.67px;">Web</a> <a href="/tags/XSS/" style="font-size: 10px;">XSS</a> <a href="/tags/css/" style="font-size: 13.33px;">css</a> <a href="/tags/javascript/" style="font-size: 10px;">javascript</a>
+						<a href="/tags/CSS/" style="font-size: 16.67px;">CSS</a> <a href="/tags/JavaScript/" style="font-size: 20px;">JavaScript</a> <a href="/tags/JavaScript-Canvas/" style="font-size: 10px;">JavaScript Canvas</a> <a href="/tags/JavaScript-Chrome-Extension/" style="font-size: 10px;">JavaScript Chrome-Extension</a> <a href="/tags/Tool/" style="font-size: 10px;">Tool</a> <a href="/tags/Web/" style="font-size: 16.67px;">Web</a> <a href="/tags/XSS/" style="font-size: 10px;">XSS</a> <a href="/tags/css/" style="font-size: 13.33px;">css</a> <a href="/tags/javascript/" style="font-size: 10px;">javascript</a>
 					</div>
 				</section>
 				
@@ -222,6 +222,71 @@
       
         <p class="article-more-link">
           <a  href="/2017/09/30/tmux/#more">more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+  
+
+  
+</article>
+
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-iheader" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/08/28/iheader/" class="article-date">
+  	<time datetime="2017-08-28T05:31:18.000Z" itemprop="datePublished">2017-08-28</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/08/28/iheader/">【Chrome扩展开发】定制HTTP请求响应头域</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><strong>本文首发于《程序员》杂志2017年第9、10、11期，下面的版本又经过进一步的修订。</strong></p>
+<h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a><strong>导读</strong></h3><p>搜索是程序员的灵魂，为了提升搜索的效率，以便更快的查询信息，我试着同时搜索4个网站，分别是百度、Google、维基、Bing。一个可行的做法就是网页中嵌入4个iframe，通过js拼接前面4个搜索引擎的Search URL并依次在iframe中加载。这个构思丝毫没有问题，简单粗暴。然而就是这么简单的功能，也无法实现。由于Google网站在HTML的response header中添加了<code>X-Frame-Options</code>字段以防止网页被Frame（这项设置常被用来防止Click Cheats），因此我无法将Google Search加入到iframe中来。那么，我会放弃Google吗？</p>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript-Chrome-Extension/">JavaScript Chrome-Extension</a></li></ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a  href="/2017/08/28/iheader/#more">more >></a>
         </p>
       
       <div class="clearfix"></div>
@@ -745,71 +810,6 @@
       
         <p class="article-more-link">
           <a  href="/2017/01/13/flex/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-  
-
-  
-</article>
-
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-sort" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2016/12/23/sort/" class="article-date">
-  	<time datetime="2016-12-23T03:55:14.000Z" itemprop="datePublished">2016-12-23</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/12/23/sort/">JS中可能用得到的全部的排序算法</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h3><p>排序算法可以称得上是我的盲点, 曾几何时当我知道Chrome的Array.prototype.sort使用了快速排序时, 我的内心是奔溃的(啥是快排, 我只知道冒泡啊?!), 要知道学习一门技术最好的时间是三年前, 但愿我现在补习还来得及(捂脸).</p>
-<p>因此本篇重拾了出镜概率比较高的十来种排序算法, 逐一分析其排序思想, 并批注注意事项. 欢迎对算法提出改进和<a href="#respond">讨论</a>.</p>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/">JavaScript</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a  href="/2016/12/23/sort/#more">more >></a>
         </p>
       
       <div class="clearfix"></div>
