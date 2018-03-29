@@ -11074,112 +11074,6 @@ document.write(str.link(&quot;https://www.baidu.com&quot;)); // &lt;a href=&quot
     </entry>
     
     <entry>
-      <title><![CDATA[Function.prototype.bind方法指南]]></title>
-      <url>/2016/01/11/bind/</url>
-      <content type="html"><![CDATA[<h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h3><p>ES5新增了 Function.prototype.bind 方法, 该方法不同于jquery的bind 方法, 它主要用于固定 this 作用域, 避免各种由于上下文切换造成的语义问题. 常用在 setTimeout, for循环等内部.</p>
-<a id="more"></a>
-<h3 id="bind"><a href="#bind" class="headerlink" title="bind"></a>bind</h3><p>语法: func.bind(thisArg, arg1, arg2, ….)</p>
-<p>bind() 方法会返回一个新函数, 又叫绑定函数, 当调用这个绑定函数时, 绑定函数会以创建它时传入 bind() 方法的第一个参数作为当前的上下文, 即this, 传入 bind() 方法的第二个及之后的参数加上绑定函数运行时自身的参数按照顺序作为原函数的参数来调用原函数.</p>
-<p>绑定函数也能使用new操作符创建对象; 这就好比把原函数当做构造器. 此时提供的this将被忽略, this之后的参数将依然前置到运行时的参数列表中.</p>
-<h4 id="基本用法"><a href="#基本用法" class="headerlink" title="基本用法"></a>基本用法</h4><p>下面我们来看看bind 的基本用法.</p>
-<pre><code class="js">var x = 8;
-var o = {
-  x: 10,
-  getX: function(){
-      console.log(this.x);
-  }
-};
-var f = o.getX;
-f();//8, 由于没有绑定执行时的上下文, this默认指向window, 打印了全局变量x的值
-var g = f.bind(o);
-g();//10, 绑定this后, 成功的打印了o对象的x属性的值.
-</code></pre>
-<h4 id="分离参数"><a href="#分离参数" class="headerlink" title="分离参数"></a>分离参数</h4><p>bind() 方法还可以设置函数拥有的初始参数. 这些参数作为bind() 的第2,3…个参数跟在this(或其他对象的后面), 调用绑定函数时, 这些参数将插入到参数列表的最开始位置, 而传递给绑定函数的参数将跟在他们后面.</p>
-<pre><code class="js">//打印十个斐波那契数
-var f = function(n1, n2, length){
-  if(arguments.length&lt;3) console.log(&#39;参数不够...&#39;);
-  var array = [n1, n2];
-  for(var i=2;i&lt;length;i++){
-      array[i] = array[i-2] + array[i-1];
-  }
-  return array;
-}
-var g = f.bind(null, 1, 1);
-console.log(g(10));//[1, 1, 2, 3, 5, 8, 13, 21, 34, 55]
-</code></pre>
-<h4 id="绑定参数"><a href="#绑定参数" class="headerlink" title="绑定参数"></a>绑定参数</h4><p>如果使用new 操作符去构造绑定函数的实例时, 原来提供的this 将被忽略, this之后的参数将依然前置到构造函数的参数列表中. 此时 bind() 方法便具备了保留参数的能力, 我们可以此达到类似柯里化的效果.</p>
-<pre><code class="js">var f = function(){
-  if(arguments.length!=0)
-      this.sum = Array.prototype.reduce.call(arguments,function(prev,item){//对传入参数求和
-         return prev + item;
-    });
-  return Array.prototype.join.call(arguments);// 返回传入参数的字符串形式
-}
-f.prototype.toString = function(){
-  return this.sum;
-}
-var g = f.bind(null,2);
-var x = new g(8);
-console.log(x.toString());//10, 可见x被绑定了2+8=10
-console.log(g(8));//2,8 这告诉我们绑定的两个参数正是2和8
-
-console.log(x instanceof g);//true, 可见通过new创建的x继承了g
-console.log(x instanceof f);//true, 可见x也继承了f
-console.log(g instanceof Function);//true, 可见bind f()方法之后, 返回了一个新的函数g
-//函数g可用于求和,如下:
-console.log(g(1,3,5,7,9));//27 2+1+3+5+7+9=27
-</code></pre>
-<h4 id="快捷调用"><a href="#快捷调用" class="headerlink" title="快捷调用"></a>快捷调用</h4><p>使用Array.prototype的方法处理类数组对象时(鸭式辨型), 不可避免的需要借用call 或者 apply 方法, 使用 bind() 方法, 我们可以简化这个过程. 如下:</p>
-<pre><code class="js">var _slice = Array.prototype.slice;
-var slice = Function.prototype.call.bind(_slice);
-function f(){
-  return slice(arguments,1);
-}
-f(1,2,3,4,5);//[2, 3, 4, 5]
-</code></pre>
-<p>下面的实例将解释 bind() 方法做了一件什么事情:</p>
-<pre><code class="js">var _slice = Array.prototype.slice;
-var slice = function(){
-  return _slice.apply(arguments[0],_slice.call(arguments,1));
-};
-function f(){
-  return slice(arguments,1);
-}
-f(1,2,3,4,5);//[2, 3, 4, 5]
-</code></pre>
-<p>如下, 是bind() 方法的简单实现.</p>
-<pre><code class="js">Function.prototype.bind = function(thisArg,argN){
-  var _this = this;
-  var _arg = _slice.call(arguments,1);
-  return function(){
-       var arg = _slice.call(arguments);
-    arg = _arg.concat(arg);
-      return _this.apply(thisArg,arg);
-  }
-}
-</code></pre>
-<p>可以看出来, 使用 bind() 方法后, 代码优雅得多.</p>
-<p>注: 作为ES5标准加入的bind方法显然不支持 IE9之前的低版本IE, 如需使用, 请参考<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Function/bind#Compatibility" target="_blank" rel="external">Polyfill</a>.</p>
-<hr>
-<p>本文就讨论这么多内容,大家有什么问题或好的想法欢迎在下方参与<a href="#respond">留言和评论</a>.</p>
-<p>本文作者: <a href="https://github.com/Louiszhai" target="_blank" rel="external">louis</a></p>
-<p>本文链接: <a href="http://louiszhai.github.io/2016/01/11/bind/">http://louiszhai.github.io/2016/01/11/bind/</a></p>
-<p>参考文章</p>
-<ul>
-<li><a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Function/bind" target="_blank" rel="external">Function.prototype.bind() - JavaScript | MDN</a></li>
-</ul>
-]]></content>
-      
-        
-        <tags>
-            
-            <tag> JavaScript </tag>
-            
-        </tags>
-        
-    </entry>
-    
-    <entry>
       <title><![CDATA[由同源策略到前端跨域]]></title>
       <url>/2016/01/11/cross-domain/</url>
       <content type="html"><![CDATA[<h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h3><p>同源策略 (Same-Origin Policy) 最早由 Netscape 公司提出, 所谓同源就是要求, 域名, 协议, 端口相同. 非同源的脚本不能访问或者操作其他域的页面对象(如DOM等). 作为著名的安全策略, 虽然它只是一个规范, 并不强制要求,  但现在所有支持 javaScript 的浏览器都会使用这个策略. 以至于该策略成为浏览器最核心最基本的安全功能, 如果缺少了同源策略, web的安全将无从谈起.</p>
@@ -11353,6 +11247,112 @@ console.log(document.domain);
 <li><a href="http://www.freebuf.com/articles/web/65468.html" target="_blank" rel="external">同源策略详解及绕过（Part1） - FreeBuf.COM | 关注黑客与极客</a></li>
 <li><a href="http://www.plhwin.com/2014/05/28/nodejs-socketio/" target="_blank" rel="external">使用Node.js+Socket.IO搭建WebSocket实时应用 | 潘良虎的随想录</a></li>
 <li><a href="http://blog.jackxy.com/cross-origin-123/" target="_blank" rel="external">跨域资源访问的几种方式</a></li>
+</ul>
+]]></content>
+      
+        
+        <tags>
+            
+            <tag> JavaScript </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[Function.prototype.bind方法指南]]></title>
+      <url>/2016/01/11/bind/</url>
+      <content type="html"><![CDATA[<h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h3><p>ES5新增了 Function.prototype.bind 方法, 该方法不同于jquery的bind 方法, 它主要用于固定 this 作用域, 避免各种由于上下文切换造成的语义问题. 常用在 setTimeout, for循环等内部.</p>
+<a id="more"></a>
+<h3 id="bind"><a href="#bind" class="headerlink" title="bind"></a>bind</h3><p>语法: func.bind(thisArg, arg1, arg2, ….)</p>
+<p>bind() 方法会返回一个新函数, 又叫绑定函数, 当调用这个绑定函数时, 绑定函数会以创建它时传入 bind() 方法的第一个参数作为当前的上下文, 即this, 传入 bind() 方法的第二个及之后的参数加上绑定函数运行时自身的参数按照顺序作为原函数的参数来调用原函数.</p>
+<p>绑定函数也能使用new操作符创建对象; 这就好比把原函数当做构造器. 此时提供的this将被忽略, this之后的参数将依然前置到运行时的参数列表中.</p>
+<h4 id="基本用法"><a href="#基本用法" class="headerlink" title="基本用法"></a>基本用法</h4><p>下面我们来看看bind 的基本用法.</p>
+<pre><code class="js">var x = 8;
+var o = {
+  x: 10,
+  getX: function(){
+      console.log(this.x);
+  }
+};
+var f = o.getX;
+f();//8, 由于没有绑定执行时的上下文, this默认指向window, 打印了全局变量x的值
+var g = f.bind(o);
+g();//10, 绑定this后, 成功的打印了o对象的x属性的值.
+</code></pre>
+<h4 id="分离参数"><a href="#分离参数" class="headerlink" title="分离参数"></a>分离参数</h4><p>bind() 方法还可以设置函数拥有的初始参数. 这些参数作为bind() 的第2,3…个参数跟在this(或其他对象的后面), 调用绑定函数时, 这些参数将插入到参数列表的最开始位置, 而传递给绑定函数的参数将跟在他们后面.</p>
+<pre><code class="js">//打印十个斐波那契数
+var f = function(n1, n2, length){
+  if(arguments.length&lt;3) console.log(&#39;参数不够...&#39;);
+  var array = [n1, n2];
+  for(var i=2;i&lt;length;i++){
+      array[i] = array[i-2] + array[i-1];
+  }
+  return array;
+}
+var g = f.bind(null, 1, 1);
+console.log(g(10));//[1, 1, 2, 3, 5, 8, 13, 21, 34, 55]
+</code></pre>
+<h4 id="绑定参数"><a href="#绑定参数" class="headerlink" title="绑定参数"></a>绑定参数</h4><p>如果使用new 操作符去构造绑定函数的实例时, 原来提供的this 将被忽略, this之后的参数将依然前置到构造函数的参数列表中. 此时 bind() 方法便具备了保留参数的能力, 我们可以此达到类似柯里化的效果.</p>
+<pre><code class="js">var f = function(){
+  if(arguments.length!=0)
+      this.sum = Array.prototype.reduce.call(arguments,function(prev,item){//对传入参数求和
+         return prev + item;
+    });
+  return Array.prototype.join.call(arguments);// 返回传入参数的字符串形式
+}
+f.prototype.toString = function(){
+  return this.sum;
+}
+var g = f.bind(null,2);
+var x = new g(8);
+console.log(x.toString());//10, 可见x被绑定了2+8=10
+console.log(g(8));//2,8 这告诉我们绑定的两个参数正是2和8
+
+console.log(x instanceof g);//true, 可见通过new创建的x继承了g
+console.log(x instanceof f);//true, 可见x也继承了f
+console.log(g instanceof Function);//true, 可见bind f()方法之后, 返回了一个新的函数g
+//函数g可用于求和,如下:
+console.log(g(1,3,5,7,9));//27 2+1+3+5+7+9=27
+</code></pre>
+<h4 id="快捷调用"><a href="#快捷调用" class="headerlink" title="快捷调用"></a>快捷调用</h4><p>使用Array.prototype的方法处理类数组对象时(鸭式辨型), 不可避免的需要借用call 或者 apply 方法, 使用 bind() 方法, 我们可以简化这个过程. 如下:</p>
+<pre><code class="js">var _slice = Array.prototype.slice;
+var slice = Function.prototype.call.bind(_slice);
+function f(){
+  return slice(arguments,1);
+}
+f(1,2,3,4,5);//[2, 3, 4, 5]
+</code></pre>
+<p>下面的实例将解释 bind() 方法做了一件什么事情:</p>
+<pre><code class="js">var _slice = Array.prototype.slice;
+var slice = function(){
+  return _slice.apply(arguments[0],_slice.call(arguments,1));
+};
+function f(){
+  return slice(arguments,1);
+}
+f(1,2,3,4,5);//[2, 3, 4, 5]
+</code></pre>
+<p>如下, 是bind() 方法的简单实现.</p>
+<pre><code class="js">Function.prototype.bind = function(thisArg,argN){
+  var _this = this;
+  var _arg = _slice.call(arguments,1);
+  return function(){
+       var arg = _slice.call(arguments);
+    arg = _arg.concat(arg);
+      return _this.apply(thisArg,arg);
+  }
+}
+</code></pre>
+<p>可以看出来, 使用 bind() 方法后, 代码优雅得多.</p>
+<p>注: 作为ES5标准加入的bind方法显然不支持 IE9之前的低版本IE, 如需使用, 请参考<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Function/bind#Compatibility" target="_blank" rel="external">Polyfill</a>.</p>
+<hr>
+<p>本文就讨论这么多内容,大家有什么问题或好的想法欢迎在下方参与<a href="#respond">留言和评论</a>.</p>
+<p>本文作者: <a href="https://github.com/Louiszhai" target="_blank" rel="external">louis</a></p>
+<p>本文链接: <a href="http://louiszhai.github.io/2016/01/11/bind/">http://louiszhai.github.io/2016/01/11/bind/</a></p>
+<p>参考文章</p>
+<ul>
+<li><a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Function/bind" target="_blank" rel="external">Function.prototype.bind() - JavaScript | MDN</a></li>
 </ul>
 ]]></content>
       
@@ -12608,7 +12608,7 @@ function curry(func, minArgs) {
     return A([]); 
 }
 </code></pre>
-<h4 id="柯里化的栗子"><a href="#柯里化的栗子" class="headerlink" title="柯里化的栗子"></a>柯里化的栗子</h4><p>这样，我们就可以随意定义我们的业务行为了，比如定义加法：</p>
+<h4 id="柯里化应用"><a href="#柯里化应用" class="headerlink" title="柯里化应用"></a>柯里化应用</h4><p>这样，我们就可以随意定义我们的业务行为了，比如定义加法：</p>
 <pre><code class="js">var plus = curry(function () {
     var result = 0;
     for (var i = 0; i &lt; arguments.length; ++i) {
@@ -12673,11 +12673,11 @@ function(f) {//该方法表示上述func,以下将称作`方法②`
 <p>如上述栗子, 第一次柯里化的参数是方法 minus, 由于长度未做限制, 默认为1, 即至少要向 flip 传递一个方法后才能返回一个柯里化的 flip_minus, 同样, 返回的 flip_minus 也具备柯里化的能力.flip_minus()(1)()(6) 等的执行结果充分说明了这点. </p>
 <h3 id="反柯里化-unCurrying"><a href="#反柯里化-unCurrying" class="headerlink" title="反柯里化(unCurrying)"></a>反柯里化(unCurrying)</h3><p>函数柯里化，是固定部分参数，返回一个接受剩余参数的函数，也称为部分计算函数，目的是为了固定参数, 延迟计算等。</p>
 <p>那么反柯里化函数，从字面讲，意义和用法跟函数柯里化相比正好相反，扩大适用范围，创建一个应用范围更广的函数。使得本来只有特定对象才适用的方法，扩展到更多的对象。</p>
-<h4 id="反柯里化的三种实现"><a href="#反柯里化的三种实现" class="headerlink" title="反柯里化的三种实现"></a>反柯里化的三种实现</h4><p>看一下通用函数：</p>
+<h4 id="反柯里化的三种实现"><a href="#反柯里化的三种实现" class="headerlink" title="反柯里化的三种实现"></a>反柯里化的三种实现</h4><p>看一下通用<strong>函数①</strong>：</p>
 <pre><code class="js">Function.prototype.unCurrying = function() {
-    var that = this;
+    var self = this;
     return function() {
-        return Function.prototype.call.apply(that, arguments);
+        return Function.prototype.call.apply(self, arguments);
     }
 }
 </code></pre>
@@ -12687,16 +12687,16 @@ function(f) {//该方法表示上述func,以下将称作`方法②`
 <li>返回方法, 即暴露方法对外的接口;</li>
 <li>借用call, call 的参数由 apply提供;</li>
 </ul>
-<p>上述代码先后调用了call, apply 方法 来保证参数传递正常. 自然也可以直接调用apply(因arguments类似数组,调用apply较为方便). 如下:</p>
+<p>上述代码先后调用了call, apply 方法 来保证参数传递正常. 自然也可以直接调用apply(因arguments类似数组,调用apply较为方便). 如下<strong>函数②</strong>：</p>
 <pre><code class="js">Function.prototype.unCurrying = function() {
-    var that = this;
+    var self = this;
     return function() {
         var a = arguments;
-        return that.apply(a[0], [].slice.call(a, 1));分割arguments,方便apply传参
+        return self.apply(a[0], [].slice.call(a, 1));分割arguments,方便apply传参
     };
 };
 </code></pre>
-<p>当然, 还可以利用<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Function/bind" target="_blank" rel="external">Function.prototype.bind()</a>方法返回一个新函数.</p>
+<p>当然, 还可以利用<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Function/bind" target="_blank" rel="external">Function.prototype.bind()</a>方法返回一个新函数，从而有如下<strong>函数③</strong>：</p>
 <pre><code class="js">Function.prototype.unCurrying = function () { 
   return this.call.bind(this);
 };
@@ -12708,7 +12708,76 @@ function(f) {//该方法表示上述func,以下将称作`方法②`
 }
 </code></pre>
 <p>原理都相同，最终就是把 this.method 转化成 method(this,arg1,arg2….) 以实现方法借用和this的泛化。</p>
-<h4 id="反柯里化的前因"><a href="#反柯里化的前因" class="headerlink" title="反柯里化的前因"></a>反柯里化的前因</h4><p>接下来我们来回顾下前一篇文章&lt;<a href="http://louiszhai.github.io/2015/12/15/arguments/">详解JS之Arguments对象</a>&gt;中所讲到的<a href="http://louiszhai.github.io/2015/12/15/arguments/#u9E2D_u5F0F_u8FA9_u578B">鸭式辩型</a>: 如果一个对象可以像鸭子一样走路,游泳,并且嘎嘎叫,就认为这个对象是鸭子,哪怕它并不是从鸭子对象继承过来的。</p>
+<p>以上，函数②比较好理解，函数①和③有些晦涩，下面我将分别推导。</p>
+<h4 id="反柯里化推导"><a href="#反柯里化推导" class="headerlink" title="反柯里化推导"></a>反柯里化推导</h4><p>如上所示，<code>Function.prototype.call.apply(self, arguments);</code>看起来有些绕，其实很好理解。接下来我会先分析第①种实现，再分析第③种实现。第①种实现是这样的：</p>
+<pre><code class="js">Function.prototype.unCurrying = function() {
+    var self = this;
+    return function() {
+        return Function.prototype.call.apply(self, arguments);
+    }
+}
+var push = Array.prototype.push.uncurrying(); // 借用push举例
+</code></pre>
+<p>谁调用<code>uncurrying</code>，谁就等于<code>this</code>或<code>self</code>. 这意味着<code>self</code>就是<code>数组的push方法</code>.<br>替换掉<code>self</code>，最终外部的<code>push</code>等同如下函数：</p>
+<pre><code class="js">function(){
+  return Function.prototype.call.apply(Array.prototype.push, arguments);
+};
+</code></pre>
+<p>函数放在这里，我们先来理解<code>apply</code>函数，<code>apply</code>有分解数组为一个个参数的作用。</p>
+<p><strong>推导公式</strong>：<code>a.apply(b, arguments)</code> 意味着把b当做this上下文，相当于是在b上调用a方法，并且传入所有的参数，如果b中本身就含有a方法，那么就相当于 <code>b.a(arg1, arg2,…)</code></p>
+<p><strong>得到公式1</strong>：<code>a.apply(b, arguments) === b.a(arg1, arg2,…)</code></p>
+<p>由于<code>call</code> 和 <code>apply</code> 除参数处理不一致之外，其他作用一致，那么公式可以进一步变化得到：</p>
+<p><strong>公式2</strong>：<code>a.call(b, arg) === b.a(arg)</code></p>
+<p>将<strong>公式1</strong>这些代入上面的函数，有：</p>
+<p><code>a = Function.prototype.call</code> 即a等于call方法。</p>
+<p>我们接着代入公式，有：</p>
+<p><code>b = Array.prototype.push</code> 即b等于数组的push方法</p>
+<p>那么 <code>Function.prototype.call.apply(Array.prototype.push, arguments)</code>就相对于：</p>
+<p><code>Array.prototype.push.call(arg1, arg2,…)</code>，那么：</p>
+<p><code>push([], 1)</code> 就相当于 <code>Array.prototype.push.call([], 1)</code>，再代入<strong>公式2</strong>，相当于：<code>[].push(1)</code></p>
+<p>答案已经呼之欲出了，就是往数组中末尾添加数字1。</p>
+<p><strong>接下来我来分析反柯里化的第③种实现：</strong></p>
+<p>对于<code>this.call.bind(this);</code>部分，<code>this</code>相当于<code>Array.prototype.push</code>，那么整体等同于如下：</p>
+<p><code>Array.prototype.push.call.bind(Array.prototype.push)</code></p>
+<p>这里的难点在于bind方法，bind的实现比较简单，如下：</p>
+<pre><code class="js">Function.prototype.bind = function(thisArg){
+  var _this = this;
+  var _arg = _slice.call(arguments,1);
+  return function(){
+       var arg = _slice.call(arguments);
+    arg = _arg.concat(arg);
+      return _this.apply(thisArg,arg);
+  }
+}
+</code></pre>
+<p>进一步简化<code>bind</code>的原理，等同于谁调用<code>bind</code>，就返回一个新的function。</p>
+<p>我们假设函数<code>fn</code>调用<code>bind</code>方法如<code>fn.bind([1, 2])</code>，经过简化，忽略<code>bind</code>绑定参数的部分，最终返回如下：</p>
+<pre><code class="js">function(){
+  return fn.apply([1, 2], arguments);
+}
+</code></pre>
+<p>以上，将<code>fn</code>替换为 <code>Array.prototype.push.call</code>，<code>[1, 2]</code>替换为 <code>Array.prototype.push</code>，那么：</p>
+<p><code>Array.prototype.push.call.bind(Array.prototype.push)</code> 将等同于：</p>
+<pre><code class="js">function(){
+  return Array.prototype.push.call.apply(Array.prototype.push, arguments);
+}
+</code></pre>
+<p>这个看起来和反柯里化的第二种实现有些不大相同，不要急，虽然表面上看起来不一致，但骨子里还是一致的。请耐心往下看：</p>
+<p>不同的地方在于前半部分 <code>Array.prototype.push.call</code>，这里它是一个整体，实际上想代表的就是call方法。而我们都知道，所有函数的call方法，最终都是<code>Function.prototype</code> 的 <code>call</code>方法。那么，就有如下恒等式成立：</p>
+<pre><code class="js">Array.prototype.push.call === Function.prototype.call //true
+</code></pre>
+<p>那么以上函数将等同于：</p>
+<pre><code class="js">function(){
+  return Function.prototype.call.apply(Array.prototype.push, arguments);
+}
+</code></pre>
+<p>褪去代入的参数，函数可还原为：</p>
+<pre><code class="js">function(){
+  return Function.prototype.call.apply(self, arguments);
+}
+</code></pre>
+<p>综上，最终反柯里化的第③种实现将和第①种实现完全一致。</p>
+<h4 id="反柯里化前因"><a href="#反柯里化前因" class="headerlink" title="反柯里化前因"></a>反柯里化前因</h4><p>接下来我们来回顾下前一篇文章&lt;<a href="http://louiszhai.github.io/2015/12/15/arguments/">详解JS之Arguments对象</a>&gt;中所讲到的<a href="http://louiszhai.github.io/2015/12/15/arguments/#u9E2D_u5F0F_u8FA9_u578B">鸭式辩型</a>: 如果一个对象可以像鸭子一样走路,游泳,并且嘎嘎叫,就认为这个对象是鸭子,哪怕它并不是从鸭子对象继承过来的。</p>
 <p>Array构造器和String构造器的prototype上的方法就被特意设计成了鸭子类型。这些方法不对this的数据类型做任何校验。这也就是为什么arguments能冒充array调用push方法.</p>
 <p>下面我们来看下v8引擎里面 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array/push" target="_blank" rel="external">Array.prototype.push</a> 的代码:</p>
 <pre><code class="js">function ArrayPush() {
@@ -12722,7 +12791,7 @@ function(f) {//该方法表示上述func,以下将称作`方法②`
 }
 </code></pre>
 <p>Array.prototype.push 方法并没有去判断调用对象是不是数组, 这给对象冒充提供了天然条件, 基于此函数反柯里化(unCurrying) 才具有可行性. </p>
-<h4 id="反柯里化的栗子"><a href="#反柯里化的栗子" class="headerlink" title="反柯里化的栗子"></a>反柯里化的栗子</h4><p>下面我们让普通对象具有push方法的能力:</p>
+<h4 id="反柯里化应用"><a href="#反柯里化应用" class="headerlink" title="反柯里化应用"></a>反柯里化应用</h4><p>下面我们让普通对象具有push方法的能力:</p>
 <pre><code class="js">var push = Array.prototype.push.unCurrying(),
 obj = {};
 push(obj, &#39;123&#39;, &#39;456&#39;);
@@ -12759,9 +12828,9 @@ console.log(array);//[1,2,3,4,5]
 <p>以上是关于 <code>javaScript</code> 柯里化与反柯里化的一些理解. </p>
 <p>柯里化体现的思想是”归一”, 多个参数化为一个参数, 然后逐个处理, 便于产生偏函数, 实现链式调用; 反柯里化体现的思想是”延伸”, 通过拓展方法的作用域, 使得它变得更通用, 提高了代码的复用性. 它们都提升了代码的优雅性.</p>
 <hr>
-<p>本文就讨论这么多内容,大家有什么问题或好的想法欢迎在下方参与<a href="#respond">留言和评论</a>.</p>
-<p>本文作者: <a href="https://github.com/Louiszhai" target="_blank" rel="external">louis</a></p>
-<p>本文链接: <a href="http://louiszhai.github.io/2015/12/16/currying/">http://louiszhai.github.io/2015/12/16/currying/</a></p>
+<p>版权声明：转载需注明作者和出处。</p>
+<p>本文作者：<a href="https://github.com/Louiszhai" target="_blank" rel="external">louis</a></p>
+<p>本文链接：<a href="http://louiszhai.github.io/2015/12/16/currying/">http://louiszhai.github.io/2015/12/16/currying/</a></p>
 <p>参考文章</p>
 <ul>
 <li><a href="http://www.cnblogs.com/TomXu/archive/2012/07/23/2580701.html" target="_blank" rel="external">深入理解JavaScript系列（49）：Function模式（上篇） - 汤姆大叔 - 博客园</a></li>

@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://louiszhai.github.io/"/>
-  <updated>2017-11-14T02:40:41.634Z</updated>
+  <updated>2018-03-27T11:13:22.375Z</updated>
   <id>http://louiszhai.github.io/</id>
   
   <author>
@@ -20,7 +20,7 @@
     <link href="http://louiszhai.github.io/2017/11/14/iheader/"/>
     <id>http://louiszhai.github.io/2017/11/14/iheader/</id>
     <published>2017-11-14T02:40:15.000Z</published>
-    <updated>2017-11-14T02:40:41.634Z</updated>
+    <updated>2018-03-27T11:13:22.375Z</updated>
     
     <content type="html"><![CDATA[<p><strong>本文首发于《程序员》杂志2017年第9、10、11期，下面的版本又经过进一步的修订。</strong></p>
 <h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a><strong>导读</strong></h3><p>搜索是程序员的灵魂，为了提升搜索的效率，以便更快的查询信息，我试着同时搜索4个网站，分别是百度、Google、维基、Bing。一个可行的做法就是网页中嵌入4个iframe，通过js拼接前面4个搜索引擎的Search URL并依次在iframe中加载。这个构思丝毫没有问题，简单粗暴。然而就是这么简单的功能，也无法实现。由于Google网站在HTML的response header中添加了<code>X-Frame-Options</code>字段以防止网页被Frame（这项设置常被用来防止Click Cheats），因此我无法将Google Search加入到iframe中来。那么，我会放弃Google吗？</p>
@@ -1198,7 +1198,7 @@ div {
     <link href="http://louiszhai.github.io/2017/09/30/tmux/"/>
     <id>http://louiszhai.github.io/2017/09/30/tmux/</id>
     <published>2017-09-30T08:59:36.000Z</published>
-    <updated>2017-10-11T08:32:28.588Z</updated>
+    <updated>2018-03-27T11:13:22.385Z</updated>
     
     <content type="html"><![CDATA[<p><strong>本文首发于CSDN网站，下面的版本又经过进一步的修订。</strong></p>
 <h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h3><p>我一直信奉简洁至上的原则，桌面窗口的数量越少，我的心情就越愉悦，开发的效率也就越高。反之，杂乱的桌面，暴涨的Chrome tab数量，或是无数的终端窗口，它们会逐步侵占我的注意力，分散我的思维，最终令我难以专注。因此桌面上我很少放文件，使用Chrome时常点 <a href="https://chrome.google.com/webstore/detail/onetab/chphlpgkkbolifaimnlloiipkdnihall" target="_blank" rel="external">OneTab</a> 回收标签页，切进终端时使用tmux管理窗口。</p>
@@ -1909,7 +1909,7 @@ tmux send -t &quot;init:tool&quot; &quot;cd ~/data/tools/AriaNg/dist/;python -m 
     <link href="http://louiszhai.github.io/2017/07/07/canvas-draw/"/>
     <id>http://louiszhai.github.io/2017/07/07/canvas-draw/</id>
     <published>2017-07-07T07:36:22.000Z</published>
-    <updated>2017-10-11T08:32:28.559Z</updated>
+    <updated>2018-03-27T11:13:22.365Z</updated>
     
     <content type="html"><![CDATA[<p><strong>本文首发于CSDN网站，下面的版本又经过进一步的修订。</strong></p>
 <h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a><strong>导读</strong></h3><p>6月又是项目吃紧的时候，一大波需求袭来，猝不及防。</p>
@@ -2222,7 +2222,7 @@ switch (degree) {
     <link href="http://louiszhai.github.io/2017/04/28/array/"/>
     <id>http://louiszhai.github.io/2017/04/28/array/</id>
     <published>2017-04-28T05:43:36.000Z</published>
-    <updated>2017-10-11T08:32:28.555Z</updated>
+    <updated>2018-03-27T11:13:22.359Z</updated>
     
     <content type="html"><![CDATA[<p><strong>本文首发于CSDN网站，下面的版本又经过进一步的修订。</strong></p>
 <p>全文共13k+字，系统讲解了JavaScript数组的各种特性和API。</p>
@@ -3373,7 +3373,7 @@ console.log(iterator.next().value); // xyz
     <link href="http://louiszhai.github.io/2017/04/19/hmr/"/>
     <id>http://louiszhai.github.io/2017/04/19/hmr/</id>
     <published>2017-04-19T02:10:00.000Z</published>
-    <updated>2017-10-11T08:32:28.572Z</updated>
+    <updated>2018-03-27T11:13:22.373Z</updated>
     
     <content type="html"><![CDATA[<p><strong>本文首发于CSDN网站，下面的版本又经过进一步的修订。</strong></p>
 <p>开发环境页面热更新早已是主流，我们不光要吃着火锅唱着歌，享受热更新高效率的快感，更要深入下去探求其原理。</p>
@@ -3901,7 +3901,7 @@ server.on(&#39;connection&#39;, function(wsServer){
     <link href="http://louiszhai.github.io/2017/04/07/http-cache/"/>
     <id>http://louiszhai.github.io/2017/04/07/http-cache/</id>
     <published>2017-04-07T00:00:00.000Z</published>
-    <updated>2017-11-04T07:51:46.811Z</updated>
+    <updated>2018-03-27T11:13:22.374Z</updated>
     
     <content type="html"><![CDATA[<p>缓存一直是前端优化的主战场, 利用好缓存就成功了一半. 本篇从http请求和响应的头域入手, 让你对浏览器缓存有个整体的概念. 最终你会发现强缓存, 协商缓存 和 启发式缓存是如此的简单.</p>
 <h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a><strong>导读</strong></h3><p>我不知道拖延症是有多严重, 反正去年3月开的题, 直到今年4月才开始写.(请尽情吐槽吧)</p>
@@ -4303,7 +4303,7 @@ c3(no)->op2->io1->e</textarea><textarea id="flowchart-0-options" style="display:
     <link href="http://louiszhai.github.io/2017/03/12/promise/"/>
     <id>http://louiszhai.github.io/2017/03/12/promise/</id>
     <published>2017-03-12T13:28:23.000Z</published>
-    <updated>2017-10-11T08:32:28.579Z</updated>
+    <updated>2018-03-27T11:13:22.380Z</updated>
     
     <content type="html"><![CDATA[<p>开始写本篇文字时, 我一直不是很明白任务队列的机制, 故想写篇文章弄懂它. 于是我尝试以Promise为核心, 逐步展开, 最终分析process.nextTick , promise.then , setTimeout , setImmediate 它们的异步机制.</p>
 <h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h3><p>Promise问世已久, 其科普类文章亦不计其数. 遂本篇初衷不为科普, 只为能够温故而知新.</p>
@@ -4657,7 +4657,7 @@ setTimeout(function(){
     <link href="http://louiszhai.github.io/2017/02/24/back/"/>
     <id>http://louiszhai.github.io/2017/02/24/back/</id>
     <published>2017-02-24T07:59:01.000Z</published>
-    <updated>2017-10-11T08:32:28.557Z</updated>
+    <updated>2018-03-27T11:13:22.360Z</updated>
     
     <content type="html"><![CDATA[<h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h3><p>最近我在梳理公司web app新产品线的返回逻辑, 推演了N种方案, 竟然没有一种完全通用的. 这让我迷惑不已. 仔细体验了公司的各种H5页面, 发现返回逻辑还真是五花八门. 那么, 问题来了, 为什么Web App的返回逻辑如此难以设计?</p>
 <a id="more"></a>
@@ -4860,7 +4860,7 @@ public class WebViewManager {
     <link href="http://louiszhai.github.io/2017/02/19/box-shadow/"/>
     <id>http://louiszhai.github.io/2017/02/19/box-shadow/</id>
     <published>2017-02-19T08:23:34.000Z</published>
-    <updated>2017-10-11T08:32:28.559Z</updated>
+    <updated>2018-03-27T11:13:22.363Z</updated>
     
     <content type="html"><![CDATA[<h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h3><p>我总是记不住css3的box-shadow属性拥有几个值, 它们的顺序究竟如何? 对我来说, 这是一个大难题. 我们都知道, 使用一个属性, 总是可以不停地在开发者工具上测试UI表现, 直到表现令人满意. 好吧, 有些时候它是奏效的; 而其它时候呢, 我们会消耗时间, 积攒疲劳值, 以及成就感下降等. 一旦短时记忆失效, 我们完全有可能重复一遍之前不愉快地尝试. 因此我选择多花些时间, 用力一次记住它. 如果你恰好也有同样的疑惑, 请读下去.</p>
 <a id="more"></a>
@@ -5122,7 +5122,7 @@ box-shadow: 110px 0 0 -10px #ccc, 220px 0 0 0 #808080, 360px 0 0 10px grey;
     <link href="http://louiszhai.github.io/2017/01/13/flex/"/>
     <id>http://louiszhai.github.io/2017/01/13/flex/</id>
     <published>2017-01-13T00:42:01.000Z</published>
-    <updated>2017-10-11T08:32:28.572Z</updated>
+    <updated>2018-03-27T11:13:22.372Z</updated>
     
     <content type="html"><![CDATA[<h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h3><p>Web layout 是Web UI中的基础架构, 重要性不言而喻. 传统的盒模型, 借助display, position, float 属性应对普通布局游刃有余, 但针对复杂的或自适应布局, 常常捉襟见肘. 比如垂直居中, 就是一个老大难的问题, 借助flex弹性盒模型, 两行代码就可以优雅的实现之. (该方法曾在 <a href="http://louiszhai.github.io/2016/03/12/css-center/">16种方法实现水平居中垂直居中</a> 一文中提到). 当然, 本次我们不会只讨论垂直居中的问题, 我将努力尽可能的还原flex的应用场景.</p>
 <a id="more"></a>
@@ -5438,7 +5438,7 @@ box-shadow: 110px 0 0 -10px #ccc, 220px 0 0 0 #808080, 360px 0 0 10px grey;
     <link href="http://louiszhai.github.io/2016/12/23/sort/"/>
     <id>http://louiszhai.github.io/2016/12/23/sort/</id>
     <published>2016-12-23T03:55:14.000Z</published>
-    <updated>2017-10-11T08:32:28.586Z</updated>
+    <updated>2018-03-27T11:13:22.385Z</updated>
     
     <content type="html"><![CDATA[<h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h3><p>排序算法可以称得上是我的盲点, 曾几何时当我知道Chrome的Array.prototype.sort使用了快速排序时, 我的内心是奔溃的(啥是快排, 我只知道冒泡啊?!), 要知道学习一门技术最好的时间是三年前, 但愿我现在补习还来得及(捂脸).</p>
 <p>因此本篇重拾了出镜概率比较高的十来种排序算法, 逐一分析其排序思想, 并批注注意事项. 欢迎对算法提出改进和<a href="#respond">讨论</a>.</p>
@@ -6184,7 +6184,7 @@ countSort(b, &#39;id&#39;); // [{id:1,s:&#39;b&#39;},{id:1,s:&#39;c&#39;},{id:1,
     <link href="http://louiszhai.github.io/2016/11/25/manifest/"/>
     <id>http://louiszhai.github.io/2016/11/25/manifest/</id>
     <published>2016-11-25T00:08:21.000Z</published>
-    <updated>2017-10-24T12:13:32.193Z</updated>
+    <updated>2018-03-27T11:13:22.380Z</updated>
     
     <content type="html"><![CDATA[<h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h3><p>Manifest 是 H5提供的一种应用缓存机制, 基于它web应用可以实现离线访问(offline cache). 为此, 浏览器还提供了应用缓存的api–applicationCache. 虽然manifest的技术已被web标准废弃, 但这不影响我们尝试去了解它. 也正是因为manifest的应用缓存机制如此诱人, 饿了么 和 office 365邮箱等都还在使用着它!</p>
 <a id="more"></a>
@@ -6366,7 +6366,7 @@ Expires: [CURRENT TIME]
     <link href="http://louiszhai.github.io/2016/11/02/ajax/"/>
     <id>http://louiszhai.github.io/2016/11/02/ajax/</id>
     <published>2016-11-02T04:48:27.000Z</published>
-    <updated>2017-11-11T10:31:34.232Z</updated>
+    <updated>2018-03-27T11:13:22.357Z</updated>
     
     <content type="html"><![CDATA[<h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h3><p>Ajax 全称 Asynchronous JavaScript and XML, 即异步JS与XML. 它最早在IE5中被使用, 然后由Mozilla, Apple, Google推广开来. 典型的代表应用有 Outlook Web Access, 以及 GMail. 现代网页中几乎无ajax不欢. 前后端分离也正是建立在ajax异步通信的基础之上.</p>
 <a id="more"></a>
@@ -7782,7 +7782,7 @@ curl -I -X POST -H &quot;Origin: http://example.com&quot; http://localhost:10108
     <link href="http://louiszhai.github.io/2016/11/02/fetch/"/>
     <id>http://louiszhai.github.io/2016/11/02/fetch/</id>
     <published>2016-11-02T04:48:08.000Z</published>
-    <updated>2017-10-11T08:32:28.571Z</updated>
+    <updated>2018-03-27T11:13:22.372Z</updated>
     
     <content type="html"><![CDATA[<h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h3><p>Fetch 是 web异步通信的未来. 从chrome42, Firefox39, Opera29, EdgeHTML14(并非Edge版本)起, fetch就已经被支持了. 其中chrome42~45版本, fetch对中文支持有问题, 建议从chrome46起使用fetch. 传送门: <a href="https://bugs.chromium.org/p/chromium/issues/detail?id=511289" target="_blank" rel="external">fetch中文乱码</a> .</p>
 <a id="more"></a>
@@ -8204,7 +8204,7 @@ fetch(&#39;http://localhost:10101/notification/&#39;,{mode:&#39;no-cors&#39;})
     <link href="http://louiszhai.github.io/2016/07/01/Math/"/>
     <id>http://louiszhai.github.io/2016/07/01/Math/</id>
     <published>2016-06-30T23:57:48.000Z</published>
-    <updated>2017-10-11T08:32:28.543Z</updated>
+    <updated>2018-03-27T11:13:22.355Z</updated>
     
     <content type="html"><![CDATA[<p>Math方法和位运算几乎是被忽略得最严重的知识点, 和正则一样, 不用不知道, 一用到处查. 为了告别这种低效的编程模式, 我特地总结此篇, 系统梳理了这两个知识点. 以此为册, 助你攻破它们.</p>
 <h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h3><p>截至ES6, JavaScript 中内置(build-in)构造器/对象共有19个, 其中14个是构造器(Number,Boolean, String, Object, Function, Array, RegExp, Error, Date, Set, WeakSet, Map, Proxy, Promise), Global 不能直接访问, Arguments仅在函数调用时由JS引擎创建, 而 Math, JSON, Reflect 是以对象形式存在的, 本篇将带你走进 JS 内置对象-Math以及与之息息相关的位运算, 一探究竟.</p>
@@ -8947,7 +8947,7 @@ add(9527,-12);//9515
     <link href="http://louiszhai.github.io/2016/06/13/regexp/"/>
     <id>http://louiszhai.github.io/2016/06/13/regexp/</id>
     <published>2016-06-13T00:24:55.000Z</published>
-    <updated>2017-10-11T08:32:28.583Z</updated>
+    <updated>2018-03-27T11:13:22.382Z</updated>
     
     <content type="html"><![CDATA[<h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h3><p>你有没有在搜索文本的时候绞尽脑汁, 试了一个又一个表达式, 还是不行.</p>
 <p>你有没有在表单验证的时候, 只是做做样子(只要不为空就好), 然后烧香拜佛, 虔诚祈祷, 千万不要出错.</p>
@@ -10112,7 +10112,7 @@ with(obj){
     <link href="http://louiszhai.github.io/2016/03/31/css-hasLayout/"/>
     <id>http://louiszhai.github.io/2016/03/31/css-hasLayout/</id>
     <published>2016-03-31T05:57:56.000Z</published>
-    <updated>2017-10-11T08:32:28.568Z</updated>
+    <updated>2018-03-27T11:13:22.370Z</updated>
     
     <content type="html"><![CDATA[<h3 id="什么是hasLayout"><a href="#什么是hasLayout" class="headerlink" title="什么是hasLayout"></a>什么是hasLayout</h3><blockquote>
 <p>hasLayout property: Gets a value that indicates whether the object has layout.</p>
@@ -10237,7 +10237,7 @@ console.log(element.currentStyle.hasLayout);//该方式只能获取值, 而不�
     <link href="http://louiszhai.github.io/2016/03/23/css-margin/"/>
     <id>http://louiszhai.github.io/2016/03/23/css-margin/</id>
     <published>2016-03-23T12:47:36.000Z</published>
-    <updated>2017-10-11T08:32:28.569Z</updated>
+    <updated>2018-03-27T11:13:22.370Z</updated>
     
     <content type="html"><![CDATA[<h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h3><p>margin属性处于盒子模型的最外层, 用以隔开其他元素, 它可以依次设置4个长度值, 分别表示 “上 右 下 左” 的间距, 其中第1个和第3个值相对应, 第2个与第4个相对应, 如果省略前者, 后者将取与前者相同的数值. margin属性共存在以下 4 种表示方式:</p>
 <ul>
@@ -10311,7 +10311,7 @@ console.log(element.currentStyle.hasLayout);//该方式只能获取值, 而不�
     <link href="http://louiszhai.github.io/2016/03/12/css-center/"/>
     <id>http://louiszhai.github.io/2016/03/12/css-center/</id>
     <published>2016-03-12T11:03:04.000Z</published>
-    <updated>2017-10-11T08:32:28.566Z</updated>
+    <updated>2018-03-27T11:13:22.369Z</updated>
     
     <content type="html"><![CDATA[<h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h3><p>熟悉水平居中和垂直居中的方法, 不为别的, 就为用的时候能够信手拈来. 下面直接步入正题.</p>
 <a id="more"></a>
@@ -10513,7 +10513,7 @@ console.log(element.currentStyle.hasLayout);//该方式只能获取值, 而不�
     <link href="http://louiszhai.github.io/2016/03/12/css-float/"/>
     <id>http://louiszhai.github.io/2016/03/12/css-float/</id>
     <published>2016-03-12T09:55:04.000Z</published>
-    <updated>2017-10-11T08:32:28.568Z</updated>
+    <updated>2018-03-27T11:13:22.369Z</updated>
     
     <content type="html"><![CDATA[<h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h3><p>float即浮动, 使用float, 该浮动元素便会脱离正常的文档流, 使其浮动到父元素的行的一端(元素向左或向右移动, 直到碰到浮动元素, 或者达到父元素内容的边界, 不包括padding), 并且其他元素将忽略该浮动元素并填补其原先的空间.</p>
 <p>这里需要捋清一个概念, 所谓文档流是什么?</p>
