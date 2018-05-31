@@ -17,7 +17,7 @@
 <meta property="og:image" content="http://louiszhai.github.io/docImages/promise03.png">
 <meta property="og:image" content="http://louiszhai.github.io/docImages/promise02.png">
 <meta property="og:image" content="http://louiszhai.github.io/docImages/promise04.png">
-<meta property="og:updated_time" content="2018-03-27T11:13:22.380Z">
+<meta property="og:updated_time" content="2018-04-04T02:45:52.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Promise使用手册">
 <meta name="twitter:description" content="promise promise.race promise.all Promise.reject Promise.resolve then catch Promises/A+ process.nextTick setImmediate">
@@ -297,7 +297,11 @@ p.then(function(SuccessRes) {
 });
 </code></pre>
 <p>那么, 如果没有指定返回值, 会怎么样?</p>
-<p>根据Promise规范, <strong>then或catch即使未显式指定返回值, 它们也总是默认返回一个新的fulfilled状态的promise对象</strong>.</p>
+<p>根据Promise规范,</p>
+<blockquote>
+<p>Values returned from the onFulfilled or onRejected callback functions will be automatically wrapped in a resolved promise.**</p>
+</blockquote>
+<p>这意味着：<strong>then或catch即使未显式指定返回值, 它们也总是自动包装一个新的fulfilled状态的promise对象</strong>。</p>
 <h4 id="catch"><a href="#catch" class="headerlink" title="catch"></a>catch</h4><p>语法: <em>Promise.prototype.catch(onRejected)</em></p>
 <p>用于捕获并处理异常. 无论是程序抛出的异常, 还是主动reject掉Promise自身, 都会被catch捕获到.</p>
 <pre><code class="js">new Promise(function(resolve, reject) {
