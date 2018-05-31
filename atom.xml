@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://louiszhai.github.io/"/>
-  <updated>2018-05-31T03:02:12.412Z</updated>
+  <updated>2018-05-31T03:46:31.439Z</updated>
   <id>http://louiszhai.github.io/</id>
   
   <author>
@@ -16,15 +16,16 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
-    <title></title>
-    <link href="http://louiszhai.github.io/2018/05/10/alfred/"/>
-    <id>http://louiszhai.github.io/2018/05/10/alfred/</id>
-    <published>2018-05-10T03:49:19.264Z</published>
-    <updated>2018-05-31T03:02:12.412Z</updated>
+    <title>Alfred神器使用手册</title>
+    <link href="http://louiszhai.github.io/2018/05/31/alfred/"/>
+    <id>http://louiszhai.github.io/2018/05/31/alfred/</id>
+    <published>2018-05-31T03:46:17.000Z</published>
+    <updated>2018-05-31T03:46:31.439Z</updated>
     
-    <content type="html"><![CDATA[<h1 id="Alfred神器使用手册"><a href="#Alfred神器使用手册" class="headerlink" title="Alfred神器使用手册"></a>Alfred神器使用手册</h1><p>我曾经耗费巨大的精力，试图在计算机的使用效率上找到一条优化的捷径，一直以来都收效甚微。直到遇上 alfred，它强大的工作流机制，<strong>彻底解决了输入输出的痛点，极大的减少了程序之间的切换成本和重复按键成本</strong>，这才让我明白，原来计算机可以这么玩。</p>
+    <content type="html"><![CDATA[<p>我曾经耗费巨大的精力，试图在计算机的使用效率上找到一条优化的捷径，一直以来都收效甚微。直到遇上 alfred，它强大的工作流机制，<strong>彻底解决了输入输出的痛点，极大的减少了程序之间的切换成本和重复按键成本</strong>，这才让我明白，原来计算机可以这么玩。</p>
 <p>神奇的魔法帽，alfred 初印象。</p>
-<p><img src="http://louiszhai.github.io/docImages/alfred/alfred.png" alt=""></p>
+<p><img src="http://louiszhai.github.io/docImages/alfred/alfred-icon.png" alt=""></p>
+<a id="more"></a>
 <h3 id="如何安装alfred"><a href="#如何安装alfred" class="headerlink" title="如何安装alfred"></a>如何安装alfred</h3><p>首先可以从 <a href="https://www.alfredapp.com/" target="_blank" rel="external">alfred官网</a> 自行下载安装，免费用户可以使用除 workflow 以外的其它功能，如需使用 workflow，则需要购买Powerpack。</p>
 <p>不建议：自行搜索破解版，或者点个喜欢，留下邮箱找我要…</p>
 <h3 id="一个例子说明为什么要用alfred"><a href="#一个例子说明为什么要用alfred" class="headerlink" title="一个例子说明为什么要用alfred"></a>一个例子说明为什么要用alfred</h3><p>以前，使用mac查询一个单词，或者翻译一个单词，我们要么经历五步：</p>
@@ -297,10 +298,12 @@ end alfred_script
     
     <summary type="html">
     
-      &lt;h1 id=&quot;Alfred神器使用手册&quot;&gt;&lt;a href=&quot;#Alfred神器使用手册&quot; class=&quot;headerlink&quot; title=&quot;Alfred神器使用手册&quot;&gt;&lt;/a&gt;Alfred神器使用手册&lt;/h1&gt;&lt;p&gt;我曾经耗费巨大的精力，试图在计算机的使用效率上找到一条优化的
+      Alfred workflow 工作流
     
     </summary>
     
+    
+      <category term="Tool" scheme="http://louiszhai.github.io/tags/Tool/"/>
     
   </entry>
   
