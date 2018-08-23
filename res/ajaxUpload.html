@@ -3,9 +3,16 @@
 <head>
 	<meta charset="UTF-8">
 	<title>ajax 文件上传 demo | louis</title>
+	<style>
+		input {
+			height: 25px;
+			font-size: 16px;
+		}
+	</style>
 </head>
 <body>
 	<input id="input" type="file" onchange="preview()"/>
+	<input id="urlInput" type="text" value="http://localhost:10108/test" placeholder="请输入上传url" style="width: 400px">
 	<input id="btn" class="btn" type="button" value="上传" onclick="upload()">
 	<span id="span"></span><br>
 	<p>
@@ -16,6 +23,7 @@
 <script>
 	var $$ = document.getElementById.bind(document),
 		input = $$("input"),
+		urlInput = $$("urlInput"),
 		img = $$("img"),
 		span = $$("span");
 
@@ -60,7 +68,7 @@
 		var formData = new FormData();
 		formData.append('file',input.files[0]);
 
-		var url = "http://localhost:10108/test",
+		var url = urlInput.value,
     		method = "POST";
 
 		// 原生js请求
