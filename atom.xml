@@ -316,10 +316,10 @@ end alfred_script
     <link href="http://louiszhai.github.io/2017/11/14/iheader/"/>
     <id>http://louiszhai.github.io/2017/11/14/iheader/</id>
     <published>2017-11-14T02:40:15.000Z</published>
-    <updated>2018-03-27T11:13:22.000Z</updated>
+    <updated>2018-09-13T03:05:26.573Z</updated>
     
     <content type="html"><![CDATA[<p><strong>本文首发于《程序员》杂志2017年第9、10、11期，下面的版本又经过进一步的修订。</strong></p>
-<h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a><strong>导读</strong></h3><p>搜索是程序员的灵魂，为了提升搜索的效率，以便更快的查询信息，我试着同时搜索4个网站，分别是百度、Google、维基、Bing。一个可行的做法就是网页中嵌入4个iframe，通过js拼接前面4个搜索引擎的Search URL并依次在iframe中加载。这个构思丝毫没有问题，简单粗暴。然而就是这么简单的功能，也无法实现。由于Google网站在HTML的response header中添加了<code>X-Frame-Options</code>字段以防止网页被Frame（这项设置常被用来防止Click Cheats），因此我无法将Google Search加入到iframe中来。那么，我会放弃Google吗？</p>
+<h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a><strong>导读</strong></h3><p>对于开发而言，搜索是日常工作，为了提升搜索的效率，以便更快的查询信息，我试着同时搜索4个网站，分别是百度、Google、维基、Bing。一个可行的做法就是网页中嵌入4个iframe，通过js拼接前面4个搜索引擎的Search URL并依次在iframe中加载。这个构思丝毫没有问题，简单粗暴。然而就是这么简单的功能，也无法实现。由于Google网站在HTML的response header中添加了<code>X-Frame-Options</code>字段以防止网页被Frame（这项设置常被用来防止Click Cheats），因此我无法将Google Search加入到iframe中来。那么，我会放弃Google吗？</p>
 <a id="more"></a>
 <h3 id="Nginx反向代理Google"><a href="#Nginx反向代理Google" class="headerlink" title="Nginx反向代理Google"></a><strong>Nginx反向代理Google</strong></h3><p>显然不会，既然问题出在<code>X-Frame-Options</code>上，我去掉就行了。对于请求或响应头域定制，nginx是个不错的选择，其第三方的<code>ngx_headers_more</code>模块就特别擅长这种处理。由于nginx无法动态加载第三方模块，我动态编译了nginx以便加入<code>ngx_headers_more</code>模块。至此，第一步完成，以下是nginx的部分配置。</p>
 <pre><code>location / {
@@ -422,10 +422,10 @@ end alfred_script
 </li>
 </ul>
 <p><img src="http://louiszhai.github.io/docImages/iheader07.png" alt="拖放以安装"></p>
-<p>​    2）点击添加扩展程序</p>
-<p><img src="http://louiszhai.github.io/docImages/iheader08.png" alt="添加扩展"></p>
-<p>​    3）添加好的扩展如下所示。</p>
-<p><img src="http://louiszhai.github.io/docImages/iheader09.png" alt="拖放安装后"></p>
+<pre><code>2）点击添加扩展程序
+</code></pre><p><img src="http://louiszhai.github.io/docImages/iheader08.png" alt="添加扩展"></p>
+<pre><code>3）添加好的扩展如下所示。
+</code></pre><p><img src="http://louiszhai.github.io/docImages/iheader09.png" alt="拖放安装后"></p>
 <ul>
 <li>启动Chrome时添加参数<code>--enable-easy-off-store-extension-install</code> ，用以开启简单的扩展安装模式，然后就能像之前一样随意拖动crx文件到浏览器页面进行安装。</li>
 </ul>
@@ -446,7 +446,7 @@ end alfred_script
 <li>options.html 选项页面，用于扩展的设置（可选，位于根目录或子级目录）</li>
 </ul>
 <p>为了方便管理，个人倾向于将HTML、JS、CSS，ICON等资源分类统一到同一个目录。</p>
-<h4 id="扩展的分类"><a href="#扩展的分类" class="headerlink" title="扩展的分类"></a><strong>扩展的分类</strong></h4><p>从使用场景上看，Chrome扩展可分为以下三类：</p>
+<h4 id="扩展的核心功能"><a href="#扩展的核心功能" class="headerlink" title="扩展的核心功能"></a><strong>扩展的核心功能</strong></h4><p>从使用场景上看，Chrome扩展常用的有以下三类：</p>
 <p>1）Browser Action，浏览器扩展，可通过manifest.json中的<code>browser_action</code>属性设置，如下所示。</p>
 <pre><code class="json">&quot;browser_action&quot;: {
   &quot;default_title&quot;: &quot;Qrcode&quot;,
@@ -468,14 +468,10 @@ end alfred_script
 <p><img src="http://louiszhai.github.io/docImages/iheader13.gif" alt="Page Action演示"></p>
 <p>该类扩展特点：不同页面可以拥有不同的状态和不同的icon，icon在指定的页面可见，可见时位于浏览器右上角工具栏。</p>
 <p>由上可见，Browser Action与Page Action功能上非常相似，配置上各自的内部属性也完全一致，它们不仅可以配置点击时弹出的页面，同时还可以绑定点击事件，如下所示。</p>
-<pre><code class="js">// 以下事件绑定一般在background.js中运行
-// Browser Action
-chrome.browserAction.onClicked.addListener(function(tab) {
+<pre><code class="js">chrome.browserAction.onClicked.addListener(function(tab) { // Browser Action
   console.log(tab.id, tab.url);
-  chrome.tabs.executeScript(tab.id, {file: &#39;content.js&#39;});
 });
-// Page Action
-chrome.pageAction.onClicked.addListener(function(tab) {
+chrome.pageAction.onClicked.addListener(function(tab) { // Page Action
   console.log(tab.id, tab.url);
 });
 </code></pre>
@@ -487,15 +483,15 @@ chrome.pageAction.onClicked.addListener(function(tab) {
 </code></pre>
 <p>以上是MDN网站快捷查询的Omnibox扩展，运行如下所示：</p>
 <p><img src="http://louiszhai.github.io/docImages/iheader11.gif" alt="Omnibox演示"></p>
-<p>很明显，你可以对地址栏的各种输入做定制，Chrome的URL地址栏只所以强大，omnibox可谓功不可没。</p>
 <p>该类扩展特点：运行在URL地址栏，无弹出界面，用户在输入时，扩展就可以显示建议或者自动完成一些工作。</p>
+<p>很明显，你可以对地址栏的各种输入做定制，Chrome的URL地址栏只所以强大，omnibox可谓功不可没。</p>
 <p>以上三类决定了扩展如何在浏览器中运行。除此之外，每个扩展程序还可以任意搭载如下页面或脚本。</p>
 <ul>
 <li><p>Background Page，后台页面，可通过manifest.json中的<code>background</code>属性设置，里面再细分<code>script</code>或<code>page</code>，分别表示脚本和页面，如下所示。</p>
 <pre><code class="json">&quot;background&quot;: {
-  &quot;persistent&quot;: true, //默认为false，指定为true时将在后台持续运行
+  &quot;persistent&quot;: true, // 默认为false，指定为true时将在后台持续运行
   &quot;scripts&quot;: [&quot;res/js/background.js&quot;] // 指定后台运行的js
-  // &quot;page&quot;: [&quot;res/background.html&quot;]  // 指定后台运行的html，html中需引入若干个js，没有用户界面，实际上就相当于引入多个js脚本
+  // &quot;page&quot;: [&quot;res/background.html&quot;]  // 指定后台运行的html，html中需引入若干个js
 },
 </code></pre>
 <p>Background Page在扩展中之所以重要，主要归功于<strong>它可以使用所有的Chrome.* API</strong>。借助它<code>popup.js</code> 和 <code>content.js</code> 可以随时进行消息通信，并且调用它们原本无法调用的API。</p>
@@ -503,14 +499,12 @@ chrome.pageAction.onClicked.addListener(function(tab) {
 <p>该页面特点：运行在浏览器后台，无用户界面，后台页面可用于页面间消息通信以及后台监控，一旦浏览器启动，后台页面就会自动运行。</p>
 </li>
 <li><p>Content Script，内容脚本，可通过manifest.json中的<code>content_scripts</code>属性设置，如下所示。</p>
-<pre><code class="json">&quot;content_scripts&quot;: [
-  {
-    &quot;all_frames&quot;: true, // 默认为false，指定为true意味着frame中也加载内容脚本
-    &quot;matches&quot;: [&quot;\u003Call_urls&gt;&quot;], // 匹配所有URL，意味着任何页面都会加载
-    &quot;js&quot;: [&quot;res/js/content.js&quot;], // 指定运行的内容脚本
-    &quot;run_at&quot;: &quot;document_end&quot; // 页面加载完成后执行
-  }
-],
+<pre><code class="json">&quot;content_scripts&quot;: [{
+  &quot;all_frames&quot;: true, // 默认为false，指定为true意味着frame中也加载内容脚本
+  &quot;matches&quot;: [&quot;\u003Call_urls&gt;&quot;], // 匹配所有URL，意味着任何页面都会加载
+  &quot;js&quot;: [&quot;res/js/content.js&quot;], // 指定运行的内容脚本
+  &quot;run_at&quot;: &quot;document_end&quot; // 页面加载完成后执行
+}],
 </code></pre>
 <p>除了配置之外，内容脚本还可以通过js的方式动态载入。</p>
 <pre><code class="js">// 动态载入js文件
@@ -534,7 +528,7 @@ chrome.tabs.executeScript(tabId, {code: &#39;alert(&quot;Hello Extension!&quot;)
 </code></pre>
 <p>该页面特点：常用于替换浏览器默认的空白标签页内容，多见于新开标签页时的壁纸程序，基于它你完全可以打造一个属于自己的空白页。</p>
 </li>
-<li><p>Devtool Page，开发者页面，可通过manifest.json中的<code>devtools_page</code>属性设置，如下所示。</p>
+<li><p>Devtool Page，控制台页面，可通过manifest.json中的<code>devtools_page</code>属性设置，如下所示。</p>
 <pre><code class="json">&quot;devtools_page&quot;: &quot;debug.html&quot;,
 </code></pre>
 <p>该页面特点：随着控制台打开而启动，可用于将扩展收到的消息输出到当前控制台。</p>
@@ -1225,7 +1219,8 @@ chrome.runtime.onConnect.addListener(function(port) {
 <pre><code class="js">/* 监听快捷键 */
 chrome.commands.onCommand.addListener(function(command) {
   if (command == &quot;toggle_status&quot;) { // 匹配命令名称
-    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) { // 查询当前激活tab
+    // 查询当前激活tab
+    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) { 
       var tab = tabs[0];
       tab &amp;&amp; TabControler(tab.id, tab.url).switchActive(); // 切换tab控制器的状态
     });
@@ -1246,18 +1241,18 @@ chrome.commands.onCommand.addListener(function(command) {
 </code></pre>
 </li>
 <li><p>菜单需在background.js中手动创建。</p>
-<pre><code class="js">chrome.contextMenus.removeAll(); // 创建之前建议清空菜单
-chrome.contextMenus.create({ // 创建右键菜单
-  title: &#39;切换Header监听模式&#39;, // 指定菜单名称
-  id: &#39;contextMenu-0&#39;, // 指定菜单id
-  contexts: [&#39;all&#39;] // 所有地方可见
+<pre><code class="js">chrome.contextMenus.removeAll();     // 创建之前建议清空菜单
+chrome.contextMenus.create({         // 创建右键菜单
+  title: &#39;切换Header监听模式&#39;,         // 指定菜单名称
+  id: &#39;contextMenu-0&#39;,                 // 指定菜单id
+  contexts: [&#39;all&#39;]                 // 所有地方可见
 });
 </code></pre>
 <p>由于<em>chrome.contextMenus.create(object createProperties, function callback)</em>方法默认返回新菜单的id，因此它通过回调（第二个参数callback）来告知是否创建成功，而第一个参数createProperties则为菜单项指定配置信息。</p>
 </li>
 <li><p>绑定右键菜单的功能。</p>
-<pre><code class="js">chrome.contextMenus.onClicked.addListener(function (menu, tab){ // 绑定点击事件
-  TabControler(tab.id, tab.url).switchActive(); // 切换扩展状态
+<pre><code class="js">chrome.contextMenus.onClicked.addListener(function (menu, tab){
+  TabControler(tab.id, tab.url).switchActive();
 });
 </code></pre>
 </li>
@@ -1442,7 +1437,7 @@ div {
 <p><img src="http://louiszhai.github.io/docImages/iheader29.png" alt="chrome.i18n.detectLanguage"></p>
 </li>
 </ul>
-<h3 id="Chrome扩展开发的心得"><a href="#Chrome扩展开发的心得" class="headerlink" title="Chrome扩展开发的心得"></a><strong>Chrome扩展开发的心得</strong></h3><p>到目前为止，IHeader是我业余开发时间最长的一款Chrome扩展。从今年的5月8号始，到6月14号，第一版才完工，然后又经过7月、8月近两个月的陆续修改，最终v1.1.0版才成型，这才达到了我最初的开发初衷。</p>
+<h3 id="Chrome扩展开发的心得"><a href="#Chrome扩展开发的心得" class="headerlink" title="Chrome扩展开发的心得"></a><strong>Chrome扩展开发的心得</strong></h3><p>到目前为止，IHeader是我业余开发时间最长的一款Chrome扩展。从去年的5月8号始，到6月14号，第一版才完工，然后又经过7月、8月近两个月的陆续修改，最终v1.1.0版才成型，这才达到了我最初的开发初衷。</p>
 <p>现在网络上流传的各种扩展开发教程非常之多，甚至API翻译的网站也很多，就我所知道的至少有这些：</p>
 <ul>
 <li><a href="http://open.chrome.360.cn/extension_dev/overview.html" target="_blank" rel="external">360--扩展开发文档</a></li>
@@ -2518,7 +2513,7 @@ switch (degree) {
     <link href="http://louiszhai.github.io/2017/04/28/array/"/>
     <id>http://louiszhai.github.io/2017/04/28/array/</id>
     <published>2017-04-28T05:43:36.000Z</published>
-    <updated>2018-03-27T11:13:22.000Z</updated>
+    <updated>2018-09-04T07:29:09.107Z</updated>
     
     <content type="html"><![CDATA[<p><strong>本文首发于CSDN网站，下面的版本又经过进一步的修订。</strong></p>
 <p>全文共13k+字，系统讲解了JavaScript数组的各种特性和API。</p>
@@ -3457,7 +3452,7 @@ array.reduce((p, v) =&gt; p * v); // 24
 <td style="text-align:center">第1次</td>
 <td style="text-align:center">1</td>
 <td style="text-align:center">1</td>
-<td style="text-align:center">1</td>
+<td style="text-align:center">0</td>
 <td style="text-align:center">[1,2,3,4]</td>
 <td style="text-align:center">1</td>
 </tr>
@@ -3465,7 +3460,7 @@ array.reduce((p, v) =&gt; p * v); // 24
 <td style="text-align:center">第2次</td>
 <td style="text-align:center">1</td>
 <td style="text-align:center">2</td>
-<td style="text-align:center">2</td>
+<td style="text-align:center">1</td>
 <td style="text-align:center">[1,2,3,4]</td>
 <td style="text-align:center">2</td>
 </tr>
@@ -3473,7 +3468,7 @@ array.reduce((p, v) =&gt; p * v); // 24
 <td style="text-align:center">第3次</td>
 <td style="text-align:center">2</td>
 <td style="text-align:center">3</td>
-<td style="text-align:center">3</td>
+<td style="text-align:center">2</td>
 <td style="text-align:center">[1,2,3,4]</td>
 <td style="text-align:center">6</td>
 </tr>
@@ -3481,7 +3476,7 @@ array.reduce((p, v) =&gt; p * v); // 24
 <td style="text-align:center">第4次</td>
 <td style="text-align:center">6</td>
 <td style="text-align:center">4</td>
-<td style="text-align:center">4</td>
+<td style="text-align:center">3</td>
 <td style="text-align:center">[1,2,3,4]</td>
 <td style="text-align:center">24</td>
 </tr>

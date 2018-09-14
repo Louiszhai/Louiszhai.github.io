@@ -13,7 +13,7 @@
 <meta property="og:url" content="http://louiszhai.github.io/2015/12/15/prototypeChain/index.html">
 <meta property="og:site_name" content="louis blog">
 <meta property="og:description" content="JavaScript 原型链 prototype instanceof typeof  hasOwnProperty new  借用构造函数 组合继承 寄生式继承 寄生组合式继承">
-<meta property="og:updated_time" content="2018-03-27T11:13:22.000Z">
+<meta property="og:updated_time" content="2018-09-03T02:42:34.914Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="详解JS原型链与继承">
 <meta name="twitter:description" content="JavaScript 原型链 prototype instanceof typeof  hasOwnProperty new  借用构造函数 组合继承 寄生式继承 寄生组合式继承">
@@ -496,8 +496,8 @@ instance1.sayName();//zhai
 instance1.sayAge();//10
 </code></pre>
 <hr>
-<h3 id="扩展"><a href="#扩展" class="headerlink" title="扩展:"></a>扩展:</h3><h4 id="属性查找"><a href="#属性查找" class="headerlink" title="属性查找"></a>属性查找</h4><p>​    使用了原型链后, 当查找一个对象的属性时，JavaScript 会向上遍历原型链，直到找到给定名称的属性为止，到查找到达原型链的顶部 - 也就是 Object.prototype - 但是仍然没有找到指定的属性，就会返回 undefined. 此时若想避免原型链查找, 建议使用 <strong>hasOwnProperty</strong> 方法. 因为 <strong>hasOwnProperty</strong> 是 JavaScript 中唯一一个处理属性但是不查找原型链的函数. 如:</p>
-<pre><code class="js">console.log(instance1.hasOwnProperty(&#39;age&#39;));//true
+<h3 id="扩展"><a href="#扩展" class="headerlink" title="扩展:"></a>扩展:</h3><h4 id="属性查找"><a href="#属性查找" class="headerlink" title="属性查找"></a>属性查找</h4><pre><code>使用了原型链后, 当查找一个对象的属性时，JavaScript 会向上遍历原型链，直到找到给定名称的属性为止，到查找到达原型链的顶部 - 也就是 Object.prototype - 但是仍然没有找到指定的属性，就会返回 undefined. 此时若想避免原型链查找, 建议使用 **hasOwnProperty** 方法. 因为 **hasOwnProperty** 是 JavaScript 中唯一一个处理属性但是不查找原型链的函数. 如:
+</code></pre><pre><code class="js">console.log(instance1.hasOwnProperty(&#39;age&#39;));//true
 </code></pre>
 <p>对比: <strong>isPrototypeOf</strong> 则是用来判断该方法所属的对象是不是参数的原型对象，是则返回true，否则返回false。如:</p>
 <pre><code class="js">console.log(Father.prototype.isPrototypeOf(instance1));//true
@@ -510,8 +510,8 @@ instance1.sayAge();//10
   else
     console.log(&#39;此处作为普通函数被调用&#39;);
 }
-f();//此处作为构造函数被调用
-new f();//此处作为普通函数被调用
+f();//此处作为普通函数被调用
+new f();//此处作为构造函数被调用
 </code></pre>
 <p>以上, this instanceof <a href="http://louiszhai.github.io/2015/12/15/arguments/"><code>arguments</code></a>.callee 的值如果为 true 表示是作为构造函数被调用的,如果为 false 则表示是作为普通函数被调用的。</p>
 <p>对比: <strong>typeof</strong> 则用以获取一个变量或者表达式的类型, 一般只能返回如下几个结果:</p>

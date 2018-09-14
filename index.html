@@ -270,7 +270,7 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p><strong>本文首发于《程序员》杂志2017年第9、10、11期，下面的版本又经过进一步的修订。</strong></p>
-<h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a><strong>导读</strong></h3><p>搜索是程序员的灵魂，为了提升搜索的效率，以便更快的查询信息，我试着同时搜索4个网站，分别是百度、Google、维基、Bing。一个可行的做法就是网页中嵌入4个iframe，通过js拼接前面4个搜索引擎的Search URL并依次在iframe中加载。这个构思丝毫没有问题，简单粗暴。然而就是这么简单的功能，也无法实现。由于Google网站在HTML的response header中添加了<code>X-Frame-Options</code>字段以防止网页被Frame（这项设置常被用来防止Click Cheats），因此我无法将Google Search加入到iframe中来。那么，我会放弃Google吗？</p>
+<h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a><strong>导读</strong></h3><p>对于开发而言，搜索是日常工作，为了提升搜索的效率，以便更快的查询信息，我试着同时搜索4个网站，分别是百度、Google、维基、Bing。一个可行的做法就是网页中嵌入4个iframe，通过js拼接前面4个搜索引擎的Search URL并依次在iframe中加载。这个构思丝毫没有问题，简单粗暴。然而就是这么简单的功能，也无法实现。由于Google网站在HTML的response header中添加了<code>X-Frame-Options</code>字段以防止网页被Frame（这项设置常被用来防止Click Cheats），因此我无法将Google Search加入到iframe中来。那么，我会放弃Google吗？</p>
       
     </div>
     
