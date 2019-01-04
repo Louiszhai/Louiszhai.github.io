@@ -17,7 +17,7 @@
 <meta property="og:image" content="http://louiszhai.github.io/docImages/promise03.png">
 <meta property="og:image" content="http://louiszhai.github.io/docImages/promise02.png">
 <meta property="og:image" content="http://louiszhai.github.io/docImages/promise04.png">
-<meta property="og:updated_time" content="2018-04-04T02:45:52.000Z">
+<meta property="og:updated_time" content="2018-09-20T11:16:25.188Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Promise使用手册">
 <meta name="twitter:description" content="promise promise.race promise.all Promise.reject Promise.resolve then catch Promises/A+ process.nextTick setImmediate">
@@ -114,7 +114,7 @@
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud" id="js-tagcloud">
-						<a href="/tags/CSS/" style="font-size: 16.67px;">CSS</a> <a href="/tags/JavaScript/" style="font-size: 20px;">JavaScript</a> <a href="/tags/JavaScript-Canvas/" style="font-size: 10px;">JavaScript Canvas</a> <a href="/tags/JavaScript-Chrome-Extension/" style="font-size: 10px;">JavaScript Chrome-Extension</a> <a href="/tags/Tool/" style="font-size: 13.33px;">Tool</a> <a href="/tags/Web/" style="font-size: 16.67px;">Web</a> <a href="/tags/XSS/" style="font-size: 10px;">XSS</a> <a href="/tags/css/" style="font-size: 13.33px;">css</a> <a href="/tags/javascript/" style="font-size: 10px;">javascript</a>
+						<a href="/tags/CSS/" style="font-size: 17.5px;">CSS</a> <a href="/tags/JavaScript/" style="font-size: 20px;">JavaScript</a> <a href="/tags/JavaScript-Canvas/" style="font-size: 10px;">JavaScript Canvas</a> <a href="/tags/JavaScript-Chrome-Extension/" style="font-size: 10px;">JavaScript Chrome-Extension</a> <a href="/tags/Tool/" style="font-size: 15px;">Tool</a> <a href="/tags/Web/" style="font-size: 17.5px;">Web</a> <a href="/tags/XSS/" style="font-size: 10px;">XSS</a> <a href="/tags/css/" style="font-size: 12.5px;">css</a> <a href="/tags/javascript/" style="font-size: 10px;">javascript</a>
 					</div>
 				</section>
 				
@@ -296,12 +296,22 @@ p.then(function(SuccessRes) {
   console.log(res);
 });
 </code></pre>
-<p>那么, 如果没有指定返回值, 会怎么样?</p>
+<p>那么, 如果没有指定返回值, 会怎么样?（没有指定返回值，实际上就默认返回了undefined）</p>
 <p>根据Promise规范,</p>
 <blockquote>
 <p>Values returned from the onFulfilled or onRejected callback functions will be automatically wrapped in a resolved promise.**</p>
 </blockquote>
-<p>这意味着：<strong>then或catch即使未显式指定返回值, 它们也总是自动包装一个新的fulfilled状态的promise对象</strong>。</p>
+<p>这意味着：<strong>then或catch，它们也总是自动包装一个新的fulfilled状态的promise对象，无论你返回的是promise、或者undefined，它依然会基于返回值再包裹一层fulfilled状态的promise</strong>。眼见为实，如下：</p>
+<pre><code class="js">var p1 = new Promise(() =&gt; {
+});
+var p2 = new Promise((r) =&gt; {
+  r();
+}).then(() =&gt; {
+  return x;
+});
+console.log(p1 === p2); // false
+</code></pre>
+<p>这点非常重要，如果你在使用vue，那么dispatch返回的promise会在mapgetters返回的promise之后执行。</p>
 <h4 id="catch"><a href="#catch" class="headerlink" title="catch"></a>catch</h4><p>语法: <em>Promise.prototype.catch(onRejected)</em></p>
 <p>用于捕获并处理异常. 无论是程序抛出的异常, 还是主动reject掉Promise自身, 都会被catch捕获到.</p>
 <pre><code class="js">new Promise(function(resolve, reject) {
@@ -747,7 +757,7 @@ setTimeout(function(){
     <div id="footer-info">
       <img src="/img/top_arrow.png" class="top_arrow" id="top_arrow">
     	<div class="footer-left">
-    		&copy; 2018 路易斯
+    		&copy; 2019 路易斯
 
         <span style="position:relative;top:2px" id="cnzz_stat_icon_1256923583"></span>
         <script type="text/javascript">
