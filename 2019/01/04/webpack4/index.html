@@ -22,7 +22,7 @@
 <meta property="og:image" content="http://louiszhai.github.io/docImages/webpack-1-happyPack-1-dll-1-parallel.w4.png">
 <meta property="og:image" content="http://louiszhai.github.io/docImages/webpack-analyzer.png">
 <meta property="og:image" content="http://louiszhai.github.io/docImages/webpack-analyzer.size.png">
-<meta property="og:updated_time" content="2019-01-04T03:48:14.588Z">
+<meta property="og:updated_time" content="2019-03-16T11:07:22.334Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用webpack4提升180%编译速度">
 <meta name="twitter:description" content="webpack4 使用webpack4提升180%编译速度">
@@ -82,10 +82,10 @@
 				<div class="tips-box hide">
 					<div class="tips-arrow"></div>
 					<ul class="tips-inner">
-						<li>Menu</li>
+						<li>菜单</li>
 						<li>Tags</li>
 						
-						<li>Links</li>
+						<li>友情链接</li>
 						
 						
 					</ul>
@@ -651,7 +651,7 @@ module.exports = {
     &quot;dll&quot;: &quot;webpack --mode production --config build/webpack.dll.config.js&quot;
 }
 </code></pre>
-<p>运行 <code>npm run dll</code> 后，会生成 <code>./src/assets/dll/vue.dll-[hash].js</code> 公共js 和 <code>./build/vue.dll.manifest.json</code> 资源说明文件，至此 dll 准备工作完成，接下来在 wepack 中引用即可。</p>
+<p>运行 <code>npm run dll</code> 后，会生成 <code>./src/assets/dll/vue.dll-[hash].js</code> 公共js 和 <code>./build/vue.dll.manifest.json</code> 资源说明文件，至此 dll 准备工作完成，接下来在 webpack 中引用即可。</p>
 <pre><code class="js">externals: {
     &#39;vue&#39;: &#39;Vue&#39;,
     &#39;vue-router&#39;: &#39;VueRouter&#39;,
@@ -838,7 +838,7 @@ plugins: [
 <div class="share_jia">
 	<!-- JiaThis Button BEGIN -->
 	<div class="jiathis_style">
-		<span class="jiathis_txt">Share to: &nbsp; </span>
+		<span class="jiathis_txt">分享到: &nbsp; </span>
 		<a class="jiathis_button_facebook"></a> 
     <a class="jiathis_button_twitter"></a>
     <a class="jiathis_button_plus"></a> 

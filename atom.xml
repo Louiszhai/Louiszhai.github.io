@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://louiszhai.github.io/"/>
-  <updated>2019-01-04T03:48:14.588Z</updated>
+  <updated>2019-03-16T11:07:22.334Z</updated>
   <id>http://louiszhai.github.io/</id>
   
   <author>
@@ -20,7 +20,7 @@
     <link href="http://louiszhai.github.io/2019/01/04/webpack4/"/>
     <id>http://louiszhai.github.io/2019/01/04/webpack4/</id>
     <published>2019-01-04T02:49:08.000Z</published>
-    <updated>2019-01-04T03:48:14.588Z</updated>
+    <updated>2019-03-16T11:07:22.334Z</updated>
     
     <content type="html"><![CDATA[<p>对于现在的前端项目而言，编译发布几乎是必需操作，有的编译只需要几秒钟，快如闪电，有的却需要10分钟，甚至更多，慢如蜗牛。特别是线上热修复时，分秒必争，响应速度直接影响了用户体验，用户不会有耐心等那么长时间，让你慢慢编译；如果涉及到支付操作，产品损失更是以秒计，每提前哪怕一秒钟发布，在腾讯海量用户面前，都能挽回不小的损失。不仅如此，编译效率的提升，带来的最直观收益就是，开发效率与开发体验双重提升。</p>
 <p>那么，到底是什么拖慢了webpack打包效率，我们又能做哪些提升呢？</p>
@@ -443,7 +443,7 @@ module.exports = {
     &quot;dll&quot;: &quot;webpack --mode production --config build/webpack.dll.config.js&quot;
 }
 </code></pre>
-<p>运行 <code>npm run dll</code> 后，会生成 <code>./src/assets/dll/vue.dll-[hash].js</code> 公共js 和 <code>./build/vue.dll.manifest.json</code> 资源说明文件，至此 dll 准备工作完成，接下来在 wepack 中引用即可。</p>
+<p>运行 <code>npm run dll</code> 后，会生成 <code>./src/assets/dll/vue.dll-[hash].js</code> 公共js 和 <code>./build/vue.dll.manifest.json</code> 资源说明文件，至此 dll 准备工作完成，接下来在 webpack 中引用即可。</p>
 <pre><code class="js">externals: {
     &#39;vue&#39;: &#39;Vue&#39;,
     &#39;vue-router&#39;: &#39;VueRouter&#39;,
@@ -3090,7 +3090,7 @@ switch (degree) {
     <link href="http://louiszhai.github.io/2017/04/28/array/"/>
     <id>http://louiszhai.github.io/2017/04/28/array/</id>
     <published>2017-04-28T05:43:36.000Z</published>
-    <updated>2018-09-04T07:29:09.107Z</updated>
+    <updated>2019-07-11T02:48:50.095Z</updated>
     
     <content type="html"><![CDATA[<p><strong>本文首发于CSDN网站，下面的版本又经过进一步的修订。</strong></p>
 <p>全文共13k+字，系统讲解了JavaScript数组的各种特性和API。</p>
@@ -3131,7 +3131,7 @@ b.length = 8; // [undefined × 8]
 <h3 id="ES6新增的构造函数方法"><a href="#ES6新增的构造函数方法" class="headerlink" title="ES6新增的构造函数方法"></a><strong>ES6新增的构造函数方法</strong></h3><p>鉴于数组的常用性，ES6专门扩展了数组构造器<code>Array</code> ，新增2个方法：<code>Array.of</code>、<code>Array.from</code>。下面展开来聊。</p>
 <h4 id="Array-of"><a href="#Array-of" class="headerlink" title="Array.of"></a><strong>Array.of</strong></h4><p>Array.of用于将参数依次转化为数组中的一项，然后返回这个新数组，而不管这个参数是数字还是其它。它基本上与Array构造器功能一致，唯一的区别就在单个数字参数的处理上。如下：</p>
 <pre><code class="js">Array.of(8.0); // [8]
-Array(8.0); // [undefined × 8]
+Array(8.0); // [empty × 8]
 </code></pre>
 <p>参数为多个，或单个参数不是数字时，Array.of 与 Array构造器等同。</p>
 <pre><code class="js">Array.of(8.0, 5); // [8, 5]
@@ -5171,7 +5171,7 @@ c3(no)->op2->io1->e</textarea><textarea id="flowchart-0-options" style="display:
     <link href="http://louiszhai.github.io/2017/03/12/promise/"/>
     <id>http://louiszhai.github.io/2017/03/12/promise/</id>
     <published>2017-03-12T13:28:23.000Z</published>
-    <updated>2018-09-20T11:16:25.188Z</updated>
+    <updated>2019-07-11T02:42:22.196Z</updated>
     
     <content type="html"><![CDATA[<p>开始写本篇文字时, 我一直不是很明白任务队列的机制, 故想写篇文章弄懂它. 于是我尝试以Promise为核心, 逐步展开, 最终分析process.nextTick , promise.then , setTimeout , setImmediate 它们的异步机制.</p>
 <h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h3><p>Promise问世已久, 其科普类文章亦不计其数. 遂本篇初衷不为科普, 只为能够温故而知新.</p>
@@ -5292,7 +5292,7 @@ console.log(p1 === p2); // false
 <h4 id="Promise-reject"><a href="#Promise-reject" class="headerlink" title="Promise.reject"></a>Promise.reject</h4><p>语法: <em>Promise.reject(value)</em></p>
 <p>该方法返回一个拒绝状态的Promise对象, 同时传入的参数作为PromiseValue.</p>
 <pre><code class="js">//params: String
-Promise.reject(&#39;该prormise已被拒绝&#39;);
+Promise.reject(&#39;该prormise已被拒绝&#39;)
 .catch(function(reason){
   console.log(&#39;catch:&#39;, reason);
 });

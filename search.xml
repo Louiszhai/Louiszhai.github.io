@@ -426,7 +426,7 @@ module.exports = {
     &quot;dll&quot;: &quot;webpack --mode production --config build/webpack.dll.config.js&quot;
 }
 </code></pre>
-<p>运行 <code>npm run dll</code> 后，会生成 <code>./src/assets/dll/vue.dll-[hash].js</code> 公共js 和 <code>./build/vue.dll.manifest.json</code> 资源说明文件，至此 dll 准备工作完成，接下来在 wepack 中引用即可。</p>
+<p>运行 <code>npm run dll</code> 后，会生成 <code>./src/assets/dll/vue.dll-[hash].js</code> 公共js 和 <code>./build/vue.dll.manifest.json</code> 资源说明文件，至此 dll 准备工作完成，接下来在 webpack 中引用即可。</p>
 <pre><code class="js">externals: {
     &#39;vue&#39;: &#39;Vue&#39;,
     &#39;vue-router&#39;: &#39;VueRouter&#39;,
@@ -3084,7 +3084,7 @@ b.length = 8; // [undefined × 8]
 <h3 id="ES6新增的构造函数方法"><a href="#ES6新增的构造函数方法" class="headerlink" title="ES6新增的构造函数方法"></a><strong>ES6新增的构造函数方法</strong></h3><p>鉴于数组的常用性，ES6专门扩展了数组构造器<code>Array</code> ，新增2个方法：<code>Array.of</code>、<code>Array.from</code>。下面展开来聊。</p>
 <h4 id="Array-of"><a href="#Array-of" class="headerlink" title="Array.of"></a><strong>Array.of</strong></h4><p>Array.of用于将参数依次转化为数组中的一项，然后返回这个新数组，而不管这个参数是数字还是其它。它基本上与Array构造器功能一致，唯一的区别就在单个数字参数的处理上。如下：</p>
 <pre><code class="js">Array.of(8.0); // [8]
-Array(8.0); // [undefined × 8]
+Array(8.0); // [empty × 8]
 </code></pre>
 <p>参数为多个，或单个参数不是数字时，Array.of 与 Array构造器等同。</p>
 <pre><code class="js">Array.of(8.0, 5); // [8, 5]
@@ -5227,7 +5227,7 @@ console.log(p1 === p2); // false
 <h4 id="Promise-reject"><a href="#Promise-reject" class="headerlink" title="Promise.reject"></a>Promise.reject</h4><p>语法: <em>Promise.reject(value)</em></p>
 <p>该方法返回一个拒绝状态的Promise对象, 同时传入的参数作为PromiseValue.</p>
 <pre><code class="js">//params: String
-Promise.reject(&#39;该prormise已被拒绝&#39;);
+Promise.reject(&#39;该prormise已被拒绝&#39;)
 .catch(function(reason){
   console.log(&#39;catch:&#39;, reason);
 });
@@ -11944,6 +11944,112 @@ document.write(str.link(&quot;https://www.baidu.com&quot;)); // &lt;a href=&quot
     </entry>
     
     <entry>
+      <title><![CDATA[Function.prototype.bind方法指南]]></title>
+      <url>/2016/01/11/bind/</url>
+      <content type="html"><![CDATA[<h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h3><p>ES5新增了 Function.prototype.bind 方法, 该方法不同于jquery的bind 方法, 它主要用于固定 this 作用域, 避免各种由于上下文切换造成的语义问题. 常用在 setTimeout, for循环等内部.</p>
+<a id="more"></a>
+<h3 id="bind"><a href="#bind" class="headerlink" title="bind"></a>bind</h3><p>语法: func.bind(thisArg, arg1, arg2, ….)</p>
+<p>bind() 方法会返回一个新函数, 又叫绑定函数, 当调用这个绑定函数时, 绑定函数会以创建它时传入 bind() 方法的第一个参数作为当前的上下文, 即this, 传入 bind() 方法的第二个及之后的参数加上绑定函数运行时自身的参数按照顺序作为原函数的参数来调用原函数.</p>
+<p>绑定函数也能使用new操作符创建对象; 这就好比把原函数当做构造器. 此时提供的this将被忽略, this之后的参数将依然前置到运行时的参数列表中.</p>
+<h4 id="基本用法"><a href="#基本用法" class="headerlink" title="基本用法"></a>基本用法</h4><p>下面我们来看看bind 的基本用法.</p>
+<pre><code class="js">var x = 8;
+var o = {
+  x: 10,
+  getX: function(){
+      console.log(this.x);
+  }
+};
+var f = o.getX;
+f();//8, 由于没有绑定执行时的上下文, this默认指向window, 打印了全局变量x的值
+var g = f.bind(o);
+g();//10, 绑定this后, 成功的打印了o对象的x属性的值.
+</code></pre>
+<h4 id="分离参数"><a href="#分离参数" class="headerlink" title="分离参数"></a>分离参数</h4><p>bind() 方法还可以设置函数拥有的初始参数. 这些参数作为bind() 的第2,3…个参数跟在this(或其他对象的后面), 调用绑定函数时, 这些参数将插入到参数列表的最开始位置, 而传递给绑定函数的参数将跟在他们后面.</p>
+<pre><code class="js">//打印十个斐波那契数
+var f = function(n1, n2, length){
+  if(arguments.length&lt;3) console.log(&#39;参数不够...&#39;);
+  var array = [n1, n2];
+  for(var i=2;i&lt;length;i++){
+      array[i] = array[i-2] + array[i-1];
+  }
+  return array;
+}
+var g = f.bind(null, 1, 1);
+console.log(g(10));//[1, 1, 2, 3, 5, 8, 13, 21, 34, 55]
+</code></pre>
+<h4 id="绑定参数"><a href="#绑定参数" class="headerlink" title="绑定参数"></a>绑定参数</h4><p>如果使用new 操作符去构造绑定函数的实例时, 原来提供的this 将被忽略, this之后的参数将依然前置到构造函数的参数列表中. 此时 bind() 方法便具备了保留参数的能力, 我们可以此达到类似柯里化的效果.</p>
+<pre><code class="js">var f = function(){
+  if(arguments.length!=0)
+      this.sum = Array.prototype.reduce.call(arguments,function(prev,item){//对传入参数求和
+         return prev + item;
+    });
+  return Array.prototype.join.call(arguments);// 返回传入参数的字符串形式
+}
+f.prototype.toString = function(){
+  return this.sum;
+}
+var g = f.bind(null,2);
+var x = new g(8);
+console.log(x.toString());//10, 可见x被绑定了2+8=10
+console.log(g(8));//2,8 这告诉我们绑定的两个参数正是2和8
+
+console.log(x instanceof g);//true, 可见通过new创建的x继承了g
+console.log(x instanceof f);//true, 可见x也继承了f
+console.log(g instanceof Function);//true, 可见bind f()方法之后, 返回了一个新的函数g
+//函数g可用于求和,如下:
+console.log(g(1,3,5,7,9));//27 2+1+3+5+7+9=27
+</code></pre>
+<h4 id="快捷调用"><a href="#快捷调用" class="headerlink" title="快捷调用"></a>快捷调用</h4><p>使用Array.prototype的方法处理类数组对象时(鸭式辨型), 不可避免的需要借用call 或者 apply 方法, 使用 bind() 方法, 我们可以简化这个过程. 如下:</p>
+<pre><code class="js">var _slice = Array.prototype.slice;
+var slice = Function.prototype.call.bind(_slice);
+function f(){
+  return slice(arguments,1);
+}
+f(1,2,3,4,5);//[2, 3, 4, 5]
+</code></pre>
+<p>下面的实例将解释 bind() 方法做了一件什么事情:</p>
+<pre><code class="js">var _slice = Array.prototype.slice;
+var slice = function(){
+  return _slice.apply(arguments[0],_slice.call(arguments,1));
+};
+function f(){
+  return slice(arguments,1);
+}
+f(1,2,3,4,5);//[2, 3, 4, 5]
+</code></pre>
+<p>如下, 是bind() 方法的简单实现.</p>
+<pre><code class="js">Function.prototype.bind = function(thisArg,argN){
+  var _this = this;
+  var _arg = _slice.call(arguments,1);
+  return function(){
+       var arg = _slice.call(arguments);
+    arg = _arg.concat(arg);
+      return _this.apply(thisArg,arg);
+  }
+}
+</code></pre>
+<p>可以看出来, 使用 bind() 方法后, 代码优雅得多.</p>
+<p>注: 作为ES5标准加入的bind方法显然不支持 IE9之前的低版本IE, 如需使用, 请参考<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Function/bind#Compatibility" target="_blank" rel="external">Polyfill</a>.</p>
+<hr>
+<p>本文就讨论这么多内容,大家有什么问题或好的想法欢迎在下方参与<a href="#respond">留言和评论</a>.</p>
+<p>本文作者: <a href="https://github.com/Louiszhai" target="_blank" rel="external">louis</a></p>
+<p>本文链接: <a href="http://louiszhai.github.io/2016/01/11/bind/">http://louiszhai.github.io/2016/01/11/bind/</a></p>
+<p>参考文章</p>
+<ul>
+<li><a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Function/bind" target="_blank" rel="external">Function.prototype.bind() - JavaScript | MDN</a></li>
+</ul>
+]]></content>
+      
+        
+        <tags>
+            
+            <tag> JavaScript </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
       <title><![CDATA[由同源策略到前端跨域]]></title>
       <url>/2016/01/11/cross-domain/</url>
       <content type="html"><![CDATA[<h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h3><p>同源策略 (Same-Origin Policy) 最早由 Netscape 公司提出, 所谓同源就是要求, 域名, 协议, 端口相同. 非同源的脚本不能访问或者操作其他域的页面对象(如DOM等). 作为著名的安全策略, 虽然它只是一个规范, 并不强制要求,  但现在所有支持 javaScript 的浏览器都会使用这个策略. 以至于该策略成为浏览器最核心最基本的安全功能, 如果缺少了同源策略, web的安全将无从谈起.</p>
@@ -12117,112 +12223,6 @@ console.log(document.domain);
 <li><a href="http://www.freebuf.com/articles/web/65468.html" target="_blank" rel="external">同源策略详解及绕过（Part1） - FreeBuf.COM | 关注黑客与极客</a></li>
 <li><a href="http://www.plhwin.com/2014/05/28/nodejs-socketio/" target="_blank" rel="external">使用Node.js+Socket.IO搭建WebSocket实时应用 | 潘良虎的随想录</a></li>
 <li><a href="http://blog.jackxy.com/cross-origin-123/" target="_blank" rel="external">跨域资源访问的几种方式</a></li>
-</ul>
-]]></content>
-      
-        
-        <tags>
-            
-            <tag> JavaScript </tag>
-            
-        </tags>
-        
-    </entry>
-    
-    <entry>
-      <title><![CDATA[Function.prototype.bind方法指南]]></title>
-      <url>/2016/01/11/bind/</url>
-      <content type="html"><![CDATA[<h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h3><p>ES5新增了 Function.prototype.bind 方法, 该方法不同于jquery的bind 方法, 它主要用于固定 this 作用域, 避免各种由于上下文切换造成的语义问题. 常用在 setTimeout, for循环等内部.</p>
-<a id="more"></a>
-<h3 id="bind"><a href="#bind" class="headerlink" title="bind"></a>bind</h3><p>语法: func.bind(thisArg, arg1, arg2, ….)</p>
-<p>bind() 方法会返回一个新函数, 又叫绑定函数, 当调用这个绑定函数时, 绑定函数会以创建它时传入 bind() 方法的第一个参数作为当前的上下文, 即this, 传入 bind() 方法的第二个及之后的参数加上绑定函数运行时自身的参数按照顺序作为原函数的参数来调用原函数.</p>
-<p>绑定函数也能使用new操作符创建对象; 这就好比把原函数当做构造器. 此时提供的this将被忽略, this之后的参数将依然前置到运行时的参数列表中.</p>
-<h4 id="基本用法"><a href="#基本用法" class="headerlink" title="基本用法"></a>基本用法</h4><p>下面我们来看看bind 的基本用法.</p>
-<pre><code class="js">var x = 8;
-var o = {
-  x: 10,
-  getX: function(){
-      console.log(this.x);
-  }
-};
-var f = o.getX;
-f();//8, 由于没有绑定执行时的上下文, this默认指向window, 打印了全局变量x的值
-var g = f.bind(o);
-g();//10, 绑定this后, 成功的打印了o对象的x属性的值.
-</code></pre>
-<h4 id="分离参数"><a href="#分离参数" class="headerlink" title="分离参数"></a>分离参数</h4><p>bind() 方法还可以设置函数拥有的初始参数. 这些参数作为bind() 的第2,3…个参数跟在this(或其他对象的后面), 调用绑定函数时, 这些参数将插入到参数列表的最开始位置, 而传递给绑定函数的参数将跟在他们后面.</p>
-<pre><code class="js">//打印十个斐波那契数
-var f = function(n1, n2, length){
-  if(arguments.length&lt;3) console.log(&#39;参数不够...&#39;);
-  var array = [n1, n2];
-  for(var i=2;i&lt;length;i++){
-      array[i] = array[i-2] + array[i-1];
-  }
-  return array;
-}
-var g = f.bind(null, 1, 1);
-console.log(g(10));//[1, 1, 2, 3, 5, 8, 13, 21, 34, 55]
-</code></pre>
-<h4 id="绑定参数"><a href="#绑定参数" class="headerlink" title="绑定参数"></a>绑定参数</h4><p>如果使用new 操作符去构造绑定函数的实例时, 原来提供的this 将被忽略, this之后的参数将依然前置到构造函数的参数列表中. 此时 bind() 方法便具备了保留参数的能力, 我们可以此达到类似柯里化的效果.</p>
-<pre><code class="js">var f = function(){
-  if(arguments.length!=0)
-      this.sum = Array.prototype.reduce.call(arguments,function(prev,item){//对传入参数求和
-         return prev + item;
-    });
-  return Array.prototype.join.call(arguments);// 返回传入参数的字符串形式
-}
-f.prototype.toString = function(){
-  return this.sum;
-}
-var g = f.bind(null,2);
-var x = new g(8);
-console.log(x.toString());//10, 可见x被绑定了2+8=10
-console.log(g(8));//2,8 这告诉我们绑定的两个参数正是2和8
-
-console.log(x instanceof g);//true, 可见通过new创建的x继承了g
-console.log(x instanceof f);//true, 可见x也继承了f
-console.log(g instanceof Function);//true, 可见bind f()方法之后, 返回了一个新的函数g
-//函数g可用于求和,如下:
-console.log(g(1,3,5,7,9));//27 2+1+3+5+7+9=27
-</code></pre>
-<h4 id="快捷调用"><a href="#快捷调用" class="headerlink" title="快捷调用"></a>快捷调用</h4><p>使用Array.prototype的方法处理类数组对象时(鸭式辨型), 不可避免的需要借用call 或者 apply 方法, 使用 bind() 方法, 我们可以简化这个过程. 如下:</p>
-<pre><code class="js">var _slice = Array.prototype.slice;
-var slice = Function.prototype.call.bind(_slice);
-function f(){
-  return slice(arguments,1);
-}
-f(1,2,3,4,5);//[2, 3, 4, 5]
-</code></pre>
-<p>下面的实例将解释 bind() 方法做了一件什么事情:</p>
-<pre><code class="js">var _slice = Array.prototype.slice;
-var slice = function(){
-  return _slice.apply(arguments[0],_slice.call(arguments,1));
-};
-function f(){
-  return slice(arguments,1);
-}
-f(1,2,3,4,5);//[2, 3, 4, 5]
-</code></pre>
-<p>如下, 是bind() 方法的简单实现.</p>
-<pre><code class="js">Function.prototype.bind = function(thisArg,argN){
-  var _this = this;
-  var _arg = _slice.call(arguments,1);
-  return function(){
-       var arg = _slice.call(arguments);
-    arg = _arg.concat(arg);
-      return _this.apply(thisArg,arg);
-  }
-}
-</code></pre>
-<p>可以看出来, 使用 bind() 方法后, 代码优雅得多.</p>
-<p>注: 作为ES5标准加入的bind方法显然不支持 IE9之前的低版本IE, 如需使用, 请参考<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Function/bind#Compatibility" target="_blank" rel="external">Polyfill</a>.</p>
-<hr>
-<p>本文就讨论这么多内容,大家有什么问题或好的想法欢迎在下方参与<a href="#respond">留言和评论</a>.</p>
-<p>本文作者: <a href="https://github.com/Louiszhai" target="_blank" rel="external">louis</a></p>
-<p>本文链接: <a href="http://louiszhai.github.io/2016/01/11/bind/">http://louiszhai.github.io/2016/01/11/bind/</a></p>
-<p>参考文章</p>
-<ul>
-<li><a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Function/bind" target="_blank" rel="external">Function.prototype.bind() - JavaScript | MDN</a></li>
 </ul>
 ]]></content>
       

@@ -19,7 +19,7 @@
 		<img alt="待上传的图片" id="img"/>
 	</p>
 </body>
-<script src="http://localhost:8080/web/js/jquery-2.1.4.min.js"></script>
+<!-- <script src="http://localhost:8080/web/js/jquery-2.1.4.min.js"></script> -->
 <script>
 	var $$ = document.getElementById.bind(document),
 		input = $$("input"),
@@ -72,16 +72,16 @@
     		method = "POST";
 
 		// 原生js请求
-		// var xhr = ajax('http://localhost:10108/test', 'POST',formData);
-		// xhr.upload.onprogress = function(e){
-		//   	console.log("upload progress:", e.loaded/e.total*100 + "%");
-		// };
-		// xhr.upload.onload = function(){
-		//   	console.log("upload onload.");
-		// };
-		// xhr.onload = function(){
-		//   	console.log("onload.");
-		// }
+		var xhr = ajax(url, 'POST',formData);
+		xhr.upload.onprogress = function(e){
+		  	console.log("upload progress:", e.loaded/e.total*100 + "%");
+		};
+		xhr.upload.onload = function(){
+		  	console.log("upload onload.");
+		};
+		xhr.onload = function(){
+		  	console.log("onload.");
+		}
 		
 		// jq请求
 		// before 1.4.4及以前版本默认传入XMLHttpRequest, 1.5以后默认传入jqXHR
@@ -110,84 +110,84 @@
 		// });
 
 		//jq xhr
-		$(document).ajaxStart(function() {
-			console.log("ajaxStart");
-		});
-		$(document).ajaxSend(function(event, xhr, settings) {
-			console.log("ajaxSend");
-		});
-		$(document).ajaxStop(function() {
-			console.log("ajaxStop");
-		});
-		$(document).ajaxError(function(event, xhr, settings, thrownError) {
-			console.log("ajaxError");
-		});
-		$(document).ajaxSuccess(function(event, xhr, settings) {
-			console.log("ajaxSuccess");
-		});
-		$(document).ajaxComplete(function(event, xhr, settings) {
-			console.log("ajaxComplete");
-		});
-		$.ajaxPrefilter( function( options, originalOptions, jqXHR ) {
-		  	console.log("ajaxPrefilter");
-		});
+		// $(document).ajaxStart(function() {
+		// 	console.log("ajaxStart");
+		// });
+		// $(document).ajaxSend(function(event, xhr, settings) {
+		// 	console.log("ajaxSend");
+		// });
+		// $(document).ajaxStop(function() {
+		// 	console.log("ajaxStop");
+		// });
+		// $(document).ajaxError(function(event, xhr, settings, thrownError) {
+		// 	console.log("ajaxError");
+		// });
+		// $(document).ajaxSuccess(function(event, xhr, settings) {
+		// 	console.log("ajaxSuccess");
+		// });
+		// $(document).ajaxComplete(function(event, xhr, settings) {
+		// 	console.log("ajaxComplete");
+		// });
+		// $.ajaxPrefilter( function( options, originalOptions, jqXHR ) {
+		//   	console.log("ajaxPrefilter");
+		// });
 
-		$.ajax({
-			type: method,
-			url: url,
-			data: formData,
-			global: true,
-			context: input ,
-			processData : false,
-			contentType : false ,//必须false才会自动加上正确的Content-Type
-			xhr: function(){
-				var xhr = $.ajaxSettings.xhr();
-				if(xhr.upload) {
-					xhr.upload.addEventListener("readystatechange", function(){
-					  	console.log("xhr onreadystatechange.");
-					});
-					xhr.upload.addEventListener("progress", function(e){
-						console.log("xhr upload progress:", e.loaded/e.total*100 + "%");
-					}, false);
-					xhr.upload.addEventListener("loadstart", function(){
-					  	console.log("xhr upload onloadstart.");
-					});
-					xhr.upload.addEventListener("load", function(){
-					  	console.log("xhr upload onload.");
-					});
-					xhr.upload.addEventListener("loadend", function(){
-					  	console.log("xhr upload onloadend.");
-					});
-					xhr.addEventListener("progress", function(e){
-						console.log("xhr progress:", e.loaded/e.total*100 + "%");
-					}, false);
-					xhr.addEventListener("loadstart", function(){
-					  	console.log("xhr onloadstart.");
-					});
-					xhr.addEventListener("load", function(){
-					  	console.log("xhr onload.");
-					});
-					// xhr.addEventListener("loadend", function(){
-					//   	console.log("xhr onloadend.");
-					// });
-					xhr.onloadend = function(){
-						console.log("xhr onloadend.");
-					}
-					window.xhr = xhr;
-					return xhr;
-				}
-		   	},
-		   	success: function(){
-		   		console.log("jq success.");
-		   	},
-		   	complete: function(){
-		   		console.log("jq complete");
-		   	},
-		   	beforeSend: function(xhr){
-		   		console.log("jq beforeSend");
-		   		return xhr;
-		   	}
-		});
+		// $.ajax({
+		// 	type: method,
+		// 	url: url,
+		// 	data: formData,
+		// 	global: true,
+		// 	context: input ,
+		// 	processData : false,
+		// 	contentType : false ,//必须false才会自动加上正确的Content-Type
+		// 	xhr: function(){
+		// 		var xhr = $.ajaxSettings.xhr();
+		// 		if(xhr.upload) {
+		// 			xhr.upload.addEventListener("readystatechange", function(){
+		// 			  	console.log("xhr onreadystatechange.");
+		// 			});
+		// 			xhr.upload.addEventListener("progress", function(e){
+		// 				console.log("xhr upload progress:", e.loaded/e.total*100 + "%");
+		// 			}, false);
+		// 			xhr.upload.addEventListener("loadstart", function(){
+		// 			  	console.log("xhr upload onloadstart.");
+		// 			});
+		// 			xhr.upload.addEventListener("load", function(){
+		// 			  	console.log("xhr upload onload.");
+		// 			});
+		// 			xhr.upload.addEventListener("loadend", function(){
+		// 			  	console.log("xhr upload onloadend.");
+		// 			});
+		// 			xhr.addEventListener("progress", function(e){
+		// 				console.log("xhr progress:", e.loaded/e.total*100 + "%");
+		// 			}, false);
+		// 			xhr.addEventListener("loadstart", function(){
+		// 			  	console.log("xhr onloadstart.");
+		// 			});
+		// 			xhr.addEventListener("load", function(){
+		// 			  	console.log("xhr onload.");
+		// 			});
+		// 			// xhr.addEventListener("loadend", function(){
+		// 			//   	console.log("xhr onloadend.");
+		// 			// });
+		// 			xhr.onloadend = function(){
+		// 				console.log("xhr onloadend.");
+		// 			}
+		// 			window.xhr = xhr;
+		// 			return xhr;
+		// 		}
+		//    	},
+		//    	success: function(){
+		//    		console.log("jq success.");
+		//    	},
+		//    	complete: function(){
+		//    		console.log("jq complete");
+		//    	},
+		//    	beforeSend: function(xhr){
+		//    		console.log("jq beforeSend");
+		//    		return xhr;
+		//    	}
+		// });
 		
 		// fetch请求
 		// fetch(url, {

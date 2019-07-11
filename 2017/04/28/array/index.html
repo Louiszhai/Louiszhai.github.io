@@ -14,7 +14,7 @@
 <meta property="og:site_name" content="louis blog">
 <meta property="og:description" content="JavaScript Array Array.of Array.from Array.isArray length constructor toString toLocaleString join pop push reverse shift unshift slice splice sort filter forEach some every map indexOf lastIndexOf re">
 <meta property="og:image" content="http://louiszhai.github.io/docImages/array01.png">
-<meta property="og:updated_time" content="2018-09-04T07:29:09.107Z">
+<meta property="og:updated_time" content="2019-07-11T02:48:50.095Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="【深度长文】JavaScript数组所有API全解密">
 <meta name="twitter:description" content="JavaScript Array Array.of Array.from Array.isArray length constructor toString toLocaleString join pop push reverse shift unshift slice splice sort filter forEach some every map indexOf lastIndexOf re">
@@ -74,10 +74,10 @@
 				<div class="tips-box hide">
 					<div class="tips-arrow"></div>
 					<ul class="tips-inner">
-						<li>Menu</li>
+						<li>菜单</li>
 						<li>Tags</li>
 						
-						<li>Links</li>
+						<li>友情链接</li>
 						
 						
 					</ul>
@@ -261,7 +261,7 @@ b.length = 8; // [undefined × 8]
 <h3 id="ES6新增的构造函数方法"><a href="#ES6新增的构造函数方法" class="headerlink" title="ES6新增的构造函数方法"></a><strong>ES6新增的构造函数方法</strong></h3><p>鉴于数组的常用性，ES6专门扩展了数组构造器<code>Array</code> ，新增2个方法：<code>Array.of</code>、<code>Array.from</code>。下面展开来聊。</p>
 <h4 id="Array-of"><a href="#Array-of" class="headerlink" title="Array.of"></a><strong>Array.of</strong></h4><p>Array.of用于将参数依次转化为数组中的一项，然后返回这个新数组，而不管这个参数是数字还是其它。它基本上与Array构造器功能一致，唯一的区别就在单个数字参数的处理上。如下：</p>
 <pre><code class="js">Array.of(8.0); // [8]
-Array(8.0); // [undefined × 8]
+Array(8.0); // [empty × 8]
 </code></pre>
 <p>参数为多个，或单个参数不是数字时，Array.of 与 Array构造器等同。</p>
 <pre><code class="js">Array.of(8.0, 5); // [8, 5]
@@ -1413,7 +1413,7 @@ console.log(iterator.next().value); // xyz
 <div class="share_jia">
 	<!-- JiaThis Button BEGIN -->
 	<div class="jiathis_style">
-		<span class="jiathis_txt">Share to: &nbsp; </span>
+		<span class="jiathis_txt">分享到: &nbsp; </span>
 		<a class="jiathis_button_facebook"></a> 
     <a class="jiathis_button_twitter"></a>
     <a class="jiathis_button_plus"></a> 
