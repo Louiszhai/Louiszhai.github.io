@@ -17,7 +17,7 @@
 <meta property="og:image" content="http://louiszhai.github.io/docImages/promise03.png">
 <meta property="og:image" content="http://louiszhai.github.io/docImages/promise02.png">
 <meta property="og:image" content="http://louiszhai.github.io/docImages/promise04.png">
-<meta property="og:updated_time" content="2019-07-11T02:42:22.196Z">
+<meta property="og:updated_time" content="2019-11-23T04:10:06.784Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Promise使用手册">
 <meta name="twitter:description" content="promise promise.race promise.all Promise.reject Promise.resolve then catch Promises/A+ process.nextTick setImmediate">
@@ -307,7 +307,7 @@ p.then(function(SuccessRes) {
 var p2 = new Promise((r) =&gt; {
   r();
 }).then(() =&gt; {
-  return x;
+  return p1;
 });
 console.log(p1 === p2); // false
 </code></pre>

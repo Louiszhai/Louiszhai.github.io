@@ -5190,7 +5190,7 @@ p.then(function(SuccessRes) {
 var p2 = new Promise((r) =&gt; {
   r();
 }).then(() =&gt; {
-  return x;
+  return p1;
 });
 console.log(p1 === p2); // false
 </code></pre>

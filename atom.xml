@@ -5171,7 +5171,7 @@ c3(no)->op2->io1->e</textarea><textarea id="flowchart-0-options" style="display:
     <link href="http://louiszhai.github.io/2017/03/12/promise/"/>
     <id>http://louiszhai.github.io/2017/03/12/promise/</id>
     <published>2017-03-12T13:28:23.000Z</published>
-    <updated>2019-07-11T02:42:22.196Z</updated>
+    <updated>2019-11-23T04:10:06.784Z</updated>
     
     <content type="html"><![CDATA[<p>开始写本篇文字时, 我一直不是很明白任务队列的机制, 故想写篇文章弄懂它. 于是我尝试以Promise为核心, 逐步展开, 最终分析process.nextTick , promise.then , setTimeout , setImmediate 它们的异步机制.</p>
 <h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h3><p>Promise问世已久, 其科普类文章亦不计其数. 遂本篇初衷不为科普, 只为能够温故而知新.</p>
@@ -5255,7 +5255,7 @@ p.then(function(SuccessRes) {
 var p2 = new Promise((r) =&gt; {
   r();
 }).then(() =&gt; {
-  return x;
+  return p1;
 });
 console.log(p1 === p2); // false
 </code></pre>
