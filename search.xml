@@ -3,6 +3,366 @@
   
     
     <entry>
+      <title><![CDATA[webpack4编译代码如何完美适配IE内核]]></title>
+      <url>/2019/12/02/webpack4.ie/</url>
+      <content type="html"><![CDATA[<p>为了更好的帮助外部合作渠道开发游戏的营销活动，我们开发了一款 JS SDK。该 SDK 采用 webpack4 编译打包，用于支持移动端 H5 活动快速开发，随着业务拓展，端游活动的开发也需要支持，但<strong>由于一些用户 PC 系统版本较低，部分端游 webview 又采用默认 IE 内核、以及用户使用 IE 浏览器参与活动等原因、导致这些用户无法参与到活动中来</strong>，从而影响活动效果，那么，该如何完美的适配 IE 内核呢？</p>
+<p><img src="http://louiszhai.github.io/docImages/webpack-ie.icon.png" alt=""></p>
+<a id="more"></a>
+<p>对于 JS SDK 而言，适配 IE 内核至少面临 5 大难题：</p>
+<ol>
+<li>IE9及以下，XMLHttpRequest 不支持跨域请求，XDomainRequest 不支持 cookie 传递；</li>
+<li>IE8 不遵循 W3C 规范，不支持 ECMAScript 5.1， CSS3 支持性低；</li>
+<li>IE7 缺少更多 JS API 支持，postMessage 也不支持；</li>
+<li>从 webpack2 起，IE8 及以下版本便不被支持；</li>
+<li>SDK 提供的选择器引擎不支持 IE8、IE7；</li>
+</ol>
+<p>实际上，以上 5 大难题，并非全部，只是诸多难题中较为突出的部分，下面会重点来讲。</p>
+<p>由于IE7、IE8、IE9 内核差异大，适配难度较大，所以我先从 IE9 开始适配，然后是 IE8、IE7。</p>
+<h3 id="代码在IE9下运行"><a href="#代码在IE9下运行" class="headerlink" title="代码在IE9下运行"></a><strong>代码在IE9下运行</strong></h3><p>webpack4 打包的代码，在 IE9 下直接运行，果然，立即报错：提示 symbol 未定义，当然错误不止一个，这里不一一列举。</p>
+<p>最终配置 .babelrc 如下所示，代码基本能在IE9上运行。</p>
+<p><img src="http://louiszhai.github.io/docImages/webpack-ie01.png" alt=".babelrc配置"></p>
+<p>如上图，transform-es2015-typeof-symbol 插件解决了symbol 未定义的问题。</p>
+<p>这里有个问题需要说明下，为什么不使用 babel-polyfill，而使用 transform-runtime，有两点原因：</p>
+<ol>
+<li>babel-polyfill size 太大，达到了 60k，sdk 不能接受这么大的垫片包；</li>
+<li>babel-polyfill 会污染全局变量，而且一旦 sdk 中引入了 babel-polyfill，使用 sdk 的项目，在不知情的情况下再次引入了 babel-polyfill， 有可能导致冲突；</li>
+</ol>
+<p>基于这两点，最终我使用了 transform-runtime 插件。</p>
+<p>另外，稍微注意下，IE9 下 console 对象在不开 dev tool 时，并不存在，也要兼容。</p>
+<h3 id="IE9如何支持跨域请求"><a href="#IE9如何支持跨域请求" class="headerlink" title="IE9如何支持跨域请求"></a><strong>IE9如何支持跨域请求</strong></h3><p>代码能在IE9上运行，起码开了个好头。接下来要面对的是第一个大难点：<strong>IE9及以下版本，XMLHttpRequest 不支持跨域请求，XDomainRequest 虽然支持跨域，却又不支持 cookie 传递</strong>。</p>
+<p>解决这个问题之前，不得不提下 xhr 的发展历史。 </p>
+<p>xhr 一共有两级标准，早在 IE5，微软就支持了 xhr1 标准，直到 IE10，xhr2 标准才得到支持。</p>
+<p>xhr1 有如下缺点：</p>
+<ul>
+<li>仅支持文本数据传输，无法传输二进制数据</li>
+<li>传输数据时，没有进度信息提示，只能提示是否完成</li>
+<li>受浏览器 同源策略 限制，<strong>只能请求同域资源</strong></li>
+<li>没有超时机制，超时了没办法处理</li>
+</ul>
+<p>很明显，xhr1 无法支持跨域请求。</p>
+<p>xhr2 针对 xhr1 的缺点做了如下改进：</p>
+<ul>
+<li>支持二进制数据，可以上传文件，可以使用 FormData 对象管理表单</li>
+<li>提供进度提示，可通过 xhr.upload.onprogress 事件回调方法获取传输进度</li>
+<li>依然受 同源策略 限制，这个安全机制不会变。<strong>xhr2 新提供 Access-Control-Allow-Origin 等 headers，设置为 * 时表示允许任何域名请求，从而支持跨域 CORS 访问</strong></li>
+<li>可以设置 timeout 及 ontimeout，方便设置超时时长和超时后续处理</li>
+</ul>
+<p>虽然，IE5 - IE9 都不支持 xhr2，但微软并没有闲着，而是在 IE8、IE9 中推出了支持 CORS 请求的 XDomainRequest，很遗憾，这是一个非成熟的解决方案，它有主要有以下限制：</p>
+<ul>
+<li>仅可用于发送 GET 和 POST 请求</li>
+<li><strong>不支持跨域传输 cookie</strong></li>
+<li>只能设置请求头的 Content-Type 字段，且不能访问响应头信息</li>
+</ul>
+<p>更多限制，不妨参考 <a href="https://blogs.msdn.microsoft.com/ieinternals/2010/05/13/xdomainrequest-restrictions-limitations-and-workarounds/" target="_blank" rel="external">XDomainRequest – Restrictions, Limitations and Workarounds</a>。</p>
+<p>不能跨域传输 cookie，登录态怎么校验？到目前为止，通过纯 api 的方式，还没有找到跨域解决方案。最终我使用了 flash 的插件，在 IE9 及以下版本浏览器中加载 flash 插件，借助 flash 去发送跨域请求。</p>
+<p>那么，是不是说 IE10、IE11 等浏览器 xhr 就没有问题了？并不尽然。xhr 规范细节一直在变化，参照 <a href="https://xhr.spec.whatwg.org/，最近一次更新是今年的" target="_blank" rel="external">https://xhr.spec.whatwg.org/，最近一次更新是今年的</a> 9 月 24 日，IE 不可能根据规范实时调整实现。即便是 IE11，它参照的也是 <a href="https://www.w3.org/TR/2011/WD-XMLHttpRequest2-20110816/#the-withcredentials-attribute" target="_blank" rel="external">w3c 2011</a>，甚至更早的规范，以下是规范的一段描述：</p>
+<blockquote>
+<p>On setting the <code>withCredentials</code> attribute these steps must be run:</p>
+<ol>
+<li>If the state is not <a href="https://www.w3.org/TR/2011/WD-XMLHttpRequest2-20110816/#dom-xmlhttprequest-opened" target="_blank" rel="external">OPENED</a> raise an <code>INVALID_STATE_ERR</code> exception and terminate these steps.</li>
+<li>If the <a href="https://www.w3.org/TR/2011/WD-XMLHttpRequest2-20110816/#send-flag" target="_blank" rel="external"><code>send()</code> flag</a> is true raise an <code>INVALID_STATE_ERR</code> exception and terminate these steps.</li>
+<li>If the <a href="https://www.w3.org/TR/2011/WD-XMLHttpRequest2-20110816/#anonymous-flag" target="_blank" rel="external">anonymous flag</a> is true raise an <code>INVALID_ACCESS_ERR</code> exception and terminate these steps.</li>
+<li>Set the <code>withCredentials</code> attribute’s value to the given value.</li>
+</ol>
+</blockquote>
+<p>这意味着，IE11 中，readyState 值为 <code>OPENED</code> 之前（即 open 方法调用前），为 xhr 对象设置 withCredentials 属性就会抛出 <code>INVALID_STATE_ERR</code> 错误。实际开发中，timeout 属性也必须在 open 方法之后调用。</p>
+<h3 id="打包文件支持IE8"><a href="#打包文件支持IE8" class="headerlink" title="打包文件支持IE8"></a><strong>打包文件支持IE8</strong></h3><p>接下来，第二个需要解决的难题是： 从 webpack2 起，IE8 及以下版本便不被支持。为此我耗费了非常多的时间。</p>
+<p>第一次在 IE8 上运行 webpack4 打包代码时，出现了各种各样的错误，远比 IE9 上遇到的多得多，挑重点讲，就是 IE8 下 default、catch 是关键字，而 webpack 打包代码，几乎无处没有 default，而用到 Promise 的地方，大多都会使用 catch 回调。</p>
+<p>我们都知道，babel 将 es6 转成了 es5， 而 <code>es3ify-loader</code> 则可以继续将 es5 转成 es3。</p>
+<pre><code class="js">function(t) { return t.default; }    // 编译前
+function(t) { return t[&quot;default&quot;]; } // 编译后
+
+{ catch：function(t){} }   // 编译前
+{ &quot;catch&quot;：function(t){} } // 编译后
+</code></pre>
+<p>借助  <code>es3ify-loader</code> ，default、catch 等关键字编译后会被加上引号，避免 IE8 报缺少标识符错误。它的配置如下所示：</p>
+<p><img src="http://louiszhai.github.io/docImages/webpack-ie03.png" alt="crossdomain.xml配置"></p>
+<p>重新编译后运行，还是报了缺少标识符的问题。难道没效果？其实不是的。</p>
+<p>原来 UglifyJsPlugin 在压缩时，默认将引号都去掉了。<code>es3ify-loader</code> 好不容易将引号加上，UglifyJsPlugin 顺手就移除了，深藏功与名。为此，需要将 <code>compress.properties</code> 设置为 false，避免使用点符号重写属性访问。如下：</p>
+<pre><code class="js">t[&quot;default&quot;] -&gt; t.default    // default true
+t[&quot;default&quot;] -&gt; t[&quot;default&quot;] // set false
+</code></pre>
+<p>另外，<code>output.quote_keys</code> 也需要设置为 true，从而保留对象 key 的引号，如下。</p>
+<pre><code class="js">{ &quot;catch&quot;: xx } -&gt; { catch: xx }   // default false
+{ &quot;catch&quot;: xx } -&gt; { &quot;catch&quot;: xx } // default false
+</code></pre>
+<p>重新编译后后运行，又报 “无法设置未定义或 null 引用的属性” 的错误。原来 UglifyJsPlugin 压缩时，<code>ie8</code>  设置默认为 false，这意味着它又顺手去掉了支持 IE8 的代码。那么，最终配置如下：</p>
+<p><img src="http://louiszhai.github.io/docImages/webpack-ie04.png" alt="UglifyJsPlugin配置"></p>
+<p>实际调试时，不妨增加 <code>mangle: false</code> 配置，关闭变量名混淆，debug 会更友好，更多配置介绍，请戳 <a href="https://github.com/LiPinghai/UglifyJSDocCN/blob/master/README.md" target="_blank" rel="external">UglifyJs 中文文档</a> 。</p>
+<p>到此，我们解决了 IE8 不被 webpack 支持的问题。</p>
+<h3 id="代码在IE8下运行"><a href="#代码在IE8下运行" class="headerlink" title=" 代码在IE8下运行"></a><strong> 代码在IE8下运行</strong></h3><p>很明显，不太可能这么容易在 IE8 下成功运行项目。这里还有两个大坑。</p>
+<ol>
+<li>webpack4 打包文件的开始部分就用到了 Function.prototype.bind 方法。</li>
+<li>IE8 下 Object.defineProperty 实现与规范不同，它只能设置 dom 元素。</li>
+</ol>
+<h4 id="提供独立编译的bind垫片"><a href="#提供独立编译的bind垫片" class="headerlink" title="提供独立编译的bind垫片"></a><strong>提供独立编译的bind垫片</strong></h4><p>第一点，无论我在 index.js 入口文件中如何添加 bind 方法的垫片，都毫无效果，依然提示 bind 方法不存在。后来终于在编译文件的头部发现了 t.push.bind 的引用，如下。</p>
+<p><img src="http://louiszhai.github.io/docImages/webpack-ie05.png" alt="bind方法被调用"></p>
+<p>原来 bind 方法的调用如此之早，此时业务逻辑代码远没有开始执行，也就是说，垫片方法也还没有执行。为了解决这个问题，只能避开 webpack 打包，我不得不额外新增了 polyfill.js，用于承载 bind 方法垫片，然后使用 gulp 压缩 polyfill.js，再合并进 webpack 打包文件。gulp 脚本如下所示：</p>
+<p><img src="http://louiszhai.github.io/docImages/webpack-ie06.png" alt="gulp配置"></p>
+<h4 id="Object-defineProperty兼容方案"><a href="#Object-defineProperty兼容方案" class="headerlink" title="Object.defineProperty兼容方案"></a><strong>Object.defineProperty兼容方案</strong></h4><p>第二点，Object.defineProperty 缺陷是硬伤，即便引入了 es5-shim 垫片，由于 IE8 不支持访问器属性，依然会抛异常。那么，到底什么地方用到了 Object.defineProperty 呢？</p>
+<p>问题出在 babel 身上，通常情况下，babel 对 export 解析不会设置访问器属性，没有问题，如下。</p>
+<pre><code class="js">// 编译前
+const a = 1;
+export default a;
+// 编译后
+Object.defineProperty(exports, &quot;__esModule&quot;, {
+  value: true
+});
+var a = 1;
+exports.default = a;
+</code></pre>
+<p>但 babel 会把 export xx from yy 编译成 Object.defineProperty 形式，并且设置访问器属性，如下。</p>
+<pre><code class="js">// 编译前
+export { loadScript } from &#39;./util/loadScript&#39;
+// 编译后
+Object.defineProperty(exports, &quot;__esModule&quot;, {
+    value: true
+});
+var _loadScript = require(&#39;./util/loadScript&#39;);
+Object.defineProperty(exports, &#39;loadScript&#39;, {
+    enumerable: true,
+    get: function get() {
+        return _loadScript.loadScript;
+    }
+});
+</code></pre>
+<p>面对上面编译后的代码，es5-shim/es5-sham 会在如下位置抛出错误。</p>
+<p><img src="http://louiszhai.github.io/docImages/webpack-ie07.png" alt="es5-sham报错位置"></p>
+<p>当 supportsAccessors 为 false 且 get 或者 set 随便一个存在，即抛出 ERR_ACCESSORS_NOT_SUPPORTED 错误，supportsAccessors 用于判断是否支持访问器属性，它的实现如下：</p>
+<p><img src="http://louiszhai.github.io/docImages/webpack-ie08.png" alt="es5-sham报错位置"></p>
+<p>稍微转换下，即 <code>supportsAccessors = Object.prototype.hasOwnProperty(&quot;__defineGetter__&quot;)</code>，而 <code>__defineGetter__</code>  IE11 才支持，虽然 IE9、IE10 同样不支持它，但它们已经支持 Object.defineProperty 方法，不需要垫片。另外，es-shim <a href="https://github.com/es-shims/es5-shim#may-fail" target="_blank" rel="external">官方文档</a>也提到了使用 Object.defineProperty 可能会失败。</p>
+<p><img src="http://louiszhai.github.io/docImages/webpack-ie09.png" alt="Object.defineProperty可能失败"></p>
+<p>如上图，描述符中存在 get 或 set，同时还不支持 defineGetter，将默默失败。</p>
+<p>综上，问题出在 export xx from yy 这种写法上，换种写法，先 import 然后再 export 不就行了，当然可以，关键是目前有很多地方都用到了这种写法，贸然改写，然后还要立一个 flag，以后不要这样编写代码巴拉巴拉，确实不太优雅。</p>
+<p>有这样的一个 babel 插件—<a href="https://www.npmjs.com/package/babel-plugin-transform-es2015-modules-simple-commonjs" target="_blank" rel="external">transform-es2015-modules-simple-commonjs</a> 可以使用（这个插件也出现在篇首 .babelrc 配置截图中第 20 行），它可以实现简单的 commonjs 语法转换，避开了访问器属性，一举解决了 Object.defineProperty 报错的问题，如下为它的编译结果。</p>
+<pre><code class="js">Object.defineProperty(exports, &quot;__esModule&quot;, {
+    value: true
+});
+var _loadScript = require(&#39;./util/loadScript&#39;);
+exports.default = _loadScript.loadScript;
+</code></pre>
+<h4 id="垫片大小权衡"><a href="#垫片大小权衡" class="headerlink" title="垫片大小权衡"></a><strong>垫片大小权衡</strong></h4><p>babel 的 transform-runtime 插件虽好，却只会引入 es6 垫片，支持 IE8 还需要额外引入 es5 的垫片 es5-shim，而 es5-shim 又包含了 es5-shim.min.js 和 es5-sham.min.js，对于 IE8 而言，两者都依赖，前者 26k， 后者 6k，共计 32k。同样的问题再次面临抉择，无论如何，不能因为它方便，而去盲目增加 sdk 的 size，事实上，sdk 远远不需要集合型的垫片方案。</p>
+<p>所以，我放弃了 es5-shim 垫片，最终选用了司徒正美提供的 <a href="https://github.com/RubyLouvre/object-defineproperty-ie8" target="_blank" rel="external">object-defineproperty-ie8</a> 解决了 Object.defineProperty 可能报错的问题。</p>
+<p><img src="http://louiszhai.github.io/docImages/webpack-ie10.png" alt="Object.defineProperty-ie8"></p>
+<p>如上图，具体思路就是，先判断是否支持访问器属性，不支持就忽略非 DOM 元素的访问器属性设置，只保证赋值成功，避免了报错导致执行中断。</p>
+<p>到这里，webpack 不支持 IE8 的问题，基本解决了，接下来就需要与 IE8、IE7 斗智斗勇了。</p>
+<h3 id="IE8-amp-IE7-各种缺陷"><a href="#IE8-amp-IE7-各种缺陷" class="headerlink" title="IE8 &amp; IE7 各种缺陷"></a><strong>IE8 &amp; IE7 各种缺陷</strong></h3><p>对于 IE8 &amp; IE7 而言，由于不遵循 w3c 规范，不支持 ECMAScript 5.1，导致有很多 API 实现与标准不一致或没有实现，以下是 SDK 涉及到的一些缺陷介绍。（如未特别说明，即 IE8、IE7 都适用）</p>
+<h4 id="缺少全局方法"><a href="#缺少全局方法" class="headerlink" title="缺少全局方法"></a><strong>缺少全局方法</strong></h4><ol>
+<li>不支持 JSON 对象。</li>
+<li>不支持 window.getComputedStyle 方法。</li>
+<li>IE7 不支持 window.localStorage 方法。</li>
+<li>IE7 不支持 window.querySelectorAll 方法。</li>
+</ol>
+<p>另外，IE8 下，document.head 也没有，需要做如下兼容。</p>
+<p><img src="http://louiszhai.github.io/docImages/webpack-ie11.png" alt="document.head"></p>
+<h4 id="缺少构造器方法"><a href="#缺少构造器方法" class="headerlink" title="缺少构造器方法"></a><strong>缺少构造器方法</strong></h4><ol>
+<li>缺少 Object.keys、Object.create 等方法。</li>
+<li>缺少 Array.isArray 方法。</li>
+</ol>
+<h4 id="原型方法缺陷"><a href="#原型方法缺陷" class="headerlink" title="原型方法缺陷"></a><strong>原型方法缺陷</strong></h4><ol>
+<li>缺少 Function.prototype.bind 方法，webpack4 编译代码开头部分就用到了 bind 方法，这个前面解决了。</li>
+<li>apply 方法第二个参数不能接受类数组对象，否则会报 “Function.prototype.apply: 缺少 Array 或 arguments 对象” 错误。</li>
+<li>Array原型方法如 forEach，map，filter、indexOf … 这些方法都没有。</li>
+<li>数组 toString 方法存在 bug，其它浏览器在调用数组的 toString 方法时，如果遇到继承于数组的就直接使用数组的 toString，如果遇到非数组对象时会切换到 Object 的 toString 上；而在 IE8 中只要非数组对象调用数组的 toString 方法，一律报错。</li>
+</ol>
+<h4 id="事件缺陷"><a href="#事件缺陷" class="headerlink" title="事件缺陷"></a><strong>事件缺陷</strong></h4><ol>
+<li><p>只有全局事件，事件没有target属性，兼容如 <code>e = e || window.Event；target = e.target || e.srcElement</code> 。</p>
+</li>
+<li><p>事件回调内部 this 执行 window。</p>
+</li>
+<li><p>不支持 addEventListener API，可由 attachEvent 替代。</p>
+<p><img src="http://louiszhai.github.io/docImages/webpack-ie12.png" alt="attachEvent"></p>
+</li>
+<li><p>IE7，不支持 stopPropagation、preventDefault 方法。</p>
+<p><img src="http://louiszhai.github.io/docImages/webpack-ie13.png" alt="cancelBubble"></p>
+</li>
+</ol>
+<h4 id="数据类型判断缺陷"><a href="#数据类型判断缺陷" class="headerlink" title="数据类型判断缺陷"></a><strong>数据类型判断缺陷</strong></h4><ol>
+<li>typeof 判断原生方法时，会将其当作是 object，而不是 function，如下兼容。</li>
+</ol>
+<p><img src="http://louiszhai.github.io/docImages/webpack-ie14.png" alt="typeof判断缺陷"></p>
+<ol>
+<li>不同 IE 版本，基本数据类型判断也存在差异，如下图。</li>
+</ol>
+<p><img src="http://louiszhai.github.io/docImages/webpack-ie15.png" alt="基本数据类型判断缺陷"></p>
+<h4 id="JS-异步加载缺陷"><a href="#JS-异步加载缺陷" class="headerlink" title="JS 异步加载缺陷"></a><strong>JS 异步加载缺陷</strong></h4><p>script load 不执行，需监听 onreadystatechange 事件，判断 readyState 是否等于 loaded 或 complete，兼容如下图。</p>
+<p><img src="http://louiszhai.github.io/docImages/webpack-ie16.png" alt="script load兼容"></p>
+<h4 id="DOM-API-缺陷"><a href="#DOM-API-缺陷" class="headerlink" title="DOM API 缺陷"></a><strong>DOM API 缺陷</strong></h4><ol>
+<li><p>innerHTML 属性对于以下标签是只读的：col、colgroup、frameset、head、html、style、table、tbody、tfoot、thead、title、tr。除此之外，下拉框赋值，也非常困难，虽然其 innerHTML 可以写入，但新增的选项不会生效（清空又可以），推荐使用 options.add 方法 添加新选项，如果还不行，可以使用 outerHTML 赋值。</p>
+</li>
+<li><p>IE7 不支持 window.Element 对象</p>
+<p><img src="http://louiszhai.github.io/docImages/webpack-ie17.png" alt="Element兜底"></p>
+</li>
+<li><p>IE7 setAttribute 支持性也有问题</p>
+<p><img src="http://louiszhai.github.io/docImages/webpack-ie18.png" alt="setAttribute兼容"></p>
+</li>
+</ol>
+<h4 id="CSS-API缺陷"><a href="#CSS-API缺陷" class="headerlink" title="CSS API缺陷"></a><strong>CSS API缺陷</strong></h4><ol>
+<li>IE9- 不支持 element.classList 属性。</li>
+<li>IE8-，CSS 部分属性动态修改后不生效，如：margin-left、margin-top 等。</li>
+<li>IE 支持 currentStyle 方法，但只能获取表面的样式，无法获取计算后的，getComputedStyle 垫片也无法准确获取，可采用 element.getBoundingClientRect() 方法获取坐标，然后计算出宽高，如下所示。</li>
+</ol>
+<p><img src="http://louiszhai.github.io/docImages/webpack-ie19.png" alt="获取宽度"></p>
+<h4 id="透明度设置缺陷"><a href="#透明度设置缺陷" class="headerlink" title="透明度设置缺陷"></a><strong>透明度设置缺陷</strong></h4><ol>
+<li>不支持 opacity 样式，可由 filter 滤镜替代。</li>
+</ol>
+<p><img src="http://louiszhai.github.io/docImages/webpack-ie20.png" alt="透明度兼容"></p>
+<ol>
+<li>不支持 rgba 色值，可由 filter 滤镜替代。</li>
+</ol>
+<p><img src="http://louiszhai.github.io/docImages/webpack-ie21.png" alt="rgba兼容"></p>
+<p>上图中，颜色 “#19000000” 由两部分组成。</p>
+<p>第一部是 # 号后面的 19 是 rgba 透明度 0.1 的 IEfilter 值。从 0.1 到 0.9 每个数字对应一个 IEfilter 值。</p>
+<p>第二部分是 19 后面的六位。这个是六进制的颜色值，跟 rgb 函数中的取值一致。比如 rgb(0,0,0) 对应 #000000，也就是黑色。</p>
+<p>rgba 透明度与 IEfilter 的对应关系如下所示。</p>
+<p><img src="http://louiszhai.github.io/docImages/webpack-ie22.png" alt="rgba-IEfilter"></p>
+<p>除了透明度外，CSS 动画也需要降级为 gif 实现，如果是 loading 动画，可以使用 <a href="https://loading.io/" target="_blank" rel="external">loading.io</a> 无缝转换。</p>
+<p>到这，IE8、IE7 的兼容性问题基本解决，接下来只需要让选择器引擎支持到 IE7，改造便可完成。</p>
+<h3 id="选择器引擎开发"><a href="#选择器引擎开发" class="headerlink" title="选择器引擎开发"></a><strong>选择器引擎开发</strong></h3><p>大家都知道，jquery 提供了非常棒的选择器引擎 <a href="https://github.com/jquery/sizzle/" target="_blank" rel="external">sizzle</a>，但它的 min 版本达到了 20 k，有点太大了。</p>
+<p>对于 JS SDK 而言， 它不但内部使用了大量选择器，同时还需要将选择器的功能开放给第三方开发者，使其能在不使用 jquery、zepto 等类库的情况下，快速完成基本的 DOM 操作，所以搭载一款轻便的选择器引擎很有必要。</p>
+<p>一个简单的选择器引擎，至少具备以下 4 点功能。</p>
+<ol>
+<li>选择元素，如 <code>$(&#39;#div&#39;)</code></li>
+<li>包装 DOM 对象为 <code>$</code> 实例，如  <code>$(element);</code></li>
+<li>包装字符串html模板为 <code>$</code> 实例，如 <code>$(&#39;&lt;div&gt;&lt;/div&gt;&#39;)</code></li>
+<li>提供选择器 <code>$</code> 实例对象的原型方法，如 <code>$(&#39;#div&#39;).html(&#39;hello world&#39;)</code></li>
+</ol>
+<p>在如今，querySelectorAll 深入人心的背景下，实现一个选择器引擎，并不难，这里我参考的是 <a href="https://github.com/dengzhiqiang/balajs/tree/master/balajs" target="_blank" rel="external">balajs</a>，它主要代码如下所示。</p>
+<p><img src="http://louiszhai.github.io/docImages/webpack-ie23.png" alt="balajs"></p>
+<p>balajs 有如下 2 个问题：</p>
+<ol>
+<li>仅仅支持 IE9+ 浏览器。</li>
+<li>原型是数组，不是对象，直接使用数组做原型，在 IE8 以下，tostring 方法调用时，会调用数组原型的tostring，从而报错（而标准浏览器，会调用对象的 tostring），由于继承数组，其实例 length 属性设置也会失效。</li>
+</ol>
+<p>为了解决这 2 个问题，我们需要更换选择器引擎的继承方式，如下代码（参考了 jquery 思想）。</p>
+<pre><code class="js">function $(s, context) { // 选择器入口
+  if (s instanceof init) { // 如果是已经获取到的元素，直接返回
+    return s;
+  }
+  // 结合 balajs 可以先产生 elements 数组
+  const elements = ... // 先略去，后面讲
+  // 再将 elements 数组交由 init 方法产生类数组返回值
+  return new $.fn.init(s ? elements : []);
+}
+$.fn = {}; // 选择器对象原型由数组改为空对象
+const init = $.fn.init = function (selector) {
+  selector.forEach((ele, i) =&gt; { // init 方法用于完成kv赋值操作，并产生类数组对象实例
+    this[i] = ele;
+  });
+  this.length = selector.length;
+  return this;
+}
+init.prototype = $.fn; // init 原型指定为 $.fn，使得 init 对象实例能够使用 $.fn 原型中的方法
+
+Object.assign($.fn, { // 往原型中添加方法
+  click(handle) {...},
+  append(child) {...},
+  find(selector) {...},
+  ...
+})
+</code></pre>
+<p>现在，选择器引擎的雏形出来了，只要完成 elements 数组部分，便能 work。</p>
+<p>elements 第一步筛选，可以使用上图 balajs 的主要代码，只需要将 querySelectorAll 垫片添加进去即可，如下图，主要修改了红框中的代码，并移除了 s 为 function 时，dom ready 部分实现（sdk 暂时用不到）。</p>
+<p><img src="http://louiszhai.github.io/docImages/webpack-ie25.png" alt="elements获取"></p>
+<p>首先奉上 querySelectorAll 垫片。</p>
+<pre><code class="js">if (!document.querySelectorAll) { // IE7 中没有 querySelectorAll
+  var style = document.createStyleSheet();
+  document.querySelectorAll = function (r, c, i, j, a) {
+    var a = document.all, c = [], r = r.replace(/\[for\b/gi, &#39;[htmlFor&#39;).split(&#39;,&#39;);
+    for (i = r.length; i--;) {
+      style.addRule(r[i], &#39;k:v&#39;);
+      for (j = a.length; j--;) a[j].currentStyle.k &amp;&amp; c.push(a[j]);
+      style.removeRule(0);
+    }
+    return c;
+  }
+}
+// 用于在 IE7 浏览器中，支持 Element.querySelectorAll 方法
+window.querySelectorAll = (function () {
+  var idAllocator = 10000;
+  function qsaWorkerShim(element, selector) {
+    var needsID = element.id === &quot;&quot;;
+    if (needsID) {
+      ++idAllocator;
+      element.id = &quot;__qsa&quot; + idAllocator;
+    }
+    try {
+      return document.querySelectorAll(&quot;#&quot; + element.id + &quot; &quot; + selector);
+    }
+    finally {
+      if (needsID) {
+        element.id = &quot;&quot;;
+      }
+    }
+  }
+  function qsaWorkerWrap(element, selector) {
+    return element.querySelectorAll(selector);
+  }
+  return document.createElement(&#39;div&#39;).querySelectorAll ? qsaWorkerWrap : qsaWorkerShim;
+})();
+</code></pre>
+<p>可以看出，elements 有可能返回类数组对象、NodeList 或 HTMLCollection 对象，第二步便需要将它们转换成数组，然后交由 init 方法处理。鉴于 IE8 apply 的 bug，需要做如下特殊处理。</p>
+<pre><code class="js">const isDOM = obj =&gt; { // 是否 DOM 元素
+  if(typeof HTMLElement === &#39;object&#39;) {
+    return obj instanceof HTMLElement；
+  } else {
+    return obj &amp;&amp; typeof obj === &#39;object&#39; &amp;&amp; obj.nodeType === 1;
+  }
+};
+const isArrayLike = collection =&gt; { // 是否类数组
+    var length = collection.length;
+    return typeof length == &#39;number&#39; &amp;&amp; length &gt;= 0 &amp;&amp; length &lt;= (Math.pow(2, 53) - 1);
+}
+// IE8中继承数组的对象，toSting时默认会调用数组的toSting方法，这点与标准不一致，导致会报&quot;缺少 Array 对象&quot;错误，因此需要排除数组
+const generalObj = elements instanceof Object &amp;&amp; !(elements instanceof Array) &amp;&amp; elements.toString() === &#39;[object Object]&#39; &amp;&amp; !isArrayLike(elements) // 非类数组的普通对象
+if (elements === window || elements === document || isDOM(elements) || generalObj) {
+  elements = [elements];
+} else {
+  // 修复 bug：SCRIPT5028: Function.prototype.apply: 缺少 Array 或 arguments 对象
+  try {
+    elements = [].slice.apply(elements, [0]); // 类数组在这里完成转换
+  } catch (err) {
+    try {
+      elements = [].concat.apply([], elements); // NodeList 或 HTMLCollection 在这里完成转换
+    } catch (e) {
+      if (elements.length) { // 兜底
+        var tempArray = [];
+        for (var i = 0; i &lt; elements.length; i++) {
+          tempArray[i] = elements[i];
+        }
+        elements = tempArray;
+      } else {
+        elements = [];
+      }
+    }
+  }
+}
+</code></pre>
+<p>整合上述代码，简单的选择器引擎便开发完成。</p>
+<p>到此，营销活动  JS SDK 终于适配完成。SDK 总 size 仅仅增大了 10k，其中 flash 垫片还占了增长的大部分。</p>
+<h3 id="如何调试"><a href="#如何调试" class="headerlink" title="如何调试"></a><strong>如何调试</strong></h3><p>除了代码外，IE 内核的适配过程中，调试也是困难重重，调试问题主要集中在以下 4 个方面：</p>
+<ol>
+<li>如何使用 mac 调试 IE ？</li>
+<li>选择哪种操作系统？ windows 10 ？ Windows 7 ？ Windows xp？</li>
+<li>选择哪种版本的 IE ？IE11？IE10？IE9？IE8？IE7？</li>
+<li>选择什么样的代理？ Fiddler ？Charles ？ Whistle ？</li>
+</ol>
+<p>我本地安装的是 Parallels Desktop 虚拟机，基于它，又安装了 win7 sp1 及 win xp 两个操作系统，分别用于测试 IE9、IE10、IE11 及 IE7、IE8。</p>
+<p>调试过程中，不要相信 IE 代理模式，效果不太好，很多错误都会被默默吃掉，需要老老实实把 IE 浏览器逐个装一遍，我经常调试完 IE8 发现 IE7 好像有个 bug，然后手动把 IE8 卸载，退回 IE7，测好了再升级，IE7 没有dev tool，调试不太方便，定位不到问题，只能先升到 IE8，这样的过程需要重复很多次。</p>
+<p>漫长的调试过程中，代理是非常重要的基础设施，代理频繁断开，或请求不正常转发，https证书问题，都非常消耗时间和精力，上面提到的三个代理软件，我都使用过，Fiddler 很容易断开连接，不建议使用，Charles 兼容性最好，各个版本的 IE 都能正常代理，但配置不是很方便，做为备选，Whistle 配置很方便，基本作为日常代理工具，但在 IE7 及 IE8 下，由于证书问题，导致https 请求不能正常发送。</p>
+<p>更多的IE适配问题，欢迎在评论区留言继续交流，谢谢。</p>
+]]></content>
+      
+        
+        <tags>
+            
+            <tag> Tool </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
       <title><![CDATA[使用webpack4提升180%编译速度]]></title>
       <url>/2019/01/04/webpack4/</url>
       <content type="html"><![CDATA[<p>对于现在的前端项目而言，编译发布几乎是必需操作，有的编译只需要几秒钟，快如闪电，有的却需要10分钟，甚至更多，慢如蜗牛。特别是线上热修复时，分秒必争，响应速度直接影响了用户体验，用户不会有耐心等那么长时间，让你慢慢编译；如果涉及到支付操作，产品损失更是以秒计，每提前哪怕一秒钟发布，在腾讯海量用户面前，都能挽回不小的损失。不仅如此，编译效率的提升，带来的最直观收益就是，开发效率与开发体验双重提升。</p>
@@ -11944,112 +12304,6 @@ document.write(str.link(&quot;https://www.baidu.com&quot;)); // &lt;a href=&quot
     </entry>
     
     <entry>
-      <title><![CDATA[Function.prototype.bind方法指南]]></title>
-      <url>/2016/01/11/bind/</url>
-      <content type="html"><![CDATA[<h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h3><p>ES5新增了 Function.prototype.bind 方法, 该方法不同于jquery的bind 方法, 它主要用于固定 this 作用域, 避免各种由于上下文切换造成的语义问题. 常用在 setTimeout, for循环等内部.</p>
-<a id="more"></a>
-<h3 id="bind"><a href="#bind" class="headerlink" title="bind"></a>bind</h3><p>语法: func.bind(thisArg, arg1, arg2, ….)</p>
-<p>bind() 方法会返回一个新函数, 又叫绑定函数, 当调用这个绑定函数时, 绑定函数会以创建它时传入 bind() 方法的第一个参数作为当前的上下文, 即this, 传入 bind() 方法的第二个及之后的参数加上绑定函数运行时自身的参数按照顺序作为原函数的参数来调用原函数.</p>
-<p>绑定函数也能使用new操作符创建对象; 这就好比把原函数当做构造器. 此时提供的this将被忽略, this之后的参数将依然前置到运行时的参数列表中.</p>
-<h4 id="基本用法"><a href="#基本用法" class="headerlink" title="基本用法"></a>基本用法</h4><p>下面我们来看看bind 的基本用法.</p>
-<pre><code class="js">var x = 8;
-var o = {
-  x: 10,
-  getX: function(){
-      console.log(this.x);
-  }
-};
-var f = o.getX;
-f();//8, 由于没有绑定执行时的上下文, this默认指向window, 打印了全局变量x的值
-var g = f.bind(o);
-g();//10, 绑定this后, 成功的打印了o对象的x属性的值.
-</code></pre>
-<h4 id="分离参数"><a href="#分离参数" class="headerlink" title="分离参数"></a>分离参数</h4><p>bind() 方法还可以设置函数拥有的初始参数. 这些参数作为bind() 的第2,3…个参数跟在this(或其他对象的后面), 调用绑定函数时, 这些参数将插入到参数列表的最开始位置, 而传递给绑定函数的参数将跟在他们后面.</p>
-<pre><code class="js">//打印十个斐波那契数
-var f = function(n1, n2, length){
-  if(arguments.length&lt;3) console.log(&#39;参数不够...&#39;);
-  var array = [n1, n2];
-  for(var i=2;i&lt;length;i++){
-      array[i] = array[i-2] + array[i-1];
-  }
-  return array;
-}
-var g = f.bind(null, 1, 1);
-console.log(g(10));//[1, 1, 2, 3, 5, 8, 13, 21, 34, 55]
-</code></pre>
-<h4 id="绑定参数"><a href="#绑定参数" class="headerlink" title="绑定参数"></a>绑定参数</h4><p>如果使用new 操作符去构造绑定函数的实例时, 原来提供的this 将被忽略, this之后的参数将依然前置到构造函数的参数列表中. 此时 bind() 方法便具备了保留参数的能力, 我们可以此达到类似柯里化的效果.</p>
-<pre><code class="js">var f = function(){
-  if(arguments.length!=0)
-      this.sum = Array.prototype.reduce.call(arguments,function(prev,item){//对传入参数求和
-         return prev + item;
-    });
-  return Array.prototype.join.call(arguments);// 返回传入参数的字符串形式
-}
-f.prototype.toString = function(){
-  return this.sum;
-}
-var g = f.bind(null,2);
-var x = new g(8);
-console.log(x.toString());//10, 可见x被绑定了2+8=10
-console.log(g(8));//2,8 这告诉我们绑定的两个参数正是2和8
-
-console.log(x instanceof g);//true, 可见通过new创建的x继承了g
-console.log(x instanceof f);//true, 可见x也继承了f
-console.log(g instanceof Function);//true, 可见bind f()方法之后, 返回了一个新的函数g
-//函数g可用于求和,如下:
-console.log(g(1,3,5,7,9));//27 2+1+3+5+7+9=27
-</code></pre>
-<h4 id="快捷调用"><a href="#快捷调用" class="headerlink" title="快捷调用"></a>快捷调用</h4><p>使用Array.prototype的方法处理类数组对象时(鸭式辨型), 不可避免的需要借用call 或者 apply 方法, 使用 bind() 方法, 我们可以简化这个过程. 如下:</p>
-<pre><code class="js">var _slice = Array.prototype.slice;
-var slice = Function.prototype.call.bind(_slice);
-function f(){
-  return slice(arguments,1);
-}
-f(1,2,3,4,5);//[2, 3, 4, 5]
-</code></pre>
-<p>下面的实例将解释 bind() 方法做了一件什么事情:</p>
-<pre><code class="js">var _slice = Array.prototype.slice;
-var slice = function(){
-  return _slice.apply(arguments[0],_slice.call(arguments,1));
-};
-function f(){
-  return slice(arguments,1);
-}
-f(1,2,3,4,5);//[2, 3, 4, 5]
-</code></pre>
-<p>如下, 是bind() 方法的简单实现.</p>
-<pre><code class="js">Function.prototype.bind = function(thisArg,argN){
-  var _this = this;
-  var _arg = _slice.call(arguments,1);
-  return function(){
-       var arg = _slice.call(arguments);
-    arg = _arg.concat(arg);
-      return _this.apply(thisArg,arg);
-  }
-}
-</code></pre>
-<p>可以看出来, 使用 bind() 方法后, 代码优雅得多.</p>
-<p>注: 作为ES5标准加入的bind方法显然不支持 IE9之前的低版本IE, 如需使用, 请参考<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Function/bind#Compatibility" target="_blank" rel="external">Polyfill</a>.</p>
-<hr>
-<p>本文就讨论这么多内容,大家有什么问题或好的想法欢迎在下方参与<a href="#respond">留言和评论</a>.</p>
-<p>本文作者: <a href="https://github.com/Louiszhai" target="_blank" rel="external">louis</a></p>
-<p>本文链接: <a href="http://louiszhai.github.io/2016/01/11/bind/">http://louiszhai.github.io/2016/01/11/bind/</a></p>
-<p>参考文章</p>
-<ul>
-<li><a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Function/bind" target="_blank" rel="external">Function.prototype.bind() - JavaScript | MDN</a></li>
-</ul>
-]]></content>
-      
-        
-        <tags>
-            
-            <tag> JavaScript </tag>
-            
-        </tags>
-        
-    </entry>
-    
-    <entry>
       <title><![CDATA[由同源策略到前端跨域]]></title>
       <url>/2016/01/11/cross-domain/</url>
       <content type="html"><![CDATA[<h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h3><p>同源策略 (Same-Origin Policy) 最早由 Netscape 公司提出, 所谓同源就是要求, 域名, 协议, 端口相同. 非同源的脚本不能访问或者操作其他域的页面对象(如DOM等). 作为著名的安全策略, 虽然它只是一个规范, 并不强制要求,  但现在所有支持 javaScript 的浏览器都会使用这个策略. 以至于该策略成为浏览器最核心最基本的安全功能, 如果缺少了同源策略, web的安全将无从谈起.</p>
@@ -12223,6 +12477,112 @@ console.log(document.domain);
 <li><a href="http://www.freebuf.com/articles/web/65468.html" target="_blank" rel="external">同源策略详解及绕过（Part1） - FreeBuf.COM | 关注黑客与极客</a></li>
 <li><a href="http://www.plhwin.com/2014/05/28/nodejs-socketio/" target="_blank" rel="external">使用Node.js+Socket.IO搭建WebSocket实时应用 | 潘良虎的随想录</a></li>
 <li><a href="http://blog.jackxy.com/cross-origin-123/" target="_blank" rel="external">跨域资源访问的几种方式</a></li>
+</ul>
+]]></content>
+      
+        
+        <tags>
+            
+            <tag> JavaScript </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[Function.prototype.bind方法指南]]></title>
+      <url>/2016/01/11/bind/</url>
+      <content type="html"><![CDATA[<h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h3><p>ES5新增了 Function.prototype.bind 方法, 该方法不同于jquery的bind 方法, 它主要用于固定 this 作用域, 避免各种由于上下文切换造成的语义问题. 常用在 setTimeout, for循环等内部.</p>
+<a id="more"></a>
+<h3 id="bind"><a href="#bind" class="headerlink" title="bind"></a>bind</h3><p>语法: func.bind(thisArg, arg1, arg2, ….)</p>
+<p>bind() 方法会返回一个新函数, 又叫绑定函数, 当调用这个绑定函数时, 绑定函数会以创建它时传入 bind() 方法的第一个参数作为当前的上下文, 即this, 传入 bind() 方法的第二个及之后的参数加上绑定函数运行时自身的参数按照顺序作为原函数的参数来调用原函数.</p>
+<p>绑定函数也能使用new操作符创建对象; 这就好比把原函数当做构造器. 此时提供的this将被忽略, this之后的参数将依然前置到运行时的参数列表中.</p>
+<h4 id="基本用法"><a href="#基本用法" class="headerlink" title="基本用法"></a>基本用法</h4><p>下面我们来看看bind 的基本用法.</p>
+<pre><code class="js">var x = 8;
+var o = {
+  x: 10,
+  getX: function(){
+      console.log(this.x);
+  }
+};
+var f = o.getX;
+f();//8, 由于没有绑定执行时的上下文, this默认指向window, 打印了全局变量x的值
+var g = f.bind(o);
+g();//10, 绑定this后, 成功的打印了o对象的x属性的值.
+</code></pre>
+<h4 id="分离参数"><a href="#分离参数" class="headerlink" title="分离参数"></a>分离参数</h4><p>bind() 方法还可以设置函数拥有的初始参数. 这些参数作为bind() 的第2,3…个参数跟在this(或其他对象的后面), 调用绑定函数时, 这些参数将插入到参数列表的最开始位置, 而传递给绑定函数的参数将跟在他们后面.</p>
+<pre><code class="js">//打印十个斐波那契数
+var f = function(n1, n2, length){
+  if(arguments.length&lt;3) console.log(&#39;参数不够...&#39;);
+  var array = [n1, n2];
+  for(var i=2;i&lt;length;i++){
+      array[i] = array[i-2] + array[i-1];
+  }
+  return array;
+}
+var g = f.bind(null, 1, 1);
+console.log(g(10));//[1, 1, 2, 3, 5, 8, 13, 21, 34, 55]
+</code></pre>
+<h4 id="绑定参数"><a href="#绑定参数" class="headerlink" title="绑定参数"></a>绑定参数</h4><p>如果使用new 操作符去构造绑定函数的实例时, 原来提供的this 将被忽略, this之后的参数将依然前置到构造函数的参数列表中. 此时 bind() 方法便具备了保留参数的能力, 我们可以此达到类似柯里化的效果.</p>
+<pre><code class="js">var f = function(){
+  if(arguments.length!=0)
+      this.sum = Array.prototype.reduce.call(arguments,function(prev,item){//对传入参数求和
+         return prev + item;
+    });
+  return Array.prototype.join.call(arguments);// 返回传入参数的字符串形式
+}
+f.prototype.toString = function(){
+  return this.sum;
+}
+var g = f.bind(null,2);
+var x = new g(8);
+console.log(x.toString());//10, 可见x被绑定了2+8=10
+console.log(g(8));//2,8 这告诉我们绑定的两个参数正是2和8
+
+console.log(x instanceof g);//true, 可见通过new创建的x继承了g
+console.log(x instanceof f);//true, 可见x也继承了f
+console.log(g instanceof Function);//true, 可见bind f()方法之后, 返回了一个新的函数g
+//函数g可用于求和,如下:
+console.log(g(1,3,5,7,9));//27 2+1+3+5+7+9=27
+</code></pre>
+<h4 id="快捷调用"><a href="#快捷调用" class="headerlink" title="快捷调用"></a>快捷调用</h4><p>使用Array.prototype的方法处理类数组对象时(鸭式辨型), 不可避免的需要借用call 或者 apply 方法, 使用 bind() 方法, 我们可以简化这个过程. 如下:</p>
+<pre><code class="js">var _slice = Array.prototype.slice;
+var slice = Function.prototype.call.bind(_slice);
+function f(){
+  return slice(arguments,1);
+}
+f(1,2,3,4,5);//[2, 3, 4, 5]
+</code></pre>
+<p>下面的实例将解释 bind() 方法做了一件什么事情:</p>
+<pre><code class="js">var _slice = Array.prototype.slice;
+var slice = function(){
+  return _slice.apply(arguments[0],_slice.call(arguments,1));
+};
+function f(){
+  return slice(arguments,1);
+}
+f(1,2,3,4,5);//[2, 3, 4, 5]
+</code></pre>
+<p>如下, 是bind() 方法的简单实现.</p>
+<pre><code class="js">Function.prototype.bind = function(thisArg,argN){
+  var _this = this;
+  var _arg = _slice.call(arguments,1);
+  return function(){
+       var arg = _slice.call(arguments);
+    arg = _arg.concat(arg);
+      return _this.apply(thisArg,arg);
+  }
+}
+</code></pre>
+<p>可以看出来, 使用 bind() 方法后, 代码优雅得多.</p>
+<p>注: 作为ES5标准加入的bind方法显然不支持 IE9之前的低版本IE, 如需使用, 请参考<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Function/bind#Compatibility" target="_blank" rel="external">Polyfill</a>.</p>
+<hr>
+<p>本文就讨论这么多内容,大家有什么问题或好的想法欢迎在下方参与<a href="#respond">留言和评论</a>.</p>
+<p>本文作者: <a href="https://github.com/Louiszhai" target="_blank" rel="external">louis</a></p>
+<p>本文链接: <a href="http://louiszhai.github.io/2016/01/11/bind/">http://louiszhai.github.io/2016/01/11/bind/</a></p>
+<p>参考文章</p>
+<ul>
+<li><a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Function/bind" target="_blank" rel="external">Function.prototype.bind() - JavaScript | MDN</a></li>
 </ul>
 ]]></content>
       

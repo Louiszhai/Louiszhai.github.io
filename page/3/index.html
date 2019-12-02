@@ -107,7 +107,7 @@
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud" id="js-tagcloud">
-						<a href="/tags/CSS/" style="font-size: 17.5px;">CSS</a> <a href="/tags/JavaScript/" style="font-size: 20px;">JavaScript</a> <a href="/tags/JavaScript-Canvas/" style="font-size: 10px;">JavaScript Canvas</a> <a href="/tags/JavaScript-Chrome-Extension/" style="font-size: 10px;">JavaScript Chrome-Extension</a> <a href="/tags/Tool/" style="font-size: 15px;">Tool</a> <a href="/tags/Web/" style="font-size: 17.5px;">Web</a> <a href="/tags/XSS/" style="font-size: 10px;">XSS</a> <a href="/tags/css/" style="font-size: 12.5px;">css</a> <a href="/tags/javascript/" style="font-size: 10px;">javascript</a>
+						<a href="/tags/CSS/" style="font-size: 16.67px;">CSS</a> <a href="/tags/JavaScript/" style="font-size: 20px;">JavaScript</a> <a href="/tags/JavaScript-Canvas/" style="font-size: 10px;">JavaScript Canvas</a> <a href="/tags/JavaScript-Chrome-Extension/" style="font-size: 10px;">JavaScript Chrome-Extension</a> <a href="/tags/Tool/" style="font-size: 16.67px;">Tool</a> <a href="/tags/Web/" style="font-size: 16.67px;">Web</a> <a href="/tags/XSS/" style="font-size: 10px;">XSS</a> <a href="/tags/css/" style="font-size: 13.33px;">css</a> <a href="/tags/javascript/" style="font-size: 10px;">javascript</a>
 					</div>
 				</section>
 				
@@ -176,6 +176,78 @@
 </nav>
 
         <div class="body-wrap">
+  
+    <article id="post-css-margin" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/03/23/css-margin/" class="article-date">
+  	<time datetime="2016-03-23T12:47:36.000Z" itemprop="datePublished">2016-03-23</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/03/23/css-margin/">你不知道的margin属性</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h3><p>margin属性处于盒子模型的最外层, 用以隔开其他元素, 它可以依次设置4个长度值, 分别表示 “上 右 下 左” 的间距, 其中第1个和第3个值相对应, 第2个与第4个相对应, 如果省略前者, 后者将取与前者相同的数值. margin属性共存在以下 4 种表示方式:</p>
+<ul>
+<li>margin: 10px 1rem 1em 5%; 共 4 个数值, 表示依次设置 上, 右, 下, 左的间距;</li>
+<li>margin: 10px 1rem 1em; 共 3 个数值, 省略第4个值, 左间距将取右间距的值, 表示依次设置 上, 左右, 下的间距;</li>
+<li>margin: 10px 1rem; 共 2 个数值, 省略第3,4个值, 左间距将取右间距的值, 下间距将取上间距的值, 表示依次设置 上下, 左右的间距;</li>
+<li>margin: 10px; 共 1 个数值, 同时省略第2,3,4个值, 表示上下左右的间距均为10px;</li>
+</ul>
+<p>若是块级元素, 借助 margin:0 auto; 即可实现水平居中.</p>
+<p>看到这里, 你可能会觉得这些你都懂了, 这不要紧, 显然本文也不是为了科普margin的基础语法, 请往下看.</p>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/css/">css</a></li></ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a  href="/2016/03/23/css-margin/#more">more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+  
+
+  
+</article>
+
+
+
+
+
+
+
+
+
+
   
     <article id="post-css-center" class="article article-type-post" itemscope itemprop="blogPost">
   
@@ -438,70 +510,6 @@
 
 
   
-    <article id="post-bind" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2016/01/11/bind/" class="article-date">
-  	<time datetime="2016-01-11T00:01:33.000Z" itemprop="datePublished">2016-01-11</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/01/11/bind/">Function.prototype.bind方法指南</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h3><p>ES5新增了 Function.prototype.bind 方法, 该方法不同于jquery的bind 方法, 它主要用于固定 this 作用域, 避免各种由于上下文切换造成的语义问题. 常用在 setTimeout, for循环等内部.</p>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/">JavaScript</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a  href="/2016/01/11/bind/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-  
-
-  
-</article>
-
-
-
-
-
-
-
-
-
-
-  
     <article id="post-cross-domain" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -544,6 +552,70 @@
       
         <p class="article-more-link">
           <a  href="/2016/01/11/cross-domain/#more">more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+  
+
+  
+</article>
+
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-bind" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/01/11/bind/" class="article-date">
+  	<time datetime="2016-01-11T00:01:33.000Z" itemprop="datePublished">2016-01-11</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/01/11/bind/">Function.prototype.bind方法指南</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h3><p>ES5新增了 Function.prototype.bind 方法, 该方法不同于jquery的bind 方法, 它主要用于固定 this 作用域, 避免各种由于上下文切换造成的语义问题. 常用在 setTimeout, for循环等内部.</p>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/">JavaScript</a></li></ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a  href="/2016/01/11/bind/#more">more >></a>
         </p>
       
       <div class="clearfix"></div>
@@ -736,74 +808,6 @@
       
         <p class="article-more-link">
           <a  href="/2015/12/18/traverse/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-  
-
-  
-</article>
-
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-prototype" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/12/17/prototype/" class="article-date">
-  	<time datetime="2015-12-17T01:34:36.000Z" itemprop="datePublished">2015-12-17</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/12/17/prototype/">详解prototype与__proto__</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h3><ol>
-<li><strong>prototype</strong> 是函数(function) 的一个属性, 它指向函数的原型.</li>
-<li><strong>__proto__</strong>   是对象的内部属性, 它指向构造器的原型, 对象依赖它进行原型链查询.</li>
-</ol>
-<p>由上, <strong>prototype</strong> 只有函数才有, 其他(非函数)对象不具有该属性. 而 <strong>__proto__</strong> 是对象的内部属性, 任何对象都拥有该属性. </p>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/">JavaScript</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a  href="/2015/12/17/prototype/#more">more >></a>
         </p>
       
       <div class="clearfix"></div>

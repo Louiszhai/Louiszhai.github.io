@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" >
+  <title>webpack4编译代码如何完美适配IE内核 | louis blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="webpack4编译代码如何完美适配IE内核">
+<meta name="keywords" content="Tool">
+<meta property="og:type" content="article">
+<meta property="og:title" content="webpack4编译代码如何完美适配IE内核">
+<meta property="og:url" content="http://louiszhai.github.io/2019/12/02/webpack4.ie/index.html">
+<meta property="og:site_name" content="louis blog">
+<meta property="og:description" content="webpack4编译代码如何完美适配IE内核">
+<meta property="og:image" content="http://louiszhai.github.io/docImages/webpack-ie.icon.png">
+<meta property="og:image" content="http://louiszhai.github.io/docImages/webpack-ie01.png">
+<meta property="og:image" content="http://louiszhai.github.io/docImages/webpack-ie03.png">
+<meta property="og:image" content="http://louiszhai.github.io/docImages/webpack-ie04.png">
+<meta property="og:image" content="http://louiszhai.github.io/docImages/webpack-ie05.png">
+<meta property="og:image" content="http://louiszhai.github.io/docImages/webpack-ie06.png">
+<meta property="og:image" content="http://louiszhai.github.io/docImages/webpack-ie07.png">
+<meta property="og:image" content="http://louiszhai.github.io/docImages/webpack-ie08.png">
+<meta property="og:image" content="http://louiszhai.github.io/docImages/webpack-ie09.png">
+<meta property="og:image" content="http://louiszhai.github.io/docImages/webpack-ie10.png">
+<meta property="og:image" content="http://louiszhai.github.io/docImages/webpack-ie11.png">
+<meta property="og:image" content="http://louiszhai.github.io/docImages/webpack-ie12.png">
+<meta property="og:image" content="http://louiszhai.github.io/docImages/webpack-ie13.png">
+<meta property="og:image" content="http://louiszhai.github.io/docImages/webpack-ie14.png">
+<meta property="og:image" content="http://louiszhai.github.io/docImages/webpack-ie15.png">
+<meta property="og:image" content="http://louiszhai.github.io/docImages/webpack-ie16.png">
+<meta property="og:image" content="http://louiszhai.github.io/docImages/webpack-ie17.png">
+<meta property="og:image" content="http://louiszhai.github.io/docImages/webpack-ie18.png">
+<meta property="og:image" content="http://louiszhai.github.io/docImages/webpack-ie19.png">
+<meta property="og:image" content="http://louiszhai.github.io/docImages/webpack-ie20.png">
+<meta property="og:image" content="http://louiszhai.github.io/docImages/webpack-ie21.png">
+<meta property="og:image" content="http://louiszhai.github.io/docImages/webpack-ie22.png">
+<meta property="og:image" content="http://louiszhai.github.io/docImages/webpack-ie23.png">
+<meta property="og:image" content="http://louiszhai.github.io/docImages/webpack-ie25.png">
+<meta property="og:updated_time" content="2019-12-02T04:11:34.106Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="webpack4编译代码如何完美适配IE内核">
+<meta name="twitter:description" content="webpack4编译代码如何完美适配IE内核">
+<meta name="twitter:image" content="http://louiszhai.github.io/docImages/webpack-ie.icon.png">
+  
+    <link rel="alternative" href="/atom.xml" title="louis blog" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+<div id="container">
+    <div class="left-col">
+        <div class="overlay">
+	<!--<input type="text" class="st-default-search-input" style="position:absolute;top: 50px;left: 35px;">-->
+</div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img lazy-src="https://avatars2.githubusercontent.com/u/8412301?v=3&amp;s=320" class="js-avatar">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">路易斯</a></h1>
+		</hgroup>
+
+		
+		<p class="header-subtitle">坚持原著, 深度思考, 力求简单通俗叙事</p>
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						<div class="icon-wrap icon-link hide" data-idx="2">
+							<div class="loopback_l"></div>
+							<div class="loopback_r"></div>
+						</div>
+						
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>Menu</li>
+						<li>Tags</li>
+						
+						<li>Links</li>
+						
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives/">所有文章</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="github" target="_blank" href="https://github.com/Louiszhai" title="github">github</a>
+					        
+								<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						<a href="/tags/CSS/" style="font-size: 16.67px;">CSS</a> <a href="/tags/JavaScript/" style="font-size: 20px;">JavaScript</a> <a href="/tags/JavaScript-Canvas/" style="font-size: 10px;">JavaScript Canvas</a> <a href="/tags/JavaScript-Chrome-Extension/" style="font-size: 10px;">JavaScript Chrome-Extension</a> <a href="/tags/Tool/" style="font-size: 16.67px;">Tool</a> <a href="/tags/Web/" style="font-size: 16.67px;">Web</a> <a href="/tags/XSS/" style="font-size: 10px;">XSS</a> <a href="/tags/css/" style="font-size: 13.33px;">css</a> <a href="/tags/javascript/" style="font-size: 10px;">javascript</a>
+					</div>
+				</section>
+				
+				
+				
+				<section class="switch-part switch-part3">
+					<div id="js-friends">
+					
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://www.ruanyifeng.com/blog/">阮一峰的网络日志</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://www.zhangxinxu.com/wordpress/category/js/">张鑫旭-鑫空间-鑫生活</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://evanyou.me/">尤雨溪主页</a>
+			        
+			        </div>
+				</section>
+				
+
+				
+			</div>
+		</div>
+	</header>				
+</div>
+
+    </div>
+    <div class="mid-col">
+        <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">路易斯</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+			
+				<img lazy-src="https://avatars2.githubusercontent.com/u/8412301?v=3&amp;s=320" class="js-avatar">
+			
+			</div>
+			<hgroup>
+			  <h1 class="header-author">路易斯</h1>
+			</hgroup>
+			
+			<p class="header-subtitle">坚持原著, 深度思考, 力求简单通俗叙事</p>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives/">所有文章</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="https://github.com/Louiszhai" title="github">github</a>
+			        
+						<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+
+        <div class="body-wrap"><article id="post-webpack4.ie" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2019/12/02/webpack4.ie/" class="article-date">
+  	<time datetime="2019-12-02T03:29:45.000Z" itemprop="datePublished">2019-12-02</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      webpack4编译代码如何完美适配IE内核
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Tool/">Tool</a></li></ul>
+	</div>
+
+        
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          <span class="toc-arrow"></span>
+<div id="toc" class="toc-article">
+    <div class="toc-title">目录</div>
+    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#代码在IE9下运行"><span class="toc-text">代码在IE9下运行</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#IE9如何支持跨域请求"><span class="toc-text">IE9如何支持跨域请求</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#打包文件支持IE8"><span class="toc-text">打包文件支持IE8</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#代码在IE8下运行"><span class="toc-text"> 代码在IE8下运行</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#提供独立编译的bind垫片"><span class="toc-text">提供独立编译的bind垫片</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Object-defineProperty兼容方案"><span class="toc-text">Object.defineProperty兼容方案</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#垫片大小权衡"><span class="toc-text">垫片大小权衡</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#IE8-amp-IE7-各种缺陷"><span class="toc-text">IE8 & IE7 各种缺陷</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#缺少全局方法"><span class="toc-text">缺少全局方法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#缺少构造器方法"><span class="toc-text">缺少构造器方法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#原型方法缺陷"><span class="toc-text">原型方法缺陷</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#事件缺陷"><span class="toc-text">事件缺陷</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#数据类型判断缺陷"><span class="toc-text">数据类型判断缺陷</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#JS-异步加载缺陷"><span class="toc-text">JS 异步加载缺陷</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#DOM-API-缺陷"><span class="toc-text">DOM API 缺陷</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#CSS-API缺陷"><span class="toc-text">CSS API缺陷</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#透明度设置缺陷"><span class="toc-text">透明度设置缺陷</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#选择器引擎开发"><span class="toc-text">选择器引擎开发</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#如何调试"><span class="toc-text">如何调试</span></a></li></ol>
+</div>
+      
+        <p>为了更好的帮助外部合作渠道开发游戏的营销活动，我们开发了一款 JS SDK。该 SDK 采用 webpack4 编译打包，用于支持移动端 H5 活动快速开发，随着业务拓展，端游活动的开发也需要支持，但<strong>由于一些用户 PC 系统版本较低，部分端游 webview 又采用默认 IE 内核、以及用户使用 IE 浏览器参与活动等原因、导致这些用户无法参与到活动中来</strong>，从而影响活动效果，那么，该如何完美的适配 IE 内核呢？</p>
+<p><img src="http://louiszhai.github.io/docImages/webpack-ie.icon.png" alt=""></p>
+<a id="more"></a>
+<p>对于 JS SDK 而言，适配 IE 内核至少面临 5 大难题：</p>
+<ol>
+<li>IE9及以下，XMLHttpRequest 不支持跨域请求，XDomainRequest 不支持 cookie 传递；</li>
+<li>IE8 不遵循 W3C 规范，不支持 ECMAScript 5.1， CSS3 支持性低；</li>
+<li>IE7 缺少更多 JS API 支持，postMessage 也不支持；</li>
+<li>从 webpack2 起，IE8 及以下版本便不被支持；</li>
+<li>SDK 提供的选择器引擎不支持 IE8、IE7；</li>
+</ol>
+<p>实际上，以上 5 大难题，并非全部，只是诸多难题中较为突出的部分，下面会重点来讲。</p>
+<p>由于IE7、IE8、IE9 内核差异大，适配难度较大，所以我先从 IE9 开始适配，然后是 IE8、IE7。</p>
+<h3 id="代码在IE9下运行"><a href="#代码在IE9下运行" class="headerlink" title="代码在IE9下运行"></a><strong>代码在IE9下运行</strong></h3><p>webpack4 打包的代码，在 IE9 下直接运行，果然，立即报错：提示 symbol 未定义，当然错误不止一个，这里不一一列举。</p>
+<p>最终配置 .babelrc 如下所示，代码基本能在IE9上运行。</p>
+<p><img src="http://louiszhai.github.io/docImages/webpack-ie01.png" alt=".babelrc配置"></p>
+<p>如上图，transform-es2015-typeof-symbol 插件解决了symbol 未定义的问题。</p>
+<p>这里有个问题需要说明下，为什么不使用 babel-polyfill，而使用 transform-runtime，有两点原因：</p>
+<ol>
+<li>babel-polyfill size 太大，达到了 60k，sdk 不能接受这么大的垫片包；</li>
+<li>babel-polyfill 会污染全局变量，而且一旦 sdk 中引入了 babel-polyfill，使用 sdk 的项目，在不知情的情况下再次引入了 babel-polyfill， 有可能导致冲突；</li>
+</ol>
+<p>基于这两点，最终我使用了 transform-runtime 插件。</p>
+<p>另外，稍微注意下，IE9 下 console 对象在不开 dev tool 时，并不存在，也要兼容。</p>
+<h3 id="IE9如何支持跨域请求"><a href="#IE9如何支持跨域请求" class="headerlink" title="IE9如何支持跨域请求"></a><strong>IE9如何支持跨域请求</strong></h3><p>代码能在IE9上运行，起码开了个好头。接下来要面对的是第一个大难点：<strong>IE9及以下版本，XMLHttpRequest 不支持跨域请求，XDomainRequest 虽然支持跨域，却又不支持 cookie 传递</strong>。</p>
+<p>解决这个问题之前，不得不提下 xhr 的发展历史。 </p>
+<p>xhr 一共有两级标准，早在 IE5，微软就支持了 xhr1 标准，直到 IE10，xhr2 标准才得到支持。</p>
+<p>xhr1 有如下缺点：</p>
+<ul>
+<li>仅支持文本数据传输，无法传输二进制数据</li>
+<li>传输数据时，没有进度信息提示，只能提示是否完成</li>
+<li>受浏览器 同源策略 限制，<strong>只能请求同域资源</strong></li>
+<li>没有超时机制，超时了没办法处理</li>
+</ul>
+<p>很明显，xhr1 无法支持跨域请求。</p>
+<p>xhr2 针对 xhr1 的缺点做了如下改进：</p>
+<ul>
+<li>支持二进制数据，可以上传文件，可以使用 FormData 对象管理表单</li>
+<li>提供进度提示，可通过 xhr.upload.onprogress 事件回调方法获取传输进度</li>
+<li>依然受 同源策略 限制，这个安全机制不会变。<strong>xhr2 新提供 Access-Control-Allow-Origin 等 headers，设置为 * 时表示允许任何域名请求，从而支持跨域 CORS 访问</strong></li>
+<li>可以设置 timeout 及 ontimeout，方便设置超时时长和超时后续处理</li>
+</ul>
+<p>虽然，IE5 - IE9 都不支持 xhr2，但微软并没有闲着，而是在 IE8、IE9 中推出了支持 CORS 请求的 XDomainRequest，很遗憾，这是一个非成熟的解决方案，它有主要有以下限制：</p>
+<ul>
+<li>仅可用于发送 GET 和 POST 请求</li>
+<li><strong>不支持跨域传输 cookie</strong></li>
+<li>只能设置请求头的 Content-Type 字段，且不能访问响应头信息</li>
+</ul>
+<p>更多限制，不妨参考 <a href="https://blogs.msdn.microsoft.com/ieinternals/2010/05/13/xdomainrequest-restrictions-limitations-and-workarounds/" target="_blank" rel="external">XDomainRequest – Restrictions, Limitations and Workarounds</a>。</p>
+<p>不能跨域传输 cookie，登录态怎么校验？到目前为止，通过纯 api 的方式，还没有找到跨域解决方案。最终我使用了 flash 的插件，在 IE9 及以下版本浏览器中加载 flash 插件，借助 flash 去发送跨域请求。</p>
+<p>那么，是不是说 IE10、IE11 等浏览器 xhr 就没有问题了？并不尽然。xhr 规范细节一直在变化，参照 <a href="https://xhr.spec.whatwg.org/，最近一次更新是今年的" target="_blank" rel="external">https://xhr.spec.whatwg.org/，最近一次更新是今年的</a> 9 月 24 日，IE 不可能根据规范实时调整实现。即便是 IE11，它参照的也是 <a href="https://www.w3.org/TR/2011/WD-XMLHttpRequest2-20110816/#the-withcredentials-attribute" target="_blank" rel="external">w3c 2011</a>，甚至更早的规范，以下是规范的一段描述：</p>
+<blockquote>
+<p>On setting the <code>withCredentials</code> attribute these steps must be run:</p>
+<ol>
+<li>If the state is not <a href="https://www.w3.org/TR/2011/WD-XMLHttpRequest2-20110816/#dom-xmlhttprequest-opened" target="_blank" rel="external">OPENED</a> raise an <code>INVALID_STATE_ERR</code> exception and terminate these steps.</li>
+<li>If the <a href="https://www.w3.org/TR/2011/WD-XMLHttpRequest2-20110816/#send-flag" target="_blank" rel="external"><code>send()</code> flag</a> is true raise an <code>INVALID_STATE_ERR</code> exception and terminate these steps.</li>
+<li>If the <a href="https://www.w3.org/TR/2011/WD-XMLHttpRequest2-20110816/#anonymous-flag" target="_blank" rel="external">anonymous flag</a> is true raise an <code>INVALID_ACCESS_ERR</code> exception and terminate these steps.</li>
+<li>Set the <code>withCredentials</code> attribute’s value to the given value.</li>
+</ol>
+</blockquote>
+<p>这意味着，IE11 中，readyState 值为 <code>OPENED</code> 之前（即 open 方法调用前），为 xhr 对象设置 withCredentials 属性就会抛出 <code>INVALID_STATE_ERR</code> 错误。实际开发中，timeout 属性也必须在 open 方法之后调用。</p>
+<h3 id="打包文件支持IE8"><a href="#打包文件支持IE8" class="headerlink" title="打包文件支持IE8"></a><strong>打包文件支持IE8</strong></h3><p>接下来，第二个需要解决的难题是： 从 webpack2 起，IE8 及以下版本便不被支持。为此我耗费了非常多的时间。</p>
+<p>第一次在 IE8 上运行 webpack4 打包代码时，出现了各种各样的错误，远比 IE9 上遇到的多得多，挑重点讲，就是 IE8 下 default、catch 是关键字，而 webpack 打包代码，几乎无处没有 default，而用到 Promise 的地方，大多都会使用 catch 回调。</p>
+<p>我们都知道，babel 将 es6 转成了 es5， 而 <code>es3ify-loader</code> 则可以继续将 es5 转成 es3。</p>
+<pre><code class="js">function(t) { return t.default; }    // 编译前
+function(t) { return t[&quot;default&quot;]; } // 编译后
+
+{ catch：function(t){} }   // 编译前
+{ &quot;catch&quot;：function(t){} } // 编译后
+</code></pre>
+<p>借助  <code>es3ify-loader</code> ，default、catch 等关键字编译后会被加上引号，避免 IE8 报缺少标识符错误。它的配置如下所示：</p>
+<p><img src="http://louiszhai.github.io/docImages/webpack-ie03.png" alt="crossdomain.xml配置"></p>
+<p>重新编译后运行，还是报了缺少标识符的问题。难道没效果？其实不是的。</p>
+<p>原来 UglifyJsPlugin 在压缩时，默认将引号都去掉了。<code>es3ify-loader</code> 好不容易将引号加上，UglifyJsPlugin 顺手就移除了，深藏功与名。为此，需要将 <code>compress.properties</code> 设置为 false，避免使用点符号重写属性访问。如下：</p>
+<pre><code class="js">t[&quot;default&quot;] -&gt; t.default    // default true
+t[&quot;default&quot;] -&gt; t[&quot;default&quot;] // set false
+</code></pre>
+<p>另外，<code>output.quote_keys</code> 也需要设置为 true，从而保留对象 key 的引号，如下。</p>
+<pre><code class="js">{ &quot;catch&quot;: xx } -&gt; { catch: xx }   // default false
+{ &quot;catch&quot;: xx } -&gt; { &quot;catch&quot;: xx } // default false
+</code></pre>
+<p>重新编译后后运行，又报 “无法设置未定义或 null 引用的属性” 的错误。原来 UglifyJsPlugin 压缩时，<code>ie8</code>  设置默认为 false，这意味着它又顺手去掉了支持 IE8 的代码。那么，最终配置如下：</p>
+<p><img src="http://louiszhai.github.io/docImages/webpack-ie04.png" alt="UglifyJsPlugin配置"></p>
+<p>实际调试时，不妨增加 <code>mangle: false</code> 配置，关闭变量名混淆，debug 会更友好，更多配置介绍，请戳 <a href="https://github.com/LiPinghai/UglifyJSDocCN/blob/master/README.md" target="_blank" rel="external">UglifyJs 中文文档</a> 。</p>
+<p>到此，我们解决了 IE8 不被 webpack 支持的问题。</p>
+<h3 id="代码在IE8下运行"><a href="#代码在IE8下运行" class="headerlink" title=" 代码在IE8下运行"></a><strong> 代码在IE8下运行</strong></h3><p>很明显，不太可能这么容易在 IE8 下成功运行项目。这里还有两个大坑。</p>
+<ol>
+<li>webpack4 打包文件的开始部分就用到了 Function.prototype.bind 方法。</li>
+<li>IE8 下 Object.defineProperty 实现与规范不同，它只能设置 dom 元素。</li>
+</ol>
+<h4 id="提供独立编译的bind垫片"><a href="#提供独立编译的bind垫片" class="headerlink" title="提供独立编译的bind垫片"></a><strong>提供独立编译的bind垫片</strong></h4><p>第一点，无论我在 index.js 入口文件中如何添加 bind 方法的垫片，都毫无效果，依然提示 bind 方法不存在。后来终于在编译文件的头部发现了 t.push.bind 的引用，如下。</p>
+<p><img src="http://louiszhai.github.io/docImages/webpack-ie05.png" alt="bind方法被调用"></p>
+<p>原来 bind 方法的调用如此之早，此时业务逻辑代码远没有开始执行，也就是说，垫片方法也还没有执行。为了解决这个问题，只能避开 webpack 打包，我不得不额外新增了 polyfill.js，用于承载 bind 方法垫片，然后使用 gulp 压缩 polyfill.js，再合并进 webpack 打包文件。gulp 脚本如下所示：</p>
+<p><img src="http://louiszhai.github.io/docImages/webpack-ie06.png" alt="gulp配置"></p>
+<h4 id="Object-defineProperty兼容方案"><a href="#Object-defineProperty兼容方案" class="headerlink" title="Object.defineProperty兼容方案"></a><strong>Object.defineProperty兼容方案</strong></h4><p>第二点，Object.defineProperty 缺陷是硬伤，即便引入了 es5-shim 垫片，由于 IE8 不支持访问器属性，依然会抛异常。那么，到底什么地方用到了 Object.defineProperty 呢？</p>
+<p>问题出在 babel 身上，通常情况下，babel 对 export 解析不会设置访问器属性，没有问题，如下。</p>
+<pre><code class="js">// 编译前
+const a = 1;
+export default a;
+// 编译后
+Object.defineProperty(exports, &quot;__esModule&quot;, {
+  value: true
+});
+var a = 1;
+exports.default = a;
+</code></pre>
+<p>但 babel 会把 export xx from yy 编译成 Object.defineProperty 形式，并且设置访问器属性，如下。</p>
+<pre><code class="js">// 编译前
+export { loadScript } from &#39;./util/loadScript&#39;
+// 编译后
+Object.defineProperty(exports, &quot;__esModule&quot;, {
+    value: true
+});
+var _loadScript = require(&#39;./util/loadScript&#39;);
+Object.defineProperty(exports, &#39;loadScript&#39;, {
+    enumerable: true,
+    get: function get() {
+        return _loadScript.loadScript;
+    }
+});
+</code></pre>
+<p>面对上面编译后的代码，es5-shim/es5-sham 会在如下位置抛出错误。</p>
+<p><img src="http://louiszhai.github.io/docImages/webpack-ie07.png" alt="es5-sham报错位置"></p>
+<p>当 supportsAccessors 为 false 且 get 或者 set 随便一个存在，即抛出 ERR_ACCESSORS_NOT_SUPPORTED 错误，supportsAccessors 用于判断是否支持访问器属性，它的实现如下：</p>
+<p><img src="http://louiszhai.github.io/docImages/webpack-ie08.png" alt="es5-sham报错位置"></p>
+<p>稍微转换下，即 <code>supportsAccessors = Object.prototype.hasOwnProperty(&quot;__defineGetter__&quot;)</code>，而 <code>__defineGetter__</code>  IE11 才支持，虽然 IE9、IE10 同样不支持它，但它们已经支持 Object.defineProperty 方法，不需要垫片。另外，es-shim <a href="https://github.com/es-shims/es5-shim#may-fail" target="_blank" rel="external">官方文档</a>也提到了使用 Object.defineProperty 可能会失败。</p>
+<p><img src="http://louiszhai.github.io/docImages/webpack-ie09.png" alt="Object.defineProperty可能失败"></p>
+<p>如上图，描述符中存在 get 或 set，同时还不支持 defineGetter，将默默失败。</p>
+<p>综上，问题出在 export xx from yy 这种写法上，换种写法，先 import 然后再 export 不就行了，当然可以，关键是目前有很多地方都用到了这种写法，贸然改写，然后还要立一个 flag，以后不要这样编写代码巴拉巴拉，确实不太优雅。</p>
+<p>有这样的一个 babel 插件—<a href="https://www.npmjs.com/package/babel-plugin-transform-es2015-modules-simple-commonjs" target="_blank" rel="external">transform-es2015-modules-simple-commonjs</a> 可以使用（这个插件也出现在篇首 .babelrc 配置截图中第 20 行），它可以实现简单的 commonjs 语法转换，避开了访问器属性，一举解决了 Object.defineProperty 报错的问题，如下为它的编译结果。</p>
+<pre><code class="js">Object.defineProperty(exports, &quot;__esModule&quot;, {
+    value: true
+});
+var _loadScript = require(&#39;./util/loadScript&#39;);
+exports.default = _loadScript.loadScript;
+</code></pre>
+<h4 id="垫片大小权衡"><a href="#垫片大小权衡" class="headerlink" title="垫片大小权衡"></a><strong>垫片大小权衡</strong></h4><p>babel 的 transform-runtime 插件虽好，却只会引入 es6 垫片，支持 IE8 还需要额外引入 es5 的垫片 es5-shim，而 es5-shim 又包含了 es5-shim.min.js 和 es5-sham.min.js，对于 IE8 而言，两者都依赖，前者 26k， 后者 6k，共计 32k。同样的问题再次面临抉择，无论如何，不能因为它方便，而去盲目增加 sdk 的 size，事实上，sdk 远远不需要集合型的垫片方案。</p>
+<p>所以，我放弃了 es5-shim 垫片，最终选用了司徒正美提供的 <a href="https://github.com/RubyLouvre/object-defineproperty-ie8" target="_blank" rel="external">object-defineproperty-ie8</a> 解决了 Object.defineProperty 可能报错的问题。</p>
+<p><img src="http://louiszhai.github.io/docImages/webpack-ie10.png" alt="Object.defineProperty-ie8"></p>
+<p>如上图，具体思路就是，先判断是否支持访问器属性，不支持就忽略非 DOM 元素的访问器属性设置，只保证赋值成功，避免了报错导致执行中断。</p>
+<p>到这里，webpack 不支持 IE8 的问题，基本解决了，接下来就需要与 IE8、IE7 斗智斗勇了。</p>
+<h3 id="IE8-amp-IE7-各种缺陷"><a href="#IE8-amp-IE7-各种缺陷" class="headerlink" title="IE8 &amp; IE7 各种缺陷"></a><strong>IE8 &amp; IE7 各种缺陷</strong></h3><p>对于 IE8 &amp; IE7 而言，由于不遵循 w3c 规范，不支持 ECMAScript 5.1，导致有很多 API 实现与标准不一致或没有实现，以下是 SDK 涉及到的一些缺陷介绍。（如未特别说明，即 IE8、IE7 都适用）</p>
+<h4 id="缺少全局方法"><a href="#缺少全局方法" class="headerlink" title="缺少全局方法"></a><strong>缺少全局方法</strong></h4><ol>
+<li>不支持 JSON 对象。</li>
+<li>不支持 window.getComputedStyle 方法。</li>
+<li>IE7 不支持 window.localStorage 方法。</li>
+<li>IE7 不支持 window.querySelectorAll 方法。</li>
+</ol>
+<p>另外，IE8 下，document.head 也没有，需要做如下兼容。</p>
+<p><img src="http://louiszhai.github.io/docImages/webpack-ie11.png" alt="document.head"></p>
+<h4 id="缺少构造器方法"><a href="#缺少构造器方法" class="headerlink" title="缺少构造器方法"></a><strong>缺少构造器方法</strong></h4><ol>
+<li>缺少 Object.keys、Object.create 等方法。</li>
+<li>缺少 Array.isArray 方法。</li>
+</ol>
+<h4 id="原型方法缺陷"><a href="#原型方法缺陷" class="headerlink" title="原型方法缺陷"></a><strong>原型方法缺陷</strong></h4><ol>
+<li>缺少 Function.prototype.bind 方法，webpack4 编译代码开头部分就用到了 bind 方法，这个前面解决了。</li>
+<li>apply 方法第二个参数不能接受类数组对象，否则会报 “Function.prototype.apply: 缺少 Array 或 arguments 对象” 错误。</li>
+<li>Array原型方法如 forEach，map，filter、indexOf … 这些方法都没有。</li>
+<li>数组 toString 方法存在 bug，其它浏览器在调用数组的 toString 方法时，如果遇到继承于数组的就直接使用数组的 toString，如果遇到非数组对象时会切换到 Object 的 toString 上；而在 IE8 中只要非数组对象调用数组的 toString 方法，一律报错。</li>
+</ol>
+<h4 id="事件缺陷"><a href="#事件缺陷" class="headerlink" title="事件缺陷"></a><strong>事件缺陷</strong></h4><ol>
+<li><p>只有全局事件，事件没有target属性，兼容如 <code>e = e || window.Event；target = e.target || e.srcElement</code> 。</p>
+</li>
+<li><p>事件回调内部 this 执行 window。</p>
+</li>
+<li><p>不支持 addEventListener API，可由 attachEvent 替代。</p>
+<p><img src="http://louiszhai.github.io/docImages/webpack-ie12.png" alt="attachEvent"></p>
+</li>
+<li><p>IE7，不支持 stopPropagation、preventDefault 方法。</p>
+<p><img src="http://louiszhai.github.io/docImages/webpack-ie13.png" alt="cancelBubble"></p>
+</li>
+</ol>
+<h4 id="数据类型判断缺陷"><a href="#数据类型判断缺陷" class="headerlink" title="数据类型判断缺陷"></a><strong>数据类型判断缺陷</strong></h4><ol>
+<li>typeof 判断原生方法时，会将其当作是 object，而不是 function，如下兼容。</li>
+</ol>
+<p><img src="http://louiszhai.github.io/docImages/webpack-ie14.png" alt="typeof判断缺陷"></p>
+<ol>
+<li>不同 IE 版本，基本数据类型判断也存在差异，如下图。</li>
+</ol>
+<p><img src="http://louiszhai.github.io/docImages/webpack-ie15.png" alt="基本数据类型判断缺陷"></p>
+<h4 id="JS-异步加载缺陷"><a href="#JS-异步加载缺陷" class="headerlink" title="JS 异步加载缺陷"></a><strong>JS 异步加载缺陷</strong></h4><p>script load 不执行，需监听 onreadystatechange 事件，判断 readyState 是否等于 loaded 或 complete，兼容如下图。</p>
+<p><img src="http://louiszhai.github.io/docImages/webpack-ie16.png" alt="script load兼容"></p>
+<h4 id="DOM-API-缺陷"><a href="#DOM-API-缺陷" class="headerlink" title="DOM API 缺陷"></a><strong>DOM API 缺陷</strong></h4><ol>
+<li><p>innerHTML 属性对于以下标签是只读的：col、colgroup、frameset、head、html、style、table、tbody、tfoot、thead、title、tr。除此之外，下拉框赋值，也非常困难，虽然其 innerHTML 可以写入，但新增的选项不会生效（清空又可以），推荐使用 options.add 方法 添加新选项，如果还不行，可以使用 outerHTML 赋值。</p>
+</li>
+<li><p>IE7 不支持 window.Element 对象</p>
+<p><img src="http://louiszhai.github.io/docImages/webpack-ie17.png" alt="Element兜底"></p>
+</li>
+<li><p>IE7 setAttribute 支持性也有问题</p>
+<p><img src="http://louiszhai.github.io/docImages/webpack-ie18.png" alt="setAttribute兼容"></p>
+</li>
+</ol>
+<h4 id="CSS-API缺陷"><a href="#CSS-API缺陷" class="headerlink" title="CSS API缺陷"></a><strong>CSS API缺陷</strong></h4><ol>
+<li>IE9- 不支持 element.classList 属性。</li>
+<li>IE8-，CSS 部分属性动态修改后不生效，如：margin-left、margin-top 等。</li>
+<li>IE 支持 currentStyle 方法，但只能获取表面的样式，无法获取计算后的，getComputedStyle 垫片也无法准确获取，可采用 element.getBoundingClientRect() 方法获取坐标，然后计算出宽高，如下所示。</li>
+</ol>
+<p><img src="http://louiszhai.github.io/docImages/webpack-ie19.png" alt="获取宽度"></p>
+<h4 id="透明度设置缺陷"><a href="#透明度设置缺陷" class="headerlink" title="透明度设置缺陷"></a><strong>透明度设置缺陷</strong></h4><ol>
+<li>不支持 opacity 样式，可由 filter 滤镜替代。</li>
+</ol>
+<p><img src="http://louiszhai.github.io/docImages/webpack-ie20.png" alt="透明度兼容"></p>
+<ol>
+<li>不支持 rgba 色值，可由 filter 滤镜替代。</li>
+</ol>
+<p><img src="http://louiszhai.github.io/docImages/webpack-ie21.png" alt="rgba兼容"></p>
+<p>上图中，颜色 “#19000000” 由两部分组成。</p>
+<p>第一部是 # 号后面的 19 是 rgba 透明度 0.1 的 IEfilter 值。从 0.1 到 0.9 每个数字对应一个 IEfilter 值。</p>
+<p>第二部分是 19 后面的六位。这个是六进制的颜色值，跟 rgb 函数中的取值一致。比如 rgb(0,0,0) 对应 #000000，也就是黑色。</p>
+<p>rgba 透明度与 IEfilter 的对应关系如下所示。</p>
+<p><img src="http://louiszhai.github.io/docImages/webpack-ie22.png" alt="rgba-IEfilter"></p>
+<p>除了透明度外，CSS 动画也需要降级为 gif 实现，如果是 loading 动画，可以使用 <a href="https://loading.io/" target="_blank" rel="external">loading.io</a> 无缝转换。</p>
+<p>到这，IE8、IE7 的兼容性问题基本解决，接下来只需要让选择器引擎支持到 IE7，改造便可完成。</p>
+<h3 id="选择器引擎开发"><a href="#选择器引擎开发" class="headerlink" title="选择器引擎开发"></a><strong>选择器引擎开发</strong></h3><p>大家都知道，jquery 提供了非常棒的选择器引擎 <a href="https://github.com/jquery/sizzle/" target="_blank" rel="external">sizzle</a>，但它的 min 版本达到了 20 k，有点太大了。</p>
+<p>对于 JS SDK 而言， 它不但内部使用了大量选择器，同时还需要将选择器的功能开放给第三方开发者，使其能在不使用 jquery、zepto 等类库的情况下，快速完成基本的 DOM 操作，所以搭载一款轻便的选择器引擎很有必要。</p>
+<p>一个简单的选择器引擎，至少具备以下 4 点功能。</p>
+<ol>
+<li>选择元素，如 <code>$(&#39;#div&#39;)</code></li>
+<li>包装 DOM 对象为 <code>$</code> 实例，如  <code>$(element);</code></li>
+<li>包装字符串html模板为 <code>$</code> 实例，如 <code>$(&#39;&lt;div&gt;&lt;/div&gt;&#39;)</code></li>
+<li>提供选择器 <code>$</code> 实例对象的原型方法，如 <code>$(&#39;#div&#39;).html(&#39;hello world&#39;)</code></li>
+</ol>
+<p>在如今，querySelectorAll 深入人心的背景下，实现一个选择器引擎，并不难，这里我参考的是 <a href="https://github.com/dengzhiqiang/balajs/tree/master/balajs" target="_blank" rel="external">balajs</a>，它主要代码如下所示。</p>
+<p><img src="http://louiszhai.github.io/docImages/webpack-ie23.png" alt="balajs"></p>
+<p>balajs 有如下 2 个问题：</p>
+<ol>
+<li>仅仅支持 IE9+ 浏览器。</li>
+<li>原型是数组，不是对象，直接使用数组做原型，在 IE8 以下，tostring 方法调用时，会调用数组原型的tostring，从而报错（而标准浏览器，会调用对象的 tostring），由于继承数组，其实例 length 属性设置也会失效。</li>
+</ol>
+<p>为了解决这 2 个问题，我们需要更换选择器引擎的继承方式，如下代码（参考了 jquery 思想）。</p>
+<pre><code class="js">function $(s, context) { // 选择器入口
+  if (s instanceof init) { // 如果是已经获取到的元素，直接返回
+    return s;
+  }
+  // 结合 balajs 可以先产生 elements 数组
+  const elements = ... // 先略去，后面讲
+  // 再将 elements 数组交由 init 方法产生类数组返回值
+  return new $.fn.init(s ? elements : []);
+}
+$.fn = {}; // 选择器对象原型由数组改为空对象
+const init = $.fn.init = function (selector) {
+  selector.forEach((ele, i) =&gt; { // init 方法用于完成kv赋值操作，并产生类数组对象实例
+    this[i] = ele;
+  });
+  this.length = selector.length;
+  return this;
+}
+init.prototype = $.fn; // init 原型指定为 $.fn，使得 init 对象实例能够使用 $.fn 原型中的方法
+
+Object.assign($.fn, { // 往原型中添加方法
+  click(handle) {...},
+  append(child) {...},
+  find(selector) {...},
+  ...
+})
+</code></pre>
+<p>现在，选择器引擎的雏形出来了，只要完成 elements 数组部分，便能 work。</p>
+<p>elements 第一步筛选，可以使用上图 balajs 的主要代码，只需要将 querySelectorAll 垫片添加进去即可，如下图，主要修改了红框中的代码，并移除了 s 为 function 时，dom ready 部分实现（sdk 暂时用不到）。</p>
+<p><img src="http://louiszhai.github.io/docImages/webpack-ie25.png" alt="elements获取"></p>
+<p>首先奉上 querySelectorAll 垫片。</p>
+<pre><code class="js">if (!document.querySelectorAll) { // IE7 中没有 querySelectorAll
+  var style = document.createStyleSheet();
+  document.querySelectorAll = function (r, c, i, j, a) {
+    var a = document.all, c = [], r = r.replace(/\[for\b/gi, &#39;[htmlFor&#39;).split(&#39;,&#39;);
+    for (i = r.length; i--;) {
+      style.addRule(r[i], &#39;k:v&#39;);
+      for (j = a.length; j--;) a[j].currentStyle.k &amp;&amp; c.push(a[j]);
+      style.removeRule(0);
+    }
+    return c;
+  }
+}
+// 用于在 IE7 浏览器中，支持 Element.querySelectorAll 方法
+window.querySelectorAll = (function () {
+  var idAllocator = 10000;
+  function qsaWorkerShim(element, selector) {
+    var needsID = element.id === &quot;&quot;;
+    if (needsID) {
+      ++idAllocator;
+      element.id = &quot;__qsa&quot; + idAllocator;
+    }
+    try {
+      return document.querySelectorAll(&quot;#&quot; + element.id + &quot; &quot; + selector);
+    }
+    finally {
+      if (needsID) {
+        element.id = &quot;&quot;;
+      }
+    }
+  }
+  function qsaWorkerWrap(element, selector) {
+    return element.querySelectorAll(selector);
+  }
+  return document.createElement(&#39;div&#39;).querySelectorAll ? qsaWorkerWrap : qsaWorkerShim;
+})();
+</code></pre>
+<p>可以看出，elements 有可能返回类数组对象、NodeList 或 HTMLCollection 对象，第二步便需要将它们转换成数组，然后交由 init 方法处理。鉴于 IE8 apply 的 bug，需要做如下特殊处理。</p>
+<pre><code class="js">const isDOM = obj =&gt; { // 是否 DOM 元素
+  if(typeof HTMLElement === &#39;object&#39;) {
+    return obj instanceof HTMLElement；
+  } else {
+    return obj &amp;&amp; typeof obj === &#39;object&#39; &amp;&amp; obj.nodeType === 1;
+  }
+};
+const isArrayLike = collection =&gt; { // 是否类数组
+    var length = collection.length;
+    return typeof length == &#39;number&#39; &amp;&amp; length &gt;= 0 &amp;&amp; length &lt;= (Math.pow(2, 53) - 1);
+}
+// IE8中继承数组的对象，toSting时默认会调用数组的toSting方法，这点与标准不一致，导致会报&quot;缺少 Array 对象&quot;错误，因此需要排除数组
+const generalObj = elements instanceof Object &amp;&amp; !(elements instanceof Array) &amp;&amp; elements.toString() === &#39;[object Object]&#39; &amp;&amp; !isArrayLike(elements) // 非类数组的普通对象
+if (elements === window || elements === document || isDOM(elements) || generalObj) {
+  elements = [elements];
+} else {
+  // 修复 bug：SCRIPT5028: Function.prototype.apply: 缺少 Array 或 arguments 对象
+  try {
+    elements = [].slice.apply(elements, [0]); // 类数组在这里完成转换
+  } catch (err) {
+    try {
+      elements = [].concat.apply([], elements); // NodeList 或 HTMLCollection 在这里完成转换
+    } catch (e) {
+      if (elements.length) { // 兜底
+        var tempArray = [];
+        for (var i = 0; i &lt; elements.length; i++) {
+          tempArray[i] = elements[i];
+        }
+        elements = tempArray;
+      } else {
+        elements = [];
+      }
+    }
+  }
+}
+</code></pre>
+<p>整合上述代码，简单的选择器引擎便开发完成。</p>
+<p>到此，营销活动  JS SDK 终于适配完成。SDK 总 size 仅仅增大了 10k，其中 flash 垫片还占了增长的大部分。</p>
+<h3 id="如何调试"><a href="#如何调试" class="headerlink" title="如何调试"></a><strong>如何调试</strong></h3><p>除了代码外，IE 内核的适配过程中，调试也是困难重重，调试问题主要集中在以下 4 个方面：</p>
+<ol>
+<li>如何使用 mac 调试 IE ？</li>
+<li>选择哪种操作系统？ windows 10 ？ Windows 7 ？ Windows xp？</li>
+<li>选择哪种版本的 IE ？IE11？IE10？IE9？IE8？IE7？</li>
+<li>选择什么样的代理？ Fiddler ？Charles ？ Whistle ？</li>
+</ol>
+<p>我本地安装的是 Parallels Desktop 虚拟机，基于它，又安装了 win7 sp1 及 win xp 两个操作系统，分别用于测试 IE9、IE10、IE11 及 IE7、IE8。</p>
+<p>调试过程中，不要相信 IE 代理模式，效果不太好，很多错误都会被默默吃掉，需要老老实实把 IE 浏览器逐个装一遍，我经常调试完 IE8 发现 IE7 好像有个 bug，然后手动把 IE8 卸载，退回 IE7，测好了再升级，IE7 没有dev tool，调试不太方便，定位不到问题，只能先升到 IE8，这样的过程需要重复很多次。</p>
+<p>漫长的调试过程中，代理是非常重要的基础设施，代理频繁断开，或请求不正常转发，https证书问题，都非常消耗时间和精力，上面提到的三个代理软件，我都使用过，Fiddler 很容易断开连接，不建议使用，Charles 兼容性最好，各个版本的 IE 都能正常代理，但配置不是很方便，做为备选，Whistle 配置很方便，基本作为日常代理工具，但在 IE7 及 IE8 下，由于证书问题，导致https 请求不能正常发送。</p>
+<p>更多的IE适配问题，欢迎在评论区留言继续交流，谢谢。</p>
+
+      
+    </div>
+    
+  </div>
+  
+  
+    <! -- 添加捐赠图标 -->
+<div class ="post-donate">
+    <div id="donate_board" class="donate_bar center">
+        <a id="btn_donate" class="btn_donate" href="javascript:;" title="打赏"></a>
+        <span class="donate_txt">
+           &uarr;<br>
+       支持一杯咖啡吧！
+        </span>
+      </div>  
+  <div id="donate_guide" class="donate_bar center hidden" >
+    <!-- 支付宝打赏图案 -->
+    <img src="/img/alipay.gif" alt="支付宝打赏"> 
+    <!-- 微信打赏图案 -->
+    <img src="/img/weixin.gif" alt="微信打赏">  
+    </div>
+  <script type="text/javascript">
+    document.getElementById('btn_donate').onclick = function(){
+      $('#donate_board').addClass('hidden');
+      $('#donate_guide').removeClass('hidden');
+    }
+  </script>
+</div>
+<! -- 添加捐赠图标 -->
+  
+
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2019/01/04/webpack4/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">使用webpack4提升180%编译速度</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share_jia">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">Share to: &nbsp; </span>
+		<a class="jiathis_button_facebook"></a> 
+    <a class="jiathis_button_twitter"></a>
+    <a class="jiathis_button_plus"></a> 
+    <a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+
+
+
+
+
+
+
+  <style>
+/*
+    Name:     Kimbie (light)
+    Author:   Jan T. Sott
+    License:  Creative Commons Attribution-ShareAlike 4.0 Unported License
+    URL:      https://github.com/idleberg/Kimbie-highlight.js
+*/
+
+/* Kimbie Comment */
+.hljs-comment,
+.hljs-quote {
+  color: #a57a4c;
+}
+
+/* Kimbie Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-meta {
+  color: #dc3958;
+}
+
+/* Kimbie Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-deletion,
+.hljs-link {
+  color: #f79a32;
+}
+
+/* Kimbie Yellow */
+.hljs-title,
+.hljs-section,
+.hljs-attribute {
+  color: #f06431;
+}
+
+/* Kimbie Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+  color: #889b4a;
+}
+
+/* Kimbie Purple */
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-function {
+  color: #98676a;
+}
+
+.hljs {
+  display: block;
+  overflow-x: auto;
+  /*background: #fbebd4;*/
+  color: #84613d;
+  padding: 0.5em;
+}
+
+.hljs-emphasis {
+  font-style: italic;
+}
+
+.hljs-strong {
+  font-weight: bold;
+}
+</style>
+  <script src="//cdn.bootcss.com/highlight.js/9.2.0/highlight.min.js"></script>
+  <script>
+    // hljs.initHighlightingOnLoad();
+    [].slice.call(document.querySelectorAll('pre code')).forEach(function(block, i) {
+      hljs.highlightBlock(block);
+      var lines = block.innerText.split('\n').length - 1;
+      var ul = document.createElement('ul');
+      ul.className = 'pre-numbering';
+      block.className += ' has-numbering';
+      block.parentNode.appendChild(ul);
+      for(i=1;i<=lines;i++){
+        var li = document.createElement('li');
+        li.innerText = i;
+        ul.appendChild(li);
+      }
+    });
+  </script>
+</div>
+        <link rel="stylesheet" href="/css/content.css" type="text/css">
+<footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+      <img src="/img/top_arrow.png" class="top_arrow" id="top_arrow">
+    	<div class="footer-left">
+    		&copy; 2019 路易斯
+
+        <span style="position:relative;top:2px" id="cnzz_stat_icon_1256923583"></span>
+        <script type="text/javascript">
+          var s = document.createElement('script');
+          var cnzz_protocol = (("https:" == document.location.protocol) ? "https://" : "http://");
+          s.src = cnzz_protocol + "s11.cnzz.com/z_stat.php?id=1256923583&show=pic";
+          document.body.appendChild(s);
+        </script>
+
+    	</div>
+      	<div class="footer-right">
+      		<a href="https://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+<script type="text/javascript">
+  //swifty
+  /*(function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+  
+  _st('install','4AmBuvmx4Cy-3hvyxeh8','2.0.0');*/
+</script>
+    </div>
+    
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: false,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="/js/jquery-1.9.1.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/content.js"></script>
+
+
+
+
+
+
+
+</div>
+<script src="/js/screenfull.js"></script>
+<a href="https://github.com/Louiszhai" style="position: fixed; top: 0; right: 0; border: 0;z-index:9999"><img
+            source="https://camo.githubusercontent.com/a6677b08c955af8400f44c6298f40e7d19cc5b2d/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677261795f3664366436642e706e67"
+            src="/img/fork_me_on_github.png" alt="Fork me on GitHub"
+            data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png"></a>
+</body>
+</html>

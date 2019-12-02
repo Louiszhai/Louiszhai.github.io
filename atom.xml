@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://louiszhai.github.io/"/>
-  <updated>2019-03-16T11:07:22.334Z</updated>
+  <updated>2019-12-02T04:11:34.106Z</updated>
   <id>http://louiszhai.github.io/</id>
   
   <author>
@@ -16,11 +16,377 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>webpack4编译代码如何完美适配IE内核</title>
+    <link href="http://louiszhai.github.io/2019/12/02/webpack4.ie/"/>
+    <id>http://louiszhai.github.io/2019/12/02/webpack4.ie/</id>
+    <published>2019-12-02T03:29:45.000Z</published>
+    <updated>2019-12-02T04:11:34.106Z</updated>
+    
+    <content type="html"><![CDATA[<p>为了更好的帮助外部合作渠道开发游戏的营销活动，我们开发了一款 JS SDK。该 SDK 采用 webpack4 编译打包，用于支持移动端 H5 活动快速开发，随着业务拓展，端游活动的开发也需要支持，但<strong>由于一些用户 PC 系统版本较低，部分端游 webview 又采用默认 IE 内核、以及用户使用 IE 浏览器参与活动等原因、导致这些用户无法参与到活动中来</strong>，从而影响活动效果，那么，该如何完美的适配 IE 内核呢？</p>
+<p><img src="http://louiszhai.github.io/docImages/webpack-ie.icon.png" alt=""></p>
+<a id="more"></a>
+<p>对于 JS SDK 而言，适配 IE 内核至少面临 5 大难题：</p>
+<ol>
+<li>IE9及以下，XMLHttpRequest 不支持跨域请求，XDomainRequest 不支持 cookie 传递；</li>
+<li>IE8 不遵循 W3C 规范，不支持 ECMAScript 5.1， CSS3 支持性低；</li>
+<li>IE7 缺少更多 JS API 支持，postMessage 也不支持；</li>
+<li>从 webpack2 起，IE8 及以下版本便不被支持；</li>
+<li>SDK 提供的选择器引擎不支持 IE8、IE7；</li>
+</ol>
+<p>实际上，以上 5 大难题，并非全部，只是诸多难题中较为突出的部分，下面会重点来讲。</p>
+<p>由于IE7、IE8、IE9 内核差异大，适配难度较大，所以我先从 IE9 开始适配，然后是 IE8、IE7。</p>
+<h3 id="代码在IE9下运行"><a href="#代码在IE9下运行" class="headerlink" title="代码在IE9下运行"></a><strong>代码在IE9下运行</strong></h3><p>webpack4 打包的代码，在 IE9 下直接运行，果然，立即报错：提示 symbol 未定义，当然错误不止一个，这里不一一列举。</p>
+<p>最终配置 .babelrc 如下所示，代码基本能在IE9上运行。</p>
+<p><img src="http://louiszhai.github.io/docImages/webpack-ie01.png" alt=".babelrc配置"></p>
+<p>如上图，transform-es2015-typeof-symbol 插件解决了symbol 未定义的问题。</p>
+<p>这里有个问题需要说明下，为什么不使用 babel-polyfill，而使用 transform-runtime，有两点原因：</p>
+<ol>
+<li>babel-polyfill size 太大，达到了 60k，sdk 不能接受这么大的垫片包；</li>
+<li>babel-polyfill 会污染全局变量，而且一旦 sdk 中引入了 babel-polyfill，使用 sdk 的项目，在不知情的情况下再次引入了 babel-polyfill， 有可能导致冲突；</li>
+</ol>
+<p>基于这两点，最终我使用了 transform-runtime 插件。</p>
+<p>另外，稍微注意下，IE9 下 console 对象在不开 dev tool 时，并不存在，也要兼容。</p>
+<h3 id="IE9如何支持跨域请求"><a href="#IE9如何支持跨域请求" class="headerlink" title="IE9如何支持跨域请求"></a><strong>IE9如何支持跨域请求</strong></h3><p>代码能在IE9上运行，起码开了个好头。接下来要面对的是第一个大难点：<strong>IE9及以下版本，XMLHttpRequest 不支持跨域请求，XDomainRequest 虽然支持跨域，却又不支持 cookie 传递</strong>。</p>
+<p>解决这个问题之前，不得不提下 xhr 的发展历史。 </p>
+<p>xhr 一共有两级标准，早在 IE5，微软就支持了 xhr1 标准，直到 IE10，xhr2 标准才得到支持。</p>
+<p>xhr1 有如下缺点：</p>
+<ul>
+<li>仅支持文本数据传输，无法传输二进制数据</li>
+<li>传输数据时，没有进度信息提示，只能提示是否完成</li>
+<li>受浏览器 同源策略 限制，<strong>只能请求同域资源</strong></li>
+<li>没有超时机制，超时了没办法处理</li>
+</ul>
+<p>很明显，xhr1 无法支持跨域请求。</p>
+<p>xhr2 针对 xhr1 的缺点做了如下改进：</p>
+<ul>
+<li>支持二进制数据，可以上传文件，可以使用 FormData 对象管理表单</li>
+<li>提供进度提示，可通过 xhr.upload.onprogress 事件回调方法获取传输进度</li>
+<li>依然受 同源策略 限制，这个安全机制不会变。<strong>xhr2 新提供 Access-Control-Allow-Origin 等 headers，设置为 * 时表示允许任何域名请求，从而支持跨域 CORS 访问</strong></li>
+<li>可以设置 timeout 及 ontimeout，方便设置超时时长和超时后续处理</li>
+</ul>
+<p>虽然，IE5 - IE9 都不支持 xhr2，但微软并没有闲着，而是在 IE8、IE9 中推出了支持 CORS 请求的 XDomainRequest，很遗憾，这是一个非成熟的解决方案，它有主要有以下限制：</p>
+<ul>
+<li>仅可用于发送 GET 和 POST 请求</li>
+<li><strong>不支持跨域传输 cookie</strong></li>
+<li>只能设置请求头的 Content-Type 字段，且不能访问响应头信息</li>
+</ul>
+<p>更多限制，不妨参考 <a href="https://blogs.msdn.microsoft.com/ieinternals/2010/05/13/xdomainrequest-restrictions-limitations-and-workarounds/" target="_blank" rel="external">XDomainRequest – Restrictions, Limitations and Workarounds</a>。</p>
+<p>不能跨域传输 cookie，登录态怎么校验？到目前为止，通过纯 api 的方式，还没有找到跨域解决方案。最终我使用了 flash 的插件，在 IE9 及以下版本浏览器中加载 flash 插件，借助 flash 去发送跨域请求。</p>
+<p>那么，是不是说 IE10、IE11 等浏览器 xhr 就没有问题了？并不尽然。xhr 规范细节一直在变化，参照 <a href="https://xhr.spec.whatwg.org/，最近一次更新是今年的" target="_blank" rel="external">https://xhr.spec.whatwg.org/，最近一次更新是今年的</a> 9 月 24 日，IE 不可能根据规范实时调整实现。即便是 IE11，它参照的也是 <a href="https://www.w3.org/TR/2011/WD-XMLHttpRequest2-20110816/#the-withcredentials-attribute" target="_blank" rel="external">w3c 2011</a>，甚至更早的规范，以下是规范的一段描述：</p>
+<blockquote>
+<p>On setting the <code>withCredentials</code> attribute these steps must be run:</p>
+<ol>
+<li>If the state is not <a href="https://www.w3.org/TR/2011/WD-XMLHttpRequest2-20110816/#dom-xmlhttprequest-opened" target="_blank" rel="external">OPENED</a> raise an <code>INVALID_STATE_ERR</code> exception and terminate these steps.</li>
+<li>If the <a href="https://www.w3.org/TR/2011/WD-XMLHttpRequest2-20110816/#send-flag" target="_blank" rel="external"><code>send()</code> flag</a> is true raise an <code>INVALID_STATE_ERR</code> exception and terminate these steps.</li>
+<li>If the <a href="https://www.w3.org/TR/2011/WD-XMLHttpRequest2-20110816/#anonymous-flag" target="_blank" rel="external">anonymous flag</a> is true raise an <code>INVALID_ACCESS_ERR</code> exception and terminate these steps.</li>
+<li>Set the <code>withCredentials</code> attribute’s value to the given value.</li>
+</ol>
+</blockquote>
+<p>这意味着，IE11 中，readyState 值为 <code>OPENED</code> 之前（即 open 方法调用前），为 xhr 对象设置 withCredentials 属性就会抛出 <code>INVALID_STATE_ERR</code> 错误。实际开发中，timeout 属性也必须在 open 方法之后调用。</p>
+<h3 id="打包文件支持IE8"><a href="#打包文件支持IE8" class="headerlink" title="打包文件支持IE8"></a><strong>打包文件支持IE8</strong></h3><p>接下来，第二个需要解决的难题是： 从 webpack2 起，IE8 及以下版本便不被支持。为此我耗费了非常多的时间。</p>
+<p>第一次在 IE8 上运行 webpack4 打包代码时，出现了各种各样的错误，远比 IE9 上遇到的多得多，挑重点讲，就是 IE8 下 default、catch 是关键字，而 webpack 打包代码，几乎无处没有 default，而用到 Promise 的地方，大多都会使用 catch 回调。</p>
+<p>我们都知道，babel 将 es6 转成了 es5， 而 <code>es3ify-loader</code> 则可以继续将 es5 转成 es3。</p>
+<pre><code class="js">function(t) { return t.default; }    // 编译前
+function(t) { return t[&quot;default&quot;]; } // 编译后
+
+{ catch：function(t){} }   // 编译前
+{ &quot;catch&quot;：function(t){} } // 编译后
+</code></pre>
+<p>借助  <code>es3ify-loader</code> ，default、catch 等关键字编译后会被加上引号，避免 IE8 报缺少标识符错误。它的配置如下所示：</p>
+<p><img src="http://louiszhai.github.io/docImages/webpack-ie03.png" alt="crossdomain.xml配置"></p>
+<p>重新编译后运行，还是报了缺少标识符的问题。难道没效果？其实不是的。</p>
+<p>原来 UglifyJsPlugin 在压缩时，默认将引号都去掉了。<code>es3ify-loader</code> 好不容易将引号加上，UglifyJsPlugin 顺手就移除了，深藏功与名。为此，需要将 <code>compress.properties</code> 设置为 false，避免使用点符号重写属性访问。如下：</p>
+<pre><code class="js">t[&quot;default&quot;] -&gt; t.default    // default true
+t[&quot;default&quot;] -&gt; t[&quot;default&quot;] // set false
+</code></pre>
+<p>另外，<code>output.quote_keys</code> 也需要设置为 true，从而保留对象 key 的引号，如下。</p>
+<pre><code class="js">{ &quot;catch&quot;: xx } -&gt; { catch: xx }   // default false
+{ &quot;catch&quot;: xx } -&gt; { &quot;catch&quot;: xx } // default false
+</code></pre>
+<p>重新编译后后运行，又报 “无法设置未定义或 null 引用的属性” 的错误。原来 UglifyJsPlugin 压缩时，<code>ie8</code>  设置默认为 false，这意味着它又顺手去掉了支持 IE8 的代码。那么，最终配置如下：</p>
+<p><img src="http://louiszhai.github.io/docImages/webpack-ie04.png" alt="UglifyJsPlugin配置"></p>
+<p>实际调试时，不妨增加 <code>mangle: false</code> 配置，关闭变量名混淆，debug 会更友好，更多配置介绍，请戳 <a href="https://github.com/LiPinghai/UglifyJSDocCN/blob/master/README.md" target="_blank" rel="external">UglifyJs 中文文档</a> 。</p>
+<p>到此，我们解决了 IE8 不被 webpack 支持的问题。</p>
+<h3 id="代码在IE8下运行"><a href="#代码在IE8下运行" class="headerlink" title=" 代码在IE8下运行"></a><strong> 代码在IE8下运行</strong></h3><p>很明显，不太可能这么容易在 IE8 下成功运行项目。这里还有两个大坑。</p>
+<ol>
+<li>webpack4 打包文件的开始部分就用到了 Function.prototype.bind 方法。</li>
+<li>IE8 下 Object.defineProperty 实现与规范不同，它只能设置 dom 元素。</li>
+</ol>
+<h4 id="提供独立编译的bind垫片"><a href="#提供独立编译的bind垫片" class="headerlink" title="提供独立编译的bind垫片"></a><strong>提供独立编译的bind垫片</strong></h4><p>第一点，无论我在 index.js 入口文件中如何添加 bind 方法的垫片，都毫无效果，依然提示 bind 方法不存在。后来终于在编译文件的头部发现了 t.push.bind 的引用，如下。</p>
+<p><img src="http://louiszhai.github.io/docImages/webpack-ie05.png" alt="bind方法被调用"></p>
+<p>原来 bind 方法的调用如此之早，此时业务逻辑代码远没有开始执行，也就是说，垫片方法也还没有执行。为了解决这个问题，只能避开 webpack 打包，我不得不额外新增了 polyfill.js，用于承载 bind 方法垫片，然后使用 gulp 压缩 polyfill.js，再合并进 webpack 打包文件。gulp 脚本如下所示：</p>
+<p><img src="http://louiszhai.github.io/docImages/webpack-ie06.png" alt="gulp配置"></p>
+<h4 id="Object-defineProperty兼容方案"><a href="#Object-defineProperty兼容方案" class="headerlink" title="Object.defineProperty兼容方案"></a><strong>Object.defineProperty兼容方案</strong></h4><p>第二点，Object.defineProperty 缺陷是硬伤，即便引入了 es5-shim 垫片，由于 IE8 不支持访问器属性，依然会抛异常。那么，到底什么地方用到了 Object.defineProperty 呢？</p>
+<p>问题出在 babel 身上，通常情况下，babel 对 export 解析不会设置访问器属性，没有问题，如下。</p>
+<pre><code class="js">// 编译前
+const a = 1;
+export default a;
+// 编译后
+Object.defineProperty(exports, &quot;__esModule&quot;, {
+  value: true
+});
+var a = 1;
+exports.default = a;
+</code></pre>
+<p>但 babel 会把 export xx from yy 编译成 Object.defineProperty 形式，并且设置访问器属性，如下。</p>
+<pre><code class="js">// 编译前
+export { loadScript } from &#39;./util/loadScript&#39;
+// 编译后
+Object.defineProperty(exports, &quot;__esModule&quot;, {
+    value: true
+});
+var _loadScript = require(&#39;./util/loadScript&#39;);
+Object.defineProperty(exports, &#39;loadScript&#39;, {
+    enumerable: true,
+    get: function get() {
+        return _loadScript.loadScript;
+    }
+});
+</code></pre>
+<p>面对上面编译后的代码，es5-shim/es5-sham 会在如下位置抛出错误。</p>
+<p><img src="http://louiszhai.github.io/docImages/webpack-ie07.png" alt="es5-sham报错位置"></p>
+<p>当 supportsAccessors 为 false 且 get 或者 set 随便一个存在，即抛出 ERR_ACCESSORS_NOT_SUPPORTED 错误，supportsAccessors 用于判断是否支持访问器属性，它的实现如下：</p>
+<p><img src="http://louiszhai.github.io/docImages/webpack-ie08.png" alt="es5-sham报错位置"></p>
+<p>稍微转换下，即 <code>supportsAccessors = Object.prototype.hasOwnProperty(&quot;__defineGetter__&quot;)</code>，而 <code>__defineGetter__</code>  IE11 才支持，虽然 IE9、IE10 同样不支持它，但它们已经支持 Object.defineProperty 方法，不需要垫片。另外，es-shim <a href="https://github.com/es-shims/es5-shim#may-fail" target="_blank" rel="external">官方文档</a>也提到了使用 Object.defineProperty 可能会失败。</p>
+<p><img src="http://louiszhai.github.io/docImages/webpack-ie09.png" alt="Object.defineProperty可能失败"></p>
+<p>如上图，描述符中存在 get 或 set，同时还不支持 defineGetter，将默默失败。</p>
+<p>综上，问题出在 export xx from yy 这种写法上，换种写法，先 import 然后再 export 不就行了，当然可以，关键是目前有很多地方都用到了这种写法，贸然改写，然后还要立一个 flag，以后不要这样编写代码巴拉巴拉，确实不太优雅。</p>
+<p>有这样的一个 babel 插件—<a href="https://www.npmjs.com/package/babel-plugin-transform-es2015-modules-simple-commonjs" target="_blank" rel="external">transform-es2015-modules-simple-commonjs</a> 可以使用（这个插件也出现在篇首 .babelrc 配置截图中第 20 行），它可以实现简单的 commonjs 语法转换，避开了访问器属性，一举解决了 Object.defineProperty 报错的问题，如下为它的编译结果。</p>
+<pre><code class="js">Object.defineProperty(exports, &quot;__esModule&quot;, {
+    value: true
+});
+var _loadScript = require(&#39;./util/loadScript&#39;);
+exports.default = _loadScript.loadScript;
+</code></pre>
+<h4 id="垫片大小权衡"><a href="#垫片大小权衡" class="headerlink" title="垫片大小权衡"></a><strong>垫片大小权衡</strong></h4><p>babel 的 transform-runtime 插件虽好，却只会引入 es6 垫片，支持 IE8 还需要额外引入 es5 的垫片 es5-shim，而 es5-shim 又包含了 es5-shim.min.js 和 es5-sham.min.js，对于 IE8 而言，两者都依赖，前者 26k， 后者 6k，共计 32k。同样的问题再次面临抉择，无论如何，不能因为它方便，而去盲目增加 sdk 的 size，事实上，sdk 远远不需要集合型的垫片方案。</p>
+<p>所以，我放弃了 es5-shim 垫片，最终选用了司徒正美提供的 <a href="https://github.com/RubyLouvre/object-defineproperty-ie8" target="_blank" rel="external">object-defineproperty-ie8</a> 解决了 Object.defineProperty 可能报错的问题。</p>
+<p><img src="http://louiszhai.github.io/docImages/webpack-ie10.png" alt="Object.defineProperty-ie8"></p>
+<p>如上图，具体思路就是，先判断是否支持访问器属性，不支持就忽略非 DOM 元素的访问器属性设置，只保证赋值成功，避免了报错导致执行中断。</p>
+<p>到这里，webpack 不支持 IE8 的问题，基本解决了，接下来就需要与 IE8、IE7 斗智斗勇了。</p>
+<h3 id="IE8-amp-IE7-各种缺陷"><a href="#IE8-amp-IE7-各种缺陷" class="headerlink" title="IE8 &amp; IE7 各种缺陷"></a><strong>IE8 &amp; IE7 各种缺陷</strong></h3><p>对于 IE8 &amp; IE7 而言，由于不遵循 w3c 规范，不支持 ECMAScript 5.1，导致有很多 API 实现与标准不一致或没有实现，以下是 SDK 涉及到的一些缺陷介绍。（如未特别说明，即 IE8、IE7 都适用）</p>
+<h4 id="缺少全局方法"><a href="#缺少全局方法" class="headerlink" title="缺少全局方法"></a><strong>缺少全局方法</strong></h4><ol>
+<li>不支持 JSON 对象。</li>
+<li>不支持 window.getComputedStyle 方法。</li>
+<li>IE7 不支持 window.localStorage 方法。</li>
+<li>IE7 不支持 window.querySelectorAll 方法。</li>
+</ol>
+<p>另外，IE8 下，document.head 也没有，需要做如下兼容。</p>
+<p><img src="http://louiszhai.github.io/docImages/webpack-ie11.png" alt="document.head"></p>
+<h4 id="缺少构造器方法"><a href="#缺少构造器方法" class="headerlink" title="缺少构造器方法"></a><strong>缺少构造器方法</strong></h4><ol>
+<li>缺少 Object.keys、Object.create 等方法。</li>
+<li>缺少 Array.isArray 方法。</li>
+</ol>
+<h4 id="原型方法缺陷"><a href="#原型方法缺陷" class="headerlink" title="原型方法缺陷"></a><strong>原型方法缺陷</strong></h4><ol>
+<li>缺少 Function.prototype.bind 方法，webpack4 编译代码开头部分就用到了 bind 方法，这个前面解决了。</li>
+<li>apply 方法第二个参数不能接受类数组对象，否则会报 “Function.prototype.apply: 缺少 Array 或 arguments 对象” 错误。</li>
+<li>Array原型方法如 forEach，map，filter、indexOf … 这些方法都没有。</li>
+<li>数组 toString 方法存在 bug，其它浏览器在调用数组的 toString 方法时，如果遇到继承于数组的就直接使用数组的 toString，如果遇到非数组对象时会切换到 Object 的 toString 上；而在 IE8 中只要非数组对象调用数组的 toString 方法，一律报错。</li>
+</ol>
+<h4 id="事件缺陷"><a href="#事件缺陷" class="headerlink" title="事件缺陷"></a><strong>事件缺陷</strong></h4><ol>
+<li><p>只有全局事件，事件没有target属性，兼容如 <code>e = e || window.Event；target = e.target || e.srcElement</code> 。</p>
+</li>
+<li><p>事件回调内部 this 执行 window。</p>
+</li>
+<li><p>不支持 addEventListener API，可由 attachEvent 替代。</p>
+<p><img src="http://louiszhai.github.io/docImages/webpack-ie12.png" alt="attachEvent"></p>
+</li>
+<li><p>IE7，不支持 stopPropagation、preventDefault 方法。</p>
+<p><img src="http://louiszhai.github.io/docImages/webpack-ie13.png" alt="cancelBubble"></p>
+</li>
+</ol>
+<h4 id="数据类型判断缺陷"><a href="#数据类型判断缺陷" class="headerlink" title="数据类型判断缺陷"></a><strong>数据类型判断缺陷</strong></h4><ol>
+<li>typeof 判断原生方法时，会将其当作是 object，而不是 function，如下兼容。</li>
+</ol>
+<p><img src="http://louiszhai.github.io/docImages/webpack-ie14.png" alt="typeof判断缺陷"></p>
+<ol>
+<li>不同 IE 版本，基本数据类型判断也存在差异，如下图。</li>
+</ol>
+<p><img src="http://louiszhai.github.io/docImages/webpack-ie15.png" alt="基本数据类型判断缺陷"></p>
+<h4 id="JS-异步加载缺陷"><a href="#JS-异步加载缺陷" class="headerlink" title="JS 异步加载缺陷"></a><strong>JS 异步加载缺陷</strong></h4><p>script load 不执行，需监听 onreadystatechange 事件，判断 readyState 是否等于 loaded 或 complete，兼容如下图。</p>
+<p><img src="http://louiszhai.github.io/docImages/webpack-ie16.png" alt="script load兼容"></p>
+<h4 id="DOM-API-缺陷"><a href="#DOM-API-缺陷" class="headerlink" title="DOM API 缺陷"></a><strong>DOM API 缺陷</strong></h4><ol>
+<li><p>innerHTML 属性对于以下标签是只读的：col、colgroup、frameset、head、html、style、table、tbody、tfoot、thead、title、tr。除此之外，下拉框赋值，也非常困难，虽然其 innerHTML 可以写入，但新增的选项不会生效（清空又可以），推荐使用 options.add 方法 添加新选项，如果还不行，可以使用 outerHTML 赋值。</p>
+</li>
+<li><p>IE7 不支持 window.Element 对象</p>
+<p><img src="http://louiszhai.github.io/docImages/webpack-ie17.png" alt="Element兜底"></p>
+</li>
+<li><p>IE7 setAttribute 支持性也有问题</p>
+<p><img src="http://louiszhai.github.io/docImages/webpack-ie18.png" alt="setAttribute兼容"></p>
+</li>
+</ol>
+<h4 id="CSS-API缺陷"><a href="#CSS-API缺陷" class="headerlink" title="CSS API缺陷"></a><strong>CSS API缺陷</strong></h4><ol>
+<li>IE9- 不支持 element.classList 属性。</li>
+<li>IE8-，CSS 部分属性动态修改后不生效，如：margin-left、margin-top 等。</li>
+<li>IE 支持 currentStyle 方法，但只能获取表面的样式，无法获取计算后的，getComputedStyle 垫片也无法准确获取，可采用 element.getBoundingClientRect() 方法获取坐标，然后计算出宽高，如下所示。</li>
+</ol>
+<p><img src="http://louiszhai.github.io/docImages/webpack-ie19.png" alt="获取宽度"></p>
+<h4 id="透明度设置缺陷"><a href="#透明度设置缺陷" class="headerlink" title="透明度设置缺陷"></a><strong>透明度设置缺陷</strong></h4><ol>
+<li>不支持 opacity 样式，可由 filter 滤镜替代。</li>
+</ol>
+<p><img src="http://louiszhai.github.io/docImages/webpack-ie20.png" alt="透明度兼容"></p>
+<ol>
+<li>不支持 rgba 色值，可由 filter 滤镜替代。</li>
+</ol>
+<p><img src="http://louiszhai.github.io/docImages/webpack-ie21.png" alt="rgba兼容"></p>
+<p>上图中，颜色 “#19000000” 由两部分组成。</p>
+<p>第一部是 # 号后面的 19 是 rgba 透明度 0.1 的 IEfilter 值。从 0.1 到 0.9 每个数字对应一个 IEfilter 值。</p>
+<p>第二部分是 19 后面的六位。这个是六进制的颜色值，跟 rgb 函数中的取值一致。比如 rgb(0,0,0) 对应 #000000，也就是黑色。</p>
+<p>rgba 透明度与 IEfilter 的对应关系如下所示。</p>
+<p><img src="http://louiszhai.github.io/docImages/webpack-ie22.png" alt="rgba-IEfilter"></p>
+<p>除了透明度外，CSS 动画也需要降级为 gif 实现，如果是 loading 动画，可以使用 <a href="https://loading.io/" target="_blank" rel="external">loading.io</a> 无缝转换。</p>
+<p>到这，IE8、IE7 的兼容性问题基本解决，接下来只需要让选择器引擎支持到 IE7，改造便可完成。</p>
+<h3 id="选择器引擎开发"><a href="#选择器引擎开发" class="headerlink" title="选择器引擎开发"></a><strong>选择器引擎开发</strong></h3><p>大家都知道，jquery 提供了非常棒的选择器引擎 <a href="https://github.com/jquery/sizzle/" target="_blank" rel="external">sizzle</a>，但它的 min 版本达到了 20 k，有点太大了。</p>
+<p>对于 JS SDK 而言， 它不但内部使用了大量选择器，同时还需要将选择器的功能开放给第三方开发者，使其能在不使用 jquery、zepto 等类库的情况下，快速完成基本的 DOM 操作，所以搭载一款轻便的选择器引擎很有必要。</p>
+<p>一个简单的选择器引擎，至少具备以下 4 点功能。</p>
+<ol>
+<li>选择元素，如 <code>$(&#39;#div&#39;)</code></li>
+<li>包装 DOM 对象为 <code>$</code> 实例，如  <code>$(element);</code></li>
+<li>包装字符串html模板为 <code>$</code> 实例，如 <code>$(&#39;&lt;div&gt;&lt;/div&gt;&#39;)</code></li>
+<li>提供选择器 <code>$</code> 实例对象的原型方法，如 <code>$(&#39;#div&#39;).html(&#39;hello world&#39;)</code></li>
+</ol>
+<p>在如今，querySelectorAll 深入人心的背景下，实现一个选择器引擎，并不难，这里我参考的是 <a href="https://github.com/dengzhiqiang/balajs/tree/master/balajs" target="_blank" rel="external">balajs</a>，它主要代码如下所示。</p>
+<p><img src="http://louiszhai.github.io/docImages/webpack-ie23.png" alt="balajs"></p>
+<p>balajs 有如下 2 个问题：</p>
+<ol>
+<li>仅仅支持 IE9+ 浏览器。</li>
+<li>原型是数组，不是对象，直接使用数组做原型，在 IE8 以下，tostring 方法调用时，会调用数组原型的tostring，从而报错（而标准浏览器，会调用对象的 tostring），由于继承数组，其实例 length 属性设置也会失效。</li>
+</ol>
+<p>为了解决这 2 个问题，我们需要更换选择器引擎的继承方式，如下代码（参考了 jquery 思想）。</p>
+<pre><code class="js">function $(s, context) { // 选择器入口
+  if (s instanceof init) { // 如果是已经获取到的元素，直接返回
+    return s;
+  }
+  // 结合 balajs 可以先产生 elements 数组
+  const elements = ... // 先略去，后面讲
+  // 再将 elements 数组交由 init 方法产生类数组返回值
+  return new $.fn.init(s ? elements : []);
+}
+$.fn = {}; // 选择器对象原型由数组改为空对象
+const init = $.fn.init = function (selector) {
+  selector.forEach((ele, i) =&gt; { // init 方法用于完成kv赋值操作，并产生类数组对象实例
+    this[i] = ele;
+  });
+  this.length = selector.length;
+  return this;
+}
+init.prototype = $.fn; // init 原型指定为 $.fn，使得 init 对象实例能够使用 $.fn 原型中的方法
+
+Object.assign($.fn, { // 往原型中添加方法
+  click(handle) {...},
+  append(child) {...},
+  find(selector) {...},
+  ...
+})
+</code></pre>
+<p>现在，选择器引擎的雏形出来了，只要完成 elements 数组部分，便能 work。</p>
+<p>elements 第一步筛选，可以使用上图 balajs 的主要代码，只需要将 querySelectorAll 垫片添加进去即可，如下图，主要修改了红框中的代码，并移除了 s 为 function 时，dom ready 部分实现（sdk 暂时用不到）。</p>
+<p><img src="http://louiszhai.github.io/docImages/webpack-ie25.png" alt="elements获取"></p>
+<p>首先奉上 querySelectorAll 垫片。</p>
+<pre><code class="js">if (!document.querySelectorAll) { // IE7 中没有 querySelectorAll
+  var style = document.createStyleSheet();
+  document.querySelectorAll = function (r, c, i, j, a) {
+    var a = document.all, c = [], r = r.replace(/\[for\b/gi, &#39;[htmlFor&#39;).split(&#39;,&#39;);
+    for (i = r.length; i--;) {
+      style.addRule(r[i], &#39;k:v&#39;);
+      for (j = a.length; j--;) a[j].currentStyle.k &amp;&amp; c.push(a[j]);
+      style.removeRule(0);
+    }
+    return c;
+  }
+}
+// 用于在 IE7 浏览器中，支持 Element.querySelectorAll 方法
+window.querySelectorAll = (function () {
+  var idAllocator = 10000;
+  function qsaWorkerShim(element, selector) {
+    var needsID = element.id === &quot;&quot;;
+    if (needsID) {
+      ++idAllocator;
+      element.id = &quot;__qsa&quot; + idAllocator;
+    }
+    try {
+      return document.querySelectorAll(&quot;#&quot; + element.id + &quot; &quot; + selector);
+    }
+    finally {
+      if (needsID) {
+        element.id = &quot;&quot;;
+      }
+    }
+  }
+  function qsaWorkerWrap(element, selector) {
+    return element.querySelectorAll(selector);
+  }
+  return document.createElement(&#39;div&#39;).querySelectorAll ? qsaWorkerWrap : qsaWorkerShim;
+})();
+</code></pre>
+<p>可以看出，elements 有可能返回类数组对象、NodeList 或 HTMLCollection 对象，第二步便需要将它们转换成数组，然后交由 init 方法处理。鉴于 IE8 apply 的 bug，需要做如下特殊处理。</p>
+<pre><code class="js">const isDOM = obj =&gt; { // 是否 DOM 元素
+  if(typeof HTMLElement === &#39;object&#39;) {
+    return obj instanceof HTMLElement；
+  } else {
+    return obj &amp;&amp; typeof obj === &#39;object&#39; &amp;&amp; obj.nodeType === 1;
+  }
+};
+const isArrayLike = collection =&gt; { // 是否类数组
+    var length = collection.length;
+    return typeof length == &#39;number&#39; &amp;&amp; length &gt;= 0 &amp;&amp; length &lt;= (Math.pow(2, 53) - 1);
+}
+// IE8中继承数组的对象，toSting时默认会调用数组的toSting方法，这点与标准不一致，导致会报&quot;缺少 Array 对象&quot;错误，因此需要排除数组
+const generalObj = elements instanceof Object &amp;&amp; !(elements instanceof Array) &amp;&amp; elements.toString() === &#39;[object Object]&#39; &amp;&amp; !isArrayLike(elements) // 非类数组的普通对象
+if (elements === window || elements === document || isDOM(elements) || generalObj) {
+  elements = [elements];
+} else {
+  // 修复 bug：SCRIPT5028: Function.prototype.apply: 缺少 Array 或 arguments 对象
+  try {
+    elements = [].slice.apply(elements, [0]); // 类数组在这里完成转换
+  } catch (err) {
+    try {
+      elements = [].concat.apply([], elements); // NodeList 或 HTMLCollection 在这里完成转换
+    } catch (e) {
+      if (elements.length) { // 兜底
+        var tempArray = [];
+        for (var i = 0; i &lt; elements.length; i++) {
+          tempArray[i] = elements[i];
+        }
+        elements = tempArray;
+      } else {
+        elements = [];
+      }
+    }
+  }
+}
+</code></pre>
+<p>整合上述代码，简单的选择器引擎便开发完成。</p>
+<p>到此，营销活动  JS SDK 终于适配完成。SDK 总 size 仅仅增大了 10k，其中 flash 垫片还占了增长的大部分。</p>
+<h3 id="如何调试"><a href="#如何调试" class="headerlink" title="如何调试"></a><strong>如何调试</strong></h3><p>除了代码外，IE 内核的适配过程中，调试也是困难重重，调试问题主要集中在以下 4 个方面：</p>
+<ol>
+<li>如何使用 mac 调试 IE ？</li>
+<li>选择哪种操作系统？ windows 10 ？ Windows 7 ？ Windows xp？</li>
+<li>选择哪种版本的 IE ？IE11？IE10？IE9？IE8？IE7？</li>
+<li>选择什么样的代理？ Fiddler ？Charles ？ Whistle ？</li>
+</ol>
+<p>我本地安装的是 Parallels Desktop 虚拟机，基于它，又安装了 win7 sp1 及 win xp 两个操作系统，分别用于测试 IE9、IE10、IE11 及 IE7、IE8。</p>
+<p>调试过程中，不要相信 IE 代理模式，效果不太好，很多错误都会被默默吃掉，需要老老实实把 IE 浏览器逐个装一遍，我经常调试完 IE8 发现 IE7 好像有个 bug，然后手动把 IE8 卸载，退回 IE7，测好了再升级，IE7 没有dev tool，调试不太方便，定位不到问题，只能先升到 IE8，这样的过程需要重复很多次。</p>
+<p>漫长的调试过程中，代理是非常重要的基础设施，代理频繁断开，或请求不正常转发，https证书问题，都非常消耗时间和精力，上面提到的三个代理软件，我都使用过，Fiddler 很容易断开连接，不建议使用，Charles 兼容性最好，各个版本的 IE 都能正常代理，但配置不是很方便，做为备选，Whistle 配置很方便，基本作为日常代理工具，但在 IE7 及 IE8 下，由于证书问题，导致https 请求不能正常发送。</p>
+<p>更多的IE适配问题，欢迎在评论区留言继续交流，谢谢。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      webpack4编译代码如何完美适配IE内核
+    
+    </summary>
+    
+    
+      <category term="Tool" scheme="http://louiszhai.github.io/tags/Tool/"/>
+    
+  </entry>
+  
+  <entry>
     <title>使用webpack4提升180%编译速度</title>
     <link href="http://louiszhai.github.io/2019/01/04/webpack4/"/>
     <id>http://louiszhai.github.io/2019/01/04/webpack4/</id>
     <published>2019-01-04T02:49:08.000Z</published>
-    <updated>2019-03-16T11:07:22.334Z</updated>
+    <updated>2019-12-02T03:28:32.899Z</updated>
     
     <content type="html"><![CDATA[<p>对于现在的前端项目而言，编译发布几乎是必需操作，有的编译只需要几秒钟，快如闪电，有的却需要10分钟，甚至更多，慢如蜗牛。特别是线上热修复时，分秒必争，响应速度直接影响了用户体验，用户不会有耐心等那么长时间，让你慢慢编译；如果涉及到支付操作，产品损失更是以秒计，每提前哪怕一秒钟发布，在腾讯海量用户面前，都能挽回不小的损失。不仅如此，编译效率的提升，带来的最直观收益就是，开发效率与开发体验双重提升。</p>
 <p>那么，到底是什么拖慢了webpack打包效率，我们又能做哪些提升呢？</p>
@@ -597,7 +963,7 @@ plugins: [
     <link href="http://louiszhai.github.io/2018/05/31/alfred/"/>
     <id>http://louiszhai.github.io/2018/05/31/alfred/</id>
     <published>2018-05-31T03:46:17.000Z</published>
-    <updated>2018-06-01T02:13:34.742Z</updated>
+    <updated>2019-12-02T03:28:32.871Z</updated>
     
     <content type="html"><![CDATA[<p>我曾经耗费巨大的精力，试图在计算机的使用效率上找到一条优化的捷径，一直以来都收效甚微。直到遇上 alfred，它强大的工作流机制，<strong>彻底解决了输入输出的痛点，极大的减少了程序之间的切换成本和重复按键成本</strong>，这才让我明白，原来计算机可以这么玩。</p>
 <p>神奇的魔法帽，alfred 初印象。</p>
@@ -893,7 +1259,7 @@ end alfred_script
     <link href="http://louiszhai.github.io/2017/11/14/iheader/"/>
     <id>http://louiszhai.github.io/2017/11/14/iheader/</id>
     <published>2017-11-14T02:40:15.000Z</published>
-    <updated>2018-09-13T03:05:26.573Z</updated>
+    <updated>2019-12-02T03:28:32.885Z</updated>
     
     <content type="html"><![CDATA[<p><strong>本文首发于《程序员》杂志2017年第9、10、11期，下面的版本又经过进一步的修订。</strong></p>
 <h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a><strong>导读</strong></h3><p>对于开发而言，搜索是日常工作，为了提升搜索的效率，以便更快的查询信息，我试着同时搜索4个网站，分别是百度、Google、维基、Bing。一个可行的做法就是网页中嵌入4个iframe，通过js拼接前面4个搜索引擎的Search URL并依次在iframe中加载。这个构思丝毫没有问题，简单粗暴。然而就是这么简单的功能，也无法实现。由于Google网站在HTML的response header中添加了<code>X-Frame-Options</code>字段以防止网页被Frame（这项设置常被用来防止Click Cheats），因此我无法将Google Search加入到iframe中来。那么，我会放弃Google吗？</p>
@@ -2066,7 +2432,7 @@ div {
     <link href="http://louiszhai.github.io/2017/09/30/tmux/"/>
     <id>http://louiszhai.github.io/2017/09/30/tmux/</id>
     <published>2017-09-30T08:59:36.000Z</published>
-    <updated>2018-05-15T03:17:16.879Z</updated>
+    <updated>2019-12-02T03:28:32.897Z</updated>
     
     <content type="html"><![CDATA[<p><strong>本文首发于CSDN网站，下面的版本又经过进一步的修订。</strong></p>
 <h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h3><p>我一直信奉简洁至上的原则，桌面窗口的数量越少，我的心情就越放松，开发的效率也就越高。反之，杂乱的桌面，暴涨的Chrome tab数量，或是无数的终端窗口，它们会逐步侵占我的注意力，分散我的思维，最终令我难以专注。因此桌面上我很少放文件，使用Chrome时常点 <a href="https://chrome.google.com/webstore/detail/onetab/chphlpgkkbolifaimnlloiipkdnihall" target="_blank" rel="external">OneTab</a> 回收标签页，切进终端时使用tmux管理窗口。</p>
@@ -2777,7 +3143,7 @@ tmux send -t &quot;init:tool&quot; &quot;cd ~/data/tools/AriaNg/dist/;python -m 
     <link href="http://louiszhai.github.io/2017/07/07/canvas-draw/"/>
     <id>http://louiszhai.github.io/2017/07/07/canvas-draw/</id>
     <published>2017-07-07T07:36:22.000Z</published>
-    <updated>2018-03-27T11:13:22.000Z</updated>
+    <updated>2019-12-02T03:28:32.876Z</updated>
     
     <content type="html"><![CDATA[<p><strong>本文首发于CSDN网站，下面的版本又经过进一步的修订。</strong></p>
 <h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a><strong>导读</strong></h3><p>6月又是项目吃紧的时候，一大波需求袭来，猝不及防。</p>
@@ -3090,7 +3456,7 @@ switch (degree) {
     <link href="http://louiszhai.github.io/2017/04/28/array/"/>
     <id>http://louiszhai.github.io/2017/04/28/array/</id>
     <published>2017-04-28T05:43:36.000Z</published>
-    <updated>2019-07-11T02:48:50.095Z</updated>
+    <updated>2019-12-02T03:28:32.873Z</updated>
     
     <content type="html"><![CDATA[<p><strong>本文首发于CSDN网站，下面的版本又经过进一步的修订。</strong></p>
 <p>全文共13k+字，系统讲解了JavaScript数组的各种特性和API。</p>
@@ -4241,7 +4607,7 @@ console.log(iterator.next().value); // xyz
     <link href="http://louiszhai.github.io/2017/04/19/hmr/"/>
     <id>http://louiszhai.github.io/2017/04/19/hmr/</id>
     <published>2017-04-19T02:10:00.000Z</published>
-    <updated>2018-03-27T11:13:22.000Z</updated>
+    <updated>2019-12-02T03:28:32.883Z</updated>
     
     <content type="html"><![CDATA[<p><strong>本文首发于CSDN网站，下面的版本又经过进一步的修订。</strong></p>
 <p>开发环境页面热更新早已是主流，我们不光要吃着火锅唱着歌，享受热更新高效率的快感，更要深入下去探求其原理。</p>
@@ -4769,7 +5135,7 @@ server.on(&#39;connection&#39;, function(wsServer){
     <link href="http://louiszhai.github.io/2017/04/07/http-cache/"/>
     <id>http://louiszhai.github.io/2017/04/07/http-cache/</id>
     <published>2017-04-07T00:00:00.000Z</published>
-    <updated>2018-03-27T11:13:22.000Z</updated>
+    <updated>2019-12-02T03:28:32.883Z</updated>
     
     <content type="html"><![CDATA[<p>缓存一直是前端优化的主战场, 利用好缓存就成功了一半. 本篇从http请求和响应的头域入手, 让你对浏览器缓存有个整体的概念. 最终你会发现强缓存, 协商缓存 和 启发式缓存是如此的简单.</p>
 <h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a><strong>导读</strong></h3><p>我不知道拖延症是有多严重, 反正去年3月开的题, 直到今年4月才开始写.(请尽情吐槽吧)</p>
@@ -5171,7 +5537,7 @@ c3(no)->op2->io1->e</textarea><textarea id="flowchart-0-options" style="display:
     <link href="http://louiszhai.github.io/2017/03/12/promise/"/>
     <id>http://louiszhai.github.io/2017/03/12/promise/</id>
     <published>2017-03-12T13:28:23.000Z</published>
-    <updated>2019-11-23T04:10:06.784Z</updated>
+    <updated>2019-12-02T03:28:32.890Z</updated>
     
     <content type="html"><![CDATA[<p>开始写本篇文字时, 我一直不是很明白任务队列的机制, 故想写篇文章弄懂它. 于是我尝试以Promise为核心, 逐步展开, 最终分析process.nextTick , promise.then , setTimeout , setImmediate 它们的异步机制.</p>
 <h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h3><p>Promise问世已久, 其科普类文章亦不计其数. 遂本篇初衷不为科普, 只为能够温故而知新.</p>
@@ -5539,7 +5905,7 @@ setTimeout(function(){
     <link href="http://louiszhai.github.io/2017/02/24/back/"/>
     <id>http://louiszhai.github.io/2017/02/24/back/</id>
     <published>2017-02-24T07:59:01.000Z</published>
-    <updated>2018-03-27T11:13:22.000Z</updated>
+    <updated>2019-12-02T03:28:32.873Z</updated>
     
     <content type="html"><![CDATA[<h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h3><p>最近我在梳理公司web app新产品线的返回逻辑, 推演了N种方案, 竟然没有一种完全通用的. 这让我迷惑不已. 仔细体验了公司的各种H5页面, 发现返回逻辑还真是五花八门. 那么, 问题来了, 为什么Web App的返回逻辑如此难以设计?</p>
 <a id="more"></a>
@@ -5742,7 +6108,7 @@ public class WebViewManager {
     <link href="http://louiszhai.github.io/2017/02/19/box-shadow/"/>
     <id>http://louiszhai.github.io/2017/02/19/box-shadow/</id>
     <published>2017-02-19T08:23:34.000Z</published>
-    <updated>2018-03-27T11:13:22.000Z</updated>
+    <updated>2019-12-02T03:28:32.875Z</updated>
     
     <content type="html"><![CDATA[<h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h3><p>我总是记不住css3的box-shadow属性拥有几个值, 它们的顺序究竟如何? 对我来说, 这是一个大难题. 我们都知道, 使用一个属性, 总是可以不停地在开发者工具上测试UI表现, 直到表现令人满意. 好吧, 有些时候它是奏效的; 而其它时候呢, 我们会消耗时间, 积攒疲劳值, 以及成就感下降等. 一旦短时记忆失效, 我们完全有可能重复一遍之前不愉快地尝试. 因此我选择多花些时间, 用力一次记住它. 如果你恰好也有同样的疑惑, 请读下去.</p>
 <a id="more"></a>
@@ -6004,7 +6370,7 @@ box-shadow: 110px 0 0 -10px #ccc, 220px 0 0 0 #808080, 360px 0 0 10px grey;
     <link href="http://louiszhai.github.io/2017/01/13/flex/"/>
     <id>http://louiszhai.github.io/2017/01/13/flex/</id>
     <published>2017-01-13T00:42:01.000Z</published>
-    <updated>2018-03-27T11:13:22.000Z</updated>
+    <updated>2019-12-02T03:28:32.882Z</updated>
     
     <content type="html"><![CDATA[<h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h3><p>Web layout 是Web UI中的基础架构, 重要性不言而喻. 传统的盒模型, 借助display, position, float 属性应对普通布局游刃有余, 但针对复杂的或自适应布局, 常常捉襟见肘. 比如垂直居中, 就是一个老大难的问题, 借助flex弹性盒模型, 两行代码就可以优雅的实现之. (该方法曾在 <a href="http://louiszhai.github.io/2016/03/12/css-center/">16种方法实现水平居中垂直居中</a> 一文中提到). 当然, 本次我们不会只讨论垂直居中的问题, 我将努力尽可能的还原flex的应用场景.</p>
 <a id="more"></a>
@@ -6320,7 +6686,7 @@ box-shadow: 110px 0 0 -10px #ccc, 220px 0 0 0 #808080, 360px 0 0 10px grey;
     <link href="http://louiszhai.github.io/2016/12/23/sort/"/>
     <id>http://louiszhai.github.io/2016/12/23/sort/</id>
     <published>2016-12-23T03:55:14.000Z</published>
-    <updated>2018-03-27T11:13:22.000Z</updated>
+    <updated>2019-12-02T03:28:32.896Z</updated>
     
     <content type="html"><![CDATA[<h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h3><p>排序算法可以称得上是我的盲点, 曾几何时当我知道Chrome的Array.prototype.sort使用了快速排序时, 我的内心是奔溃的(啥是快排, 我只知道冒泡啊?!), 要知道学习一门技术最好的时间是三年前, 但愿我现在补习还来得及(捂脸).</p>
 <p>因此本篇重拾了出镜概率比较高的十来种排序算法, 逐一分析其排序思想, 并批注注意事项. 欢迎对算法提出改进和<a href="#respond">讨论</a>.</p>
@@ -7066,7 +7432,7 @@ countSort(b, &#39;id&#39;); // [{id:1,s:&#39;b&#39;},{id:1,s:&#39;c&#39;},{id:1,
     <link href="http://louiszhai.github.io/2016/11/25/manifest/"/>
     <id>http://louiszhai.github.io/2016/11/25/manifest/</id>
     <published>2016-11-25T00:08:21.000Z</published>
-    <updated>2018-03-27T11:13:22.000Z</updated>
+    <updated>2019-12-02T03:28:32.889Z</updated>
     
     <content type="html"><![CDATA[<h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h3><p>Manifest 是 H5提供的一种应用缓存机制, 基于它web应用可以实现离线访问(offline cache). 为此, 浏览器还提供了应用缓存的api–applicationCache. 虽然manifest的技术已被web标准废弃, 但这不影响我们尝试去了解它. 也正是因为manifest的应用缓存机制如此诱人, 饿了么 和 office 365邮箱等都还在使用着它!</p>
 <a id="more"></a>
@@ -7248,7 +7614,7 @@ Expires: [CURRENT TIME]
     <link href="http://louiszhai.github.io/2016/11/02/ajax/"/>
     <id>http://louiszhai.github.io/2016/11/02/ajax/</id>
     <published>2016-11-02T04:48:27.000Z</published>
-    <updated>2018-03-27T11:13:22.000Z</updated>
+    <updated>2019-12-02T03:28:32.870Z</updated>
     
     <content type="html"><![CDATA[<h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h3><p>Ajax 全称 Asynchronous JavaScript and XML, 即异步JS与XML. 它最早在IE5中被使用, 然后由Mozilla, Apple, Google推广开来. 典型的代表应用有 Outlook Web Access, 以及 GMail. 现代网页中几乎无ajax不欢. 前后端分离也正是建立在ajax异步通信的基础之上.</p>
 <a id="more"></a>
@@ -8664,7 +9030,7 @@ curl -I -X POST -H &quot;Origin: http://example.com&quot; http://localhost:10108
     <link href="http://louiszhai.github.io/2016/11/02/fetch/"/>
     <id>http://louiszhai.github.io/2016/11/02/fetch/</id>
     <published>2016-11-02T04:48:08.000Z</published>
-    <updated>2018-03-27T11:13:22.000Z</updated>
+    <updated>2019-12-02T03:28:32.882Z</updated>
     
     <content type="html"><![CDATA[<h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h3><p>Fetch 是 web异步通信的未来. 从chrome42, Firefox39, Opera29, EdgeHTML14(并非Edge版本)起, fetch就已经被支持了. 其中chrome42~45版本, fetch对中文支持有问题, 建议从chrome46起使用fetch. 传送门: <a href="https://bugs.chromium.org/p/chromium/issues/detail?id=511289" target="_blank" rel="external">fetch中文乱码</a> .</p>
 <a id="more"></a>
@@ -9086,7 +9452,7 @@ fetch(&#39;http://localhost:10101/notification/&#39;,{mode:&#39;no-cors&#39;})
     <link href="http://louiszhai.github.io/2016/07/01/Math/"/>
     <id>http://louiszhai.github.io/2016/07/01/Math/</id>
     <published>2016-06-30T23:57:48.000Z</published>
-    <updated>2018-03-27T11:13:22.000Z</updated>
+    <updated>2019-12-02T03:28:32.868Z</updated>
     
     <content type="html"><![CDATA[<p>Math方法和位运算几乎是被忽略得最严重的知识点, 和正则一样, 不用不知道, 一用到处查. 为了告别这种低效的编程模式, 我特地总结此篇, 系统梳理了这两个知识点. 以此为册, 助你攻破它们.</p>
 <h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h3><p>截至ES6, JavaScript 中内置(build-in)构造器/对象共有19个, 其中14个是构造器(Number,Boolean, String, Object, Function, Array, RegExp, Error, Date, Set, WeakSet, Map, Proxy, Promise), Global 不能直接访问, Arguments仅在函数调用时由JS引擎创建, 而 Math, JSON, Reflect 是以对象形式存在的, 本篇将带你走进 JS 内置对象-Math以及与之息息相关的位运算, 一探究竟.</p>
@@ -9829,7 +10195,7 @@ add(9527,-12);//9515
     <link href="http://louiszhai.github.io/2016/06/13/regexp/"/>
     <id>http://louiszhai.github.io/2016/06/13/regexp/</id>
     <published>2016-06-13T00:24:55.000Z</published>
-    <updated>2018-03-27T11:13:22.000Z</updated>
+    <updated>2019-12-02T03:28:32.893Z</updated>
     
     <content type="html"><![CDATA[<h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h3><p>你有没有在搜索文本的时候绞尽脑汁, 试了一个又一个表达式, 还是不行.</p>
 <p>你有没有在表单验证的时候, 只是做做样子(只要不为空就好), 然后烧香拜佛, 虔诚祈祷, 千万不要出错.</p>
@@ -10994,7 +11360,7 @@ with(obj){
     <link href="http://louiszhai.github.io/2016/03/31/css-hasLayout/"/>
     <id>http://louiszhai.github.io/2016/03/31/css-hasLayout/</id>
     <published>2016-03-31T05:57:56.000Z</published>
-    <updated>2018-03-27T11:13:22.000Z</updated>
+    <updated>2019-12-02T03:28:32.879Z</updated>
     
     <content type="html"><![CDATA[<h3 id="什么是hasLayout"><a href="#什么是hasLayout" class="headerlink" title="什么是hasLayout"></a>什么是hasLayout</h3><blockquote>
 <p>hasLayout property: Gets a value that indicates whether the object has layout.</p>
@@ -11106,80 +11472,6 @@ console.log(element.currentStyle.hasLayout);//该方式只能获取值, 而不�
     <summary type="html">
     
       css IE6 IE7 hasLayout
-    
-    </summary>
-    
-    
-      <category term="css" scheme="http://louiszhai.github.io/tags/css/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>你不知道的margin属性</title>
-    <link href="http://louiszhai.github.io/2016/03/23/css-margin/"/>
-    <id>http://louiszhai.github.io/2016/03/23/css-margin/</id>
-    <published>2016-03-23T12:47:36.000Z</published>
-    <updated>2018-03-27T11:13:22.000Z</updated>
-    
-    <content type="html"><![CDATA[<h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h3><p>margin属性处于盒子模型的最外层, 用以隔开其他元素, 它可以依次设置4个长度值, 分别表示 “上 右 下 左” 的间距, 其中第1个和第3个值相对应, 第2个与第4个相对应, 如果省略前者, 后者将取与前者相同的数值. margin属性共存在以下 4 种表示方式:</p>
-<ul>
-<li>margin: 10px 1rem 1em 5%; 共 4 个数值, 表示依次设置 上, 右, 下, 左的间距;</li>
-<li>margin: 10px 1rem 1em; 共 3 个数值, 省略第4个值, 左间距将取右间距的值, 表示依次设置 上, 左右, 下的间距;</li>
-<li>margin: 10px 1rem; 共 2 个数值, 省略第3,4个值, 左间距将取右间距的值, 下间距将取上间距的值, 表示依次设置 上下, 左右的间距;</li>
-<li>margin: 10px; 共 1 个数值, 同时省略第2,3,4个值, 表示上下左右的间距均为10px;</li>
-</ul>
-<p>若是块级元素, 借助 margin:0 auto; 即可实现水平居中.</p>
-<p>看到这里, 你可能会觉得这些你都懂了, 这不要紧, 显然本文也不是为了科普margin的基础语法, 请往下看.</p>
-<a id="more"></a>
-<h3 id="垂直外边距合并问题"><a href="#垂直外边距合并问题" class="headerlink" title="垂直外边距合并问题"></a>垂直外边距合并问题</h3><p>别被上面这个名词给吓倒了, 简单地说, 外边距合并指的是, 当两个垂直外边距相遇时, 它们将形成一个外边距. 合并后的外边距的高度等于两个发生合并的外边距的高度中的较大者. 你可以查看<a href="http://www.w3school.com.cn/css/css_margin_collapsing.asp" target="_blank" rel="external">W3Shool CSS外边距合并</a>了解这个基本知识.</p>
-<p>实际工作中, 垂直外边距合并问题常见于第一个子元素的margin-top会顶开父元素与父元素相邻元素的间距, 而且只在标准浏览器下(FirfFox、Chrome、Opera、Sarfi)产生问题, IE下反而表现良好.</p>
-<pre><code class="html">&lt;style&gt;
-  .outer-box{
-      margin-top:15px;
-  }
-  .inner-box{
-      margin-top:30px;
-  }
-&lt;/style&gt;
-&lt;div class=&quot;outer-box&quot;&gt;
-  &lt;div class=&quot;inner-box&quot;&gt;1234567890&lt;/div&gt;
-&lt;/div&gt;
-</code></pre>
-<p>打开控制台, 你会发现内部div距离顶部的距离是30px, 而不是45px, 这是因为内部div与外部div的margin-top属性做了合并, 取两者中的最大值, 即 30px.</p>
-<p>如果按照CSS规范, IE的“良好表现”其实是一个错误的表现, 因为IE的hasLayout渲染导致了这个“表现良好”的外观. 而其他标准浏览器则会表现出“有问题”的外观. 好了, 如果你读过了上面W3Shcool的CSS外边距合并的文章后, 就很容易讨论这个问题了. 这个问题发生的原因是<strong>根据规范, 一个盒子如果没有上补白(padding-top)和上边框(border-top), 那么这个盒子的上边距会和其内部文档流中的第一个子元素的上边距重叠</strong>.</p>
-<p>基于此, 该问题便很好解决了, 给外部div设置一个透明的1像素的border-top即可.</p>
-<pre><code class="css">.outer-box{
-  margin-top:15px;
-  border-top:1px solid transparent;
-}
-</code></pre>
-<h3 id="margin是否对内联元素生效"><a href="#margin是否对内联元素生效" class="headerlink" title="margin是否对内联元素生效?"></a>margin是否对内联元素生效?</h3><p>margin也能用于内联元素, 这是规范所允许的, 但是margin-top和margin-bottom对内联元素（对行）的高度没有影响, 并且由于边界效果(margin效果)是透明的, 他也没有任何的视觉影响.</p>
-<p>这是因为边界应用于内联元素时不改变元素的行高度，如果你要改变内联元素的行高即类似文本的行间距, 那么你只能使用这三个属性: line-height, fong-size, vertical-align. 请记住, 这个影响内联元素高度的是line-height而不是height, 因为内联元素是一行行的, 定一个height的话, 那这到底是整段inline元素的高呢? 还是inline元素一行的高呢? 这都说不准, 所以统一都给每行定一个高, 只能是line-height了.</p>
-<p><strong>margin-top/margin-bottom对内联元素没有实际效果, 不过margin-left/margin-right还是能够对内联元素产生影响的</strong>. 应用margin:10px 20px 30px 40px;, 左边这个css如果写在inline元素上, 他的效果大致是, 上下无效果, 左边离他相邻元素或者文本距离为40px, 右边离他相邻元素或者文本距离为20px.</p>
-<h3 id="有关margin的常见bug"><a href="#有关margin的常见bug" class="headerlink" title="有关margin的常见bug"></a>有关margin的常见bug</h3><p>下面罗列一下常见的有关margin的bug, 可能不全, 非常欢迎交流探讨, 请在<a href="#respond">回复</a>中补充.</p>
-<h4 id="IE6中浮动元素3px间隔Bug"><a href="#IE6中浮动元素3px间隔Bug" class="headerlink" title="IE6中浮动元素3px间隔Bug"></a>IE6中浮动元素3px间隔Bug</h4><p>发生场景: 发生在一个元素浮动，然后一个不浮动的元素自然上浮与之靠近会出现的3px的bug.<br>解决方法: 右边元素也一起浮动; 或者为右边元素添加IE6 Hack “_margin-left:-3px;” 从而消除3px间距.<br>原因分析：IE6浏览器缺陷Bug.</p>
-<h4 id="inline-block元素之间空白Bug"><a href="#inline-block元素之间空白Bug" class="headerlink" title="inline-block元素之间空白Bug"></a>inline-block元素之间空白Bug</h4><p>发生场景: IE8+、Chrome、Firefox、Safari等浏览器下的效果, 两个inline-block的元素之间会存在一定的空白间距, 空白间距的宽度与父元素的font-size大小有关.</p>
-<p>解决方法: 可以为inline-block元素设置为负的margin-left; 或父元素font-size设置为0, 子元素再重新设置回来, 如需兼容所有浏览器, 请参考 <a href="http://louiszhai.github.io/2016/03/27/css-inline-block/">inline-block空白间距解决方案探讨</a>.</p>
-<p>原因分析: HTML 中的换行符、空格符、制表符等合并为空白符, 字体大小不为 0 的情况下, 空白符自然占据一定的宽度, 因此产生了元素间的空隙.</p>
-<h4 id="IE6-7负margin隐藏Bug"><a href="#IE6-7负margin隐藏Bug" class="headerlink" title="IE6/7负margin隐藏Bug"></a>IE6/7负margin隐藏Bug</h4><p>发生场景: 当给一个有hasLayout的父元素内的非hasLayout元素设置负margin时, 超出父元素部分不可见.<br>解决方法: 去掉父元素的hasLayout; 或者赋hasLayout给子元素,并添加position:relative;<br>原理分析: IE6/7独有的hasLayout产生问题.</p>
-<h4 id="IE6-7下ul-ol标记消失bug"><a href="#IE6-7下ul-ol标记消失bug" class="headerlink" title="IE6/7下ul/ol标记消失bug"></a>IE6/7下ul/ol标记消失bug</h4><p>发生场合: 当ul/ol触发了haslayout并且是在ul/ol上写margin-left, 前面默认的ul/ol标记会消失.<br>解决方法: 给li设置margin-left, 而不是给ul/ol设置margin-left.<br>原因分析：IE6/7浏览器Bug.</p>
-<h4 id="IE6-7下margin与absolute元素重叠bug"><a href="#IE6-7下margin与absolute元素重叠bug" class="headerlink" title="IE6/7下margin与absolute元素重叠bug"></a>IE6/7下margin与absolute元素重叠bug</h4><p>发生场景: 双栏自适应布局中, 左侧元素absolute绝对定位, 右侧的margin撑开距离定位. 在IE6/7下左侧应用了absolute属性的块级元素与右边的自适应的文字内容重叠.<br>解决方法: 把左侧块级元素更改为内联元素, 比如把div更换为span.<br>原因分析: 这是由于IE6-7浏览器将inline水平标签元素和block水平的标签元素没有加以区分一视同仁渲染了. 属于IE6-7浏览器渲染Bug.</p>
-<h4 id="IE6-7-8下auto-margin居中bug"><a href="#IE6-7-8下auto-margin居中bug" class="headerlink" title="IE6/7/8下auto margin居中bug"></a>IE6/7/8下auto margin居中bug</h4><p>发生场景: 给block元素设置margin auto无法居中<br>解决方法: 出现这种bug的原因通常是没有Doctype, 然后触发了ie的quirks mode, 加上Doctype声明就可以了. 在《打败IE的葵花宝典》里给出的方法是给block元素添加一个width能够解决, 但据测试, 加with此种方法是无效的, 如果没有Doctype即使给元素添加width也无法让block元素居中.<br>原因分析: 缺少Doctype声明.</p>
-<h4 id="IE8下input-button-submit-设置margin-0-auto无法居中"><a href="#IE8下input-button-submit-设置margin-0-auto无法居中" class="headerlink" title="IE8下input[button | submit] 设置margin:0 auto无法居中"></a>IE8下input[button | submit] 设置margin:0 auto无法居中</h4><p>发生场景: ie8下, 如果给像button这样的标签（如button input[type=”button”] input[type=”submit”]）设置{ display: block; margin:0 auto; }如果不设置宽度的话无法居中.<br>解决方法: 可以给为input加上宽度.<br>原因分析: IE8浏览器Bug.</p>
-<h4 id="IE8百分比padding垂直margin-bug"><a href="#IE8百分比padding垂直margin-bug" class="headerlink" title="IE8百分比padding垂直margin bug"></a>IE8百分比padding垂直margin bug</h4><p>发生场景: 当父元素设置了百分比的padding, 子元素有垂直的margin的时候, 就好像父元素被设置了margin一样.<br>解决方法: 给父元素加一个overflow:hidden/auto。<br>原因分析: IE8浏览器Bug.</p>
-<hr>
-<p>本文就讨论这么多内容,大家有什么问题或好的想法欢迎在下方参与<a href="#respond">留言和评论</a>.</p>
-<p>本文作者: <a href="https://github.com/Louiszhai" target="_blank" rel="external">louis</a></p>
-<p>本文链接: <a href="http://louiszhai.github.io/2016/03/23/css-margin/">http://louiszhai.github.io/2016/03/23/css-margin/</a></p>
-<p>参考文章</p>
-<ul>
-<li><a href="http://www.hicss.net/do-not-tell-me-you-understand-margin/" target="_blank" rel="external">不要告诉我你懂margin</a></li>
-</ul>
-]]></content>
-    
-    <summary type="html">
-    
-      css margin margin-left margin-top margin-right margin-bottom
     
     </summary>
     
