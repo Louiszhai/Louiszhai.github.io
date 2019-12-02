@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://louiszhai.github.io/2016/03/12/css-center/</loc>
+    
+    <lastmod>2019-12-02T06:11:41.905Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://louiszhai.github.io/2019/12/02/webpack4.ie/</loc>
     
     <lastmod>2019-12-02T04:11:34.106Z</lastmod>
@@ -163,13 +170,6 @@
   </url>
   
   <url>
-    <loc>http://louiszhai.github.io/2016/03/12/css-float/</loc>
-    
-    <lastmod>2019-12-02T03:28:32.879Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://louiszhai.github.io/2016/03/31/css-hasLayout/</loc>
     
     <lastmod>2019-12-02T03:28:32.879Z</lastmod>
@@ -177,9 +177,9 @@
   </url>
   
   <url>
-    <loc>http://louiszhai.github.io/2016/03/12/css-center/</loc>
+    <loc>http://louiszhai.github.io/2016/03/12/css-float/</loc>
     
-    <lastmod>2019-12-02T03:28:32.878Z</lastmod>
+    <lastmod>2019-12-02T03:28:32.879Z</lastmod>
     
   </url>
   
