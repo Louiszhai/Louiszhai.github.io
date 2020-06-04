@@ -11,29 +11,32 @@
       width: 100%;
       height: 100%;
     }
-    table{
+    iframe{
       width: 100%;
       height: 100%;
-      border-spacing: 0px;
     }
-    td:nth-child(odd){
+    .panel {
+      float: left;
+      width: 49%;
+      height: 49vh;
+    }
+    .show:nth-child(odd) {
       border-right: 1px dashed lightgray;
     }
-    tr:nth-child(-n+1){
+    .show:nth-child(-n+1){
       border-bottom: 1px dashed lightgray;
     }
-    tr:nth-child(n+1) iframe{
-      width: 100%;
-      height: 99%;
-    }
-    td iframe{
-      width: 100%;
-      height: 100%;
+    .hide {
+      display: none;
     }
   </style>
 </head>
 <body>
-  <table>
+  <div class="panel hide">
+    <iframe frameborder="0"></iframe>
+  </div>
+  <div class="container"></div>
+  <!-- <table id="table">
     <tr>
       <td><iframe frameborder="0"></iframe></td>
       <td><iframe frameborder="0"></iframe></td>
@@ -42,20 +45,30 @@
       <td><iframe frameborder="0"></iframe></td>
       <td><iframe frameborder="0"></iframe></td>
     </tr>
-  </table>
+  </table> -->
 </body>
 <script>
   const word = location.search.replace('?q=','');
-  const link = [
+  const links = [
     'https://www.baidu.com/s?wd=',
     'https://www.google.com/search?safe=off&q=',
     'https://zh.wikipedia.org/w/index.php?search=',
+    'http://cn.bing.com/search?q=',
     'http://cn.bing.com/search?q='
   ];
-
-  [].map.call(document.getElementsByTagName('iframe'), function(iframe, i){
-    iframe.src = link[i] + word;
+  const container = document.querySelector('.container');
+  const sample = document.querySelector('.panel');
+  links.forEach(link => {
+    const panel = sample.cloneNode(true);
+    panel.className = 'panel show';
+    panel.querySelector('iframe').src = link + word;
+    container.appendChild(panel);
   });
+  
+
+  // [].map.call(document.getElementsByTagName('iframe'), function(iframe, i){
+  //   iframe.src = link[i] + word;
+  // });
 
   // const width = ~~(window.screen.availWidth/2),
   //  height = ~~(window.screen.availHeight/2),

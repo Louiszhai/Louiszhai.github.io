@@ -5135,7 +5135,7 @@ server.on(&#39;connection&#39;, function(wsServer){
     <link href="http://louiszhai.github.io/2017/04/07/http-cache/"/>
     <id>http://louiszhai.github.io/2017/04/07/http-cache/</id>
     <published>2017-04-07T00:00:00.000Z</published>
-    <updated>2019-12-02T03:28:32.883Z</updated>
+    <updated>2020-06-04T06:36:08.672Z</updated>
     
     <content type="html"><![CDATA[<p>缓存一直是前端优化的主战场, 利用好缓存就成功了一半. 本篇从http请求和响应的头域入手, 让你对浏览器缓存有个整体的概念. 最终你会发现强缓存, 协商缓存 和 启发式缓存是如此的简单.</p>
 <h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a><strong>导读</strong></h3><p>我不知道拖延症是有多严重, 反正去年3月开的题, 直到今年4月才开始写.(请尽情吐槽吧)</p>
@@ -5339,7 +5339,7 @@ server.on(&#39;connection&#39;, function(wsServer){
 <p><img src="http://louiszhai.github.io/docImages/http-cache03.png" alt="Pragma:no-cache"></p>
 <h3 id="Expires"><a href="#Expires" class="headerlink" title="Expires"></a><strong>Expires</strong></h3><pre><code class="http">Expires:Wed, 05 Apr 2017 00:55:35 GMT
 </code></pre>
-<p>即到期时间, 以服务器时间为参考系, 其优先级比 <code>Cache-Control:max-age</code> 低, 两者同时出现在响应头时, <code>Expires</code>将被后者覆盖. 如果<code>Expires</code>, <code>Cache-Control: max-age</code>, 或 <code>Cache-Control:s-maxage</code> 都没有在响应头中出现, 并且也没有其它缓存的设置, 那么浏览器默认会采用一个启发式的算法, 通常会取响应头的<code>Date_value - Last-Modified_value</code>值的10%作为缓存时间.</p>
+<p>即到期时间, 以服务器时间为参考系, 其优先级比 <code>Cache-Control:max-age</code> 低, 两者同时出现在响应头时, <code>Expires</code>将被后者覆盖. 如果<code>Expires</code>, <code>Cache-Control: max-age</code>, 或 <code>Cache-Control:s-maxage</code> 都没有在响应头中出现, 并且也没有其它缓存的设置, 那么浏览器默认会采用一个<strong>启发式的算法</strong>, 通常会取响应头的<code>Date_value - Last-Modified_value</code>值的10%作为缓存时间。（更多资料可参考：<a href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec13.html#sec13.2.4" target="_blank" rel="external">Caching in HTTP</a>）</p>
 <p>如下资源便采取了启发式缓存算法.</p>
 <p><img src="http://louiszhai.github.io/docImages/http-cache06.png" alt="启发式缓存生效"></p>
 <p>其缓存时间为 <code>(Date_value - Last-Modified_value) * 10%</code>, 计算如下:</p>
@@ -6370,7 +6370,7 @@ box-shadow: 110px 0 0 -10px #ccc, 220px 0 0 0 #808080, 360px 0 0 10px grey;
     <link href="http://louiszhai.github.io/2017/01/13/flex/"/>
     <id>http://louiszhai.github.io/2017/01/13/flex/</id>
     <published>2017-01-13T00:42:01.000Z</published>
-    <updated>2019-12-02T03:28:32.882Z</updated>
+    <updated>2020-06-04T06:41:16.511Z</updated>
     
     <content type="html"><![CDATA[<h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h3><p>Web layout 是Web UI中的基础架构, 重要性不言而喻. 传统的盒模型, 借助display, position, float 属性应对普通布局游刃有余, 但针对复杂的或自适应布局, 常常捉襟见肘. 比如垂直居中, 就是一个老大难的问题, 借助flex弹性盒模型, 两行代码就可以优雅的实现之. (该方法曾在 <a href="http://louiszhai.github.io/2016/03/12/css-center/">16种方法实现水平居中垂直居中</a> 一文中提到). 当然, 本次我们不会只讨论垂直居中的问题, 我将努力尽可能的还原flex的应用场景.</p>
 <a id="more"></a>
@@ -6657,12 +6657,11 @@ box-shadow: 110px 0 0 -10px #ccc, 220px 0 0 0 #808080, 360px 0 0 10px grey;
 <p>有关移动端的最佳实践, 请戳这篇围观 <a href="https://isux.tencent.com/flexbox.html" target="_blank" rel="external">移动端全兼容的flexbox速成班</a> .</p>
 <p>当然, 这里还有一个 <a href="https://github.com/philipwalton/flexbugs" target="_blank" rel="external">Flexbugs</a> 列表, github上已有7k+的star, 感兴趣可以前去看看.</p>
 <hr>
-<p>本问就讨论这么多内容,大家有什么问题或好的想法欢迎在下方参与<a href="#respond">留言和评论</a>.</p>
 <p>本文作者: <a href="https://github.com/Louiszhai" target="_blank" rel="external">louis</a></p>
 <p>本文链接: <a href="http://louiszhai.github.io/2017/01/13/flex/">http://louiszhai.github.io/2017/01/13/flex/</a></p>
 <p>参考文章</p>
 <ul>
-<li><a href="https://www.w3.org/TR/css-flexbox-1/" target="_blank" rel="external">CSS Flexible Box Layout Module Level 1</a></li>
+<li>[CSS Flexible Box Layout Module Level 1][7]</li>
 <li><a href="https://www.w3.org/TR/2012/WD-css3-flexbox-20120322/" target="_blank" rel="external">2012 CSS Flexible Box Layout Module</a></li>
 <li><a href="https://www.w3.org/TR/2009/WD-css3-flexbox-20090723/" target="_blank" rel="external">2009 CSS Flexible Box Layout Module</a></li>
 <li><a href="http://www.ruanyifeng.com/blog/2015/07/flex-grammar.html" target="_blank" rel="external">Flex 布局教程：语法篇 - 阮一峰的网络日志</a></li>

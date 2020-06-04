@@ -5274,7 +5274,7 @@ server.on(&#39;connection&#39;, function(wsServer){
 <p><img src="http://louiszhai.github.io/docImages/http-cache03.png" alt="Pragma:no-cache"></p>
 <h3 id="Expires"><a href="#Expires" class="headerlink" title="Expires"></a><strong>Expires</strong></h3><pre><code class="http">Expires:Wed, 05 Apr 2017 00:55:35 GMT
 </code></pre>
-<p>即到期时间, 以服务器时间为参考系, 其优先级比 <code>Cache-Control:max-age</code> 低, 两者同时出现在响应头时, <code>Expires</code>将被后者覆盖. 如果<code>Expires</code>, <code>Cache-Control: max-age</code>, 或 <code>Cache-Control:s-maxage</code> 都没有在响应头中出现, 并且也没有其它缓存的设置, 那么浏览器默认会采用一个启发式的算法, 通常会取响应头的<code>Date_value - Last-Modified_value</code>值的10%作为缓存时间.</p>
+<p>即到期时间, 以服务器时间为参考系, 其优先级比 <code>Cache-Control:max-age</code> 低, 两者同时出现在响应头时, <code>Expires</code>将被后者覆盖. 如果<code>Expires</code>, <code>Cache-Control: max-age</code>, 或 <code>Cache-Control:s-maxage</code> 都没有在响应头中出现, 并且也没有其它缓存的设置, 那么浏览器默认会采用一个<strong>启发式的算法</strong>, 通常会取响应头的<code>Date_value - Last-Modified_value</code>值的10%作为缓存时间。（更多资料可参考：<a href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec13.html#sec13.2.4" target="_blank" rel="external">Caching in HTTP</a>）</p>
 <p>如下资源便采取了启发式缓存算法.</p>
 <p><img src="http://louiszhai.github.io/docImages/http-cache06.png" alt="启发式缓存生效"></p>
 <p>其缓存时间为 <code>(Date_value - Last-Modified_value) * 10%</code>, 计算如下:</p>
@@ -6568,12 +6568,11 @@ box-shadow: 110px 0 0 -10px #ccc, 220px 0 0 0 #808080, 360px 0 0 10px grey;
 <p>有关移动端的最佳实践, 请戳这篇围观 <a href="https://isux.tencent.com/flexbox.html" target="_blank" rel="external">移动端全兼容的flexbox速成班</a> .</p>
 <p>当然, 这里还有一个 <a href="https://github.com/philipwalton/flexbugs" target="_blank" rel="external">Flexbugs</a> 列表, github上已有7k+的star, 感兴趣可以前去看看.</p>
 <hr>
-<p>本问就讨论这么多内容,大家有什么问题或好的想法欢迎在下方参与<a href="#respond">留言和评论</a>.</p>
 <p>本文作者: <a href="https://github.com/Louiszhai" target="_blank" rel="external">louis</a></p>
 <p>本文链接: <a href="http://louiszhai.github.io/2017/01/13/flex/">http://louiszhai.github.io/2017/01/13/flex/</a></p>
 <p>参考文章</p>
 <ul>
-<li><a href="https://www.w3.org/TR/css-flexbox-1/" target="_blank" rel="external">CSS Flexible Box Layout Module Level 1</a></li>
+<li>[CSS Flexible Box Layout Module Level 1][7]</li>
 <li><a href="https://www.w3.org/TR/2012/WD-css3-flexbox-20120322/" target="_blank" rel="external">2012 CSS Flexible Box Layout Module</a></li>
 <li><a href="https://www.w3.org/TR/2009/WD-css3-flexbox-20090723/" target="_blank" rel="external">2009 CSS Flexible Box Layout Module</a></li>
 <li><a href="http://www.ruanyifeng.com/blog/2015/07/flex-grammar.html" target="_blank" rel="external">Flex 布局教程：语法篇 - 阮一峰的网络日志</a></li>

@@ -21,7 +21,7 @@
 <meta property="og:image" content="http://louiszhai.github.io/docImages/http-cache02.png">
 <meta property="og:image" content="http://louiszhai.github.io/docImages/http-cache04.png">
 <meta property="og:image" content="http://louiszhai.github.io/docImages/http-cache05.png">
-<meta property="og:updated_time" content="2019-12-02T03:28:32.883Z">
+<meta property="og:updated_time" content="2020-06-04T06:36:08.672Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="浏览器缓存机制剖析">
 <meta name="twitter:description" content="http-cache 浏览器缓存策略 浏览器缓存机制 304协商缓存 强缓存 Age Date Vary Cache-Control Expires ETag Last-Modified Pragma If-Modified-Since If-Unmodified-Since If-Match If-None-Match no-cache max-age max-stale min-fresh m">
@@ -431,7 +431,7 @@
 <p><img src="http://louiszhai.github.io/docImages/http-cache03.png" alt="Pragma:no-cache"></p>
 <h3 id="Expires"><a href="#Expires" class="headerlink" title="Expires"></a><strong>Expires</strong></h3><pre><code class="http">Expires:Wed, 05 Apr 2017 00:55:35 GMT
 </code></pre>
-<p>即到期时间, 以服务器时间为参考系, 其优先级比 <code>Cache-Control:max-age</code> 低, 两者同时出现在响应头时, <code>Expires</code>将被后者覆盖. 如果<code>Expires</code>, <code>Cache-Control: max-age</code>, 或 <code>Cache-Control:s-maxage</code> 都没有在响应头中出现, 并且也没有其它缓存的设置, 那么浏览器默认会采用一个启发式的算法, 通常会取响应头的<code>Date_value - Last-Modified_value</code>值的10%作为缓存时间.</p>
+<p>即到期时间, 以服务器时间为参考系, 其优先级比 <code>Cache-Control:max-age</code> 低, 两者同时出现在响应头时, <code>Expires</code>将被后者覆盖. 如果<code>Expires</code>, <code>Cache-Control: max-age</code>, 或 <code>Cache-Control:s-maxage</code> 都没有在响应头中出现, 并且也没有其它缓存的设置, 那么浏览器默认会采用一个<strong>启发式的算法</strong>, 通常会取响应头的<code>Date_value - Last-Modified_value</code>值的10%作为缓存时间。（更多资料可参考：<a href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec13.html#sec13.2.4" target="_blank" rel="external">Caching in HTTP</a>）</p>
 <p>如下资源便采取了启发式缓存算法.</p>
 <p><img src="http://louiszhai.github.io/docImages/http-cache06.png" alt="启发式缓存生效"></p>
 <p>其缓存时间为 <code>(Date_value - Last-Modified_value) * 10%</code>, 计算如下:</p>
@@ -795,7 +795,7 @@ c3(no)->op2->io1->e</textarea><textarea id="flowchart-0-options" style="display:
     <div id="footer-info">
       <img src="/img/top_arrow.png" class="top_arrow" id="top_arrow">
     	<div class="footer-left">
-    		&copy; 2019 路易斯
+    		&copy; 2020 路易斯
 
         <span style="position:relative;top:2px" id="cnzz_stat_icon_1256923583"></span>
         <script type="text/javascript">
