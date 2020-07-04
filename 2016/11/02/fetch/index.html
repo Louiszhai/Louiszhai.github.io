@@ -15,6 +15,7 @@
 <meta property="og:description" content="fetch async await mode promise progress abort">
 <meta property="og:image" content="http://louiszhai.github.io/docImages/ajax07.png">
 <meta property="og:image" content="http://louiszhai.github.io/docImages/ajax08.png">
+<meta property="og:image" content="http://louiszhai.github.io/docImages/ajax28.png">
 <meta property="og:image" content="http://louiszhai.github.io/docImages/ajax11.png">
 <meta property="og:image" content="http://louiszhai.github.io/docImages/ajax09.png">
 <meta property="og:image" content="http://louiszhai.github.io/docImages/ajax10.png">
@@ -24,7 +25,7 @@
 <meta property="og:image" content="http://louiszhai.github.io/docImages/ajax22.png">
 <meta property="og:image" content="http://louiszhai.github.io/docImages/ajax15.png">
 <meta property="og:image" content="http://louiszhai.github.io/docImages/ajax16.png">
-<meta property="og:updated_time" content="2019-12-02T03:28:32.882Z">
+<meta property="og:updated_time" content="2020-07-04T05:48:04.299Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Fetch进阶指南">
 <meta name="twitter:description" content="fetch async await mode promise progress abort">
@@ -232,17 +233,20 @@
     <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#导读"><span class="toc-text">导读</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Fetch"><span class="toc-text">Fetch</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#尝试一个fetch"><span class="toc-text">尝试一个fetch</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Promise特性"><span class="toc-text">Promise特性</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#response-type"><span class="toc-text">response type</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#mode"><span class="toc-text">mode</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#header"><span class="toc-text">header</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#post"><span class="toc-text">post</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#credentials"><span class="toc-text">credentials</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#catch"><span class="toc-text">catch</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#cache"><span class="toc-text">cache</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#async-await"><span class="toc-text">async/await</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#为什么是async-await"><span class="toc-text">为什么是async/await</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#async-await语法"><span class="toc-text">async/await语法</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#如何试运行async-await"><span class="toc-text">如何试运行async/await</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#如何弥补Fetch的不足"><span class="toc-text">如何弥补Fetch的不足</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#fetch-jsonp"><span class="toc-text">fetch-jsonp</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#abort"><span class="toc-text">abort</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#timeout"><span class="toc-text">timeout</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#progress"><span class="toc-text">progress</span></a></li></ol></li></ol>
 </div>
       
-        <h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h3><p>Fetch 是 web异步通信的未来. 从chrome42, Firefox39, Opera29, EdgeHTML14(并非Edge版本)起, fetch就已经被支持了. 其中chrome42~45版本, fetch对中文支持有问题, 建议从chrome46起使用fetch. 传送门: <a href="https://bugs.chromium.org/p/chromium/issues/detail?id=511289" target="_blank" rel="external">fetch中文乱码</a> .</p>
+        <h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h3><p>对于前端来说，Axios应该不陌生，自从尤大推荐后，Axios几乎成了前端必备工具库，Axios的体积也与日俱增，当前最新版本已经达到了14k的size，这样的大小，在sdk中引用是不太合适的，而XMLHttpRequest又过于原始，还不支持promise，需要进一步封装。那么有没有简单便捷的ajax API呢？它就是Fetch。</p>
+<p>Fetch 是 web异步通信的未来. 从chrome42, Firefox39, Opera29, EdgeHTML14(并非Edge版本)起, fetch就已经被支持了. 其中chrome42~45版本, fetch对中文支持有问题, 建议从chrome46起使用fetch. 传送门: <a href="https://bugs.chromium.org/p/chromium/issues/detail?id=511289" target="_blank" rel="external">fetch中文乱码</a> .</p>
 <a id="more"></a>
 <h3 id="Fetch"><a href="#Fetch" class="headerlink" title="Fetch"></a>Fetch</h3><p>先过一遍Fetch原生支持率.</p>
 <p><img src="http://louiszhai.github.io/docImages/ajax07.png" alt=""><br><img src="http://louiszhai.github.io/docImages/ajax08.png" alt=""></p>
+<p>以下是2020年7月4日更新的 Fetch 兼容性统计，除了 IE 系列，Fetch 兼容性基本没什么大问题。</p>
+<p><img src="http://louiszhai.github.io/docImages/ajax28.png" alt=""></p>
 <p>可见要想在IE8/9/10/11中使用fetch还是有些犯难的,毕竟它连 Promise 都不支持, 更别说fetch了. 别急, 这里有polyfill(垫片). </p>
 <ul>
 <li>es5 的 polyfill — <a href="https://github.com/es-shims/es5-shim" target="_blank" rel="external"><code>es5-shim, es5-sham</code></a> .</li>
 <li>Promise 的 polyfill — <a href="https://github.com/jakearchibald/es6-promise" target="_blank" rel="external"><code>es6-promise</code></a> .</li>
 <li>fetch 的 polyfill — <a href="https://github.com/camsong/fetch-ie8" target="_blank" rel="external"><code>fetch-ie8</code></a> .</li>
 </ul>
-<p>由于IE8基于ES3, IE9支持大部分ES5, IE11支持少量ES5, 其中只有IE10对ES5支持比较完整. 因此IE8+浏览器, 建议依次装载上述垫片.</p>
+<p>由于IE8基于ES3, IE9、IE10、IE11基于ES5，但支持不完全. 因此IE8+浏览器, 建议依次装载上述垫片.</p>
 <h4 id="尝试一个fetch"><a href="#尝试一个fetch" class="headerlink" title="尝试一个fetch"></a>尝试一个fetch</h4><p>先来看一个简单的fetch.</p>
 <pre><code class="js">var word = &#39;123&#39;,
     url = &#39;https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su?wd=&#39;+word+&#39;&amp;json=1&amp;p=3&#39;;
@@ -620,7 +624,7 @@ fetch(&#39;http://localhost:10101/notification/&#39;,{mode:&#39;no-cors&#39;})
 <p>刚好github上有个fetch progress的demo, 感兴趣的小伙伴请参看这里: <a href="https://labs.jxck.io/fetch/progress.html" target="_blank" rel="external">Fetch Progress DEMO</a> .</p>
 <p>我们不妨来对比下, 使用xhr的onprogress事件回调, 输出如下:</p>
 <p><img src="http://louiszhai.github.io/docImages/ajax16.png" alt=""></p>
-<p>我试着适当增加响应body的size, 发现xhr的onprogress事件回调依然只执行两次. 通过多次测试发现其执行频率比较低, 远不及fetch progress.</p>
+<p>当适当增加响应body的size, 发现xhr的onprogress事件回调依然只执行两次. 通过多次测试发现其执行频率比较低, 远不及fetch progress.</p>
 <hr>
 <p>本问就讨论这么多内容,大家有什么问题或好的想法欢迎在下方参与<a href="#respond">留言和评论</a>.</p>
 <p>本文作者: <a href="https://github.com/Louiszhai" target="_blank" rel="external">louis</a></p>
