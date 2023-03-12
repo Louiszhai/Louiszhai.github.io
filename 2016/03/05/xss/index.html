@@ -7,19 +7,20 @@
   <title>xss攻防浅谈 | louis blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="xss xss漏洞 xss攻击 xss浅谈 前端xss">
-<meta name="keywords" content="XSS">
 <meta property="og:type" content="article">
 <meta property="og:title" content="xss攻防浅谈">
 <meta property="og:url" content="http://louiszhai.github.io/2016/03/05/xss/index.html">
 <meta property="og:site_name" content="louis blog">
 <meta property="og:description" content="xss xss漏洞 xss攻击 xss浅谈 前端xss">
+<meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://louiszhai.github.io/docImages/xss01.png">
 <meta property="og:image" content="http://louiszhai.github.io/docImages/xss03-csp1.png">
 <meta property="og:image" content="http://louiszhai.github.io/docImages/xss03-csp2.png">
-<meta property="og:updated_time" content="2019-12-02T03:28:32.900Z">
+<meta property="article:published_time" content="2016-03-05T01:48:09.000Z">
+<meta property="article:modified_time" content="2019-12-02T03:28:32.900Z">
+<meta property="article:author" content="路易斯">
+<meta property="article:tag" content="XSS">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="xss攻防浅谈">
-<meta name="twitter:description" content="xss xss漏洞 xss攻击 xss浅谈 前端xss">
 <meta name="twitter:image" content="http://louiszhai.github.io/docImages/xss01.png">
   
     <link rel="alternative" href="/atom.xml" title="louis blog" type="application/atom+xml">
@@ -27,8 +28,10 @@
   
     <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
   
-  <link rel="stylesheet" href="/css/style.css">
-</head>
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 6.3.0"></head>
 
 <body>
 <div id="container">
@@ -45,11 +48,9 @@
 		</a>
 
 		<hgroup>
-		  <h1 class="header-author"><a href="/">路易斯</a></h1>
+		  <h1 class="header-author"><a href="/">undefined</a></h1>
 		</hgroup>
 
-		
-		<p class="header-subtitle">坚持原著, 深度思考, 力求简单通俗叙事</p>
 		
 
 		
@@ -143,7 +144,7 @@
         <nav id="mobile-nav">
   	<div class="overlay">
   		<div class="slider-trigger"></div>
-  		<h1 class="header-author js-mobile-header hide">路易斯</h1>
+  		<h1 class="header-author js-mobile-header hide">undefined</h1>
   	</div>
 	<div class="intrude-less">
 		<header id="header" class="inner">
@@ -153,10 +154,8 @@
 			
 			</div>
 			<hgroup>
-			  <h1 class="header-author">路易斯</h1>
+			  <h1 class="header-author">undefined</h1>
 			</hgroup>
-			
-			<p class="header-subtitle">坚持原著, 深度思考, 力求简单通俗叙事</p>
 			
 			<nav class="header-menu">
 				<ul>
@@ -207,7 +206,7 @@
       <div class="article-info article-info-post">
         
 	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/XSS/">XSS</a></li></ul>
+		<ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/XSS/" rel="tag">XSS</a></li></ul>
 	</div>
 
         
@@ -221,7 +220,7 @@
           <span class="toc-arrow"></span>
 <div id="toc" class="toc-article">
     <div class="toc-title">目录</div>
-    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#导读"><span class="toc-text">导读</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#xss攻击方式"><span class="toc-text">xss攻击方式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#防止xss攻击"><span class="toc-text">防止xss攻击</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#转义"><span class="toc-text">转义</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#使用浏览器自带的xss-filter"><span class="toc-text">使用浏览器自带的xss-filter</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Content-Security-Policy"><span class="toc-text">Content Security Policy</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#X-Frame-Options"><span class="toc-text">X-Frame-Options</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Http-Only"><span class="toc-text">Http-Only</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#iframe-沙箱环境"><span class="toc-text">iframe 沙箱环境</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#其他安全相关的HTTP头"><span class="toc-text">其他安全相关的HTTP头</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#X-Content-Type-Options"><span class="toc-text">X-Content-Type-Options</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#HPKP-Public-Key-Pinning"><span class="toc-text">HPKP(Public Key Pinning)</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#HSTS-HTTP-Strict-Transport-Security"><span class="toc-text">HSTS (HTTP Strict-Transport-Security)</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#前端xss过滤"><span class="toc-text">前端xss过滤</span></a></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%BC%E8%AF%BB"><span class="toc-text">导读</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#xss%E6%94%BB%E5%87%BB%E6%96%B9%E5%BC%8F"><span class="toc-text">xss攻击方式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%98%B2%E6%AD%A2xss%E6%94%BB%E5%87%BB"><span class="toc-text">防止xss攻击</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BD%AC%E4%B9%89"><span class="toc-text">转义</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E6%B5%8F%E8%A7%88%E5%99%A8%E8%87%AA%E5%B8%A6%E7%9A%84xss-filter"><span class="toc-text">使用浏览器自带的xss-filter</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Content-Security-Policy"><span class="toc-text">Content Security Policy</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#X-Frame-Options"><span class="toc-text">X-Frame-Options</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Http-Only"><span class="toc-text">Http-Only</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#iframe-%E6%B2%99%E7%AE%B1%E7%8E%AF%E5%A2%83"><span class="toc-text">iframe 沙箱环境</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B6%E4%BB%96%E5%AE%89%E5%85%A8%E7%9B%B8%E5%85%B3%E7%9A%84HTTP%E5%A4%B4"><span class="toc-text">其他安全相关的HTTP头</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#X-Content-Type-Options"><span class="toc-text">X-Content-Type-Options</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#HPKP-Public-Key-Pinning"><span class="toc-text">HPKP(Public Key Pinning)</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#HSTS-HTTP-Strict-Transport-Security"><span class="toc-text">HSTS (HTTP Strict-Transport-Security)</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%89%8D%E7%AB%AFxss%E8%BF%87%E6%BB%A4"><span class="toc-text">前端xss过滤</span></a></li></ol>
 </div>
       
         <h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h3><p><strong>XSS</strong> (Cross-Site Script) 攻击又叫跨站脚本攻击, 本质是一种注入攻击. 其原理, 简单的说就是利用各种手段把恶意代码添加到网页中, 并让受害者执行这段脚本. XSS能做用户使用浏览器能做的一切事情. 伟大的同源策略也无法保证不受XSS攻击，因为此时攻击者就在同源之内.</p>
@@ -656,7 +655,9 @@ text/live script
 </script>
     </div>
     
-  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
 
 
 <script>
@@ -672,8 +673,13 @@ text/live script
 		open_in_new: false
 	}
 </script>
+
 <script src="/js/jquery-1.9.1.min.js"></script>
+
+
 <script src="/js/main.js"></script>
+
+
 <script src="/js/content.js"></script>
 
 
@@ -682,9 +688,12 @@ text/live script
 
 
 
+
 </div>
+
 <script src="/js/screenfull.js"></script>
-<a href="https://github.com/Louiszhai" style="position: fixed; top: 0; right: 0; border: 0;z-index:9999"><img
+
+<a target="_blank" rel="noopener" href="https://github.com/Louiszhai" style="position: fixed; top: 0; right: 0; border: 0;z-index:9999"><img
             source="https://camo.githubusercontent.com/a6677b08c955af8400f44c6298f40e7d19cc5b2d/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677261795f3664366436642e706e67"
             src="/img/fork_me_on_github.png" alt="Fork me on GitHub"
             data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png"></a>

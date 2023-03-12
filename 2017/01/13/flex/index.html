@@ -7,19 +7,20 @@
   <title>弹性盒模型Flex指南 | louis blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="弹性盒模型 flex flex-grow flex-shrink flex-basis align-items align-content order flex-flow flex-direction flex-wrap align-self">
-<meta name="keywords" content="CSS">
 <meta property="og:type" content="article">
 <meta property="og:title" content="弹性盒模型Flex指南">
 <meta property="og:url" content="http://louiszhai.github.io/2017/01/13/flex/index.html">
 <meta property="og:site_name" content="louis blog">
 <meta property="og:description" content="弹性盒模型 flex flex-grow flex-shrink flex-basis align-items align-content order flex-flow flex-direction flex-wrap align-self">
+<meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://louiszhai.github.io/docImages/flex01.jpeg">
 <meta property="og:image" content="http://louiszhai.github.io/docImages/flex03.png">
 <meta property="og:image" content="http://louiszhai.github.io/docImages/flex02.png">
-<meta property="og:updated_time" content="2020-06-04T06:41:16.511Z">
+<meta property="article:published_time" content="2017-01-13T00:42:01.000Z">
+<meta property="article:modified_time" content="2020-06-04T06:41:16.511Z">
+<meta property="article:author" content="路易斯">
+<meta property="article:tag" content="CSS">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="弹性盒模型Flex指南">
-<meta name="twitter:description" content="弹性盒模型 flex flex-grow flex-shrink flex-basis align-items align-content order flex-flow flex-direction flex-wrap align-self">
 <meta name="twitter:image" content="http://louiszhai.github.io/docImages/flex01.jpeg">
   
     <link rel="alternative" href="/atom.xml" title="louis blog" type="application/atom+xml">
@@ -27,8 +28,10 @@
   
     <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
   
-  <link rel="stylesheet" href="/css/style.css">
-</head>
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 6.3.0"></head>
 
 <body>
 <div id="container">
@@ -45,11 +48,9 @@
 		</a>
 
 		<hgroup>
-		  <h1 class="header-author"><a href="/">路易斯</a></h1>
+		  <h1 class="header-author"><a href="/">undefined</a></h1>
 		</hgroup>
 
-		
-		<p class="header-subtitle">坚持原著, 深度思考, 力求简单通俗叙事</p>
 		
 
 		
@@ -143,7 +144,7 @@
         <nav id="mobile-nav">
   	<div class="overlay">
   		<div class="slider-trigger"></div>
-  		<h1 class="header-author js-mobile-header hide">路易斯</h1>
+  		<h1 class="header-author js-mobile-header hide">undefined</h1>
   	</div>
 	<div class="intrude-less">
 		<header id="header" class="inner">
@@ -153,10 +154,8 @@
 			
 			</div>
 			<hgroup>
-			  <h1 class="header-author">路易斯</h1>
+			  <h1 class="header-author">undefined</h1>
 			</hgroup>
-			
-			<p class="header-subtitle">坚持原著, 深度思考, 力求简单通俗叙事</p>
 			
 			<nav class="header-menu">
 				<ul>
@@ -207,7 +206,7 @@
       <div class="article-info article-info-post">
         
 	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CSS/">CSS</a></li></ul>
+		<ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CSS/" rel="tag">CSS</a></li></ul>
 	</div>
 
         
@@ -221,7 +220,7 @@
           <span class="toc-arrow"></span>
 <div id="toc" class="toc-article">
     <div class="toc-title">目录</div>
-    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#导读"><span class="toc-text">导读</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Flex"><span class="toc-text">Flex</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#兼容性"><span class="toc-text">兼容性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Autoprefixer"><span class="toc-text">Autoprefixer</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#优势"><span class="toc-text">优势</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#概念铺垫"><span class="toc-text">概念铺垫</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#属性"><span class="toc-text">属性</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#容器属性"><span class="toc-text">容器属性</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#子项目属性"><span class="toc-text">子项目属性</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#flex属性的优先级"><span class="toc-text">flex属性的优先级</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#场景回顾"><span class="toc-text">场景回顾</span></a></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%BC%E8%AF%BB"><span class="toc-text">导读</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Flex"><span class="toc-text">Flex</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%BC%E5%AE%B9%E6%80%A7"><span class="toc-text">兼容性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Autoprefixer"><span class="toc-text">Autoprefixer</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E5%8A%BF"><span class="toc-text">优势</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A6%82%E5%BF%B5%E9%93%BA%E5%9E%AB"><span class="toc-text">概念铺垫</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B1%9E%E6%80%A7"><span class="toc-text">属性</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%B9%E5%99%A8%E5%B1%9E%E6%80%A7"><span class="toc-text">容器属性</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AD%90%E9%A1%B9%E7%9B%AE%E5%B1%9E%E6%80%A7"><span class="toc-text">子项目属性</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#flex%E5%B1%9E%E6%80%A7%E7%9A%84%E4%BC%98%E5%85%88%E7%BA%A7"><span class="toc-text">flex属性的优先级</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%BA%E6%99%AF%E5%9B%9E%E9%A1%BE"><span class="toc-text">场景回顾</span></a></li></ol>
 </div>
       
         <h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h3><p>Web layout 是Web UI中的基础架构, 重要性不言而喻. 传统的盒模型, 借助display, position, float 属性应对普通布局游刃有余, 但针对复杂的或自适应布局, 常常捉襟见肘. 比如垂直居中, 就是一个老大难的问题, 借助flex弹性盒模型, 两行代码就可以优雅的实现之. (该方法曾在 <a href="http://louiszhai.github.io/2016/03/12/css-center/">16种方法实现水平居中垂直居中</a> 一文中提到). 当然, 本次我们不会只讨论垂直居中的问题, 我将努力尽可能的还原flex的应用场景.</p>
@@ -731,7 +730,9 @@
 </script>
     </div>
     
-  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
 
 
 <script>
@@ -747,8 +748,13 @@
 		open_in_new: false
 	}
 </script>
+
 <script src="/js/jquery-1.9.1.min.js"></script>
+
+
 <script src="/js/main.js"></script>
+
+
 <script src="/js/content.js"></script>
 
 
@@ -757,9 +763,12 @@
 
 
 
+
 </div>
+
 <script src="/js/screenfull.js"></script>
-<a href="https://github.com/Louiszhai" style="position: fixed; top: 0; right: 0; border: 0;z-index:9999"><img
+
+<a target="_blank" rel="noopener" href="https://github.com/Louiszhai" style="position: fixed; top: 0; right: 0; border: 0;z-index:9999"><img
             source="https://camo.githubusercontent.com/a6677b08c955af8400f44c6298f40e7d19cc5b2d/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677261795f3664366436642e706e67"
             src="/img/fork_me_on_github.png" alt="Fork me on GitHub"
             data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png"></a>

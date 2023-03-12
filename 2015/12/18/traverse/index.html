@@ -7,24 +7,27 @@
   <title>详解JS遍历 | louis blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="JavaScript traverse 遍历 数组 对象 map every forEach forin $.each for while">
-<meta name="keywords" content="JavaScript">
 <meta property="og:type" content="article">
 <meta property="og:title" content="详解JS遍历">
 <meta property="og:url" content="http://louiszhai.github.io/2015/12/18/traverse/index.html">
 <meta property="og:site_name" content="louis blog">
 <meta property="og:description" content="JavaScript traverse 遍历 数组 对象 map every forEach forin $.each for while">
-<meta property="og:updated_time" content="2019-12-02T03:28:32.898Z">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2015-12-18T02:54:48.000Z">
+<meta property="article:modified_time" content="2019-12-02T03:28:32.898Z">
+<meta property="article:author" content="路易斯">
+<meta property="article:tag" content="JavaScript">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="详解JS遍历">
-<meta name="twitter:description" content="JavaScript traverse 遍历 数组 对象 map every forEach forin $.each for while">
   
     <link rel="alternative" href="/atom.xml" title="louis blog" type="application/atom+xml">
   
   
     <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
   
-  <link rel="stylesheet" href="/css/style.css">
-</head>
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 6.3.0"></head>
 
 <body>
 <div id="container">
@@ -41,11 +44,9 @@
 		</a>
 
 		<hgroup>
-		  <h1 class="header-author"><a href="/">路易斯</a></h1>
+		  <h1 class="header-author"><a href="/">undefined</a></h1>
 		</hgroup>
 
-		
-		<p class="header-subtitle">坚持原著, 深度思考, 力求简单通俗叙事</p>
 		
 
 		
@@ -139,7 +140,7 @@
         <nav id="mobile-nav">
   	<div class="overlay">
   		<div class="slider-trigger"></div>
-  		<h1 class="header-author js-mobile-header hide">路易斯</h1>
+  		<h1 class="header-author js-mobile-header hide">undefined</h1>
   	</div>
 	<div class="intrude-less">
 		<header id="header" class="inner">
@@ -149,10 +150,8 @@
 			
 			</div>
 			<hgroup>
-			  <h1 class="header-author">路易斯</h1>
+			  <h1 class="header-author">undefined</h1>
 			</hgroup>
-			
-			<p class="header-subtitle">坚持原著, 深度思考, 力求简单通俗叙事</p>
 			
 			<nav class="header-menu">
 				<ul>
@@ -203,7 +202,7 @@
       <div class="article-info article-info-post">
         
 	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/">JavaScript</a></li></ul>
+		<ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/" rel="tag">JavaScript</a></li></ul>
 	</div>
 
         
@@ -217,7 +216,7 @@
           <span class="toc-arrow"></span>
 <div id="toc" class="toc-article">
     <div class="toc-title">目录</div>
-    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#导读"><span class="toc-text">导读</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#概述"><span class="toc-text">概述</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#for"><span class="toc-text">for</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#do-while"><span class="toc-text">do/while</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#forEach"><span class="toc-text">forEach</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#for-in"><span class="toc-text">for in</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#each"><span class="toc-text">$.each</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#selecter-each"><span class="toc-text">$(selecter).each</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#map"><span class="toc-text">map</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#every"><span class="toc-text">every</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#测试各方法效率"><span class="toc-text">测试各方法效率</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#数组长度为10-6"><span class="toc-text">数组长度为10^6</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#数组长度为10-7"><span class="toc-text">数组长度为10^7</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#数组长度为10-8"><span class="toc-text">数组长度为10^8</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#数组赋值后-数组长度为10-6"><span class="toc-text">数组赋值后, 数组长度为10^6</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#数组赋值后-数组长度为10-7"><span class="toc-text">数组赋值后, 数组长度为10^7</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#分析总结"><span class="toc-text">分析总结</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#基于测试结果的两点思考"><span class="toc-text">基于测试结果的两点思考</span></a></li></ol></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%BC%E8%AF%BB"><span class="toc-text">导读</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A6%82%E8%BF%B0"><span class="toc-text">概述</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#for"><span class="toc-text">for</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#do-while"><span class="toc-text">do&#x2F;while</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#forEach"><span class="toc-text">forEach</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#for-in"><span class="toc-text">for in</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#each"><span class="toc-text">$.each</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#selecter-each"><span class="toc-text">$(selecter).each</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#map"><span class="toc-text">map</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#every"><span class="toc-text">every</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B5%8B%E8%AF%95%E5%90%84%E6%96%B9%E6%B3%95%E6%95%88%E7%8E%87"><span class="toc-text">测试各方法效率</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%95%B0%E7%BB%84%E9%95%BF%E5%BA%A6%E4%B8%BA10-6"><span class="toc-text">数组长度为10^6</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%95%B0%E7%BB%84%E9%95%BF%E5%BA%A6%E4%B8%BA10-7"><span class="toc-text">数组长度为10^7</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%95%B0%E7%BB%84%E9%95%BF%E5%BA%A6%E4%B8%BA10-8"><span class="toc-text">数组长度为10^8</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%95%B0%E7%BB%84%E8%B5%8B%E5%80%BC%E5%90%8E-%E6%95%B0%E7%BB%84%E9%95%BF%E5%BA%A6%E4%B8%BA10-6"><span class="toc-text">数组赋值后, 数组长度为10^6</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%95%B0%E7%BB%84%E8%B5%8B%E5%80%BC%E5%90%8E-%E6%95%B0%E7%BB%84%E9%95%BF%E5%BA%A6%E4%B8%BA10-7"><span class="toc-text">数组赋值后, 数组长度为10^7</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%86%E6%9E%90%E6%80%BB%E7%BB%93"><span class="toc-text">分析总结</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9F%BA%E4%BA%8E%E6%B5%8B%E8%AF%95%E7%BB%93%E6%9E%9C%E7%9A%84%E4%B8%A4%E7%82%B9%E6%80%9D%E8%80%83"><span class="toc-text">基于测试结果的两点思考</span></a></li></ol></li></ol>
 </div>
       
         <h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h3><p>遍历数组或对象是一名程序员的基本素养之一. 然而遍历却不是一件简单的事, 优秀的程序员知道怎么去选择合适的遍历方法, 优化遍历效率. 本篇将带你走进JavaScript遍历的世界, 享受分析JS循环的快感. 本篇所有代码都可以直接运行, 希望您通读本篇后, 不止是浏览, 最好是亲手去实践下.</p>
@@ -1084,7 +1083,9 @@ for(var i=0;i&lt;length;i++){
 </script>
     </div>
     
-  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
 
 
 <script>
@@ -1100,8 +1101,13 @@ for(var i=0;i&lt;length;i++){
 		open_in_new: false
 	}
 </script>
+
 <script src="/js/jquery-1.9.1.min.js"></script>
+
+
 <script src="/js/main.js"></script>
+
+
 <script src="/js/content.js"></script>
 
 
@@ -1110,9 +1116,12 @@ for(var i=0;i&lt;length;i++){
 
 
 
+
 </div>
+
 <script src="/js/screenfull.js"></script>
-<a href="https://github.com/Louiszhai" style="position: fixed; top: 0; right: 0; border: 0;z-index:9999"><img
+
+<a target="_blank" rel="noopener" href="https://github.com/Louiszhai" style="position: fixed; top: 0; right: 0; border: 0;z-index:9999"><img
             source="https://camo.githubusercontent.com/a6677b08c955af8400f44c6298f40e7d19cc5b2d/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677261795f3664366436642e706e67"
             src="/img/fork_me_on_github.png" alt="Fork me on GitHub"
             data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png"></a>

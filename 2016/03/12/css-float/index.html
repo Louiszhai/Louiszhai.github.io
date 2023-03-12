@@ -7,24 +7,27 @@
   <title>float深入分析 | louis blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="css float clear:both overflow:auto 文档流">
-<meta name="keywords" content="CSS">
 <meta property="og:type" content="article">
 <meta property="og:title" content="float深入分析">
 <meta property="og:url" content="http://louiszhai.github.io/2016/03/12/css-float/index.html">
 <meta property="og:site_name" content="louis blog">
 <meta property="og:description" content="css float clear:both overflow:auto 文档流">
-<meta property="og:updated_time" content="2019-12-02T03:28:32.879Z">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2016-03-12T09:55:04.000Z">
+<meta property="article:modified_time" content="2019-12-02T03:28:32.879Z">
+<meta property="article:author" content="路易斯">
+<meta property="article:tag" content="CSS">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="float深入分析">
-<meta name="twitter:description" content="css float clear:both overflow:auto 文档流">
   
     <link rel="alternative" href="/atom.xml" title="louis blog" type="application/atom+xml">
   
   
     <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
   
-  <link rel="stylesheet" href="/css/style.css">
-</head>
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 6.3.0"></head>
 
 <body>
 <div id="container">
@@ -41,11 +44,9 @@
 		</a>
 
 		<hgroup>
-		  <h1 class="header-author"><a href="/">路易斯</a></h1>
+		  <h1 class="header-author"><a href="/">undefined</a></h1>
 		</hgroup>
 
-		
-		<p class="header-subtitle">坚持原著, 深度思考, 力求简单通俗叙事</p>
 		
 
 		
@@ -139,7 +140,7 @@
         <nav id="mobile-nav">
   	<div class="overlay">
   		<div class="slider-trigger"></div>
-  		<h1 class="header-author js-mobile-header hide">路易斯</h1>
+  		<h1 class="header-author js-mobile-header hide">undefined</h1>
   	</div>
 	<div class="intrude-less">
 		<header id="header" class="inner">
@@ -149,10 +150,8 @@
 			
 			</div>
 			<hgroup>
-			  <h1 class="header-author">路易斯</h1>
+			  <h1 class="header-author">undefined</h1>
 			</hgroup>
-			
-			<p class="header-subtitle">坚持原著, 深度思考, 力求简单通俗叙事</p>
 			
 			<nav class="header-menu">
 				<ul>
@@ -203,7 +202,7 @@
       <div class="article-info article-info-post">
         
 	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CSS/">CSS</a></li></ul>
+		<ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CSS/" rel="tag">CSS</a></li></ul>
 	</div>
 
         
@@ -217,7 +216,7 @@
           <span class="toc-arrow"></span>
 <div id="toc" class="toc-article">
     <div class="toc-title">目录</div>
-    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#导读"><span class="toc-text">导读</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#float对布局的影响"><span class="toc-text">float对布局的影响</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#对行框的影响"><span class="toc-text">对行框的影响</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#对父元素的影响"><span class="toc-text">对父元素的影响</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#对兄弟元素的影响"><span class="toc-text">对兄弟元素的影响</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#对兄弟元素-浮动-的影响"><span class="toc-text">对兄弟元素(浮动)的影响</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#对自身元素的影响"><span class="toc-text">对自身元素的影响</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#对子元素的影响"><span class="toc-text">对子元素的影响</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#对父元素非浮动兄弟元素的影响"><span class="toc-text">对父元素非浮动兄弟元素的影响</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#对父元素浮动兄弟元素的影响"><span class="toc-text">对父元素浮动兄弟元素的影响</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#清除浮动的2种方法"><span class="toc-text">清除浮动的2种方法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#overflow"><span class="toc-text">overflow</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#after伪类"><span class="toc-text">after伪类</span></a></li></ol></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%BC%E8%AF%BB"><span class="toc-text">导读</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#float%E5%AF%B9%E5%B8%83%E5%B1%80%E7%9A%84%E5%BD%B1%E5%93%8D"><span class="toc-text">float对布局的影响</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AF%B9%E8%A1%8C%E6%A1%86%E7%9A%84%E5%BD%B1%E5%93%8D"><span class="toc-text">对行框的影响</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AF%B9%E7%88%B6%E5%85%83%E7%B4%A0%E7%9A%84%E5%BD%B1%E5%93%8D"><span class="toc-text">对父元素的影响</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AF%B9%E5%85%84%E5%BC%9F%E5%85%83%E7%B4%A0%E7%9A%84%E5%BD%B1%E5%93%8D"><span class="toc-text">对兄弟元素的影响</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AF%B9%E5%85%84%E5%BC%9F%E5%85%83%E7%B4%A0-%E6%B5%AE%E5%8A%A8-%E7%9A%84%E5%BD%B1%E5%93%8D"><span class="toc-text">对兄弟元素(浮动)的影响</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AF%B9%E8%87%AA%E8%BA%AB%E5%85%83%E7%B4%A0%E7%9A%84%E5%BD%B1%E5%93%8D"><span class="toc-text">对自身元素的影响</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AF%B9%E5%AD%90%E5%85%83%E7%B4%A0%E7%9A%84%E5%BD%B1%E5%93%8D"><span class="toc-text">对子元素的影响</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AF%B9%E7%88%B6%E5%85%83%E7%B4%A0%E9%9D%9E%E6%B5%AE%E5%8A%A8%E5%85%84%E5%BC%9F%E5%85%83%E7%B4%A0%E7%9A%84%E5%BD%B1%E5%93%8D"><span class="toc-text">对父元素非浮动兄弟元素的影响</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AF%B9%E7%88%B6%E5%85%83%E7%B4%A0%E6%B5%AE%E5%8A%A8%E5%85%84%E5%BC%9F%E5%85%83%E7%B4%A0%E7%9A%84%E5%BD%B1%E5%93%8D"><span class="toc-text">对父元素浮动兄弟元素的影响</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B8%85%E9%99%A4%E6%B5%AE%E5%8A%A8%E7%9A%842%E7%A7%8D%E6%96%B9%E6%B3%95"><span class="toc-text">清除浮动的2种方法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#overflow"><span class="toc-text">overflow</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#after%E4%BC%AA%E7%B1%BB"><span class="toc-text">after伪类</span></a></li></ol></li></ol>
 </div>
       
         <h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h3><p>float即浮动, 使用float, 该浮动元素便会脱离正常的文档流, 使其浮动到父元素的行的一端(元素向左或向右移动, 直到碰到浮动元素, 或者达到父元素内容的边界, 不包括padding), 并且其他元素将忽略该浮动元素并填补其原先的空间.</p>
@@ -497,7 +496,9 @@
 </script>
     </div>
     
-  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
 
 
 <script>
@@ -513,8 +514,13 @@
 		open_in_new: false
 	}
 </script>
+
 <script src="/js/jquery-1.9.1.min.js"></script>
+
+
 <script src="/js/main.js"></script>
+
+
 <script src="/js/content.js"></script>
 
 
@@ -523,9 +529,12 @@
 
 
 
+
 </div>
+
 <script src="/js/screenfull.js"></script>
-<a href="https://github.com/Louiszhai" style="position: fixed; top: 0; right: 0; border: 0;z-index:9999"><img
+
+<a target="_blank" rel="noopener" href="https://github.com/Louiszhai" style="position: fixed; top: 0; right: 0; border: 0;z-index:9999"><img
             source="https://camo.githubusercontent.com/a6677b08c955af8400f44c6298f40e7d19cc5b2d/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677261795f3664366436642e706e67"
             src="/img/fork_me_on_github.png" alt="Fork me on GitHub"
             data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png"></a>

@@ -7,17 +7,18 @@
   <title>由同源策略到前端跨域 | louis blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="JavaScript Same-Origin 同源策略 跨域 jsonp postMessage CORS domain">
-<meta name="keywords" content="JavaScript">
 <meta property="og:type" content="article">
 <meta property="og:title" content="由同源策略到前端跨域">
 <meta property="og:url" content="http://louiszhai.github.io/2016/01/11/cross-domain/index.html">
 <meta property="og:site_name" content="louis blog">
 <meta property="og:description" content="JavaScript Same-Origin 同源策略 跨域 jsonp postMessage CORS domain">
+<meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://louiszhai.github.io/docImages/cross-domain03.jpg">
-<meta property="og:updated_time" content="2019-12-02T03:28:32.877Z">
+<meta property="article:published_time" content="2016-01-11T00:01:33.000Z">
+<meta property="article:modified_time" content="2019-12-02T03:28:32.877Z">
+<meta property="article:author" content="路易斯">
+<meta property="article:tag" content="JavaScript">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="由同源策略到前端跨域">
-<meta name="twitter:description" content="JavaScript Same-Origin 同源策略 跨域 jsonp postMessage CORS domain">
 <meta name="twitter:image" content="http://louiszhai.github.io/docImages/cross-domain03.jpg">
   
     <link rel="alternative" href="/atom.xml" title="louis blog" type="application/atom+xml">
@@ -25,8 +26,10 @@
   
     <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
   
-  <link rel="stylesheet" href="/css/style.css">
-</head>
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 6.3.0"></head>
 
 <body>
 <div id="container">
@@ -43,11 +46,9 @@
 		</a>
 
 		<hgroup>
-		  <h1 class="header-author"><a href="/">路易斯</a></h1>
+		  <h1 class="header-author"><a href="/">undefined</a></h1>
 		</hgroup>
 
-		
-		<p class="header-subtitle">坚持原著, 深度思考, 力求简单通俗叙事</p>
 		
 
 		
@@ -141,7 +142,7 @@
         <nav id="mobile-nav">
   	<div class="overlay">
   		<div class="slider-trigger"></div>
-  		<h1 class="header-author js-mobile-header hide">路易斯</h1>
+  		<h1 class="header-author js-mobile-header hide">undefined</h1>
   	</div>
 	<div class="intrude-less">
 		<header id="header" class="inner">
@@ -151,10 +152,8 @@
 			
 			</div>
 			<hgroup>
-			  <h1 class="header-author">路易斯</h1>
+			  <h1 class="header-author">undefined</h1>
 			</hgroup>
-			
-			<p class="header-subtitle">坚持原著, 深度思考, 力求简单通俗叙事</p>
 			
 			<nav class="header-menu">
 				<ul>
@@ -205,7 +204,7 @@
       <div class="article-info article-info-post">
         
 	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/">JavaScript</a></li></ul>
+		<ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/" rel="tag">JavaScript</a></li></ul>
 	</div>
 
         
@@ -219,7 +218,7 @@
           <span class="toc-arrow"></span>
 <div id="toc" class="toc-article">
     <div class="toc-title">目录</div>
-    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#导读"><span class="toc-text">导读</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#同源策略的限制"><span class="toc-text">同源策略的限制</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#iframe限制"><span class="toc-text">iframe限制</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Ajax限制"><span class="toc-text">Ajax限制</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Script限制"><span class="toc-text">Script限制</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#注意"><span class="toc-text">注意</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#跨域访问"><span class="toc-text">跨域访问</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#使用代理"><span class="toc-text">使用代理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#JSONP"><span class="toc-text">JSONP</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#postMessage"><span class="toc-text">postMessage</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#CORS-跨域访问"><span class="toc-text">CORS 跨域访问</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#document-domain"><span class="toc-text">document.domain</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#Internet-Explorer同源策略绕过"><span class="toc-text">Internet Explorer同源策略绕过</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#window-name"><span class="toc-text">window.name</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#location-hash"><span class="toc-text">location.hash</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Access-Control"><span class="toc-text">Access Control</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#flash-URLLoder"><span class="toc-text">flash URLLoder</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#WebSocket"><span class="toc-text">WebSocket</span></a></li></ol></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%BC%E8%AF%BB"><span class="toc-text">导读</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%90%8C%E6%BA%90%E7%AD%96%E7%95%A5%E7%9A%84%E9%99%90%E5%88%B6"><span class="toc-text">同源策略的限制</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#iframe%E9%99%90%E5%88%B6"><span class="toc-text">iframe限制</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Ajax%E9%99%90%E5%88%B6"><span class="toc-text">Ajax限制</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Script%E9%99%90%E5%88%B6"><span class="toc-text">Script限制</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B3%A8%E6%84%8F"><span class="toc-text">注意</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B7%A8%E5%9F%9F%E8%AE%BF%E9%97%AE"><span class="toc-text">跨域访问</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E4%BB%A3%E7%90%86"><span class="toc-text">使用代理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#JSONP"><span class="toc-text">JSONP</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#postMessage"><span class="toc-text">postMessage</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#CORS-%E8%B7%A8%E5%9F%9F%E8%AE%BF%E9%97%AE"><span class="toc-text">CORS 跨域访问</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#document-domain"><span class="toc-text">document.domain</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#Internet-Explorer%E5%90%8C%E6%BA%90%E7%AD%96%E7%95%A5%E7%BB%95%E8%BF%87"><span class="toc-text">Internet Explorer同源策略绕过</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#window-name"><span class="toc-text">window.name</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#location-hash"><span class="toc-text">location.hash</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Access-Control"><span class="toc-text">Access Control</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#flash-URLLoder"><span class="toc-text">flash URLLoder</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#WebSocket"><span class="toc-text">WebSocket</span></a></li></ol></li></ol>
 </div>
       
         <h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h3><p>同源策略 (Same-Origin Policy) 最早由 Netscape 公司提出, 所谓同源就是要求, 域名, 协议, 端口相同. 非同源的脚本不能访问或者操作其他域的页面对象(如DOM等). 作为著名的安全策略, 虽然它只是一个规范, 并不强制要求,  但现在所有支持 javaScript 的浏览器都会使用这个策略. 以至于该策略成为浏览器最核心最基本的安全功能, 如果缺少了同源策略, web的安全将无从谈起.</p>
@@ -606,7 +605,9 @@ console.log(document.domain);
 </script>
     </div>
     
-  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
 
 
 <script>
@@ -622,8 +623,13 @@ console.log(document.domain);
 		open_in_new: false
 	}
 </script>
+
 <script src="/js/jquery-1.9.1.min.js"></script>
+
+
 <script src="/js/main.js"></script>
+
+
 <script src="/js/content.js"></script>
 
 
@@ -632,9 +638,12 @@ console.log(document.domain);
 
 
 
+
 </div>
+
 <script src="/js/screenfull.js"></script>
-<a href="https://github.com/Louiszhai" style="position: fixed; top: 0; right: 0; border: 0;z-index:9999"><img
+
+<a target="_blank" rel="noopener" href="https://github.com/Louiszhai" style="position: fixed; top: 0; right: 0; border: 0;z-index:9999"><img
             source="https://camo.githubusercontent.com/a6677b08c955af8400f44c6298f40e7d19cc5b2d/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677261795f3664366436642e706e67"
             src="/img/fork_me_on_github.png" alt="Fork me on GitHub"
             data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png"></a>

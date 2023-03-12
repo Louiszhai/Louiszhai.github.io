@@ -7,12 +7,12 @@
   <title>JS中可能用得到的全部的排序算法 | louis blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="算法 冒泡排序 双向冒泡排序 选择排序 插入排序 直接插入排序 折半插入排序 希尔排序 归并排序 快速排序 堆排序 计数排序 桶排序 基数排序">
-<meta name="keywords" content="JavaScript">
 <meta property="og:type" content="article">
 <meta property="og:title" content="JS中可能用得到的全部的排序算法">
 <meta property="og:url" content="http://louiszhai.github.io/2016/12/23/sort/index.html">
 <meta property="og:site_name" content="louis blog">
 <meta property="og:description" content="算法 冒泡排序 双向冒泡排序 选择排序 插入排序 直接插入排序 折半插入排序 希尔排序 归并排序 快速排序 堆排序 计数排序 桶排序 基数排序">
+<meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://louiszhai.github.io/docImages/sort02.gif">
 <meta property="og:image" content="http://louiszhai.github.io/docImages/sort05.gif">
 <meta property="og:image" content="http://louiszhai.github.io/docImages/sort06.gif">
@@ -26,10 +26,11 @@
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1867034-bf2472770e2258a9.gif?imageMogr2/auto-orient/strip">
 <meta property="og:image" content="http://louiszhai.github.io/docImages/sort10.gif">
 <meta property="og:image" content="http://louiszhai.github.io//docImages/sort11.gif">
-<meta property="og:updated_time" content="2019-12-02T03:28:32.896Z">
+<meta property="article:published_time" content="2016-12-23T03:55:14.000Z">
+<meta property="article:modified_time" content="2019-12-02T03:28:32.896Z">
+<meta property="article:author" content="路易斯">
+<meta property="article:tag" content="JavaScript">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="JS中可能用得到的全部的排序算法">
-<meta name="twitter:description" content="算法 冒泡排序 双向冒泡排序 选择排序 插入排序 直接插入排序 折半插入排序 希尔排序 归并排序 快速排序 堆排序 计数排序 桶排序 基数排序">
 <meta name="twitter:image" content="http://louiszhai.github.io/docImages/sort02.gif">
   
     <link rel="alternative" href="/atom.xml" title="louis blog" type="application/atom+xml">
@@ -37,8 +38,10 @@
   
     <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
   
-  <link rel="stylesheet" href="/css/style.css">
-</head>
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 6.3.0"></head>
 
 <body>
 <div id="container">
@@ -55,11 +58,9 @@
 		</a>
 
 		<hgroup>
-		  <h1 class="header-author"><a href="/">路易斯</a></h1>
+		  <h1 class="header-author"><a href="/">undefined</a></h1>
 		</hgroup>
 
-		
-		<p class="header-subtitle">坚持原著, 深度思考, 力求简单通俗叙事</p>
 		
 
 		
@@ -153,7 +154,7 @@
         <nav id="mobile-nav">
   	<div class="overlay">
   		<div class="slider-trigger"></div>
-  		<h1 class="header-author js-mobile-header hide">路易斯</h1>
+  		<h1 class="header-author js-mobile-header hide">undefined</h1>
   	</div>
 	<div class="intrude-less">
 		<header id="header" class="inner">
@@ -163,10 +164,8 @@
 			
 			</div>
 			<hgroup>
-			  <h1 class="header-author">路易斯</h1>
+			  <h1 class="header-author">undefined</h1>
 			</hgroup>
-			
-			<p class="header-subtitle">坚持原著, 深度思考, 力求简单通俗叙事</p>
 			
 			<nav class="header-menu">
 				<ul>
@@ -217,7 +216,7 @@
       <div class="article-info article-info-post">
         
 	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/">JavaScript</a></li></ul>
+		<ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/" rel="tag">JavaScript</a></li></ul>
 	</div>
 
         
@@ -231,7 +230,7 @@
           <span class="toc-arrow"></span>
 <div id="toc" class="toc-article">
     <div class="toc-title">目录</div>
-    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#导读"><span class="toc-text">导读</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#冒泡排序"><span class="toc-text">冒泡排序</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#双向冒泡排序"><span class="toc-text">双向冒泡排序</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#选择排序"><span class="toc-text">选择排序</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#插入排序"><span class="toc-text">插入排序</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#直接插入排序"><span class="toc-text">直接插入排序</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#折半插入排序"><span class="toc-text">折半插入排序</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#希尔排序"><span class="toc-text">希尔排序</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#归并排序"><span class="toc-text">归并排序</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#快速排序"><span class="toc-text">快速排序</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#堆排序"><span class="toc-text">堆排序</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#计数排序"><span class="toc-text">计数排序</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#桶排序"><span class="toc-text">桶排序</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#基数排序"><span class="toc-text">基数排序</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#小结"><span class="toc-text">小结</span></a></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%BC%E8%AF%BB"><span class="toc-text">导读</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%86%92%E6%B3%A1%E6%8E%92%E5%BA%8F"><span class="toc-text">冒泡排序</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%8C%E5%90%91%E5%86%92%E6%B3%A1%E6%8E%92%E5%BA%8F"><span class="toc-text">双向冒泡排序</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%89%E6%8B%A9%E6%8E%92%E5%BA%8F"><span class="toc-text">选择排序</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8F%92%E5%85%A5%E6%8E%92%E5%BA%8F"><span class="toc-text">插入排序</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%9B%B4%E6%8E%A5%E6%8F%92%E5%85%A5%E6%8E%92%E5%BA%8F"><span class="toc-text">直接插入排序</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%8A%98%E5%8D%8A%E6%8F%92%E5%85%A5%E6%8E%92%E5%BA%8F"><span class="toc-text">折半插入排序</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B8%8C%E5%B0%94%E6%8E%92%E5%BA%8F"><span class="toc-text">希尔排序</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BD%92%E5%B9%B6%E6%8E%92%E5%BA%8F"><span class="toc-text">归并排序</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F"><span class="toc-text">快速排序</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A0%86%E6%8E%92%E5%BA%8F"><span class="toc-text">堆排序</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%A1%E6%95%B0%E6%8E%92%E5%BA%8F"><span class="toc-text">计数排序</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A1%B6%E6%8E%92%E5%BA%8F"><span class="toc-text">桶排序</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E6%95%B0%E6%8E%92%E5%BA%8F"><span class="toc-text">基数排序</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B0%8F%E7%BB%93"><span class="toc-text">小结</span></a></li></ol>
 </div>
       
         <h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h3><p>排序算法可以称得上是我的盲点, 曾几何时当我知道Chrome的Array.prototype.sort使用了快速排序时, 我的内心是奔溃的(啥是快排, 我只知道冒泡啊?!), 要知道学习一门技术最好的时间是三年前, 但愿我现在补习还来得及(捂脸).</p>
@@ -1172,7 +1171,9 @@ countSort(b, &#39;id&#39;); // [{id:1,s:&#39;b&#39;},{id:1,s:&#39;c&#39;},{id:1,
 </script>
     </div>
     
-  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
 
 
 <script>
@@ -1188,8 +1189,13 @@ countSort(b, &#39;id&#39;); // [{id:1,s:&#39;b&#39;},{id:1,s:&#39;c&#39;},{id:1,
 		open_in_new: false
 	}
 </script>
+
 <script src="/js/jquery-1.9.1.min.js"></script>
+
+
 <script src="/js/main.js"></script>
+
+
 <script src="/js/content.js"></script>
 
 
@@ -1198,9 +1204,12 @@ countSort(b, &#39;id&#39;); // [{id:1,s:&#39;b&#39;},{id:1,s:&#39;c&#39;},{id:1,
 
 
 
+
 </div>
+
 <script src="/js/screenfull.js"></script>
-<a href="https://github.com/Louiszhai" style="position: fixed; top: 0; right: 0; border: 0;z-index:9999"><img
+
+<a target="_blank" rel="noopener" href="https://github.com/Louiszhai" style="position: fixed; top: 0; right: 0; border: 0;z-index:9999"><img
             source="https://camo.githubusercontent.com/a6677b08c955af8400f44c6298f40e7d19cc5b2d/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677261795f3664366436642e706e67"
             src="/img/fork_me_on_github.png" alt="Fork me on GitHub"
             data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png"></a>

@@ -7,17 +7,18 @@
   <title>详解prototype与__proto__ | louis blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="JavaScript prototype __proto__ 原型 内部原型 new constructor 原型链查询">
-<meta name="keywords" content="JavaScript">
 <meta property="og:type" content="article">
 <meta property="og:title" content="详解prototype与__proto__">
 <meta property="og:url" content="http://louiszhai.github.io/2015/12/17/prototype/index.html">
 <meta property="og:site_name" content="louis blog">
 <meta property="og:description" content="JavaScript prototype __proto__ 原型 内部原型 new constructor 原型链查询">
+<meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://louiszhai.github.io/docImages/prototype.png">
-<meta property="og:updated_time" content="2019-12-02T03:28:32.891Z">
+<meta property="article:published_time" content="2015-12-17T01:34:36.000Z">
+<meta property="article:modified_time" content="2019-12-02T03:28:32.891Z">
+<meta property="article:author" content="路易斯">
+<meta property="article:tag" content="JavaScript">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="详解prototype与__proto__">
-<meta name="twitter:description" content="JavaScript prototype __proto__ 原型 内部原型 new constructor 原型链查询">
 <meta name="twitter:image" content="http://louiszhai.github.io/docImages/prototype.png">
   
     <link rel="alternative" href="/atom.xml" title="louis blog" type="application/atom+xml">
@@ -25,8 +26,10 @@
   
     <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
   
-  <link rel="stylesheet" href="/css/style.css">
-</head>
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 6.3.0"></head>
 
 <body>
 <div id="container">
@@ -43,11 +46,9 @@
 		</a>
 
 		<hgroup>
-		  <h1 class="header-author"><a href="/">路易斯</a></h1>
+		  <h1 class="header-author"><a href="/">undefined</a></h1>
 		</hgroup>
 
-		
-		<p class="header-subtitle">坚持原著, 深度思考, 力求简单通俗叙事</p>
 		
 
 		
@@ -141,7 +142,7 @@
         <nav id="mobile-nav">
   	<div class="overlay">
   		<div class="slider-trigger"></div>
-  		<h1 class="header-author js-mobile-header hide">路易斯</h1>
+  		<h1 class="header-author js-mobile-header hide">undefined</h1>
   	</div>
 	<div class="intrude-less">
 		<header id="header" class="inner">
@@ -151,10 +152,8 @@
 			
 			</div>
 			<hgroup>
-			  <h1 class="header-author">路易斯</h1>
+			  <h1 class="header-author">undefined</h1>
 			</hgroup>
-			
-			<p class="header-subtitle">坚持原著, 深度思考, 力求简单通俗叙事</p>
 			
 			<nav class="header-menu">
 				<ul>
@@ -205,7 +204,7 @@
       <div class="article-info article-info-post">
         
 	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/">JavaScript</a></li></ul>
+		<ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/" rel="tag">JavaScript</a></li></ul>
 	</div>
 
         
@@ -219,7 +218,7 @@
           <span class="toc-arrow"></span>
 <div id="toc" class="toc-article">
     <div class="toc-title">目录</div>
-    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#概念"><span class="toc-text">概念</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#栗子"><span class="toc-text">栗子</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#proto"><span class="toc-text">__proto__</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Function-prototype"><span class="toc-text">Function.prototype</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#JS中函数是一等公民"><span class="toc-text">JS中函数是一等公民</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Object-prototype"><span class="toc-text">Object.prototype</span></a></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A6%82%E5%BF%B5"><span class="toc-text">概念</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A0%97%E5%AD%90"><span class="toc-text">栗子</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#proto"><span class="toc-text">__proto__</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Function-prototype"><span class="toc-text">Function.prototype</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#JS%E4%B8%AD%E5%87%BD%E6%95%B0%E6%98%AF%E4%B8%80%E7%AD%89%E5%85%AC%E6%B0%91"><span class="toc-text">JS中函数是一等公民</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Object-prototype"><span class="toc-text">Object.prototype</span></a></li></ol>
 </div>
       
         <h3 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h3><ol>
@@ -558,7 +557,9 @@ console.log(Function.__proto__ == Function.prototype);//true
 </script>
     </div>
     
-  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
 
 
 <script>
@@ -574,8 +575,13 @@ console.log(Function.__proto__ == Function.prototype);//true
 		open_in_new: false
 	}
 </script>
+
 <script src="/js/jquery-1.9.1.min.js"></script>
+
+
 <script src="/js/main.js"></script>
+
+
 <script src="/js/content.js"></script>
 
 
@@ -584,9 +590,12 @@ console.log(Function.__proto__ == Function.prototype);//true
 
 
 
+
 </div>
+
 <script src="/js/screenfull.js"></script>
-<a href="https://github.com/Louiszhai" style="position: fixed; top: 0; right: 0; border: 0;z-index:9999"><img
+
+<a target="_blank" rel="noopener" href="https://github.com/Louiszhai" style="position: fixed; top: 0; right: 0; border: 0;z-index:9999"><img
             source="https://camo.githubusercontent.com/a6677b08c955af8400f44c6298f40e7d19cc5b2d/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677261795f3664366436642e706e67"
             src="/img/fork_me_on_github.png" alt="Fork me on GitHub"
             data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png"></a>

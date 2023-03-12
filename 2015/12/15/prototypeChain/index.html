@@ -7,24 +7,27 @@
   <title>详解JS原型链与继承 | louis blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="JavaScript 原型链 prototype instanceof typeof  hasOwnProperty new  借用构造函数 组合继承 寄生式继承 寄生组合式继承">
-<meta name="keywords" content="JavaScript">
 <meta property="og:type" content="article">
 <meta property="og:title" content="详解JS原型链与继承">
 <meta property="og:url" content="http://louiszhai.github.io/2015/12/15/prototypeChain/index.html">
 <meta property="og:site_name" content="louis blog">
 <meta property="og:description" content="JavaScript 原型链 prototype instanceof typeof  hasOwnProperty new  借用构造函数 组合继承 寄生式继承 寄生组合式继承">
-<meta property="og:updated_time" content="2019-12-02T03:28:32.892Z">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2015-12-15T01:26:28.000Z">
+<meta property="article:modified_time" content="2019-12-02T03:28:32.892Z">
+<meta property="article:author" content="路易斯">
+<meta property="article:tag" content="JavaScript">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="详解JS原型链与继承">
-<meta name="twitter:description" content="JavaScript 原型链 prototype instanceof typeof  hasOwnProperty new  借用构造函数 组合继承 寄生式继承 寄生组合式继承">
   
     <link rel="alternative" href="/atom.xml" title="louis blog" type="application/atom+xml">
   
   
     <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
   
-  <link rel="stylesheet" href="/css/style.css">
-</head>
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 6.3.0"></head>
 
 <body>
 <div id="container">
@@ -41,11 +44,9 @@
 		</a>
 
 		<hgroup>
-		  <h1 class="header-author"><a href="/">路易斯</a></h1>
+		  <h1 class="header-author"><a href="/">undefined</a></h1>
 		</hgroup>
 
-		
-		<p class="header-subtitle">坚持原著, 深度思考, 力求简单通俗叙事</p>
 		
 
 		
@@ -139,7 +140,7 @@
         <nav id="mobile-nav">
   	<div class="overlay">
   		<div class="slider-trigger"></div>
-  		<h1 class="header-author js-mobile-header hide">路易斯</h1>
+  		<h1 class="header-author js-mobile-header hide">undefined</h1>
   	</div>
 	<div class="intrude-less">
 		<header id="header" class="inner">
@@ -149,10 +150,8 @@
 			
 			</div>
 			<hgroup>
-			  <h1 class="header-author">路易斯</h1>
+			  <h1 class="header-author">undefined</h1>
 			</hgroup>
-			
-			<p class="header-subtitle">坚持原著, 深度思考, 力求简单通俗叙事</p>
 			
 			<nav class="header-menu">
 				<ul>
@@ -203,7 +202,7 @@
       <div class="article-info article-info-post">
         
 	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/">JavaScript</a></li></ul>
+		<ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/" rel="tag">JavaScript</a></li></ul>
 	</div>
 
         
@@ -217,7 +216,7 @@
           <span class="toc-arrow"></span>
 <div id="toc" class="toc-article">
     <div class="toc-title">目录</div>
-    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#摘自JavaScript高级程序设计"><span class="toc-text">摘自JavaScript高级程序设计:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#概念"><span class="toc-text">概念</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#确定原型和实例的关系"><span class="toc-text">确定原型和实例的关系</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#原型链的问题"><span class="toc-text">原型链的问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#借用构造函数"><span class="toc-text">借用构造函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#组合继承"><span class="toc-text">组合继承</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#原型继承"><span class="toc-text">原型继承</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#寄生式继承"><span class="toc-text">寄生式继承</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#寄生组合式继承"><span class="toc-text">寄生组合式继承</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#new-运算符"><span class="toc-text">new 运算符</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#proto-属性是指定原型的关键"><span class="toc-text">__proto__ 属性是指定原型的关键</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#扩展"><span class="toc-text">扩展:</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#属性查找"><span class="toc-text">属性查找</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#instanceof-amp-amp-typeof"><span class="toc-text">instanceof && typeof</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#new运算符"><span class="toc-text">new运算符</span></a></li></ol></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%91%98%E8%87%AAJavaScript%E9%AB%98%E7%BA%A7%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1"><span class="toc-text">摘自JavaScript高级程序设计:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A6%82%E5%BF%B5"><span class="toc-text">概念</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A1%AE%E5%AE%9A%E5%8E%9F%E5%9E%8B%E5%92%8C%E5%AE%9E%E4%BE%8B%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="toc-text">确定原型和实例的关系</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8E%9F%E5%9E%8B%E9%93%BE%E7%9A%84%E9%97%AE%E9%A2%98"><span class="toc-text">原型链的问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%80%9F%E7%94%A8%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0"><span class="toc-text">借用构造函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BB%84%E5%90%88%E7%BB%A7%E6%89%BF"><span class="toc-text">组合继承</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8E%9F%E5%9E%8B%E7%BB%A7%E6%89%BF"><span class="toc-text">原型继承</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%84%E7%94%9F%E5%BC%8F%E7%BB%A7%E6%89%BF"><span class="toc-text">寄生式继承</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%84%E7%94%9F%E7%BB%84%E5%90%88%E5%BC%8F%E7%BB%A7%E6%89%BF"><span class="toc-text">寄生组合式继承</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#new-%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="toc-text">new 运算符</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#proto-%E5%B1%9E%E6%80%A7%E6%98%AF%E6%8C%87%E5%AE%9A%E5%8E%9F%E5%9E%8B%E7%9A%84%E5%85%B3%E9%94%AE"><span class="toc-text">__proto__ 属性是指定原型的关键</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%89%A9%E5%B1%95"><span class="toc-text">扩展:</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B1%9E%E6%80%A7%E6%9F%A5%E6%89%BE"><span class="toc-text">属性查找</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#instanceof-amp-amp-typeof"><span class="toc-text">instanceof &amp;&amp; typeof</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#new%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="toc-text">new运算符</span></a></li></ol></li></ol>
 </div>
       
         <h3 id="摘自JavaScript高级程序设计"><a href="#摘自JavaScript高级程序设计" class="headerlink" title="摘自JavaScript高级程序设计:"></a>摘自JavaScript高级程序设计:</h3><p>继承是OO语言中的一个最为人津津乐道的概念.许多OO语言都支持两种继承方式: <strong>接口继承</strong> 和 <strong>实现继承</strong> .接口继承只继承方法签名,而实现继承则继承实际的方法.由于js中方法没有签名,在ECMAScript中无法实现接口继承.ECMAScript只支持实现继承,而且其 <code>实现继承</code> 主要是依靠原型链来实现的.</p>
@@ -762,7 +761,9 @@ alert(obj2 instanceof MyObject);// true
 </script>
     </div>
     
-  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
 
 
 <script>
@@ -778,8 +779,13 @@ alert(obj2 instanceof MyObject);// true
 		open_in_new: false
 	}
 </script>
+
 <script src="/js/jquery-1.9.1.min.js"></script>
+
+
 <script src="/js/main.js"></script>
+
+
 <script src="/js/content.js"></script>
 
 
@@ -788,9 +794,12 @@ alert(obj2 instanceof MyObject);// true
 
 
 
+
 </div>
+
 <script src="/js/screenfull.js"></script>
-<a href="https://github.com/Louiszhai" style="position: fixed; top: 0; right: 0; border: 0;z-index:9999"><img
+
+<a target="_blank" rel="noopener" href="https://github.com/Louiszhai" style="position: fixed; top: 0; right: 0; border: 0;z-index:9999"><img
             source="https://camo.githubusercontent.com/a6677b08c955af8400f44c6298f40e7d19cc5b2d/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677261795f3664366436642e706e67"
             src="/img/fork_me_on_github.png" alt="Fork me on GitHub"
             data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png"></a>

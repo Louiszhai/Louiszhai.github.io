@@ -7,24 +7,27 @@
   <title>JavaScript字符串所有API全解密 | louis blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="JavaScript String String.prototype charAt charCodeAt concat indexOf lastIndexOf localeCompare match replace search slice split substr substring toLocaleLowerCase toLocaleUpperCase toLowerCase toString">
-<meta name="keywords" content="JavaScript">
 <meta property="og:type" content="article">
 <meta property="og:title" content="JavaScript字符串所有API全解密">
 <meta property="og:url" content="http://louiszhai.github.io/2016/01/12/js.String/index.html">
 <meta property="og:site_name" content="louis blog">
 <meta property="og:description" content="JavaScript String String.prototype charAt charCodeAt concat indexOf lastIndexOf localeCompare match replace search slice split substr substring toLocaleLowerCase toLocaleUpperCase toLowerCase toString">
-<meta property="og:updated_time" content="2019-12-02T03:28:32.886Z">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2016-01-12T12:27:09.000Z">
+<meta property="article:modified_time" content="2019-12-02T03:28:32.886Z">
+<meta property="article:author" content="路易斯">
+<meta property="article:tag" content="JavaScript">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="JavaScript字符串所有API全解密">
-<meta name="twitter:description" content="JavaScript String String.prototype charAt charCodeAt concat indexOf lastIndexOf localeCompare match replace search slice split substr substring toLocaleLowerCase toLocaleUpperCase toLowerCase toString">
   
     <link rel="alternative" href="/atom.xml" title="louis blog" type="application/atom+xml">
   
   
     <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
   
-  <link rel="stylesheet" href="/css/style.css">
-</head>
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 6.3.0"></head>
 
 <body>
 <div id="container">
@@ -41,11 +44,9 @@
 		</a>
 
 		<hgroup>
-		  <h1 class="header-author"><a href="/">路易斯</a></h1>
+		  <h1 class="header-author"><a href="/">undefined</a></h1>
 		</hgroup>
 
-		
-		<p class="header-subtitle">坚持原著, 深度思考, 力求简单通俗叙事</p>
 		
 
 		
@@ -139,7 +140,7 @@
         <nav id="mobile-nav">
   	<div class="overlay">
   		<div class="slider-trigger"></div>
-  		<h1 class="header-author js-mobile-header hide">路易斯</h1>
+  		<h1 class="header-author js-mobile-header hide">undefined</h1>
   	</div>
 	<div class="intrude-less">
 		<header id="header" class="inner">
@@ -149,10 +150,8 @@
 			
 			</div>
 			<hgroup>
-			  <h1 class="header-author">路易斯</h1>
+			  <h1 class="header-author">undefined</h1>
 			</hgroup>
-			
-			<p class="header-subtitle">坚持原著, 深度思考, 力求简单通俗叙事</p>
 			
 			<nav class="header-menu">
 				<ul>
@@ -203,7 +202,7 @@
       <div class="article-info article-info-post">
         
 	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/">JavaScript</a></li></ul>
+		<ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/" rel="tag">JavaScript</a></li></ul>
 	</div>
 
         
@@ -217,7 +216,7 @@
           <span class="toc-arrow"></span>
 <div id="toc" class="toc-article">
     <div class="toc-title">目录</div>
-    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#String构造器方法"><span class="toc-text">String构造器方法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#fromCharCode"><span class="toc-text">fromCharCode</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#fromCodePoint-ES6"><span class="toc-text">fromCodePoint(ES6)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#raw-ES6"><span class="toc-text">raw(ES6)</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#String-prototype"><span class="toc-text">String.prototype</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#属性"><span class="toc-text">属性</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#方法"><span class="toc-text">方法</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#HTML无关的方法"><span class="toc-text">HTML无关的方法</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#charAt"><span class="toc-text">charAt</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#charCodeAt"><span class="toc-text">charCodeAt</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#concat"><span class="toc-text">concat</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#indexOf"><span class="toc-text">indexOf</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#lastIndexOf"><span class="toc-text">lastIndexOf</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#localeCompare"><span class="toc-text">localeCompare</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#match"><span class="toc-text">match</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#replace"><span class="toc-text">replace</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#search"><span class="toc-text">search</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#slice"><span class="toc-text">slice</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#split"><span class="toc-text">split</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#substr"><span class="toc-text">substr</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#substring"><span class="toc-text">substring</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#toLocaleLowerCase"><span class="toc-text">toLocaleLowerCase</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#toLocaleUpperCase"><span class="toc-text">toLocaleUpperCase</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#toLowerCase"><span class="toc-text">toLowerCase</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#toUpperCase"><span class="toc-text">toUpperCase</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#toString-NaN"><span class="toc-text">toString</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#valueOf-NaN"><span class="toc-text">valueOf</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#trim"><span class="toc-text">trim</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#codePointAt-ES6"><span class="toc-text">codePointAt(ES6)</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#includes-ES6"><span class="toc-text">includes(ES6)</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#endsWith-ES6"><span class="toc-text">endsWith(ES6)</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#normalize-ES6"><span class="toc-text">normalize(ES6)</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#repeat-ES6"><span class="toc-text">repeat(ES6)</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#startsWith-ES6"><span class="toc-text">startsWith(ES6)</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#HTML有关的方法"><span class="toc-text">HTML有关的方法</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#anchor"><span class="toc-text">anchor</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#link"><span class="toc-text">link</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#小结"><span class="toc-text">小结</span></a></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#String%E6%9E%84%E9%80%A0%E5%99%A8%E6%96%B9%E6%B3%95"><span class="toc-text">String构造器方法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#fromCharCode"><span class="toc-text">fromCharCode</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#fromCodePoint-ES6"><span class="toc-text">fromCodePoint(ES6)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#raw-ES6"><span class="toc-text">raw(ES6)</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#String-prototype"><span class="toc-text">String.prototype</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B1%9E%E6%80%A7"><span class="toc-text">属性</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%96%B9%E6%B3%95"><span class="toc-text">方法</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#HTML%E6%97%A0%E5%85%B3%E7%9A%84%E6%96%B9%E6%B3%95"><span class="toc-text">HTML无关的方法</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#charAt"><span class="toc-text">charAt</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#charCodeAt"><span class="toc-text">charCodeAt</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#concat"><span class="toc-text">concat</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#indexOf"><span class="toc-text">indexOf</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#lastIndexOf"><span class="toc-text">lastIndexOf</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#localeCompare"><span class="toc-text">localeCompare</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#match"><span class="toc-text">match</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#replace"><span class="toc-text">replace</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#search"><span class="toc-text">search</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#slice"><span class="toc-text">slice</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#split"><span class="toc-text">split</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#substr"><span class="toc-text">substr</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#substring"><span class="toc-text">substring</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#toLocaleLowerCase"><span class="toc-text">toLocaleLowerCase</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#toLocaleUpperCase"><span class="toc-text">toLocaleUpperCase</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#toLowerCase"><span class="toc-text">toLowerCase</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#toUpperCase"><span class="toc-text">toUpperCase</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#toString-NaN"><span class="toc-text">toString</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#valueOf-NaN"><span class="toc-text">valueOf</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#trim"><span class="toc-text">trim</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#codePointAt-ES6"><span class="toc-text">codePointAt(ES6)</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#includes-ES6"><span class="toc-text">includes(ES6)</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#endsWith-ES6"><span class="toc-text">endsWith(ES6)</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#normalize-ES6"><span class="toc-text">normalize(ES6)</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#repeat-ES6"><span class="toc-text">repeat(ES6)</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#startsWith-ES6"><span class="toc-text">startsWith(ES6)</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#HTML%E6%9C%89%E5%85%B3%E7%9A%84%E6%96%B9%E6%B3%95"><span class="toc-text">HTML有关的方法</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#anchor"><span class="toc-text">anchor</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#link"><span class="toc-text">link</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B0%8F%E7%BB%93"><span class="toc-text">小结</span></a></li></ol>
 </div>
       
         <p>本文近 6k 字，读完需 10 分钟。</p>
@@ -801,7 +800,9 @@ document.write(str.link(&quot;https://www.baidu.com&quot;)); // &lt;a href=&quot
 </script>
     </div>
     
-  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
 
 
 <script>
@@ -817,8 +818,13 @@ document.write(str.link(&quot;https://www.baidu.com&quot;)); // &lt;a href=&quot
 		open_in_new: false
 	}
 </script>
+
 <script src="/js/jquery-1.9.1.min.js"></script>
+
+
 <script src="/js/main.js"></script>
+
+
 <script src="/js/content.js"></script>
 
 
@@ -827,9 +833,12 @@ document.write(str.link(&quot;https://www.baidu.com&quot;)); // &lt;a href=&quot
 
 
 
+
 </div>
+
 <script src="/js/screenfull.js"></script>
-<a href="https://github.com/Louiszhai" style="position: fixed; top: 0; right: 0; border: 0;z-index:9999"><img
+
+<a target="_blank" rel="noopener" href="https://github.com/Louiszhai" style="position: fixed; top: 0; right: 0; border: 0;z-index:9999"><img
             source="https://camo.githubusercontent.com/a6677b08c955af8400f44c6298f40e7d19cc5b2d/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677261795f3664366436642e706e67"
             src="/img/fork_me_on_github.png" alt="Fork me on GitHub"
             data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png"></a>

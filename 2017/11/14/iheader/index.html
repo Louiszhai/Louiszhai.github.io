@@ -7,12 +7,12 @@
   <title>【Chrome扩展开发】定制HTTP请求响应头域 | louis blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="IHeader chrome插件开发 chrome扩展开发 定制请求头响应头 一次性消息 长期连接 pageAction browserAction background.js content.js 扩展国际化 右键菜单 扩展状态管理 chrome.webrequest">
-<meta name="keywords" content="JavaScript Chrome-Extension">
 <meta property="og:type" content="article">
 <meta property="og:title" content="【Chrome扩展开发】定制HTTP请求响应头域">
 <meta property="og:url" content="http://louiszhai.github.io/2017/11/14/iheader/index.html">
 <meta property="og:site_name" content="louis blog">
 <meta property="og:description" content="IHeader chrome插件开发 chrome扩展开发 定制请求头响应头 一次性消息 长期连接 pageAction browserAction background.js content.js 扩展国际化 右键菜单 扩展状态管理 chrome.webrequest">
+<meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://louiszhai.github.io/docImages/iheader01.png">
 <meta property="og:image" content="http://louiszhai.github.io/docImages/iheader05.png">
 <meta property="og:image" content="http://louiszhai.github.io/docImages/iheader06.png">
@@ -42,10 +42,11 @@
 <meta property="og:image" content="http://louiszhai.github.io/docImages/iheader28.png">
 <meta property="og:image" content="http://louiszhai.github.io/docImages/iheader29.png">
 <meta property="og:image" content="http://louiszhai.github.io/docImages/iheader31.gif">
-<meta property="og:updated_time" content="2019-12-02T03:28:32.885Z">
+<meta property="article:published_time" content="2017-11-14T02:40:15.000Z">
+<meta property="article:modified_time" content="2019-12-02T03:28:32.885Z">
+<meta property="article:author" content="路易斯">
+<meta property="article:tag" content="JavaScript Chrome-Extension">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="【Chrome扩展开发】定制HTTP请求响应头域">
-<meta name="twitter:description" content="IHeader chrome插件开发 chrome扩展开发 定制请求头响应头 一次性消息 长期连接 pageAction browserAction background.js content.js 扩展国际化 右键菜单 扩展状态管理 chrome.webrequest">
 <meta name="twitter:image" content="http://louiszhai.github.io/docImages/iheader01.png">
   
     <link rel="alternative" href="/atom.xml" title="louis blog" type="application/atom+xml">
@@ -53,8 +54,10 @@
   
     <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
   
-  <link rel="stylesheet" href="/css/style.css">
-</head>
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 6.3.0"></head>
 
 <body>
 <div id="container">
@@ -71,11 +74,9 @@
 		</a>
 
 		<hgroup>
-		  <h1 class="header-author"><a href="/">路易斯</a></h1>
+		  <h1 class="header-author"><a href="/">undefined</a></h1>
 		</hgroup>
 
-		
-		<p class="header-subtitle">坚持原著, 深度思考, 力求简单通俗叙事</p>
 		
 
 		
@@ -169,7 +170,7 @@
         <nav id="mobile-nav">
   	<div class="overlay">
   		<div class="slider-trigger"></div>
-  		<h1 class="header-author js-mobile-header hide">路易斯</h1>
+  		<h1 class="header-author js-mobile-header hide">undefined</h1>
   	</div>
 	<div class="intrude-less">
 		<header id="header" class="inner">
@@ -179,10 +180,8 @@
 			
 			</div>
 			<hgroup>
-			  <h1 class="header-author">路易斯</h1>
+			  <h1 class="header-author">undefined</h1>
 			</hgroup>
-			
-			<p class="header-subtitle">坚持原著, 深度思考, 力求简单通俗叙事</p>
 			
 			<nav class="header-menu">
 				<ul>
@@ -233,7 +232,7 @@
       <div class="article-info article-info-post">
         
 	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript-Chrome-Extension/">JavaScript Chrome-Extension</a></li></ul>
+		<ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript-Chrome-Extension/" rel="tag">JavaScript Chrome-Extension</a></li></ul>
 	</div>
 
         
@@ -247,7 +246,7 @@
           <span class="toc-arrow"></span>
 <div id="toc" class="toc-article">
     <div class="toc-title">目录</div>
-    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#导读"><span class="toc-text">导读</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Nginx反向代理Google"><span class="toc-text">Nginx反向代理Google</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#IHeader缘起"><span class="toc-text">IHeader缘起</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Chrome-Extension简介"><span class="toc-text">Chrome Extension简介</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#如何安装扩展"><span class="toc-text">如何安装扩展</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#扩展打包和更新"><span class="toc-text">扩展打包和更新</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#扩展的基本组成"><span class="toc-text">扩展的基本组成</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#扩展的核心功能"><span class="toc-text">扩展的核心功能</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#扩展如何运行调试"><span class="toc-text">扩展如何运行调试</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Chrome-Extension-API"><span class="toc-text">Chrome Extension API</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#WebRequest-API"><span class="toc-text">WebRequest API</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#如何绑定header监听"><span class="toc-text">如何绑定header监听</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#扩展状态管理"><span class="toc-text">扩展状态管理</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#监听器的状态管理"><span class="toc-text">监听器的状态管理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Page-Action图标状态管理"><span class="toc-text">Page Action图标状态管理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#标签页的状态管理"><span class="toc-text">标签页的状态管理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#标签页关闭或更新的妥善处理"><span class="toc-text">标签页关闭或更新的妥善处理</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#消息通信"><span class="toc-text">消息通信</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#扩展内部消息通信"><span class="toc-text">扩展内部消息通信</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#一次性消息通信API"><span class="toc-text">一次性消息通信API</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#长期连接消息通信"><span class="toc-text">长期连接消息通信</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#扩展程序间消息通信"><span class="toc-text">扩展程序间消息通信</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Web页面与扩展间消息通信"><span class="toc-text">Web页面与扩展间消息通信</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#设置快捷键"><span class="toc-text">设置快捷键</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#添加右键菜单"><span class="toc-text">添加右键菜单</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#安装或更新"><span class="toc-text">安装或更新</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#国际化"><span class="toc-text">国际化</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#如何引用国际化字符串"><span class="toc-text">如何引用国际化字符串</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#预定义消息"><span class="toc-text">预定义消息</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#其它国际化API"><span class="toc-text">其它国际化API</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Chrome扩展开发的心得"><span class="toc-text">Chrome扩展开发的心得</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#小结"><span class="toc-text">小结</span></a></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%BC%E8%AF%BB"><span class="toc-text">导读</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Nginx%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86Google"><span class="toc-text">Nginx反向代理Google</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#IHeader%E7%BC%98%E8%B5%B7"><span class="toc-text">IHeader缘起</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Chrome-Extension%E7%AE%80%E4%BB%8B"><span class="toc-text">Chrome Extension简介</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E5%AE%89%E8%A3%85%E6%89%A9%E5%B1%95"><span class="toc-text">如何安装扩展</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%89%A9%E5%B1%95%E6%89%93%E5%8C%85%E5%92%8C%E6%9B%B4%E6%96%B0"><span class="toc-text">扩展打包和更新</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%89%A9%E5%B1%95%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%BB%84%E6%88%90"><span class="toc-text">扩展的基本组成</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%89%A9%E5%B1%95%E7%9A%84%E6%A0%B8%E5%BF%83%E5%8A%9F%E8%83%BD"><span class="toc-text">扩展的核心功能</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%89%A9%E5%B1%95%E5%A6%82%E4%BD%95%E8%BF%90%E8%A1%8C%E8%B0%83%E8%AF%95"><span class="toc-text">扩展如何运行调试</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Chrome-Extension-API"><span class="toc-text">Chrome Extension API</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#WebRequest-API"><span class="toc-text">WebRequest API</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E7%BB%91%E5%AE%9Aheader%E7%9B%91%E5%90%AC"><span class="toc-text">如何绑定header监听</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%89%A9%E5%B1%95%E7%8A%B6%E6%80%81%E7%AE%A1%E7%90%86"><span class="toc-text">扩展状态管理</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%9B%91%E5%90%AC%E5%99%A8%E7%9A%84%E7%8A%B6%E6%80%81%E7%AE%A1%E7%90%86"><span class="toc-text">监听器的状态管理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Page-Action%E5%9B%BE%E6%A0%87%E7%8A%B6%E6%80%81%E7%AE%A1%E7%90%86"><span class="toc-text">Page Action图标状态管理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%A0%87%E7%AD%BE%E9%A1%B5%E7%9A%84%E7%8A%B6%E6%80%81%E7%AE%A1%E7%90%86"><span class="toc-text">标签页的状态管理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%A0%87%E7%AD%BE%E9%A1%B5%E5%85%B3%E9%97%AD%E6%88%96%E6%9B%B4%E6%96%B0%E7%9A%84%E5%A6%A5%E5%96%84%E5%A4%84%E7%90%86"><span class="toc-text">标签页关闭或更新的妥善处理</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B6%88%E6%81%AF%E9%80%9A%E4%BF%A1"><span class="toc-text">消息通信</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%89%A9%E5%B1%95%E5%86%85%E9%83%A8%E6%B6%88%E6%81%AF%E9%80%9A%E4%BF%A1"><span class="toc-text">扩展内部消息通信</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%B8%80%E6%AC%A1%E6%80%A7%E6%B6%88%E6%81%AF%E9%80%9A%E4%BF%A1API"><span class="toc-text">一次性消息通信API</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E9%95%BF%E6%9C%9F%E8%BF%9E%E6%8E%A5%E6%B6%88%E6%81%AF%E9%80%9A%E4%BF%A1"><span class="toc-text">长期连接消息通信</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%89%A9%E5%B1%95%E7%A8%8B%E5%BA%8F%E9%97%B4%E6%B6%88%E6%81%AF%E9%80%9A%E4%BF%A1"><span class="toc-text">扩展程序间消息通信</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Web%E9%A1%B5%E9%9D%A2%E4%B8%8E%E6%89%A9%E5%B1%95%E9%97%B4%E6%B6%88%E6%81%AF%E9%80%9A%E4%BF%A1"><span class="toc-text">Web页面与扩展间消息通信</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%BE%E7%BD%AE%E5%BF%AB%E6%8D%B7%E9%94%AE"><span class="toc-text">设置快捷键</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B7%BB%E5%8A%A0%E5%8F%B3%E9%94%AE%E8%8F%9C%E5%8D%95"><span class="toc-text">添加右键菜单</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85%E6%88%96%E6%9B%B4%E6%96%B0"><span class="toc-text">安装或更新</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9B%BD%E9%99%85%E5%8C%96"><span class="toc-text">国际化</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E5%BC%95%E7%94%A8%E5%9B%BD%E9%99%85%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="toc-text">如何引用国际化字符串</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%A2%84%E5%AE%9A%E4%B9%89%E6%B6%88%E6%81%AF"><span class="toc-text">预定义消息</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B6%E5%AE%83%E5%9B%BD%E9%99%85%E5%8C%96API"><span class="toc-text">其它国际化API</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Chrome%E6%89%A9%E5%B1%95%E5%BC%80%E5%8F%91%E7%9A%84%E5%BF%83%E5%BE%97"><span class="toc-text">Chrome扩展开发的心得</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B0%8F%E7%BB%93"><span class="toc-text">小结</span></a></li></ol>
 </div>
       
         <p><strong>本文首发于《程序员》杂志2017年第9、10、11期，下面的版本又经过进一步的修订。</strong></p>
@@ -1615,7 +1614,9 @@ div {
 </script>
     </div>
     
-  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
 
 
 <script>
@@ -1631,8 +1632,13 @@ div {
 		open_in_new: false
 	}
 </script>
+
 <script src="/js/jquery-1.9.1.min.js"></script>
+
+
 <script src="/js/main.js"></script>
+
+
 <script src="/js/content.js"></script>
 
 
@@ -1641,9 +1647,12 @@ div {
 
 
 
+
 </div>
+
 <script src="/js/screenfull.js"></script>
-<a href="https://github.com/Louiszhai" style="position: fixed; top: 0; right: 0; border: 0;z-index:9999"><img
+
+<a target="_blank" rel="noopener" href="https://github.com/Louiszhai" style="position: fixed; top: 0; right: 0; border: 0;z-index:9999"><img
             source="https://camo.githubusercontent.com/a6677b08c955af8400f44c6298f40e7d19cc5b2d/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677261795f3664366436642e706e67"
             src="/img/fork_me_on_github.png" alt="Fork me on GitHub"
             data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png"></a>

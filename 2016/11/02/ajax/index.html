@@ -7,12 +7,12 @@
   <title>Ajax知识体系大梳理 | louis blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="ajax XMLHttpRequest xhr fetch XDomainRequest jquery.ajax overrideMimeType CORS FileReader postman angular withCredentials setRequestHeader getAllResponseHeaders upload ajax与history的兼容 ajax跨域请求 ajax文件上">
-<meta name="keywords" content="JavaScript">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Ajax知识体系大梳理">
 <meta property="og:url" content="http://louiszhai.github.io/2016/11/02/ajax/index.html">
 <meta property="og:site_name" content="louis blog">
 <meta property="og:description" content="ajax XMLHttpRequest xhr fetch XDomainRequest jquery.ajax overrideMimeType CORS FileReader postman angular withCredentials setRequestHeader getAllResponseHeaders upload ajax与history的兼容 ajax跨域请求 ajax文件上">
+<meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://louiszhai.github.io/docImages/ajax27.png">
 <meta property="og:image" content="http://louiszhai.github.io/docImages/ajax01.png">
 <meta property="og:image" content="http://louiszhai.github.io/docImages/ajax02.png">
@@ -30,10 +30,11 @@
 <meta property="og:image" content="http://louiszhai.github.io/docImages/ajax20.png">
 <meta property="og:image" content="http://louiszhai.github.io/docImages/ajax21.png">
 <meta property="og:image" content="http://louiszhai.github.io/docImages/ajax26.png">
-<meta property="og:updated_time" content="2019-12-02T03:28:32.870Z">
+<meta property="article:published_time" content="2016-11-02T04:48:27.000Z">
+<meta property="article:modified_time" content="2019-12-02T03:28:32.870Z">
+<meta property="article:author" content="路易斯">
+<meta property="article:tag" content="JavaScript">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Ajax知识体系大梳理">
-<meta name="twitter:description" content="ajax XMLHttpRequest xhr fetch XDomainRequest jquery.ajax overrideMimeType CORS FileReader postman angular withCredentials setRequestHeader getAllResponseHeaders upload ajax与history的兼容 ajax跨域请求 ajax文件上">
 <meta name="twitter:image" content="http://louiszhai.github.io/docImages/ajax27.png">
   
     <link rel="alternative" href="/atom.xml" title="louis blog" type="application/atom+xml">
@@ -41,8 +42,10 @@
   
     <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
   
-  <link rel="stylesheet" href="/css/style.css">
-</head>
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 6.3.0"></head>
 
 <body>
 <div id="container">
@@ -59,11 +62,9 @@
 		</a>
 
 		<hgroup>
-		  <h1 class="header-author"><a href="/">路易斯</a></h1>
+		  <h1 class="header-author"><a href="/">undefined</a></h1>
 		</hgroup>
 
-		
-		<p class="header-subtitle">坚持原著, 深度思考, 力求简单通俗叙事</p>
 		
 
 		
@@ -157,7 +158,7 @@
         <nav id="mobile-nav">
   	<div class="overlay">
   		<div class="slider-trigger"></div>
-  		<h1 class="header-author js-mobile-header hide">路易斯</h1>
+  		<h1 class="header-author js-mobile-header hide">undefined</h1>
   	</div>
 	<div class="intrude-less">
 		<header id="header" class="inner">
@@ -167,10 +168,8 @@
 			
 			</div>
 			<hgroup>
-			  <h1 class="header-author">路易斯</h1>
+			  <h1 class="header-author">undefined</h1>
 			</hgroup>
-			
-			<p class="header-subtitle">坚持原著, 深度思考, 力求简单通俗叙事</p>
 			
 			<nav class="header-menu">
 				<ul>
@@ -221,7 +220,7 @@
       <div class="article-info article-info-post">
         
 	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/">JavaScript</a></li></ul>
+		<ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/" rel="tag">JavaScript</a></li></ul>
 	</div>
 
         
@@ -235,7 +234,7 @@
           <span class="toc-arrow"></span>
 <div id="toc" class="toc-article">
     <div class="toc-title">目录</div>
-    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#导读"><span class="toc-text">导读</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#浏览器为ajax做了什么"><span class="toc-text">浏览器为ajax做了什么</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#MSXML"><span class="toc-text">MSXML</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#全平台兼容的XMLHttpRequest对象"><span class="toc-text">全平台兼容的XMLHttpRequest对象</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ajax有没有破坏js单线程机制"><span class="toc-text">ajax有没有破坏js单线程机制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ajax与setTimeout排队问题"><span class="toc-text">ajax与setTimeout排队问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#XMLHttpRequest-属性解读"><span class="toc-text">XMLHttpRequest 属性解读</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#inherit"><span class="toc-text">inherit</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#readyState"><span class="toc-text">readyState</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#onreadystatechange"><span class="toc-text">onreadystatechange</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#status"><span class="toc-text">status</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#statusText"><span class="toc-text">statusText</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#onloadstart"><span class="toc-text">onloadstart</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#onprogress"><span class="toc-text">onprogress</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#onload"><span class="toc-text">onload</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#onloadend"><span class="toc-text">onloadend</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#timeout"><span class="toc-text">timeout</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#ontimeout"><span class="toc-text">ontimeout</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#response-responseText"><span class="toc-text">response responseText</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#responseXML"><span class="toc-text">responseXML</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#responseType"><span class="toc-text">responseType</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#responseURL"><span class="toc-text">responseURL</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#withCredentials"><span class="toc-text">withCredentials</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#abort"><span class="toc-text">abort</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#getResponseHeader"><span class="toc-text">getResponseHeader</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#getAllResponseHeaders"><span class="toc-text">getAllResponseHeaders</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#setRequestHeader"><span class="toc-text">setRequestHeader</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#onerror"><span class="toc-text">onerror</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#upload"><span class="toc-text">upload</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#overrideMimeType"><span class="toc-text">overrideMimeType</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#XHR一级"><span class="toc-text">XHR一级</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#XHR二级"><span class="toc-text">XHR二级</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#XDomainRequest"><span class="toc-text">XDomainRequest</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ajax"><span class="toc-text">$.ajax</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#参数列表"><span class="toc-text">参数列表</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#支持promise"><span class="toc-text">支持promise</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#使用转换器"><span class="toc-text">使用转换器</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#事件触发顺序"><span class="toc-text">事件触发顺序</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Axios"><span class="toc-text">Axios</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Fetch"><span class="toc-text">Fetch</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ajax跨域请求"><span class="toc-text">ajax跨域请求</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#什么是CORS"><span class="toc-text">什么是CORS</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#移动端CORS兼容性"><span class="toc-text">移动端CORS兼容性</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#CORS有关的headers"><span class="toc-text">CORS有关的headers</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#CORS请求"><span class="toc-text">CORS请求</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#HTML启用CORS"><span class="toc-text">HTML启用CORS</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#图片启用CORS"><span class="toc-text">图片启用CORS</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ajax文件上传"><span class="toc-text">ajax文件上传</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#js文件上传"><span class="toc-text">js文件上传</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#fetch上传"><span class="toc-text">fetch上传</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#jquery文件上传"><span class="toc-text">jquery文件上传</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#angular文件上传"><span class="toc-text">angular文件上传</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ajax请求二进制文件"><span class="toc-text">ajax请求二进制文件</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#FileReader"><span class="toc-text">FileReader</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#ajax请求二进制图片并预览"><span class="toc-text">ajax请求二进制图片并预览</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#ajax请求二进制文本并展示"><span class="toc-text">ajax请求二进制文本并展示</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#如何等待多个ajax请求完成"><span class="toc-text">如何等待多个ajax请求完成</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ajax与history的兼容"><span class="toc-text">ajax与history的兼容</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#pjax"><span class="toc-text">pjax</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ajax缓存处理"><span class="toc-text">ajax缓存处理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ajax的错误处理"><span class="toc-text">ajax的错误处理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ajax调试技巧"><span class="toc-text">ajax调试技巧</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#hosts-nginx-node-webserver"><span class="toc-text">hosts+nginx+node-webserver</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#编码问题"><span class="toc-text">编码问题</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#后端接口测试技巧"><span class="toc-text">后端接口测试技巧</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#使用命令测试OPTIONS请求"><span class="toc-text">使用命令测试OPTIONS请求</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#postman"><span class="toc-text">postman</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ajax移动端兼容性"><span class="toc-text">ajax移动端兼容性</span></a></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%BC%E8%AF%BB"><span class="toc-text">导读</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B5%8F%E8%A7%88%E5%99%A8%E4%B8%BAajax%E5%81%9A%E4%BA%86%E4%BB%80%E4%B9%88"><span class="toc-text">浏览器为ajax做了什么</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#MSXML"><span class="toc-text">MSXML</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%A8%E5%B9%B3%E5%8F%B0%E5%85%BC%E5%AE%B9%E7%9A%84XMLHttpRequest%E5%AF%B9%E8%B1%A1"><span class="toc-text">全平台兼容的XMLHttpRequest对象</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ajax%E6%9C%89%E6%B2%A1%E6%9C%89%E7%A0%B4%E5%9D%8Fjs%E5%8D%95%E7%BA%BF%E7%A8%8B%E6%9C%BA%E5%88%B6"><span class="toc-text">ajax有没有破坏js单线程机制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ajax%E4%B8%8EsetTimeout%E6%8E%92%E9%98%9F%E9%97%AE%E9%A2%98"><span class="toc-text">ajax与setTimeout排队问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#XMLHttpRequest-%E5%B1%9E%E6%80%A7%E8%A7%A3%E8%AF%BB"><span class="toc-text">XMLHttpRequest 属性解读</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#inherit"><span class="toc-text">inherit</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#readyState"><span class="toc-text">readyState</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#onreadystatechange"><span class="toc-text">onreadystatechange</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#status"><span class="toc-text">status</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#statusText"><span class="toc-text">statusText</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#onloadstart"><span class="toc-text">onloadstart</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#onprogress"><span class="toc-text">onprogress</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#onload"><span class="toc-text">onload</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#onloadend"><span class="toc-text">onloadend</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#timeout"><span class="toc-text">timeout</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#ontimeout"><span class="toc-text">ontimeout</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#response-responseText"><span class="toc-text">response responseText</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#responseXML"><span class="toc-text">responseXML</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#responseType"><span class="toc-text">responseType</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#responseURL"><span class="toc-text">responseURL</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#withCredentials"><span class="toc-text">withCredentials</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#abort"><span class="toc-text">abort</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#getResponseHeader"><span class="toc-text">getResponseHeader</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#getAllResponseHeaders"><span class="toc-text">getAllResponseHeaders</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#setRequestHeader"><span class="toc-text">setRequestHeader</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#onerror"><span class="toc-text">onerror</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#upload"><span class="toc-text">upload</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#overrideMimeType"><span class="toc-text">overrideMimeType</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#XHR%E4%B8%80%E7%BA%A7"><span class="toc-text">XHR一级</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#XHR%E4%BA%8C%E7%BA%A7"><span class="toc-text">XHR二级</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#XDomainRequest"><span class="toc-text">XDomainRequest</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ajax"><span class="toc-text">$.ajax</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8F%82%E6%95%B0%E5%88%97%E8%A1%A8"><span class="toc-text">参数列表</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%94%AF%E6%8C%81promise"><span class="toc-text">支持promise</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E8%BD%AC%E6%8D%A2%E5%99%A8"><span class="toc-text">使用转换器</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BA%8B%E4%BB%B6%E8%A7%A6%E5%8F%91%E9%A1%BA%E5%BA%8F"><span class="toc-text">事件触发顺序</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Axios"><span class="toc-text">Axios</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Fetch"><span class="toc-text">Fetch</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ajax%E8%B7%A8%E5%9F%9F%E8%AF%B7%E6%B1%82"><span class="toc-text">ajax跨域请求</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFCORS"><span class="toc-text">什么是CORS</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%A7%BB%E5%8A%A8%E7%AB%AFCORS%E5%85%BC%E5%AE%B9%E6%80%A7"><span class="toc-text">移动端CORS兼容性</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#CORS%E6%9C%89%E5%85%B3%E7%9A%84headers"><span class="toc-text">CORS有关的headers</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#CORS%E8%AF%B7%E6%B1%82"><span class="toc-text">CORS请求</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#HTML%E5%90%AF%E7%94%A8CORS"><span class="toc-text">HTML启用CORS</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9B%BE%E7%89%87%E5%90%AF%E7%94%A8CORS"><span class="toc-text">图片启用CORS</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ajax%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0"><span class="toc-text">ajax文件上传</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#js%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0"><span class="toc-text">js文件上传</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#fetch%E4%B8%8A%E4%BC%A0"><span class="toc-text">fetch上传</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#jquery%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0"><span class="toc-text">jquery文件上传</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#angular%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0"><span class="toc-text">angular文件上传</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ajax%E8%AF%B7%E6%B1%82%E4%BA%8C%E8%BF%9B%E5%88%B6%E6%96%87%E4%BB%B6"><span class="toc-text">ajax请求二进制文件</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#FileReader"><span class="toc-text">FileReader</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#ajax%E8%AF%B7%E6%B1%82%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%9B%BE%E7%89%87%E5%B9%B6%E9%A2%84%E8%A7%88"><span class="toc-text">ajax请求二进制图片并预览</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#ajax%E8%AF%B7%E6%B1%82%E4%BA%8C%E8%BF%9B%E5%88%B6%E6%96%87%E6%9C%AC%E5%B9%B6%E5%B1%95%E7%A4%BA"><span class="toc-text">ajax请求二进制文本并展示</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E7%AD%89%E5%BE%85%E5%A4%9A%E4%B8%AAajax%E8%AF%B7%E6%B1%82%E5%AE%8C%E6%88%90"><span class="toc-text">如何等待多个ajax请求完成</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ajax%E4%B8%8Ehistory%E7%9A%84%E5%85%BC%E5%AE%B9"><span class="toc-text">ajax与history的兼容</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#pjax"><span class="toc-text">pjax</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ajax%E7%BC%93%E5%AD%98%E5%A4%84%E7%90%86"><span class="toc-text">ajax缓存处理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ajax%E7%9A%84%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86"><span class="toc-text">ajax的错误处理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ajax%E8%B0%83%E8%AF%95%E6%8A%80%E5%B7%A7"><span class="toc-text">ajax调试技巧</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#hosts-nginx-node-webserver"><span class="toc-text">hosts+nginx+node-webserver</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BC%96%E7%A0%81%E9%97%AE%E9%A2%98"><span class="toc-text">编码问题</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%90%8E%E7%AB%AF%E6%8E%A5%E5%8F%A3%E6%B5%8B%E8%AF%95%E6%8A%80%E5%B7%A7"><span class="toc-text">后端接口测试技巧</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%91%BD%E4%BB%A4%E6%B5%8B%E8%AF%95OPTIONS%E8%AF%B7%E6%B1%82"><span class="toc-text">使用命令测试OPTIONS请求</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#postman"><span class="toc-text">postman</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ajax%E7%A7%BB%E5%8A%A8%E7%AB%AF%E5%85%BC%E5%AE%B9%E6%80%A7"><span class="toc-text">ajax移动端兼容性</span></a></li></ol>
 </div>
       
         <h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h3><p>Ajax 全称 Asynchronous JavaScript and XML, 即异步JS与XML. 它最早在IE5中被使用, 然后由Mozilla, Apple, Google推广开来. 典型的代表应用有 Outlook Web Access, 以及 GMail. 现代网页中几乎无ajax不欢. 前后端分离也正是建立在ajax异步通信的基础之上.</p>
@@ -1846,7 +1845,9 @@ curl -I -X POST -H &quot;Origin: http://example.com&quot; http://localhost:10108
 </script>
     </div>
     
-  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
 
 
 <script>
@@ -1862,8 +1863,13 @@ curl -I -X POST -H &quot;Origin: http://example.com&quot; http://localhost:10108
 		open_in_new: false
 	}
 </script>
+
 <script src="/js/jquery-1.9.1.min.js"></script>
+
+
 <script src="/js/main.js"></script>
+
+
 <script src="/js/content.js"></script>
 
 
@@ -1872,9 +1878,12 @@ curl -I -X POST -H &quot;Origin: http://example.com&quot; http://localhost:10108
 
 
 
+
 </div>
+
 <script src="/js/screenfull.js"></script>
-<a href="https://github.com/Louiszhai" style="position: fixed; top: 0; right: 0; border: 0;z-index:9999"><img
+
+<a target="_blank" rel="noopener" href="https://github.com/Louiszhai" style="position: fixed; top: 0; right: 0; border: 0;z-index:9999"><img
             source="https://camo.githubusercontent.com/a6677b08c955af8400f44c6298f40e7d19cc5b2d/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677261795f3664366436642e706e67"
             src="/img/fork_me_on_github.png" alt="Fork me on GitHub"
             data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png"></a>

@@ -6,21 +6,22 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <title>Promise使用手册 | louis blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="promise promise.race promise.all Promise.reject Promise.resolve then catch Promises/A+ process.nextTick setImmediate">
-<meta name="keywords" content="JavaScript">
+  <meta name="description" content="promise promise.race promise.all Promise.reject Promise.resolve then catch Promises&#x2F;A+ process.nextTick setImmediate">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Promise使用手册">
 <meta property="og:url" content="http://louiszhai.github.io/2017/03/12/promise/index.html">
 <meta property="og:site_name" content="louis blog">
-<meta property="og:description" content="promise promise.race promise.all Promise.reject Promise.resolve then catch Promises/A+ process.nextTick setImmediate">
+<meta property="og:description" content="promise promise.race promise.all Promise.reject Promise.resolve then catch Promises&#x2F;A+ process.nextTick setImmediate">
+<meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://louiszhai.github.io/docImages/promise01.png">
 <meta property="og:image" content="http://louiszhai.github.io/docImages/promise03.png">
 <meta property="og:image" content="http://louiszhai.github.io/docImages/promise02.png">
 <meta property="og:image" content="http://louiszhai.github.io/docImages/promise04.png">
-<meta property="og:updated_time" content="2019-12-02T03:28:32.890Z">
+<meta property="article:published_time" content="2017-03-12T13:28:23.000Z">
+<meta property="article:modified_time" content="2019-12-02T03:28:32.890Z">
+<meta property="article:author" content="路易斯">
+<meta property="article:tag" content="JavaScript">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Promise使用手册">
-<meta name="twitter:description" content="promise promise.race promise.all Promise.reject Promise.resolve then catch Promises/A+ process.nextTick setImmediate">
 <meta name="twitter:image" content="http://louiszhai.github.io/docImages/promise01.png">
   
     <link rel="alternative" href="/atom.xml" title="louis blog" type="application/atom+xml">
@@ -28,8 +29,10 @@
   
     <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
   
-  <link rel="stylesheet" href="/css/style.css">
-</head>
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 6.3.0"></head>
 
 <body>
 <div id="container">
@@ -46,11 +49,9 @@
 		</a>
 
 		<hgroup>
-		  <h1 class="header-author"><a href="/">路易斯</a></h1>
+		  <h1 class="header-author"><a href="/">undefined</a></h1>
 		</hgroup>
 
-		
-		<p class="header-subtitle">坚持原著, 深度思考, 力求简单通俗叙事</p>
 		
 
 		
@@ -144,7 +145,7 @@
         <nav id="mobile-nav">
   	<div class="overlay">
   		<div class="slider-trigger"></div>
-  		<h1 class="header-author js-mobile-header hide">路易斯</h1>
+  		<h1 class="header-author js-mobile-header hide">undefined</h1>
   	</div>
 	<div class="intrude-less">
 		<header id="header" class="inner">
@@ -154,10 +155,8 @@
 			
 			</div>
 			<hgroup>
-			  <h1 class="header-author">路易斯</h1>
+			  <h1 class="header-author">undefined</h1>
 			</hgroup>
-			
-			<p class="header-subtitle">坚持原著, 深度思考, 力求简单通俗叙事</p>
 			
 			<nav class="header-menu">
 				<ul>
@@ -208,7 +207,7 @@
       <div class="article-info article-info-post">
         
 	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/">JavaScript</a></li></ul>
+		<ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/" rel="tag">JavaScript</a></li></ul>
 	</div>
 
         
@@ -222,7 +221,7 @@
           <span class="toc-arrow"></span>
 <div id="toc" class="toc-article">
     <div class="toc-title">目录</div>
-    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#导读"><span class="toc-text">导读</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Promise"><span class="toc-text">Promise</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#引子"><span class="toc-text">引子</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#new-Promise"><span class="toc-text">new Promise</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#then"><span class="toc-text">then</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#catch"><span class="toc-text">catch</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#catch能捕获哪些错误"><span class="toc-text">catch能捕获哪些错误</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Promise-reject"><span class="toc-text">Promise.reject</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#错误处理"><span class="toc-text">错误处理</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#链式写法的好处"><span class="toc-text">链式写法的好处</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Promise-resolve"><span class="toc-text">Promise.resolve</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Promise-all"><span class="toc-text">Promise.all</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Promise-race"><span class="toc-text">Promise.race</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Promises-A-规范的要点"><span class="toc-text">Promises/A+规范的要点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#任务队列之谜"><span class="toc-text">任务队列之谜</span></a></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%BC%E8%AF%BB"><span class="toc-text">导读</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Promise"><span class="toc-text">Promise</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%BC%95%E5%AD%90"><span class="toc-text">引子</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#new-Promise"><span class="toc-text">new Promise</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#then"><span class="toc-text">then</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#catch"><span class="toc-text">catch</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#catch%E8%83%BD%E6%8D%95%E8%8E%B7%E5%93%AA%E4%BA%9B%E9%94%99%E8%AF%AF"><span class="toc-text">catch能捕获哪些错误</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Promise-reject"><span class="toc-text">Promise.reject</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86"><span class="toc-text">错误处理</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E9%93%BE%E5%BC%8F%E5%86%99%E6%B3%95%E7%9A%84%E5%A5%BD%E5%A4%84"><span class="toc-text">链式写法的好处</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Promise-resolve"><span class="toc-text">Promise.resolve</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Promise-all"><span class="toc-text">Promise.all</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Promise-race"><span class="toc-text">Promise.race</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Promises-A-%E8%A7%84%E8%8C%83%E7%9A%84%E8%A6%81%E7%82%B9"><span class="toc-text">Promises&#x2F;A+规范的要点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%BB%E5%8A%A1%E9%98%9F%E5%88%97%E4%B9%8B%E8%B0%9C"><span class="toc-text">任务队列之谜</span></a></li></ol>
 </div>
       
         <p>开始写本篇文字时, 我一直不是很明白任务队列的机制, 故想写篇文章弄懂它. 于是我尝试以Promise为核心, 逐步展开, 最终分析process.nextTick , promise.then , setTimeout , setImmediate 它们的异步机制.</p>
@@ -785,7 +784,9 @@ setTimeout(function(){
 </script>
     </div>
     
-  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
 
 
 <script>
@@ -801,8 +802,13 @@ setTimeout(function(){
 		open_in_new: false
 	}
 </script>
+
 <script src="/js/jquery-1.9.1.min.js"></script>
+
+
 <script src="/js/main.js"></script>
+
+
 <script src="/js/content.js"></script>
 
 
@@ -811,9 +817,12 @@ setTimeout(function(){
 
 
 
+
 </div>
+
 <script src="/js/screenfull.js"></script>
-<a href="https://github.com/Louiszhai" style="position: fixed; top: 0; right: 0; border: 0;z-index:9999"><img
+
+<a target="_blank" rel="noopener" href="https://github.com/Louiszhai" style="position: fixed; top: 0; right: 0; border: 0;z-index:9999"><img
             source="https://camo.githubusercontent.com/a6677b08c955af8400f44c6298f40e7d19cc5b2d/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677261795f3664366436642e706e67"
             src="/img/fork_me_on_github.png" alt="Fork me on GitHub"
             data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png"></a>

@@ -7,12 +7,12 @@
   <title>webpack4编译代码如何完美适配IE内核 | louis blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="webpack4编译代码如何完美适配IE内核">
-<meta name="keywords" content="Tool">
 <meta property="og:type" content="article">
 <meta property="og:title" content="webpack4编译代码如何完美适配IE内核">
 <meta property="og:url" content="http://louiszhai.github.io/2019/12/02/webpack4.ie/index.html">
 <meta property="og:site_name" content="louis blog">
 <meta property="og:description" content="webpack4编译代码如何完美适配IE内核">
+<meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://louiszhai.github.io/docImages/webpack-ie.icon.png">
 <meta property="og:image" content="http://louiszhai.github.io/docImages/webpack-ie01.png">
 <meta property="og:image" content="http://louiszhai.github.io/docImages/webpack-ie03.png">
@@ -37,10 +37,11 @@
 <meta property="og:image" content="http://louiszhai.github.io/docImages/webpack-ie22.png">
 <meta property="og:image" content="http://louiszhai.github.io/docImages/webpack-ie23.png">
 <meta property="og:image" content="http://louiszhai.github.io/docImages/webpack-ie25.png">
-<meta property="og:updated_time" content="2019-12-02T04:11:34.106Z">
+<meta property="article:published_time" content="2019-12-02T03:29:45.000Z">
+<meta property="article:modified_time" content="2019-12-02T04:11:34.106Z">
+<meta property="article:author" content="路易斯">
+<meta property="article:tag" content="Tool">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="webpack4编译代码如何完美适配IE内核">
-<meta name="twitter:description" content="webpack4编译代码如何完美适配IE内核">
 <meta name="twitter:image" content="http://louiszhai.github.io/docImages/webpack-ie.icon.png">
   
     <link rel="alternative" href="/atom.xml" title="louis blog" type="application/atom+xml">
@@ -48,8 +49,10 @@
   
     <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
   
-  <link rel="stylesheet" href="/css/style.css">
-</head>
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 6.3.0"></head>
 
 <body>
 <div id="container">
@@ -66,11 +69,9 @@
 		</a>
 
 		<hgroup>
-		  <h1 class="header-author"><a href="/">路易斯</a></h1>
+		  <h1 class="header-author"><a href="/">undefined</a></h1>
 		</hgroup>
 
-		
-		<p class="header-subtitle">坚持原著, 深度思考, 力求简单通俗叙事</p>
 		
 
 		
@@ -164,7 +165,7 @@
         <nav id="mobile-nav">
   	<div class="overlay">
   		<div class="slider-trigger"></div>
-  		<h1 class="header-author js-mobile-header hide">路易斯</h1>
+  		<h1 class="header-author js-mobile-header hide">undefined</h1>
   	</div>
 	<div class="intrude-less">
 		<header id="header" class="inner">
@@ -174,10 +175,8 @@
 			
 			</div>
 			<hgroup>
-			  <h1 class="header-author">路易斯</h1>
+			  <h1 class="header-author">undefined</h1>
 			</hgroup>
-			
-			<p class="header-subtitle">坚持原著, 深度思考, 力求简单通俗叙事</p>
 			
 			<nav class="header-menu">
 				<ul>
@@ -228,7 +227,7 @@
       <div class="article-info article-info-post">
         
 	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Tool/">Tool</a></li></ul>
+		<ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Tool/" rel="tag">Tool</a></li></ul>
 	</div>
 
         
@@ -242,7 +241,7 @@
           <span class="toc-arrow"></span>
 <div id="toc" class="toc-article">
     <div class="toc-title">目录</div>
-    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#代码在IE9下运行"><span class="toc-text">代码在IE9下运行</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#IE9如何支持跨域请求"><span class="toc-text">IE9如何支持跨域请求</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#打包文件支持IE8"><span class="toc-text">打包文件支持IE8</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#代码在IE8下运行"><span class="toc-text"> 代码在IE8下运行</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#提供独立编译的bind垫片"><span class="toc-text">提供独立编译的bind垫片</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Object-defineProperty兼容方案"><span class="toc-text">Object.defineProperty兼容方案</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#垫片大小权衡"><span class="toc-text">垫片大小权衡</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#IE8-amp-IE7-各种缺陷"><span class="toc-text">IE8 & IE7 各种缺陷</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#缺少全局方法"><span class="toc-text">缺少全局方法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#缺少构造器方法"><span class="toc-text">缺少构造器方法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#原型方法缺陷"><span class="toc-text">原型方法缺陷</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#事件缺陷"><span class="toc-text">事件缺陷</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#数据类型判断缺陷"><span class="toc-text">数据类型判断缺陷</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#JS-异步加载缺陷"><span class="toc-text">JS 异步加载缺陷</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#DOM-API-缺陷"><span class="toc-text">DOM API 缺陷</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#CSS-API缺陷"><span class="toc-text">CSS API缺陷</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#透明度设置缺陷"><span class="toc-text">透明度设置缺陷</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#选择器引擎开发"><span class="toc-text">选择器引擎开发</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#如何调试"><span class="toc-text">如何调试</span></a></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%A3%E7%A0%81%E5%9C%A8IE9%E4%B8%8B%E8%BF%90%E8%A1%8C"><span class="toc-text">代码在IE9下运行</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#IE9%E5%A6%82%E4%BD%95%E6%94%AF%E6%8C%81%E8%B7%A8%E5%9F%9F%E8%AF%B7%E6%B1%82"><span class="toc-text">IE9如何支持跨域请求</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%89%93%E5%8C%85%E6%96%87%E4%BB%B6%E6%94%AF%E6%8C%81IE8"><span class="toc-text">打包文件支持IE8</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%A3%E7%A0%81%E5%9C%A8IE8%E4%B8%8B%E8%BF%90%E8%A1%8C"><span class="toc-text"> 代码在IE8下运行</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%8F%90%E4%BE%9B%E7%8B%AC%E7%AB%8B%E7%BC%96%E8%AF%91%E7%9A%84bind%E5%9E%AB%E7%89%87"><span class="toc-text">提供独立编译的bind垫片</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Object-defineProperty%E5%85%BC%E5%AE%B9%E6%96%B9%E6%A1%88"><span class="toc-text">Object.defineProperty兼容方案</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9E%AB%E7%89%87%E5%A4%A7%E5%B0%8F%E6%9D%83%E8%A1%A1"><span class="toc-text">垫片大小权衡</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#IE8-amp-IE7-%E5%90%84%E7%A7%8D%E7%BC%BA%E9%99%B7"><span class="toc-text">IE8 &amp; IE7 各种缺陷</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BC%BA%E5%B0%91%E5%85%A8%E5%B1%80%E6%96%B9%E6%B3%95"><span class="toc-text">缺少全局方法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BC%BA%E5%B0%91%E6%9E%84%E9%80%A0%E5%99%A8%E6%96%B9%E6%B3%95"><span class="toc-text">缺少构造器方法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8E%9F%E5%9E%8B%E6%96%B9%E6%B3%95%E7%BC%BA%E9%99%B7"><span class="toc-text">原型方法缺陷</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BA%8B%E4%BB%B6%E7%BC%BA%E9%99%B7"><span class="toc-text">事件缺陷</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E5%88%A4%E6%96%AD%E7%BC%BA%E9%99%B7"><span class="toc-text">数据类型判断缺陷</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#JS-%E5%BC%82%E6%AD%A5%E5%8A%A0%E8%BD%BD%E7%BC%BA%E9%99%B7"><span class="toc-text">JS 异步加载缺陷</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#DOM-API-%E7%BC%BA%E9%99%B7"><span class="toc-text">DOM API 缺陷</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#CSS-API%E7%BC%BA%E9%99%B7"><span class="toc-text">CSS API缺陷</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%80%8F%E6%98%8E%E5%BA%A6%E8%AE%BE%E7%BD%AE%E7%BC%BA%E9%99%B7"><span class="toc-text">透明度设置缺陷</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%89%E6%8B%A9%E5%99%A8%E5%BC%95%E6%93%8E%E5%BC%80%E5%8F%91"><span class="toc-text">选择器引擎开发</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E8%B0%83%E8%AF%95"><span class="toc-text">如何调试</span></a></li></ol>
 </div>
       
         <p>为了更好的帮助外部合作渠道开发游戏的营销活动，我们开发了一款 JS SDK。该 SDK 采用 webpack4 编译打包，用于支持移动端 H5 活动快速开发，随着业务拓展，端游活动的开发也需要支持，但<strong>由于一些用户 PC 系统版本较低，部分端游 webview 又采用默认 IE 内核、以及用户使用 IE 浏览器参与活动等原因、导致这些用户无法参与到活动中来</strong>，从而影响活动效果，那么，该如何完美的适配 IE 内核呢？</p>
@@ -794,7 +793,9 @@ if (elements === window || elements === document || isDOM(elements) || generalOb
 </script>
     </div>
     
-  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
 
 
 <script>
@@ -810,8 +811,13 @@ if (elements === window || elements === document || isDOM(elements) || generalOb
 		open_in_new: false
 	}
 </script>
+
 <script src="/js/jquery-1.9.1.min.js"></script>
+
+
 <script src="/js/main.js"></script>
+
+
 <script src="/js/content.js"></script>
 
 
@@ -820,9 +826,12 @@ if (elements === window || elements === document || isDOM(elements) || generalOb
 
 
 
+
 </div>
+
 <script src="/js/screenfull.js"></script>
-<a href="https://github.com/Louiszhai" style="position: fixed; top: 0; right: 0; border: 0;z-index:9999"><img
+
+<a target="_blank" rel="noopener" href="https://github.com/Louiszhai" style="position: fixed; top: 0; right: 0; border: 0;z-index:9999"><img
             source="https://camo.githubusercontent.com/a6677b08c955af8400f44c6298f40e7d19cc5b2d/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677261795f3664366436642e706e67"
             src="/img/fork_me_on_github.png" alt="Fork me on GitHub"
             data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png"></a>

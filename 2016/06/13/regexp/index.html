@@ -12,12 +12,13 @@
 <meta property="og:url" content="http://louiszhai.github.io/2016/06/13/regexp/index.html">
 <meta property="og:site_name" content="louis blog">
 <meta property="og:description" content="regexp 正则表达式 反向引用 贪婪模式 非贪婪模式 元字符 字符组 限定符 操作符 ES6扩展 固化分组 占有量词优先 环视 顺序环视 逆序环视">
+<meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://louiszhai.github.io/docImages/regexp01.png">
 <meta property="og:image" content="http://louiszhai.github.io/docImages/regexp02.png">
-<meta property="og:updated_time" content="2019-12-02T03:28:32.893Z">
+<meta property="article:published_time" content="2016-06-13T00:24:55.000Z">
+<meta property="article:modified_time" content="2019-12-02T03:28:32.893Z">
+<meta property="article:author" content="路易斯">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="正则表达式前端使用手册">
-<meta name="twitter:description" content="regexp 正则表达式 反向引用 贪婪模式 非贪婪模式 元字符 字符组 限定符 操作符 ES6扩展 固化分组 占有量词优先 环视 顺序环视 逆序环视">
 <meta name="twitter:image" content="http://louiszhai.github.io/docImages/regexp01.png">
   
     <link rel="alternative" href="/atom.xml" title="louis blog" type="application/atom+xml">
@@ -25,8 +26,10 @@
   
     <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
   
-  <link rel="stylesheet" href="/css/style.css">
-</head>
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 6.3.0"></head>
 
 <body>
 <div id="container">
@@ -43,11 +46,9 @@
 		</a>
 
 		<hgroup>
-		  <h1 class="header-author"><a href="/">路易斯</a></h1>
+		  <h1 class="header-author"><a href="/">undefined</a></h1>
 		</hgroup>
 
-		
-		<p class="header-subtitle">坚持原著, 深度思考, 力求简单通俗叙事</p>
 		
 
 		
@@ -141,7 +142,7 @@
         <nav id="mobile-nav">
   	<div class="overlay">
   		<div class="slider-trigger"></div>
-  		<h1 class="header-author js-mobile-header hide">路易斯</h1>
+  		<h1 class="header-author js-mobile-header hide">undefined</h1>
   	</div>
 	<div class="intrude-less">
 		<header id="header" class="inner">
@@ -151,10 +152,8 @@
 			
 			</div>
 			<hgroup>
-			  <h1 class="header-author">路易斯</h1>
+			  <h1 class="header-author">undefined</h1>
 			</hgroup>
-			
-			<p class="header-subtitle">坚持原著, 深度思考, 力求简单通俗叙事</p>
 			
 			<nav class="header-menu">
 				<ul>
@@ -215,7 +214,7 @@
           <span class="toc-arrow"></span>
 <div id="toc" class="toc-article">
     <div class="toc-title">目录</div>
-    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#导读"><span class="toc-text">导读</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#回顾历史"><span class="toc-text">回顾历史</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#正则表达式的定义"><span class="toc-text">正则表达式的定义</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#元字符"><span class="toc-text">元字符</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#反义元字符"><span class="toc-text">反义元字符</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#重复限定符"><span class="toc-text">重复限定符</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#字符组"><span class="toc-text">字符组</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#排除性字符组"><span class="toc-text">排除性字符组</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#多选结构"><span class="toc-text">多选结构</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#括号"><span class="toc-text">括号</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#转义字符"><span class="toc-text">转义字符</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#操作符的运算优先级"><span class="toc-text">操作符的运算优先级</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#修饰符"><span class="toc-text">修饰符</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#测试"><span class="toc-text">测试</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#常用的正则表达式"><span class="toc-text">常用的正则表达式</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#密码验证"><span class="toc-text">密码验证</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#正则的几大家族"><span class="toc-text">正则的几大家族</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#正则表达式分类"><span class="toc-text">正则表达式分类</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#正则表达式比较"><span class="toc-text">正则表达式比较</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#linux-osx下常用命令与正则表达式的关系"><span class="toc-text">linux/osx下常用命令与正则表达式的关系</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#grep-egrep-sed-awk-正则表达式特点"><span class="toc-text">grep , egrep , sed , awk  正则表达式特点</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#正则表达式初阶技能"><span class="toc-text">正则表达式初阶技能</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#贪婪模式与非贪婪模式"><span class="toc-text">贪婪模式与非贪婪模式</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#区间量词的非贪婪模式"><span class="toc-text">区间量词的非贪婪模式</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#分组"><span class="toc-text">分组</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#捕获性分组"><span class="toc-text">捕获性分组</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#反向引用"><span class="toc-text">反向引用</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#非捕获性分组"><span class="toc-text">非捕获性分组</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#命名分组"><span class="toc-text">命名分组</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#固化分组"><span class="toc-text">固化分组</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#正则表达式高阶技能-零宽断言"><span class="toc-text">正则表达式高阶技能-零宽断言</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#场景回顾"><span class="toc-text">场景回顾</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#获取html片段"><span class="toc-text">获取html片段</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#千位分割符"><span class="toc-text">千位分割符</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#正则表达式在JS中的应用"><span class="toc-text">正则表达式在JS中的应用</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#ES6对正则的扩展"><span class="toc-text">ES6对正则的扩展</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#UCS-2字节码"><span class="toc-text">UCS-2字节码</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#附-ES6新增的处理4字节码的函数"><span class="toc-text">附: ES6新增的处理4字节码的函数</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#RegExp"><span class="toc-text">RegExp</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#compile"><span class="toc-text">compile</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#test"><span class="toc-text">test</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#exec"><span class="toc-text">exec</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#String"><span class="toc-text">String</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#正则表达式在H5中的应用"><span class="toc-text">正则表达式在H5中的应用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#正则引擎"><span class="toc-text">正则引擎</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#总结"><span class="toc-text">总结</span></a></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%BC%E8%AF%BB"><span class="toc-text">导读</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9B%9E%E9%A1%BE%E5%8E%86%E5%8F%B2"><span class="toc-text">回顾历史</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E7%9A%84%E5%AE%9A%E4%B9%89"><span class="toc-text">正则表达式的定义</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%83%E5%AD%97%E7%AC%A6"><span class="toc-text">元字符</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8F%8D%E4%B9%89%E5%85%83%E5%AD%97%E7%AC%A6"><span class="toc-text">反义元字符</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%87%8D%E5%A4%8D%E9%99%90%E5%AE%9A%E7%AC%A6"><span class="toc-text">重复限定符</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AD%97%E7%AC%A6%E7%BB%84"><span class="toc-text">字符组</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%8E%92%E9%99%A4%E6%80%A7%E5%AD%97%E7%AC%A6%E7%BB%84"><span class="toc-text">排除性字符组</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%A4%9A%E9%80%89%E7%BB%93%E6%9E%84"><span class="toc-text">多选结构</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%8B%AC%E5%8F%B7"><span class="toc-text">括号</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BD%AC%E4%B9%89%E5%AD%97%E7%AC%A6"><span class="toc-text">转义字符</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%93%8D%E4%BD%9C%E7%AC%A6%E7%9A%84%E8%BF%90%E7%AE%97%E4%BC%98%E5%85%88%E7%BA%A7"><span class="toc-text">操作符的运算优先级</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BF%AE%E9%A5%B0%E7%AC%A6"><span class="toc-text">修饰符</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B5%8B%E8%AF%95"><span class="toc-text">测试</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B8%B8%E7%94%A8%E7%9A%84%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F"><span class="toc-text">常用的正则表达式</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AF%86%E7%A0%81%E9%AA%8C%E8%AF%81"><span class="toc-text">密码验证</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%AD%A3%E5%88%99%E7%9A%84%E5%87%A0%E5%A4%A7%E5%AE%B6%E6%97%8F"><span class="toc-text">正则的几大家族</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E5%88%86%E7%B1%BB"><span class="toc-text">正则表达式分类</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%AF%94%E8%BE%83"><span class="toc-text">正则表达式比较</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#linux-osx%E4%B8%8B%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E4%B8%8E%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="toc-text">linux&#x2F;osx下常用命令与正则表达式的关系</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#grep-egrep-sed-awk-%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E7%89%B9%E7%82%B9"><span class="toc-text">grep , egrep , sed , awk  正则表达式特点</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E5%88%9D%E9%98%B6%E6%8A%80%E8%83%BD"><span class="toc-text">正则表达式初阶技能</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%B4%AA%E5%A9%AA%E6%A8%A1%E5%BC%8F%E4%B8%8E%E9%9D%9E%E8%B4%AA%E5%A9%AA%E6%A8%A1%E5%BC%8F"><span class="toc-text">贪婪模式与非贪婪模式</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%8C%BA%E9%97%B4%E9%87%8F%E8%AF%8D%E7%9A%84%E9%9D%9E%E8%B4%AA%E5%A9%AA%E6%A8%A1%E5%BC%8F"><span class="toc-text">区间量词的非贪婪模式</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%86%E7%BB%84"><span class="toc-text">分组</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%8D%95%E8%8E%B7%E6%80%A7%E5%88%86%E7%BB%84"><span class="toc-text">捕获性分组</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8F%8D%E5%90%91%E5%BC%95%E7%94%A8"><span class="toc-text">反向引用</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%9D%9E%E6%8D%95%E8%8E%B7%E6%80%A7%E5%88%86%E7%BB%84"><span class="toc-text">非捕获性分组</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%91%BD%E5%90%8D%E5%88%86%E7%BB%84"><span class="toc-text">命名分组</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9B%BA%E5%8C%96%E5%88%86%E7%BB%84"><span class="toc-text">固化分组</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E9%AB%98%E9%98%B6%E6%8A%80%E8%83%BD-%E9%9B%B6%E5%AE%BD%E6%96%AD%E8%A8%80"><span class="toc-text">正则表达式高阶技能-零宽断言</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9C%BA%E6%99%AF%E5%9B%9E%E9%A1%BE"><span class="toc-text">场景回顾</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E8%8E%B7%E5%8F%96html%E7%89%87%E6%AE%B5"><span class="toc-text">获取html片段</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%8D%83%E4%BD%8D%E5%88%86%E5%89%B2%E7%AC%A6"><span class="toc-text">千位分割符</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E5%9C%A8JS%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8"><span class="toc-text">正则表达式在JS中的应用</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#ES6%E5%AF%B9%E6%AD%A3%E5%88%99%E7%9A%84%E6%89%A9%E5%B1%95"><span class="toc-text">ES6对正则的扩展</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#UCS-2%E5%AD%97%E8%8A%82%E7%A0%81"><span class="toc-text">UCS-2字节码</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E9%99%84-ES6%E6%96%B0%E5%A2%9E%E7%9A%84%E5%A4%84%E7%90%864%E5%AD%97%E8%8A%82%E7%A0%81%E7%9A%84%E5%87%BD%E6%95%B0"><span class="toc-text">附: ES6新增的处理4字节码的函数</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#RegExp"><span class="toc-text">RegExp</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#compile"><span class="toc-text">compile</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#test"><span class="toc-text">test</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#exec"><span class="toc-text">exec</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#String"><span class="toc-text">String</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E5%9C%A8H5%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8"><span class="toc-text">正则表达式在H5中的应用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%AD%A3%E5%88%99%E5%BC%95%E6%93%8E"><span class="toc-text">正则引擎</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-text">总结</span></a></li></ol>
 </div>
       
         <h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h3><p>你有没有在搜索文本的时候绞尽脑汁, 试了一个又一个表达式, 还是不行.</p>
@@ -1577,7 +1576,9 @@ with(obj){
 </script>
     </div>
     
-  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
 
 
 <script>
@@ -1593,8 +1594,13 @@ with(obj){
 		open_in_new: false
 	}
 </script>
+
 <script src="/js/jquery-1.9.1.min.js"></script>
+
+
 <script src="/js/main.js"></script>
+
+
 <script src="/js/content.js"></script>
 
 
@@ -1603,9 +1609,12 @@ with(obj){
 
 
 
+
 </div>
+
 <script src="/js/screenfull.js"></script>
-<a href="https://github.com/Louiszhai" style="position: fixed; top: 0; right: 0; border: 0;z-index:9999"><img
+
+<a target="_blank" rel="noopener" href="https://github.com/Louiszhai" style="position: fixed; top: 0; right: 0; border: 0;z-index:9999"><img
             source="https://camo.githubusercontent.com/a6677b08c955af8400f44c6298f40e7d19cc5b2d/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677261795f3664366436642e706e67"
             src="/img/fork_me_on_github.png" alt="Fork me on GitHub"
             data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png"></a>

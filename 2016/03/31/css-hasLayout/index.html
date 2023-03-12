@@ -7,24 +7,27 @@
   <title>详解IE7以下独有的hasLayout | louis blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="css IE6 IE7 hasLayout">
-<meta name="keywords" content="css">
 <meta property="og:type" content="article">
 <meta property="og:title" content="详解IE7以下独有的hasLayout">
 <meta property="og:url" content="http://louiszhai.github.io/2016/03/31/css-hasLayout/index.html">
 <meta property="og:site_name" content="louis blog">
 <meta property="og:description" content="css IE6 IE7 hasLayout">
-<meta property="og:updated_time" content="2019-12-02T03:28:32.879Z">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2016-03-31T05:57:56.000Z">
+<meta property="article:modified_time" content="2019-12-02T03:28:32.879Z">
+<meta property="article:author" content="路易斯">
+<meta property="article:tag" content="css">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="详解IE7以下独有的hasLayout">
-<meta name="twitter:description" content="css IE6 IE7 hasLayout">
   
     <link rel="alternative" href="/atom.xml" title="louis blog" type="application/atom+xml">
   
   
     <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
   
-  <link rel="stylesheet" href="/css/style.css">
-</head>
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 6.3.0"></head>
 
 <body>
 <div id="container">
@@ -41,11 +44,9 @@
 		</a>
 
 		<hgroup>
-		  <h1 class="header-author"><a href="/">路易斯</a></h1>
+		  <h1 class="header-author"><a href="/">undefined</a></h1>
 		</hgroup>
 
-		
-		<p class="header-subtitle">坚持原著, 深度思考, 力求简单通俗叙事</p>
 		
 
 		
@@ -139,7 +140,7 @@
         <nav id="mobile-nav">
   	<div class="overlay">
   		<div class="slider-trigger"></div>
-  		<h1 class="header-author js-mobile-header hide">路易斯</h1>
+  		<h1 class="header-author js-mobile-header hide">undefined</h1>
   	</div>
 	<div class="intrude-less">
 		<header id="header" class="inner">
@@ -149,10 +150,8 @@
 			
 			</div>
 			<hgroup>
-			  <h1 class="header-author">路易斯</h1>
+			  <h1 class="header-author">undefined</h1>
 			</hgroup>
-			
-			<p class="header-subtitle">坚持原著, 深度思考, 力求简单通俗叙事</p>
 			
 			<nav class="header-menu">
 				<ul>
@@ -203,7 +202,7 @@
       <div class="article-info article-info-post">
         
 	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/css/">css</a></li></ul>
+		<ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/css/" rel="tag">css</a></li></ul>
 	</div>
 
         
@@ -217,7 +216,7 @@
           <span class="toc-arrow"></span>
 <div id="toc" class="toc-article">
     <div class="toc-title">目录</div>
-    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#什么是hasLayout"><span class="toc-text">什么是hasLayout</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#默认情况下hasLayout-true的元素"><span class="toc-text">默认情况下hasLayout=true的元素</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#怎么触发及清除-hasLayout"><span class="toc-text">怎么触发及清除 hasLayout</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#hasLayout-的影响"><span class="toc-text">hasLayout 的影响</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#hasLayout-引起的bug"><span class="toc-text">hasLayout 引起的bug</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#怎么检测IE下的某个元素是否拥有hasLayout"><span class="toc-text">怎么检测IE下的某个元素是否拥有hasLayout</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#需要注意的是"><span class="toc-text">需要注意的是</span></a></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFhasLayout"><span class="toc-text">什么是hasLayout</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%BB%98%E8%AE%A4%E6%83%85%E5%86%B5%E4%B8%8BhasLayout-true%E7%9A%84%E5%85%83%E7%B4%A0"><span class="toc-text">默认情况下hasLayout&#x3D;true的元素</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%8E%E4%B9%88%E8%A7%A6%E5%8F%91%E5%8F%8A%E6%B8%85%E9%99%A4-hasLayout"><span class="toc-text">怎么触发及清除 hasLayout</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#hasLayout-%E7%9A%84%E5%BD%B1%E5%93%8D"><span class="toc-text">hasLayout 的影响</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#hasLayout-%E5%BC%95%E8%B5%B7%E7%9A%84bug"><span class="toc-text">hasLayout 引起的bug</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%8E%E4%B9%88%E6%A3%80%E6%B5%8BIE%E4%B8%8B%E7%9A%84%E6%9F%90%E4%B8%AA%E5%85%83%E7%B4%A0%E6%98%AF%E5%90%A6%E6%8B%A5%E6%9C%89hasLayout"><span class="toc-text">怎么检测IE下的某个元素是否拥有hasLayout</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9C%80%E8%A6%81%E6%B3%A8%E6%84%8F%E7%9A%84%E6%98%AF"><span class="toc-text">需要注意的是</span></a></li></ol>
 </div>
       
         <h3 id="什么是hasLayout"><a href="#什么是hasLayout" class="headerlink" title="什么是hasLayout"></a>什么是hasLayout</h3><blockquote>
@@ -537,7 +536,9 @@ console.log(element.currentStyle.hasLayout);//该方式只能获取值, 而不�
 </script>
     </div>
     
-  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
 
 
 <script>
@@ -553,8 +554,13 @@ console.log(element.currentStyle.hasLayout);//该方式只能获取值, 而不�
 		open_in_new: false
 	}
 </script>
+
 <script src="/js/jquery-1.9.1.min.js"></script>
+
+
 <script src="/js/main.js"></script>
+
+
 <script src="/js/content.js"></script>
 
 
@@ -563,9 +569,12 @@ console.log(element.currentStyle.hasLayout);//该方式只能获取值, 而不�
 
 
 
+
 </div>
+
 <script src="/js/screenfull.js"></script>
-<a href="https://github.com/Louiszhai" style="position: fixed; top: 0; right: 0; border: 0;z-index:9999"><img
+
+<a target="_blank" rel="noopener" href="https://github.com/Louiszhai" style="position: fixed; top: 0; right: 0; border: 0;z-index:9999"><img
             source="https://camo.githubusercontent.com/a6677b08c955af8400f44c6298f40e7d19cc5b2d/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677261795f3664366436642e706e67"
             src="/img/fork_me_on_github.png" alt="Fork me on GitHub"
             data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png"></a>

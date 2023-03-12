@@ -7,12 +7,12 @@
   <title>box-shadow属性探秘 | louis blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="box-shadow 阴影 多重阴影 纸张投影 升起效果 box-decoration-break">
-<meta name="keywords" content="CSS">
 <meta property="og:type" content="article">
 <meta property="og:title" content="box-shadow属性探秘">
 <meta property="og:url" content="http://louiszhai.github.io/2017/02/19/box-shadow/index.html">
 <meta property="og:site_name" content="louis blog">
 <meta property="og:description" content="box-shadow 阴影 多重阴影 纸张投影 升起效果 box-decoration-break">
+<meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://louiszhai.github.io/docImages/box-shadow01.png">
 <meta property="og:image" content="http://louiszhai.github.io/docImages/box-shadow02.png">
 <meta property="og:image" content="http://louiszhai.github.io/docImages/box-shadow03.png">
@@ -36,10 +36,11 @@
 <meta property="og:image" content="http://louiszhai.github.io/docImages/box-shadow18.gif">
 <meta property="og:image" content="http://louiszhai.github.io/docImages/box-shadow21.png">
 <meta property="og:image" content="http://louiszhai.github.io/docImages/box-shadow22.png">
-<meta property="og:updated_time" content="2019-12-02T03:28:32.875Z">
+<meta property="article:published_time" content="2017-02-19T08:23:34.000Z">
+<meta property="article:modified_time" content="2019-12-02T03:28:32.875Z">
+<meta property="article:author" content="路易斯">
+<meta property="article:tag" content="CSS">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="box-shadow属性探秘">
-<meta name="twitter:description" content="box-shadow 阴影 多重阴影 纸张投影 升起效果 box-decoration-break">
 <meta name="twitter:image" content="http://louiszhai.github.io/docImages/box-shadow01.png">
   
     <link rel="alternative" href="/atom.xml" title="louis blog" type="application/atom+xml">
@@ -47,8 +48,10 @@
   
     <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
   
-  <link rel="stylesheet" href="/css/style.css">
-</head>
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 6.3.0"></head>
 
 <body>
 <div id="container">
@@ -65,11 +68,9 @@
 		</a>
 
 		<hgroup>
-		  <h1 class="header-author"><a href="/">路易斯</a></h1>
+		  <h1 class="header-author"><a href="/">undefined</a></h1>
 		</hgroup>
 
-		
-		<p class="header-subtitle">坚持原著, 深度思考, 力求简单通俗叙事</p>
 		
 
 		
@@ -163,7 +164,7 @@
         <nav id="mobile-nav">
   	<div class="overlay">
   		<div class="slider-trigger"></div>
-  		<h1 class="header-author js-mobile-header hide">路易斯</h1>
+  		<h1 class="header-author js-mobile-header hide">undefined</h1>
   	</div>
 	<div class="intrude-less">
 		<header id="header" class="inner">
@@ -173,10 +174,8 @@
 			
 			</div>
 			<hgroup>
-			  <h1 class="header-author">路易斯</h1>
+			  <h1 class="header-author">undefined</h1>
 			</hgroup>
-			
-			<p class="header-subtitle">坚持原著, 深度思考, 力求简单通俗叙事</p>
 			
 			<nav class="header-menu">
 				<ul>
@@ -227,7 +226,7 @@
       <div class="article-info article-info-post">
         
 	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CSS/">CSS</a></li></ul>
+		<ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CSS/" rel="tag">CSS</a></li></ul>
 	</div>
 
         
@@ -241,7 +240,7 @@
           <span class="toc-arrow"></span>
 <div id="toc" class="toc-article">
     <div class="toc-title">目录</div>
-    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#导读"><span class="toc-text">导读</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#box-shadow"><span class="toc-text">box-shadow</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#offsetX"><span class="toc-text">offsetX</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#offsetY"><span class="toc-text">offsetY</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#blur"><span class="toc-text">blur</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#spread"><span class="toc-text">spread</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#color"><span class="toc-text">color</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#position"><span class="toc-text">position</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#多重阴影"><span class="toc-text">多重阴影</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#有趣的效果"><span class="toc-text">有趣的效果</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#纸张投影效果"><span class="toc-text">纸张投影效果</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#准备元素"><span class="toc-text">准备元素</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#添加阴影样式"><span class="toc-text">添加阴影样式</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#给阴影加个角度并收缩一些"><span class="toc-text">给阴影加个角度并收缩一些</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#升起效果"><span class="toc-text">升起效果</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#准备元素和阴影"><span class="toc-text">准备元素和阴影</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#添加动画"><span class="toc-text">添加动画</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#box-decoration-break"><span class="toc-text">box-decoration-break</span></a></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%BC%E8%AF%BB"><span class="toc-text">导读</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#box-shadow"><span class="toc-text">box-shadow</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#offsetX"><span class="toc-text">offsetX</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#offsetY"><span class="toc-text">offsetY</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#blur"><span class="toc-text">blur</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#spread"><span class="toc-text">spread</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#color"><span class="toc-text">color</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#position"><span class="toc-text">position</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%9A%E9%87%8D%E9%98%B4%E5%BD%B1"><span class="toc-text">多重阴影</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%89%E8%B6%A3%E7%9A%84%E6%95%88%E6%9E%9C"><span class="toc-text">有趣的效果</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BA%B8%E5%BC%A0%E6%8A%95%E5%BD%B1%E6%95%88%E6%9E%9C"><span class="toc-text">纸张投影效果</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%87%86%E5%A4%87%E5%85%83%E7%B4%A0"><span class="toc-text">准备元素</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%B7%BB%E5%8A%A0%E9%98%B4%E5%BD%B1%E6%A0%B7%E5%BC%8F"><span class="toc-text">添加阴影样式</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E7%BB%99%E9%98%B4%E5%BD%B1%E5%8A%A0%E4%B8%AA%E8%A7%92%E5%BA%A6%E5%B9%B6%E6%94%B6%E7%BC%A9%E4%B8%80%E4%BA%9B"><span class="toc-text">给阴影加个角度并收缩一些</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8D%87%E8%B5%B7%E6%95%88%E6%9E%9C"><span class="toc-text">升起效果</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%87%86%E5%A4%87%E5%85%83%E7%B4%A0%E5%92%8C%E9%98%B4%E5%BD%B1"><span class="toc-text">准备元素和阴影</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%B7%BB%E5%8A%A0%E5%8A%A8%E7%94%BB"><span class="toc-text">添加动画</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#box-decoration-break"><span class="toc-text">box-decoration-break</span></a></li></ol>
 </div>
       
         <h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h3><p>我总是记不住css3的box-shadow属性拥有几个值, 它们的顺序究竟如何? 对我来说, 这是一个大难题. 我们都知道, 使用一个属性, 总是可以不停地在开发者工具上测试UI表现, 直到表现令人满意. 好吧, 有些时候它是奏效的; 而其它时候呢, 我们会消耗时间, 积攒疲劳值, 以及成就感下降等. 一旦短时记忆失效, 我们完全有可能重复一遍之前不愉快地尝试. 因此我选择多花些时间, 用力一次记住它. 如果你恰好也有同样的疑惑, 请读下去.</p>
@@ -698,7 +697,9 @@ box-shadow: 110px 0 0 -10px #ccc, 220px 0 0 0 #808080, 360px 0 0 10px grey;
 </script>
     </div>
     
-  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
 
 
 <script>
@@ -714,8 +715,13 @@ box-shadow: 110px 0 0 -10px #ccc, 220px 0 0 0 #808080, 360px 0 0 10px grey;
 		open_in_new: false
 	}
 </script>
+
 <script src="/js/jquery-1.9.1.min.js"></script>
+
+
 <script src="/js/main.js"></script>
+
+
 <script src="/js/content.js"></script>
 
 
@@ -724,9 +730,12 @@ box-shadow: 110px 0 0 -10px #ccc, 220px 0 0 0 #808080, 360px 0 0 10px grey;
 
 
 
+
 </div>
+
 <script src="/js/screenfull.js"></script>
-<a href="https://github.com/Louiszhai" style="position: fixed; top: 0; right: 0; border: 0;z-index:9999"><img
+
+<a target="_blank" rel="noopener" href="https://github.com/Louiszhai" style="position: fixed; top: 0; right: 0; border: 0;z-index:9999"><img
             source="https://camo.githubusercontent.com/a6677b08c955af8400f44c6298f40e7d19cc5b2d/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677261795f3664366436642e706e67"
             src="/img/fork_me_on_github.png" alt="Fork me on GitHub"
             data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png"></a>

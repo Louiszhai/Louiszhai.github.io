@@ -82,24 +82,41 @@
               messages: messages
             };
             this.message = "";
-            const data = await fetch(
-              "https://api.openai.com/v1/chat/completions",
-              {
-                method: "POST",
-                headers: {
-                  Authorization: "Bearer " + API_KEY,
-                  "Content-Type": "application/json"
-                },
-                body: JSON.stringify(apiRequestBody)
-              }
-            ).then((data) => data.json());
-            this.messages = [
-              ...messages,
-              {
-                content: data.choices[0].message.content,
-                role: "assistant"
-              }
-            ];
+            try {
+              let status;
+              const data = await fetch(
+                "https://api.openai.com/v1/chat/completions",
+                {
+                  method: "POST",
+                  headers: {
+                    Authorization: "Bearer " + API_KEY,
+                    "Content-Type": "application/json"
+                  },
+                  body: JSON.stringify(apiRequestBody)
+                }
+              ).then((data) => {
+                status = data.status;
+                data = data.json();
+                return data;
+              });
+              debugger
+              this.messages = [
+                ...messages,
+                {
+                  content: data.error ?  `status: ${status}, ${data.error.message}` : data.choices[0].message.content,
+                  role: "assistant"
+                }
+              ];
+            } catch(e) {
+              console.log(e);
+              this.messages = [
+                ...messages,
+                {
+                  content: e,
+                  role: "assistant"
+                }
+              ];
+            }
           }
         }
       });
