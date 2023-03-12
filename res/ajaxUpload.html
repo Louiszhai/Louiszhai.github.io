@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>ajax 文件上传 demo | louis</title>
+	<style>
+		input {
+			height: 25px;
+			font-size: 16px;
+		}
+	</style>
+</head>
+<body>
+	<input id="input" type="file" onchange="preview()"/>
+	<input id="urlInput" type="text" value="http://localhost:10108/test" placeholder="请输入上传url" style="width: 400px">
+	<input id="btn" class="btn" type="button" value="上传" onclick="upload()">
+	<span id="span"></span><br>
+	<p>
+		<img alt="待上传的图片" id="img"/>
+	</p>
+</body>
+<!-- <script src="http://localhost:8080/web/js/jquery-2.1.4.min.js"></script> -->
+<script>
+	var $$ = document.getElementById.bind(document),
+		input = $$("input"),
+		urlInput = $$("urlInput"),
+		img = $$("img"),
+		span = $$("span");
+
+	function preview(){
+		var file = input.files[0];
+		if (/\.(jpe?g|png|gif)$/i.test(file.name)) {
+			img.src = window.URL.createObjectURL(file);
+		}
+	}
+
+	function ajax(url, method, data){
+        var xhr = null;
+        if(window.XMLHttpRequest) {
+            xhr = new XMLHttpRequest();
+        } else if (window.ActiveXObject) {
+            try {
+            	xhr = new ActiveXObject("Msxml2.XMLHTTP");
+            } catch (e) {
+            	try {
+            		xhr = new ActiveXObject("Microsoft.XMLHTTP");
+            	} catch (e) { 
+            		alert("您的浏览器暂不支持Ajax!");
+            	}
+            }
+        }
+        xhr.onerror = function(e){
+        	console.log(e);
+        }
+        xhr.open(method, url);
+        try{
+        	setTimeout(function(){
+        		xhr.send(data);
+        	});
+        }catch(e){
+        	console.log('error:',e);
+        }
+        return xhr;
+    }
+
+	function upload(){
+		// console.log('uploading...');
+		var formData = new FormData();
+		formData.append('file',input.files[0]);
+
+		var url = urlInput.value,
+    		method = "POST";
+
+		// 原生js请求
+		var xhr = ajax(url, 'POST',formData);
+		xhr.upload.onprogress = function(e){
+		  	console.log("upload progress:", e.loaded/e.total*100 + "%");
+		};
+		xhr.upload.onload = function(){
+		  	console.log("upload onload.");
+		};
+		xhr.onload = function(){
+		  	console.log("onload.");
+		}
+		
+		// jq请求
+		// before 1.4.4及以前版本默认传入XMLHttpRequest, 1.5以后默认传入jqXHR
+		// $.ajax({
+		// 	type: method,
+		// 	url: url,
+		// 	data: formData ,
+		// 	processData : false,
+		// 	contentType : false ,//必须false才会自动加上正确的Content-Type
+		// 	beforeSend: function(xhr){//请在低版本jq下测试
+		// 			xhr.upload.addEventListener("progress", function(e){
+		// 				console.log("jq upload progress:", e.loaded/e.total*100 + "%");
+		// 			}, false);
+		// 			xhr.upload.addEventListener("load", function(){
+		// 			  	console.log("jq upload onload.");
+		// 			});
+		// 			xhr.addEventListener("load", function(){
+		// 			  	console.log("jq onload.");
+		// 			});
+		// 			return xhr;
+		// 		}
+		// 	},
+		// 	success: function(){
+		// 		console.log("jq success.");
+		// 	}
+		// });
+
+		//jq xhr
+		// $(document).ajaxStart(function() {
+		// 	console.log("ajaxStart");
+		// });
+		// $(document).ajaxSend(function(event, xhr, settings) {
+		// 	console.log("ajaxSend");
+		// });
+		// $(document).ajaxStop(function() {
+		// 	console.log("ajaxStop");
+		// });
+		// $(document).ajaxError(function(event, xhr, settings, thrownError) {
+		// 	console.log("ajaxError");
+		// });
+		// $(document).ajaxSuccess(function(event, xhr, settings) {
+		// 	console.log("ajaxSuccess");
+		// });
+		// $(document).ajaxComplete(function(event, xhr, settings) {
+		// 	console.log("ajaxComplete");
+		// });
+		// $.ajaxPrefilter( function( options, originalOptions, jqXHR ) {
+		//   	console.log("ajaxPrefilter");
+		// });
+
+		// $.ajax({
+		// 	type: method,
+		// 	url: url,
+		// 	data: formData,
+		// 	global: true,
+		// 	context: input ,
+		// 	processData : false,
+		// 	contentType : false ,//必须false才会自动加上正确的Content-Type
+		// 	xhr: function(){
+		// 		var xhr = $.ajaxSettings.xhr();
+		// 		if(xhr.upload) {
+		// 			xhr.upload.addEventListener("readystatechange", function(){
+		// 			  	console.log("xhr onreadystatechange.");
+		// 			});
+		// 			xhr.upload.addEventListener("progress", function(e){
+		// 				console.log("xhr upload progress:", e.loaded/e.total*100 + "%");
+		// 			}, false);
+		// 			xhr.upload.addEventListener("loadstart", function(){
+		// 			  	console.log("xhr upload onloadstart.");
+		// 			});
+		// 			xhr.upload.addEventListener("load", function(){
+		// 			  	console.log("xhr upload onload.");
+		// 			});
+		// 			xhr.upload.addEventListener("loadend", function(){
+		// 			  	console.log("xhr upload onloadend.");
+		// 			});
+		// 			xhr.addEventListener("progress", function(e){
+		// 				console.log("xhr progress:", e.loaded/e.total*100 + "%");
+		// 			}, false);
+		// 			xhr.addEventListener("loadstart", function(){
+		// 			  	console.log("xhr onloadstart.");
+		// 			});
+		// 			xhr.addEventListener("load", function(){
+		// 			  	console.log("xhr onload.");
+		// 			});
+		// 			// xhr.addEventListener("loadend", function(){
+		// 			//   	console.log("xhr onloadend.");
+		// 			// });
+		// 			xhr.onloadend = function(){
+		// 				console.log("xhr onloadend.");
+		// 			}
+		// 			window.xhr = xhr;
+		// 			return xhr;
+		// 		}
+		//    	},
+		//    	success: function(){
+		//    		console.log("jq success.");
+		//    	},
+		//    	complete: function(){
+		//    		console.log("jq complete");
+		//    	},
+		//    	beforeSend: function(xhr){
+		//    		console.log("jq beforeSend");
+		//    		return xhr;
+		//    	}
+		// });
+		
+		// fetch请求
+		// fetch(url, {
+		//   method: method,
+		//   body: formData
+		// }).then(function(res){
+		// 	console.log(res);
+		// }).catch(function(e){
+		// 	console.log(e);
+		// });
+	}
+
+</script>
+</html>

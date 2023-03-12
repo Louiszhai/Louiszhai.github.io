@@ -1,0 +1,12 @@
+<!DOCTYPE html><html><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no"><title>canvas-draw</title><link href=./static/css/app.b73fcd809fc5b258223ea2f473d273ea.css rel=stylesheet></head><body><div id=app></div><script type=text/javascript src=./static/js/manifest.0c5776891d260adaeeed.js></script><script type=text/javascript src=./static/js/vendor.43d230268a7743d739d6.js></script><script type=text/javascript src=./static/js/app.dac408f5be8c122d0885.js></script></body><script>(function(defaultFontSize, defaultScreenWidth) {
+      var htmlNode = document.getElementsByTagName('html')[0];
+      function resize() {
+        var screenWidth = document.body.offsetWidth;
+        var fontSize = (screenWidth / defaultScreenWidth) * defaultFontSize;
+        htmlNode.style.fontSize = fontSize + 'px';
+      }
+      document.addEventListener('DOMContentLoaded', function() {
+        resize();
+      });
+      window.addEventListener('resize', resize);
+    })(10, 375);</script></html>
