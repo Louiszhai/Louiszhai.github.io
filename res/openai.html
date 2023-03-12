@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>ChatGPT</title>
+    <meta charset="UTF-8" />
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no,viewport-fit=cover"
+    />
+  </head>
+
+  <body>
+    <div id="app" style="padding: 4rem 0;">
+      <h1 style="text-align: center;">louis GPT</h1>
+      <p style="text-align: center;">@louiszhai</p>
+
+      <br />
+
+      <div style="text-align: center;">
+        <input
+		      :disabled="isTyping"
+          v-model="message"
+          style="width: calc(100% - 4rem); padding: 0.5rem;"
+          autofocus
+          :placeholder="isTyping ? 'ChatGPT 正在组织语言 ...' : '问问 ChatGPT ...'"
+          type="text"
+		      @blur="handleSend"
+          @keyup.enter="handleSend"
+        />
+      </div>
+
+      <br />
+
+      <ul v-for="(message, key) in [...messages].reverse()" :key="key">
+        <li>
+          <div style="color: #6b7280;">{{ message.role }}</div>
+          <div style="white-space: pre-wrap;">{{message.content}}</div>
+        </li>
+      </ul>
+    </div>
+    <script>
+      const params = location.search.replace('?', '').split('&').reduce(function (p, v) {
+        const i = v.indexOf('=');
+        ~i && (p[v.substring(0, i)] = v.substring(i+1));
+        return p;
+      }, {});
+      const API_KEY = params.key || '';
+      if (!API_KEY) {
+        alert('请在链接结尾补齐参数key={API_KEY}');
+      }
+      new Vue({
+        el: "#app",
+        data() {
+          return {
+            message: "",
+            isTyping: false,
+            messages: [
+              {
+                content: "Hi, 我是 ChatGPT！你可以问我任何事情！👋",
+                role: "assistant"
+              }
+            ]
+          };
+        },
+        methods: {
+          handleSend: async function () {
+			if(!this.message) return
+            const newMessage = {
+              content: this.message,
+              role: "user"
+            };
+            const newMessages = [...this.messages, newMessage];
+            this.messages = newMessages;
+            this.isTyping = true;
+            await this.processMessageToChatGPT(newMessages);
+            this.isTyping = false;
+          },
+          processMessageToChatGPT: async function (messages) {
+            const apiRequestBody = {
+              model: "gpt-3.5-turbo",
+              messages: messages
+            };
+            this.message = "";
+            const data = await fetch(
+              "https://api.openai.com/v1/chat/completions",
+              {
+                method: "POST",
+                headers: {
+                  Authorization: "Bearer " + API_KEY,
+                  "Content-Type": "application/json"
+                },
+                body: JSON.stringify(apiRequestBody)
+              }
+            ).then((data) => data.json());
+            this.messages = [
+              ...messages,
+              {
+                content: data.choices[0].message.content,
+                role: "assistant"
+              }
+            ];
+          }
+        }
+      });
+    </script>
+  </body>
+</html>
