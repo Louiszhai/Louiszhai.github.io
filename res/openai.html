@@ -8,11 +8,16 @@
       name="viewport"
       content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no,viewport-fit=cover"
     />
+    <style>
+      .vc-switch {
+        right: 100% !important;
+      }
+    </style>
   </head>
 
   <body>
     <div id="app" style="padding: 4rem 0;">
-      <h1 style="text-align: center;">louis GPT</h1>
+      <h1 style="text-align: center;" @click="switchVConsole">louis GPT</h1>
       <p style="text-align: center;">@louiszhai</p>
 
       <br />
@@ -39,7 +44,9 @@
         </li>
       </ul>
     </div>
+    <script src="https://unpkg.com/vconsole@latest/dist/vconsole.min.js"></script>
     <script>
+      const vConsole = new window.VConsole();
       const params = location.search.replace('?', '').split('&').reduce(function (p, v) {
         const i = v.indexOf('=');
         ~i && (p[v.substring(0, i)] = v.substring(i+1));
@@ -64,6 +71,9 @@
           };
         },
         methods: {
+          switchVConsole() {
+            document.querySelector('.vc-switch').click();
+          },
           handleSend: async function () {
 			if(!this.message) return
             const newMessage = {
@@ -99,7 +109,6 @@
                 data = data.json();
                 return data;
               });
-              debugger
               this.messages = [
                 ...messages,
                 {
